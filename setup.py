@@ -1,0 +1,20 @@
+from distutils.core import setup
+
+setup(name='marinemap',
+      version='0.1',
+      description='A framework for building decisison support tools supporting marine spatial planning',
+      author='MarineMap Consortium',
+      author_email='mcclintock@msi.ucsb.edu',
+      url='http://code.google.com/p/marinemap',
+      # download_url='http://code.google.com/p/marinemap',
+      packages=['lingcod'],
+      license='New BSD License',
+      # classifiers=['Development Status :: 4 - Beta',
+      #              'Environment :: Web Environment',
+      #              'Framework :: Django',
+      #              'Intended Audience :: Developers',
+      #              'License :: OSI Approved :: BSD License',
+      #              'Operating System :: OS Independent',
+      #              'Programming Language :: Python',
+      #              'Topic :: Utilities'],
+      )
