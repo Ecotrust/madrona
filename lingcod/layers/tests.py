@@ -67,6 +67,9 @@ class PublicLayerListTest(TestCase):
         response = client.get('/layers/public/')
         self.failUnlessEqual(response.status_code, 200)
         
+    def brokenTest(self):
+        self.assertEquals(True, False)
+        
 # __test__ = {"doctest": """
 # """}
 
