@@ -11,7 +11,9 @@ Dependencies
 ************
 You need the following installed on your system in order to start running
 MarineMap.
+
     * A working installation of `GeoDjango <http://geodjango.org>`_
+
 In addition, you should be familiar with programming in Python, how web 
 application are structured in `Django <http://djangoproject.com>`_, and using 
 a `Subversion <http://subversion.tigris.org/>`_ client.
