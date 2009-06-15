@@ -29,7 +29,7 @@ class PublicLayerList(models.Model):
         NetworkLinks pointing to remote kml datasets or WMS servers.
         For more information on how to create this kml file see the 
         documentation.
-    """, blank=False)
+    """, blank=False, max_length=255)
     
     def __unicode__(self):
         return "PublicLayerList, created: %s" % (self.creation_date)
