@@ -1,8 +1,9 @@
 ﻿Introduction
-===========
+============
 
 Marine Protected Area Planning
-**********************
+******************************
+
 Protecting the diversity and health of marine habitats and the organisms that populate them is a global concern.  Globally, over half the stocks of fisheries are fully exploited and producing catches very near their maximum sustainable limits.  Rising levels of atmospheric carbon dioxide are making surface waters more acidic.  A key management strategy to address many issues affecting marine ecosystems is the implementation of marine protected areas (MPAs).  MPAs are coastal and open ocean areas that seek to protect natural resources and biodiversity.  Increasingly, governments around the world are implementing MPAs that specifically protect valuable ecosystem services such as edible fish, plants and invertebrates. Once established, MPAs can improve educational, research and recreational activities, and secure access to artisanal fisheries that are a way of life for many.  
 California is a leader in the process of designing MPAs that many believe will serve as the model for the rest of the world.  We are currently designing MPAs that meet both biodiversity protection objectives while minimizing economic impacts in the short term and in many cases increasing the productivity of the world’s fisheries in the long term.  In order to facilitate MPA planning, we propose to develop maps and innovative map-based technologies that encourage people to participate in MPA creation and to maximize transparency in the process.
 
@@ -12,6 +13,7 @@ Designing MPAs requires the consideration of a wide variety of geospatial inform
 
 MarineMap Decision Support
 --------------------------
+
 The MarineMap decision support tool has been developed in response to the specific needs of average, non-technical stakeholders as they collaboratively design MPAs. MarineMap is a web-mapping application that allows users to:
 
 #. visualize over 60 vetted geospatial data layers
@@ -27,13 +29,15 @@ MarineMap is the most comprehensive, most user-friendly, web-based MPA design ap
 
 
 Collaborators
-***********************
+*************
+
 The MarineMap consortium is comprised of scientists and technologists at the University of California Santa Barbara, Ecotrust, and The Nature Conservancy. 
 
 Future Implementations
-*******
+**********************
+
 We are eager to extend MarineMap to new marine spatial planning efforts and geographies. In December, 2010, we hope to begin developing MarineMap England, a version of MarineMap designed specifically for the Marine Conservation Zone planning currently underway in England. 
 
 Some Basic Use Statistics
-********
+*************************
 
