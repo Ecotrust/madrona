@@ -92,3 +92,6 @@ If everything looks good, turn on the dev server::
     
 Hit http://localhost:8000/admin/ in a browser and use the authentication
 credentialed specified when syncdb was run.
+
+showing data
+------------
