@@ -4,8 +4,7 @@ Layers
 Models
 ******
 
-..  automodule:: lingcod.layers.models
-    :members:
+..  autoclass:: lingcod.layers.models.PublicLayerList
     
 Views
 *****
