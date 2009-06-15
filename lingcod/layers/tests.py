@@ -26,6 +26,7 @@ class PublicLayerListTest(TestCase):
         """
         layer = PublicLayerList.objects.create(active=True)
         path = os.path.dirname(os.path.abspath(__file__))
+
         f = File(open(path + '/fixtures/public_layers.kml'))
         settings.MEDIA_URL = ''
         layer.kml.save('kml-file.kml', f)
