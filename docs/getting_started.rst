@@ -95,3 +95,5 @@ credentialed specified when syncdb was run.
 
 showing data
 ------------
+
+See `layers`
