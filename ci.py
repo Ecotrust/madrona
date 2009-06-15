@@ -23,8 +23,8 @@ print options.docs_output
 print "Generating documentation..."
 os.system('cd docs; make clean; make html')
 if options.docs_output:
-    cmd = 'rm -rf %s/*; cp -r docs/.build/html/* %s/' % (options.docs_output, options.docs_output)
-    os.system(cmd)
+    os.system('rm -rf %s/*' % (options.docs_output, ))
+    os.system('cp -r docs/.build/html/* %s/' % (options.docs_output, ))
 
 # Remove settings_local if it exists
 try:
