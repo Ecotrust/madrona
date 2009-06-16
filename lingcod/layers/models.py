@@ -18,18 +18,21 @@ class PublicLayerList(models.Model):
                                 updates.
         ======================  ==============================================
 """    
+    
     creation_date = models.DateTimeField(auto_now=True) 
+    
     active = models.BooleanField(default=True, help_text="""
         Checking here indicates that this layer list should be the one used in
         the application. Copies of other layer lists are retained in the
         system so you can go back to an old version if necessary.
     """)
+    
     kml = models.FileField(upload_to='uploaded-kml/', help_text="""
         KML file that represents the public layers list. This file can use
         NetworkLinks pointing to remote kml datasets or WMS servers.
         For more information on how to create this kml file see the 
         documentation.
-    """, blank=False, max_length=255)
+    """, blank=False, max_length=510)
     
     def __unicode__(self):
         return "PublicLayerList, created: %s" % (self.creation_date)
