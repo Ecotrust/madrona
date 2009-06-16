@@ -76,7 +76,6 @@ class PublicLayerListTest(TestCase):
         layer.kml.save('kml-file.kml', f)
         dr = os.path.dirname(layer.kml.file.name)
         cmd = 'rm -f %s/*.kml' % (dr, )
-        print cmd
         os.system(cmd)
         
         
