@@ -66,6 +66,19 @@ class PublicLayerListTest(TestCase):
         client = Client()
         response = client.get('/layers/public/')
         self.failUnlessEqual(response.status_code, 200)
+    
+    def tearDown(self):
+        layer = PublicLayerList.objects.create(active=True)
+        path = os.path.dirname(os.path.abspath(__file__))
+
+        f = File(open(path + '/fixtures/public_layers.kml'))
+        settings.MEDIA_URL = ''
+        layer.kml.save('kml-file.kml', f)
+        dr = os.path.dirname(layer.kml.file.name)
+        cmd = 'rm -f %s/*.kml' % (dr, )
+        print cmd
+        os.system(cmd)
+        
         
 # __test__ = {"doctest": """
 # """}
