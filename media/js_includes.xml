@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	includes.xml
+    Edit this file to add javascript files that need to be included in the
+    main marinemap.js distribution, as well as point to appropriate tests.
+    Please avoid adding third party libs where they are available from a CDN        
+    like Google's ajaxlibs
+-->
+<javascripts>
+    <file path="common/js/lib/tmpl.js" />
+    <test path="common/js/test/lib/tmpl.js" />
+</javascripts>

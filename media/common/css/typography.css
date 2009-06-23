@@ -1,0 +1,8 @@
+/*
+    Site-wide typographic styling. Due to the cascading nature, styles 
+    specified in application.css will override these.
+*/
+
+html {
+    font-family: Verdana, sans-serif;
+}

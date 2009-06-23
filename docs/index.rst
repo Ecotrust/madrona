@@ -13,6 +13,7 @@ Contents:
    introduction
    getting_started
    deployment
+   asset_packaging
    layers
 
 API

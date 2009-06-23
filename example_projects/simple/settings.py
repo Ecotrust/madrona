@@ -85,7 +85,35 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.gis',
+    'compress',
+    'lingcod.common',
     'lingcod.layers',
 )
+
+from lingcod.common import assets
+
+COMPRESS_CSS = {
+    'application': {
+        'source_filenames': assets.get_css_files(),
+        'output_filename': 'marinemap.r?.css',
+        'extra_context': {
+            'media': 'all'
+        }
+    }
+}
+
+COMPRESS_JS = {
+    'application': {
+        'source_filenames': assets.get_js_files(),
+        'output_filename': 'marinemap.r?.js'
+    },
+    'tests': {
+        'source_filenames': assets.get_js_test_files(),
+        'output_filename': 'marinemap_tests.r?.js'
+    }
+}
+
+COMPRESS_VERSION = True
+COMPRESS_AUTO = True
 
 from settings_local import *

@@ -39,6 +39,7 @@ f.write(template.read())
 f.write("""
 TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
 TEST_OUTPUT_DESCRIPTIONS=True
+DEBUG=False
 """)
 
 f.close()

@@ -6,6 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
+    (r'^$', 'lingcod.common.views.map'),
+    (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html'}),
     (r'^layers/', include('lingcod.layers.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
@@ -17,7 +19,6 @@ urlpatterns = patterns('',
 )
 
 # Useful for serving files when using the django dev server
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
-    )
+urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+)

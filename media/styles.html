@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MarineMap Client Test Suite</title>    <!-- Date: 2009-06-18 -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="common/js/load_js.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        
+        function addStyleSheet(path){
+            var head = document.getElementsByTagName('head')[0];
+            $(document.createElement('link')) 
+                .attr({type: 'text/css', href: path, rel: 'stylesheet', media: 'screen'}) 
+                .appendTo(head);            
+        }
+        
+        // Dynamically load stylesheets from css_includes.xml
+        $.get('css_includes.xml', function(data, textStatus){
+            var xml = $(data);
+            $(xml).find('file').each(function(){
+                addStyleSheet($(this).attr('path'));
+            });
+        });
+        
+        $(document).ready(function(){
+            // Load appropriate javascript in case needed
+            mm_load_js('', function(){
+            }, false);
+        });
+    </script>
+</head>
+<body>
+    <!-- 
+        File this page with examples of how markup is styled using the 
+        marinemap stylesheets 
+    -->
+</body>
+</html>

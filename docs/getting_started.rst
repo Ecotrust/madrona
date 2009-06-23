@@ -1,3 +1,5 @@
+.. _getting_started:
+
 Getting Started
 ===============
 These instructions will walk you through developing a basic implementation of
@@ -13,6 +15,7 @@ You need the following installed on your system in order to start running
 MarineMap.
 
     * A working installation of `GeoDjango <http://geodjango.org>`_
+    * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
 
 In addition, you should be familiar with programming in Python, how web 
 application are structured in `Django <http://djangoproject.com>`_, and using 
@@ -96,4 +99,4 @@ credentialed specified when syncdb was run.
 showing data
 ------------
 
-See `layers`
+See :ref:`layers`
