@@ -45,6 +45,9 @@ DEBUG=False
 f.close()
 template.close()
 
+# Add paths of example projects
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/example_projects/simple')
+
 from example_projects.simple import settings as project_settings
 
 from django.core.management import setup_environ
