@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
-    (r'^$', 'lingcod.common.views.map'),
+    (r'^$', 'lingcod.common.views.map', { 'api_key':settings.GOOGLE_API_KEY }),
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html'}),
     (r'^layers/', include('lingcod.layers.urls')),
 

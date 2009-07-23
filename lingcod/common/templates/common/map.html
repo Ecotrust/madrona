@@ -1,14 +1,42 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-    <head>
-        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-        <title>MarineMap Decision Support Tool</title>
-        {% load compressed %}
-        {% compressed_css 'application' %}
-        {% compressed_js 'application' %}
-    </head>
-    <body>
+{% extends "common/base.html" %}
+
+{% block head %}
+<script type="text/javascript">
+    google.load("earth", "1");
+
+    var ge = null;
+    var measureTool = null;
+
+    function init() {
+        google.earth.createInstance("map3d", initCallback, failureCallback);
+    }
+
+    function initCallback(pluginInstance) {
+    
+        ge = pluginInstance;
+        ge.getWindow().setVisibility(true); // required
         
-    </body>
-</html>
+        gex = new GEarthExtensions(pluginInstance);
+        
+        gex.util.lookAt([45.5, -122.66], { range: 800000, tilt: 40 });  
+        
+        measureTool = new lingcod.measureTool();
+        measureTool.measureArea( gex, "area" );
+        
+    }
+
+    function failureCallback(errorCode) {
+      alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    $(document).ready(function(){
+        init();
+    });
+        
+</script>
+{% endblock %}
+{% block content %}
+<div id="map3d" style="width: 500px; height: 500px; border: 1px solid silver;"></div>
+<p><strong>Distance: </strong><span id="distance">N/A</span></p>
+<p><strong>Area: </strong><span id="area">N/A</span></p>
+{% endblock %}

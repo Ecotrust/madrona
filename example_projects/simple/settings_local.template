@@ -10,6 +10,9 @@
 # that is kept hidden from public repositories.
 # SECRET_KEY = '6c(kr8r%aqf#r8%arr=0py_7t9m)wgocwyp5g@!j7eb0erm(2+sdklj23'
 
+# The following Google key is for localhost:
+# GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg' 
+
 # You'll want to specify any database connection info here:
 # DATABASE_NAME = 'simple_example'
 # DATABASE_USER = 'postgres'
