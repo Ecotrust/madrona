@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'compress',
     'lingcod.common',
     'lingcod.layers',
+    'simple_app',
 )
 
 from lingcod.common import assets
