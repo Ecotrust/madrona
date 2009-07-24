@@ -13,6 +13,7 @@
     <script src="http://geojs.googlecode.com/files/geo-0.1.2.pack.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
     <script src="common/js/load_js.js"></script>
+    <script src="common/js/lib/qunit/testrunner.js"></script>
     <script type="text/javascript" charset="utf-8">
         google.load("earth", "1");
         var ge;
@@ -20,11 +21,9 @@
         var bothReady = false;
         
         $(document).ready(function(){
-            $.getScript('common/js/lib/qunit/testrunner.js', function(){
-                mm_load_js('', function(){
-                    runtests_when_ready();
-                }, true);
-            });
+            mm_load_js('', function(){
+                runtests_when_ready();
+            }, true);
             google.earth.createInstance("map3d", initCallback, failureCallback);
         });
         
