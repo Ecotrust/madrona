@@ -1,34 +1,43 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+{% extends "common/base.html" %}
 
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>MarineMap Client Test Suite</title>
+{% block head %}
     <link rel="stylesheet" href="http://jqueryjs.googlecode.com/svn/trunk/qunit/testsuite.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://jqueryjs.googlecode.com/svn/trunk/qunit/testrunner.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{MEDIA_URL}}common/js/lib/qunit/testrunner.js" type="text/javascript" charset="utf-8"></script>
     {% load compressed %}
-    {% compressed_js 'application' %}
     {% compressed_js 'tests' %}
     <script type="text/javascript" charset="utf-8">
+        stop();
+        google.load("earth", "1");
+        var ge;
+        var gex;
+        var bothReady = false;
+
         $(document).ready(function(){
-            // setTimeout(function(){
-            //    window.location.reload(); 
-            // }, 10000);
+            google.earth.createInstance("map3d", initCallback, failureCallback);
         });
+                
+        function initCallback(pluginInstance){
+            ge = pluginInstance;
+            gex = new GEarthExtensions(ge);
+            window.runTest();
+        }
+        
+        function failureCallback(){
+            alert('failed to load google earth plugin.');
+        }
+        
         if ( typeof fireunit === "object" ) {
             QUnit.log = fireunit.ok;
             QUnit.done = fireunit.testDone;
         }
     </script>
-</head>
-<body>
+{% endblock %}
+{% block content %}
     <h1>MarineMap Client Unit Tests</h1>
     <h2 id="banner"></h2>
     <h2 id="userAgent"></h2>
     <ol id="tests"></ol>
-    <div id="main"></div>        
+    <div id="main"></div>
     <!-- Any HTML you may require for your tests to work properly -->
-</body>
-</html>
+    <div id="map3d" style="width:800px;height:450px;"></div>
+{% endblock %}

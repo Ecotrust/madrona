@@ -10,6 +10,8 @@
     <file path="common/js/lingcod.js" />
     <file path="common/js/lib/tmpl.js" />
     <test path="common/js/test/lib/tmpl.js" />
+    <file path="common/js/lib/ge_utility_lib_patches.js" />
+    <test path="common/js/test/lib/ge_utility_lib_patches.js" />
     <file path="common/js/tools/measure_tool.js" />
-    <test path="common/js/test/tools/measure_tool.js" />
+    <test path="common/js/test/tools/measure_tool.js" />    
 </javascripts>
