@@ -52,6 +52,26 @@ lingcod.measureTool = function() {
     this.distance_unit = 'm';
 };
 
+lingcod.measureTool.prototype.clear = function() {
+    
+    this.gex.dom.clearFeatures();
+    
+    this.area = 0.0;
+    this.distance = 0.0;
+    
+    if ( this.distTarget )
+    {        
+        document.getElementById(this.distTarget).innerHTML = 'N/A';
+        this.distTarget = null;
+    }
+    
+    if ( this.areaTarget )
+    { 
+        document.getElementById(this.areaTarget).innerHTML = 'N/A';
+        this.areaTarget = null;
+    }
+};
+
 /**
  * Set the measure tool's system of measurement for reporting (still uses metric internally)
  * @param {String} units The name of the system of measure, i.e. 'english', 'metric', 'nautical'
