@@ -20,6 +20,8 @@ DATABASE_USER = 'postgres'             # Not used with sqlite3.
 # DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 # DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
+GEOMETRY_DB_SRID = 3310
+
 # localhost Google key:
 GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
 
