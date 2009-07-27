@@ -52,24 +52,27 @@ lingcod.measureTool = function() {
     this.distance_unit = 'm';
 };
 
-lingcod.measureTool.prototype.clear = function() {
-    
-    this.gex.dom.clearFeatures();
-    
+lingcod.measureTool.prototype.clear = function() 
+{ 
     this.area = 0.0;
     this.distance = 0.0;
     
     if ( this.distTarget )
-    {        
+    {
+        this.gex.edit.endEditLineString( this.placemark.getGeometry() );
         document.getElementById(this.distTarget).innerHTML = 'N/A';
         this.distTarget = null;
     }
     
     if ( this.areaTarget )
     { 
+        this.gex.edit.endEditLineString( this.placemark.getGeometry().getOuterBoundary() );
         document.getElementById(this.areaTarget).innerHTML = 'N/A';
         this.areaTarget = null;
     }
+    
+    this.gex.dom.removeObject( this.placemark );
+    this.placemark = null;
 };
 
 /**
@@ -90,8 +93,6 @@ lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId ) {
     var self = this;
     this.gex = gex;
     this.areaTarget = areaSpanId;
-    
-    gex.dom.clearFeatures();
 
     this.placemark = gex.dom.addPlacemark({
         polygon: [],
@@ -128,8 +129,6 @@ lingcod.measureTool.prototype.measureDistance = function( gex, distSpanId ) {
     var self = this;
     this.gex = gex;
     this.distTarget = distSpanId;
-    
-    gex.dom.clearFeatures();
 
     this.placemark = gex.dom.addPlacemark({
         lineString: [],
