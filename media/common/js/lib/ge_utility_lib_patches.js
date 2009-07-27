@@ -10,21 +10,23 @@
  * @param {Boolean} [options.cacheBuster] Enforce freshly downloading the KML
  *       by introducing a cache-busting query parameter.
  */
-GEarthExtensions.prototype.util.displayKml = function(url, options) {
-    options = options || {};
-    if (options.cacheBuster) {
-        url += (url.match(/\?/) ? '&' : '?') + '_cacheBuster=' +
-            Number(new Date()).toString();
-    }
-    // TODO: option to choose network link or fetchKml
-    var me = this;
-    google.earth.fetchKml(me.pluginInstance, url, function(kmlObject) {
-        if (kmlObject) {
-            me.pluginInstance.getFeatures().appendChild(kmlObject);
-            if(options.flyToView){
-                var la = kmlObject.getAbstractView();
-                me.pluginInstance.getView().setAbstractView(la);
-            }
+if(window.GEarthExtensions){ 
+    GEarthExtensions.prototype.util.displayKml = function(url, options) {
+        options = options || {};
+        if (options.cacheBuster) {
+            url += (url.match(/\?/) ? '&' : '?') + '_cacheBuster=' +
+                Number(new Date()).toString();
         }
-    });
-};
+        // TODO: option to choose network link or fetchKml
+        var me = this;
+        google.earth.fetchKml(me.pluginInstance, url, function(kmlObject) {
+            if (kmlObject) {
+                me.pluginInstance.getFeatures().appendChild(kmlObject);
+                if(options.flyToView){
+                    var la = kmlObject.getAbstractView();
+                    me.pluginInstance.getView().setAbstractView(la);
+                }
+            }
+        });
+    };
+}
