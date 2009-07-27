@@ -57,22 +57,25 @@ lingcod.measureTool.prototype.clear = function()
     this.area = 0.0;
     this.distance = 0.0;
     
-    if ( this.distTarget )
+    if ( this.placemark )
     {
-        this.gex.edit.endEditLineString( this.placemark.getGeometry() );
-        document.getElementById(this.distTarget).innerHTML = 'N/A';
-        this.distTarget = null;
-    }
+        if ( this.distTarget )
+        {
+            this.gex.edit.endEditLineString( this.placemark.getGeometry() );
+            document.getElementById(this.distTarget).innerHTML = 'N/A';
+            this.distTarget = null;
+        }
+        
+        if ( this.areaTarget )
+        { 
+            this.gex.edit.endEditLineString( this.placemark.getGeometry().getOuterBoundary() );
+            document.getElementById(this.areaTarget).innerHTML = 'N/A';
+            this.areaTarget = null;
+        }
     
-    if ( this.areaTarget )
-    { 
-        this.gex.edit.endEditLineString( this.placemark.getGeometry().getOuterBoundary() );
-        document.getElementById(this.areaTarget).innerHTML = 'N/A';
-        this.areaTarget = null;
+        this.gex.dom.removeObject( this.placemark );
+        this.placemark = null;
     }
-    
-    this.gex.dom.removeObject( this.placemark );
-    this.placemark = null;
 };
 
 /**
@@ -89,9 +92,13 @@ lingcod.measureTool.prototype.setUnits = function( units ) {
  * @param {GEarthExtensions} gex The handle to the GEarthExtensions object
  * @param {String} areaSpanId The id of an HTML tag whose innerHTML will be overwritten with measure results.
  */
-lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId ) {
+lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId ) 
+{
     var self = this;
     this.gex = gex;
+    
+    this.clear();
+
     this.areaTarget = areaSpanId;
 
     this.placemark = gex.dom.addPlacemark({
@@ -125,9 +132,13 @@ lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId ) {
  * @param {GEarthExtensions} gex The handle to the GEarthExtensions object
  * @param {String} distSpanId The id of an HTML tag whose innerHTML will be overwritten with measure results.
  */
-lingcod.measureTool.prototype.measureDistance = function( gex, distSpanId ) {
+lingcod.measureTool.prototype.measureDistance = function( gex, distSpanId ) 
+{    
     var self = this;
     this.gex = gex;
+    
+    this.clear();
+    
     this.distTarget = distSpanId;
 
     this.placemark = gex.dom.addPlacemark({
