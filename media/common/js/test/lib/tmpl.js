@@ -1,4 +1,4 @@
-module('micro-templating')
+module('micro-templating');
 
 test("list template", function(){
     template = [
