@@ -7,4 +7,6 @@
 <stylesheets>
     <file path="common/css/typography.css" />
     <file path="common/css/application.css" />
+    <file path="common/css/tabs.css" />
+    <file path="common/css/layout.css" />
 </stylesheets>

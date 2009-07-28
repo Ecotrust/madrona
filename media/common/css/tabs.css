@@ -1,0 +1,127 @@
+/* CSS file modified from http://stilbuero.de/jquery/tabs_3/ */
+/* Caution! Ensure accessibility in print and other media types... */
+.ui-tabs-hide {
+    position:absolute;
+    left:-1000px;
+    top:0px;
+}
+/*}*/
+
+/* Hide useless elements in print layouts... */
+
+/* Skin */
+.ui-tabs-nav{
+/*    font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif;*/
+    font-size: 0.6em;
+}
+.ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 4px;
+    position:absolute;
+    top:-2.2em;
+}
+.ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+
+.ui-tabs-nav li {
+    float: left;
+    margin: 0 0 0 1px;
+    min-width: 84px; /* be nice to Opera */
+}
+
+.ui-tabs-nav a, .ui-tabs-nav a span {
+    display: block;
+/*    padding: 0 10px;*/
+/*    background: white;*/
+    background-color:#F9FAFF;
+    padding:0.5em;
+}
+
+.ui-tabs-nav a {
+    margin: 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
+    padding-left: 0;
+    color: #27537a;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* required in IE 6 */    
+    outline: 0; /* prevent dotted border in Firefox */
+    border-bottom:solid 1px #E6E6E6;
+    -webkit-box-shadow: 2px -2px 3px #CBCBCB;
+    -moz-box-shadow: 2px -2px 3px #CBCBCB;
+}
+
+.ui-tabs-nav .ui-tabs-selected a {
+    -webkit-box-shadow: 2px -2px 3px #BCBCBC;
+    -moz-box-shadow: 2px -2px 3px #B6B6B6;
+    border-bottom:none;
+    background-color:white;
+    -webkit-border-top-right-radius:15px;
+    -webkit-border-top-left-radius:2px;
+    -moz-border-radius-topright:15px;
+    -moz-border-radius-topleft:2px;
+    margin-right:-5px;
+    margin-top:0;
+    position: relative;
+    padding-bottom:7px;
+    top: 0px;
+    z-index: 2;
+/*    margin-top: 0;*/
+/*    margin-bottom:-5px;*/
+    color: #1A3752;
+}
+.ui-tabs-nav a span {
+    width: 64px; /* IE 6 treats width as min-width */
+    min-width: 64px;
+    height: 18px; /* IE 6 treats height as min-height */
+    min-height: 18px;
+    padding-top: 6px;
+    padding-right: 0;
+}
+*>.ui-tabs-nav a span { /* hide from IE 6 */
+    width: auto;
+    height: auto;
+}
+.ui-tabs-nav .ui-tabs-selected a span {
+    padding-bottom: 1px;
+}
+.ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
+    background-position: 100% -150px;
+}
+.ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
+    background-position: 100% -100px;
+}
+.ui-tabs-nav .ui-tabs-selected a span, .ui-tabs-nav a:hover span, .ui-tabs-nav a:focus span, .ui-tabs-nav a:active span {
+    background-position: 0 -50px;
+}
+.ui-tabs-nav a span, .ui-tabs-nav .ui-tabs-disabled a:hover span, .ui-tabs-nav .ui-tabs-disabled a:focus span, .ui-tabs-nav .ui-tabs-disabled a:active span {
+    background-position: 0 0;
+}
+.ui-tabs-nav .ui-tabs-selected a:link, .ui-tabs-nav .ui-tabs-selected a:visited, .ui-tabs-nav .ui-tabs-disabled a:link, .ui-tabs-nav .ui-tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
+    cursor: text;
+}
+.ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active,
+.ui-tabs-nav .ui-tabs-deselectable a:hover, .ui-tabs-nav .ui-tabs-deselectable a:focus, .ui-tabs-nav .ui-tabs-deselectable a:active { /* @ Opera, we need to be explicit again here now... */
+    cursor: pointer;
+}
+.ui-tabs-disabled {
+    opacity: .4;
+    filter: alpha(opacity=40);
+}
+.ui-tabs-loading em {
+    padding: 0 0 0 20px;
+    background: url(loading.gif) no-repeat 0 50%;
+}
+
+/* Additional IE specific bug fixes... */
+* html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
+    display: inline-block;
+}
+*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+    display: inline-block;
+}

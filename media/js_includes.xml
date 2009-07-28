@@ -13,5 +13,9 @@
     <file path="common/js/lib/ge_utility_lib_patches.js" />
     <test path="common/js/test/lib/ge_utility_lib_patches.js" />
     <file path="common/js/tools/measure_tool.js" />
-    <test path="common/js/test/tools/measure_tool.js" />    
+    <test path="common/js/test/tools/measure_tool.js" />
+    <file path="common/js/layout/panel.js" />
+    <test path="common/js/test/layout/panel.js" />
+    <file path="common/js/layout/panel_manager.js" />
+    <test path="common/js/test/layout/panel_manager.js" />
 </javascripts>
