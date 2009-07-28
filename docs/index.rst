@@ -15,6 +15,8 @@ Contents:
    deployment
    asset_packaging
    layers
+   ui
+   templatetags
 
 API
 ***
