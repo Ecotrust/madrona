@@ -26,10 +26,10 @@ design philosophy
 * Default stylesheets should produce a pleasing and consistent look when applied to simple markup.
 * Stylesheets should specifically target markup produced by the django APIs such as `forms <http://docs.djangoproject.com/en/dev/topics/forms/>`_.
 * Complex markup, like linking to a static map in a template, should be made easy via custom `template tags <http://docs.djangoproject.com/en/dev/ref/templates/builtins/>`_.
-* Where effects such as rounded corners or drop shadows are desired, css3 should be used. Markup should not be complicated to support older browsers just to support aesthetic issues.
+* Where effects such as rounded corners or drop shadows are desired, css3 should be used. Markup should not be complicated to support older browsers to marginally improve aesthetics.
 * Great pains should not be made to replace native form widgets and buttons to be consistent across browsers. There is nothing wrong with a native look and feel.
 * It is better to create an awesome tool that works on most browsers than a less useful one that works on all of them.
-* A web application doesn't have to behave like a desktop application.
+* It's not always better for a web application to behave like a desktop one.
 
 .. _map_view:
 
@@ -40,13 +40,19 @@ The MarineMap application interface consists primarily of a map view coupled
 with a sidebar implementing the `One-Window Drilldown <http://www.time-tripper.com/uipatterns/One-Window_Drilldown>`_
 pattern. It imposes a limit to the amount of information that can
 be presented in a single view, but also allows for more information to be 
-exposed via links without overwhelming novice users. One goal of using this ui
+exposed via links without overwhelming novice users. One goal of using this UI
 pattern is to reduce the cognitive overhead of managing multiple drag-able 
 windows.
 
 home panel
 ----------
-The home panel blah blah blah.
+The home panel is multi-tabbed, consisting of a set number of categories. 
+Links and content can be added to these tabs using template blocks such as
+`tools`, `data_layers_footer`, `after_my_shapes`, etc.
+
+It's not intended that implementation of MarineMap can easily add tabs or 
+make drastic modifications to the home screen. This interface should remain 
+fairly consistent across projects.
 
 creating new panels
 -------------------
@@ -58,13 +64,16 @@ or markup structures because they can be hard to remember. Changes to
 presentation or additional features may also require a change in markup 
 sometime in the future.
 
+.. _example_panel:
+
 example panel
 ^^^^^^^^^^^^^
 
 .. code-block:: django
 
     {% extends 'common/panel.html' %}
-    {% load footer panel printable home_link %}
+    {# Load all the tags seen here (printable, panel, etc) #}
+    {% load layout_tags %}
     
     {% printable %}
     {% home_link %}
@@ -80,8 +89,8 @@ example panel
         {% endpanel %}        
     {% endblock %}
 
-Note the :ref:`printable` tag for specifying a link to the page-based view, and
-the :ref:`home_link` tag for specifying where the back button should lead.
+Note the :ref:`tag_printable` tag for specifying a link to the page-based view, and
+the :ref:`tag_home_link` tag for specifying where the back button should lead.
 
 example tabbed panel
 ^^^^^^^^^^^^^^^^^^^^
@@ -89,7 +98,7 @@ example tabbed panel
 .. code-block:: django
 
     {% extends 'common/panel.html' %}
-    {% load footer tab tabpanel printable back_link %}
+    {% load layout_tags %}
     
     {% url mpa_attributes mpa.pk as backurl %}
     {% back_link "Back to MPA Attributes" backurl "Attributes" %}
@@ -122,22 +131,67 @@ Show panels by linking to them from other panels.
 .. code-block:: django
 
     {# Link will slide in from the right #}
-    <a href="{% url new_mpa %}" class="link forward" title="Create a Marine Protected Area">create mpa</a>
+    <a href="{% url new_mpa %}" class="forward" title="Create a Marine Protected Area">create mpa</a>
 
     {# Link will slide in from the left, as if returning to the previous panel #}
-    <a href="{% url mpa_attributes mpa.pk %}" class="link backward" title="back to attributes">create mpa</a>
+    <a href="{% url mpa_attributes mpa.pk %}" class="backward" title="back to attributes">create mpa</a>
     
     {# Link will appear without any implied spatial relationship to the current panel #}
-    <a href="{% url wave_detail wave.pk %}" class="link switch" title="view discussion">create mpa</a>
+    {# Switch is currently not implemented #}
+    <a href="{% url wave_detail wave.pk %}" class="switch" title="view discussion">create mpa</a>
+
+how panels are reloaded
+-----------------------
+
+As a user moves to the right, opening more and more panels, they build up a 
+trail of panels that are hidden to the left. If they hit the back button, 
+those panels are brought back up, as they were when first seen. Panels that 
+are hidden to the right are actually removed and can be considered closed. If 
+a user travels back to that panel it is refreshed from the server.
+
+In order to refresh all panels, the javascript api should be used *(not 
+implemented)*.
+
+.. code-block:: javascript
+
+    lingcod.refreshPanels();
 
 
 adding javascript to a panel
 ----------------------------
 
+*Not implemented*. Some sort of api here like this:
+
+.. code-block:: javascript
+
+    <script>
+        lingcod.onPanelShown(function(){
+            // initialize some widgets
+            // ...
+            // setup event listeners.
+        });
+        
+        lingcod.onPanelHide(function(){
+            // deactivate some widgets to improve performance
+        });
+        
+        lingcod.onPanelUnhide(function(){
+            // re-enable components
+        });
+        
+        lingcod.onPanelDestroy(function(){
+            // permanently remove widgets, avoid memory leaks
+        });
+    </script>
 
 
 Linking to other Pages
 **********************
 
+To open a link in a new window or the current window, set the link target to 
+`_self` or `_blank`.
+
 complimentary printable pages for panels
 ----------------------------------------
+*Not Implemented*. Use the :ref:`tag_printable` template tag as seen in the 
+:ref:`example_panel`.

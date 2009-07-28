@@ -14,6 +14,10 @@
             this.index = 0;
             var self = this;
             this.element.find('a').live('click', function(e){
+                var target = $a.attr('target');
+                if(target == '_blank' || target == '_self')){
+                    return true;
+                }
                 var $a = $(this);
                 e.preventDefault();
                 var href = $a.attr('href');

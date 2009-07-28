@@ -3,6 +3,9 @@
 Built-in Template Tags
 ======================
 
+
+.. _tag_footer:
+
 footer
 ^^^^^^
 Creates a footer section that will be attached to the very bottom of the panel
@@ -14,6 +17,8 @@ and appropriately styled.
         This is <i>my</i> footer content
     {% endfooter %}
 
+
+.. _tag_panel:
 
 panel
 ^^^^^
@@ -34,14 +39,18 @@ header, and can be a string(quoted) or a context variable.
     {% endpanel %}
 
 
+.. _tag_tabpanel:
+
 tabpanel
 ^^^^^^^^
-Alternative to `panel <#panel>`_. Works in conjunction with `tab <#tab>`_ tags 
+Alternative to :ref:`tag_panel`. Works in conjunction with :ref:`tag_tab` tags 
 to create tabbed navigation within a single panel.
 
 Accepts one argument, the name of the panel. This will show up in the
 header, and can be a string(quoted) or a context variable.
 
+
+.. _tag_tab:
 
 tab
 ^^^
@@ -64,8 +73,7 @@ navigation element, and can be a string(quoted) or a context variable.
         {% endtab %}
     {% endtabpanel %}
 
-
-.. _printable:
+.. _tag_printable:
 
 printable
 ^^^^^^^^^
@@ -77,27 +85,24 @@ panel, with a style suitable for printing and direct linking.
     {% printable %}
 
 
-.. _back_link:
+.. _tag_back_link:
 
 back_link
 ^^^^^^^^^
 Required for proper operation, this tag creates the link to go back to it's 
 "parent". Note, this does not have to be the last panel shown. It could be
-that the previous linked to this panel via a "switch" animation.
+that the previous panel linked to this one via a "switch" animation.
 
-Accepts the same arguments as the built-in `url tag <http://docs.djangoproject.com/en/dev/ref/templates/builtins/#url>`_,
-or a quoted string that represents the title of a tab on the home panel.
+Accepts the url of a panel as a variable, as well as the title of the link.
 
 .. code-block:: django
 
-    {% back_link mpa_attributes mpa.pk %}
-    
-    {% back_link "Data Layers" %}
+    {% url mpa_attributes mpa.pk as my_url %}
+    {% back_link my_url "MPA Attributes" %}
 
-
-.. _home_link:
+.. _tag_home_link:
 
 home_link
 ^^^^^^^^^
-Can be used rather than :ref:`back_link` for linking directly to the home 
+Can be used rather than :ref:`tag_back_link` for linking directly to the home 
 panel.
