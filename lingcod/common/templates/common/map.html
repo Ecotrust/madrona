@@ -1,58 +1,121 @@
 {% extends "common/base.html" %}
 
 {% block head %}
-<script type="text/javascript">
-    google.load("earth", "1");
+    <script type="text/javascript">
+        google.load("earth", "1");
+        google.load('maps', '3', {"other_params":"sensor=false"});
 
-    var ge = null;
-    var measureTool = null;
+        var ge = null;
+        var gex = null;
 
-    function init() {
-        $.ajaxSetup({ cache: false });
-        google.earth.createInstance("map3d", initCallback, failureCallback);
-    }
+        $(document).ready(function(){
+            lingcod.init();
+        });
+    </script>
 
-    function initCallback(pluginInstance) {
-    
-        ge = pluginInstance;
-        ge.getWindow().setVisibility(true); // required
-        
-        gex = new GEarthExtensions(pluginInstance);
-        
-        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
-            
-        // example: set Earth lookat from study region
-        /*$.get('/studyregion/lookAtKml/', 
-            function(data) {
-                var kmlObject = ge.parseKml(data);
-                if (kmlObject) {
-                    if (kmlObject.getAbstractView())
-                        ge.getView().setAbstractView(kmlObject.getAbstractView());
-                }
-            });*/
-
-        // example: show study region kml
-        /*$.get('/studyregion/kml/', function(data) {
-            gex.util.displayKmlString( data );
-        });*/
-        
-        measureTool = new lingcod.measureTool();
-        measureTool.measureArea( gex, "area" );
-        
-    }
-
-    function failureCallback(errorCode) {
-      alert("Failure loading the Google Earth Plugin: " + errorCode);
-    }
-    
-    $(document).ready(function(){
-        init();
-    });
-        
-</script>
+    <style type="text/css" media="screen">
+        body {
+            font-size:1em;
+            font-family:verdana;
+        }
+    </style>    
 {% endblock %}
-{% block content %}
-<div id="map3d" style="width: 500px; height: 500px; border: 1px solid silver;"></div>
-<p><strong>Distance: </strong><span id="distance">N/A</span></p>
-<p><strong>Area: </strong><span id="area">N/A</span></p>
+
+{% block body %}
+    {% load layout_tags %}
+    <!-- Top-right link area -->
+    <div id="meta-navigation">
+        <ul>
+            <li><a href="profile">cburt</a> | </li>
+            <li><a href="http://marinemap.org">about marinemap</a> | </li>
+            {% block meta_navigation_list_insert %}{% endblock %}
+            <li><a href="help">help</a> | </li>
+            <li><a href="sign out">sign out</a></li>
+            {% block meta_navigation_list_append %}{% endblock %}
+        </ul>
+        <br />
+    </div>
+    <div id="panelManager" class="panel-manager">
+        {% tabpanel "Home" %}
+            {% tab "Data Layers" %}
+                {% block data_layers_before_tree %}{% endblock %}
+                <div id="datalayerstree">
+                    <img src="{{MEDIA_URL}}common/fixtures/widget_mockups/datalayers.png" width="297" height="434" />
+                </div>
+                <p>
+                    <a onclick="playTour(); return false;" href="#js">Play welcome tour</a>
+                </p>
+                {% block data_layers_after_tree %}{% endblock %}
+                {% footer %}
+                    <h3>Earth Options</h3>
+                    <ul>
+                        <form name="ge_options">
+                            <li><input type="checkbox" name="setStatusBarVisibility" checked />Status Bar</li>
+                            <li><input type="checkbox" name="nav" />Navigation Control</li>
+                            <li><input type="checkbox" name="setGridVisibility" />Grid</li>
+                            <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li>
+                            <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li>
+                            <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li>
+                            <li><input type="checkbox" name="sun" />Sun</li>      
+                        </form>
+                    </ul>
+                    <h3>Google Layers</h3>
+                    <ul>
+                        <form name="ge_layers">
+                            <li><input type="checkbox" name="LAYER_BORDERS">Borders</li>
+                            <li><input type="checkbox" name="LAYER_ROADS">Roads</li>
+                            <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li>
+                            <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li>
+                            <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                
+                        </form>
+                    </ul>
+                    <h3>Find a place</h3>
+                    <form id="flyToLocation" method="GET">
+                        <ul>
+                            <li>
+                                <input type="text" name="flyto_location" value="">
+                                <input type="submit" value="Fly here">                                    
+                            </li>
+                        </ul>
+                    </form>
+                    {% block data_layers_footer_append %}{% endblock %}
+                {% endfooter %}
+            {% endtab %}
+            {% tab "My Shapes" %}
+                {% block my_shapes_prepend %}{% endblock %}
+                <p>
+                    <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />
+                    <a href="javascript:alert('create mpa');">create mpa</a> |
+                    <a href="javascript:alert('create array');">create array</a>
+                </p>                    
+                {% block my_shapes_append %}{% endblock %}
+            {% endtab %}
+            {% tab "Collaborate" %}
+                    <p>
+                        <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/wave.png" width="372" height="483" />
+                    </p>   
+            {% endtab %}
+            {% tab "Tools" %}
+                    {% block tools_prepend %}{% endblock %}
+                    <div style="padding:1em;">
+                        <h4>Measurement Tool</h4>
+                        <button id="measure_distance">measure distance</button>
+                        <button id="measure_area">measure area</button>
+                        <button id="measure_clear">clear</button>
+                        <select id="measure_units">
+                            <option value="metric">metric</option>
+                            <option value="english">english</option>
+                            <option value="nautical">nautical</option>                            
+                        </select>
+                        <p><strong>Distance: </strong><span id="distance">N/A</span></p>
+                        <p><strong>Area: </strong><span id="area">N/A</span></p>
+                        <hr>
+                    </div>
+                    {% block tools_append %}{% endblock %}   
+            {% endtab %}
+        {% endtabpanel %}        
+    </div>
+    <div id="map_container">
+        <div id="map"></div>
+    </div>
 {% endblock %}

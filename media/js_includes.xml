@@ -18,4 +18,8 @@
     <test path="common/js/test/layout/panel.js" />
     <file path="common/js/layout/panel_manager.js" />
     <test path="common/js/test/layout/panel_manager.js" />
+    <file path="common/js/map/map.js" />
+    <file path="common/js/map/googleLayers.js" />
+    <test path="common/js/test/map/googleLayers.js" />
+    <test path="common/js/test/map/geocoder.js" />
 </javascripts>
