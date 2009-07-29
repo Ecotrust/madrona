@@ -93,7 +93,8 @@ INSTALLED_APPS = (
     'compress',
     'lingcod.common',
     'lingcod.layers',
-    'mpa',
+    'lingcod.studyregion',
+    'mlpa',
 )
 
 from lingcod.common import assets

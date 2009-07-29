@@ -88,7 +88,7 @@ class MlpaMpa(Mpa):
     other_allowed_uses = models.TextField(null=True, blank=True, verbose_name="Additional Proposed Allowed Uses", help_text="""List here proposed regulations that apply to extractive use activities NOT listed in the drop down menu above. These regulations should be listed here in the form of proposed allowed uses. Please note that the allowed uses listed above have been reviewed by the MLPA Science Advisory Team (SAT) and assigned a level of protection that is used in several MarineMap reporting functions. Any additional allowed uses listed below can not be assigned a level of protection until they are reviewed by the SAT. Thus, including any allowed uses below will disable reporting functions in MarineMap that use levels of protection. """)
     
     class Meta:
-        db_table = u'mlpa_mpas'
+        db_table = u'mlpa_mpa'
         permissions = (
             ("can_share_mpas", "Can Share Mpas"),
         )
