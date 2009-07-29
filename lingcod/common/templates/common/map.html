@@ -8,6 +8,7 @@
     var measureTool = null;
 
     function init() {
+        $.ajaxSetup({ cache: false });
         google.earth.createInstance("map3d", initCallback, failureCallback);
     }
 
@@ -18,7 +19,22 @@
         
         gex = new GEarthExtensions(pluginInstance);
         
-        gex.util.lookAt([45.5, -122.66], { range: 800000, tilt: 40 });  
+        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
+            
+        // example: set Earth lookat from study region
+        /*$.get('/regionLookAtKml/', 
+            function(data) {
+                var kmlObject = ge.parseKml(data);
+                if (kmlObject) {
+                    if (kmlObject.getAbstractView())
+                        ge.getView().setAbstractView(kmlObject.getAbstractView());
+                }
+            });*/
+
+        // example: show study region kml
+        /*$.get('/regionKml/', function(data) {
+            gex.util.displayKmlString( data );
+        });*/
         
         measureTool = new lingcod.measureTool();
         measureTool.measureArea( gex, "area" );
