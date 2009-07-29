@@ -93,7 +93,6 @@ INSTALLED_APPS = (
     'compress',
     'lingcod.common',
     'lingcod.layers',
-    'mpa',
     'simple_app',
 )
 
