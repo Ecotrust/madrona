@@ -37,7 +37,7 @@ class StudyRegion(models.Model):
     lookAt_Lat = models.FloatField(default=0, null=True, blank=True)
     lookAt_Lon = models.FloatField(default=0, null=True, blank=True)
     lookAt_Range = models.FloatField(default=80000, help_text='Distance from lookAt point in meters')
-    lookAt_Tilt = models.FloatField(default=40, help_text='Degrees from vertical (0=directly above)')
+    lookAt_Tilt = models.FloatField(default=0, help_text='Degrees from vertical (0=directly above)')
     lookAt_Heading = models.FloatField(default=0, help_text='View direction in degrees (0=look North)')
     
     objects = models.GeoManager()
@@ -54,6 +54,10 @@ class StudyRegion(models.Model):
     
         
     def lookAtKml(self):
+    
+        if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
+            self.computeLookAt()
+    
         retval = '<Document><LookAt>\
             <latitude>%f</latitude>\
             <longitude>%f</longitude>\
@@ -63,6 +67,56 @@ class StudyRegion(models.Model):
             <altitudeMode>clampToGround</altitudeMode>\
             </LookAt></Document>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
         return KmlWrap( retval )
+        
+        
+    def computeLookAt(self):
+    
+        from math import pi, sin, tan, sqrt, pow
+        
+        DEGREES = pi / 180.0
+        EARTH_RADIUS = 6378137.0
+  
+        trans_geom = self.geometry
+    
+        w = trans_geom.extent[0]
+        s = trans_geom.extent[1]
+        e = trans_geom.extent[2]
+        n = trans_geom.extent[3]
+        
+        center_lon = (w + e)/2
+        center_lat = (n + s)/2
+        
+        lngSpan = abs( w - e )
+        latSpan = abs( n - s )
+        
+        aspectRatio = 1.0
+    
+        PAD_FACTOR = 1.5 # add 50% to the computed range for padding
+        
+        aspectUse = max( aspectRatio, min((lngSpan / latSpan),1.0))
+        alpha = (45.0 / (aspectUse + 0.4) - 2.0) * DEGREES # computed experimentally;
+      
+        # create LookAt using distance formula
+        if lngSpan > latSpan:
+            # polygon is wide
+            beta = min(DEGREES * 90.0, alpha + lngSpan / 2.0 / EARTH_RADIUS)
+        else:
+            # polygon is taller
+            beta = min(DEGREES * 90.0, alpha + latSpan / 2.0 / EARTH_RADIUS)
+      
+        self.lookAt_Range = PAD_FACTOR * EARTH_RADIUS * (sin(beta) *
+            sqrt(1.0 / pow(tan(alpha),2.0) + 1.0) - 1.0)
+            
+        trans_geom.transform(4326)
+        self.lookAt_Lat = trans_geom.centroid.y
+        self.lookAt_Lon = trans_geom.centroid.x
+        
+        self.lookAt_Tilt = 0
+        
+        self.save()
+    
+        
+        
         
 
 #    def updated(self):
