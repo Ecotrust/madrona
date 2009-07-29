@@ -6,10 +6,10 @@ from lingcod.studyregion import models
 from django.conf import settings
 
 
-def map(request):
+def map(request, template_name='common/map.html'):
     """Main application window
     """
-    return render_to_response('common/map.html', RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
+    return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
     
     
 def regionKml(request):
