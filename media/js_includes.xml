@@ -22,4 +22,6 @@
     <file path="common/js/map/googleLayers.js" />
     <test path="common/js/test/map/googleLayers.js" />
     <test path="common/js/test/map/geocoder.js" />
+    <file path="common/js/tree/tree.js" />
+    <test path="common/js/test/tree/tree.js" />
 </javascripts>
