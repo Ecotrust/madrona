@@ -22,6 +22,22 @@ var lingcod = {
         ge.getWindow().setVisibility(true); // required
         gex = new GEarthExtensions(ge);
         gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
+        
+        // set Earth lookat from study region
+        /*$.get('/studyregion/lookAtKml/', 
+            function(data) {
+                var kmlObject = ge.parseKml(data);
+                if (kmlObject) {
+                    if (kmlObject.getAbstractView())
+                        ge.getView().setAbstractView(kmlObject.getAbstractView());
+                }
+            });
+            
+        // show study region kml
+        $.get('/studyregion/kml/', function(data) { //?n=34&s=32&e=-117&w=-117.5
+            gex.util.displayKmlString( data );
+        });*/
+        
         this.googleLayers = new lingcod.map.googleLayers(ge, window.ge_options, window.ge_layers);
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
