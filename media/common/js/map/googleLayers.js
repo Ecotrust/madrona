@@ -26,7 +26,6 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
  * Looks at the layers form and updates the map to match form values
  */
 lingcod.map.googleLayers.prototype.updateLayers = function(){
-    console.log('updating layers');
     $(this.layers).find('input').each(function(){
         ge.getLayerRoot().enableLayerById(ge[$(this).attr('name')], $(this).attr('checked'));
     });
@@ -43,7 +42,6 @@ lingcod.map.googleLayers.prototype.updateOptions = function(){
     var form = this.options;
     var options = ge.getOptions();
     $(form).find('input').each(function(){
-        console.log(this);
         var $input = $(this);
         var name = $input.attr('name');
         if(name != 'nav' && name != 'sun'){

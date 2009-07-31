@@ -20,6 +20,7 @@
     <test path="common/js/test/layout/panel_manager.js" />
     <file path="common/js/map/map.js" />
     <file path="common/js/map/googleLayers.js" />
+    <file path="common/js/map/geocoder.js" />
     <test path="common/js/test/map/googleLayers.js" />
     <test path="common/js/test/map/geocoder.js" />
     <file path="common/js/tree/tree.js" />
