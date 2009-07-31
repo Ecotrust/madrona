@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.conf import settings
 from lingcod.common.utils import KmlWrap
+from django.contrib.gis.geos import Point, Polygon, LinearRing
 
 
 class StudyRegion(models.Model):
@@ -47,13 +48,75 @@ class StudyRegion(models.Model):
     
     
     def kml(self):
-        transform_geom = self.geometry
+        """
+        Get the kml of the entire study region
+        """
+    
+        trans_geom = self.geometry.clone()
+        trans_geom.transform(4326)
+        
+        w = trans_geom.extent[0]
+        s = trans_geom.extent[1]
+        e = trans_geom.extent[2]
+        n = trans_geom.extent[3]
+        
+        return self.kml_chunk(n,s,e,w)
+        
+    
+    def kml_chunk(self, n, s, e, w ):
+        """
+        Get the kml of a lat/lon bounded part of the study region, 
+        with geometry simplified in proportion to the visible % of the region
+        """
+    
+        bounds = Polygon( LinearRing([ Point( w, n ), Point( e, n ), Point( e, s ), Point( w, s ), Point( w, n)]))
+        bounds.set_srid(4326)
+        center_lat = bounds.centroid.y
+        center_lon = bounds.centroid.x
+        bounds.transform( settings.GEOMETRY_DB_SRID )
+            
+        zoom_width = abs(bounds.extent[0] - bounds.extent[2])
+    
+        simplify_factor = max( 50, min( 200, 200.0 * float(zoom_width) / abs( self.geometry.extent[0] - self.geometry.extent[2])))
+        
+        #print zoom_width
+        #print simplify_factor
+        
+        transform_geom = self.geometry.simplify(simplify_factor, preserve_topology=True)
+        transform_geom = transform_geom.intersection( bounds )    
         transform_geom.transform(4326)
-        retval = '<Placemark> <Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle> </Style>' + transform_geom.kml + '</Placemark>'
+        
+        
+        # only add sub-regions if this is not our highest detail level
+        bLastLevel = True #simplify_factor == 50
+        max_lod_pixels = 250
+        if bLastLevel:
+            max_lod_pixels = -1
+        
+        retval = '<Document><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>%d</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region><Placemark> <Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle> </Style>%s</Placemark>' % ( n, s, e, w, max_lod_pixels, transform_geom.kml )
+        
+        # conditionally add sub-regions
+        if not bLastLevel:
+            subregions = '<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( center_lat, s, e, center_lon, center_lat, s, e, center_lon )
+            
+            subregions = subregions +            '<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( n, center_lat, e, center_lon, n, center_lat, e, center_lon )
+            
+            subregions = subregions +'<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( center_lat, s, center_lon, w, center_lat, s, center_lon, w )
+            
+            subregions = subregions +'<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( n, center_lat, center_lon, w, n, center_lat, center_lon, w )
+            
+            retval = retval + subregions
+            
+        retval = retval + '</Document>'
+        
         return KmlWrap( retval )
     
         
     def lookAtKml(self):
+        """
+        Get the kml for the region's lookat values saved in the DB,
+        or compute them if they are set to 0
+        """
     
         if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
             self.computeLookAt()
@@ -70,6 +133,9 @@ class StudyRegion(models.Model):
         
         
     def computeLookAt(self):
+        """
+        Kml defining a camera perspective that puts the whole study region in view
+        """
     
         from math import pi, sin, tan, sqrt, pow
         

@@ -12,11 +12,21 @@ def regionKml(request):
     """Handler for AJAX regionKml request
     """
     region = get_object_or_404( models.StudyRegion, pk=1 )
-    return HttpResponse( region.kml() )
     
+    return HttpResponse(region.kml(), content_type='text/plain') 
+    
+        
+def regionKmlChunk(request, n, s, e, w):
+    """Handler for AJAX regionKml request
+    """
+    region = get_object_or_404( models.StudyRegion, pk=1 )
+    
+    return HttpResponse( 
+        region.kml_chunk(float(n), float(s), float(e), float(w)), content_type='text/plain') 
+            
     
 def regionLookAtKml(request):
     """Handler for AJAX regionLookAtKml request
     """
     region = get_object_or_404( models.StudyRegion, pk=1 )
-    return HttpResponse( region.lookAtKml() )
+    return HttpResponse( region.lookAtKml(), content_type='text/plain' )
