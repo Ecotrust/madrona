@@ -25,4 +25,6 @@
     <test path="common/js/test/map/geocoder.js" />
     <file path="common/js/tree/tree.js" />
     <test path="common/js/test/tree/tree.js" />
+    <file path="common/js/tree/kmlForest.js" />
+    <test path="common/js/test/tree/kmlForest.js" />
 </javascripts>

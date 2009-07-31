@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<!-- This page serves as a standalone example of the panelManager for testing purposes -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MarineMap Client Test Suite</title>    <!-- Date: 2009-06-18 -->
+    <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbEBR9v0lqBFdTfOcbe5WjRTgJ6kw7UGQ-22JRxMCtNAO7aQMQxTVxiKB_Ir8K8OIgRGxFdlY6TxT6w"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://geojs.googlecode.com/files/geo-0.1.2.pack.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
+    <script src="common/js/load_js.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        google.load("earth", "1");
+        google.load('maps', '3', {"other_params":"sensor=false"});
+
+        var ge = null;
+        var gex = null;
+        
+        function addStyleSheet(path){
+            $('head').prepend('<link rel="stylesheet" media="all" href="'+path+'"></link>');
+        }
+        
+        // Dynamically load stylesheets from css_includes.xml
+        $.get('css_includes.xml', function(data, textStatus){
+            var xml = $(data);
+            $(xml).find('file').each(function(){
+                var path = $(this).attr('path') + '?' + (new Date).valueOf();
+                addStyleSheet(path);
+            });
+        });
+        
+        $(document).ready(function(){
+            // Load appropriate javascript in case needed
+            mm_load_js('', function(){
+                google.earth.createInstance("map3d", initCallback, failureCallback);                
+            }, false);
+        });
+        
+        var pdl;
+        
+        function initCallback(instance){
+            ge = instance;
+            gex = new GEarthExtensions(ge);
+            $('#treeContainer').append('<div id="treetest"></div>');
+            $('#treetest').kmlForest({ge: ge, gex: gex})
+            $('#treetest').kmlForest('add', 'http://marinemap.org/kml_test/Public%20Data%20Layers.kmz')
+        }
+        
+        function failureCallback(code){
+            alert(code);
+        }
+        
+    </script>
+    <style type="text/css" media="screen">
+        html, body {
+            overflow:auto;
+            width:auto;
+            height:auto;
+            background-color:#DDDDDE;
+        }
+        
+        #panelManager {
+            position:absolute;
+            top:1em;
+            left:1em;
+        }
+        
+        #map3d {
+            width:800px;
+            height:600px;
+            position:absolute;
+            left:400px;
+            top:10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="treeContainer"></div>
+    <div id="map3d"></div>
+</body>
+</html>

@@ -30,12 +30,12 @@ test("add", function(){
     equals($('li.myCategory img.icon').length, 1);
     
     equals($('li.myCategory > ul > li').length, 0);
-    $('#treetest').tree('add', {
+    var node = $('#treetest').tree('add', {
         name: 'subelement',
         collapsible: false,
         parent: myCategory,
-        metadata: '{mydata: true}'
+        data: {mydata: true}
     });
     equals($('li.myCategory > ul > li').length, 1);
-    equals($($('li.myCategory > ul > li')[0]).metadata()['mydata'], true)
+    equals($(node).data('mydata'), true)
 });

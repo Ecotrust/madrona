@@ -14,10 +14,11 @@
                 collapsible: false,
                 toggle: false,
                 icon: false,
-                metadata: '',
+                data: {},
                 children: false,
                 extra: '',
-                description: false
+                description: false,
+                checked: false
             };
             
             this._template = tmpl([
@@ -27,13 +28,13 @@
                 '<%= (select ? "select " : "unselectable ") %>',
                 '<%= (doubleclick ? "doubleclick " : "") %>',
                 '<%= (hideByDefault ? "hideByDefault " : "") %>',
-                '<%= classname %> <%= id %> <%= metadata %> marinemap-tree-item',
+                '<%= classname %> <%= id %> marinemap-tree-item',
                 '">',
                     '<% if(collapsible) { %>',
-                        '<span class="collapsible"><img src="/marinemap/media/images/core/arrow-right.png" width="9" height="9" /></span>',
+                        '<span class="collapsible"><img src="/media/common/images/arrow-right.png" width="9" height="9" /></span>',
                     '<% } %>',
                     '<% if(toggle) { %>',
-                        '<input type="checkbox"></input>',
+                        '<input type="checkbox" <% if(checked){ %>CHECKED<%}%>></input>',
                     '<% } %>',
                     '<% if(icon) { %>',
                         '<img class="icon" src="<%= icon %>" width="16" height="16" />',
@@ -70,22 +71,26 @@
                     $(this).toggleClass('expanded', false);
                 }
                 if(event && event.button != undefined){
-                    list.slideToggle('fast');
+                    if(self.options.animate){
+                        list.slideToggle('fast');
+                    }else{
+                        list.toggle();
+                    }
                 }else{
                     list.toggle();
                 }
                 var img = $(this).find('img');
-                if($(this).find('img[src*=/marinemap/media/images/core/arrow-right.png]').length != 0){
-                    img.attr('src', "/marinemap/media/images/core/arrow-down.png");
+                if($(this).find('img[src*=/media/common/images/arrow-right.png]').length != 0){
+                    img.attr('src', "/media/common/images/arrow-right.png");
                 }else{
-                    img.attr('src', "/marinemap/media/images/core/arrow-right.png");
+                    img.attr('src', "/media/common/images/arrow-right.png");
                 }
                 return false;
             });
             
             $(this).find('li.marinemap-tree-item a').live('dblclick', function(event){
                 if($(event.target).parent().hasClass('doubleclick')){
-                    $(self.element).trigger('itemDoubleClick', [$(event.target).parent().metadata(), event]);
+                    $(self.element).trigger('itemDoubleClick', [$(event.target).parent(), event]);
                 }
                 event.preventDefault();
                 return false;
@@ -94,7 +99,7 @@
             $(this).find('li a').live('contextmenu', function(event){
                 var item = $(event.target).parent();
                 if(item.hasClass('context')){
-                    self.element.trigger('itemContext', [event, item.metadata(), item]);
+                    self.element.trigger('itemContext', [event, item]);
                 }
                 event.preventDefault();
                 return false;
@@ -107,7 +112,7 @@
                     var parent = $(event.target).parent();
                     if(parent.hasClass('select')){
                         var e = jQuery.Event("itemSelect");
-                        self.element.trigger(e, [parent.metadata(), parent]);
+                        self.element.trigger(e, [parent]);
                         if(!e.isDefaultPrevented()){
                             self.selectItem(parent);
                         }
@@ -149,7 +154,7 @@
                         self.clearSelection();
                     }
                 }
-                var clickedData = [parent.metadata()];
+                var clickedData = [parent];
                 var list = parent.find('>ul');
                 if(list.length > 0){
                     self._toggleCheckboxes(list, checked, clickedData);
@@ -260,7 +265,7 @@
                     // testing for use cases other than array->mpa
                     if(input.attr('checked') != state){
                         input.attr('checked', state);
-                        data.push($(this).metadata());
+                        data.push($(this));
                     }
                     var ul = $(this).find('>ul');
                     if(ul.length > 0){
@@ -271,7 +276,11 @@
         },
 
         add: function(options){
-            var element = this._rTemplate(options);
+            var element = $(this._rTemplate(options));
+            // add metadata
+            for(var k in options['data']){
+                element.data(k, options['data'][k]);
+            }
             var parent;
             if(typeof options['parent'] == 'string'){
                 parent = this.element.find(options['parent']);
@@ -293,7 +302,7 @@
                 ul.html('');
             }
             ul.append(element);
-            var element = ul.find('.'+options['id']);
+            // var element = ul.find('.'+options['id']);
             options = null;
             return element;
         },
@@ -333,15 +342,8 @@
         defaults: {
             // uses micro-templating. 
             // See http://ejohn.org/blog/javascript-micro-templating/
-            defaultItemTemplate: '<li><h3><%= name %></h3></li>',
-            categoryTemplate: '<li><h2><img src="<%= ( obj.icon ? icon : "/marinemap/media/images/silk/icons/folder.png") %>" width="9" height="9" /><%= label %></h2></li>',
-            idProperty: 'id',
-            modelProperty: 'model',
-            modelTemplates: {},
             scrollEl: false,
-            contextMenu: function(event, element, id){
-                
-            }
+            animate: true
         }
     });
     

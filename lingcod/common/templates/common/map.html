@@ -39,9 +39,7 @@
         {% tabpanel "Home" %}
             {% tab "Data Layers" %}
                 {% block data_layers_before_tree %}{% endblock %}
-                <div id="datalayerstree">
-                    <img src="{{MEDIA_URL}}common/fixtures/widget_mockups/datalayers.png" width="297" height="434" />
-                </div>
+                <div style="height:400px;font-size:1em;" id="datalayerstree"></div>
                 <p>
                     <a onclick="playTour(); return false;" href="#js">Play welcome tour</a>
                 </p>
