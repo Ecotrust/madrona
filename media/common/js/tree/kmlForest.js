@@ -3,8 +3,12 @@
         
         // options: {ge, gex, animate}
         _init: function(opts){
-            this.ge = this.options.ge;
-            this.gex = this.options.gex;
+            if(this.options.ge && this.options.gex){
+                this.ge = this.options.ge;
+                this.gex = this.options.gex;                
+            }else{
+                throw('Google earth instance and/or earth-api-utility-library instance not specified in options.');
+            }
             this.element.addClass('marinemap-kml-forest');
             this.kmlObjects = {};
             $(this.element).tree({animate: this.options.animate})
@@ -24,14 +28,19 @@
                 });
         },
 
-        // options = {parent, cachebust, }
+        // options = {callback, cachebust, }
         add: function(url, opts){
+            if(url in this.kmlObjects){
+                throw('KML file with url '+url+' already added.');
+            }
+            var original_url = url;
             console.log('add', url);
             var options = opts || {};
             var self = this;
             if(!url.match('http')){
                 url = window.location + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
+                console.log('RELATIVE PATH: '+url);
             }
             if(options['cachebust']){
                 url = url + '?' + (new Date).valueOf();
@@ -46,7 +55,7 @@
                     0);
                     return;
                 }
-                self.kmlObjects[url] = kmlObject;
+                self.kmlObjects[original_url] = kmlObject;
                 self._addKmlObject(kmlObject, options.callback);
             });            
         },
@@ -93,23 +102,54 @@
             }
         },
         
-        remove: function(options){
-            
+        clear: function(){
+            for(var key in this.kmlObjects){
+                this.remove(key);
+            }
+        },
+        
+        remove: function(url){
+            var obj = this.kmlObjects[url];
+            var found = false;
+            $(this.element).find('> li').each(function(){
+                console.log('li found', this);
+                if($(this).data('kml') == obj){
+                    console.log('found it');
+                    $(this).remove();
+                    found = true;
+                    return;
+                }
+            });
+            if(!found)
+                throw('Could not find node in kmlForest that represents the kml object.');
+            delete this.kmlObjects[url];
+            gex.dom.removeObject(obj);
         },
         
         refresh: function(kml){
-            
         },
         
-        getKmlObject: function(url){
-            
+        getByUrl: function(url){
+            if(this.kmlObjects[url]){
+                return this.kmlObjects[url];
+            }else{
+                throw('Could not find kmlObject with that url.');
+            }
+        },
+        
+        length: function(){
+            var length = 0;
+            for(var key in this.kmlObjects){
+                length += 1;
+            }
+            return length;
         }
     }
 
     $.widget('marinemap.kmlForest', KMLForest);
     
     $.extend($.marinemap.kmlForest, {
-        getter: ['getKmlObject'],
+        getter: ['getByUrl', 'length'],
         defaults: {
             animate: false
         }
