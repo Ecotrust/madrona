@@ -21,22 +21,6 @@ var lingcod = {
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
         gex = new GEarthExtensions(ge);
-        // gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
-        
-        // set Earth lookat from study region
-        $.get('/studyregion/lookAtKml/', 
-            function(data) {
-                var kmlObject = ge.parseKml(data);
-                if (kmlObject) {
-                    if (kmlObject.getAbstractView())
-                        ge.getView().setAbstractView(kmlObject.getAbstractView());
-                }
-            });
-            
-        // show study region kml
-        $.get('/studyregion/kml/', function(data) { //?n=34&s=32&e=-117&w=-117.5
-            gex.util.displayKmlString( data );
-        });
         
         this.googleLayers = new lingcod.map.googleLayers(ge, window.ge_options, window.ge_layers);
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
@@ -57,7 +41,16 @@ var lingcod = {
             self.measureTool.setUnits($(this).val());
         });
         $('#datalayerstree').kmlForest({ge: ge, gex: gex})
-            .kmlForest('add', 'http://marinemap.org/kml_test/Public%20Data%20Layers.kmz');
+            .kmlForest('add', '/studyregion/kml/', {cachebust: true, callback: this.studyRegionLoaded})
+            .kmlForest('add', 'http://marinemap.org/kml_test/Public%20Data%20Layers.kmz', {cachebust: true});
+    },
+    
+    studyRegionLoaded: function(kmlObject, node){
+        // Reorder so studyRegion is on top of the list
+        $('#datalayerstree').prepend(node);
+        if (kmlObject.getAbstractView())
+            ge.getView().setAbstractView(kmlObject.getAbstractView());
+        
     },
     
     geFailure: function(errorCode){
@@ -69,9 +62,6 @@ var lingcod = {
         $(window).resize(function(){
             self.resize();
         });
-        
-        // $(document.options).find('input').click(lingcod.map.ge_options.updateOptions);
-        // $(document.ge_layers).find('input').click(lingcod.map.ge_options.updateLayer);
     },
     
     resize: function(){

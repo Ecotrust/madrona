@@ -1,21 +1,18 @@
 (function($){
     var KMLForest = {
         
+        // options: {ge, gex, animate}
         _init: function(opts){
-            console.log('init');
             this.ge = this.options.ge;
             this.gex = this.options.gex;
             this.element.addClass('marinemap-kml-forest');
             this.kmlObjects = {};
-            $(this.element).tree({animate: false})
+            $(this.element).tree({animate: this.options.animate})
                 .bind('itemToggle', function(e, clickedData, checked){
-                    console.log(e, clickedData, checked);
                     for(var i=0; i<clickedData.length; i++){
                         var node = clickedData[i];
-                        console.log(node, node.data('kml'));
                         
                         var kml = $(node).data('kml');
-                        console.log(kml);
                         kml.setVisibility(checked);
                         var c = kml;
                         while (c && 'setVisibility' in c) {
@@ -27,19 +24,19 @@
                 });
         },
 
+        // options = {parent, cachebust, }
         add: function(url, opts){
-            console.log('add');
+            console.log('add', url);
             var options = opts || {};
-            // pdl = $('#treetest').tree('add', {
-            //     id: 'publicdatalayers',
-            //     name: 'Public Data Layers',
-            //     classname: 'marinemap-tree-category',
-            //     context: true
-            // });
-            // loadKml('http://marinemap.org/kml_test/Public%20Data%20Layers.kmz');
-            // var url=url+'?nodcache=True';
             var self = this;
-            google.earth.fetchKml(this.ge, url + '?' + (new Date).valueOf(),
+            if(!url.match('http')){
+                url = window.location + url;
+                url = url.replace(/(\w)\/\//g, '$1/');
+            }
+            if(options['cachebust']){
+                url = url + '?' + (new Date).valueOf();
+            }
+            google.earth.fetchKml(this.ge, url,
             function(kmlObject) {
                 if (!kmlObject) {
                     // show error
@@ -50,45 +47,50 @@
                     return;
                 }
                 self.kmlObjects[url] = kmlObject;
-                self.addKmlObject(kmlObject);
+                self._addKmlObject(kmlObject, options.callback);
             });            
         },
         
-        addKmlObject: function(kmlObject){
+        _addKmlObject: function(kmlObject, callback){
             console.log('addKmlObject');
             this.ge.getFeatures().appendChild(kmlObject);
-            this._buildTreeUI(kmlObject);
+            this._buildTreeUI(kmlObject, callback);
         },
         
-        _buildTreeUI: function(kmlObject){
-            console.log('_buildTreeUI');
+        _buildTreeUI: function(kmlObject, callback){
             // walk the loaded KML object DOM
-            var node = $(this.element).tree('add', {
-                    id: 'publicdatalayers',
-                    name: 'Public Data Layers',
-                    classname: 'marinemap-tree-category',
-                    context: true,
-                    // collapsible: true
-            });
+            // var node = $(this.element).tree('add', {
+            //         id: 'publicdatalayers',
+            //         name: 'Public Data Layers',
+            //         classname: 'marinemap-tree-category',
+            //         context: true,
+            //         // collapsible: true
+            // });
             var self = this;
+            var topNode;
             gex.dom.walk({
                 visitCallback: function(context){
                     var child = $(self.element).tree('add', {
-                        name: this.getName(),
+                        name: this.getName() || "No name specified in kml",
                         parent: context.current,
-                        collapsible: this.getType() == 'KmlFolder',
+                        collapsible: !(this == kmlObject) && this.getType() == 'KmlFolder',
                         hideByDefault: false,
-                        toggle: true,
+                        toggle: !(this == kmlObject),
+                        classname: (this == kmlObject) ? 'marinemap-tree-category' : undefined,
                         checked: this.getVisibility()
                     });
-                    console.log(this.getType());
+                    if(this == kmlObject){
+                        topNode = child;
+                    }
                     child.data('kml', this);
-                    console.log(child.data('kml'));
                     context.child = child;
                 },
-                rootContext: node,
+                rootContext: false,
                 rootObject: kmlObject
             });
+            if(callback){
+                callback(kmlObject, topNode);
+            }
         },
         
         remove: function(options){
@@ -109,18 +111,7 @@
     $.extend($.marinemap.kmlForest, {
         getter: ['getKmlObject'],
         defaults: {
-            // uses micro-templating. 
-            // See http://ejohn.org/blog/javascript-micro-templating/
-            defaultItemTemplate: '<li><h3><%= name %></h3></li>',
-            categoryTemplate: '<li><h2><img src="<%= ( obj.icon ? icon : "/marinemap/media/images/silk/icons/folder.png") %>" width="9" height="9" /><%= label %></h2></li>',
-            idProperty: 'id',
-            modelProperty: 'model',
-            modelTemplates: {},
-            scrollEl: false,
-            contextMenu: function(event, element, id){
-                
-            },
-            animate: true
+            animate: false
         }
     });
     

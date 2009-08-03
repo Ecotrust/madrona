@@ -93,7 +93,18 @@ class StudyRegion(models.Model):
         if bLastLevel:
             max_lod_pixels = -1
         
-        retval = '<Document><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>%d</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region><Placemark> <Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle> </Style>%s</Placemark>' % ( n, s, e, w, max_lod_pixels, transform_geom.kml )
+        
+        if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
+            self.computeLookAt()
+            
+        retval = '<Document><name>%s</name>    <LookAt>\
+                <latitude>%f</latitude>\
+                <longitude>%f</longitude>\
+                <range>%f</range>\
+                <tilt>%f</tilt>\
+                <heading>%f</heading>\
+                <altitudeMode>clampToGround</altitudeMode>\
+                </LookAt><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>%d</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region><Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle> </Style>%s</Placemark>' % ( self.name, self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading, n, s, e, w, max_lod_pixels, transform_geom.kml )
         
         # conditionally add sub-regions
         if not bLastLevel:

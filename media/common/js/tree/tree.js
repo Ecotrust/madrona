@@ -39,7 +39,7 @@
                     '<% if(icon) { %>',
                         '<img class="icon" src="<%= icon %>" width="16" height="16" />',
                     '<% } %>',
-                    '<a href="#"><%= name %></a>',
+                    '<a href="#js"><%= name %></a>',
                     '<span class="badges"><%= extra %></span>',
                     '<% if(description){ %>',
                         '<p class="description"><%= description %></p>',
@@ -72,7 +72,7 @@
                 }
                 if(event && event.button != undefined){
                     if(self.options.animate){
-                        list.slideToggle('fast');
+                        list.slideToggle(100);
                     }else{
                         list.toggle();
                     }
@@ -284,7 +284,7 @@
             var parent;
             if(typeof options['parent'] == 'string'){
                 parent = this.element.find(options['parent']);
-            }else if(typeof options['parent'] == 'undefined'){
+            }else if(typeof options['parent'] == 'undefined' || options['parent'] == null || options['parent'] == false){
                 parent = this.element;
             }else{
                 parent = options['parent'];
