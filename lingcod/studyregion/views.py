@@ -20,7 +20,7 @@ def regionKml(request):
     """
     region = get_object_or_404( models.StudyRegion, pk=1 )
     
-    return HttpResponse( KmlWrap( region.kml() ), content_type='text/plain') 
+    return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type='text/plain') 
     
         
 def regionKmlChunk(request, n, s, e, w):

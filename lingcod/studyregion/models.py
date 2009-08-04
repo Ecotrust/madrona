@@ -47,15 +47,15 @@ class StudyRegion(models.Model):
         db_table = u'mm_study_region'
     
     
-    def kml(self):
+    def kml(self, style_domain):
         """
         Get the kml of the entire study region
         """
-    
+        
         transform_geom = self.geometry.simplify(20, preserve_topology=True)
         transform_geom.transform(4326)
         
-        return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>%s</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark></Document>' % (self.name, transform_geom.kml, )
+        return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>%s</name><styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % (self.name, style_domain, transform_geom.kml, )
     
         # To use the kml_chunk LOD system, use the following instead:
     
