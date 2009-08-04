@@ -1,0 +1,58 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+<script type="text/javascript">
+    google.load("earth", "1");
+
+    var ge = null;
+    var measureTool = null;
+
+    function init() {
+        $.ajaxSetup({ cache: false });
+        google.earth.createInstance("map3d", initCallback, failureCallback);
+    }
+
+    function initCallback(pluginInstance) {
+    
+        ge = pluginInstance;
+        ge.getWindow().setVisibility(true); // required
+        
+        gex = new GEarthExtensions(pluginInstance);
+        
+        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
+            
+        // example: set Earth lookat from study region
+        $.get('/studyregion/lookAtKml/', 
+            function(data) {
+                var kmlObject = ge.parseKml(data);
+                if (kmlObject) {
+                    if (kmlObject.getAbstractView())
+                        ge.getView().setAbstractView(kmlObject.getAbstractView());
+                }
+            });
+
+        // example: show study region kml
+        $.get('/studyregion/kml/', function(data) {
+            gex.util.displayKmlString( data );
+        });
+        
+        //measureTool = new lingcod.measureTool();
+        //measureTool.measureArea( gex, "area" );
+        
+    }
+
+    function failureCallback(errorCode) {
+      alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    $(document).ready(function(){
+        init();
+    });
+        
+</script>
+{% endblock %}
+{% block body %}
+<div id="map3d" style="width: 500px; height: 500px; border: 1px solid silver;"></div>
+<p><strong>Distance: </strong><span id="distance">N/A</span></p>
+<p><strong>Area: </strong><span id="area">N/A</span></p>
+{% endblock %}

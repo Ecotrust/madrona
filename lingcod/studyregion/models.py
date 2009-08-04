@@ -52,17 +52,27 @@ class StudyRegion(models.Model):
         Get the kml of the entire study region
         """
     
-        trans_geom = self.geometry.clone()
-        trans_geom.transform(4326)
+        transform_geom = self.geometry.simplify(20, preserve_topology=True)
+        transform_geom.transform(4326)
         
-        w = trans_geom.extent[0]
-        s = trans_geom.extent[1]
-        e = trans_geom.extent[2]
-        n = trans_geom.extent[3]
-        
-        return self.kml_chunk(n,s,e,w)
-        
+        return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>%s</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark></Document>' % (self.name, transform_geom.kml, )
     
+        # To use the kml_chunk LOD system, use the following instead:
+    
+        #trans_geom = self.geometry.clone()
+        #trans_geom.transform(4326)
+        
+        #w = trans_geom.extent[0]
+        #s = trans_geom.extent[1]
+        #e = trans_geom.extent[2]
+        #n = trans_geom.extent[3]
+        
+        #retval = '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
+
+        #return retval
+        
+        
+    # NOTE: not currently used, LOD system overhead not justified by performance
     def kml_chunk(self, n, s, e, w ):
         """
         Get the kml of a lat/lon bounded part of the study region, 
@@ -77,50 +87,42 @@ class StudyRegion(models.Model):
             
         zoom_width = abs(bounds.extent[0] - bounds.extent[2])
     
-        simplify_factor = max( 50, min( 200, 200.0 * float(zoom_width) / abs( self.geometry.extent[0] - self.geometry.extent[2])))
-        
-        #print zoom_width
-        #print simplify_factor
+        # minimum geometry simplify value (highest detail) = 50
+        # maximum geometry simplify value = 200
+        # value set by pecentage of study region width requested in this chunk
+        simplify_factor = max( 50, min( 200, 200.0 * float(zoom_width) / abs( self.geometry.extent[0] - self.geometry.extent[2]))) # TODO: fix this extent subtraction at the end -- will not account for international date line if in srid 4326
         
         transform_geom = self.geometry.simplify(simplify_factor, preserve_topology=True)
         transform_geom = transform_geom.intersection( bounds )    
         transform_geom.transform(4326)
         
+        # Debugging info
+        #print zoom_width
+        #print simplify_factor
+        #print transform_geom.num_coords
+        # End debugging info
         
         # only add sub-regions if this is not our highest detail level
-        bLastLevel = True #simplify_factor == 50
-        max_lod_pixels = 250
+        bLastLevel = simplify_factor == 200 # change value to build varying levels of LOD
+        max_lod_pixels = 500
         if bLastLevel:
             max_lod_pixels = -1
-        
-        
-        if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
-            self.computeLookAt()
             
-        retval = '<Document><name>%s</name>    <LookAt>\
-                <latitude>%f</latitude>\
-                <longitude>%f</longitude>\
-                <range>%f</range>\
-                <tilt>%f</tilt>\
-                <heading>%f</heading>\
-                <altitudeMode>clampToGround</altitudeMode>\
-                </LookAt><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>%d</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region><Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle> </Style>%s</Placemark>' % ( self.name, self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading, n, s, e, w, max_lod_pixels, transform_geom.kml )
+        retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>250</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % ( n, s, e, w, max_lod_pixels )
         
         # conditionally add sub-regions
         if not bLastLevel:
-            subregions = '<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( center_lat, s, e, center_lon, center_lat, s, e, center_lon )
+            subregions = '<Folder>' + self.kml_chunk( center_lat, s, e, center_lon ) 
             
-            subregions = subregions +            '<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( n, center_lat, e, center_lon, n, center_lat, e, center_lon )
+            subregions = subregions + self.kml_chunk( n, center_lat, e, center_lon )       
             
-            subregions = subregions +'<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( center_lat, s, center_lon, w, center_lat, s, center_lon, w )
+            subregions = subregions + self.kml_chunk( center_lat, s, center_lon, w )    
             
-            subregions = subregions +'<NetworkLink><Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>125</minLodPixels><maxLodPixels>250</maxLodPixels></Lod></Region><Link><href>http://localhost:8080/studyregion/kml_chunk/%f/%f/%f/%f/</href><viewRefreshMode>onRegion</viewRefreshMode></Link></NetworkLink>' % ( n, center_lat, center_lon, w, n, center_lat, center_lon, w )
+            subregions = subregions + self.kml_chunk( n, center_lat, center_lon, w )
             
-            retval = retval + subregions
-            
-        retval = retval + '</Document>'
+            retval = retval + subregions + '</Folder>'
         
-        return KmlWrap( retval )
+        return retval + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml, )
     
         
     def lookAtKml(self):
@@ -132,15 +134,8 @@ class StudyRegion(models.Model):
         if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
             self.computeLookAt()
     
-        retval = '<Document><LookAt>\
-            <latitude>%f</latitude>\
-            <longitude>%f</longitude>\
-            <range>%f</range>\
-            <tilt>%f</tilt>\
-            <heading>%f</heading>\
-            <altitudeMode>clampToGround</altitudeMode>\
-            </LookAt></Document>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
-        return KmlWrap( retval )
+        retval = '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
+        return retval
         
         
     def computeLookAt(self):
@@ -160,10 +155,10 @@ class StudyRegion(models.Model):
         e = trans_geom.extent[2]
         n = trans_geom.extent[3]
         
-        center_lon = (w + e)/2
-        center_lat = (n + s)/2
+        center_lon = trans_geom.centroid.y
+        center_lat = trans_geom.centroid.x
         
-        lngSpan = abs( w - e )
+        lngSpan = abs( w - e ) # TODO: fix this calculation, it will break over the date line
         latSpan = abs( n - s )
         
         aspectRatio = 1.0
