@@ -35,8 +35,7 @@
             var head = document.getElementsByTagName('head')[0];
             $(document.createElement('link')) 
                 .attr({type: 'text/css', href: path, rel: 'stylesheet', media: 'screen'}) 
-                .insertBefore($('#overflow-style'));            
-            console.log('adding stylesheet', path);
+                .appendTo(head);            
         }
         
         function load_javascript(){
