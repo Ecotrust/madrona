@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.conf import settings
-from lingcod.common.utils import KmlWrap
+from lingcod.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
 
 
@@ -57,7 +57,7 @@ class StudyRegion(models.Model):
             transform_geom = self.geometry.simplify(20, preserve_topology=True)
             transform_geom.transform(4326)
             
-            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>Study Region Boundaries</name><styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % (style_domain, transform_geom.kml, )
+            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark><name>Study Region Boundaries</name>%s<styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % ( self.lookAtKml(), style_domain, transform_geom.kml, )
     
         else:
             # use the kml_chunk LOD system,
@@ -143,58 +143,24 @@ class StudyRegion(models.Model):
         """
     
         if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
-            self.computeLookAt()
+            self.cacheLookAt()
     
         retval = '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
         return retval
         
         
-    def computeLookAt(self):
+    def cacheLookAt(self):
         """
-        Kml defining a camera perspective that puts the whole study region in view
+        Compute and store the camera perspective that puts the whole study region in view
         """
     
-        from math import pi, sin, tan, sqrt, pow
+        lookAtParams = ComputeLookAt( self.geometry )
         
-        DEGREES = pi / 180.0
-        EARTH_RADIUS = 6378137.0
-  
-        trans_geom = self.geometry
-    
-        w = trans_geom.extent[0]
-        s = trans_geom.extent[1]
-        e = trans_geom.extent[2]
-        n = trans_geom.extent[3]
-        
-        center_lon = trans_geom.centroid.y
-        center_lat = trans_geom.centroid.x
-        
-        lngSpan = (Point(w, center_lat)).distance(Point(e, center_lat)) 
-        latSpan = (Point(center_lon, n)).distance(Point(center_lon, s))
-        
-        aspectRatio = 1.0
-    
-        PAD_FACTOR = 1.5 # add 50% to the computed range for padding
-        
-        aspectUse = max( aspectRatio, min((lngSpan / latSpan),1.0))
-        alpha = (45.0 / (aspectUse + 0.4) - 2.0) * DEGREES # computed experimentally;
-      
-        # create LookAt using distance formula
-        if lngSpan > latSpan:
-            # polygon is wide
-            beta = min(DEGREES * 90.0, alpha + lngSpan / 2.0 / EARTH_RADIUS)
-        else:
-            # polygon is taller
-            beta = min(DEGREES * 90.0, alpha + latSpan / 2.0 / EARTH_RADIUS)
-      
-        self.lookAt_Range = PAD_FACTOR * EARTH_RADIUS * (sin(beta) *
-            sqrt(1.0 / pow(tan(alpha),2.0) + 1.0) - 1.0)
-            
-        trans_geom.transform(4326)
-        self.lookAt_Lat = trans_geom.centroid.y
-        self.lookAt_Lon = trans_geom.centroid.x
-        
-        self.lookAt_Tilt = 0
+        self.lookAt_Range = lookAtParams['range']
+        self.lookAt_Lat = lookAtParams['latitude'] 
+        self.lookAt_Lon = lookAtParams['longitude'] 
+        self.lookAt_Tilt = lookAtParams['tilt']
+        self.lookAt_Heading = lookAtParams['heading']
         
         self.save()
     

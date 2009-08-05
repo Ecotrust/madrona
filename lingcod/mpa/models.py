@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group
 from django.conf import settings
+from lingcod.common.utils import LookAtKml
 
 from managers import *
 
@@ -38,3 +39,35 @@ class Mpa(models.Model):
     
     class Meta:
         abstract=True
+        
+        
+    def lookAtKml(self):
+        """
+        Get the kml for a camera perspective looking at the MPA's final geometry
+        """
+        return LookAtKml( self.geometry_final )
+    
+    
+    def kmlOrigGeom(self, style_domain):
+        self.geometry_orig.transform(4326)
+        return '<Placemark>' + '<name>' + self.name + ' original geometry</name>' + self.kmlOrigGeomStyle(style_domain) + LookAtKml( self.geometry_orig ) + self.geometry_orig.kml + '</Placemark>'
+    
+    def kmlFinalGeom(self, style_domain):
+        self.geometry_final.transform(4326)
+        return '<Placemark>' + '<name>' + self.name + ' final geometry</name>' + self.kmlFinalGeomStyle(style_domain) + LookAtKml( self.geometry_final ) + self.geometry_final.kml + '</Placemark>'
+        
+    
+    def kmlOrigGeomStyle(self, style_domain):
+        return '<Style> <LineStyle> <color>ffffffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>80ffffff</color> </PolyStyle></Style>'
+    
+    
+    def kmlFinalGeomStyle(self, style_domain):
+        return '<Style> <LineStyle> <color>ffffffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>80ff0000</color> </PolyStyle></Style>'
+        
+        
+    def kmlFolder(self, style_domain):
+        """
+        Return a kml folder containing the kml for this mpa's final and orginal geometry
+        """
+        return '<Document><name>MPAs</name><Folder>' + '<name>' + self.name + '</name>' + self.kmlFinalGeom(style_domain) + self.kmlOrigGeom(style_domain) + '</Folder></Document>'
+        

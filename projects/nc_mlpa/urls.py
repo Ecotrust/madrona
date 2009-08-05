@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     
     (r'^layers/', include('lingcod.layers.urls')),
     (r'^studyregion/', include('lingcod.studyregion.urls')),
+    (r'^mlpa/', include('mlpa.urls')),
     
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
