@@ -22,11 +22,28 @@
         var bothReady = false;
         
         $(document).ready(function(){
+            $.get('css_includes.xml', function(data, textStatus){
+                var xml = $(data);
+                $(xml).find('file').each(function(){
+                    addStyleSheet($(this).attr('path'));
+                });
+                load_javascript();
+            });            
+        });
+        
+        function addStyleSheet(path){
+            var head = document.getElementsByTagName('head')[0];
+            $(document.createElement('link')) 
+                .attr({type: 'text/css', href: path, rel: 'stylesheet', media: 'screen'}) 
+                .insertBefore($('#overflow-style'));            
+        }
+        
+        function load_javascript(){
             mm_load_js('', function(){
                 runtests_when_ready();
             }, true);
-            google.earth.createInstance("map3d", initCallback, failureCallback);
-        });
+            google.earth.createInstance("map3d", initCallback, failureCallback);            
+        }
         
         function runtests_when_ready(){
             if(bothReady){
@@ -51,7 +68,7 @@
             QUnit.done = fireunit.testDone;
         }
     </script>
-    <style type="text/css" media="screen">
+    <style id="overflow-style" type="text/css" media="screen">
         body,html {
             overflow:auto;
         }
