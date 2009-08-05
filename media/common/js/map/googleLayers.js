@@ -27,7 +27,6 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
  */
 lingcod.map.googleLayers.prototype.updateLayers = function(){
     this.layers.find('input').each(function(){
-        console.log('UPDATE LAYERS           ', $(this).attr('name'));
         ge.getLayerRoot().enableLayerById(ge[$(this).attr('name')], $(this).attr('checked'));
     });
 };
