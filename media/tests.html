@@ -35,7 +35,7 @@
             var head = document.getElementsByTagName('head')[0];
             $(document.createElement('link')) 
                 .attr({type: 'text/css', href: path, rel: 'stylesheet', media: 'screen'}) 
-                .appendTo(head);            
+                .insertBefore($('#scroll'));            
         }
         
         function load_javascript(){
@@ -68,7 +68,7 @@
             QUnit.done = fireunit.testDone;
         }
     </script>
-    <style id="overflow-style" type="text/css" media="screen">
+    <style id="scroll" type="text/css" media="screen">
         body,html {
             overflow:auto;
         }
