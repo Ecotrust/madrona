@@ -22,7 +22,7 @@ var lingcod = {
         ge.getWindow().setVisibility(true); // required
         gex = new GEarthExtensions(ge);
         
-        this.googleLayers = new lingcod.map.googleLayers(ge, window.ge_options, window.ge_layers);
+        this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
         var self = this;

@@ -6,8 +6,8 @@
  * @param {form element} the form that controls which layers are displayed. See http://code.google.com/apis/earth/documentation/layers.html#layers
  */
 lingcod.map.googleLayers = function(ge, options_form, layers_form){
-    this.layers = layers_form;
-    this.options = options_form;
+    this.layers = $(layers_form);
+    this.options = $(options_form);
     this.get = ge;
     var self = this;
     $(this.layers).find('input').click(function(){
@@ -26,7 +26,8 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
  * Looks at the layers form and updates the map to match form values
  */
 lingcod.map.googleLayers.prototype.updateLayers = function(){
-    $(this.layers).find('input').each(function(){
+    this.layers.find('input').each(function(){
+        console.log('UPDATE LAYERS           ', $(this).attr('name'));
         ge.getLayerRoot().enableLayerById(ge[$(this).attr('name')], $(this).attr('checked'));
     });
 };
@@ -39,9 +40,8 @@ lingcod.map.googleLayers.prototype.updateLayers = function(){
  *      <input name="setGridVisibility" />
  */
 lingcod.map.googleLayers.prototype.updateOptions = function(){
-    var form = this.options;
     var options = ge.getOptions();
-    $(form).find('input').each(function(){
+    this.options.find('input').each(function(){
         var $input = $(this);
         var name = $input.attr('name');
         if(name != 'nav' && name != 'sun'){
@@ -49,14 +49,20 @@ lingcod.map.googleLayers.prototype.updateOptions = function(){
         }
     });
     
-    if (form.nav && form.nav.checked) {
-        ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
-    } else if(form.nav) {
-        ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+    if(this.options.find('input[name="nav"]').length){
+        if (this.options.find('input[name="nav"]:checked').length) {
+            ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+        }else{
+            ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+        }
     }
     
-    if(form.sun){
-        ge.getSun().setVisibility(form.sun.checked);
+    if(this.options.find('input[name="sun"]').length){
+        if(this.options.find('input[name="sun"]:checked').length){
+            ge.getSun().setVisibility(true);
+        }else{
+            ge.getSun().setVisibility(false);
+        }
     }
 };
 
