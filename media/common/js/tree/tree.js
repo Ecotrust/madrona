@@ -10,7 +10,6 @@
                 context: false,
                 select: false,
                 doubleclick: false,
-                hideByDefault: false,
                 collapsible: false,
                 toggle: false,
                 icon: false,
@@ -18,7 +17,8 @@
                 children: false,
                 extra: '',
                 description: false,
-                checked: false
+                checked: false,
+                open: false
             };
             
             this._template = tmpl([
@@ -27,7 +27,7 @@
                 '<%= (toggle ? "toggle " : "") %>',
                 '<%= (select ? "select " : "unselectable ") %>',
                 '<%= (doubleclick ? "doubleclick " : "") %>',
-                '<%= (hideByDefault ? "hideByDefault " : "") %>',
+                '<%= (open ? "open " : "") %>',
                 '<%= classname %> <%= id %> marinemap-tree-item',
                 '">',
                     '<% if(collapsible) { %>',
@@ -46,12 +46,12 @@
                     '<% } %>',
                     '<% if(children) { %>',
                     '<% if(collapsible) { %>',
-                    '<ul style="display:none;"><%= children %></ul>',
+                    '<ul><%= children %></ul>',
                     '<% }else{ %>',
                     '<ul><%= children %></ul>',
                     '<% } %>',
                     '<% } else if(collapsible) { %>',
-                        '<ul style="display:none;"></ul>',
+                        '<ul></ul>',
                     '<% } %>',
                 '</li>'
             ].join(''))
@@ -59,26 +59,14 @@
             $(this).find('span.collapsible').live('click', function(event){
                 event.preventDefault();
                 // alert('collapsible click');
-                var list = $(this).parent().find('>ul');
+                var li = $(this).parent();
+                var list = li.find('>ul');
                 if(list.find('li').length == 0){
                     list.html('<p class="no-items">No items.</p>');
                 }else{
                     list.find('p.no-items').remove();
                 }
-                if(list.css('display') == 'none'){
-                    $(this).toggleClass('expanded', true);
-                }else{
-                    $(this).toggleClass('expanded', false);
-                }
-                if(event && event.button != undefined){
-                    if(self.options.animate){
-                        list.slideToggle(100);
-                    }else{
-                        list.toggle();
-                    }
-                }else{
-                    list.toggle();
-                }
+                li.toggleClass('open');
                 var img = $(this).find('img');
                 if($(this).find('img[src*=/media/common/images/arrow-right.png]').length != 0){
                     img.attr('src', "/media/common/images/arrow-right.png");
@@ -255,22 +243,16 @@
         _toggleCheckboxes: function(el, state, data){
             var self = this;
             el.find('>li.toggle').each(function(){
-                var hideByDefault = $(this).hasClass('hideByDefault');
-                if(hideByDefault && state){
-                    // do nothing
-                }else{
-                    // dont uncheck hideByDefault nodes that are already unchecked
-                    var input = $(this).find('>input');
-                    // this code might not work for deeply nested trees, needs
-                    // testing for use cases other than array->mpa
-                    if(input.attr('checked') != state){
-                        input.attr('checked', state);
-                        data.push($(this));
-                    }
-                    var ul = $(this).find('>ul');
-                    if(ul.length > 0){
-                        self._toggleCheckboxes(ul, state, data);
-                    }
+                var input = $(this).find('>input');
+                // this code might not work for deeply nested trees, needs
+                // testing for use cases other than array->mpa
+                if(input.attr('checked') != state){
+                    input.attr('checked', state);
+                    data.push($(this));
+                }
+                var ul = $(this).find('>ul');
+                if(ul.length > 0){
+                    self._toggleCheckboxes(ul, state, data);
                 }
             });
         },

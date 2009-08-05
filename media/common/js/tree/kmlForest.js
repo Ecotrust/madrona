@@ -37,6 +37,8 @@
             console.log('add', url);
             var options = opts || {};
             var self = this;
+            // can be removed when the following ticket is resolved:
+            // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
             if(!url.match('http')){
                 url = window.location + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
@@ -67,26 +69,23 @@
         },
         
         _buildTreeUI: function(kmlObject, callback){
-            // walk the loaded KML object DOM
-            // var node = $(this.element).tree('add', {
-            //         id: 'publicdatalayers',
-            //         name: 'Public Data Layers',
-            //         classname: 'marinemap-tree-category',
-            //         context: true,
-            //         // collapsible: true
-            // });
             var self = this;
             var topNode;
             gex.dom.walk({
                 visitCallback: function(context){
+                    console.log(this.getName(), this.getType());
+                    var type = this.getType();
+                    console.log("OPEN???", this.getOpen(), this.getName());
                     var child = $(self.element).tree('add', {
                         name: this.getName() || "No name specified in kml",
                         parent: context.current,
-                        collapsible: !(this == kmlObject) && this.getType() == 'KmlFolder',
+                        collapsible: !(this == kmlObject) && (type == 'KmlFolder' || type == 'KmlDocument'),
+                        open: this.getOpen(),
                         hideByDefault: false,
                         toggle: !(this == kmlObject),
                         classname: (this == kmlObject) ? 'marinemap-tree-category' : undefined,
-                        checked: this.getVisibility()
+                        checked: this.getVisibility(),
+                        select: true
                     });
                     if(this == kmlObject){
                         topNode = child;
@@ -151,7 +150,8 @@
     $.extend($.marinemap.kmlForest, {
         getter: ['getByUrl', 'length'],
         defaults: {
-            animate: false
+            animate: false,
+            selectToggles: false //matches google earth desktop behavior if set to false
         }
     });
     

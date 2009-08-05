@@ -67,25 +67,50 @@ test('remove', function(){
 });
 
 test('add with relative path', function(){
-    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('clear');    
     // Not sure how to test this considering the location of the kml files in relation to where the tests are run
 });
 
 test('refresh', function(){
-    
+    // Not going to address this yet, since it requires remembering the on/off/open state of each element.
 });
 
 
 test('appropriate category header', function(){
-    
+    $('#treetest').kmlForest('clear');
+    stop();
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        ok($('#treetest .marinemap-tree-category').length == 1, 'Category created');
+    }});
 });
 
 test('supports kml <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#open">open tag</a>', function(){
-    
+    $('#treetest').kmlForest('clear');
+    stop();
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        equals($('#treetest a:contains("kmlForest Test File")').parent().find('> ul:visible').length, 1, "List should be visible, folder open");
+        equals($('#treetest a:contains("closed folder")').parent().find('> ul:visible').length, 0, "'closed folder' should be closed");
+    }});    
 });
 
 test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#visibility">visibility tag</a>', function(){
-    
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        equals($('#treetest a:contains("Visibility set to false")').length, 1, 'unchecked node exists.');
+        equals($('#treetest a:contains("Visibility set to false")').parent().data('kml').getVisibility(), false, 'Node is not visible on the map.');
+        equals($('#treetest a:contains("Visibility set to false")').parent().find('input:checked').length, 0, 'Checkbox is not checked.');
+        
+        equals($('#treetest a:contains("Placemark with description")').length, 1, 'checked node exists.');
+        equals($('#treetest a:contains("Placemark with description")').parent().data('kml').getVisibility(), true, 'Node is visible on the map.');
+        equals($('#treetest a:contains("Placemark with description")').parent().find('input:checked').length, 1, 'Checkbox is checked.');
+    }});    
 });
 
 test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#snippet">snippet tag</a>', function(){

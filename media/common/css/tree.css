@@ -21,6 +21,19 @@
     margin-top:0.2em;
 }
 
+.marinemap-tree li ul {
+    display:none;
+}
+
+.marinemap-tree li.open > ul {
+    display:block;
+}
+
+.marinemap-tree li.marinemap-tree-category > ul {
+    display:block;
+}
+
+
 .marinemap-tree-category > ul {
     margin-top:0.3em;
 }
