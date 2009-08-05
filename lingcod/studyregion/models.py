@@ -51,25 +51,25 @@ class StudyRegion(models.Model):
         """
         Get the kml of the entire study region
         """
+        bUseLod = False
         
-        transform_geom = self.geometry.simplify(20, preserve_topology=True)
-        transform_geom.transform(4326)
-        
-        return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>%s</name><styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % (self.name, style_domain, transform_geom.kml, )
+        if not bUseLod:
+            transform_geom = self.geometry.simplify(20, preserve_topology=True)
+            transform_geom.transform(4326)
+            
+            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark> <name>Study Region Boundaries</name><styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % (style_domain, transform_geom.kml, )
     
-        # To use the kml_chunk LOD system, use the following instead:
-    
-        #trans_geom = self.geometry.clone()
-        #trans_geom.transform(4326)
-        
-        #w = trans_geom.extent[0]
-        #s = trans_geom.extent[1]
-        #e = trans_geom.extent[2]
-        #n = trans_geom.extent[3]
-        
-        #retval = '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
-
-        #return retval
+        else:
+            # use the kml_chunk LOD system,
+            trans_geom = self.geometry.clone() # cloning here to avoid stepping into subfunctions with a mutated self.geometry
+            trans_geom.transform(4326)
+            
+            w = trans_geom.extent[0]
+            s = trans_geom.extent[1]
+            e = trans_geom.extent[2]
+            n = trans_geom.extent[3]
+            
+            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
         
         
     # NOTE: not currently used, LOD system overhead not justified by performance
@@ -81,16 +81,22 @@ class StudyRegion(models.Model):
     
         bounds = Polygon( LinearRing([ Point( w, n ), Point( e, n ), Point( e, s ), Point( w, s ), Point( w, n)]))
         bounds.set_srid(4326)
-        center_lat = bounds.centroid.y
-        center_lon = bounds.centroid.x
-        bounds.transform( settings.GEOMETRY_DB_SRID )
-            
-        zoom_width = abs(bounds.extent[0] - bounds.extent[2])
+        center_lat = bounds.centroid.y # in 4326 because it is used only for setting up the subregion calls
+        center_lon = bounds.centroid.x # in 4326 because it is used only for setting up the subregion calls
+        bounds.transform(settings.GEOMETRY_DB_SRID)
+           
+        # all longitudinal width calcs should be done in GEOMETRY_DB_SRID - 4326 can fail across the date line
+        zoom_width = (Point( bounds.extent[0], bounds.centroid.y )).distance( Point( bounds.extent[2], bounds.centroid.y ))
     
-        # minimum geometry simplify value (highest detail) = 50
-        # maximum geometry simplify value = 200
+        full_shape_width = (Point( self.geometry.extent[0], self.geometry.centroid.y )).distance( Point( self.geometry.extent[2], self.geometry.centroid.y ))
+        
+        # The following simplify values can be tuned to your preference
+        # minimum geometry simplify value (highest detail) = 50 (arbitrary, based on observation)
+        # maximum geometry simplify value = 200 (arbitrary, based on observation)
         # value set by pecentage of study region width requested in this chunk
-        simplify_factor = max( 50, min( 200, 200.0 * float(zoom_width) / abs( self.geometry.extent[0] - self.geometry.extent[2]))) # TODO: fix this extent subtraction at the end -- will not account for international date line if in srid 4326
+        min_simplify_val = 50.0
+        max_simplify_val = 200.0
+        simplify_factor = max( min_simplify_val, min( max_simplify_val, max_simplify_val * zoom_width / full_shape_width))
         
         transform_geom = self.geometry.simplify(simplify_factor, preserve_topology=True)
         transform_geom = transform_geom.intersection( bounds )    
@@ -98,31 +104,36 @@ class StudyRegion(models.Model):
         
         # Debugging info
         #print zoom_width
+        #print full_shape_width
         #print simplify_factor
         #print transform_geom.num_coords
         # End debugging info
         
         # only add sub-regions if this is not our highest detail level
-        bLastLevel = simplify_factor == 200 # change value to build varying levels of LOD
+        bLastLodLevel = simplify_factor < max_simplify_val # change this last value to build varying levels of LOD
         max_lod_pixels = 500
-        if bLastLevel:
+        min_lod_pixels = 250
+        
+        # make sure the most detailed lod stays active no matter how close user zooms
+        if bLastLodLevel:
             max_lod_pixels = -1
             
-        retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>250</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % ( n, s, e, w, max_lod_pixels )
+            
+        retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>%f</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % ( n, s, e, w, min_lod_pixels, max_lod_pixels ) + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml, )
         
         # conditionally add sub-regions
-        if not bLastLevel:
-            subregions = '<Folder>' + self.kml_chunk( center_lat, s, e, center_lon ) 
+        if not bLastLodLevel:
+            subregions = '<Folder><name>Study Region LODs</name>' + '<Folder><name>SE</name>' + self.kml_chunk( center_lat, s, e, center_lon ) + '</Folder>'
             
-            subregions = subregions + self.kml_chunk( n, center_lat, e, center_lon )       
+            subregions = subregions + '<Folder><name>NE</name>' + self.kml_chunk( n, center_lat, e, center_lon ) + '</Folder>'       
             
-            subregions = subregions + self.kml_chunk( center_lat, s, center_lon, w )    
+            subregions = subregions + '<Folder><name>SW</name>' + self.kml_chunk( center_lat, s, center_lon, w ) + '</Folder>'    
             
-            subregions = subregions + self.kml_chunk( n, center_lat, center_lon, w )
+            subregions = subregions + '<Folder><name>NW</name>' + self.kml_chunk( n, center_lat, center_lon, w ) + '</Folder>'
             
             retval = retval + subregions + '</Folder>'
         
-        return retval + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml, )
+        return retval 
     
         
     def lookAtKml(self):
@@ -158,8 +169,8 @@ class StudyRegion(models.Model):
         center_lon = trans_geom.centroid.y
         center_lat = trans_geom.centroid.x
         
-        lngSpan = abs( w - e ) # TODO: fix this calculation, it will break over the date line
-        latSpan = abs( n - s )
+        lngSpan = (Point(w, center_lat)).distance(Point(e, center_lat)) 
+        latSpan = (Point(center_lon, n)).distance(Point(center_lon, s))
         
         aspectRatio = 1.0
     
