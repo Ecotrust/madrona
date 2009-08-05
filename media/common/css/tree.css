@@ -238,7 +238,7 @@
     cursor: help;
 }
 
-.marinemap-tree-item p.description {
+.marinemap-tree-item p.snippet {
     text-indent: 0px;
     width:80%;
     margin:0 0;

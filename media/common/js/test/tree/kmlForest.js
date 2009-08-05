@@ -114,6 +114,14 @@ test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreferen
 });
 
 test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#snippet">snippet tag</a>', function(){
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        equals($('#treetest a:contains("PhotoOverlay of South Coast Study Region")').length, 1, 'node with snippet exists.');
+        equals($('#treetest a:contains("PhotoOverlay of South Coast Study Region")').parent().find('p.snippet').length, 1, 'Snippet is displayed.');
+    }});    
     
 });
 

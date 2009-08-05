@@ -34,7 +34,6 @@
                 throw('KML file with url '+url+' already added.');
             }
             var original_url = url;
-            console.log('add', url);
             var options = opts || {};
             var self = this;
             // can be removed when the following ticket is resolved:
@@ -42,7 +41,6 @@
             if(!url.match('http')){
                 url = window.location + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
-                console.log('RELATIVE PATH: '+url);
             }
             if(options['cachebust']){
                 url = url + '?' + (new Date).valueOf();
@@ -63,7 +61,6 @@
         },
         
         _addKmlObject: function(kmlObject, callback){
-            console.log('addKmlObject');
             this.ge.getFeatures().appendChild(kmlObject);
             this._buildTreeUI(kmlObject, callback);
         },
@@ -73,9 +70,7 @@
             var topNode;
             gex.dom.walk({
                 visitCallback: function(context){
-                    console.log(this.getName(), this.getType());
                     var type = this.getType();
-                    console.log("OPEN???", this.getOpen(), this.getName());
                     var child = $(self.element).tree('add', {
                         name: this.getName() || "No name specified in kml",
                         parent: context.current,
@@ -85,7 +80,8 @@
                         toggle: !(this == kmlObject),
                         classname: (this == kmlObject) ? 'marinemap-tree-category' : undefined,
                         checked: this.getVisibility(),
-                        select: true
+                        select: true,
+                        snippet: this.getSnippet()
                     });
                     if(this == kmlObject){
                         topNode = child;
@@ -111,9 +107,7 @@
             var obj = this.kmlObjects[url];
             var found = false;
             $(this.element).find('> li').each(function(){
-                console.log('li found', this);
                 if($(this).data('kml') == obj){
-                    console.log('found it');
                     $(this).remove();
                     found = true;
                     return;

@@ -16,7 +16,7 @@
                 data: {},
                 children: false,
                 extra: '',
-                description: false,
+                snippet: false,
                 checked: false,
                 open: false
             };
@@ -41,8 +41,8 @@
                     '<% } %>',
                     '<a href="#js"><%= name %></a>',
                     '<span class="badges"><%= extra %></span>',
-                    '<% if(description){ %>',
-                        '<p class="description"><%= description %></p>',
+                    '<% if(snippet){ %>',
+                        '<p class="snippet"><%= snippet %></p>',
                     '<% } %>',
                     '<% if(children) { %>',
                     '<% if(collapsible) { %>',
