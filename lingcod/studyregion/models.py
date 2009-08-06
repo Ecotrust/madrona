@@ -57,7 +57,17 @@ class StudyRegion(models.Model):
             transform_geom = self.geometry.simplify(20, preserve_topology=True)
             transform_geom.transform(4326)
             
-            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark><name>Study Region Boundaries</name>%s<styleUrl>http://%s/media/studyregion/styles.kml#YellowFillNoLine</styleUrl>%s</Placemark></Document>' % ( self.lookAtKml(), style_domain, transform_geom.kml, )
+            shape_kml = transform_geom.kml
+            
+            # remove Polygon, outerBoundaryIs, innerBoundaryIs tags
+            shape_kml = shape_kml.replace('<Polygon>', '')
+            shape_kml = shape_kml.replace('</Polygon>', '')
+            shape_kml = shape_kml.replace('<outerBoundaryIs>', '')
+            shape_kml = shape_kml.replace('</outerBoundaryIs>', '')
+            shape_kml = shape_kml.replace('<innerBoundaryIs>', '')
+            shape_kml = shape_kml.replace('</innerBoundaryIs>', '')
+            
+            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark><name>Study Region Boundaries</name>%s<styleUrl>http://%s/media/studyregion/styles.kml#StudyRegionStyle</styleUrl>%s</Placemark></Document>' % ( self.lookAtKml(), style_domain, shape_kml, )
     
         else:
             # use the kml_chunk LOD system,
