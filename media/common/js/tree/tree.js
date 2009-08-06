@@ -18,7 +18,8 @@
                 extra: '',
                 snippet: false,
                 checked: false,
-                open: false
+                open: false,
+                description: false
             };
             
             this._template = tmpl([
@@ -29,6 +30,7 @@
                 '<%= (doubleclick ? "doubleclick " : "") %>',
                 '<%= (open ? "open " : "") %>',
                 '<%= (toggle ? "toggle " : "") %>',
+                '<%= (description ? "description " : "") %>',
                 '<%= classname %> <%= id %> marinemap-tree-item',
                 '">',
                     '<% if(collapsible) { %>',
@@ -99,6 +101,7 @@
                     
                 }else{
                     var parent = $(event.target).parent();
+                    self.element.trigger('itemClick', [parent, event]);
                     if(parent.hasClass('select')){
                         var e = jQuery.Event("itemSelect");
                         self.element.trigger(e, [parent]);
@@ -131,7 +134,6 @@
             //     //     ul.append(sorted[i]);
             //     // }
             // });
-            
             $(this).find('li.marinemap-tree-item input[type=checkbox]').live('click', function(e){
                 var element = $(this);
                 var checked = element.attr('checked');

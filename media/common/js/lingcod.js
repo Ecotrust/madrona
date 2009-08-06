@@ -42,7 +42,7 @@ var lingcod = {
         });
         $('#datalayerstree').kmlForest({ge: ge, gex: gex})
             .kmlForest('add', '/studyregion/kml/', {cachebust: true, callback: this.studyRegionLoaded})
-            .kmlForest('add', 'http://marinemap.org/kml_test/Public%20Data%20Layers.kmz', {cachebust: true});
+            .kmlForest('add', window.public_data_layers, {cachebust: true});
     },
     
     studyRegionLoaded: function(kmlObject, node){

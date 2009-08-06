@@ -2,6 +2,7 @@
 
 {% block head %}
     <script type="text/javascript">
+        window.public_data_layers = '{% url public-data-layers %}';
         google.load("earth", "1");
         google.load('maps', '3', {"other_params":"sensor=false"});
 
@@ -39,10 +40,7 @@
         {% tabpanel "Home" %}
             {% tab "Data Layers" %}
                 {% block data_layers_before_tree %}{% endblock %}
-                <div style="height:400px;font-size:1em;" id="datalayerstree"></div>
-                <p>
-                    <a onclick="playTour(); return false;" href="#js">Play welcome tour</a>
-                </p>
+                <div style="height:750px;font-size:1em;overflow:auto;" id="datalayerstree"></div>
                 {% block data_layers_after_tree %}{% endblock %}
                 {% footer %}
                     <h3>Earth Options</h3>

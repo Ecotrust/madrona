@@ -227,6 +227,23 @@ test('semi-toggled state for parents with some children visible', function(){
 });
 
 test('features with descriptions have balloon link', function(){
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        $('#treetest a:contains("closed folder")').click();
+        ok(ge.getBalloon(), 'Balloon for the feature is opened.');
+        $('#treetest a:contains("Visibility set to false")').click();
+        ok(!ge.getBalloon(), "Balloon closed when list item without description is clicked.");
+        
+        $('#treetest a:contains("Placemark with description")').parent().data('kml').setVisibility(false);
+        $('#treetest a:contains("Placemark with description")').click();
+        var balloon = ge.getBalloon();
+        ok(balloon, 'Balloon for the feature is opened.');
+        equals(balloon.getFeature().getName(), 'Placemark with description');
+        ok(ge.getBalloon().getFeature().getVisibility(), 'Placemark should be visible after click');
+    }});
     
 });
 
@@ -297,4 +314,3 @@ test('tours are activated when double-clicked.', function(){
         ge.getTourPlayer().pause();
     }});    
 });
-

@@ -28,15 +28,29 @@
                     }else{
                         // do something
                         var view = kml.getAbstractView();
-                        console.log(view);
                         if(view){
-                            console.log('found view');
                             ge.getView().setAbstractView(view);
                         }else{
-                            console.log('computing bounds');
-                            var bounds = gex.dom.computeBounds(kml);
-                            gex.view.setToBoundsView(bounds, {aspectRatio: 1});
+                            if(kml.getType() != 'KmlNetworkLink'){
+                                var bounds = gex.dom.computeBounds(kml);
+                                if(bounds._ne){
+                                    gex.view.setToBoundsView(bounds, {aspectRatio: .75});                                    
+                                }
+                            }
                         }
+                    }
+                })
+                .bind('itemClick', function(e, target, ev){
+                    var kml = target.data('kml');
+                    if(target.hasClass('description')){
+                        target.find('input[checked=false]').click();
+                        kml.setVisibility(true);
+                        var balloon = ge.createFeatureBalloon('');
+                        balloon.setFeature(kml);
+                        balloon.setMinWidth(400);
+                        ge.setBalloon(balloon);
+                    }else{
+                        ge.setBalloon(null);
                     }
                 });
         },
@@ -93,9 +107,10 @@
                         toggle: !(this == kmlObject),
                         classname: (this == kmlObject) ? 'marinemap-tree-category' : this.getType(),
                         checked: this.getVisibility(),
-                        select: true,
+                        select: false,
                         snippet: this.getSnippet(),
-                        doubleclick: true
+                        doubleclick: true,
+                        description: this.getDescription()
                     });
                     if(this == kmlObject){
                         topNode = child;
