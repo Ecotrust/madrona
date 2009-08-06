@@ -202,11 +202,11 @@ test('toggle on/off features', function(){
 });
 
 test('toggle on/off folders and NetworkLinks', function(){
-    
+    // same as is tested in the tree tests, just check getVisibility()
 });
 
 test('semi-toggled state for parents with some children visible', function(){
-    
+    // this will require custom icons
 });
 
 test('features with descriptions have balloon link', function(){
@@ -240,3 +240,25 @@ test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#l
 test('Contents of NetworkLinks can be displayed. Depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=260&q=NetworkLink&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars#c3">this ticket</a>, or a hack', function(){
     
 });
+
+// Not a very good test. If the double click event was instead causing the 
+// viewport to zoom to the camera like any other feature, the bug likely
+// wouldn't be detected. Should really be a ge.getTourPlayer().getTour() api.
+// A feature request has been submitted for that function
+// http://code.google.com/p/earth-api-samples/issues/detail?id=309
+test('tours are activated when double-clicked.', function(){
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        equals($('#treetest a:contains("Tour Example")').length, 1, 'Tour exists');
+        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        $('#treetest a:contains("Tour Example")').dblclick();
+        ge.getTourPlayer().play();
+        var secondLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        ok(firstLat != secondLat, "Assuming the latitude changes after double-clicking the tour, it must be active.");
+        ge.getTourPlayer().pause();
+    }});    
+});
+

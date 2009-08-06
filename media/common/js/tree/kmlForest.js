@@ -20,6 +20,16 @@
                             kml.setVisibility(checked);
                         }
                     }
+                })
+                .bind('itemDoubleClick', function(e, target, ev){
+                    console.log('itemDoubleClick', e, target, ev);
+                    var kml = target.data('kml');
+                    if(kml.getType() == 'KmlTour'){
+                        self.ge.getTourPlayer().setTour(kml);
+                    }else{
+                        // do something
+                        
+                    }
                 });
         },
 
@@ -77,6 +87,7 @@
                         checked: this.getVisibility(),
                         select: true,
                         snippet: this.getSnippet(),
+                        doubleclick: true
                     });
                     if(this == kmlObject){
                         topNode = child;
