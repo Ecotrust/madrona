@@ -213,8 +213,27 @@ test('features with descriptions have balloon link', function(){
     
 });
 
+var firstLat;
+
 test('double click feature flys to feature', function(){
-    
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        equals($('#treetest a:contains("Placemark without description")').length, 1, 'Placemark exists');
+        firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        $('#treetest a:contains("Placemark without description")').dblclick();
+    }});
+});
+
+test('finish double click feature flys to feature', function(){
+    stop();
+    setTimeout(function(){
+        var secondLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        ok(firstLat != secondLat, "Viewport has changed after double-clicking the placemark");
+        start();
+    }, 500);
 });
 
 test('proper default icons given to folders, network links, features, etc', function(){

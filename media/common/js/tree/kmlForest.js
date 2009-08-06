@@ -22,13 +22,21 @@
                     }
                 })
                 .bind('itemDoubleClick', function(e, target, ev){
-                    console.log('itemDoubleClick', e, target, ev);
                     var kml = target.data('kml');
                     if(kml.getType() == 'KmlTour'){
                         self.ge.getTourPlayer().setTour(kml);
                     }else{
                         // do something
-                        
+                        var view = kml.getAbstractView();
+                        console.log(view);
+                        if(view){
+                            console.log('found view');
+                            ge.getView().setAbstractView(view);
+                        }else{
+                            console.log('computing bounds');
+                            var bounds = gex.dom.computeBounds(kml);
+                            gex.view.setToBoundsView(bounds, {aspectRatio: 1});
+                        }
                     }
                 });
         },
