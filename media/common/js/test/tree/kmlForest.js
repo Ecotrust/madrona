@@ -201,8 +201,25 @@ test('toggle on/off features', function(){
     // then check that it hasn't messed with any of the others
 });
 
-test('toggle on/off folders and NetworkLinks', function(){
+test('toggle on/off folders toggles children', function(){
     // same as is tested in the tree tests, just check getVisibility()
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        var folder = $('#treetest a:contains("Both visible")').parent();
+        var input = folder.find('>input');
+        // toggle off
+        input.click();
+        var kml = folder.data('kml');
+        ok(!kml.getVisibility(), 'Folder is now visible');
+        ok(!kml.getFeatures().getLastChild().getVisibility(), 'Children are now visible');
+        // toggle on now
+        input.click();
+        equals(kml.getVisibility(), true, 'Folder is now invisible');
+        equals(kml.getFeatures().getLastChild().getVisibility(), true, 'Children are now visible');
+    }});
 });
 
 test('semi-toggled state for parents with some children visible', function(){
