@@ -15,14 +15,9 @@
                 .bind('itemToggle', function(e, clickedData, checked){
                     for(var i=0; i<clickedData.length; i++){
                         var node = clickedData[i];
-                        
-                        var kml = $(node).data('kml');
-                        kml.setVisibility(checked);
-                        var c = kml;
-                        while (c && 'setVisibility' in c) {
-                            c.setVisibility(checked);
-                            c = c.getParentNode();
-                            //store.setValue(item, 'checked' 
+                        if($(node).hasClass('toggle')){
+                            var kml = $(node).data('kml');
+                            kml.setVisibility(checked);
                         }
                     }
                 });
@@ -78,10 +73,10 @@
                         open: this.getOpen(),
                         hideByDefault: false,
                         toggle: !(this == kmlObject),
-                        classname: (this == kmlObject) ? 'marinemap-tree-category' : undefined,
+                        classname: (this == kmlObject) ? 'marinemap-tree-category' : this.getType(),
                         checked: this.getVisibility(),
                         select: true,
-                        snippet: this.getSnippet()
+                        snippet: this.getSnippet(),
                     });
                     if(this == kmlObject){
                         topNode = child;

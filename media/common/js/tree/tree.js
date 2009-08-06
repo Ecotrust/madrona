@@ -28,6 +28,7 @@
                 '<%= (select ? "select " : "unselectable ") %>',
                 '<%= (doubleclick ? "doubleclick " : "") %>',
                 '<%= (open ? "open " : "") %>',
+                '<%= (toggle ? "toggle " : "") %>',
                 '<%= classname %> <%= id %> marinemap-tree-item',
                 '">',
                     '<% if(collapsible) { %>',
@@ -145,16 +146,19 @@
                 var clickedData = [parent];
                 var list = parent.find('>ul');
                 if(list.length > 0){
-                    self._toggleCheckboxes(list, checked, clickedData);
+                    var clickedData = self._toggleCheckboxes(list, checked, clickedData);
                 }
-                // if(checked == true){
+                
                 parent.parents('li.toggle').each(function(){
                     var el = $(this);
                     if(checked == true){
                         el.find(' > input[type=checkbox]').attr('checked', true);
+                        clickedData.push(el);
                     }else{
+                        // if you cant find any child elements turned on
                         if(el.find('> ul input[type=checkbox][checked=true]').length == 0){
                             el.find('> input[type=checkbox]').attr('checked', false);
+                            clickedData.push(el);
                         }
                         if(el.hasClass('selected')){
                             self.clearSelection();
@@ -252,9 +256,10 @@
                 }
                 var ul = $(this).find('>ul');
                 if(ul.length > 0){
-                    self._toggleCheckboxes(ul, state, data);
+                    data = self._toggleCheckboxes(ul, state, data);
                 }
             });
+            return data;
         },
 
         add: function(options){
@@ -284,6 +289,10 @@
                 ul.html('');
             }
             ul.append(element);
+            // Here the parent needs to have something set on it
+            // if(options.checked && options.parent){
+            //     $(options.parent).find('> input[type="checkbox"]').attr('checked', true);
+            // }
             // var element = ul.find('.'+options['id']);
             options = null;
             return element;
@@ -314,6 +323,14 @@
             }else{
                 return false;
             }
+        },
+        
+        destroy: function(){
+            $(this).find('span.collapsible').die('click');
+            $(this).find('li.marinemap-tree-item a').die('dblclick');
+            $(this).find('li a').die('contextmenu');
+            $(this).find('li.marinemap-tree-item input[type=checkbox]').die('click');
+            $.widget.prototype.destroy.apply(this, arguments);
         }
     }
 

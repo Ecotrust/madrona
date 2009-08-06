@@ -126,7 +126,79 @@ test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreferen
 });
 
 test('toggle on/off features', function(){
+    // check that toggling a feature works
+    stop();
+    $('#treetest').kmlForest('clear');
+    $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
+        start();
+        ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
+        // Make sure all other visibilities match up
+        $('#treetest li').each(function(){
+            var kml = $(this).data('kml');
+            if(!$(this).hasClass('toggle')){
+                ok(kml.getVisibility(), "init check: "+kml.getName() + ' node: KML is not toggle-able, so should have visibility set at true');
+            }else{
+                var text = "init check: "+'"' + kml.getName() + '" node ';
+                var checked = $(this).find('> input:checked').length == 1;
+                if(checked){
+                    text += 'is checked so should be visible.'
+                }else{
+                    text += "is not checked so shouldn't be visible."
+                }
+                ok(checked == kml.getVisibility(), text)
+            }
+        });
+        
+        equals($('#treetest a:contains("Visibility set to false")').length, 1, 'invisible node exists');
+        equals($('#treetest a:contains("One at a time")').length, 1, 'other invisible node exists');
+        equals($('#treetest a:contains("Visibility set to false")').parent().data('kml').getVisibility(), false, 'invisible node does not show on map');
+        var input = $('#treetest a:contains("Visibility set to false")').parent().find('input');
+        // turn on visibility of feature
+        input.click();
+        equals($('#treetest a:contains("Visibility set to false")').parent().data('kml').getVisibility(), true, 'node turned on after click on map');
+        equals($('#treetest a:contains("Visibility set to false")').parent().find('input:checked').length, 1, 'node turned on after click in list');
+        
+        // Make sure all other visibilities match up
+        $('#treetest li').each(function(){
+            var kml = $(this).data('kml');
+            if(!$(this).hasClass('toggle')){
+                ok(kml.getVisibility(), "toggle-on check: "+kml.getName() + ' node: KML is not toggle-able, so should have visibility set at true');
+            }else{
+                var text = "toggle-on check: "+'"' + kml.getName() + '" node ';
+                var checked = $(this).find('> input:checked').length == 1;
+                if(checked){
+                    text += 'is checked so should be visible.'
+                }else{
+                    text += "is not checked so shouldn't be visible."
+                }
+                ok(checked == kml.getVisibility(), text)
+            }
+        });
+
+        // turn off visibility of feature
+        input.click();
+        equals($('#treetest a:contains("Visibility set to false")').parent().data('kml').getVisibility(), false, 'node turned off on map');
+        equals($('#treetest a:contains("Visibility set to false")').parent().find('input:checked').length, 0, 'node turned off in list');
+        
+        // Make sure all other visibilities match up
+        $('#treetest li').each(function(){
+            var kml = $(this).data('kml');
+            if(!$(this).hasClass('toggle')){
+                ok(kml.getVisibility(), "toggle-off check: "+kml.getName() + ' node: KML is not toggle-able, so should have visibility set at true');
+            }else{
+                var text = "toggle-off check: "+'"' + kml.getName() + '" node ';
+                var checked = $(this).find('> input:checked').length == 1;
+                if(checked){
+                    text += 'is checked so should be visible.'
+                }else{
+                    text += "is not checked so shouldn't be visible."
+                }
+                ok(checked == kml.getVisibility(), text)
+            }
+        });
+    }});    
     
+    // then check that it hasn't messed with any of the others
 });
 
 test('toggle on/off folders and NetworkLinks', function(){
@@ -146,7 +218,7 @@ test('double click feature flys to feature', function(){
 });
 
 test('proper default icons given to folders, network links, features, etc', function(){
-    
+    // Just check the class for KmlFolder, KmlGroundOverlay, KmlPlacemark, KmlNetworkLink, etc
 });
 
 test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: radioFolder. All ListStyle support depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=303">this ticket</a>', function(){

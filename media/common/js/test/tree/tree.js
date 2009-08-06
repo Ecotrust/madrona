@@ -5,13 +5,15 @@ test("initialize", function() {
     equals($("#treetest").length, 1);
     $("#treetest").tree();
     ok($('#treetest').hasClass('marinemap-tree'), 'Should have class');
+    $('#treetest').tree('destroy');
+    $('#treetest').remove();
 });
 
 test("add", function(){
-    $('#main').append('<ul id="treetest" />');
+    $(document.body).append('<ul id="treetest" />');
     $("#treetest").tree();
     
-    $('#treetest').tree('add', {
+    var node = $('#treetest').tree('add', {
         id: 'noIcon',
         name: 'Default Icon Category'
     });
@@ -38,4 +40,98 @@ test("add", function(){
     });
     equals($('li.myCategory > ul > li').length, 1);
     equals($(node).data('mydata'), true)
+    $('#treetest').tree('destroy');
+    $('#treetest').remove();
+});
+
+function setupTree(){
+    $('#treetest').remove();
+    $(document.body).append('<ul id="treetest" />');
+    $("#treetest").tree();
+    
+    var node = $('#treetest').tree('add', {
+        name: 'category',
+        classname: 'marinemap-tree-category',
+        toggle: false
+    });
+    
+    var folder = $('#treetest').tree('add', {
+        name: 'folder',
+        toggle: true,
+        collapsible: true,
+        parent: node,
+        open: true,
+        checked: true
+    });
+    
+    $('#treetest').tree('add', {
+        name: 'child zero',
+        toggle: true,
+        collapsible: false,
+        parent: folder
+    });
+    
+    $('#treetest').tree('add', {
+        name: 'child2',
+        toggle: true,
+        collapsible: false,
+        parent: folder,
+        checked: true
+    });
+    
+    var subfolder = $('#treetest').tree('add', {
+        name: 'sub folder',
+        toggle: true,
+        collapsible: true,
+        parent: folder,
+        checked: false,
+        open: true
+    });
+    
+    $('#treetest').tree('add', {
+        name: 'child 1',
+        toggle: true,
+        collapsible: false,
+        parent: subfolder,
+        checked: false
+    });
+    
+    $('#treetest').tree('add', {
+        name: 'child 2',
+        toggle: true,
+        collapsible: false,
+        parent: subfolder,
+        checked: true
+    });
+    ok($('#treetest li a:contains(child 2)').length == 1, 'tree setup properly.');
+}
+
+test("clicking fires toggle event", function(){
+    setupTree();
+    $('#treetest').bind('itemToggle', function(e, clickedData, checked){
+        ok(clickedData.length > 0, 'Event fired with proper clickedData');
+        $('#treetest').unbind('itemToggle');
+    });
+    $('a:contains(child)').parent().find('> input').click();
+});
+
+test("when all children are toggled off so does the parent", function(){
+    setupTree();
+    $('a:contains(child2)').parent().find('>input').click();
+    $('#treetest').bind('itemToggle', function(e, clickedData, checked){
+        equals(clickedData.length, 3, 'Event fired with proper clickedData');
+        $('#treetest').unbind('itemToggle');
+    });
+    $('a:contains(child 2)').parent().find('>input').click();
+});
+
+test("clicking off parent clears children", function(){
+    setupTree();
+    $('#treetest').bind('itemToggle', function(e, clickedData, checked){
+        equals(clickedData.length, 3, 'Event fired with proper clickedData');
+        $('#treetest').unbind('itemToggle');
+    });
+    $('a:contains(folder):first').parent().find('>input').click();
+    $('#treetest').remove();
+    
 });
