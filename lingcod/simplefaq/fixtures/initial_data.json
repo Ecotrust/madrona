@@ -1,0 +1,19 @@
+[
+  {
+    "pk": 1, 
+    "model": "simplefaq.faqgroup", 
+    "fields": {
+      "faq_group_name": "Site responsiveness / performance"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "simplefaq.faq", 
+    "fields": {
+      "answer": "The performance of the MarineMap application is primarily dependent on 3 things: your computer, connection speed, and choice of browser. The easiest of those three that you can change is your browser. On Windows, <a href=\"http://www.mozilla.com/en-US/firefox/\">Mozilla Firefox</a> and <a href=\"http://www.google.com/chrome/index.html\">Google Chrome</a> are both excellent choices. While Internet Explorer is supported, it is not a very good performer for web applications like MarineMap. On the Mac, <a href=\"http://www.apple.com/safari/\">Safari</a> is fastest followed by <a href=\"http://www.mozilla.com/en-US/firefox/\">Firefox</a>.", 
+      "importance": 1, 
+      "question": "How can I make MarineMap run faster on my computer?", 
+      "faq_group": 1
+    }
+  }
+]

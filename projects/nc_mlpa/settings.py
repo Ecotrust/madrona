@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'lingcod.common',
     'lingcod.layers',
     'lingcod.studyregion',
+    'lingcod.simplefaq',
     'mlpa',
 )
 
