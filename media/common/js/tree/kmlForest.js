@@ -28,7 +28,7 @@
                         self.ge.getTourPlayer().setTour(kml);
                     }else{
                         // do something
-                        var aspectRatio = $(this.div).width() / $(this.div).height()
+                        var aspectRatio = $(this.div).width() / $(this.div).height();
                         gex.util.flyToObject(kml, {
                             boundsFallback: true,
                             aspectRatio: aspectRatio
@@ -64,8 +64,8 @@
                 url = window.location + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
             }
-            if(options['cachebust']){
-                url = url + '?' + (new Date).valueOf();
+            if(options.cachebust){
+                url = url + '?' + (new Date()).valueOf();
             }
             google.earth.fetchKml(this.ge, url,
             function(kmlObject) {
@@ -137,8 +137,9 @@
                     return;
                 }
             });
-            if(!found)
+            if(!found){
                 throw('Could not find node in kmlForest that represents the kml object.');
+            }
             delete this.kmlObjects[url];
             gex.dom.removeObject(obj);
         },
@@ -161,7 +162,7 @@
             }
             return length;
         }
-    }
+    };
 
     $.widget('marinemap.kmlForest', KMLForest);
     
@@ -169,7 +170,8 @@
         getter: ['getByUrl', 'length'],
         defaults: {
             animate: false,
-            selectToggles: false //matches google earth desktop behavior if set to false
+             //matches google earth desktop behavior if set to false
+            selectToggles: false
         }
     });
     

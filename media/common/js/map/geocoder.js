@@ -34,11 +34,11 @@ lingcod.map.geocoder = function(gex, form){
             }
         });
     });
-}
+};
 
 /**
  * Prepare instance for destruction by remove event listeners.
  */
 lingcod.map.geocoder.prototype.destroy = function(){
     $(this.form).unbind('submit');
-}
+};

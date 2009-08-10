@@ -48,8 +48,9 @@ var lingcod = {
     studyRegionLoaded: function(kmlObject, node){
         // Reorder so studyRegion is on top of the list
         $('#datalayerstree').prepend(node);
-        if (kmlObject.getAbstractView())
+        if (kmlObject.getAbstractView()){
             ge.getView().setAbstractView(kmlObject.getAbstractView());
+        }
         
     },
     
@@ -66,7 +67,7 @@ var lingcod = {
     
     resize: function(){
         $('#panelManager').panelManager('resize');
-        var size = [$(window).width(), $(window).height()]
+        var size = [$(window).width(), $(window).height()];
         var top_height = $('#meta-navigation').height();
         var body_height = size[1] - top_height - 7;
         var map_width = size[0] - $('.sidebar-panel').panel('width') - 20;
