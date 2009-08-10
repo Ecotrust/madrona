@@ -5,7 +5,7 @@ module('kmlForest');
  */
 test('initialize', function(){
     $(document.body).append('<div id="treetest"></div>');
-    $('#treetest').kmlForest({ge: ge, gex: gex, animate: false});
+    $('#treetest').kmlForest({ge: ge, gex: gex, animate: false, div: $('#map3d')});
     ok($('#treetest').kmlForest('length') == 0, 'No kml files loaded yet');
 });
 

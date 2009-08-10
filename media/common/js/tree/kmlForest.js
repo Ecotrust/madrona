@@ -3,11 +3,12 @@
         
         // options: {ge, gex, animate}
         _init: function(opts){
-            if(this.options.ge && this.options.gex){
+            if(this.options.ge && this.options.gex && this.options.div){
                 this.ge = this.options.ge;
-                this.gex = this.options.gex;                
+                this.gex = this.options.gex;
+                this.div = this.options.div;
             }else{
-                throw('Google earth instance and/or earth-api-utility-library instance not specified in options.');
+                throw('Google earth instance, earth-api-utility-library instance, and/or map div not specified in options.');
             }
             this.element.addClass('marinemap-kml-forest');
             this.kmlObjects = {};
@@ -27,17 +28,11 @@
                         self.ge.getTourPlayer().setTour(kml);
                     }else{
                         // do something
-                        var view = kml.getAbstractView();
-                        if(view){
-                            ge.getView().setAbstractView(view);
-                        }else{
-                            if(kml.getType() != 'KmlNetworkLink'){
-                                var bounds = gex.dom.computeBounds(kml);
-                                if(bounds._ne){
-                                    gex.view.setToBoundsView(bounds, {aspectRatio: .75});                                    
-                                }
-                            }
-                        }
+                        var aspectRatio = $(this.div).width() / $(this.div).height()
+                        gex.util.flyToObject(kml, {
+                            boundsFallback: true,
+                            aspectRatio: aspectRatio
+                        });
                     }
                 })
                 .bind('itemClick', function(e, target, ev){

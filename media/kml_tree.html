@@ -45,7 +45,7 @@
             ge = instance;
             gex = new GEarthExtensions(ge);
             $('#treeContainer').append('<div id="treetest"></div>');
-            $('#treetest').kmlForest({ge: ge, gex: gex})
+            $('#treetest').kmlForest({ge: ge, gex: gex, div: $('#map3d')})
             $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz')
         }
         

@@ -40,7 +40,7 @@ var lingcod = {
         $('#measure_units').change(function(){
             self.measureTool.setUnits($(this).val());
         });
-        $('#datalayerstree').kmlForest({ge: ge, gex: gex})
+        $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', '/studyregion/kml/', {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
     },
