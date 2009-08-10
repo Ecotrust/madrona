@@ -20,7 +20,7 @@ def regionKml(request):
     """
     region = get_object_or_404( models.StudyRegion, pk=1 )
     
-    return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type='text/plain') 
+    return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type=mimetypes.KML) 
     
         
 def regionKmlChunk(request, n, s, e, w):
@@ -29,11 +29,11 @@ def regionKmlChunk(request, n, s, e, w):
     region = get_object_or_404( models.StudyRegion, pk=1 )
     
     return HttpResponse( 
-        KmlWrap( '<Document>' + region.kml_chunk(float(n), float(s), float(e), float(w)) + '</Document>' ), content_type='text/plain') 
+        KmlWrap( '<Document>' + region.kml_chunk(float(n), float(s), float(e), float(w)) + '</Document>' ), content_type=mimetypes.KML) 
             
     
 def regionLookAtKml(request):
     """Handler for AJAX regionLookAtKml request
     """
     region = get_object_or_404( models.StudyRegion, pk=1 )
-    return HttpResponse( KmlWrap( '<Document>' + region.lookAtKml() + '</Document>' ), content_type='text/plain' )
+    return HttpResponse( KmlWrap( '<Document>' + region.lookAtKml() + '</Document>' ), content_type=mimetypes.KML )
