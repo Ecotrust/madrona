@@ -57,7 +57,7 @@
                         '<ul></ul>',
                     '<% } %>',
                 '</li>'
-            ].join(''))
+            ].join(''));
             
             $(this).find('span.collapsible').live('click', function(event){
                 event.preventDefault();
@@ -194,7 +194,7 @@
             }
             
             var list = item.find('>ul');
-            var checked = []
+            var checked = [];
             if(list.length > 0){
                 this._toggleCheckboxes(list, true, checked);
             }
@@ -267,16 +267,16 @@
         add: function(options){
             var element = $(this._rTemplate(options));
             // add metadata
-            for(var k in options['data']){
-                element.data(k, options['data'][k]);
+            for(var k in options.data){
+                element.data(k, options.data[k]);
             }
             var parent;
-            if(typeof options['parent'] == 'string'){
-                parent = this.element.find(options['parent']);
-            }else if(typeof options['parent'] == 'undefined' || options['parent'] == null || options['parent'] == false){
+            if(typeof options.parent == 'string'){
+                parent = this.element.find(options.parent);
+            }else if(typeof options.parent == 'undefined' || options.parent == null || options.parent == false){
                 parent = this.element;
             }else{
-                parent = options['parent'];
+                parent = options.parent;
             }
             if(parent == this.element){
                 var ul = parent;
@@ -334,7 +334,7 @@
             $(this).find('li.marinemap-tree-item input[type=checkbox]').die('click');
             $.widget.prototype.destroy.apply(this, arguments);
         }
-    }
+    };
 
     $.widget('marinemap.tree', Tree);
     
