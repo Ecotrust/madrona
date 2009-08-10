@@ -17,3 +17,8 @@
 # DATABASE_NAME = 'simple_example'
 # DATABASE_USER = 'postgres'
 # DATABASE_PASSWORD = 'my-secret-password'
+
+# And to run tests correctly, tell Django what your spatial database template is...
+#POSTGIS_TEMPLATE='template_postgis'
+# ...and uncomment TEST_RUNNER
+#TEST_RUNNER='django.contrib.gis.tests.run_tests'
