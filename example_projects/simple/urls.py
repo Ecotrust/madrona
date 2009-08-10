@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html', 'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
     (r'^layers/', include('lingcod.layers.urls')),
     (r'^studyregion/', include('lingcod.studyregion.urls')),
+    (r'^faq/', include('lingcod.simplefaq.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
