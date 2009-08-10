@@ -11,11 +11,11 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
     this.get = ge;
     var self = this;
     $(this.layers).find('input').click(function(){
-        self.updateLayers()
+        self.updateLayers();
     });
     
     $(this.options).find('input').click(function(){
-        self.updateOptions()
+        self.updateOptions();
     });
     
     this.updateLayers();
