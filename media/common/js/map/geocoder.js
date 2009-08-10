@@ -2,8 +2,8 @@
  * Creates a module that listens to the given form for a new location, adds it
  * to the map, and pans/zooms the map.
  * @constructor
- * @param {Object} An instance of GoogleEarthExtensions
- * @param {form element} A form with a single text input for a location to geocode
+ * @param {GEPlugin} plugin An instance of GoogleEarthExtensions
+ * @param {HTMLFormElement} location A form with a single text input for a location to geocode
  */
 lingcod.map.geocoder = function(gex, form){
     // Will need to have google maps api v3 already loaded
