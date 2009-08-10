@@ -24,7 +24,7 @@ lingcod.map.geocoder = function(gex, form){
                     ge.getView().setAbstractView(lookAt);
                     var p = gex.dom.addPointPlacemark([point.lat(), point.lng()], {
                       // stockIcon: 'pal3/icon60.png',
-                      name: location,
+                      name: location
                     });
                 }else{
                     alert("geocoder didn't find any results.");
