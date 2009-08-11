@@ -22,19 +22,23 @@
         gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
             
         // example: set Earth lookat from study region
-        $.get('/studyregion/lookAtKml/', 
+        // assumes text/plain mimetype is being returned
+        /*$.get('/studyregion/lookAtKml/', 
             function(data) {
                 var kmlObject = ge.parseKml(data);
                 if (kmlObject) {
                     if (kmlObject.getAbstractView())
                         ge.getView().setAbstractView(kmlObject.getAbstractView());
                 }
-            });
+            });*/
+            
+        gex.util.displayKml( document.location + 'kml/' );
 
         // example: show study region kml
-        $.get('/studyregion/kml/', function(data) {
+        // assumes text/plain mimetype is being returned
+        /*$.get('/studyregion/kml/', function(data) {
             gex.util.displayKmlString( data );
-        });
+        });*/
         
         //measureTool = new lingcod.measureTool();
         //measureTool.measureArea( gex, "area" );
