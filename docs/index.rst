@@ -14,7 +14,9 @@ Contents:
    getting_started
    deployment
    asset_packaging
+   study_region
    layers
+   managing_users
    ui
    templatetags
 

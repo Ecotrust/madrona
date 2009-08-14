@@ -9,6 +9,8 @@ basic customization. By the end you'll have an application that will perform
 all the `basic functions <http://code.google.com/p/marinemap/wiki/FeaturesAndRequirements>`_ 
 needed to start drawing MPAs on a map.
 
+.. _dependencies:
+
 Dependencies
 ************
 You need the following installed on your system in order to start running
@@ -17,6 +19,10 @@ MarineMap.
     * A working installation of `GeoDjango <http://geodjango.org>`_
     * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
     * `elementtree <http://effbot.org/zone/element-index.htm>`_
+    
+.. note::
+    MarineMap development tends to follow django trunk. It may work on the 
+    point releases but it's safer to just start from source.
 
 In addition, you should be familiar with programming in Python, how web 
 application are structured in `Django <http://djangoproject.com>`_, and using 
@@ -71,6 +77,10 @@ lines as needed to allow this application to connect to your local database::
     # DATABASE_NAME = 'simple_example'
     # DATABASE_USER = 'postgres'
     # DATABASE_PASSWORD = 'my-secret-password'
+    
+Grab a `Google Maps API key <http://code.google.com/apis/maps/signup.html>`_ and put it into the proper setting (not needed for localhost)::
+
+    GOOGLE_API_KEY = 'ABQIAAAAbEBR9v0lqBFdTfOcbe5WjRSwtTT5GAxiJqzQ69gC1VuJs9XrFRSHtkp9BFyAR6_lVVfY3MBP3uA7Mg'
 
 setup the database
 ------------------
@@ -79,9 +89,16 @@ Create a database accessible by the connection settings above using a tool
 like `pgAdmin <http://www.pgadmin.org/>`_. It is very important that this
 database be created from a template with all the PostGIS functions installed.
 After doing so, to setup the database schema all you'll need to do is run the 
-django syncdb command from within the `example-projects/simple` directory::
+django syncdb command from within the ``example-projects/simple`` directory::
 
     python manage.py syncdb
+    
+.. note::
+    
+    If syncdb fails and you get an error related to importing settings.py 
+    failing, you are likely missing a python dependency. Double-check 
+    :ref:`the dependencies <dependencies>`, and if none are missing jump into a python shell from
+    ``example-projects/simple``, ``import settings``, and look for any errors.
 
 verify and run the dev server
 -----------------------------
@@ -90,14 +107,38 @@ Confirm that everything is working as expected by running the tests::
     
     python manage.py test
     
+.. note::
+
+    Django creates a test database that is different than the database specified 
+    in ``settings_local.py``. Depending on your database setup, PostGIS 
+    functions may not be added to this new database and cause errors at this
+    step related to the geometry columns. See the guide to using :ref:`django_test_database_and_postgis`.
+    
+    
 If everything looks good, turn on the dev server::
     
     python manage.py runserver
     
 Hit http://localhost:8000/admin/ in a browser and use the authentication
-credentialed specified when syncdb was run.
+credentials specified when syncdb was run.
 
-showing data
-------------
+At http://localhost:8000/ the interface should render with sample data.
 
-See :ref:`layers`
+Next Steps
+**********
+
+Both the :ref:`Study Region <study_region>` and :ref:`Data Layers <layers>` apps are 
+configured to load sample data when ``syncdb`` is run. This is great to get 
+started but you'll want to read the documentation for each of these apps to
+learn how to specify your actual study region and public data layers.
+
+
+useful documentation
+--------------------
+
+.. toctree::
+   :maxdepth: 1
+   
+   study_region
+   layers
+   managing_users
