@@ -83,6 +83,7 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.admin',
@@ -95,7 +96,7 @@ INSTALLED_APPS = (
     'lingcod.layers',
     'lingcod.studyregion',
     'lingcod.simplefaq',
-    'simple_app',
+    'simple.simple_app',
 )
 
 from lingcod.common import assets
