@@ -54,7 +54,7 @@
                     self._appendPanel($a);
                 }
             });
-            this.resize();
+            // this.resize();
         },
 
         // Create an empty panel, assuming it will be loaded from an 
@@ -94,7 +94,7 @@
             var panel = this.createPanel({title: $(link).attr('title')});
             this.stack.push(panel);
             jQuery.data(panel, 'index', this.stack.length - 1);
-            this.resize();
+            // this.resize();
             this.index += 1;
             var href = $(link).attr('href');
             jQuery.data(panel, 'href', href);
@@ -133,7 +133,7 @@
             $panel.data('backButton', back);
             $panel.panel('setContent', 
             $data.find('.sidebar-panel').html());
-            $panel.panel('resize');
+            // $panel.panel('resize');
             $(this.element).trigger('panelChange', $panel);
             this._showBackButton(back);
         },
@@ -187,7 +187,7 @@
             $panel.data('backButton', back);
             $panel.panel('setContent', 
                 $data.find('.sidebar-panel').html());
-            $panel.panel('resize');
+            // $panel.panel('resize');
             $(this.element).trigger('panelChange', [$panel]);
             // this._showBackButton(back);
             this._showBackButton(back);
@@ -237,7 +237,7 @@
         
         getStack: function(){
             return this.stack;
-        },
+        }
         
         
         // Leaving these functions in place, since I may have to use them

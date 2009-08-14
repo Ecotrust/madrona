@@ -24,7 +24,6 @@
 
 {% block body %}
     {% load layout_tags %}
-    <!-- Top-right link area -->
     <div id="meta-navigation">
         <ul>
             <li><a href="profile">cburt</a> | </li>
@@ -36,11 +35,11 @@
         </ul>
         <br />
     </div>
-    <div id="panelManager" class="panel-manager">
+    <div id="panelManager">
         {% tabpanel "Home" %}
             {% tab "Data Layers" %}
                 {% block data_layers_before_tree %}{% endblock %}
-                <div style="height:750px;font-size:1em;overflow:auto;" id="datalayerstree"></div>
+                <div id="datalayerstree"></div>
                 {% block data_layers_after_tree %}{% endblock %}
                 {% footer %}
                     <h3>Earth Options</h3>

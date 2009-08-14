@@ -19,7 +19,7 @@
     margin: 0;
     padding: 0 0 0 4px;
     position:absolute;
-    top:-2.2em;
+    top:-2.1em;
 }
 .ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
     display: block;
@@ -37,35 +37,40 @@
     display: block;
 /*    padding: 0 10px;*/
 /*    background: white;*/
-    background-color:#F9FAFF;
+    background-color:#E2E2E2;
     padding:0.5em;
 }
 
 .ui-tabs-nav a {
-    margin: 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
+    margin: 1px 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
     padding-left: 0;
-    color: #27537a;
+    color: #102233;
     font-weight: bold;
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
     white-space: nowrap; /* required in IE 6 */    
     outline: 0; /* prevent dotted border in Firefox */
-    border-bottom:solid 1px #E6E6E6;
-    -webkit-box-shadow: 2px -2px 3px #CBCBCB;
-    -moz-box-shadow: 2px -2px 3px #CBCBCB;
+/*    border-bottom:solid 1px #A9CEE8;
+    -webkit-box-shadow: 2px -2px 3px #357ABE;
+    -moz-box-shadow: 2px -2px 3px #3373B2;
+*/}
+
+.sidebar-panel .ui-tabs-nav a {
+    color:#17314A;
 }
 
 .ui-tabs-nav .ui-tabs-selected a {
-    -webkit-box-shadow: 2px -2px 3px #BCBCBC;
+/*    -webkit-box-shadow: 2px -2px 3px #3373B2;
     -moz-box-shadow: 2px -2px 3px #B6B6B6;
-    border-bottom:none;
-    background-color:white;
-    -webkit-border-top-right-radius:15px;
+*/    border-bottom:none;
+    background-color:#FFF;
+/*    -webkit-border-top-right-radius:15px;
     -webkit-border-top-left-radius:2px;
     -moz-border-radius-topright:15px;
     -moz-border-radius-topleft:2px;
-    margin-right:-5px;
+*/   
+/*    margin-right:-5px;*/
     margin-top:0;
     position: relative;
     padding-bottom:7px;
