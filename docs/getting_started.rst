@@ -16,6 +16,7 @@ MarineMap.
 
     * A working installation of `GeoDjango <http://geodjango.org>`_
     * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
+    * `elementtree <http://effbot.org/zone/element-index.htm>`_
 
 In addition, you should be familiar with programming in Python, how web 
 application are structured in `Django <http://djangoproject.com>`_, and using 
