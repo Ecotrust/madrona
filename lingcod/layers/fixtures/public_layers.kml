@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Folder>
+	<name>Public Layers Example</name>
+	<open>1</open>
+	<Snippet maxLines="2">This is a basic public layers list example. It demonstrates how to link to datasets that may not even reside on the same server as MarineMap.</Snippet>
+	<description>This is a basic public layers list example. It demonstrates how to link to datasets that may not even reside on the same server as MarineMap.</description>
+	<Camera>
+		<longitude>-63.51015828606266</longitude>
+		<latitude>21.69756647379949</latitude>
+		<altitude>7508976.459525689</altitude>
+		<heading>11.33299511320025</heading>
+		<tilt>0.07434808991996725</tilt>
+		<roll>1.580841821043279</roll>
+	</Camera>
+	<Document>
+		<name>Ocean Chlorophyll Concentration</name>
+		<LookAt>
+			<longitude>-59</longitude>
+			<latitude>32</latitude>
+			<altitude>0</altitude>
+			<range>3500000</range>
+			<tilt>0</tilt>
+			<heading>0</heading>
+		</LookAt>
+		<Style>
+			<ListStyle>
+				<listItemType>check</listItemType>
+				<ItemIcon>
+					<state>open closed</state>
+					<href>http://ti.arc.nasa.gov/m/project/planetary/Icons/nasa16x16.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<Style id="infoNormalState">
+			<IconStyle>
+				<scale>1.5</scale>
+				<Icon>
+					<href>http://maps.google.com/mapfiles/kml/shapes/info-i.png</href>
+				</Icon>
+			</IconStyle>
+			<LabelStyle>
+				<color>00000000</color>
+			</LabelStyle>
+			<BalloonStyle>
+				<text>$[description]</text>
+			</BalloonStyle>
+		</Style>
+		<StyleMap id="infoStyle">
+			<Pair>
+				<key>normal</key>
+				<styleUrl>#infoNormalState</styleUrl>
+			</Pair>
+			<Pair>
+				<key>highlight</key>
+				<styleUrl>#infoHighlightState</styleUrl>
+			</Pair>
+		</StyleMap>
+		<Style id="infoHighlightState">
+			<IconStyle>
+				<scale>1.7</scale>
+				<Icon>
+					<href>http://maps.google.com/mapfiles/kml/shapes/info-i.png</href>
+				</Icon>
+			</IconStyle>
+			<LabelStyle>
+				<scale>1.5</scale>
+			</LabelStyle>
+			<BalloonStyle>
+				<text>$[description]</text>
+			</BalloonStyle>
+		</Style>
+		<Placemark>
+			<name>Information</name>
+			<Snippet maxLines="0" maxlines="0"></Snippet>
+			<description><![CDATA[<table width="360" border="0" cellpadding="0" cellspacing="0">
+        <tr><td><img width="360" height="40" alt="Ocean Chlorophyll Concentration" src="http://ti.arc.nasa.gov/m/project/planetary/Icons/chlorophyll_title.png"></td></tr>
+        <tr><td width="360">
+	  <p><a href="http://earthobservatory.nasa.gov/Newsroom/NewImages/images.php3?img_id=17405"><img width="360" height="180" src="http://ti.arc.nasa.gov/m/project/planetary/Icons/chlorophyll_browse.jpg"></a></p>
+	  <p><font size="+1"><b>Ocean Chlorophyll Concentration</b></font></p>
+	  <p>When we think about Earth&rsquo;s sources of oxygen, we usually think of vast 
+	  forests such as the Amazon, but about half of the oxygen we breathe comes from elsewhere: 
+	  it&rsquo;s produced by phytoplankton. Phytoplankton are tiny, single-celled plants that 
+	  live in the ocean, and they serve as the base of the oceanic food chain. Yet as important 
+	  as phytoplankton are to life on Earth, their interaction with our planet has only recently 
+	  been studied on a global scale.</p>
+	  <p>To convert sunlight to chemical energy, ocean plants use chlorophyll, the same chemical 
+	  that gives terrestrial plants their green color. By measuring chlorophyll, NASA satellites 
+	  can determine the distribution and intensity of phytoplankton in the world&rsquo;s oceans.
+	  These images were produced by combining data from the <A HREF="http://oceancolor.gsfc.nasa.gov/SeaWiFS/">SeaWiFS</A>
+	  and <A HREF="http://modis.gsfc.nasa.gov/">MODIS</A> sensors.</p>
+	  <div align="right"><a href="http://earthobservatory.nasa.gov/Newsroom/NewImages/images.php3?img_id=17405">Read more...</a></div>
+          <hr>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="left" width="50%">&copy; NASA. All rights reserved.<br><a href="http://www.nasa.gov/">www.nasa.gov</a></td>
+              <td align="right" width="50%"><a href="http://ti.arc.nasa.gov/earth/">See more NASA imagery<br>for Google Earth.</a></td>
+            </tr>
+          </table>
+          <hr>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr><td align="center"><A HREF="http://oceancolor.gsfc.nasa.gov/SeaWiFS/">The SeaWiFS Project</A>, 
+	      <A HREF="http://modis.gsfc.nasa.gov/">MODIS</A>,
+	      <A HREF="http://oceancolor.gsfc.nasa.gov/">NASA/GSFC</A> and GeoEye.</td></tr>
+	      <tr><td align="center">For <I>research</I> and <I>educational</I> use only.</td></tr>
+          </table>
+        </td></tr>
+      </table>]]></description>
+			<LookAt>
+				<longitude>-59</longitude>
+				<latitude>32</latitude>
+				<altitude>0</altitude>
+				<range>3500000</range>
+				<tilt>0</tilt>
+				<heading>0</heading>
+			</LookAt>
+			<styleUrl>#infoStyle</styleUrl>
+			<Point>
+				<coordinates>-59,32,0</coordinates>
+			</Point>
+		</Placemark>
+		<Folder>
+			<name>Imagery</name>
+			<open>1</open>
+			<Style>
+				<ListStyle>
+					<listItemType>radioFolder</listItemType>
+					<bgColor>00ffffff</bgColor>
+					<maxSnippetLines>2</maxSnippetLines>
+				</ListStyle>
+			</Style>
+			<Document>
+				<name>January</name>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20060012006031/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>February</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20060322006059/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>March</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20060602006090/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>April</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20060912006120/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>May</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20061212006151/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>June</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20061522006181/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>July</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20061822006212/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>August</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20062132006243/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>September</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20062442006273/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>October</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20062742006304/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>November</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20063052006334/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+			<Document>
+				<name>December</name>
+				<visibility>0</visibility>
+				<Style>
+					<ListStyle>
+						<listItemType>checkHideChildren</listItemType>
+						<bgColor>00ffffff</bgColor>
+						<maxSnippetLines>2</maxSnippetLines>
+					</ListStyle>
+				</Style>
+				<NetworkLink>
+					<Link>
+						<href>http://ti.arc.nasa.gov/m/project/planetary/kml/planetary_kml/Chlorophyll/A20063352006365/kml/0.kmz</href>
+					</Link>
+				</NetworkLink>
+			</Document>
+		</Folder>
+		<ScreenOverlay>
+			<name>Legend</name>
+			<Icon>
+				<href>http://ti.arc.nasa.gov/m/project/planetary/Icons/chlorophyll_legend.png</href>
+			</Icon>
+			<overlayXY x="1" y="0" xunits="fraction" yunits="fraction"/>
+			<screenXY x="50" y="100" xunits="insetPixels" yunits="pixels"/>
+			<rotationXY x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+			<size x="-1" y="-1" xunits="fraction" yunits="fraction"/>
+		</ScreenOverlay>
+	</Document>
+	<Document>
+		<name>Sea Surface Temperature</name>
+		<visibility>0</visibility>
+		<Snippet maxLines="0"></Snippet>
+		<description><![CDATA[<hr/>
+<p>The temperature of the surface of the ocean is commonly referred to as sea surface temperature.  Sea surface temperature is now recognized as one of the most important variables related to the global ocean atmosphere system. It is a key indicator for climate change, is widely applied to studies of upper ocean processes and air-sea heat exchange, and is used as a boundary condition for numerical weather prediction (NWP).  Changes in sea surface temperature, such as the large changes in ocean temperatures during El Ni&ntilde;o / La Ni&ntilde;a events, can have dramatic impacts on fisheries by forcing fish into regions where they are not commonly found.  Additionally, coral-bleaching due to warm ocean temperatures can result in reduced fish habitat and fish species diversity.  Changes in sea surface temperatures impact our weather and are therefore an important measurement for accurate weather forecasting of both daily weather and severe events, such as hurricanes.</p>
+<p>Like Earth&rsquo;s land surface, sea surface temperatures are warmer near the equator and colder near the poles. Wind driven ocean currents move warm and cold water around the world&rsquo;s oceans like giant rivers.  Surface currents can be seen in sea surface temperature images from satellites.  Traditionally, SST has been measured using infrared radiometers called AVHRRs and more recently <a href="http://modis.gsfc.nasa.gov/">MODIS</a>.  Recently, special microwave technology allows the <a href="http://wwwghcc.msfc.nasa.gov/AMSR/">AMSR-E</a> sensor on NASA&rsquo;s Aqua satellite to measure sea surface temperatures through clouds, something no satellite sensor before it was able to do across the whole globe.</p>
+<p>An <i>anomaly</i> is when something is different from normal, or average. A sea surface temperature anomaly is how different the ocean temperature at a particular location at a particular time is from the normal temperatures for that place. For example, a global map of sea surface temperature anomaly for May 2006 would show where the temperatures in May 2006 were warmer, cooler, or the same as other Mays in previous years. Sea surface temperature anomalies can happen as part of normal ocean cycles or they can be a sign of long-term climate change, such as global warming.</p>
+<hr/>
+<p>Daily global interpolated sea surface temperature data from the Advanced Microwave Radiometer for EOS (AMSR-E) and the Moderate Resolution Imaging Spectroradiometer (MODIS), courtesy <a href="http://www.ssmi.com/">Remote Sensing Systems</a>.  Image processing by NASA&rsquo;s <a href="http://earthobservatory.nasa.gov/">Earth Observatory</a> and <a href="http://ti.arc.nasa.gov/project/planetary/">Ames Research Center</a>.</p>]]></description>
+		<Style>
+			<BalloonStyle>
+				<text><![CDATA[<style>body {width:500px;}</style><h2>$[name]</h2>$[description]]]></text>
+				<textColor>ff000000</textColor>
+				<displayMode>default</displayMode>
+			</BalloonStyle>
+			<ListStyle>
+				<listItemType>radioFolder</listItemType>
+				<ItemIcon>
+					<state>open closed</state>
+					<href>http://mw1.google.com/mw-earth-vectordb/nasa/nasakml0/Icons/nasa16x16.png</href>
+				</ItemIcon>
+				<bgColor>00ffffff</bgColor>
+				<maxSnippetLines>2</maxSnippetLines>
+			</ListStyle>
+		</Style>
+		<NetworkLink>
+			<name>Sea Surface Temperature</name>
+			<visibility>0</visibility>
+			<Style>
+				<ListStyle>
+					<listItemType>checkHideChildren</listItemType>
+					<ItemIcon>
+						<state>open closed</state>
+						<href>http://mw1.google.com/mw-earth-vectordb/nasa/nasakml0/Icons/nasa16x16.png</href>
+					</ItemIcon>
+					<bgColor>00ffffff</bgColor>
+					<maxSnippetLines>2</maxSnippetLines>
+				</ListStyle>
+			</Style>
+			<Link>
+				<href>http://byss.arc.nasa.gov/maps/earth/sst/amsre_sst.kmz</href>
+			</Link>
+		</NetworkLink>
+		<NetworkLink>
+			<name>SST Anomaly</name>
+			<visibility>0</visibility>
+			<Style>
+				<ListStyle>
+					<listItemType>checkHideChildren</listItemType>
+					<ItemIcon>
+						<state>open closed</state>
+						<href>http://mw1.google.com/mw-earth-vectordb/nasa/nasakml0/Icons/nasa16x16.png</href>
+					</ItemIcon>
+					<bgColor>00ffffff</bgColor>
+					<maxSnippetLines>2</maxSnippetLines>
+				</ListStyle>
+			</Style>
+			<Link>
+				<href>http://byss.arc.nasa.gov/maps/earth/sst/sst_anomaly.kmz</href>
+			</Link>
+		</NetworkLink>
+	</Document>
+</Folder>
+</kml>
