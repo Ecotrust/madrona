@@ -32,7 +32,11 @@
                 }
             });*/
             
-        gex.util.displayKml( document.location + 'kml/' );
+        gex.util.displayKml( 'http://localhost:8080/studyregion/kml/' );
+        
+        {% if extra_kml %}
+        gex.util.displayKmlString( '{{ extra_kml|safe }}' );
+        {% endif %}
 
         // example: show study region kml
         // assumes text/plain mimetype is being returned
