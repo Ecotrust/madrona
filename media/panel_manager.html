@@ -99,5 +99,95 @@
             </div>
         </div>
     </div>
+    
+    
+    <div id="meta-navigation">
+        <ul>
+            <li><a href="profile">cburt</a> | </li>
+            <li><a href="http://marinemap.org">about marinemap</a> | </li>
+            <li><a href="help">help</a> | </li>
+            <li><a href="sign out">sign out</a></li>
+        </ul>
+        <br />
+    </div>
+    <div id="panelManager">
+        {% tabpanel "Home" %}
+            {% tab "Data Layers" %}
+                <div id="datalayerstree"></div>
+                {% footer %}
+                    <h3>Earth Options</h3>
+                    <ul>
+                        <form id="ge_options">
+                            <li><input type="checkbox" name="setStatusBarVisibility" checked />Status Bar</li>
+                            <li><input type="checkbox" name="nav" />Navigation Control</li>
+                            <li><input type="checkbox" name="setGridVisibility" />Grid</li>
+                            <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li>
+                            <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li>
+                            <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li>
+                            <li><input type="checkbox" name="sun" />Sun</li>      
+                        </form>
+                    </ul>
+                    <h3>Google Layers</h3>
+                    <ul>
+                        <form id="ge_layers">
+                            <li><input type="checkbox" name="LAYER_BORDERS">Borders</li>
+                            <li><input type="checkbox" name="LAYER_ROADS">Roads</li>
+                            <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li>
+                            <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li>
+                            <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                
+                        </form>
+                    </ul>
+                    <h3>Find a place</h3>
+                    <form id="flyToLocation" method="GET">
+                        <ul>
+                            <li>
+                                <input type="text" name="flyto_location" value="">
+                                <input type="submit" value="Fly here">                                    
+                            </li>
+                        </ul>
+                    </form>
+                    {% block data_layers_footer_append %}{% endblock %}
+                {% endfooter %}
+            {% endtab %}
+            {% tab "My Shapes" %}
+                {% block my_shapes_prepend %}{% endblock %}
+                <p>
+                    <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />
+                    <a href="javascript:alert('create mpa');">create mpa</a> |
+                    <a href="javascript:alert('create array');">create array</a>
+                </p>                    
+                {% block my_shapes_append %}{% endblock %}
+            {% endtab %}
+            {% tab "Collaborate" %}
+                    <p>
+                        <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/wave.png" width="372" height="483" />
+                    </p>   
+            {% endtab %}
+            {% tab "Tools" %}
+                    {% block tools_prepend %}{% endblock %}
+                    <div style="padding:1em;">
+                        <h4>Measurement Tool</h4>
+                        <button id="measure_distance">measure distance</button>
+                        <button id="measure_area">measure area</button>
+                        <button id="measure_clear">clear</button>
+                        <select id="measure_units">
+                            <option value="metric">metric</option>
+                            <option value="english">english</option>
+                            <option value="nautical">nautical</option>                            
+                        </select>
+                        <p><strong>Distance: </strong><span id="distance">N/A</span></p>
+                        <p><strong>Area: </strong><span id="area">N/A</span></p>
+                        <hr>
+                    </div>
+                    {% block tools_append %}{% endblock %}   
+            {% endtab %}
+        {% endtabpanel %}        
+    </div>
+    <div id="map_container">
+        <div id="map"></div>
+    </div>
+    
+    
+    
 </body>
 </html>
