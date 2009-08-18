@@ -32,7 +32,7 @@
                 }
             });*/
             
-        gex.util.displayKml( 'http://localhost:8080/studyregion/kml/' );
+        gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
         
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
