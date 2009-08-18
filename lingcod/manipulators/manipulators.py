@@ -1,6 +1,7 @@
 from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing
 from django import forms
 from lingcod.studyregion.models import *
+from django.conf import settings
 
 
 class ManipulatorBase():
@@ -45,10 +46,14 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
     
     def manipulate(self):
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        target_shape.set_srid(4326)
+        target_shape.transform(settings.GEOMETRY_DB_SRID)
+        
         clip_shape = StudyRegion.objects.all()[0].geometry
-        clip_shape.transform(4326)
+        
         ret_shape = target_shape.intersection( clip_shape )
-        ret_shape.set_srid(4326)
+        ret_shape.set_srid(settings.GEOMETRY_DB_SRID)
+        ret_shape.transform(4326)
         return ret_shape
         
     class Options:

@@ -14,7 +14,9 @@ from django.conf import settings
 def multi_generic_manipulator_view(request, manipulators):
 
     # conversion jiggery-pokery to get the QueryDict into appropriate kwarg format
-    kwargs = dict( request.POST )
+    kwargs = {}
+    for key,val in request.POST.items():
+        kwargs[str(key)] = str(val)
                 
     # parse out which manipulators are requested
     manipulator_list = manipulators.split(',')
@@ -74,6 +76,7 @@ def multi_generic_manipulator_view(request, manipulators):
     
 def testView( request ):
     trans_geom = StudyRegion.objects.all()[0].geometry 
+    trans_geom.transform(4326)
         
     w = trans_geom.extent[0]
     s = trans_geom.extent[1]
@@ -84,8 +87,6 @@ def testView( request ):
     center_lon = trans_geom.centroid.x
             
     target_shape = Polygon( LinearRing([ Point( center_lon, center_lat ), Point( e, center_lat ), Point( e, s ), Point( center_lon, s ), Point( center_lon, center_lat)]))
-    target_shape.set_srid(3310)
-    target_shape.transform(4236)
     
     new_req = HttpRequest()
     new_req.method = 'POST'
