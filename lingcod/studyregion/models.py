@@ -4,6 +4,10 @@ from lingcod.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
 
 
+class StudyRegionManager(models.GeoManager):
+    def current(self):
+        return self.all()[0]
+
 class StudyRegion(models.Model):
     """Model used for representing study regions
 
@@ -41,7 +45,7 @@ class StudyRegion(models.Model):
     lookAt_Tilt = models.FloatField(default=0, help_text='Degrees from vertical (0=directly above)')
     lookAt_Heading = models.FloatField(default=0, help_text='View direction in degrees (0=look North)')
     
-    objects = models.GeoManager()
+    objects = StudyRegionManager()
     
     class Meta:
         db_table = u'mm_study_region'

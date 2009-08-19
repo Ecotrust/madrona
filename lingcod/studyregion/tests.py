@@ -29,7 +29,7 @@ class StudyRegionTest(TestCase):
         """
         Check computing of lookat values
         """
-        region = StudyRegion.objects.all()[0]
+        region = StudyRegion.objects.current()
         region.lookAt_Lat = 0
         region.lookAt_Lon = 0
         self.assertEquals(region.lookAt_Lat, 0.0)

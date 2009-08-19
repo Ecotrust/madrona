@@ -75,7 +75,7 @@ def multi_generic_manipulator_view(request, manipulators):
     
     
 def testView( request ):
-    trans_geom = StudyRegion.objects.all()[0].geometry 
+    trans_geom = StudyRegion.objects.current().geometry
     trans_geom.transform(4326)
         
     w = trans_geom.extent[0]

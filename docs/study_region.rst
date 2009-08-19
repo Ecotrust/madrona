@@ -12,12 +12,13 @@ proposed. Often this is based on a combination of factors including the
 administrative jurisdiction of the agency implementing the MPAs, biogeography,
 and the logistics of running a design process across a wide area. For example,
 the `Marine Life Protection Act Initiative <http://www.dfg.ca.gov/mlpa/>`_ 
-proceeded with establishing MPAs by breaking up the state into 5 study 
-regions. Each study region was addressed in series, and the study region was 
-limited to state waters because the process was backed by state legislation.
+proceeded with establishing MPAs by breaking up the state of California into 5 
+study regions. Each study region was addressed in series, and the study region
+was limited to state waters because the process was backed by state
+legislation.
 
-The Study Region is the fundamental unit by which MarineMap implementations 
-are built. To support the `California MLPA Initiative <http://www.dfg.ca.gov/mlpa/>`_, 
+The Study Region is the fundamental unit that defines a MarineMap installation.
+To support the `California MLPA Initiative <http://www.dfg.ca.gov/mlpa/>`_, 
 5 instances of MarineMap would need to be built and run. MarineMap clips all 
 Marine Protected Areas to the Study Region boundaries. It also uses the Study 
 Region bounds to determine the default extent of the map.
@@ -50,3 +51,14 @@ between it and the previous study region can be calculated to determine which
 MPAs are affected. Reports cached for these MPAs will expire, so the next time
 they are requested it may take longer to retrieve the results until they are
 cached again.
+
+Cross-Study Region Support
+**************************
+
+There are use cases where it makes sense to have integration across multiple
+study regions. For example, in California it makes sense for work in the 
+southern study region to be informed by work in the central one. It would be
+desirable to report on the Marine Protected Areas in multiple study regions as
+a network. Such integration cannot happen within a single app, and will need
+to be supported by webservices. The actual implementation details of these 
+services have yet to be worked out.

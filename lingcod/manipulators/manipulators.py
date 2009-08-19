@@ -49,7 +49,7 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         target_shape.set_srid(4326)
         target_shape.transform(settings.GEOMETRY_DB_SRID)
         
-        clip_shape = StudyRegion.objects.all()[0].geometry
+        clip_shape = StudyRegion.objects.current().geometry
         
         ret_shape = target_shape.intersection( clip_shape )
         ret_shape.set_srid(settings.GEOMETRY_DB_SRID)
