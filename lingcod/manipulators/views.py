@@ -10,7 +10,9 @@ from lingcod.studyregion.models import StudyRegion
 from lingcod.common.utils import KmlWrap
 from django.conf import settings
 
-from cjson import encode as json_encode
+from django.utils import simplejson
+
+#from cjson import encode as json_encode
 
 
 def multi_generic_manipulator_view(request, manipulators):
@@ -52,18 +54,18 @@ def multi_generic_manipulator_view(request, manipulators):
                     original_shape = result['original_shape']
                     
                     if original_shape is None: # common case is when all necessary kwargs are not provided
-                        return HttpResponse(str(json_encode({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
+                        return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
                     
                     if new_shape is None: # common case is when target_shape is invalid
                         #return HttpResponse( 'From ' + manipulator + ':  ' + result['message'] )
-                        return HttpResponse(str(json_encode({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
+                        return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
                     
                     # put the resulting shape back into the kwargs as the target_shape
                     kwargs['target_shape'] = new_shape.wkt
                      
                 else: # invalid parameters - bounce form back to user
                     #missing kwargs, will we eventually reinstate the base_form.html type response???
-                    return HttpResponse(str(json_encode({"status_code": '6', "message": "form is not valid (missing arguments?)", "clipped_shape": None, "original_shape": None})))
+                    return HttpResponse(str(simplejson.dumps({"status_code": '6', "message": "form is not valid (missing arguments?)", "clipped_shape": None, "original_shape": None})))
                     #return render_to_response( 'common/base_form.html', RequestContext(request,{'form': form}))
                     
             else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
@@ -74,11 +76,11 @@ def multi_generic_manipulator_view(request, manipulators):
                 original_shape = result['original_shape']
 
                 if original_shape is None: # common case is when all necessary kwargs are not provided
-                    return HttpResponse(str(json_encode({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
+                    return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
                 
                 if new_shape is None: # common case is when target_shape is invalid
                     #return HttpResponse( 'From ' + manipulator + ':  ' + result['message'] )
-                    return HttpResponse(str(json_encode({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
+                    return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
                     
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
@@ -91,13 +93,13 @@ def multi_generic_manipulator_view(request, manipulators):
                         
     #return HttpResponse(result, content_type = 'text/plain')
     
-    return HttpResponse(str(json_encode({"status_code": result["status_code"], "message": result["message"], "clipped_shape": result["clipped_shape"].kml, "original_shape": result["original_shape"].kml})))
+    return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": result["clipped_shape"].kml, "original_shape": result["original_shape"].kml})))
     #result = '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>80ffffff</color> </PolyStyle></Style>'+new_shape.kml+'</Placemark></Document>'
     #return render_to_response( 'studyregion/studyregion.html', RequestContext(request,{'extra_kml': result, 'api_key':settings.GOOGLE_API_KEY}))
     
    
 def testView( request ):
-    trans_geom = StudyRegion.objects.current().geometry
+    trans_geom = StudyRegion.objects.all()[0].geometry 
         
     w = trans_geom.extent[0]
     s = trans_geom.extent[1]
