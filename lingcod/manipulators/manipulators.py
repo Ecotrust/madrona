@@ -50,7 +50,8 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
         the clipped shape will be the largest (in area) polygon result from intersecting target_shape with each study region 
         
-        status_code 6 if one or more necessary arguments is not found in kwargs
+        status_code 6 if "target_shape" was not found in kwargs, or if "study_region" was not found in kwargs and
+                         the application failed to find StudyRegion objects in the database
         status_code 3 if "target_shape" is not valid geometry
         status_code 4 if study_regions contained no geometries
         status_code 2 clipped shape is empty (no overlap with study region?)
@@ -63,7 +64,7 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
     def manipulate(self):                    
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "one or more kwargs not provided", "clipped_shape": None, "original_shape": None}
+            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "clipped_shape": None, "original_shape": None}
         
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
@@ -73,14 +74,17 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         
         clipped_shape = None 
         
-        #this conditional is FOR UNIT-TESTING PURPOSES ONLY (in which case we pass in a study region kwarg)
+        #'study_region' kwarg is FOR UNIT-TESTING PURPOSES ONLY, otherwise we access the database
         if 'study_region' in keys:
             study_region = GEOSGeometry(self.kwargs['study_region'])
             study_region.set_srid(settings.GEOMETRY_CLIENT_SRID)
             study_region.transform(settings.GEOMETRY_DB_SRID)
             study_regions = [study_region]
         else:
-            study_regions = [sr.geometry for sr in StudyRegion.objects.all()]
+            try:
+                study_regions = [sr.geometry for sr in StudyRegion.objects.all()]
+            except:
+                return {"status_code": "6", "message": "StudyRegion objects not found in database.  Check database or provide 'study_region' kwarg.", "clipped_shape": None, "original_shape": None}
         
         #transform the target_shape to the srid of the study region(s)
         target_shape.transform(settings.GEOMETRY_DB_SRID)
@@ -134,7 +138,7 @@ class ClipToGraticuleManipulator(ManipulatorBase):
     def manipulate(self):
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "one or more kwargs not provided", "clipped_shape": None, "original_shape": None}
+            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "clipped_shape": None, "original_shape": None}
         
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID) 

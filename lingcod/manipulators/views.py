@@ -42,7 +42,7 @@ def multi_generic_manipulator_view(request, manipulators):
                 form = manipClass.Form()
                 return render_to_response( 'common/base_form.html', RequestContext(request,{'form': form}))
             else: # this manipulator has no form, just error out
-                return HttpResponse( "Manipulator " + manipulator + " does not support GET requests.", status=405 )
+                return HttpResponse( "Manipulator " + manipulator + " does not support GET requests.", status=501 )
                 
         else: # post request: run this manipulator
             if manipClass.Form.available: # validate a related form, if such exists

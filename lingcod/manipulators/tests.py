@@ -137,11 +137,11 @@ class ManipulatorsTest(TestCase):
         self.assertAlmostEquals(result["original_shape"].area, 0, places=7)
         
         #missing kwargs
-        response6 = self.client.post('/manipulators/ClipToStudyRegion/', {'study_region': self.study_region.wkt})
+        response6 = self.client.post('/manipulators/ClipToStudyRegion/', {})
         self.assertEquals(response6.status_code, 200)
         json6 = serializers.json.simplejson.loads(response6.content)
         self.assertEquals(json6["status_code"], '6')
-        studyregion_clipper = ClipToStudyRegionManipulator(study_region=self.study_region.wkt)
+        studyregion_clipper = ClipToStudyRegionManipulator()
         result = studyregion_clipper.manipulate()
         self.assertEquals(result["status_code"], '6')
         self.assertEquals(result["clipped_shape"], None)
