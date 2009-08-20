@@ -10,8 +10,19 @@ def KmlWrap( string ):
 def LookAtKml( geometry ):
     lookAtParams = ComputeLookAt( geometry )
     return '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (lookAtParams['latitude'], lookAtParams['longitude'], lookAtParams['range'], lookAtParams['tilt'], lookAtParams['heading'] )
-    
-    
+
+def LargestPolyFromMulti(geom): 
+    """ takes a polygon or a multipolygon geometry and returns only the largest polygon geometry"""
+    if geom.num_geom > 1:
+        largest_area = 0.0
+        for g in geom: # find the largest polygon in the multi polygon 
+            if g.area > largest_area:
+                largest_geom = g
+                largest_area = g.area
+    else:
+        largest_geom = geom
+    return largest_geom  
+   
 def ComputeLookAt( geometry ):
 
     lookAtParams = {}
