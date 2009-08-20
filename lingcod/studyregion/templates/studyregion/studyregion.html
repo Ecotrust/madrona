@@ -19,18 +19,7 @@
         
         gex = new GEarthExtensions(pluginInstance);
         
-        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 });
-            
-        // example: set Earth lookat from study region
-        // assumes text/plain mimetype is being returned
-        /*$.get('/studyregion/lookAtKml/', 
-            function(data) {
-                var kmlObject = ge.parseKml(data);
-                if (kmlObject) {
-                    if (kmlObject.getAbstractView())
-                        ge.getView().setAbstractView(kmlObject.getAbstractView());
-                }
-            });*/
+        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 }); 
             
         gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
         
@@ -38,19 +27,50 @@
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
 
-        // example: show study region kml
-        // assumes text/plain mimetype is being returned
-        /*$.get('/studyregion/kml/', function(data) {
-            gex.util.displayKmlString( data );
-        });*/
-        
-        //measureTool = new lingcod.measureTool();
-        //measureTool.measureArea( gex, "area" );
-        
+        drawTool = new lingcod.drawTool();
+        drawTool.drawShape( gex, drawMpaComplete );  
     }
 
     function failureCallback(errorCode) {
-      alert("Failure loading the Google Earth Plugin: " + errorCode);
+        alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    function drawMpaComplete(){
+        $.get('{% url mpa-manipulator-list %}',
+            function(data){
+                manipulators = eval(data);
+                manip_string = '';
+                for ( var i = 0; i < manipulators.length; i++ )
+                {
+                    if (i > 0)
+                        manip_string = manip_string + ',';
+                    manip_string = manip_string + manipulators[i];
+                }
+                
+                target_wkt = placemarkToWkt(drawTool.placemark);
+                
+                $.post('/manipulators/'+manip_string+'/', 
+                    { target_shape: target_wkt },
+                    function(manip_data){
+                        ret_obj = eval( '(' + manip_data + ')' );
+                        gex.util.displayKmlString(ret_obj.clipped_shape);
+                        drawTool.clear();
+                    });
+            });
+    }
+    
+    function placemarkToWkt(placemark) {
+        var linearRing = placemark.getGeometry().getOuterBoundary();
+        var wkt = 'POLYGON((';
+        for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ )
+        {
+            if (i > 0)
+                wkt = wkt + ',';
+            wkt = wkt + linearRing.getCoordinates().get(i).getLongitude() + ' ' + linearRing.getCoordinates().get(i).getLatitude();
+        }
+        wkt = wkt + '))'
+        
+        return wkt;
     }
     
     $(document).ready(function(){

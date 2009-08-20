@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     (r'^layers/', include('lingcod.layers.urls')),
     (r'^studyregion/', include('lingcod.studyregion.urls')),
     (r'^faq/', include('lingcod.simplefaq.urls')),
+    (r'^manipulators/', include('lingcod.manipulators.urls')),
     (r'^mlpa/', include('mlpa.urls')),
 
     

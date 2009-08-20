@@ -30,4 +30,14 @@ def mpaKml(request, id):
     mpa = get_object_or_404( models.MlpaMpa, pk=id )
     
     return HttpResponse( KmlWrap( '<Document><name>MPA</name>' + mpa.kmlFinalGeom(request.get_host()) + '</Document>' ), content_type='text/plain')
+   
+    
+def mpaManipulatorList(request):
+    """Handler for AJAX mpa manipulators request
+    """
+    manipulators = models.MlpaMpa.Options.manipulators
+    manip_text = [(manipulator.Options.name) for manipulator in manipulators]
+    
+    return HttpResponse( simplejson.dumps( manip_text ))
+    
 

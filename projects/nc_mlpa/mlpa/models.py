@@ -1,5 +1,7 @@
 from django.contrib.gis.db import models
 from lingcod.mpa.models import Mpa
+from lingcod.manipulators.manipulators import *
+from manipulators import *
 
 class MlpaMpa(Mpa):
     """Model used for representing marine protected areas as part of the MLPA initiative
@@ -93,6 +95,9 @@ class MlpaMpa(Mpa):
             ("can_share_mpas", "Can Share Mpas"),
         )
         
+    class Options:
+        manipulators = [ ClipToStudyRegionManipulator ]
+        
     def __str__(self):
-        return self.name     
-    
+        return self.name
+        

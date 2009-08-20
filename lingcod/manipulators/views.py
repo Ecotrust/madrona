@@ -57,7 +57,6 @@ def multi_generic_manipulator_view(request, manipulators):
                         return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
                     
                     if new_shape is None: # common case is when target_shape is invalid
-                        #return HttpResponse( 'From ' + manipulator + ':  ' + result['message'] )
                         return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
                     
                     # put the resulting shape back into the kwargs as the target_shape
@@ -79,25 +78,24 @@ def multi_generic_manipulator_view(request, manipulators):
                     return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": None})))
                 
                 if new_shape is None: # common case is when target_shape is invalid
-                    #return HttpResponse( 'From ' + manipulator + ':  ' + result['message'] )
                     return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": None, "original_shape": result["original_shape"].kml})))
                     
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
-    #end manipulator for loop              
+    #end manipulator for loop
                 
     # manipulators ran fine and the resulting shape is ready for outbound processing
     new_shape.transform(settings.GEOMETRY_DB_SRID)
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
                         
-    #return HttpResponse(result, content_type = 'text/plain')
+    return HttpResponse( simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml)}), content_type='text/plain')
+
     
-    return HttpResponse(str(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "clipped_shape": result["clipped_shape"].kml, "original_shape": result["original_shape"].kml})))
-    #result = '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>80ffffff</color> </PolyStyle></Style>'+new_shape.kml+'</Placemark></Document>'
-    #return render_to_response( 'studyregion/studyregion.html', RequestContext(request,{'extra_kml': result, 'api_key':settings.GOOGLE_API_KEY}))
+def kmlDocWrap( string ):
+    return '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>80ffffff</color> </PolyStyle></Style>'+string+'</Placemark></Document>'
+
     
-   
 def testView( request ):
     trans_geom = StudyRegion.objects.all()[0].geometry 
         
