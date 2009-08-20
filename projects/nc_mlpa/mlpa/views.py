@@ -9,7 +9,8 @@ from manipulators import *
 from django.contrib.gis.geos import *
 
 from django.conf import settings
-from cjson import encode as json_encode
+#from cjson import encode as json_encode
+from django.utils import simplejson
 
 import models
 
@@ -56,12 +57,12 @@ def clipToEstuaries(request):
 
     #if target_shape is not in the request post return status_code 6
     if target_shape is None:
-        return HttpResponse(str(json_encode({"status_code": '6', "message": 'target_shape was not provided with request', "clipped_shape": None, "original_shape": None})))
+        return HttpResponse(str(simplejson.dumps({"status_code": '6', "message": 'target_shape was not provided with request', "clipped_shape": None, "original_shape": None})))
     target_shape = fromstr(target_shape)
     
     #THE FOLLOWING WILL NEED TO BE REMOVED when extracting estuaries form database (rather than kwargs)
     if ests is None:
-        return HttpResponse(str(json_encode({"status_code": '6', "message": 'estuaries was not provided with request', "clipped_shape": None, "original_shape": None})))
+        return HttpResponse(str(simplejson.dumps({"status_code": '6', "message": 'estuaries was not provided with request', "clipped_shape": None, "original_shape": None})))
     estuaries = fromstr(ests)
     
     #clip mpa to estuaries and obtain the larger poly (either estuarine or oceanic)
@@ -70,8 +71,8 @@ def clipToEstuaries(request):
     
     #make sure the geometry was valid 
     if result['status_code'] == '3':
-        return HttpResponse(str(json_encode({"status_code": "3", "message": "New Geometry is NOT valid", "clipped_shape": None, "original_shape": target_shape.kml})))
+        return HttpResponse(str(simplejson.dumps({"status_code": "3", "message": "New Geometry is NOT valid", "clipped_shape": None, "original_shape": target_shape.kml})))
     #otherwise all returned geometries should have non None values
-    return HttpResponse(str(json_encode({"status_code": result['status_code'], "message": result['message'], "clipped_shape": result['clipped_shape'].kml, "original_shape": result['original_shape'].kml})))
+    return HttpResponse(str(simplejson.dumps({"status_code": result['status_code'], "message": result['message'], "clipped_shape": result['clipped_shape'].kml, "original_shape": result['original_shape'].kml})))
 
    
