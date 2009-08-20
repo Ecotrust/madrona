@@ -99,7 +99,6 @@ INSTALLED_APPS = (
     'lingcod.simplefaq',
     'lingcod.manipulators',
     'simple.simple_app',
-    'mlpa',
 )
 
 from lingcod.common import assets
