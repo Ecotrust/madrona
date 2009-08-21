@@ -3,6 +3,8 @@ from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
 from lingcod.common.utils import LargestPolyFromMulti
+from django.template.loader import render_to_string
+
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
 manipulatorsDict = {}
 
@@ -19,7 +21,9 @@ class ManipulatorBase():
         
     class Options:
         name = 'Manipulator base class'
+        template_name = 'manipulators/manipulator_default.html'
     
+       
        
 class ClipToShapeManipulator(ManipulatorBase):
     '''
@@ -64,13 +68,14 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
     def manipulate(self):                    
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "clipped_shape": None, "original_shape": None}
+            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "html":"", "clipped_shape": None, "original_shape": None}
         
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
 
         if not target_shape.valid:
-            return {"status_code": "3", "message": "target_shape is not a valid geometry", "clipped_shape": None, "original_shape": target_shape}
+            status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL})
+            return {"status_code": "3", "message": "target_shape is not a valid geometry", "html":status_html, "clipped_shape": None, "original_shape": target_shape}
         
         clipped_shape = None 
         
@@ -84,7 +89,7 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
             try:
                 study_regions = [sr.geometry for sr in StudyRegion.objects.all()]
             except:
-                return {"status_code": "6", "message": "StudyRegion objects not found in database.  Check database or provide 'study_region' kwarg.", "clipped_shape": None, "original_shape": None}
+                return {"status_code": "6", "message": "StudyRegion objects not found in database.  Check database or provide 'study_region' kwarg.", "html":"", "clipped_shape": None, "original_shape": None}
         
         #transform the target_shape to the srid of the study region(s)
         target_shape.transform(settings.GEOMETRY_DB_SRID)
@@ -102,20 +107,29 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         #transform the target_shape back to its original srid
         target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
         if clipped_shape is None:
-            return  {"status_code": "4", "message": "study_regions contained no geometries", "clipped_shape": None, "original_shape": target_shape}
+            return  {"status_code": "4", "message": "study_regions contained no geometries", "clipped_shape": None, "html":"", "original_shape": target_shape}
         
         #transform clipped_shape to the appropriate srid
         clipped_shape.transform(settings.GEOMETRY_CLIENT_SRID)
 
         if clipped_shape.area == 0:
-            return {"status_code": "2", "message": "clipped geometry is empty (no overlap with study region?)", "clipped_shape": clipped_shape, "original_shape": target_shape}
+            status_html = render_to_string(self.Options.status_html_templates["2"], {'MEDIA_URL':settings.MEDIA_URL})
+            return {"status_code": "2", "message": "clipped geometry is empty (no overlap with study region?)", "html":status_html, "clipped_shape": clipped_shape, "original_shape": target_shape}
         
         largest_poly = LargestPolyFromMulti(clipped_shape)
-        return {"status_code": "0", "message": "target_shape is clipped to study region", "clipped_shape": largest_poly, "original_shape": target_shape}
+        
+        status_html = render_to_string(self.Options.status_html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
+        return {"status_code": "0", "message": "target_shape is clipped to study region", "html":status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
      
         
     class Options:
         name = 'ClipToStudyRegion'
+        status_html_templates = {
+            '0':'manipulators/clipping.html', 
+            '2':'manipulators/outside_studyregion.html', 
+            '3':'manipulators/invalid_geometry.html'
+        }
+        
       
 manipulatorsDict[ClipToStudyRegionManipulator.Options.name] = ClipToStudyRegionManipulator
     
@@ -138,13 +152,13 @@ class ClipToGraticuleManipulator(ManipulatorBase):
     def manipulate(self):
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "clipped_shape": None, "original_shape": None}
+            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "html":"", "clipped_shape": None, "original_shape": None}
         
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID) 
         
         if not target_shape.valid:
-            return {"status_code": "3", "message": "target_shape is not a valid geometry", "clipped_shape": None, "original_shape": target_shape}
+            return {"status_code": "3", "message": "target_shape is not a valid geometry", "html":"", "clipped_shape": None, "original_shape": target_shape}
             
         north = south = east = west = None
         keys = self.kwargs.keys()
@@ -181,16 +195,16 @@ class ClipToGraticuleManipulator(ManipulatorBase):
             graticule_box = Polygon( LinearRing([ Point( float(west), float(north) ), Point( float(east), float(north) ), Point( float(east), float(south) ), Point( float(west), float(south) ), Point( float(west), float(north))]))
             graticule_box.set_srid(settings.GEOMETRY_CLIENT_SRID)
         except:
-            return {"status_code": "4", "message": "Graticule clipping failed to create polygon", "clipped_shape": None, "original_shape": target_shape}
+            return {"status_code": "4", "message": "Graticule clipping failed to create polygon", "html":"", "clipped_shape": None, "original_shape": target_shape}
         graticule_box.srid = settings.GEOMETRY_CLIENT_SRID
         
         #clip target_shape to the polygon created by the graticule parameters
         clipped_shape = target_shape.intersection(graticule_box)
         
         if clipped_shape.area == 0:
-            return {"status_code": "2", "message": "Graticule dimensions produce an empty clipped geometry", "clipped_shape": clipped_shape, "original_shape": target_shape}
+            return {"status_code": "2", "message": "Graticule dimensions produce an empty clipped geometry", "html":"", "clipped_shape": clipped_shape, "original_shape": target_shape}
         
-        return {"status_code": "0", "message": "Graticule clipping was a success", "clipped_shape": clipped_shape, "original_shape": target_shape}
+        return {"status_code": "0", "message": "Graticule clipping was a success", "clipped_shape": clipped_shape, "html":"", "original_shape": target_shape}
                 
             
     class Form(forms.Form):
