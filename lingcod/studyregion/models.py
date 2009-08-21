@@ -5,8 +5,11 @@ from django.contrib.gis.geos import Point, Polygon, LinearRing
 
 
 class StudyRegionManager(models.GeoManager):
+    """Returns the currently active study region. The active study region is 
+    determined by the active attribute.
+    """
     def current(self):
-        return self.all()[0]
+        return self.get(active=True)
 
 class StudyRegion(models.Model):
     """Model used for representing study regions
@@ -16,6 +19,14 @@ class StudyRegion(models.Model):
         ======================  ==============================================
 
         ``name``                Name of the Study Region
+        
+        ``active``              Whether the study region is treated as the
+                                current authoritative copy. This should not be
+                                set using the admin interface
+                                
+        ``creation_date``       Automatically assigned
+
+        ``modification_date``   Automatically assigned
                                 
         ``geometry``            PolygonField representing the study region boundary
         
@@ -33,7 +44,12 @@ class StudyRegion(models.Model):
                                 
         ======================  ==============================================
 """   
-    name = models.TextField(verbose_name="Study Region Name")
+    name = models.CharField(verbose_name="Study Region Name", max_length=255)
+    
+    active = models.BooleanField(default=False, help_text='This options will usually not be set using the admin interface, but rather by using the management commands relating to study region changes.')
+    
+    creation_date = models.DateTimeField(auto_now_add=True) 
+    modification_date = models.DateTimeField(auto_now=True)     
     
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Study region boundary")
     
@@ -50,7 +66,17 @@ class StudyRegion(models.Model):
     class Meta:
         db_table = u'mm_study_region'
     
-    
+    def save(self, *args, **kwargs):
+        super(StudyRegion, self).save(*args, **kwargs)
+        if self.active and StudyRegion.objects.filter(active=True).count() > 1:
+            # Ensure that any previously active study region is deactivated
+            # There can be only one!
+            StudyRegion.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
+            
+    @models.permalink
+    def get_absolute_url(self):
+        return ('lingcod.studyregion.views.show', [self.pk])
+            
     def kml(self, style_domain):
         """
         Get the kml of the entire study region

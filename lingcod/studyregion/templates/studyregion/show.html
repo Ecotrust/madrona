@@ -1,0 +1,44 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+<script type="text/javascript">
+    google.load("earth", "1");
+
+    var ge = null;
+    var measureTool = null;
+
+    function init() {
+        $.ajaxSetup({ cache: false });
+        google.earth.createInstance("map3d", initCallback, failureCallback);
+    }
+
+    function initCallback(pluginInstance) {
+    
+        ge = pluginInstance;
+        ge.getWindow().setVisibility(true); // required
+        
+        gex = new GEarthExtensions(pluginInstance);
+        $.ajax({
+            url: '{% url lingcod.studyregion.views.kml pk %}',
+            success: function(data){
+                gex.util.displayKmlString( data, {flyToView: true} );
+            },
+            dataType: 'text',
+            error: failureCallback
+        });
+        
+    }
+
+    function failureCallback(errorCode) {
+      alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    $(document).ready(function(){
+        init();
+    });
+        
+</script>
+{% endblock %}
+{% block body %}
+<div id="map3d" style="width: 100%; height: 100%;"></div>
+{% endblock %}

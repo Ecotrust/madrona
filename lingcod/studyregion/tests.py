@@ -80,3 +80,11 @@ class StudyRegionTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
 
+    def testOnlyOneActive(self):
+        # Only need to create one to test since there is an active study 
+        # region fixture
+        self.assertTrue(StudyRegion.objects.count() == 1)
+        studyregion = StudyRegion.objects.create(active=True)
+        self.assertTrue(StudyRegion.objects.count() == 2)
+        self.assertTrue(StudyRegion.objects.filter(active=True).count() == 1)
+        self.assertTrue(StudyRegion.objects.get(active=True).pk == studyregion.pk)

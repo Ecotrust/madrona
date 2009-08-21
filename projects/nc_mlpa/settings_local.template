@@ -18,6 +18,11 @@
 # DATABASE_USER = 'postgres'
 # DATABASE_PASSWORD = 'my-secret-password'
 
+# Uncomment this line to cause MarineMap to go into maintenance mode
+# It will not be accessible without logging in as staff
+# See http://pypi.python.org/pypi/django-maintenancemode
+# MAINTENANCE_MODE = True
+
 # And to run tests correctly, tell Django what your spatial database template is...
 #POSTGIS_TEMPLATE='template_postgis'
 # ...and uncomment TEST_RUNNER

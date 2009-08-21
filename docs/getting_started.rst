@@ -19,6 +19,7 @@ MarineMap.
     * A working installation of `GeoDjango <http://geodjango.org>`_
     * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
     * `elementtree <http://effbot.org/zone/element-index.htm>`_
+    * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
     
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 

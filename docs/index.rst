@@ -19,6 +19,7 @@ Contents:
    managing_users
    ui
    templatetags
+   maintenance_mode
 
 API
 ***
