@@ -142,4 +142,5 @@ needed:
    study_region
    layers
    managing_users
+   waves
    marine_protected_areas
