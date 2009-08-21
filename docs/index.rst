@@ -5,21 +5,24 @@
 MarineMap Decision Support Tool Documentation
 =============================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
    
    introduction
    getting_started
    deployment
-   asset_packaging
    study_region
    layers
    managing_users
+   waves
+   marine_protected_areas
+   arrays
+   reports
    ui
    templatetags
+   asset_packaging
    maintenance_mode
+   postgis_django_tests
 
 API
 ***

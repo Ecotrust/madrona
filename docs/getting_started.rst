@@ -128,14 +128,13 @@ At http://localhost:8000/ the interface should render with sample data.
 Next Steps
 **********
 
-Both the :ref:`Study Region <study_region>` and :ref:`Data Layers <layers>` apps are 
-configured to load sample data when ``syncdb`` is run. This is great to get 
-started but you'll want to read the documentation for each of these apps to
-learn how to specify your actual study region and public data layers.
+MarineMap has fixtures containing test data that is installed on database 
+setup like an example :ref:`Study Region <study_region>` and :ref:`layers`. This makes
+it easy to verify the installation and learn how the tool works. For use in an 
+actual planning session these default datasets will need to be replaced.
 
-
-useful documentation
---------------------
+See the documentation in the following sections to customize MarineMap as 
+needed:
 
 .. toctree::
    :maxdepth: 1
@@ -143,3 +142,4 @@ useful documentation
    study_region
    layers
    managing_users
+   marine_protected_areas
