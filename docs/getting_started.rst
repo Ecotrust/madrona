@@ -144,3 +144,7 @@ needed:
    managing_users
    waves
    marine_protected_areas
+   
+The setup this guide has walked through only specifies how to run the django
+development server. To setup a public facing website using Apache, consult the
+:ref:`deployment` notes.
