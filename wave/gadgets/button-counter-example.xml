@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
 <ModulePrefs title="State Example" height="120">
-  <Require feature="wave-preview" /> 
+  <Require feature="rpc" /> 
 </ModulePrefs>
 <Content type="html">
 <![CDATA[ 
