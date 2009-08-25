@@ -39,7 +39,7 @@ def multi_generic_manipulator_view(request, manipulators):
         if not manipClass:
             return HttpResponse( "Manipulator " + manipulator + " does not exist.", status=404 )
 
-        # 'get' requests assume the intent is to get a related parameter-entry form
+        # 'GET' requests assume the intent is to get a related parameter-entry form
         if request.method == 'GET':
             if manipClass.Form.available:
                 form = manipClass.Form()
@@ -47,7 +47,7 @@ def multi_generic_manipulator_view(request, manipulators):
             else: # this manipulator has no form, just error out
                 return HttpResponse( "Manipulator " + manipulator + " does not support GET requests.", status=501 )
                 
-        else: # post request: run this manipulator
+        else: # 'POST' request: run this manipulator
             if manipClass.Form.available: # validate a related form, if such exists
                 form = manipClass.Form( kwargs )
                 if form.is_valid():
@@ -101,7 +101,7 @@ def kmlDocWrap( string ):
 
     
 def testView( request ):
-    trans_geom = StudyRegion.objects.all()[0].geometry 
+    trans_geom = StudyRegion.objects.current().geometry 
         
     w = trans_geom.extent[0]
     s = trans_geom.extent[1]
@@ -112,6 +112,7 @@ def testView( request ):
     center_lon = trans_geom.centroid.x
             
     target_shape = Polygon( LinearRing([ Point( center_lon, center_lat ), Point( e, center_lat ), Point( e, s ), Point( center_lon, s ), Point( center_lon, center_lat)]))
+
     target_shape.set_srid(settings.GEOMETRY_DB_SRID)
     target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
     

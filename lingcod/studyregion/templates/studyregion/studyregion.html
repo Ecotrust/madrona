@@ -19,7 +19,8 @@
         
         gex = new GEarthExtensions(pluginInstance);
         
-        gex.util.lookAt([33, -118], { range: 800000, tilt: 40 }); 
+        <!--- location and zoom (zoom changed from 800000 to 100000) (tilt changed from 40 to 20) (lat changed from 33 to 33.3)--->
+        gex.util.lookAt([33.3, -118], { range: 100000, tilt: 20 }); 
             
         gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
         
@@ -48,11 +49,12 @@
                 }
                 
                 target_wkt = placemarkToWkt(drawTool.placemark);
-                
+                <!--- this is where the template is added to the sandbox --->
                 $.post('/manipulators/'+manip_string+'/', 
                     { target_shape: target_wkt },
                     function(manip_data){
                         ret_obj = eval( '(' + manip_data + ')' );
+                        document.getElementById("area").innerHTML=ret_obj.html;
                         gex.util.displayKmlString(ret_obj.clipped_shape);
                         drawTool.clear();
                     });
@@ -79,8 +81,8 @@
         
 </script>
 {% endblock %}
-{% block body %}
-<div id="map3d" style="width: 500px; height: 500px; border: 1px solid silver;"></div>
+{% block body %} <!--- modified div to include scroll bar with 'overflow: auto'--->
+<div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;">
 <p><strong>Distance: </strong><span id="distance">N/A</span></p>
-<p><strong>Area: </strong><span id="area">N/A</span></p>
+<p><strong>Area: </strong><span id="area">N/A</span></p></div>
 {% endblock %}

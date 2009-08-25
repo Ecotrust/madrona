@@ -52,19 +52,20 @@ class MlpaValidateTest(TestCase):
         
         Or the following to run as unit test:
             python manage.py test mlpa
+            this calls setUp, testManipulators, and tearDown, in that order
     '''
 
     def setUp(self):
         '''
-            mpaValidate expected code_status results:
-            code_status 0:  clips to study region, no estuary overlap
+            rough meaning of each code_status result:
+            code_status 0:  clips successfully
             code_status 1:  overlaps with estuary, oceanic part chosen
-            code_status 2:  outside study region
-            code_status 3:  geometry not valid
-            code_status 4:  estuary only (currently not used in mpaVAlidate)
+            code_status 2:  target geometry lies outside of geometry being clipped against
+                            or in the case of Estuary clipping, no estuaries were found to clip against
+            code_status 3:  target geometry is not valid
+            code_status 4:  this code has the most meanings, each depending on context
+                            in the case of Estuary clipping, it means the target was estuary only
             code_status 5:  overlaps with estuary, estuary part chosen
-            
-            #code_status 6 is particular to manipulator classes
             code_status 6:  one or more required kwargs not provided
         '''
         
@@ -80,7 +81,6 @@ class MlpaValidateTest(TestCase):
         self.est1 = fromstr('POLYGON ((0 2, 1 0, 2 2, 0 2))') # same as code4_poly
         self.est2 = fromstr('POLYGON ((0 2, -1 0, -2 2, 0 2))') # est1.area == est2.area == 2
         self.ests = MultiPolygon(self.est1, self.est2)
-        self.ests.srid=900913
    
         self.client = Client()
         
@@ -101,8 +101,7 @@ class MlpaValidateTest(TestCase):
    
         self.client = None
         
-    def testManipulators(self):
-        #individual testing methods will be called from here    
+    def testManipulators(self):   
         self.clipToGraticuleTest()
         self.clipToStudyRegionTest()
         self.clipToEstuariesTest()
@@ -246,7 +245,7 @@ class MlpaValidateTest(TestCase):
             Tests the following:
             code_status 0:  clipped to study region
         '''
-        study_region = StudyRegion.objects.all()[0].geometry 
+        study_region = StudyRegion.objects.current().geometry 
         
         w = study_region.extent[0]
         s = study_region.extent[1]

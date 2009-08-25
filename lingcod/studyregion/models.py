@@ -10,6 +10,8 @@ class StudyRegionManager(models.GeoManager):
     """
     def current(self):
         return self.get(active=True)
+        #or should the above line now be changed to:
+        #return self.current()
 
 class StudyRegion(models.Model):
     """Model used for representing study regions
