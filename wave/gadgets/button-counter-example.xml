@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
 <ModulePrefs title="State Example" height="120">
-  <Require feature="rpc" /> 
-</ModulePrefs>
+    <Require feature="wave" /> 
+  </ModulePrefs>
 <Content type="html">
 <![CDATA[ 
 <div id="content_div" style="height: 50px;"></div>
+  
     <script type="text/javascript">
 
     var div = document.getElementById('content_div');
 
     function buttonClicked() {
-      console.log('buttonclicked');
       var value = parseInt(wave.getState().get('count', '0'));
       wave.getState().submitDelta({'count': value + 1});
+    }
+
+    // Reset value of "count" to 0
+    function resetCounter(){
+      wave.getState().submitDelta({'count': '0'});
     }
 
     function stateUpdated() {
@@ -31,11 +36,6 @@
       }
     }
     gadgets.util.registerOnLoadHandler(init);
-
-    // Reset value of "count" to 0
-    function resetCounter(){
-      wave.getState().submitDelta({'count': '0'});
-    }
 
     </script>
     <input type=button value="Click Me!" id="butCount" onClick="buttonClicked()">
