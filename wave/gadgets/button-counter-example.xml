@@ -9,10 +9,10 @@
   
     <script type="text/javascript">
 
-    console.log(top);
     var div = document.getElementById('content_div');
 
     function buttonClicked() {
+      console.log(top);
       var value = parseInt(wave.getState().get('count', '0'));
       wave.getState().submitDelta({'count': value + 1});
     }
