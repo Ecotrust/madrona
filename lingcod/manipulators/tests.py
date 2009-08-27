@@ -61,7 +61,7 @@ class ManipulatorsTest(TestCase):
             test views.generic_manipulator_view
         '''
         
-        trans_geom = StudyRegion.objects.all()[0].geometry
+        trans_geom = StudyRegion.objects.current().geometry
         trans_geom.transform(settings.GEOMETRY_CLIENT_SRID)
         
         w = trans_geom.extent[0]

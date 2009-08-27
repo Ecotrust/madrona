@@ -96,8 +96,9 @@ class MlpaMpa(Mpa):
         )
         
     class Options:
-        #manipulators = [ ClipToStudyRegionManipulator, ClipToEstuariesManipulator ]
-        manipulators = [ ClipToShapeManipulator ]
+        manipulators = [ ClipToStudyRegionManipulator, ClipToGraticuleManipulator, ClipToEstuariesManipulator ]
+        #manipulators = [ ClipToEstuariesManipulator ]
+        #manipulators = [ ClipToShapeManipulator ]
         #manipulators = [ ClipToGraticuleManipulator ]
         
     def __str__(self):

@@ -18,7 +18,6 @@ import models
 def mpaKmlAllGeom(request, id):
     """Handler for AJAX mpaKmlAllGeom request
     """
-
     mpa = get_object_or_404( models.MlpaMpa, pk=id )
     
     return HttpResponse( KmlWrap( mpa.kmlFolder(request.get_host()) ), content_type='text/plain') 

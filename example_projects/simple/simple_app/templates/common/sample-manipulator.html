@@ -1,0 +1,108 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+<script type="text/javascript">
+    google.load("earth", "1");
+
+    var ge = null;
+    var measureTool = null;
+
+    <!--- create an instance of Google Earth and start the drawing process--->
+    function init() {
+        $.ajaxSetup({ cache: false });
+        google.earth.createInstance("map3d", initCallback, failureCallback);
+    }
+
+    <!--- set up the google earth areal view, add the study region, followed by the lingcod.drawTool--->
+    function initCallback(pluginInstance) {
+    
+        ge = pluginInstance;
+        ge.getWindow().setVisibility(true); // required
+        
+        gex = new GEarthExtensions(pluginInstance);
+        
+        <!--- location and zoom (zoom changed from 800000 to 400000) (tilt changed from 40 to 20) (lat changed from 33 to 33.3)--->
+        gex.util.lookAt([33.5, -118], { range: 400000, tilt: 20 }); 
+            
+        gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
+        
+        {% if extra_kml %}
+        gex.util.displayKmlString( '{{ extra_kml|safe }}' );
+        {% endif %}
+
+        drawTool = new lingcod.drawTool();
+        drawTool.drawShape( gex, drawMpaComplete );  
+    }
+
+    function failureCallback(errorCode) {
+        alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    <!--- get the manipulator list from the Mpa model and process the manipulators--->
+    function drawMpaComplete(){
+        $.getJSON(
+            '{% url mpa-manipulator-list %}',
+            processManipulators
+        );
+    }
+    
+    <!--- posts a request to /manipulators/<manipulator-list> with the target_shape containing the user-drawn coordinates--->
+    function processManipulators(manipulator_list) {
+        manip_string = stringFromList(manipulator_list);
+        
+        target_wkt = placemarkToWkt(drawTool.placemark);
+        <!--- this is where the template is added to the sandbox --->
+        $.post(
+            '/manipulators/'+manip_string+'/', 
+            { target_shape: target_wkt },
+            renderManipulatorResults
+        );
+    }
+    
+    <!--- wraps the user-drawn coordinates in a wkt type geometry --->
+    function placemarkToWkt(placemark) {
+        var linearRing = placemark.getGeometry().getOuterBoundary();
+        var wkt = 'POLYGON((';
+        for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ )
+        {
+            if (i > 0)
+                wkt = wkt + ',';
+            wkt = wkt + linearRing.getCoordinates().get(i).getLongitude() + ' ' + linearRing.getCoordinates().get(i).getLatitude();
+        }
+        wkt = wkt + '))'
+        
+        return wkt;
+    }
+    
+    <!--- creates a comma separated string from a list object --->
+    function stringFromList(list) {
+        string_result = '';
+        for ( var i = 0; i < list.length; i++ )
+        {
+            if (i > 0)
+                string_result = string_result + ',';
+            string_result = string_result + list[i];
+        }
+        return string_result
+    }
+    
+    <!--- obtains the json wrapped return value from the manipulators --->
+    <!--- extracts and displays the 'html' manipulator data, and the resulting 'clipped_shape' onto the browser window --->
+    function renderManipulatorResults(manip_data) {
+        ret_obj = eval( '(' + manip_data + ')' );
+        document.getElementById("area").innerHTML=ret_obj.html;
+        gex.util.displayKmlString(ret_obj.clipped_shape);
+        drawTool.clear();
+    }
+    
+    $(document).ready(function(){
+        init();
+    });
+        
+</script>
+{% endblock %}
+{% block body %} <!--- modified div to include scroll bar with 'overflow: auto'--->
+<div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;">
+<p><strong>Distance: </strong><span id="distance">N/A</span></p>
+<p><strong>Area: </strong><span id="area">N/A</span></p></div>
+{% endblock %}

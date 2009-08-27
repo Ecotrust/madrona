@@ -33,7 +33,6 @@ def multi_generic_manipulator_view(request, manipulators):
 
     # run the manipulators in order presented
     for manipulator in manipulator_list:
-
         # try to bind the incoming manipulator string to an existing class
         manipClass = manipulatorsDict.get(manipulator)
         if not manipClass:
@@ -56,6 +55,7 @@ def multi_generic_manipulator_view(request, manipulators):
                     new_shape = result['clipped_shape']
                     original_shape = result['original_shape']
                     
+                    #this may not even be possible as the form is checked for validity above
                     if original_shape is None: # common case is when all necessary kwargs are not provided
                         return HttpResponse(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": None}))
                     
@@ -90,6 +90,7 @@ def multi_generic_manipulator_view(request, manipulators):
                 
     # manipulators ran fine and the resulting shape is ready for outbound processing
     new_shape.transform(settings.GEOMETRY_DB_SRID)
+    #we should probably move this static value 20 to a settings variable
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
                         

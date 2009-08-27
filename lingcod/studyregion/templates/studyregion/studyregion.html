@@ -19,8 +19,8 @@
         
         gex = new GEarthExtensions(pluginInstance);
         
-        <!--- location and zoom (zoom changed from 800000 to 100000) (tilt changed from 40 to 20) (lat changed from 33 to 33.3)--->
-        gex.util.lookAt([33.3, -118], { range: 100000, tilt: 20 }); 
+        <!--- location and zoom (tilt changed from 40 to 30) (lat changed from 33 to 33.5)--->
+        gex.util.lookAt([33.5, -118], { range: 800000, tilt: 30 }); 
             
         gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
         
@@ -37,28 +37,40 @@
     }
     
     function drawMpaComplete(){
-        $.get('{% url mpa-manipulator-list %}',
-            function(data){
-                manipulators = eval(data);
-                manip_string = '';
-                for ( var i = 0; i < manipulators.length; i++ )
-                {
-                    if (i > 0)
-                        manip_string = manip_string + ',';
-                    manip_string = manip_string + manipulators[i];
-                }
-                
-                target_wkt = placemarkToWkt(drawTool.placemark);
-                <!--- this is where the template is added to the sandbox --->
-                $.post('/manipulators/'+manip_string+'/', 
-                    { target_shape: target_wkt },
-                    function(manip_data){
-                        ret_obj = eval( '(' + manip_data + ')' );
-                        document.getElementById("area").innerHTML=ret_obj.html;
-                        gex.util.displayKmlString(ret_obj.clipped_shape);
-                        drawTool.clear();
-                    });
-            });
+        $.getJSON(
+            '{% url mpa-manipulator-list %}',
+            processManipulators
+        );
+    }
+    
+    function processManipulators(manipulator_list) {
+        manip_string = stringFromList(manipulator_list);
+        
+        target_wkt = placemarkToWkt(drawTool.placemark);
+        <!--- this is where the template is added to the sandbox --->
+        $.post(
+            '/manipulators/'+manip_string+'/', 
+            { target_shape: target_wkt },
+            renderManipulatorResults
+        );
+    }
+    
+    function stringFromList(list) {
+        string_result = '';
+        for ( var i = 0; i < list.length; i++ )
+        {
+            if (i > 0)
+                string_result = string_result + ',';
+            string_result = string_result + list[i];
+        }
+        return string_result
+    }
+    
+    function renderManipulatorResults(manip_data) {
+        ret_obj = eval( '(' + manip_data + ')' );
+        document.getElementById("area").innerHTML=ret_obj.html;
+        gex.util.displayKmlString(ret_obj.clipped_shape);
+        drawTool.clear();
     }
     
     function placemarkToWkt(placemark) {

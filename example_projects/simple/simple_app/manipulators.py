@@ -1,6 +1,6 @@
 from lingcod.manipulators.manipulators import * 
 from django.contrib.gis.geos import *
-from mlpa.models import *
+from simple_app.models import *
 from lingcod.common.utils import LargestPolyFromMulti
 
 
@@ -48,8 +48,7 @@ class ClipToEstuariesManipulator(ManipulatorBase):
         else:
             try:
                 estuaries = [est.geometry for est in Estuaries.objects.all()]
-                #THE FOLLOWING IS FOR TESTING PURPOSES -- simple shape in south coast
-                #IN THE CASE IN WHCIH THE ESTUARIES ARE NOT YET LOADED INTO DATABASE
+                #TEMPORARY ALTERATION FOR TESTING UNTIL ESTUARIES ARE LOADED INTO DATABASE
                 #estuaries = GEOSGeometry('MULTIPOLYGON (((-118.9953602060336800 33.6703166802659840, -117.0933248787674000 33.6703166802659840, -117.0933248787674000 32.5307977227377730, -118.9953602060336800 32.5307977227377730, -118.9953602060336800 33.6703166802659840)))')
                 #estuaries.set_srid(settings.GEOMETRY_CLIENT_SRID)
                 #estuaries.transform(settings.GEOMETRY_DB_SRID)
@@ -117,11 +116,11 @@ class ClipToEstuariesManipulator(ManipulatorBase):
     class Options:
         name = 'ClipToEstuaries'  
         status_html_templates = {
-            '0': 'mlpa/no_estuary_overlap.html', 
-            '1': 'mlpa/estuary_clip_oceanic.html', 
+            '0': 'estuary/no_estuary_overlap.html', 
+            '1': 'estuary/estuary_clip_oceanic.html', 
             '3': 'manipulators/invalid_geometry.html',
-            '4': 'mlpa/only_estuary.html', 
-            '5': 'mlpa/estuary_clip_estuarine.html', 
+            '4': 'estuary/only_estuary.html', 
+            '5': 'estuary/estuary_clip_estuarine.html', 
         } 
 
         

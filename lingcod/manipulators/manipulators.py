@@ -57,9 +57,12 @@ class ClipToShapeManipulator(ManipulatorBase):
     
     def manipulate(self):
         keys = self.kwargs.keys()
+
         if 'target_shape' not in keys or 'clip_against' not in keys: 
-            #return {"status_code": "6", "message": "one or more necessary keys not found in kwargs", "html": "", "clipped_shape": None, "original_shape": None}
-            return self.manipulator_return_values(status_code="6", message="one or more necessary keys not found in kwargs", clipped_shape=None, original_shape=None)
+            message = "one or more necessary keys not found in kwargs"
+            html_message = "From ClipToShapeManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return self.manipulator_return_values(status_code="6", message=message, html=status_html, clipped_shape=None, original_shape=None)
          
         target_shape = GEOSGeometry(self.kwargs['target_shape'])
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
@@ -71,10 +74,16 @@ class ClipToShapeManipulator(ManipulatorBase):
             status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL})
             return self.manipulator_return_values(status_code="3", message="target_shape is not a valid geometry", html=status_html, clipped_shape=None, original_shape=target_shape)
         if not clip_against.valid:
+            message = "clip_against is not a valid geometry"
+            html_message = "From ClipToShapeManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
             return self.manipulator_return_values(status_code="3", message="clip_against is not a valid geometry", clipped_shape=None, original_shape=target_shape)
         try:
             ret_shape = target_shape.intersection( clip_against )
         except:
+            message = "intersection call failed"
+            html_message = "From ClipToShapeManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
             return self.manipulator_return_values(status_code="4", message="intersection call failed", clipped_shape=None, original_shape=target_shape)
         
         if ret_shape.area == 0:
@@ -86,7 +95,8 @@ class ClipToShapeManipulator(ManipulatorBase):
         status_html = render_to_string(self.Options.status_html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
         return self.manipulator_return_values(html=status_html, clipped_shape=ret_shape, original_shape=target_shape)
     ''' 
-    #the following is USED FOR SANDBOX TESTING 
+    #the following is USED FOR TESTING, 
+    #assigns db current studyregion as the shape to clip against
     class Form(forms.Form):
         available = True
         target_shape = forms.CharField( widget=forms.HiddenInput )
@@ -109,7 +119,8 @@ class ClipToShapeManipulator(ManipulatorBase):
         status_html_templates = {
             '0':'manipulators/shape_clip.html', 
             '2':'manipulators/outside_shape.html', 
-            '3':'manipulators/invalid_geometry.html'
+            '3':'manipulators/invalid_geometry.html',
+            '9':'manipulators/internal_error.html'
         }
 
 manipulatorsDict[ClipToShapeManipulator.Options.name] = ClipToShapeManipulator
@@ -303,7 +314,10 @@ class ClipToGraticuleManipulator(ManipulatorBase):
         
         def clean(self):
             kwargs = self.cleaned_data
-            #kwargs["w"] = -118.5 #used for sandbox testing
+            
+            #used for sandbox testing
+            #kwargs["w"] = -118.5 
+            
             my_manipulator = ClipToGraticuleManipulator( **kwargs )
             self.manipulation = my_manipulator.manipulate()
             return self.cleaned_data
