@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     (r'^studyregion/', include('lingcod.studyregion.urls')),
     (r'^faq/', include('lingcod.simplefaq.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
-    (r'^simple-app/', include('simple_app.urls')),
+    (r'^simple-app/', include('simple.simple_app.urls')),
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
