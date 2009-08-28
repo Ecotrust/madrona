@@ -1,6 +1,6 @@
 from lingcod.manipulators.manipulators import * 
 from django.contrib.gis.geos import *
-from models import *
+from simple.simple_app.models import *
 from lingcod.common.utils import LargestPolyFromMulti
 
 
