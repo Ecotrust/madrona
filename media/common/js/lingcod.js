@@ -25,6 +25,7 @@ var lingcod = {
         this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
+        this.drawTool = new lingcod.drawTool();
         var self = this;
         $('#measure_distance').click(function(){
             self.measureTool.clear();
@@ -43,6 +44,15 @@ var lingcod = {
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', '/studyregion/kml/', {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
+        $('#mpa_draw').click(function(){
+            document.getElementById("mpa_draw_results").innerHTML = '';
+            self.drawTool.clear();
+            self.drawTool.drawShape( gex, lingcod.drawMpaComplete ); 
+        });
+        $('#mpa_clear').click(function(){
+            document.getElementById("mpa_draw_results").innerHTML = '';
+            self.drawTool.clear();
+        });
     },
     
     studyRegionLoaded: function(kmlObject, node){
@@ -83,3 +93,4 @@ var lingcod = {
         // $('#map_container').width(map_width - 10);
     }
 };
+

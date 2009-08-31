@@ -98,7 +98,7 @@ def multi_generic_manipulator_view(request, manipulators):
 
     
 def kmlDocWrap( string ):
-    return '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>80ffffff</color> </PolyStyle></Style>'+string+'</Placemark></Document>'
+    return '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>8000ff00</color> </PolyStyle></Style>'+string+'</Placemark></Document>'
 
     
 def testView( request ):
