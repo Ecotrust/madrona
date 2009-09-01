@@ -6,11 +6,15 @@
 <Content type="html">
 <![CDATA[ 
 <div id="content_div" style="padding:2px; margin:5px;background:#F2F8F7 url('http://marinemap.googlecode.com/svn/trunk/wave/gadgets/camera.png') no-repeat 3px center; border:solid #82C5DD 2px; -webkit-border-radius:5px; padding-left:25px;">
-    Map Snapshot Added
+    <a onclick="linkClicked(); return false;" href="#"> Map Snapshot Added</a>
 </div>
     <script type="text/javascript">
 
     var div = document.getElementById('content_div');
+
+    function linkClicked(){
+        alert('link clicked');
+    }
 
     function buttonClicked() {
       var value = parseInt(wave.getState().get('count', '0'));
