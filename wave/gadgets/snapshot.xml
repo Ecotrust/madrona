@@ -46,7 +46,9 @@
           if(snapshot){
               gadgets.rpc.call('top', 'show_snapshot', null, snapshot);
           }else{
-              gadgets.rpc.call('top', 'sync_snapshot', function(snapshot));
+              gadgets.rpc.call('top', 'sync_snapshot', function(snapshot){
+                  
+              });
           }
       }
     }
