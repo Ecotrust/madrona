@@ -12,8 +12,10 @@
 
     var div = document.getElementById('content_div');
 
-    function linkClicked(){
+    function linkClicked(stateCallback){
         alert('link clicked');
+        var snapshot = wave.getState().get('snapshot');
+        gadgets.rpc.call('top', 'show_snapshot', null, snapshot);
     }
 
     function buttonClicked() {
@@ -36,8 +38,16 @@
     }
  
     function init() {
+        var relay_url = 'http://mm-01.msi.ucsb.edu/media/rpc_relay.html';
+        gadgets.rpc.setRelayUrl('top', relay_url, false);
+        gadgets.rpc.call('top', 'map_state_initialize', false, window.name);
       if (wave && wave.isInWaveContainer()) {
-        //wave.setStateCallback(stateUpdated);
+          var snapshot = wave.getState().get('snapshot');
+          if(snapshot){
+              gadgets.rpc.call('top', 'show_snapshot', null, snapshot);
+          }else{
+              gadgets.rpc.call('top', 'sync_snapshot', function(snapshot));
+          }
       }
     }
     gadgets.util.registerOnLoadHandler(init);
