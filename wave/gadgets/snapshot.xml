@@ -5,14 +5,14 @@
   </ModulePrefs>
 <Content type="html">
 <![CDATA[ 
-<div id="content_div" style="height: 50px;"></div>
-  
+<div id="content_div" style="background-image:url('http://marinemap.googlecode.com/svn/trunk/wave/gadgets/camera.png'); height: 50px; border:solid color: #82C5DD 2px; --webkit-border-radius:5px; padding-left:20px;">
+    Map Snapshot Added
+</div>
     <script type="text/javascript">
 
     var div = document.getElementById('content_div');
 
     function buttonClicked() {
-      console.log(top);
       var value = parseInt(wave.getState().get('count', '0'));
       wave.getState().submitDelta({'count': value + 1});
     }
@@ -33,14 +33,12 @@
  
     function init() {
       if (wave && wave.isInWaveContainer()) {
-        wave.setStateCallback(stateUpdated);
+        //wave.setStateCallback(stateUpdated);
       }
     }
     gadgets.util.registerOnLoadHandler(init);
 
     </script>
-    <input type=button value="Click Me!" id="butCount" onClick="buttonClicked()">
-    <input type=button value="Reset" id="butReset" onClick="resetCounter()">
   ]]> 
   </Content>
 </Module>
