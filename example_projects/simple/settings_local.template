@@ -27,3 +27,6 @@
 #POSTGIS_TEMPLATE='template_postgis'
 # ...and uncomment TEST_RUNNER
 #TEST_RUNNER='django.contrib.gis.tests.run_tests'
+
+# ID of Wave to be used in demo of the conversation tab
+WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
