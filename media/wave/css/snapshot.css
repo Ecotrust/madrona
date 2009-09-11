@@ -1,0 +1,50 @@
+
+#content_div {
+/*    padding:2px;*/
+    margin:5px;
+    background:#F2F8F8 url('http://marinemap.googlecode.com/svn/trunk/wave/gadgets/camera.png') no-repeat 3px 5px; 
+    border:solid #5C85B7 2px; 
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+}
+
+#creating {
+    font-style: italic;
+    font-size:0.8em;
+    display:none;
+    padding-left:25px;
+}
+
+#creation_instructions {
+    padding:0.2em;
+    padding-left:25px;
+    padding-bottom:0.5em;
+    margin:0;
+    font-size:0.8em;
+}
+
+#options {
+    margin:0;
+    padding:0;
+    width:100%;
+    font-size:0.8em;
+    color:#1B2E39;
+    background-color:#B9CBD7;
+}
+
+#options li {
+    list-style:none;
+    text-indent:none;
+    padding:0;
+    margin:0 3px 0 3px;
+}
+
+#finished {
+    padding-left:25px;
+    display:none;
+}
+
+#reset {
+    font-size:0.8em;
+    color:#7C8499;
+}

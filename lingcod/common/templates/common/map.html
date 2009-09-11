@@ -1,6 +1,7 @@
 {% extends "common/base.html" %}
 
 {% block head %}
+    <script src="http://wave-api.appspot.com/public/embed.js" type="text/javascript"></script>
     <script type="text/javascript">
         window.public_data_layers = '{% url public-data-layers %}';
         google.load("earth", "1");
@@ -8,9 +9,39 @@
 
         var ge = null;
         var gex = null;
-
-        $(document).ready(function(){
+        var wavePanel;
+        $(document).ready(function(){            
             lingcod.init();
+            
+            // WAVE STUFF
+            
+            $(window).bind('message', function(e){
+                e = e.originalEvent;
+                if(e.origin === 'https://0-wave-opensocial.googleusercontent.com'){
+                    var data = JSON.parse(e.data);
+                    if(data.message == 'getSnapshot'){
+                        var message = {
+                            "message": "setSnapshot",
+                            "camera": gex.view.serialize()
+                        };
+                        e.source.postMessage(JSON.stringify(message), e.origin);
+                    }else if(data.message == 'displaySnapshot'){
+                        var data = JSON.parse(e.data);
+                        if(data.camera){
+                            gex.view.deserialize(data.camera);
+                        }
+                    }else{
+                        console.error('invalid message');
+                    }
+                    // console.log('message', e.source, e.origin, e.data);
+                    // e.source.postMessage('I see you ;)', e.origin);
+                }
+            });
+            
+            wavePanel = new WavePanel('http://wave.google.com/a/wavesandbox.com/');
+            wavePanel.loadWave('{{WAVE_ID}}');
+            wavePanel.setUIConfig('white', 'black', 'Arial', '12px');
+            wavePanel.init(document.getElementById('waveframe'));
         });
     </script>
 
@@ -39,7 +70,7 @@
         {% tabpanel "Home" %}
             {% tab "Data Layers" %}
                 {% block data_layers_before_tree %}{% endblock %}
-                <div id="datalayerstree"></div>
+                <div style="font-size:1em;" id="datalayerstree"></div>
                 {% block data_layers_after_tree %}{% endblock %}
                 {% footer %}
                     <h3>Earth Options</h3>
@@ -86,9 +117,7 @@
                 {% block my_shapes_append %}{% endblock %}
             {% endtab %}
             {% tab "Collaborate" %}
-                    <p>
-                        <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/wave.png" width="372" height="483" />
-                    </p>   
+                <div id="waveframe" style="height:500px;overflow:hidden;margin:3px;"></div>
             {% endtab %}
             {% tab "Tools" %}
                     {% block tools_prepend %}{% endblock %}

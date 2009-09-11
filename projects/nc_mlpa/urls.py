@@ -7,13 +7,14 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     
-    (r'^$', 'lingcod.common.views.map' ),
+    url(r'^$', 'lingcod.common.views.map', name="map" ),
     
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html', 'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
     
     (r'^layers/', include('lingcod.layers.urls')),
     (r'^studyregion/', include('lingcod.studyregion.urls')),
     (r'^faq/', include('lingcod.simplefaq.urls')),
+    (r'^wave/', include('lingcod.wave.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
     (r'^mlpa/', include('mlpa.urls')),
 
