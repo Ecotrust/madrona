@@ -58,10 +58,10 @@ def multi_generic_manipulator_view(request, manipulators):
                     
                     #this may not even be possible as the form is checked for validity above
                     if original_shape is None: # common case is when all necessary kwargs are not provided
-                        return HttpResponse(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": None}))
+                        return HttpResponse(simplejson.dumps({"message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": None}))
                     
                     if new_shape is None: # common case is when target_shape is invalid
-                        return HttpResponse(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": kmlDocWrap(result["original_shape"].kml)}))
+                        return HttpResponse(simplejson.dumps({"message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": kmlDocWrap(result["original_shape"].kml)}))
                     
                     # put the resulting shape back into the kwargs as the target_shape
                     kwargs['target_shape'] = new_shape.wkt
@@ -69,7 +69,7 @@ def multi_generic_manipulator_view(request, manipulators):
                      
                 else: # invalid parameters - bounce form back to user
                     
-                    return HttpResponse(simplejson.dumps({"status_code": '6', "message": "form is not valid (missing arguments?)", "html": render_to_string( 'common/base_form.html', {'form': form}, RequestContext(request)), "clipped_shape": None, "original_shape": None}))
+                    return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string( 'common/base_form.html', {'form': form}, RequestContext(request)), "clipped_shape": None, "original_shape": None}))
                     
             else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
 
@@ -80,10 +80,10 @@ def multi_generic_manipulator_view(request, manipulators):
                 original_shape = result['original_shape']
 
                 if original_shape is None: # common case is when all necessary kwargs are not provided
-                    return HttpResponse(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": None}))
+                    return HttpResponse(simplejson.dumps({"message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": None}))
                 
                 if new_shape is None: # common case is when target_shape is invalid
-                    return HttpResponse(simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": kmlDocWrap(result["original_shape"].kml)}))
+                    return HttpResponse(simplejson.dumps({"message": result["message"], "html": result["html"], "clipped_shape": None, "original_shape": kmlDocWrap(result["original_shape"].kml)}))
                     
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
@@ -96,11 +96,10 @@ def multi_generic_manipulator_view(request, manipulators):
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
                         
-    return HttpResponse( simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": html_response, "clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml)}), content_type='text/plain')
+    return HttpResponse( simplejson.dumps({"message": result["message"], "html": html_response, "clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml)}), content_type='text/plain')
 
     
 def ensure_keys(values):
-        values.setdefault("status_code", 7)
         values.setdefault("message", "no message given")
         values.setdefault("html", "")
         values.setdefault("clipped_shape", None)
