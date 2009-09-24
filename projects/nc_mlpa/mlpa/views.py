@@ -30,7 +30,10 @@ def mpaKml(request, id):
     
     return HttpResponse( KmlWrap( '<Document><name>MPA</name>' + mpa.kmlFinalGeom(request.get_host()) + '</Document>' ), content_type='text/plain')
    
-    
+def mlpaManipulators(request, template_name='common/mlpa-manipulators.html'):
+    return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
+ 
+   
 def mpaManipulatorList(request):
     """Handler for AJAX mpa manipulators request
     """

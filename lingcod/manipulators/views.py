@@ -14,8 +14,8 @@ from django.conf import settings
 from django.utils import simplejson
 
 #from cjson import encode as json_encode
-
-
+    
+     
 def multi_generic_manipulator_view(request, manipulators):
     '''
         multi_generic_manipulator_view takes a request and a list of manipulators
@@ -51,7 +51,8 @@ def multi_generic_manipulator_view(request, manipulators):
                 form = manipClass.Form( kwargs )
                 if form.is_valid():
                 
-                    result = form.manipulation
+                    initial_result = form.manipulation
+                    result = ensure_keys(initial_result)
                     new_shape = result['clipped_shape']
                     original_shape = result['original_shape']
                     
@@ -73,7 +74,8 @@ def multi_generic_manipulator_view(request, manipulators):
             else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
 
                 manip_inst = manipClass( **kwargs )
-                result = manip_inst.manipulate()
+                initial_result = manip_inst.manipulate()
+                result = ensure_keys(initial_result)
                 new_shape = result["clipped_shape"] 
                 original_shape = result['original_shape']
 
@@ -96,6 +98,15 @@ def multi_generic_manipulator_view(request, manipulators):
                         
     return HttpResponse( simplejson.dumps({"status_code": result["status_code"], "message": result["message"], "html": html_response, "clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml)}), content_type='text/plain')
 
+    
+def ensure_keys(values):
+        values.setdefault("status_code", 7)
+        values.setdefault("message", "no message given")
+        values.setdefault("html", "")
+        values.setdefault("clipped_shape", None)
+        values.setdefault("original_shape", None)
+        return values
+ 
     
 def kmlDocWrap( string ):
     return '<Document><Placemark><Style><LineStyle> <color>ffffffff</color> <width>2</width></LineStyle><PolyStyle> <color>8000ff00</color> </PolyStyle></Style>'+string+'</Placemark></Document>'

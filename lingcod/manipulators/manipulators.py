@@ -10,22 +10,17 @@ manipulatorsDict = {}
 
 
 class ManipulatorBase():
+    '''
+        ManipulatorBase should be used as the parent class to all manipulator classes.
+        The manipulate() function should be overridden with suitable definition, it is this function that will
+        be called automatically when your manipulator class is included in the Mpa.Options.manipulators list.
+    '''
     def __init__(self, **kwargs):
         self.kwargs = kwargs
      
     def manipulate(self):
         raise NotImplementedError()
-        
-    #an idea for providing the client with default return values...not sure what to do about status_code...
-    #currently used by ClipToShapeManipulator just for fun
-    def manipulator_return_values(self, **kwargs):
-        status_code = kwargs.get('status_code', '0')
-        message = kwargs.get('message', '')
-        html = kwargs.get('html', '')
-        clipped_shape = kwargs.get('clipped_shape', None)
-        original_shape = kwargs.get('original_shape', None)
-        return {'status_code': status_code, 'message': message, 'html': html, 'clipped_shape': clipped_shape, 'original_shape': original_shape}
-        
+  
     class Form:
         available = False
         
@@ -43,8 +38,9 @@ class ClipToShapeManipulator(ManipulatorBase):
         return:
             a dictionary containing a 'status_code', a 'message', 'html', the 'clipped_shape', and the 'orginal_shape'
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
-            'clipped_shape' will be the result from intersecting 'target_shape' with 'clip_against' 
+            'clipped_shape' will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against' 
         
+        status_code==8  if geometries can not be generated from "target_shape" or "clip_against" 
         status_code==6  if either "target_shape" or "clip_against" was not found in kwargs
                         both clipped_shape and original_shape will be returned as None
         status_code==3  if either "target_shape" or "clip_against" is not a valid geometry
@@ -59,41 +55,57 @@ class ClipToShapeManipulator(ManipulatorBase):
         keys = self.kwargs.keys()
 
         if 'target_shape' not in keys or 'clip_against' not in keys: 
-            message = "one or more necessary keys not found in kwargs"
+            if 'target_shape' not in keys:
+                message = "necessary key, 'target_shape', was not found in kwargs"
+            else:
+                message = "necessary key, 'clip_against', was not found in kwargs"
             html_message = "From ClipToShapeManipulator: " + message
             status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
-            return self.manipulator_return_values(status_code="6", message=message, html=status_html, clipped_shape=None, original_shape=None)
+            return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
          
-        target_shape = GEOSGeometry(self.kwargs['target_shape'])
-        target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
-        
-        clip_against = GEOSGeometry(self.kwargs['clip_against'])
+        try:
+            target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        except:
+            message = "unable to generate geometry from 'target_shape'"
+            html_message = "From ClipToShapeManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "8", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+                    
+        try:
+            clip_against = GEOSGeometry(self.kwargs['clip_against'])
+        except:
+            message = "unable to generate geometry from 'clip_against'"
+            html_message = "From ClipToShapeManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "8", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+          
+        target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)  
         clip_against.set_srid(settings.GEOMETRY_CLIENT_SRID)
         
         if not target_shape.valid:
             status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL})
-            return self.manipulator_return_values(status_code="3", message="target_shape is not a valid geometry", html=status_html, clipped_shape=None, original_shape=target_shape)
+            return {"status_code": "3", "message": "target_shape is not a valid geometry", "html": status_html, "clipped_shape": None, "original_shape": target_shape}
         if not clip_against.valid:
-            message = "clip_against is not a valid geometry"
+            message = "'clip_against' is not a valid geometry"
             html_message = "From ClipToShapeManipulator: " + message
             status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
-            return self.manipulator_return_values(status_code="3", message="clip_against is not a valid geometry", clipped_shape=None, original_shape=target_shape)
+            return {"status_code": "3", "message": message, "html": status_html, "clipped_shape": None, "original_shape": target_shape}
         try:
             ret_shape = target_shape.intersection( clip_against )
         except:
             message = "intersection call failed"
             html_message = "From ClipToShapeManipulator: " + message
             status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
-            return self.manipulator_return_values(status_code="4", message="intersection call failed", clipped_shape=None, original_shape=target_shape)
+            return {"status_code": "4", "message": message, "html": status_html, "clipped_shape": None, "original_shape": target_shape}
         
         if ret_shape.area == 0:
             status_html = render_to_string(self.Options.status_html_templates["2"], {'MEDIA_URL':settings.MEDIA_URL})
-            return self.manipulator_return_values(status_code="2", message="intersection resulted in empty geometry", html=status_html, clipped_shape=ret_shape, original_shape=target_shape)
+            return {"status_code": "2", "message": "intersection resulted in empty geometry", "html": status_html, "clipped_shape": ret_shape, "original_shape": target_shape}
         
-        #largest_poly = LargestPolyFromMulti(ret_shape)???
+        largest_poly = LargestPolyFromMulti(ret_shape)
         
         status_html = render_to_string(self.Options.status_html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
-        return self.manipulator_return_values(html=status_html, clipped_shape=ret_shape, original_shape=target_shape)
+        return {"status_code": "0", "message": "'target_shape' was clipped successfully to 'clip_against'", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
     ''' 
     #the following is USED FOR TESTING, 
     #assigns db current studyregion as the shape to clip against
@@ -139,11 +151,12 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
             the clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region 
         
+        status_code==8  if geometries can not be generated from "target_shape" 
         status_code==6  if "target_shape" was not found in kwargs, or if "study_region" was not found in kwargs and the application failed to find StudyRegion objects in the database
                         both clipped_shape and original_shape will be returned as None
         status_code==3  if "target_shape" is not valid geometry
                         clipped_shape will be returned as None
-        status_code==4  if study_regions contained no geometries
+        status_code==4  if intersection call failed for whatever reason
                         clipped_shape will be returned as None                       
         status_code==2  clipped shape is empty (no overlap with study region?)
         status_code==0  if "target_shape" is successfully clipped to study region(s)
@@ -151,12 +164,27 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
     
     def manipulate(self):                    
         keys = self.kwargs.keys()
-        if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "html": "", "clipped_shape": None, "original_shape": None}
         
-        target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        #make sure an input geometry was provided
+        if 'target_shape' not in keys: 
+            message = "necessary argument 'target_shape' not found among kwarg keys"
+            html_message = "From ClipToStudyRegionManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+        
+        #create a geometry from wkt that is target_shape
+        try:
+            target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        except:
+            message = "unable to generate geometry from 'target_shape'"
+            html_message = "From ClipToStudyRegionManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "8", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+        
+        #as the input geometry has no srid, an appropriate srid should be assigned          
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
 
+        #make sure the input geometry is a valid geometry
         if not target_shape.valid:
             status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL})
             return {"status_code": "3", "message": "target_shape is not a valid geometry", "html": status_html, "clipped_shape": None, "original_shape": target_shape}
@@ -173,13 +201,17 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
             try:
                 study_region = StudyRegion.objects.current().geometry
             except:
-                return {"status_code": "6", "message": "StudyRegion.objects.current() not found in database.", "html": "", "clipped_shape": None, "original_shape": None}
+                message = "StudyRegion.objects.current().geometry not found in database."
+                html_message = "From ClipToStudyRegionManipulator: " + message
+                status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+                return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
         
         #transform the target_shape to the srid of the study region(s)
         target_shape.transform(settings.GEOMETRY_DB_SRID)
         
         #loops through the study regions and takes the largest clipped_shape (intersection) found
         """
+        #the following is no longer needed, now that we have agreed on having a single study region 
         for study_region in study_regions:
             intersected_geom = target_shape.intersection(study_region)
             if clipped_shape is None:
@@ -187,14 +219,21 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
             elif intersected_geom.area > clipped_shape.area:
                 clipped_shape = intersected_geom
         """
-        #assuming only one study region, the above loop could be replaced with the following:
-        clipped_shape = target_shape.intersection(study_region)
+
+        try:
+            clipped_shape = target_shape.intersection(study_region)
+        except:
+            target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
+            message = "intersection call failed"
+            if not target_shape.valid:
+                message += ", target_shape is not a valid geometry"
+            html_message = "From ClipToStudyRegionManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "4", "message": message, "html": status_html, "clipped_shape": None, "original_shape": target_shape}
         
         #transform the target_shape back to its original srid
         target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
-        if clipped_shape is None:
-            return  {"status_code": "4", "message": "study_regions contained no geometries", "html": "", "clipped_shape": None, "original_shape": target_shape}
-        
+
         #transform clipped_shape to the appropriate srid
         clipped_shape.transform(settings.GEOMETRY_CLIENT_SRID)
 
@@ -205,7 +244,7 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         largest_poly = LargestPolyFromMulti(clipped_shape)
         
         status_html = render_to_string(self.Options.status_html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
-        return {"status_code": "0", "message": "target_shape is clipped to study region", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
+        return {"status_code": "0", "message": "'target_shape' was clipped to study region", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
         
         
     class Options:
@@ -213,7 +252,8 @@ class ClipToStudyRegionManipulator(ManipulatorBase):
         status_html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
-            '3':'manipulators/invalid_geometry.html'
+            '3':'manipulators/invalid_geometry.html',
+            '9':'manipulators/internal_error.html'
         }
         
       
@@ -231,6 +271,7 @@ class ClipToGraticuleManipulator(ManipulatorBase):
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
             the clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s) 
         
+        status_code==8  if geometries can not be generated from "target_shape" 
         status_code==6 if one or more necessary arguments is not found in kwargs
                        both clipped_shape and original_shape will be returned as None
         status_code==3 if target_shape is not valid geometry
@@ -244,9 +285,19 @@ class ClipToGraticuleManipulator(ManipulatorBase):
     def manipulate(self):
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "html": "", "clipped_shape": None, "original_shape": None}
-        
-        target_shape = GEOSGeometry(self.kwargs['target_shape'])
+            message = "necessary argument 'target_shape' not found among kwarg keys"
+            html_message = "From ClipToGraticuleManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+
+        try:
+            target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        except:
+            message = "unable to generate geometry from 'target_shape'"
+            html_message = "From ClipToGraticuleManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "8", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+         
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID) 
         
         if not target_shape.valid:
@@ -288,11 +339,21 @@ class ClipToGraticuleManipulator(ManipulatorBase):
             graticule_box = Polygon( LinearRing([ Point( float(west), float(north) ), Point( float(east), float(north) ), Point( float(east), float(south) ), Point( float(west), float(south) ), Point( float(west), float(north))]))
             graticule_box.set_srid(settings.GEOMETRY_CLIENT_SRID)
         except:
-            return {"status_code": "4", "message": "Graticule clipping failed to create polygon", "html": "", "clipped_shape": None, "original_shape": target_shape}
-        graticule_box.srid = settings.GEOMETRY_CLIENT_SRID
+            message = "failed to create polygon from graticules"
+            html_message = "From ClipToGraticuleManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "4", "message": message, "html": status_html, "clipped_shape": None, "original_shape": target_shape}
+        #graticule_box.srid = settings.GEOMETRY_CLIENT_SRID
         
         #clip target_shape to the polygon created by the graticule parameters
-        clipped_shape = target_shape.intersection(graticule_box)
+        try:
+            clipped_shape = target_shape.intersection(graticule_box)
+        except:
+            target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
+            message = "intersection call failed"
+            html_message = "From ClipToGraticuleManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "4", "message": message, "html": status_html, "clipped_shape": None, "original_shape": target_shape}
         
         if clipped_shape.area == 0:
             status_html = render_to_string(self.Options.status_html_templates["2"], {'MEDIA_URL':settings.MEDIA_URL})
@@ -328,7 +389,8 @@ class ClipToGraticuleManipulator(ManipulatorBase):
         status_html_templates = {
             '0':'manipulators/graticule.html', 
             '2':'manipulators/no_graticule_overlap.html', 
-            '3':'manipulators/invalid_geometry.html'
+            '3':'manipulators/invalid_geometry.html',
+            '9':'manipulators/internal_error.html'
         }
 
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        

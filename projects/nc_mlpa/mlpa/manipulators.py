@@ -19,6 +19,7 @@ class ClipToEstuariesManipulator(ManipulatorBase):
                 in the case where there is estuary overlap, the largest poly (oceanic or estuary) is returned 
                 otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
             
+            status_code==8  if geometries can not be generated from "target_shape" 
             status_code==6  'target_shape' is not included in POST, or if 'estuaries' was not included and the application failed to find Estuaries objects in the database
                             both clipped_shape and original_shape will be returned as None
             status_code==3  if 'target_shape' is not valid geometry
@@ -34,9 +35,19 @@ class ClipToEstuariesManipulator(ManipulatorBase):
 
         keys = self.kwargs.keys()
         if 'target_shape' not in keys: 
-            return {"status_code": "6", "message": "necessary argument 'target_shape' not found among kwarg keys", "html": "", "clipped_shape": None, "original_shape": None}
+            message = "necessary argument 'target_shape' not found among kwarg keys"
+            html_message = "From ClipToEstuariesManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
          
-        target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        try:
+            target_shape = GEOSGeometry(self.kwargs['target_shape'])
+        except:
+            message = "unable to generate geometry from 'target_shape'"
+            html_message = "From ClipToEstuariesManipulator: " + message
+            status_html = render_to_string(self.Options.status_html_templates["3"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+            return {"status_code": "8", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
+         
         target_shape.set_srid(settings.GEOMETRY_CLIENT_SRID)
 
         #'estuaries' kwarg is FOR UNIT-TESTING PURPOSES ONLY, otherwise we access the database
@@ -54,7 +65,10 @@ class ClipToEstuariesManipulator(ManipulatorBase):
                 #estuaries.set_srid(settings.GEOMETRY_CLIENT_SRID)
                 #estuaries.transform(settings.GEOMETRY_DB_SRID)
             except:
-                return {"status_code": "6", "message": "Estuaries objects not found in database.  Check database or provide 'estuaries' kwarg.", "html": "", "clipped_shape": None, "original_shape": None}
+                message = "Estuaries objects not found in database."
+                html_message = "From ClipToEstuariesManipulator: " + message + "  Check database or provide 'estuaries' kwarg."
+                status_html = render_to_string(self.Options.status_html_templates["9"], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': html_message})
+                return {"status_code": "6", "message": message, "html": status_html, "clipped_shape": None, "original_shape": None}
         
         target_shape.transform(settings.GEOMETRY_DB_SRID)
         
@@ -121,7 +135,8 @@ class ClipToEstuariesManipulator(ManipulatorBase):
             '1': 'mlpa/estuary_clip_oceanic.html', 
             '3': 'manipulators/invalid_geometry.html',
             '4': 'mlpa/only_estuary.html', 
-            '5': 'mlpa/estuary_clip_estuarine.html', 
+            '5': 'mlpa/estuary_clip_estuarine.html',
+            '9': 'manipulators/internal_error.html' 
         } 
 
         
