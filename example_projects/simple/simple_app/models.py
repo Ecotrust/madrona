@@ -38,8 +38,6 @@ class Mpa(models.Model):
         manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator ]
         #manipulators = [ ClipToStudyRegionManipulator ]
         #manipulators = [ EastWestManipulator ]
-        #manipulators = [ ClipToShapeManipulator ]
-        #manipulators = [ ClipToGraticuleManipulator ]
         
     def __str__(self):
         return self.name
