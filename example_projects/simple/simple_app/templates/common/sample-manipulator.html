@@ -13,7 +13,8 @@
         google.earth.createInstance("map3d", initCallback, failureCallback);
     }
 
-    <!--- set up the google earth areal view, add the study region, followed by the lingcod.drawTool--->
+    <!--- called from init() --->
+    <!--- set up the google earth areal view, add the study region, create a lingcod.drawTool instance --->
     function initCallback(pluginInstance) {
     
         ge = pluginInstance;
@@ -38,14 +39,16 @@
         alert("Failure loading the Google Earth Plugin: " + errorCode);
     }
     
+    <!--- called from initCallback() --->
     <!--- get the manipulator list from the Mpa model and process the manipulators--->
     function drawMpaComplete(){
         $.getJSON(
-            '{% url mpa-manipulator-list %}',
+            '{% url sample-manipulator-list %}',
             processManipulators
         );
     }
     
+    <!--- called from drawMpaComplete() --->
     <!--- posts a request to /manipulators/<manipulator-list> with the target_shape containing the user-drawn coordinates--->
     function processManipulators(manipulator_list) {
         manip_string = stringFromList(manipulator_list);
@@ -59,6 +62,7 @@
         );
     }
     
+    <!--- called from processManipulators() --->
     <!--- wraps the user-drawn coordinates in a wkt type geometry --->
     function placemarkToWkt(placemark) {
         var linearRing = placemark.getGeometry().getOuterBoundary();
@@ -74,6 +78,7 @@
         return wkt;
     }
     
+    <!--- called from processManipulators() --->
     <!--- creates a comma separated string from a list object --->
     function stringFromList(list) {
         string_result = '';
@@ -86,11 +91,12 @@
         return string_result
     }
     
+    <!--- called from processManipulators() --->
     <!--- obtains the json wrapped return value from the manipulators --->
     <!--- extracts and displays the 'html' manipulator data, and the resulting 'clipped_shape' onto the browser window --->
     function renderManipulatorResults(manip_data) {
         ret_obj = eval( '(' + manip_data + ')' );
-        document.getElementById("area").innerHTML=ret_obj.html;
+        document.getElementById("test").innerHTML=ret_obj.html;
         gex.util.displayKmlString(ret_obj.clipped_shape);
         drawTool.clear();
     }
@@ -103,6 +109,5 @@
 {% endblock %}
 {% block body %} <!--- modified div to include scroll bar with 'overflow: auto'--->
 <div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;">
-<p><strong>Distance: </strong><span id="distance">N/A</span></p>
-<p><strong>Area: </strong><span id="area">N/A</span></p></div>
+<p><strong>Sample Manipulator Test </strong><span id="test"></span></p></div>
 {% endblock %}

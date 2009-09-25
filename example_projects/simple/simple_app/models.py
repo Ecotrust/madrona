@@ -35,38 +35,12 @@ class Mpa(models.Model):
         abstract=True
 
     class Options:
-        #manipulators = [ ClipToStudyRegionManipulator, ClipToGraticuleManipulator, ClipToEstuariesManipulator ]
-        manipulators = [ ClipToStudyRegionManipulator ]
-        #manipulators = [ ClipToEstuariesManipulator ]
+        manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator ]
+        #manipulators = [ ClipToStudyRegionManipulator ]
+        #manipulators = [ EastWestManipulator ]
         #manipulators = [ ClipToShapeManipulator ]
         #manipulators = [ ClipToGraticuleManipulator ]
         
     def __str__(self):
         return self.name
 
-#THE FOLLOWING ESTUARIES RELATED CLASSES ARE INCOMPLETE AND HAVE BEEN ADDED HERE FOR TESTING PURPOSES!!!
-class EstuariesManager(models.GeoManager):
-    def current(self):
-        return self.all()
-        
-class Estuaries(models.Model):
-    """Model used for representing Estuaries
-
-        ======================  ==============================================
-        Attribute               Description
-        ======================  ==============================================
-
-        ``name``                Name of the Estuary
-                                
-        ``geometry``            PolygonField representing the Estuary boundary
-                                
-        ======================  ==============================================
-    """   
-    name = models.TextField(verbose_name="Estuary Name")
-    
-    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Estuary boundary")
-       
-    objects = EstuariesManager()
-    
-    class Meta:
-        db_table = u'mm_estuaries' 
