@@ -7,21 +7,19 @@ from lingcod.common.utils import LargestPolyFromMulti
 
 
 class EastWestManipulator(ManipulatorBase):
-
+    ''' 
+        required arguments:
+            'target_shape', a GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+        returns:
+            a dictionary that usually includes a 'message', 'html', 'clipped_shape', and 'original_shape'
+            At minimum, it's a good idea to include at least the following two keys:
+            a 'clipped_shape' (or None value), and the 'original_shape'
+            All of the returned shape geometries should be in srid GEOMETRY_CLIENT_SRID (4326 for Google Earth) 
+            In the case where there is both eastern and western overlap, the largest poly is returned 
+            otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
+    '''
+    
     def manipulate(self): 
-        ''' 
-            required arguments:
-                'target_shape', a GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
-            returns:
-                a dictionary passed as an argument to self.result() (inherited from ManipulatorBase)
-                This call to result is basically a wrapper for the returned dictionary that fills in 
-                necessary components used on the server side.
-                At minimum, it's a good idea to include at least the following two keys:
-                a 'clipped_shape' (or None value), and the 'original_shape'
-                All of the returned shape geometries should be in srid GEOMETRY_CLIENT_SRID (4326 for Google Earth) 
-                In the case where there is both eastern and western overlap, the largest poly is returned 
-                otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
-        '''
 
         keys = self.kwargs.keys()
 
