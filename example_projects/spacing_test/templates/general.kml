@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+		<Style id="default">
+			<LineStyle>
+				<width>0</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>6dff0000</color>
+			</PolyStyle>
+		</Style>
+		{% for pm in kml.placemarks %}
+			{{pm|safe}}
+		{% endfor %}
+	</Document>
+</kml>
