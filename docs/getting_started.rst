@@ -20,6 +20,7 @@ MarineMap.
     * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
     * `elementtree <http://effbot.org/zone/element-index.htm>`_
     * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
+    * `sphinx <http://sphinx.pocoo.org/>`_ (used for generating documentation)
     
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 
@@ -88,8 +89,18 @@ setup the database
 
 Create a database accessible by the connection settings above using a tool
 like `pgAdmin <http://www.pgadmin.org/>`_. It is very important that this
-database be created from a template with all the PostGIS functions installed.
-After doing so, to setup the database schema all you'll need to do is run the 
+database be created from a template with all the PostGIS functions installed. One approach
+is to set up postgis in the default postgres template::
+
+   #run as postgres superuser
+   POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib
+   createlang -d template1 plpgsql # Adding PLPGSQL language support.
+   psql -d template1 -f $POSTGIS_SQL_PATH/postgis.sql # Loading the PostGIS SQL routines
+   psql -d template1 -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+   psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
+   psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+
+Once the template is spatially enabled, to setup the database schema all you'll need to do is run the 
 django syncdb command from within the ``example-projects/simple`` directory::
 
     python manage.py syncdb
