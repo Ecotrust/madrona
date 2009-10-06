@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html> 
+<head> 
+  <title>MarineMap Reporting Demo - Narwhals!!!</title> 
+  <!-- might not need this after all 
+  <script src="/site_media/spacing/js/json2.js"> </script>
+  <script src="http://earth-api-utility-library.googlecode.com/svn/tags/extensions-0.1.2/dist/extensions.pack.js"> </script>
+  -->
+  <script src="http://www.google.com/jsapi?key=ABQIAAAAN_hNyUfH5mpudZW1pUE8mxTpH3CbXHjuCVmaTc5MkkU4wO1RRhQGecM4mPlhtIkKtuad6DDhuHPY_Q" type="text/javascript"></script> 
+   
+<script type="text/javascript"> 
+/* <![CDATA[ */
+ 
+var ge = null;
+var gex = null;
+var placemark = null;
+ 
+google.load('earth', '1');
+ 
+function init() {
+	google.earth.createInstance('map3d', initCallback, failureCallback);
+}
+
+function fishPath(pnt1, pnt2) {
+	var netLink = ge.createNetworkLink('');
+	netLink.setDescription('NetworkLink open to get path');
+	netLink.setName('Fish Path NetworkLink');
+	var url_string = "http://127.0.0.1:8000/fish_distance/kml"
+	url_string += '?lat1=' + pnt1.getLatitude();
+	url_string += '&lon1=' + pnt1.getLongitude();
+	url_string += '&lat2=' + pnt2.getLatitude();
+	url_string += '&lon2=' + pnt2.getLongitude();
+	//alert( url_string );
+	var fishLink = ge.createLink('');
+	fishLink.setHref(url_string);
+	netLink.setLink(fishLink);
+	ge.getFeatures().appendChild(netLink);
+}
+
+function addLand() {
+	// NetworkLink
+	var networkLink = ge.createNetworkLink('');
+	networkLink.setDescription('NetworkLink open to fetched content');
+	networkLink.setName('Open NetworkLink');
+	networkLink.setFlyToView(true);
+
+	// NetworkLink/Link
+	var link = ge.createLink('');
+	link.setHref('http://127.0.0.1:8000/land/kml');
+	networkLink.setLink(link);
+	// add the network link to earth
+	ge.getFeatures().appendChild(networkLink);
+	//stylePolygonPM(networkLink);
+}
+
+function stylePolygonPM(polygonPlacemark) {
+	
+	// If polygonPlacemark doesn't already have a Style associated
+	// with it, we create it now.
+	if (!polygonPlacemark.getStyleSelector()) {
+		polygonPlacemark.setStyleSelector(ge.createStyle(''));
+	}
+
+	// The Style of a Feature is retrieved as
+	// feature.getStyleSelector().  The Style itself contains a
+	// LineStyle and a PolyStyle, which are what we manipulate to change
+	// the line color, line width, and inner color of the polygon.
+	var lineStyle = polygonPlacemark.getStyleSelector().getLineStyle();
+	lineStyle.setWidth(lineStyle.getWidth() + 2);
+	// Color is specified in 'aabbggrr' format.
+	lineStyle.getColor().set('66ff0000');
+
+	// Color can also be specified by individual color components.
+	var polyColor =	polygonPlacemark.getStyleSelector().getPolyStyle().getColor();
+	polyColor.setA(200);
+	polyColor.setB(0);
+	polyColor.setG(255);
+	polyColor.setR(255);
+}
+
+function initCallback(pluginInstance) {
+	ge = pluginInstance;
+    ge.getWindow().setVisibility(true);
+    var point_name = '';
+    var pmOne = ge.createPlacemark('');
+	var pmTwo = ge.createPlacemark('');
+	var pointOne = ge.createPoint('');
+	var pointTwo = ge.createPoint('');
+    var cnt = 0;
+    google.earth.addEventListener(ge.getGlobe(), 'click', function(evt) {
+		cnt ++;
+		if (cnt == 3) {
+			fishPath(pointOne,pointTwo);
+		} else if (cnt==4) {
+			ge.getFeatures().removeChild(pmOne);
+			ge.getFeatures().removeChild(pmTwo);
+			cnt = 0;
+		} else if (cnt==1) {
+			pointOne.setLatitude(evt.getLatitude());
+			pointOne.setLongitude(evt.getLongitude());
+			point_name = "point " + cnt.toString();
+			pmOne.setGeometry(pointOne);
+			ge.getFeatures().appendChild(pmOne);
+		} else if (cnt==2) {
+			pointTwo.setLatitude(evt.getLatitude());
+			pointTwo.setLongitude(evt.getLongitude());
+			point_name = "point " + cnt.toString();
+			pmTwo.setGeometry(pointTwo);
+			ge.getFeatures().appendChild(pmTwo);
+		}
+    });	
+	addLand();
+}
+
+function failureCallback() {
+	alert('porkchop sandwiches');
+}
+
+/* ]]> */
+</script> 
+</head> 
+<body onload="init()" id="body">
+  <div id="map3d_container" style="width: 700px; height: 700px; -moz-box-shadow: 5px 5px 6px 'grey'; -webkit-box-shadow: 5px 5px 6px 'grey'; -webkit-border-radius: 10px; -moz-border-radius: 10px;"> 
+    <div id="map3d" style="height: 100%; -moz-box-shadow: 5px 5px 6px 'grey'; -webkit-box-shadow: 5px 5px 6px 'grey'; -webkit-border-radius: 10px; -moz-border-radius: 10px;"></div> 
+  </div> 
+</body> 
+</html>
