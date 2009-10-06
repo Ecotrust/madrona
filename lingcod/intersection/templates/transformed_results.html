@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<title>{% block title %}{% endblock %}</title>
+<body>
+
+	<table>
+		<tr>
+			<td>Feature Name</td>
+			<td>Result</td>
+			<td>Percent of SR Total</td>
+			<td>Units</td>
+		</tr>
+		{% for item in result|dictsort:'sort' %}
+		<tr>	
+			<td>{{ item.feature_name }}</td>
+			<td>{{ item.result }}</td>
+			<td>{{ item.percent_of_total }}</td>
+			<td>{{ item.units }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<br></br><br></br>
+	<a href="/intersection/intersect/testdrawing/">New Drawing Test</a><br></br>
+	<br></br>
+	<a href="/intersection/intersect/testpolygon/">New TestPolygon Test</a>
+</body>
+</html>
