@@ -41,5 +41,4 @@ def mpaManipulatorList(request):
     manip_text = [(manipulator.Options.name) for manipulator in manipulators]
     
     return HttpResponse( simplejson.dumps( manip_text ))
-    
 

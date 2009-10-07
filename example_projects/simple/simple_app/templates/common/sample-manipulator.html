@@ -6,6 +6,9 @@
 
     var ge = null;
     var measureTool = null;
+    //NEW
+    var gex = null;
+    var lastMpa = null
 
     <!--- create an instance of Google Earth and start the drawing process--->
     function init() {
@@ -31,10 +34,17 @@
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
 
-        drawTool = new lingcod.drawTool();
-        drawTool.drawShape( gex, drawMpaComplete );  
+        //NEW
+        //drawTool = new lingcod.drawTool();
+        //drawTool.drawShape( gex, drawMpaComplete );  
     }
 
+    //NEW
+    function drawMpa() {
+        drawTool = new lingcod.drawTool();
+        drawTool.drawShape( gex, drawMpaComplete );
+    }
+    
     function failureCallback(errorCode) {
         alert("Failure loading the Google Earth Plugin: " + errorCode);
     }
@@ -97,10 +107,22 @@
     function renderManipulatorResults(manip_data) {
         ret_obj = eval( '(' + manip_data + ')' );
         document.getElementById("test").innerHTML=ret_obj.html;
-        gex.util.displayKmlString(ret_obj.clipped_shape);
+        //NEW
+        lastMpa = gex.util.displayKmlString(ret_obj.clipped_shape);
+        //gex.util.displayKmlString(ret_obj.clipped_shape);
         drawTool.clear();
     }
     
+    function rejectMpa() {
+        gex.dom.removeObject(lastMpa);
+        document.getElementById("test").innerHTML="<button onclick='drawMpa()'>Create an Mpa</button>";
+    }
+    
+    function tryAgain() {
+        document.getElementById("test").innerHTML="<button onclick='drawMpa()'>Create an Mpa</button>";
+        drawTool.clear();
+    }
+
     $(document).ready(function(){
         init();
     });
@@ -108,6 +130,8 @@
 </script>
 {% endblock %}
 {% block body %} <!--- modified div to include scroll bar with 'overflow: auto'--->
-<div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;">
-<p><strong>Sample Manipulator Test </strong><span id="test"></span></p></div>
+<div id="map3d" style="overflow: auto; width: 500px; height: 600px; border: 1px solid silver;">
+<p><strong>Sample Manipulator Test </strong></p>
+<p><span id="test"><button onclick="drawMpa()">Create an Mpa</button></span></p>
+</div>
 {% endblock %}

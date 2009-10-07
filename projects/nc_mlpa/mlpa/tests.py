@@ -43,7 +43,7 @@ class MlpaTest(TestCase):
 
 class MlpaValidateTest(TestCase):
     '''
-        Commands used to run the following test (from the python manage.py shell command line):
+        Commands used to run the following test (from the python shell command line):
             from mlpa.tests import *
             tester = MlpaValidateTest('testManipulators')
             tester.setUp()
@@ -57,16 +57,16 @@ class MlpaValidateTest(TestCase):
 
     def setUp(self):
         '''
-            rough meaning of each code_status result:
-            code_status 0:  clips successfully
-            code_status 1:  overlaps with estuary, oceanic part chosen
-            code_status 2:  target geometry lies outside of geometry being clipped against
+            Build geometries for the following test cases:
+            code0_poly  clips successfully
+            code1_poly  overlaps with estuary, oceanic part chosen
+            code2_poly  target geometry lies outside of geometry being clipped against
                             or in the case of Estuary clipping, no estuaries were found to clip against
-            code_status 3:  target geometry is not valid
-            code_status 4:  this code has the most meanings, each depending on context
+            code3_poly  target geometry is not valid
+            code4_poly  this code has the most meanings, each depending on context
                             in the case of Estuary clipping, it means the target was estuary only
-            code_status 5:  overlaps with estuary, estuary part chosen
-            code_status 6:  one or more required kwargs not provided
+            code5_poly  overlaps with estuary, estuary part chosen
+            other case  one or more required kwargs not provided
         '''
         
         self.code0_poly = fromstr('POLYGON ((-1 -1, 1 -1, 1 -3, -1 -3, -1 -1))') # area = 4
@@ -112,14 +112,12 @@ class MlpaValidateTest(TestCase):
     def clipToGraticuleTest(self):
         '''
             Tests the following:
-            code_status 0:  clipped to graticule
+                clip to graticule
         '''
         #clip to graticule test
         response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'w': .5, 'e': -.5})
         self.assertEquals(response1.status_code, 200)
-        #json1 = serializers.json.simplejson.loads(response1.content)
-        #self.assertEquals(json1["status_code"], '0')
-        graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, w=.5, e=-.5)
+        graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=.5, east=-.5)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
     
@@ -127,123 +125,106 @@ class MlpaValidateTest(TestCase):
     def clipToStudyRegionTest(self):
         '''
             Tests the following:
-            code_status 0:  clipped to study region
-            code_status 2:  outside study region
-            code_status 3:  geometry not valid
+                clipped to study region
+                outside study region
+                geometry not valid
         '''
-        #clipped to study region
+        #clip to study region
         response0 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': self.code0_poly.wkt, 'study_region': self.study_region.wkt})
         self.assertEquals(response0.status_code, 200)
-        #json0 = serializers.json.simplejson.loads(response0.content)
-        #self.assertEquals(json0["status_code"], '0')
         studyregion_clipper = ClipToStudyRegionManipulator(target_shape=self.code0_poly, study_region=self.study_region)
         result = studyregion_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '0')
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
         
         #outside study region
         response2 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': self.code2_poly.wkt, 'study_region': self.study_region.wkt})
         self.assertEquals(response2.status_code, 200)
-        #json2 = serializers.json.simplejson.loads(response2.content)
-        #self.assertEquals(json2["status_code"], '2')
+        try:
+            graticule_clipper = ClipToStudyRegionManipulator(target_shape=self.code2_poly)
+        except HaltManipulations:
+            pass
         
         #geometry not valid
         response3 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': self.code3_poly.wkt, 'study_region': self.study_region.wkt})
         self.assertEquals(response3.status_code, 200)
-        #json3 = serializers.json.simplejson.loads(response3.content)
-        #self.assertEquals(json3["status_code"], '3')
+        try:
+            graticule_clipper = ClipToStudyRegionManipulator(target_shape=self.code3_poly)
+        except InvalidGeometryException:
+            pass
     
     #Clip to Estuary Oceanic testing
     def clipToEstuariesTest(self):
         '''
             Tests the following:
-            code_status 0:  no estuary overlap ('cliipped_shape == 'target_shape')
-            code_status 1:  overlaps both estuary and oceanic, oceanic returned
-            code_status 5:  overlaps both estuary and oceanic, estuary returned
-            code_status 3:  geometry not valid
-            code_status 4:  estuary only
-            code_status 6:  missing kwargs
+                no estuary overlap ('cliipped_shape == 'target_shape')
+                overlaps both estuary and oceanic, oceanic returned
+                overlaps both estuary and oceanic, estuary returned
+                geometry not valid
+                estuary only
+                missing kwargs
         '''
         #mpa does not overlap with estuary
         response0 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code0_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response0.status_code, 200)
-        #json0 = serializers.json.simplejson.loads(response0.content)
-        #self.assertEquals(json0["status_code"], '0')
         #again with direct call to ClipToEstuariesManipulator.manipulate
         estuary_clipper = ClipToEstuariesManipulator(target_shape=self.code0_poly, estuaries=self.ests)
         result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '0')
         self.assertAlmostEquals(result["clipped_shape"].area, 4, places=1)
     
         #overlaps both estuary and oceanic, oceanic returned
         response1 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code1_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response1.status_code, 200)
-        #json1 = serializers.json.simplejson.loads(response1.content)
-        #self.assertEquals(json1["status_code"], '1')
         #again with direct call to ClipToEstuariesManipulator.manipulate
         estuary_clipper = ClipToEstuariesManipulator(target_shape=self.code1_poly, estuaries=self.ests)
         result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '1')
         self.assertAlmostEquals(result["clipped_shape"].area, 3.5, places=1)
         
         #overlaps both estuary and oceanic, estuary returned
         response5 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code5_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response5.status_code, 200)
-        #json5 = serializers.json.simplejson.loads(response5.content)
-        #self.assertEquals(json5["status_code"], '5')
         #again with direct call to ClipToEstuariesManipulator.manipulate
         estuary_clipper = ClipToEstuariesManipulator(target_shape=self.code5_poly, estuaries=self.ests)
         result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '5')
         self.assertAlmostEquals(result["clipped_shape"].area, 1.5, places=1)
         
         #mpa is outside of study region (but this shouldn't matter much to ClipToEstuaries)
         response2 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code2_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response2.status_code, 200)
-        #json2 = serializers.json.simplejson.loads(response2.content)
-        #self.assertEquals(json2["status_code"], '0')
         #again with direct call to ClipToEstuariesManipulator.manipulate
         estuary_clipper = ClipToEstuariesManipulator(target_shape=self.code2_poly, estuaries=self.ests)
         result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '0')
         self.assertAlmostEquals(result["clipped_shape"].area, 1, places=1)
 
         #mpa geometry is not valid
         response3 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code3_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response3.status_code, 200)
-        json3 = serializers.json.simplejson.loads(response3.content)
-        #self.assertEquals(json3["status_code"], '3')
-        self.assertEquals(json3["clipped_shape"], None)
+        try:
+            graticule_clipper = ClipToEstuariesManipulator(target_shape=self.code3_poly)
+        except InvalidGeometryException:
+            pass
         
         #mpa is estuary only
         response4 = self.client.post('/manipulators/ClipToEstuaries/', {'target_shape': self.code4_poly.wkt, 'estuaries': self.ests.wkt})
         self.assertEquals(response4.status_code, 200)
-        #json4 = serializers.json.simplejson.loads(response4.content)
-        #self.assertEquals(json4["status_code"], '4')
         #again with direct call to ClipToEstuariesManipulator.manipulate
         estuary_clipper = ClipToEstuariesManipulator(target_shape=self.code4_poly, estuaries=self.ests)
         result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '4')
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
         
         #missing kwargs
         response6 = self.client.post('/manipulators/ClipToEstuaries/', {})
         self.assertEquals(response6.status_code, 200)
-        #json6 = serializers.json.simplejson.loads(response6.content)
-        #self.assertEquals(json6["status_code"], '6')
-        #again with direct call to ClipToEstuariesManipulator.manipulate
-        estuary_clipper = ClipToEstuariesManipulator()
-        result = estuary_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '6')
-        self.assertEquals(result["clipped_shape"], None)
-        self.assertEquals(result["original_shape"], None)
+        try:
+            ClipToEstuariesManipulator()
+        except TypeError:
+            pass
         
     
     #Tests mpa geometries appropriate for the nc_mlpa study region 
     def clipToNCMLPATest(self):
         '''
             Tests the following:
-            code_status 0:  clipped to study region
+                clipped to study region
         '''
         study_region = StudyRegion.objects.current().geometry 
         
@@ -262,10 +243,5 @@ class MlpaValidateTest(TestCase):
         #clip to study region
         response0 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': target_shape.wkt})
         self.assertEquals(response0.status_code, 200)
-        #json0 = serializers.json.simplejson.loads(response0.content)
-        #self.assertEquals(json0["status_code"], '0')
-        #studyregion_clipper = ClipToStudyRegionManipulator(target_shape=target_shape)
-        #result = studyregion_clipper.manipulate()
-        #self.assertEquals(result["status_code"], '0')
        
     

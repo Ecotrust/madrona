@@ -36,6 +36,8 @@ class Mpa(models.Model):
 
     class Options:
         manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator ]
+        #manipulators = [ ClipToShapeManipulator, EastWestManipulator ]
+        #manipulators = [ ClipToGraticuleManipulator ]
         #manipulators = [ ClipToStudyRegionManipulator ]
         #manipulators = [ EastWestManipulator ]
         
