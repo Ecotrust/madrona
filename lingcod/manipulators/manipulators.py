@@ -209,9 +209,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         self.target_shape = target_shape
         self.study_region = study_region
         
-    def manipulate(self):   
-        import pdb
-        pdb.set_trace()
+    def manipulate(self):
+    
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
 

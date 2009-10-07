@@ -30,8 +30,7 @@ class EastWestManipulator(BaseManipulator):
             raise self.InternalException("Exception raised in EastWestManipulator while initializing east/west geometries: " + e.message)
     
     def manipulate(self): 
-        import pdb 
-        pdb.set_trace()
+    
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
         
