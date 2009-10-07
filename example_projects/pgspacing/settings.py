@@ -10,10 +10,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql_psycopg2' # 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'spacing_dev'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'gisdev'             # Not used with sqlite3.
-DATABASE_PASSWORD = '2fae23fa955ac0ee8fdc!3ACi@'         # Not used with sqlite3.
-DATABASE_HOST = 'maps11.msi.ucsb.edu'             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_NAME = 'tmp_reporting_dev'             # Or path to database file if using sqlite3.
+DATABASE_USER = 'postgres'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'd0nkey' #'2fae23fa955ac0ee8fdc!3ACi@'         # Not used with sqlite3.
+DATABASE_HOST = '' #'maps11.msi.ucsb.edu'             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
@@ -82,6 +82,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.gis',
     'django.contrib.admin',
-    'lingcod.pg_spacing',
+ #   'lingcod.pg_spacing',
     'lingcod.intersection',
 )
