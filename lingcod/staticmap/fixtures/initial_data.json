@@ -3,8 +3,8 @@
     "pk": 1, 
     "model": "staticmap.mapconfig", 
     "fields": {
-      "mapfile": "staticmap/world_styles.xml", 
-      "mapname": "Default"
+      "mapfile": "../../media/staticmap/world_styles.xml", 
+      "mapname": "default"
     }
   }
 ]

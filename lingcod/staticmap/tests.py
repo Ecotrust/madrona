@@ -24,7 +24,7 @@ class StaticMapTest(TestCase):
         """
         self.assertTrue(MapConfig.objects.count() > 0)
 
-    def testFaqView(self):
+    def testMapView(self):
         """
         test views.staticmap
         """

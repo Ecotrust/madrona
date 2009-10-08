@@ -6,4 +6,5 @@ class MapConfig(models.Model):
         return u"%s" % (self.mapfile)
     
     mapfile = models.CharField(max_length=50)
+    #TODO make mapname unique pk
     mapname = models.CharField(max_length=50)

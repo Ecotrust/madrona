@@ -21,6 +21,7 @@ MarineMap.
     * `elementtree <http://effbot.org/zone/element-index.htm>`_
     * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
     * `sphinx <http://sphinx.pocoo.org/>`_ (used for generating documentation)
+    * `mapnik <http://mapnik.org/>`_ (generates static maps for reports)
     
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 
