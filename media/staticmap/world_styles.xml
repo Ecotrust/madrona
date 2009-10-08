@@ -1,0 +1,24 @@
+<!DOCTYPE Map>
+<Map bgcolor="steelblue" srs="+proj=latlong +datum=WGS84">
+
+<Style name="land">
+<Rule>
+<PolygonSymbolizer>
+<CssParameter name="fill">#f2eff9</CssParameter>
+</PolygonSymbolizer>
+<LineSymbolizer>
+<CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
+<CssParameter name="stroke-width">0.1</CssParameter>
+</LineSymbolizer>
+</Rule>
+</Style>
+
+<Layer name="world" srs="+proj=latlong +datum=WGS84">
+	<StyleName>land</StyleName>
+	<Datasource>
+		<Parameter name="type">shape</Parameter>
+		<Parameter name="file">../../media/staticmap/socal_gshhs</Parameter>
+	</Datasource>
+</Layer>
+
+</Map>

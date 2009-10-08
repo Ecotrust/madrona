@@ -98,6 +98,7 @@ INSTALLED_APPS = (
     'lingcod.layers',
     'lingcod.studyregion',
     'lingcod.simplefaq',
+    'lingcod.staticmap',
     'lingcod.manipulators',
     'lingcod.wave',
     'simple.simple_app',
