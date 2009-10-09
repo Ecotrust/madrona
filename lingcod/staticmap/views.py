@@ -28,14 +28,24 @@ def show(request, map_name):
     # Replace the db, host, user and pass for any postgis layers in the database
     # Uses ALL_CAPS keywords in the mapfile
     xmltext = open(mapfile).read()
+    # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
     xmltext = xmltext.replace("DATABASE_NAME",settings.DATABASE_NAME)
-    xmltext = xmltext.replace("DATABASE_USER",settings.DATABASE_USER)
-    xmltext = xmltext.replace("DATABASE_PASSWORD",settings.DATABASE_PASSWORD)
+    try:
+        xmltext = xmltext.replace("DATABASE_USER",settings.DATABASE_USER)
+    except AttributeError:
+        xmltext = xmltext.replace("DATABASE_USER",'')
+
+    try:
+        xmltext = xmltext.replace("DATABASE_PASSWORD",settings.DATABASE_PASSWORD)
+    except AttributeError:
+        xmltext = xmltext.replace("DATABASE_PASSWORD",'')
+
     try:
         xmltext = xmltext.replace("DATABASE_HOST",settings.DATABASE_HOST)
     except AttributeError:
         xmltext = xmltext.replace("DATABASE_HOST",'localhost')
+
     mapnik.load_map_from_string(m,xmltext)
     
 
