@@ -10,10 +10,10 @@ from lingcod.staticmap.models import *
 from django.conf import settings
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('',
-    # Example:
-    (r'/staticmap/', include('lingcod.staticmap.urls')),
-)
+#urlpatterns = patterns('',
+# Example:
+#    (r'/staticmap/', include('lingcod.staticmap.urls')),
+#)
 
 
 class StaticMapTest(TestCase):
@@ -28,14 +28,14 @@ class StaticMapTest(TestCase):
         """
         test default staticmap image response
         """
-        response = self.client.get('/staticmap/default', {})
+        response = self.client.get('/staticmap/default/', {})
         self.assertEquals(response.status_code, 200)
         
     def testRedirectDefault(self):
         """
         test the redirection of staticmap without map name specified
         """
-        response = self.client.get('/staticmap', {})
+        response = self.client.get('/staticmap/', {})
         self.assertEquals(response.status_code, 301)
 
    
