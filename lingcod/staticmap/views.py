@@ -11,26 +11,31 @@ def show(request, map_name):
     maps = get_object_or_404(MapConfig,mapname=map_name)
     mapfile = str(maps.mapfile)
      
+    # Grab the image dimensions
     try:
         width = int(request.REQUEST['width'])
         height = int(request.REQUEST['height'])
     except:
         # fall back on defaults
-        width, height = 800, 600
+        width, height = maps.default_width, maps.default_height
 
-    try:
-        x1, y1, x2, y2 = split(str(request.REQUEST['bbox']), ',')
-    except:
-        # fall back on default image extent
-        x1, y1, x2, y2 = -121.2, 31.2, -116.6, 35 # so cal
-        # x1, y1, x2, y2 = -180,-90,180,90 # whole world 
-
+    # Create a blank image and load the mapfile
     import mapnik
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
     mapnik.load_map(m, mapfile)
+
+    # Grab the bounding coordinates and set them if specified
+    try:
+        x1, y1, x2, y2 = split(str(request.REQUEST['bbox']), ',')
+    except:
+        # fall back on default image extent
+        x1, y1 = maps.default_x1, maps.default_y1
+        x2, y2 = maps.default_x2, maps.default_y2
+
     bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
     m.zoom_to_box(bbox)
+    # Render image and send out the response
     mapnik.render(m, draw)
     img = draw.tostring('png')
     response = HttpResponse()

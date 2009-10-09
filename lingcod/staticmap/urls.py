@@ -7,4 +7,3 @@ urlpatterns = patterns('',
 urlpatterns += patterns('lingcod.staticmap.views',
     (r'^(?P<map_name>\w+)/$', 'show' )
 )
-

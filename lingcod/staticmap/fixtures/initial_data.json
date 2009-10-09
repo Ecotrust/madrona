@@ -4,7 +4,13 @@
     "model": "staticmap.mapconfig", 
     "fields": {
       "mapfile": "../../media/staticmap/world_styles.xml", 
-      "mapname": "default"
+      "mapname": "default",
+      "default_x1": -120.7,
+      "default_y1": 32.3,
+      "default_x2": -116.9,
+      "default_y2": 35,
+      "default_height": 600,
+      "default_width": 800
     }
   }
 ]

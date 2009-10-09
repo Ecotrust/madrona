@@ -24,11 +24,18 @@ class StaticMapTest(TestCase):
         """
         self.assertTrue(MapConfig.objects.count() > 0)
 
-    def testMapView(self):
+    def testDefaultMap(self):
         """
-        test views.staticmap
+        test default staticmap image response
         """
-        response = self.client.get('/staticmap/', {})
+        response = self.client.get('/staticmap/default', {})
         self.assertEquals(response.status_code, 200)
         
+    def testRedirectDefault(self):
+        """
+        test the redirection of staticmap without map name specified
+        """
+        response = self.client.get('/staticmap', {})
+        self.assertEquals(response.status_code, 301)
+
    
