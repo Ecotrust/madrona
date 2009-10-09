@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from lingcod.common import mimetypes
+import settings
 
 from lingcod.staticmap.models import *
 
@@ -19,11 +20,24 @@ def show(request, map_name):
         # fall back on defaults
         width, height = maps.default_width, maps.default_height
 
-    # Create a blank image and load the mapfile
+    # Create a blank image
     import mapnik
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
-    mapnik.load_map(m, mapfile)
+
+    # Replace the db, host, user and pass for any postgis layers in the database
+    # Uses ALL_CAPS keywords in the mapfile
+    xmltext = open(mapfile).read()
+    xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
+    xmltext = xmltext.replace("DATABASE_NAME",settings.DATABASE_NAME)
+    xmltext = xmltext.replace("DATABASE_USER",settings.DATABASE_USER)
+    xmltext = xmltext.replace("DATABASE_PASSWORD",settings.DATABASE_PASSWORD)
+    try:
+        xmltext = xmltext.replace("DATABASE_HOST",settings.DATABASE_HOST)
+    except AttributeError:
+        xmltext = xmltext.replace("DATABASE_HOST",'localhost')
+    mapnik.load_map_from_string(m,xmltext)
+    
 
     # Grab the bounding coordinates and set them if specified
     try:

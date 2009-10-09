@@ -4,7 +4,7 @@
 <Style name="land">
 <Rule>
 <PolygonSymbolizer>
-<CssParameter name="fill">#f2eff9</CssParameter>
+<CssParameter name="fill">rgb(244,238,203)</CssParameter>
 </PolygonSymbolizer>
 <LineSymbolizer>
 <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
@@ -13,13 +13,35 @@
 </Rule>
 </Style>
 
-<Layer name="world" srs="+proj=latlong +datum=WGS84">
-	<StyleName>land</StyleName>
-	<Datasource>
-		<Parameter name="type">shape</Parameter>
-        <!-- Example of referencing the data manager <Parameter name="file">../data_manager/shapefiles/general/socal_gshhs</Parameter> -->
-        <Parameter name="file">data/socal_gshhs</Parameter>
-	</Datasource>
+<Style name="region_style">
+<Rule>
+<LineSymbolizer>
+<CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
+<CssParameter name="stroke-width">1</CssParameter>
+</LineSymbolizer>
+</Rule>
+</Style>
+
+
+<Layer name="land" srs="+proj=latlong +datum=WGS84" status="on">
+<StyleName>land</StyleName>
+<Datasource>
+    <Parameter name="type">shape</Parameter>
+    <Parameter name="file">MEDIA_ROOT/staticmap/data/socal_gshhs</Parameter>
+</Datasource>
 </Layer>
+
+<Layer name="studyregion" status="on" srs="+init=epsg:3310">
+    <StyleName>region_style</StyleName>
+    <Datasource>
+      <Parameter name="type">postgis</Parameter>
+      <Parameter name="host">DATABASE_HOST</Parameter>
+      <Parameter name="dbname">DATABASE_NAME</Parameter>
+      <Parameter name="user">DATABASE_USER</Parameter>      
+      <Parameter name="password">DATABASE_PASSWORD</Parameter>
+      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
+    </Datasource>
+</Layer>
+
 
 </Map>
