@@ -17,7 +17,8 @@
 	<StyleName>land</StyleName>
 	<Datasource>
 		<Parameter name="type">shape</Parameter>
-		<Parameter name="file">../../media/staticmap/socal_gshhs</Parameter>
+        <!-- Example of referencing the data manager <Parameter name="file">../data_manager/shapefiles/general/socal_gshhs</Parameter> -->
+        <Parameter name="file">data/socal_gshhs</Parameter>
 	</Datasource>
 </Layer>
 

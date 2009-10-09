@@ -9,7 +9,7 @@ def show(request, map_name):
     """Display a map with the study region geometry.
     """
     maps = get_object_or_404(MapConfig,mapname=map_name)
-    mapfile = str(maps.mapfile)
+    mapfile = str(maps.mapfile.path)
      
     # Grab the image dimensions
     try:

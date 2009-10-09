@@ -3,7 +3,7 @@
     "pk": 1, 
     "model": "staticmap.mapconfig", 
     "fields": {
-      "mapfile": "../../media/staticmap/world_styles.xml", 
+      "mapfile": "staticmap/socal.xml", 
       "mapname": "default",
       "default_x1": -120.7,
       "default_y1": 32.3,
