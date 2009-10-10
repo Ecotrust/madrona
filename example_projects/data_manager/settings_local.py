@@ -1,3 +1,4 @@
+import os
 # This settings file is intended to be used as the second-half of a 
 # SplitSetting as described on the django wiki. See:
 # http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother
@@ -20,3 +21,12 @@ DATABASE_PASSWORD = 'd0nkey'
 
 MEDIA_URL = '/media/'
 #MEDIA_ROOT = '/Users/jaredkibele/Documents/workspace/lingcod_trunk/media/'
+
+from settings import TEMPLATE_DIRS
+
+TEMPLATE_DIRS += (
+   #os.path.join(os.path.dirname(__file__), '../../lingcod/data_manager/templates/').replace('\\','/'),
+   '/Users/jaredkibele/Documents/workspace/lingcod_trunk/lingcod/data_manager/templates',
+)
+
+#print TEMPLATE_DIRS #os.path.join(os.path.dirname(__file__), '../../lingcod/data_manager/templates').replace('\\','/')
