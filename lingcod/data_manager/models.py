@@ -90,18 +90,39 @@ def zip_from_shp(shp_path):
     zfile.close()
     
     return filename, File( open(zfile_path) )
-    
-class Shapefile(models.Model):
-    #shapefile = models.FileField(upload_to='intersection/shapefiles')
+        
+class DataLayer(models.Model):
     name = models.CharField(max_length=255, unique=True, null=True)
     description = models.TextField(null=True, blank=True)
     metadata = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     
-    class Meta:
-        abstract = True
-        
+    def __unicode__(self):
+        return self.name
+    
+class Shapefile(models.Model):
+    comment = models.TextField()
+    data_layer = models.ForeignKey(DataLayer)
+    truncated_comment = models.CharField(max_length=255, editable=False) 
+    update_display_layer = models.BooleanField(help_text='Does this data update require an update of the assoicated display layer?')
+    update_analysis_layer = models.BooleanField(help_text='Does this data update require an update of the assoicated analysis layer?')
+    display_updated = models.BooleanField(help_text='Has the requested display update been made?')
+    analysis_updated = models.BooleanField(help_text='Has the requested analysis update been made?')
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    shapefile = models.FileField(upload_to='data_manager/shapefiles/general')
+    field_description = models.TextField(null=True, blank=True, help_text='This is list of field names within the shapefile.  It is generated automatically when the shapefile is saved.  There is no need to edit this.')
+    
+    def save(self):
+        trunc_com = self.comment[0:25]
+        if self.comment.__len__() > 25:
+            trunc_com += '...'
+        self.truncated_comment = trunc_com
+        super(Shapefile, self).save()
+        self.link_field_names()
+        self.load_field_info()
+        super(Shapefile, self).save()
 #    def save(self, *args, **kwargs):
 #        super(Shapefile, self).save(*args, **kwargs)
 #        self.metadata = self.read_xml_metadata()
@@ -148,32 +169,50 @@ class Shapefile(models.Model):
             distinct_values_count = dict.fromkeys(field).keys().__len__()
             result[fname] = distinct_values_count
         return result
-        
-class GeneralShapefile(Shapefile):
-    shapefile = models.FileField(upload_to='data_manager/shapefiles/general')
     
-    def __unicode__(self):
-        return self.name
-    
-    def save(self):
-        super(GeneralShapefile, self).save()
-        self.link_field_names()
+    def field_info_str(self):
+        dict = self.field_info()
+        return_str = ''
+        for key in dict.keys():
+            return_str += '%s: %i distinct values\n' % (key, dict[key])
+        return return_str
     
     def link_field_names(self):
         info_dict = self.field_info()
         for f in info_dict.keys():
             sf = ShapefileField(name=f,distinct_values=info_dict[f],shapefile=self)
             sf.save()
-            
+    
+    def load_field_info(self):
+        self.field_description = self.field_info_str()
     
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
     name = models.CharField(max_length=255)
     distinct_values = models.IntegerField()
     type = models.CharField(max_length=255, null=True, blank=True)
-    shapefile = models.ForeignKey(GeneralShapefile)
+    shapefile = models.ForeignKey(Shapefile)
     
     def __unicode__(self):
         return '%s: %i distinct values' % (self.name, self.distinct_values)
 
-
+    
+#class GeneralShapeComment(models.Model):
+#    comment = models.TextField()
+#    truncated_comment = models.CharField(max_length=255, editable=False) 
+#    date_modified = models.DateTimeField(auto_now=True)
+#    update_display_layer = models.BooleanField(help_text='Does this data update require an update of the assoicated display layer')
+#    update_analysis_layer = models.BooleanField(help_text='Does this data update require an update of the assoicated analysis layer')
+#    general_shapefile = models.ForeignKey(GeneralShapefile)
+#    shapefile_name = models.CharField(max_length=255, null=True, editable=False)
+#    
+#    def __unicode__(self):
+#        return self.comment
+#
+#    def save(self):
+#        self.shapefile_name = self.general_shapefile.name
+#        trunc_com = self.comment[0:25]
+#        if self.comment.__len__() > 25:
+#            trunc_com += '...'
+#        self.truncated_comment = trunc_com
+#        super(GeneralShapeComment, self).save()
