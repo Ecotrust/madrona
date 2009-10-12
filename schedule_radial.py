@@ -18,7 +18,6 @@ reader = csv.reader(f, delimiter=',', quotechar='"')
 print """
 graph graphname {
    page=8.5,11;
-   orientation=landscape;
 """
 tickets = []
 
