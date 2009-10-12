@@ -17,7 +17,8 @@ import csv
 reader = csv.reader(f, delimiter=',', quotechar='"')
 print """
 graph graphname {
-   ratio=0.4
+   page=8.5,11
+   orientation=landscape
 """
 tickets = []
 
