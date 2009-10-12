@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
+from django.db import connection
 from lingcod.common import mimetypes
 import settings
 
@@ -25,31 +26,22 @@ def show(request, map_name):
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
 
-    # Replace the db, host, user and pass for any postgis layers in the database
+    # Replace local settings-specific variables using keywords in mapnik mapfile
     # Uses ALL_CAPS keywords in the mapfile
     xmltext = open(mapfile).read()
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
-    xmltext = xmltext.replace("DATABASE_NAME","<Parameter name='dbname'>%s</Parameter>" % settings.DATABASE_NAME)
 
-    try:
-        xmltext = xmltext.replace("DATABASE_USER","<Parameter name='user'>%s</Parameter>" % settings.DATABASE_USER)
-    except AttributeError:
-        xmltext = xmltext.replace("DATABASE_USER",'')
+    conn = connection.settings_dict
+    connection_string = ""
+    connection_string += "<Parameter name='dbname'>%s</Parameter>" % conn['DATABASE_NAME']
+    connection_string += "<Parameter name='user'>%s</Parameter>" % conn['DATABASE_USER']
+    connection_string += "<Parameter name='password'>%s</Parameter>" % conn['DATABASE_PASSWORD']
+    connection_string += "<Parameter name='host'>%s</Parameter>" % conn['DATABASE_HOST']
 
-    try:
-        xmltext = xmltext.replace("DATABASE_PASSWORD","<Parameter name='password'>%s</Parameter>" % settings.DATABASE_PASSWORD)
-    except AttributeError:
-        xmltext = xmltext.replace("DATABASE_PASSWORD",'')
-
-    try:
-        xmltext = xmltext.replace("DATABASE_HOST","<Parameter name='host'>%s</Parameter>" % settings.DATABASE_HOST)
-    except AttributeError:
-        xmltext = xmltext.replace("DATABASE_HOST","<Parameter name='host'>localhost</Parameter>")
-
+    xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
     mapnik.load_map_from_string(m,xmltext)
-    
 
     # Grab the bounding coordinates and set them if specified
     try:

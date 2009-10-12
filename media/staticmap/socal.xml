@@ -36,10 +36,7 @@
     <Datasource>
       <Parameter name="type">postgis</Parameter>
       <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
-      DATABASE_NAME
-      DATABASE_USER
-      DATABASE_PASSWORD
-      DATABASE_HOST
+      DATABASE_CONNECTION
     </Datasource>
 </Layer>
 
