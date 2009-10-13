@@ -1,3 +1,4 @@
+import os
 # This settings file is intended to be used as the second-half of a 
 # SplitSetting as described on the django wiki. See:
 # http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother
@@ -14,6 +15,15 @@
 # GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg' 
 
 # You'll want to specify any database connection info here:
-# DATABASE_NAME = 'simple_example'
-# DATABASE_USER = 'postgres'
-# DATABASE_PASSWORD = 'my-secret-password'
+DATABASE_NAME = 'data_manager'
+DATABASE_USER = 'db_user'
+DATABASE_PASSWORD = 'clever_password'
+
+MEDIA_URL = '/media/'
+
+from settings import TEMPLATE_DIRS
+
+TEMPLATE_DIRS += (
+   #os.path.join(os.path.dirname(__file__), '../../lingcod/data_manager/templates/').replace('\\','/'), #This didn't really work out for me
+   '/your-path-to/lingcod/data_manager/templates',
+)

@@ -101,6 +101,17 @@ class DataLayer(models.Model):
     def __unicode__(self):
         return self.name
     
+class GeneralFile(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True,blank=True)
+    data_layer = models.ForeignKey(DataLayer)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    file = models.FileField(upload_to='data_manager/general_files')
+    
+    def __unicode__(self):
+        return self.name
+    
 class Shapefile(models.Model):
     comment = models.TextField()
     data_layer = models.ForeignKey(DataLayer)
@@ -111,14 +122,17 @@ class Shapefile(models.Model):
     analysis_updated = models.BooleanField(help_text='Has the requested analysis update been made?')
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    shapefile = models.FileField(upload_to='data_manager/shapefiles/general')
+    shapefile = models.FileField(upload_to='data_manager/shapefiles')
     field_description = models.TextField(null=True, blank=True, help_text='This is list of field names within the shapefile.  It is generated automatically when the shapefile is saved.  There is no need to edit this.')
     
     def save(self):
+        # create a truncated comment to use as a title for the comment in the admin tool
         trunc_com = self.comment[0:25]
         if self.comment.__len__() > 25:
             trunc_com += '...'
         self.truncated_comment = trunc_com
+        # make the file name what we want it to be before saving.
+        self.shapefile.name = self.new_filename()
         super(Shapefile, self).save()
         self.link_field_names()
         self.load_field_info()
@@ -127,7 +141,19 @@ class Shapefile(models.Model):
 #        super(Shapefile, self).save(*args, **kwargs)
 #        self.metadata = self.read_xml_metadata()
 #        super(Shapefile, self).save(*args, **kwargs)
-        
+
+    def __unicode__(self):
+        return '%s: %s' % (self.data_layer.name, self.shapefile.name)
+    
+    def new_filename(self):
+        import time
+        from django.template.defaultfilters import slugify
+        dir = os.path.dirname(self.shapefile.name)
+        newbasename = '%s_%s.zip' % (slugify(self.data_layer.name), time.strftime('%y%m%d', time.localtime() ))
+        newname = os.path.join(dir, newbasename)
+        #self.shapefile.name = newname
+        return newname
+    
     def unzip_to_temp(self):
         # unzip to a temp directory and return the path to the .shp file
         valid, error = validate_zipped_shp(self.shapefile.path)
