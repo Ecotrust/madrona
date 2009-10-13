@@ -12,13 +12,5 @@ import models
 
 def simpleManipulators(request, template_name='common/simple-manipulators.html'):
     return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
-    
-def mpaManipulatorList(request):
-    """Handler for AJAX mpa manipulators request (from sample-manipulator.html)
-    """
-    manipulators = models.Mpa.Options.manipulators
-    manip_text = [(manipulator.Options.name) for manipulator in manipulators]
-    
-    return HttpResponse( simplejson.dumps( manip_text ))
-    
+  
 
