@@ -97,7 +97,7 @@ class MlpaMpa(Mpa):
         
     class Options:
         manipulators = [ ClipToStudyRegionManipulator, ClipToEstuariesManipulator, ]
-        #manipulaotrs = [ ClipToStudyRegionManipulator ]
+        #manipulators = [ ClipToStudyRegionManipulator ]
         #manipulators = [ ClipToEstuariesManipulator ]
         #manipulators = [ ClipToShapeManipulator ]
         #manipulators = [ ClipToGraticuleManipulator ]

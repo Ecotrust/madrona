@@ -6,7 +6,6 @@
  */
 lingcod.drawTool = function() {
     this.placemark = null;
-    this.gex = null;
 };
 
 
@@ -17,8 +16,8 @@ lingcod.drawTool.prototype.clear = function()
 { 
     if ( this.placemark )
     {
-        this.gex.edit.endEditLineString( this.placemark.getGeometry().getOuterBoundary() );
-        this.gex.dom.removeObject( this.placemark );
+        gex.edit.endEditLineString( this.placemark.getGeometry().getOuterBoundary() );
+        gex.dom.removeObject( this.placemark );
         this.placemark = null;
     }
 };
@@ -26,13 +25,14 @@ lingcod.drawTool.prototype.clear = function()
 
 /**
  * Start accepting user input for shape-draw. Sets callbacks to keep measures updated and to switch to edit mode on completion.
- * @param {GEarthExtensions} gex The handle to the GEarthExtensions object
- * @param {String} feedbackSpanId The id of an HTML tag whose innerHTML will be overwritten with server status/feedback results.
+ * REMOVED 10-13-09 -- {GEarthExtensions} gex The handle to the GEarthExtensions object 
+ * REMOVED 10-13-09 -- {String} feedbackSpanId The id of an HTML tag whose innerHTML will be overwritten with server status/feedback results.
+ * ADDED 10-13-09:
+ * @param {String} finishedCallback The id of an HTML tag whose innerHTML will be overwritten with server status/feedback results.
  */
-lingcod.drawTool.prototype.drawShape = function( gex, finishedCallback ) 
+lingcod.drawTool.prototype.drawShape = function( finishedCallback ) 
 {
     var self = this;
-    this.gex = gex;
     
     this.clear();
 

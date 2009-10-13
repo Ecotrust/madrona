@@ -10,7 +10,7 @@ from django.utils import simplejson
 
 import models
 
-def sampleManipulator(request, template_name='common/sample-manipulator.html'):
+def simpleManipulators(request, template_name='common/simple-manipulators.html'):
     return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
     
 def mpaManipulatorList(request):

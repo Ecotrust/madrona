@@ -66,7 +66,8 @@ class BaseManipulator(object):
         template_name = 'manipulators/manipulator_default.html'
         html_templates = {
             '3':'manipulators/invalid_geometry.html',
-            '9':'manipulators/internal_error.html'
+            '9':'manipulators/internal_error.html',
+            '11':'manipulators/unexpected_error.html'
         }
     
     class InternalException(Exception):
@@ -210,7 +211,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         self.study_region = study_region
         
     def manipulate(self):
-    
+
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
 

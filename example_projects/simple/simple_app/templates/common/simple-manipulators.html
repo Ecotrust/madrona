@@ -42,7 +42,7 @@
     //NEW
     function drawMpa() {
         drawTool = new lingcod.drawTool();
-        drawTool.drawShape( gex, drawMpaComplete );
+        drawTool.drawShape( drawMpaComplete );
     }
     
     function failureCallback(errorCode) {
@@ -53,7 +53,8 @@
     <!--- get the manipulator list from the Mpa model and process the manipulators--->
     function drawMpaComplete(){
         $.getJSON(
-            '{% url sample-manipulator-list %}',
+            //'{% url sample-manipulator-list %}',
+            '/manipulators/list/simple_app/mpa/',
             processManipulators
         );
     }

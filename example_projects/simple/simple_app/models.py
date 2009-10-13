@@ -32,7 +32,8 @@ class Mpa(models.Model):
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True, verbose_name="Final MPA boundary")   
     
     class Meta:
-        abstract=True
+        db_table = u'simple_mpa'
+        #abstract=True
 
     class Options:
         manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator ]

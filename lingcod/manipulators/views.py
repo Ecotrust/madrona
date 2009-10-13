@@ -12,10 +12,23 @@ from lingcod.studyregion.models import StudyRegion
 from lingcod.common.utils import KmlWrap
 from django.conf import settings
 
+from django.contrib.contenttypes.models import ContentType
 from django.utils import simplejson
 
 #from cjson import encode as json_encode
+ 
+def mpaManipulatorList(request, app_name, model_name):
+    """Handler for AJAX mpa manipulators request
+    """
+    try:
+        model = ContentType.objects.get(app_label=app_name, model=model_name)
+        manipulators = model.model_class().Options.manipulators        
+    except Exception, e:
+        return HttpResponse( "The following error was reported: '" + e.message + "', while generating manipulator list from application: " + app_name + " and model: " + model_name, status=404 )
     
+    manip_text = [(manipulator.Options.name) for manipulator in manipulators]   
+    
+    return HttpResponse( simplejson.dumps( manip_text )) 
      
 def multi_generic_manipulator_view(request, manipulators):
     '''
@@ -65,7 +78,7 @@ def multi_generic_manipulator_view(request, manipulators):
                   
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
-                html_response = html_response + '<br /><br />' + result["html"] 
+                html_response = html_response + '<br/>' + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
             return do_template_and_respond('3', e.message, None, None)
@@ -74,7 +87,7 @@ def multi_generic_manipulator_view(request, manipulators):
         except manipClass.HaltManipulations, e:
             return respond_with_template(e.html, e.message, None, None)
         except Exception, e:
-            return do_template_and_respond('9', "Unexpected Exception: \n" + e.message, None, None)      
+            return do_template_and_respond('11', e.message, None, None)      
     #end manipulator for loop      
                         
     #add buttons for accept-reject

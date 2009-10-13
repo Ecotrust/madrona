@@ -40,6 +40,11 @@ class ClipToEstuariesManipulator(BaseManipulator):
         self.estuaries = estuaries
         
     def intersect_and_union(self, target, estuaries):
+        '''
+            Intersect the target_shape with each of the estuaries in the database.  
+            As there may be multiple estuaries present within the boundaries of target_shape,
+            we want to include all intersections within the estuary_clip return geometry.
+        '''
         estuary_clip = None
         for estuary in estuaries:
             intersected_geom = target.intersection(estuary)

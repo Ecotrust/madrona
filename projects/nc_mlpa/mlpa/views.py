@@ -21,8 +21,7 @@ def mpaKmlAllGeom(request, id):
     mpa = get_object_or_404( models.MlpaMpa, pk=id )
     
     return HttpResponse( KmlWrap( mpa.kmlFolder(request.get_host()) ), content_type='text/plain') 
-    
-    
+     
 def mpaKml(request, id):
     """Handler for AJAX mpaKml request
     """
@@ -33,12 +32,4 @@ def mpaKml(request, id):
 def mlpaManipulators(request, template_name='common/mlpa-manipulators.html'):
     return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
  
-   
-def mpaManipulatorList(request):
-    """Handler for AJAX mpa manipulators request
-    """
-    manipulators = models.MlpaMpa.Options.manipulators
-    manip_text = [(manipulator.Options.name) for manipulator in manipulators]
-    
-    return HttpResponse( simplejson.dumps( manip_text ))
 

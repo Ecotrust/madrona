@@ -28,6 +28,5 @@
     <test path="common/js/test/tree/tree.js" />
     <file path="common/js/tree/kmlForest.js" />
     <test path="common/js/test/tree/kmlForest.js" />
-    <file path="mpa/js/drawMpaSupport.js" />
     <file path="common/js/lib/json2.js" />
 </javascripts>
