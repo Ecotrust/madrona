@@ -134,17 +134,25 @@ def sum_results(results):
       'units': u'miles'}]]
     '''
     # These keys will be summed.  Any other key will be the last value encountered.
-    sum_keys = ('result','percent_of_total',)
+    sum_keys_dict = {'result': 0.0,'percent_of_total': 0.0,'geo_collection': geos.fromstr('GEOMETRYCOLLECTION EMPTY') }
+    sum_keys = sum_keys_dict.keys()
     
     summed_results = []
     for hab in range(0,results[0].__len__()):
         dict = {}
-        for key in sum_keys: dict[key]=0.0
+        # set up initial values
+        for key in sum_keys: dict[key]=sum_keys_dict[key]
         for i in range(0,results.__len__()):
             for key in results[i][hab].keys():
                 if key in sum_keys:
                     dict[key] += results[i][hab][key]
+                elif key=='kml':
+                    raise Exception("I haven't figured out how to sum kml so don't ask for kml when getting intersection results for Geometry collections")
                 else:
+                    if i <> 0:
+                        # Since we're not summing these values, let's make sure they're actually the same.
+                        try: assert(dict[key]==results[i][hab][key]) #print '%s = %s' % (dict[key], results[i][hab][key]) 
+                        except: raise Exception('sum_results has been passed an incorrect results matrix.')
                     dict[key] = results[i][hab][key]
         summed_results.append(dict)
     return summed_results
