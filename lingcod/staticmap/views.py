@@ -39,6 +39,9 @@ def show(request, map_name):
     connection_string += "<Parameter name='user'>%s</Parameter>" % conn['DATABASE_USER']
     connection_string += "<Parameter name='password'>%s</Parameter>" % conn['DATABASE_PASSWORD']
     connection_string += "<Parameter name='host'>%s</Parameter>" % conn['DATABASE_HOST']
+    # if testing via django unit tests, close out the connection
+    if conn['DATABASE_NAME'] != settings.DATABASE_NAME:
+        connection_string += "<Parameter name='persist_connection'>false</Parameter>"
 
     xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
     mapnik.load_map_from_string(m,xmltext)
@@ -60,4 +63,9 @@ def show(request, map_name):
     response['Content-length'] = len(img)
     response['Content-Type'] = 'image/png' 
     response.write(img)
+
+    # if testing via django unit tests, close out the connection
+    if conn['DATABASE_NAME'] != settings.DATABASE_NAME:
+        del m
+
     return response
