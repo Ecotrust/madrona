@@ -97,6 +97,57 @@ def zip_from_shp(shp_path):
     zfile.close()
     
     return filename, File( open(zfile_path) )
+
+def sum_results(results):
+    '''Sum a matrix of intersection results appropriately.  
+    
+    Here's an example of a data structure that can be summed
+    [[{'feature_name': u'test points',
+      'percent_of_total': 20.0,
+      'result': 2.0,
+      'sort': 0.5,
+      'units': u'count'},
+     {'feature_name': u'Beaches',
+      'percent_of_total': 0.40000000000000002,
+      'result': 2.0,
+      'sort': 0.59999999999999998,
+      'units': u'miles'},
+     {'feature_name': u'Rocky Shores',
+      'percent_of_total': 3.0,
+      'result': 30.0,
+      'sort': 0.69999999999999996,
+      'units': u'miles'}],
+      [{'feature_name': u'test points',
+      'percent_of_total': 20.0,
+      'result': 2.0,
+      'sort': 0.5,
+      'units': u'count'},
+     {'feature_name': u'Beaches',
+      'percent_of_total': 0.40000000000000002,
+      'result': 2.0,
+      'sort': 0.59999999999999998,
+      'units': u'miles'},
+     {'feature_name': u'Rocky Shores',
+      'percent_of_total': 3.0,
+      'result': 30.0,
+      'sort': 0.69999999999999996,
+      'units': u'miles'}]]
+    '''
+    # These keys will be summed.  Any other key will be the last value encountered.
+    sum_keys = ('result','percent_of_total',)
+    
+    summed_results = []
+    for hab in range(0,results[0].__len__()):
+        dict = {}
+        for key in sum_keys: dict[key]=0.0
+        for i in range(0,results.__len__()):
+            for key in results[i][hab].keys():
+                if key in sum_keys:
+                    dict[key] += results[i][hab][key]
+                else:
+                    dict[key] = results[i][hab][key]
+        summed_results.append(dict)
+    return summed_results
     
 class Shapefile(models.Model):
     #shapefile = models.FileField(upload_to='intersection/shapefiles')
@@ -495,7 +546,12 @@ class OrganizationScheme(models.Model):
             return self.transformed_results_single_geom(geom_or_collection, with_geometries=with_geometries, with_kml=with_kml)
         elif geom_or_collection.geom_type.lower().endswith('collection'):
             #do stuff for a collection
-            pass
+            results_matrix = []
+            for geom in geom_or_collection:
+                geom_results = self.transformed_results_single_geom(geom, with_geometries=with_geometries, with_kml=with_kml)
+                results_matrix.append(geom_results)
+            summed_results = sum_results(results_matrix)
+            return summed_results
         else:
             raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
     

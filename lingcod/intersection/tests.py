@@ -26,6 +26,20 @@ def upload_singlefeature_point(file_name='test_points.zip'):
     sfsf = SingleFeatureShapefile(name="test points", shapefile=File(zip_file) )
     sfsf.save()
     zip_file.close()
+
+class SumResultsTest(TestCase):
+    def text_sum_results(self):
+        summed = sum_results([[{'feature_name': u'test points','percent_of_total': 10,'result': 1.0,'sort': 0.5,'units': u'count'},{'feature_name': u'Beaches','percent_of_total': 0.2,'result': 1.0,'sort': 0.6,'units': u'miles'},{'feature_name': u'Rocky Shores','percent_of_total': 1.0,'result': 10.0,'sort': 0.7,'units': u'miles'}],[{'feature_name': u'test points','percent_of_total': 10,'result': 1.0,'sort': 0.5,'units': u'count'},{'feature_name': u'Beaches','percent_of_total': 0.2,'result': 1.0,'sort': 0.6,'units': u'miles'},{'feature_name': u'Rocky Shores','percent_of_total': 2.0,'result': 20.0,'sort': 0.7,'units': u'miles'}]])
+        
+        self.assertEquals(summed.__len__(),3)
+        
+        self.assertEquals(summed[0]['result'],2.0)
+        self.assertEquals(summed[1]['result'],2.0)
+        self.assertEquals(summed[2]['result'],30.0)
+        
+        self.assertEquals(summed[0]['percent_of_total'],20.0)
+        self.assertEquals(summed[1]['percent_of_total'],0.40000000000000002)
+        self.assertEquals(summed[2]['percent_of_total'],3.0)
         
 class UploadShapefilesTest(TestCase):
     fixtures = ['minimal_test_data.json']
