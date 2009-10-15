@@ -38,8 +38,11 @@ class Mpa(models.Model):
     objects = MpaManager()
     
     class Meta:
+        db_table = u'mm_mpa'
         abstract=True
         
+    def __unicode__(self):
+        return self.name
         
     def lookAtKml(self):
         """
