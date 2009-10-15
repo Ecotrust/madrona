@@ -1,7 +1,7 @@
 <!DOCTYPE Map>
 <Map bgcolor="steelblue" srs="+proj=latlong +datum=WGS84">
 
-<Style name="land">
+<Style name="land_style">
 <Rule>
 <PolygonSymbolizer>
 <CssParameter name="fill">rgb(244,238,203)</CssParameter>
@@ -22,13 +22,21 @@
 </Rule>
 </Style>
 
+<Style name="port_style">
+<Rule>
+    <TextSymbolizer name="Main_port_" face_name="DejaVu Sans Bold" size="8" 
+        fill="black" halo_fill= "#DFDBE3" halo_radius="1" 
+        wrap_width="12" spacing="4" allow_overlap="false" avoid_edges="false" 
+        min_distance="6"/>
+</Rule>
+</Style>
 
 <Layer name="land" srs="+proj=latlong +datum=WGS84" status="on">
-<StyleName>land</StyleName>
-<Datasource>
-    <Parameter name="type">shape</Parameter>
-    <Parameter name="file">MEDIA_ROOT/staticmap/data/socal_gshhs</Parameter>
-</Datasource>
+    <StyleName>land_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">MEDIA_ROOT/staticmap/data/socal_gshhs</Parameter>
+    </Datasource>
 </Layer>
 
 <Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
@@ -39,6 +47,15 @@
       DATABASE_CONNECTION
     </Datasource>
 </Layer>
+
+<Layer name="ports" srs="+proj=latlong +datum=WGS84" status="on">
+    <StyleName>port_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">MEDIA_ROOT/staticmap/data/wpi150</Parameter>
+    </Datasource>
+</Layer>
+
 
 
 </Map>
