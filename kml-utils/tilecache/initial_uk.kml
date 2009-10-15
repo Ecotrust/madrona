@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>test.kml</name>
+	<open>1</open>
+	<LookAt>
+		<longitude>-2.59</longitude>
+		<latitude>54.27</latitude>
+		<altitude>0</altitude>
+		<range>2100100</range>
+		<tilt>0</tilt>
+		<heading>0</heading>
+		<altitudeMode>relativeToGround</altitudeMode>
+		<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+	</LookAt>
+	<NetworkLink>
+		<name>west</name>
+		<Link>
+			<href>http://localhost:8080/1.0.0/habitat/0/0/0.kml</href>
+		</Link>
+	</NetworkLink>
+	<NetworkLink>
+		<name>east</name>
+		<Link>
+			<href>http://localhost:8080/1.0.0/habitat/0/1/0.kml</href>
+		</Link>
+	</NetworkLink>
+</Document>
+</kml>

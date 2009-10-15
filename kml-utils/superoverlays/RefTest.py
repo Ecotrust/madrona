@@ -3,7 +3,7 @@
 import mapnik
 from georeference import render_to_wld
 
-mapfile = 'Habitat.xml'
+mapfile = 'habitat.xml'
 
 m = mapnik.Map(20000,20000,'+proj=latlong +datum=WGS84')
 
