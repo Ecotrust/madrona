@@ -16,11 +16,11 @@
 <Style name="mpa_style">
 <Rule>
 <PolygonSymbolizer>
-<CssParameter name="fill">rgb(100,100,250)</CssParameter>
+<CssParameter name="fill">rgb(150,0,0)</CssParameter>
 </PolygonSymbolizer>
 <LineSymbolizer>
 <CssParameter name="stroke">rgb(255,255,0)</CssParameter>
-<CssParameter name="stroke-width">0.1</CssParameter>
+<CssParameter name="stroke-width">0.2</CssParameter>
 </LineSymbolizer>
 </Rule>
 </Style>
@@ -51,21 +51,21 @@
     </Datasource>
 </Layer>
 
-<Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
-    <StyleName>region_style</StyleName>
-    <Datasource>
-      <Parameter name="type">postgis</Parameter>
-      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
-      DATABASE_CONNECTION
-    </Datasource>
-</Layer>
-
 <Layer name="mpa" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
     <StyleName>mpa_style</StyleName>
     <Datasource>
       <Parameter name="type">postgis</Parameter>
       <Parameter name="geometry_field">geometry_final</Parameter>
-      <Parameter name="table">(select geometry_final, name from mm_mpa) as mpa</Parameter>
+      <Parameter name="table">(select geometry_final, name from MM_MPA) as mpa</Parameter>
+      DATABASE_CONNECTION
+    </Datasource>
+</Layer>
+
+<Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
+    <StyleName>region_style</StyleName>
+    <Datasource>
+      <Parameter name="type">postgis</Parameter>
+      <Parameter name="table">(select geometry, name from MM_STUDY_REGION) as region</Parameter>
       DATABASE_CONNECTION
     </Datasource>
 </Layer>
