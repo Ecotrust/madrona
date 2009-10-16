@@ -27,7 +27,7 @@ class Mpa(models.Model):
                                 after postprocessing.
         ======================  ==============================================
 """   
-    #user = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     name = models.TextField(verbose_name="MPA Name")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
