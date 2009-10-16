@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'lingcod.simplefaq',
     'lingcod.staticmap',
     'lingcod.manipulators',
+    'lingcod.mpa',
     'lingcod.wave',
     'simple.simple_app',
 )
