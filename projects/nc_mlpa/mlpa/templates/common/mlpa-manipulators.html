@@ -19,7 +19,8 @@
     <!--rather than load everything from js_includes.xml, we just load the following-->
     <script src="/media/common/js/lingcod.js"></script>
     <script src="/media/common/js/tools/draw_tool.js"></script>
-    <script src="/media/mpa/js/manipulator.js"></script>
+    <script src="/media/mpa/js/manipulators.js"></script>
+    <script src="/media/mpa/js/mpa_creator.js"></script>
     <script src="/media/common/js/jquery/jquery-callback-1.2.js"></script>
 
     <script type="text/javascript">
@@ -34,6 +35,7 @@
     var ge_range = 400000;
     var ge_tile = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
+    var manip_list = '';
     var manip_url = '/manipulators/list/mlpa/mlpampa/';
         
     $(document).ready(function() {
@@ -41,24 +43,26 @@
         $.getJSON( manip_url, init );
     });    
     
-    function init(manip_list) {
-        $("#create_button").removeAttr('disabled');
+    function init(manipulators) {
+        //$("#create_button").removeAttr('disabled');
+        //$("#edit_button").attr('disabled', 'disabled');
+        //$("#finish_edit").attr('disabled', 'disabled');
+        manip_list = manipulators;
         google.earth.createInstance("map3d", initCallback, failureCallback);
-        drawTool = new lingcod.drawTool();
-        mlpa_manipulator = new lingcod.Manipulator(renderManipulatorResults, manip_list, drawTool);
-        //$("#create_button").click($.delegate(mlpa_manipulator.drawAndProcess, mlpa_manipulator));
-        $("#create_button").click(beginManipulators);
+        buttons = { create: 'create_button', edit: 'edit_button', finish: 'finish_edit' };
+        //panels = { button_panel: 'button_panel', template_panel: 'template_panel' };
+        mpaCreator = new lingcod.MpaCreator(renderManipulatorResults, manip_list, buttons);
+        //$("#create_button").click(drawShapeAndProcessManipulators); 
+        //$("#create_button").click($.delegate(mpaCreator.drawAndProcess, mpaCreator)); 
     }
-    
-    //can't figure out how to call this function from init rather than call delegate directly on click as above
-    function beginManipulators() {
-        mlpa_manipulator.drawAndProcess();
+    /*
+    function drawShapeAndProcessManipulators() {
+        mpaCreator.drawAndProcess();
     }
-    
+    */
     //called from init()
     //set up the google earth areal view, add the study region, create a lingcod.drawTool instance 
     function initCallback(pluginInstance) {
-    
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
         
@@ -69,8 +73,6 @@
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
- 
-        //at this point the application waits for the user to click the 'Create an Mpa' button
     }
 
     function failureCallback(errorCode) {
@@ -82,35 +84,63 @@
     //the function extracts and displays the 'html' template data, 
     //and 'clipped_shape' is displayed on the map
     function renderManipulatorResults(manip_data) {
-        $("#create_button").attr('disabled', 'disabled');
+        //disableButton("create_button");
+        //CONTINUE TO SHIFT MUCH OF THIS CODE OVER TO create_mpa.js
         ret_obj = eval( '(' + manip_data + ')' );
-        document.getElementById("template_space").innerHTML=ret_obj.html;
+        document.getElementById("template_panel").innerHTML=ret_obj.html;
         lastMpa = gex.util.displayKmlString(ret_obj.clipped_shape);
-        drawTool.clear();
+        mpaCreator.hide();
+        enableButton("edit_button");
+        $("#edit_button").click(editShape);
     }
     
-    //should the rejectMpa and tryAgain be moved to manipulator.js?
+    function editShape() {
+        document.getElementById("template_panel").innerHTML="";
+        gex.dom.removeObject(lastMpa);
+        mpaCreator.editShape();
+        enableButton("finish_edit");
+        disableButton("edit_button");
+        $("#finish_edit").click(finishEdit);
+    }
+    
+    function finishEdit() {
+        disableButton("finish_edit");
+        mpaCreator.endEdit(mpaCreator.processManipulators);
+    }
     
     //called from the Reject button
     function rejectMpa() {
         gex.dom.removeObject(lastMpa);
-        document.getElementById("template_space").innerHTML=""
-        $("#create_button").removeAttr('disabled');
+        document.getElementById("template_panel").innerHTML="";
+        enableButton("create_button");
+        disableButton("edit_button");
     }
     
     //called from the Try Again button
     function tryAgain() {
-        drawTool.clear();
-        document.getElementById("template_space").innerHTML="";
-        $("#create_button").removeAttr('disabled');
+        mpaCreator.clear();
+        document.getElementById("template_panel").innerHTML="";
+        enableButton("create_button");
+        disableButton("edit_button");
+    }
+    
+    function disableButton(button) {
+        $('#'+button).attr('disabled', 'disabled');
+    }
+    
+    function enableButton(button) {
+        $('#'+button).removeAttr('disabled');
     }
         
     </script>
 </head>
 <body> 
     <p><strong>MLPA Manipulator Test</strong></p>
-    <p><div id="create_space"><button id="create_button">Create an Mpa</button></div></p>
-    <p><div id="template_space" style="overflow: auto; width: 500px; height: 100px; border: 1px solid silver;"></div></p>
+    <p><div id="button_panel">  <button id="create_button">Create an Mpa</button>
+                                <button id="edit_button">Edit Mpa</button>
+                                <button id="finish_edit">Finish Edit</button>
+    </div></p>
+    <p><div id="template_panel" style="overflow: auto; width: 500px; height: 100px; border: 1px solid silver;"></div></p>
     <div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;"></div>
 </body>
 </html>

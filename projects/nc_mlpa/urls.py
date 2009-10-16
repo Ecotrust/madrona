@@ -18,7 +18,6 @@ urlpatterns = patterns('',
     (r'^manipulators/', include('lingcod.manipulators.urls')),
     (r'^mlpa/', include('mlpa.urls')),
 
-    
     #accessing manipulators app
     (r'^manipulators/', include('lingcod.manipulators.urls')),
     
