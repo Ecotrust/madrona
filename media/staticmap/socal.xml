@@ -65,7 +65,7 @@
     <StyleName>region_style</StyleName>
     <Datasource>
       <Parameter name="type">postgis</Parameter>
-      <Parameter name="table">(select geometry, name from MM_STUDY_REGION) as region</Parameter>
+      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
       DATABASE_CONNECTION
     </Datasource>
 </Layer>

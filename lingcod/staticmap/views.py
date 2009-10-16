@@ -3,13 +3,13 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
 from lingcod.common import mimetypes
+
 import settings
 
 from lingcod.staticmap.models import *
 
 def show(request, map_name):
-    """Display a map with the study region geometry.
-    """
+    """Display a map with the study region geometry.  """
     maps = get_object_or_404(MapConfig,mapname=map_name)
     mapfile = str(maps.mapfile.path)
      
@@ -32,6 +32,10 @@ def show(request, map_name):
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
+
+    # Replace table names for mpas and mpaarrays
+    xmltext = xmltext.replace("MM_MPA", "simple_app_mpa") #getMpaTablename())
+    #xmltext = xmltext.replace("MM_ARRAY", getMpaArrayTablename())
 
     conn = connection.settings_dict
     connection_string = ""
