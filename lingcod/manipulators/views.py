@@ -81,40 +81,39 @@ def multi_generic_manipulator_view(request, manipulators):
                 html_response = html_response + '<br/>' + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
-            return do_template_and_respond('3', e.message, None, None)
+            return respond_with_error('3', e.message, None, None)
         except manipClass.InternalException, e:
-            return do_template_and_respond('9', e.message, None, None)
+            return respond_with_error('9', e.message, None, None)
         except manipClass.HaltManipulations, e:
-            return respond_with_template(e.html, e.message, None, None)
+            return respond_with_template(e.html, e.message, None, None, e.success)
         except Exception, e:
-            return do_template_and_respond('11', e.message, None, None)      
+            return respond_with_error('11', e.message, None, None)      
     #end manipulator for loop      
-                        
-    #add buttons for accept-reject
-    html_response = html_response + render_to_string("manipulators/accept_reject_buttons.html", {'MEDIA_URL':settings.MEDIA_URL})
-                        
+                                           
     # manipulators ran fine and the resulting shape is ready for outbound processing
     new_shape.transform(settings.GEOMETRY_DB_SRID)
     #we should probably move this static value 20 to a settings variable
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
-                        
-    return HttpResponse( simplejson.dumps({"message": result["message"], "html": html_response, "clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml)}), content_type='text/plain')
-
-def respond_with_template(status_html, message, clipped, original):
-    status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html}))
     
-def do_template_and_respond(key, message, clipped, original):
+    return respond_with_template(html_response, result["message"], kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"])
+    #return HttpResponse( simplejson.dumps({"clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml), "html": html_response, "message": result["message"], "success": result["success"]}))
+
+def respond_with_template(status_html, message, clipped, original, success="1"):
+    #status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
+    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
+    
+def respond_with_error(key, message, clipped, original, success="0"):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL})
-    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html}))
+    #status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL})
+    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
     
 def ensure_keys(values):
     values.setdefault("message", "no message given")
     values.setdefault("html", "")
     values.setdefault("clipped_shape", None)
     values.setdefault("original_shape", None)
+    values.setdefault("success", "1")
     return values
  
     
@@ -144,6 +143,4 @@ def testView( request ):
     response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion,ClipToGraticule' )
     #response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion' )
     return response
-    
-    
     

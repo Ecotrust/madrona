@@ -1,5 +1,6 @@
-<!--if we would rather extend from common/base.html than be sure and add the following two lines:
-    <file path="mpa/js/manipulator.js" />
+<!--if we would rather extend from common/base.html than be sure and add the following lines:
+    <file path="mpa/js/manipulators.js" />
+    <file path="mpa/js/mpa_creator.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
     to media/js_includes.xml, so that load compressed in base.html will find those files (after a dev-server reload)
     -->
@@ -30,7 +31,6 @@
     var measureTool = null;
 
     var gex = null;
-    var lastMpa = null;
     var ge_lookAt = [33.5, -118];
     var ge_range = 400000;
     var ge_tile = 20;
@@ -42,105 +42,55 @@
         $.ajaxSetup({ cache: false });
         $.getJSON( manip_url, init );
     });    
-    
+     
+    /**
+     * Called at load time.
+     * Creates google earth instance and MpaCreator instance.
+     * Starts mpa creation process.
+     * @param {List} manipulators, list of manipulations to be performed on the target shape (returned from manip_url request)
+     */
     function init(manipulators) {
-        //$("#create_button").removeAttr('disabled');
-        //$("#edit_button").attr('disabled', 'disabled');
-        //$("#finish_edit").attr('disabled', 'disabled');
         manip_list = manipulators;
         google.earth.createInstance("map3d", initCallback, failureCallback);
-        buttons = { create: 'create_button', edit: 'edit_button', finish: 'finish_edit' };
-        //panels = { button_panel: 'button_panel', template_panel: 'template_panel' };
-        mpaCreator = new lingcod.MpaCreator(renderManipulatorResults, manip_list, buttons);
-        //$("#create_button").click(drawShapeAndProcessManipulators); 
-        //$("#create_button").click($.delegate(mpaCreator.drawAndProcess, mpaCreator)); 
+        panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
+        mpaCreator = new lingcod.MpaCreator(manip_list, panels);
+        mpaCreator.startMpaCreation();
     }
-    /*
-    function drawShapeAndProcessManipulators() {
-        mpaCreator.drawAndProcess();
-    }
-    */
-    //called from init()
-    //set up the google earth areal view, add the study region, create a lingcod.drawTool instance 
+        
+    /**
+     * Called from within init() upon success of google.earth.createInstance
+     * Sets up the google earth areal view and adds the study region to the map.
+     * @param {Google Earth Instance} pluginInstance, returned from google.earth.createInstance
+     */
     function initCallback(pluginInstance) {
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
         
         gex = new GEarthExtensions(pluginInstance);
         gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tile });    
-        gex.util.displayKml( ge_studyregion_display );
+        //gex.util.displayKml( ge_studyregion_display );
         
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
     }
-
+    
+    /**
+     * Called upon google earth instance creation failure (from init())
+     * @param {String} errorCode, error code returned from google.earth.createInstance
+     */
     function failureCallback(errorCode) {
         alert("Failure loading the Google Earth Plugin: " + errorCode);
-    }
-        
-    //renderManipulatorResults is called from lingcod.manipulators.processManipulators() in manipulator.js
-    //manip_data is given the json wrapped return value from the manipulators
-    //the function extracts and displays the 'html' template data, 
-    //and 'clipped_shape' is displayed on the map
-    function renderManipulatorResults(manip_data) {
-        //disableButton("create_button");
-        //CONTINUE TO SHIFT MUCH OF THIS CODE OVER TO create_mpa.js
-        ret_obj = eval( '(' + manip_data + ')' );
-        document.getElementById("template_panel").innerHTML=ret_obj.html;
-        lastMpa = gex.util.displayKmlString(ret_obj.clipped_shape);
-        mpaCreator.hide();
-        enableButton("edit_button");
-        $("#edit_button").click(editShape);
-    }
-    
-    function editShape() {
-        document.getElementById("template_panel").innerHTML="";
-        gex.dom.removeObject(lastMpa);
-        mpaCreator.editShape();
-        enableButton("finish_edit");
-        disableButton("edit_button");
-        $("#finish_edit").click(finishEdit);
-    }
-    
-    function finishEdit() {
-        disableButton("finish_edit");
-        mpaCreator.endEdit(mpaCreator.processManipulators);
-    }
-    
-    //called from the Reject button
-    function rejectMpa() {
-        gex.dom.removeObject(lastMpa);
-        document.getElementById("template_panel").innerHTML="";
-        enableButton("create_button");
-        disableButton("edit_button");
-    }
-    
-    //called from the Try Again button
-    function tryAgain() {
-        mpaCreator.clear();
-        document.getElementById("template_panel").innerHTML="";
-        enableButton("create_button");
-        disableButton("edit_button");
-    }
-    
-    function disableButton(button) {
-        $('#'+button).attr('disabled', 'disabled');
-    }
-    
-    function enableButton(button) {
-        $('#'+button).removeAttr('disabled');
     }
         
     </script>
 </head>
 <body> 
     <p><strong>MLPA Manipulator Test</strong></p>
-    <p><div id="button_panel">  <button id="create_button">Create an Mpa</button>
-                                <button id="edit_button">Edit Mpa</button>
-                                <button id="finish_edit">Finish Edit</button>
-    </div></p>
-    <p><div id="template_panel" style="overflow: auto; width: 500px; height: 100px; border: 1px solid silver;"></div></p>
+    <!-- results_panel is used to display the templates returned from the manipulators -->   
+    <p><div id="results_panel" style="overflow: auto; width: 500px; height: 200px; border: 1px solid silver;"></div></p>
+    <!-- button_panel is used to display buttons such as Create Mpa, Edit Mpa, and Finish Editing -->
+    <p><div id="button_panel">  </div></p>
     <div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;"></div>
 </body>
 </html>

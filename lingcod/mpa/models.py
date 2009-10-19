@@ -36,6 +36,9 @@ class Mpa(models.Model):
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True, verbose_name="Final MPA boundary")   
     objects = models.GeoManager()
     
+    class Options:
+        manipulators = [ ClipToStudyRegionManipulator ]
+        
     class Meta:
         abstract=True
         

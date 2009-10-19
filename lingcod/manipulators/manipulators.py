@@ -83,9 +83,10 @@ class BaseManipulator(object):
             return repr(self.message)   
     
     class HaltManipulations(Exception):
-        def __init__(self, message="", status_html=""):
+        def __init__(self, message="", status_html="", success="0"):
             self.message = message
             self.html = status_html
+            self.success = success
         def __str__(self):
             return repr(self.message)
        

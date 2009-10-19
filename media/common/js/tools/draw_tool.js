@@ -13,7 +13,7 @@ lingcod.DrawTool = function() {
 lingcod.DrawTool.prototype.drawShape = function( finishedCallback ) 
 {
     var self = this; //is this needed?
-    this.clear();
+    this.clearShape();
     
     this.targetShape = gex.dom.addPlacemark({
         visibility: true,
@@ -33,7 +33,7 @@ lingcod.DrawTool.prototype.drawShape = function( finishedCallback )
 };
 
 /**
- * Wraps the user-drawn coordinates in a wkt type geometry
+ * Wraps the targetShape coordinates in a wkt polygon type geometry
  */
 lingcod.DrawTool.prototype.polyToWkt = function() {
     var linearRing = this.targetShape.getGeometry().getOuterBoundary();
@@ -52,7 +52,7 @@ lingcod.DrawTool.prototype.polyToWkt = function() {
 /**
  * Starts accepting user input for editing.
  */
-lingcod.DrawTool.prototype.editShape = function( )
+lingcod.DrawTool.prototype.editShape = function()
 {
     this.targetShape.setVisibility(true);
     gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
@@ -71,9 +71,9 @@ lingcod.DrawTool.prototype.endEdit = function( finishedCallback )
 }
 
 /**
- * Remove the shape that was being drawn
+ * Remove the shape that was being drawn.
  */
-lingcod.DrawTool.prototype.clear = function() 
+lingcod.DrawTool.prototype.clearShape = function() 
 { 
     if ( this.targetShape )
     {
@@ -84,9 +84,9 @@ lingcod.DrawTool.prototype.clear = function()
 };
 
 /**
- * Hide the shape that was being drawn
+ * Hide the shape that was being drawn.
  */
-lingcod.DrawTool.prototype.hide = function() 
+lingcod.DrawTool.prototype.hideShape = function() 
 { 
     if ( this.targetShape )
     {

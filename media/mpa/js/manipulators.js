@@ -11,6 +11,7 @@ lingcod.Manipulators = function(renderCallBack, manip_list) {
       
 /**
  * Posts a request to /manipulators/<manipulator-list> with the user-drawn coordinates.
+ * @param {WKT Geometry} target_wkt is the geometry to be manipulated
  */
 lingcod.Manipulators.prototype.process = function(target_wkt) { 
     $.post(
@@ -22,6 +23,7 @@ lingcod.Manipulators.prototype.process = function(target_wkt) {
 
 /**
  * Creates a comma separated string from a list object.
+ * @param {List} 
  */
 lingcod.Manipulators.prototype.stringFromList = function(list) {
     string_result = '';
