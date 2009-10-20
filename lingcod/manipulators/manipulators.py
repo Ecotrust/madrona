@@ -1,5 +1,4 @@
 from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing
-from django.contrib.gis.geos.error import GEOSException
 from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
@@ -71,14 +70,26 @@ class BaseManipulator(object):
         }
     
     class InternalException(Exception):
-        def __init__(self, message=""):
+        def __init__(self, message="", status_html=None, success="0"):
             self.message = message
+            if status_html == None:
+                self.template = BaseManipulator.do_template(BaseManipulator(), '9', message)
+                self.html = self.template
+            else:
+                self.html = status_html
+            self.success = success
         def __str__(self):
             return repr(self.message)
     
     class InvalidGeometryException(Exception):
-        def __init__(self, message=""):
+        def __init__(self, message="", status_html=None, success="0"):
             self.message = message
+            if status_html == None:
+                self.template = BaseManipulator.do_template(BaseManipulator(), '3', message)
+                self.html = self.template
+            else:
+                self.html = status_html
+            self.success = success
         def __str__(self):
             return repr(self.message)   
     
@@ -95,6 +106,8 @@ class ClipToShapeManipulator(BaseManipulator):
         required arguments:
             target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
             clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
             a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
@@ -114,7 +127,7 @@ class ClipToShapeManipulator(BaseManipulator):
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
  
-    def __init__(self, target_shape, clip_against=None):
+    def __init__(self, target_shape, clip_against=None, **kwargs):
         self.target_shape = target_shape
         self.clip_against = clip_against
     
@@ -188,6 +201,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         optional argument:
             generally USED FOR TESTING ONLY
             study_region: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
             a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
@@ -207,7 +222,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         html_templates==0   if target_shape is successfully clipped to Study Region
     '''  
      
-    def __init__(self, target_shape, study_region=None):
+    def __init__(self, target_shape, study_region=None, **kwargs):
         self.target_shape = target_shape
         self.study_region = study_region
         
@@ -270,6 +285,8 @@ class ClipToGraticuleManipulator(BaseManipulator):
             target_shape:  GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
         optional arguments:
             north, south, east, west:  expressed in srid GEOMETRY_CLIENT_SRID (4326) 
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
             a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
@@ -289,7 +306,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
         html_templates==0   if target_shape is successfully clipped to the requested graticule(s)
     '''
 
-    def __init__(self, target_shape, north=None, south=None, east=None, west=None):
+    def __init__(self, target_shape, north=None, south=None, east=None, west=None, **kwargs):
         self.target_shape = target_shape
         self.north = north
         self.south = south

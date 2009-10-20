@@ -18,8 +18,8 @@ from django.utils import simplejson
 #from cjson import encode as json_encode
  
 def mpaManipulatorList(request, app_name, model_name):
-    """Handler for AJAX mpa manipulators request
-    """
+    '''Handler for AJAX mpa manipulators request
+    '''
     try:
         model = ContentType.objects.get(app_label=app_name, model=model_name)
         manipulators = model.model_class().Options.manipulators        
@@ -81,13 +81,13 @@ def multi_generic_manipulator_view(request, manipulators):
                 html_response = html_response + '<br/>' + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
-            return respond_with_error('3', e.message, None, None)
+            return respond_with_template(e.html, None, None, e.success)
         except manipClass.InternalException, e:
-            return respond_with_error('9', e.message, None, None)
+            return respond_with_template(e.html, None, None, e.success)
         except manipClass.HaltManipulations, e:
-            return respond_with_template(e.html, e.message, None, None, e.success)
+            return respond_with_template(e.html, None, None, e.success)
         except Exception, e:
-            return respond_with_error('11', e.message, None, None)      
+            return respond_with_error('11', e.message)      
     #end manipulator for loop      
                                            
     # manipulators ran fine and the resulting shape is ready for outbound processing
@@ -96,16 +96,14 @@ def multi_generic_manipulator_view(request, manipulators):
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
     
-    return respond_with_template(html_response, result["message"], kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"])
-    #return HttpResponse( simplejson.dumps({"clipped_shape": kmlDocWrap(new_shape.kml), "original_shape": kmlDocWrap(result["original_shape"].kml), "html": html_response, "message": result["message"], "success": result["success"]}))
-
-def respond_with_template(status_html, message, clipped, original, success="1"):
-    #status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
+    return respond_with_template(html_response, kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"])
+    
+    
+def respond_with_template(status_html, clipped, original, success="1"):
     return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
     
-def respond_with_error(key, message, clipped, original, success="0"):
+def respond_with_error(key='11', message='', clipped=None, original=None, success="0"):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    #status_html = status_html + render_to_string("manipulators/try_again_button.html", {'MEDIA_URL':settings.MEDIA_URL})
     return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
     
 def ensure_keys(values):
@@ -139,7 +137,7 @@ def testView( request ):
     
     new_req = HttpRequest()
     new_req.method = 'POST'
-    new_req.POST.update({'target_shape':target_shape.wkt, "n":"40", "s":"20", "e":"-117", "w":"-118"})
+    new_req.POST.update({'target_shape':target_shape.wkt, "north":"40", "south":"20", "east":"-117", "west":"-118"})
     response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion,ClipToGraticule' )
     #response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion' )
     return response

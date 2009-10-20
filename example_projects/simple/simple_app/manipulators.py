@@ -10,6 +10,8 @@ class EastWestManipulator(BaseManipulator):
     ''' 
         required arguments:
             target_shape, a GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
             a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
             All of the returned shape geometries should be in srid GEOMETRY_CLIENT_SRID (4326 for Google Earth) 
@@ -17,7 +19,7 @@ class EastWestManipulator(BaseManipulator):
             otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
     '''
 
-    def __init__(self, target_shape):
+    def __init__(self, target_shape, **kwargs):
         self.target_shape = target_shape
     
     def build_geometries(self):

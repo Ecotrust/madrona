@@ -11,6 +11,8 @@ class ClipToEstuariesManipulator(BaseManipulator):
         optional arguments:
             generally USED FOR TESTING PURPOSES ONLY
             estuaries, a GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326) 
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
             a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
             all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
@@ -35,7 +37,7 @@ class ClipToEstuariesManipulator(BaseManipulator):
         in this case, clipped_shape will be returned as target_shape
     '''
 
-    def __init__(self, target_shape, estuaries=None):
+    def __init__(self, target_shape, estuaries=None, **kwargs):
         self.target_shape = target_shape
         self.estuaries = estuaries
         

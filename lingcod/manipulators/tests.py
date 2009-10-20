@@ -62,7 +62,6 @@ class ManipulatorsTest(TestCase):
         '''
             test views.generic_manipulator_view
         '''
-        
         trans_geom = StudyRegion.objects.current().geometry
         trans_geom.transform(settings.GEOMETRY_CLIENT_SRID)
         
@@ -194,7 +193,7 @@ class ManipulatorsTest(TestCase):
                 missing kwargs
         '''
         #clip to graticule test
-        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'e': .5, 'w': -.5})
+        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'east': .5, 'west': -.5})
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, east=.5, west=-.5)
         result = graticule_clipper.manipulate()
@@ -204,7 +203,7 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #another clip to graticule test
-        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'n': .5, 's': -.5})
+        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'north': .5, 'south': -.5})
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, north=.5, south=-.5)
         result = graticule_clipper.manipulate()
@@ -214,7 +213,7 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #another clip to graticule test
-        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'w': 0})
+        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'west': 0})
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=0)
         result = graticule_clipper.manipulate()
@@ -224,7 +223,7 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #test with bad graticule values
-        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'w': 3})
+        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'west': 3})
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=3)
         result = graticule_clipper.manipulate()
@@ -252,7 +251,7 @@ class ManipulatorsTest(TestCase):
             pass
         
         #missing kwargs
-        response6 = self.client.post('/manipulators/ClipToGraticule/', {'e': 3, 'w': -3})
+        response6 = self.client.post('/manipulators/ClipToGraticule/', {'east': 3, 'west': -3})
         self.assertEquals(response6.status_code, 200)
         try:
             graticule_clipper = ClipToGraticuleManipulator(east=3, west=-3)
