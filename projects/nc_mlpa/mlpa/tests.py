@@ -105,6 +105,7 @@ class MlpaValidateTest(TestCase):
         self.clipToGraticuleTest()
         self.clipToStudyRegionTest()
         self.clipToEstuariesTest()
+        self.multipleManipulatorTest()
         self.clipToNCMLPATest()
         
         
@@ -115,7 +116,7 @@ class MlpaValidateTest(TestCase):
                 clip to graticule
         '''
         #clip to graticule test
-        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'w': .5, 'e': -.5})
+        response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'west': .5, 'east': -.5})
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=.5, east=-.5)
         result = graticule_clipper.manipulate()
@@ -219,6 +220,21 @@ class MlpaValidateTest(TestCase):
         except TypeError:
             pass
         
+    #Multiple Manipulators testing 
+    def multipleManipulatorTest(self):
+        '''
+            Tests the following:
+                clip to study region and clip to estuaries manipulations
+                clip to study region and clip to graticules manipulations
+                
+        '''
+        #clip to study region and estuaries test
+        response1 = self.client.post('/manipulators/ClipToStudyRegion,ClipToEstuaries/', {'target_shape': self.code1_poly.wkt})
+        self.assertEquals(response1.status_code, 200)
+        #clip to study region and clip to graticules test
+        response1 = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'east': .5})
+        self.assertEquals(response1.status_code, 200)
+    
     
     #Tests mpa geometries appropriate for the nc_mlpa study region 
     def clipToNCMLPATest(self):

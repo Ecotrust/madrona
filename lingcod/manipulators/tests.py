@@ -57,6 +57,7 @@ class ManipulatorsTest(TestCase):
         self.clipToShapeTest()
         self.clipToStudyRegionTest()
         self.clipToGraticuleTest()
+        self.multipleManipulatorTest()
         
     def manipulatorViewTest(self):
         '''
@@ -80,15 +81,24 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(response.status_code, 200)
         
         # test graticules
-        response = self.client.post('/manipulators/ClipToGraticule/', {'target_shape':target_shape.wkt, "n":"40", "s":"30", "e":"-118", "w":"-119"})
+        response = self.client.post('/manipulators/ClipToGraticule/', {'target_shape':target_shape.wkt, "north":"40", "south":"30", "east":"-118", "west":"-119"})
         self.assertEquals(response.status_code, 200)
-        
+        import pdb
+        pdb.set_trace()
         # test non-trivial multi manipulator case
-        response = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape':target_shape.wkt, "n":"40", "s":"30", "e":"-118", "w":"-119"}) 
+        response = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape':target_shape.wkt, "north":"40", "south":"30", "east":"-118", "west":"-119"}) 
         self.assertEquals(response.status_code, 200)
         
         # test reversed order of manipulators
-        response = self.client.post('/manipulators/ClipToGraticule,ClipToStudyRegion/', {'target_shape':target_shape.wkt, "n":"40", "s":"30", "e":"-118", "w":"-119"}) 
+        response = self.client.post('/manipulators/ClipToGraticule,ClipToStudyRegion/', {'target_shape':target_shape.wkt, "north":"40", "south":"30", "east":"-118", "west":"-119"}) 
+        self.assertEquals(response.status_code, 200)
+        
+        # test clip to study region and to shape 
+        response = self.client.post('/manipulators/ClipToStudyRegion,ClipToShape/', {'target_shape': self.code1_poly.wkt, 'clip_against': self.study_region.wkt})
+        self.assertEquals(response.status_code, 200)
+        
+        # test clip to shape and to study region
+        response = self.client.post('/manipulators/ClipToShape,ClipToStudyRegion/', {'target_shape': self.code1_poly.wkt, 'clip_against': self.study_region.wkt})
         self.assertEquals(response.status_code, 200)
         
     def clipToShapeTest(self):
@@ -257,3 +267,19 @@ class ManipulatorsTest(TestCase):
             graticule_clipper = ClipToGraticuleManipulator(east=3, west=-3)
         except TypeError:
             pass
+            
+    #Multiple Manipulators testing 
+    def multipleManipulatorTest(self):
+        '''
+            Tests the following:
+                clip to study region and clip to estuaries manipulations
+                clip to study region and clip to graticules manipulations
+                
+        '''
+        #clip to study region and to shape test
+        response1 = self.client.post('/manipulators/ClipToStudyRegion,ClipToShape/', {'target_shape': self.code1_poly.wkt, 'clip_against': self.study_region.wkt})
+        self.assertEquals(response1.status_code, 200)
+        #clip to study region and clip to graticules test
+        response1 = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'east': .5})
+        self.assertEquals(response1.status_code, 200)
+    
