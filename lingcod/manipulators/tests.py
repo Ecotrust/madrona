@@ -83,8 +83,6 @@ class ManipulatorsTest(TestCase):
         # test graticules
         response = self.client.post('/manipulators/ClipToGraticule/', {'target_shape':target_shape.wkt, "north":"40", "south":"30", "east":"-118", "west":"-119"})
         self.assertEquals(response.status_code, 200)
-        import pdb
-        pdb.set_trace()
         # test non-trivial multi manipulator case
         response = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape':target_shape.wkt, "north":"40", "south":"30", "east":"-118", "west":"-119"}) 
         self.assertEquals(response.status_code, 200)
