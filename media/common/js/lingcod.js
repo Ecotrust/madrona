@@ -25,7 +25,7 @@ var lingcod = {
         this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
-        this.drawTool = new lingcod.drawTool();
+        this.drawTool = new lingcod.DrawTool();
         var self = this;
         $('#measure_distance').click(function(){
             self.measureTool.clear();
