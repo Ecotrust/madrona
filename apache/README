@@ -1,0 +1,8 @@
+To deploy a project under mod_wsgi, you need a script to act as the wsgi handler and some apache directives
+
+Create a copy of these files in the project's src tree and modify 
+* the project_wsgi.py script to point to the proper paths
+* the project_apache.conf file paths
+
+Include the project's apache .conf in httpd.conf (or symlink to sites-available directory and a2enable it)
+

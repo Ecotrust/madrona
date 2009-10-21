@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+import sys
+import os
+
+sys.stdout = sys.stderr
+
+# If django is not already in python site-directories
+sys.path.append('/path/to/src/django')
+
+# Project specific 
+sys.path.append('/path/to/src/marinemap/example_projects/simple')
+#sys.path.append('/path/to/src/marinemap')
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
+import django.core.handlers.wsgi
+
+application = django.core.handlers.wsgi.WSGIHandler()
