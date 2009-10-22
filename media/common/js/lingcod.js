@@ -25,7 +25,7 @@ var lingcod = {
         this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
-        this.drawTool = new lingcod.DrawTool();
+        this.drawTool = new lingcod.DrawTool(gex);
         var self = this;
         $('#measure_distance').click(function(){
             self.measureTool.clear();
@@ -47,7 +47,7 @@ var lingcod = {
         $('#mpa_draw').click(function(){
             document.getElementById("mpa_draw_results").innerHTML = '';
             self.drawTool.clear();
-            self.drawTool.drawShape( gex, lingcod.drawMpaComplete ); 
+            self.drawTool.drawShape( lingcod.drawMpaComplete ); 
         });
         $('#mpa_clear').click(function(){
             document.getElementById("mpa_draw_results").innerHTML = '';

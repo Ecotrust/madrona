@@ -2,8 +2,9 @@
  * Creates a new draw tool.
  * @constructor
  */
-lingcod.DrawTool = function() {
+lingcod.DrawTool = function(gex) {
     this.targetShape = null;
+    this.gex = gex;
 };
 
 /**
@@ -13,9 +14,9 @@ lingcod.DrawTool = function() {
 lingcod.DrawTool.prototype.drawShape = function( finishedCallback ) 
 {
     var self = this; //is this needed?
-    this.clearShape();
+    this.clear();
     
-    this.targetShape = gex.dom.addPlacemark({
+    this.targetShape = this.gex.dom.addPlacemark({
         visibility: true,
         polygon: [],
         style: {
@@ -29,7 +30,7 @@ lingcod.DrawTool.prototype.drawShape = function( finishedCallback )
         finishCallback: finishedCallback
     };
 
-    gex.edit.drawLineString( this.targetShape.getGeometry().getOuterBoundary(), drawLineStringOptions );
+    this.gex.edit.drawLineString( this.targetShape.getGeometry().getOuterBoundary(), drawLineStringOptions );
 };
 
 /**
@@ -55,7 +56,7 @@ lingcod.DrawTool.prototype.polyToWkt = function() {
 lingcod.DrawTool.prototype.editShape = function()
 {
     this.targetShape.setVisibility(true);
-    gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
+    this.gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
 }
 
 /**
@@ -64,7 +65,7 @@ lingcod.DrawTool.prototype.editShape = function()
  */
 lingcod.DrawTool.prototype.endEdit = function( finishedCallback )
 {
-    gex.edit.endEditLineString(this.targetShape.getGeometry().getOuterBoundary());
+    this.gex.edit.endEditLineString(this.targetShape.getGeometry().getOuterBoundary());
     //finishedCallback.call(null, this.targetShape);
     finishedCallback.call();
     
@@ -73,12 +74,12 @@ lingcod.DrawTool.prototype.endEdit = function( finishedCallback )
 /**
  * Remove the shape that was being drawn.
  */
-lingcod.DrawTool.prototype.clearShape = function() 
+lingcod.DrawTool.prototype.clear = function() 
 { 
     if ( this.targetShape )
     {
-        gex.edit.endEditLineString( this.targetShape.getGeometry().getOuterBoundary() );
-        gex.dom.removeObject( this.targetShape );
+        this.gex.edit.endEditLineString( this.targetShape.getGeometry().getOuterBoundary() );
+        this.gex.dom.removeObject( this.targetShape );
         this.targetShape = null;
     }
 };
@@ -86,11 +87,11 @@ lingcod.DrawTool.prototype.clearShape = function()
 /**
  * Hide the shape that was being drawn.
  */
-lingcod.DrawTool.prototype.hideShape = function() 
+lingcod.DrawTool.prototype.hide = function() 
 { 
     if ( this.targetShape )
     {
-        gex.edit.endEditLineString( this.targetShape.getGeometry().getOuterBoundary() );
+        this.gex.edit.endEditLineString( this.targetShape.getGeometry().getOuterBoundary() );
         this.targetShape.setVisibility(false);
     }
 };
