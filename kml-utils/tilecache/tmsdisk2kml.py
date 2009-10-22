@@ -1,6 +1,8 @@
 #/usr/bin/env python
 """
 Reads a TMS disk cache and generates superoverlays
+TODO: Handle blank images 
+TODO: Make a proper module and better approach to configuration
 Author: perry@marinemap.org
 """
 
