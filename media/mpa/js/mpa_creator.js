@@ -11,8 +11,10 @@ var try_again_html = '<p><button id="try_again_button">Try Again</button></p>';
  * @param {List} manip_list, list of manipulators to be executed
  * @param {Dictionary} panels, the ids of the button panel and the results panel
  */
-lingcod.MpaCreator = function(manip_list, panels) {
-    this.drawTool = new lingcod.DrawTool();
+lingcod.MpaCreator = function( manip_list, panels) {
+    //we've put the gex back into draw_tool via the constructor (was needed to run lingcod.js)
+    //will need to re-examine this public gex at some point...
+    this.drawTool = new lingcod.DrawTool(gex);
     this.manipulators = new lingcod.Manipulators($.delegate(this.renderManipulatorResults, this), manip_list);
     
     this.button_panel = $('#'+panels.button_panel);
@@ -72,7 +74,7 @@ lingcod.MpaCreator.prototype.renderManipulatorResults = function(manip_data) {
  */
 lingcod.MpaCreator.prototype.displayResults = function(ret_html, clipped_shape, success) {
     if(success=='1') {
-        this.drawTool.hideShape();
+        this.drawTool.hide();
         this.lastMpa = gex.util.displayKmlString(clipped_shape);
         
         this.enableButton(this.edit_button);
@@ -135,7 +137,7 @@ lingcod.MpaCreator.prototype.rejectMpa = function() {
  * Removes the user-drawn shape from the map, clears the results panel, enables the Create an Mpa button.
  */
 lingcod.MpaCreator.prototype.tryAgain = function() {
-    this.drawTool.clearShape();
+    this.drawTool.clear();
     this.results_panel.html("");
     this.enableButton(this.create_button);
     this.disableButton(this.edit_button);
