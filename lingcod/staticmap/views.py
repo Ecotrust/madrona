@@ -8,7 +8,7 @@ import settings
 
 from lingcod.staticmap.models import *
 
-def show(request, map_name):
+def show(request, map_name='default'):
     """Display a map with the study region geometry.  """
     maps = get_object_or_404(MapConfig,mapname=map_name)
     mapfile = str(maps.mapfile.path)
@@ -29,12 +29,21 @@ def show(request, map_name):
     # Replace local settings-specific variables using keywords in mapnik mapfile
     # Uses ALL_CAPS keywords in the mapfile
     xmltext = open(mapfile).read()
+
+    # get a list of the MPA ids to display
+    # construct filter and replace the MPA_FILTER tag
+    try:
+        mpas = ['[id] = %d' % int(x) for x in str(request.REQUEST['mpas']).split(',')]
+        xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpas))
+    except:
+        xmltext = xmltext.replace("MPA_FILTER",'')
+
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
 
     # Replace table names for mpas and mpaarrays
-    xmltext = xmltext.replace("MM_MPA", "simple_app_mpa") #getMpaTablename())
+    xmltext = xmltext.replace("MM_MPA", "simple_app_mpa") #TODO getMpaTablename())
     #xmltext = xmltext.replace("MM_ARRAY", getMpaArrayTablename())
 
     conn = connection.settings_dict
@@ -52,7 +61,7 @@ def show(request, map_name):
 
     # Grab the bounding coordinates and set them if specified
     try:
-        x1, y1, x2, y2 = split(str(request.REQUEST['bbox']), ',')
+        x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
     except:
         # fall back on default image extent
         x1, y1 = maps.default_x1, maps.default_y1

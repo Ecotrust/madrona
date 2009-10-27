@@ -1,9 +1,7 @@
 from django.conf.urls.defaults import *
+from django.core.urlresolvers import reverse
 
-urlpatterns = patterns('',
-    (r'^$', 'django.views.generic.simple.redirect_to', {'url':'/staticmap/default'} ),
-)
-
-urlpatterns += patterns('lingcod.staticmap.views',
-    (r'^(?P<map_name>\w+)/$', 'show' )
+urlpatterns = patterns('lingcod.staticmap.views',
+    (r'^(?P<map_name>\w+)/$', 'show' ),
+    (r'^$', 'show' )
 )

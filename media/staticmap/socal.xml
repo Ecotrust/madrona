@@ -15,13 +15,14 @@
 
 <Style name="mpa_style">
 <Rule>
-<PolygonSymbolizer>
-<CssParameter name="fill">rgb(150,0,0)</CssParameter>
-</PolygonSymbolizer>
-<LineSymbolizer>
-<CssParameter name="stroke">rgb(255,255,0)</CssParameter>
-<CssParameter name="stroke-width">0.2</CssParameter>
-</LineSymbolizer>
+    <PolygonSymbolizer>
+        <CssParameter name="fill">rgb(150,0,0)</CssParameter>
+    </PolygonSymbolizer>
+    <LineSymbolizer>
+        <CssParameter name="stroke">rgb(255,255,0)</CssParameter>
+        <CssParameter name="stroke-width">0.2</CssParameter>
+    </LineSymbolizer>
+    <Filter> MPA_FILTER </Filter>
 </Rule>
 </Style>
 
@@ -56,7 +57,7 @@
     <Datasource>
       <Parameter name="type">postgis</Parameter>
       <Parameter name="geometry_field">geometry_final</Parameter>
-      <Parameter name="table">(select geometry_final, name from MM_MPA) as mpa</Parameter>
+      <Parameter name="table">(select id, geometry_final, name from MM_MPA) as mpa</Parameter>
       DATABASE_CONNECTION
     </Datasource>
 </Layer>
