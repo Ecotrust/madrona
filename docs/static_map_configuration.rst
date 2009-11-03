@@ -58,6 +58,12 @@ Note on spatial reference systems
 ----------------------------------
 The spatial reference system (SRS) of each layer should be explicitly defined using a `proj4 string <http://trac.osgeo.org/proj/wiki/GenParms>`_. Its important to note that this is the SRS of the original data source - it is not necessarily the SRS of the output map. If the SRS defined in the Map element differs from the Layer SRS, mapnik will reproject each Layer to the common SRS of the Map.
 
+Adding maps to the staticmap application
+*****************************************
+If you create a new mapnik xml map, you'll need to register it with your django project. First, login to the django admin site and navigate to Home › Staticmap › Map configs › Add map config. Here you will define the short n name of your new map, the initial map dimensions and the path to the xml file. 
+
+To access your new map, hit http://your.domain.com/staticmap/yourmapname
+
 Variable Substitution
 **********************
 While it is certainly possible to hardcode paths to MEDIA_ROOT and postgres database connections, this limits the portability of the code. By using KEYWORDS in the mapnik mapfile, these variables can be infered by the staticmap code depending on the current environment. Currently, staticmap supports the following KEYWORD substitutions::
