@@ -37,7 +37,7 @@
 
 <Style name="port_style">
 <Rule>
-    <TextSymbolizer name="Main_port_" face_name="DejaVu Sans Bold" size="8" 
+    <TextSymbolizer name="MAIN_PORT_" face_name="DejaVu Sans Bold" size="8" 
         fill="black" halo_fill= "#DFDBE3" halo_radius="1" 
         wrap_width="12" spacing="4" allow_overlap="false" avoid_edges="false" 
         min_distance="6"/>
@@ -75,7 +75,7 @@
     <StyleName>port_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">MEDIA_ROOT/staticmap/data/wpi150</Parameter>
+        <Parameter name="file">MEDIA_ROOT/staticmap/data/world_ports</Parameter>
     </Datasource>
 </Layer>
 

@@ -8,8 +8,9 @@ geom_handlers = ['original', 'exterior', 'exterior_simplify', 'convex', 'simplif
 
 opts = { 
         'name_field': 'AREA',
-        'area_threshold': 0.001, # In the original dataset units
-        'tolerance': 0.005 # ALWAYS in degrees
+        'area_threshold': 0.001, # In the original dataset units, only output 
+                                 # polygons larger than this area
+        'tolerance': 0.005 # Simplification tolerance in degrees
 }
 
 outdir = tempfile.mkdtemp()

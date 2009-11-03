@@ -23,6 +23,7 @@ MarineMap Decision Support Tool Documentation
    asset_packaging
    maintenance_mode
    postgis_django_tests
+   static_map_configuration
 
 API
 ***
