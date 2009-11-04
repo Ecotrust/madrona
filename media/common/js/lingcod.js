@@ -42,7 +42,7 @@ var lingcod = {
             self.measureTool.setUnits($(this).val());
         });
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-            .kmlForest('add', '/studyregion/kml/', {cachebust: true, callback: this.studyRegionLoaded})
+            .kmlForest('add', window.studyregion, {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         $('#mpa_draw').click(function(){
             document.getElementById("mpa_draw_results").innerHTML = '';

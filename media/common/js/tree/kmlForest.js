@@ -61,7 +61,7 @@
             // can be removed when the following ticket is resolved:
             // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
             if(!url.match('http')){
-                url = window.location + url;
+                url = window.location.protocol + "//" + window.location.host + "/" + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
             }
             if(options.cachebust){
@@ -72,7 +72,7 @@
                 if (!kmlObject) {
                     // show error
                     setTimeout(function() {
-                        alert('Error loading KML.');
+                        alert('Error loading KML - '+url);
                     },
                     0);
                     return;
