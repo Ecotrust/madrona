@@ -1,4 +1,4 @@
-WSGIScriptAlias /simple/ /path/to/src/marinemap/example_projects/simple/simple_wsgi.py
+WSGIScriptAlias /simple /path/to/src/marinemap/example_projects/simple/simple_wsgi.py
 WSGIDaemonProcess simple_marinemap user=username group=usergroup processes=10 threads=1
 WSGIProcessGroup simple_marinemap
 
