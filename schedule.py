@@ -74,7 +74,7 @@ for ticket in tickets:
                 fontcolor = 'black'
                 style= 'filled'
                     
-        if ticket['status'] == 'WontFix' or ticket['status'] == 'Fixed' or ticket['status'] == 'Done' or blocker['status'] == 'Duplicate' or blocker['status'] == 'Invalid':
+        if ticket['status'] == 'WontFix' or ticket['status'] == 'Fixed' or ticket['status'] == 'Done' or ticket['status'] == 'Duplicate' or ticket['status'] == 'Invalid':
             fillcolor = 'lightslategray'
             fontcolor = 'black'
         if ticket['status'] == 'Started':
