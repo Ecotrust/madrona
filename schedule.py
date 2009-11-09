@@ -65,7 +65,7 @@ for ticket in tickets:
             for blocker in ticket['blockedon']:
                 blocker = get_ticket(blocker)
                 if blocker:
-                    if blocker['status'] == 'WontFix' or blocker['status'] == 'Fixed' or blocker['status'] == 'Done':
+                    if blocker['status'] == 'WontFix' or blocker['status'] == 'Fixed' or blocker['status'] == 'Done' or blocker['status'] == 'Duplicate' or blocker['status'] == 'Invalid':
                         pass
                     else:
                         next_step = False
@@ -74,7 +74,7 @@ for ticket in tickets:
                 fontcolor = 'black'
                 style= 'filled'
                     
-        if ticket['status'] == 'WontFix' or ticket['status'] == 'Fixed' or ticket['status'] == 'Done':
+        if ticket['status'] == 'WontFix' or ticket['status'] == 'Fixed' or ticket['status'] == 'Done' or blocker['status'] == 'Duplicate' or blocker['status'] == 'Invalid':
             fillcolor = 'lightslategray'
             fontcolor = 'black'
         if ticket['status'] == 'Started':
