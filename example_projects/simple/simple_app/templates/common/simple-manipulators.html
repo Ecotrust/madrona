@@ -52,9 +52,6 @@
     function init(manipulators) {
         manip_list = manipulators;
         google.earth.createInstance("map3d", initCallback, failureCallback);
-        panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
-        mpaCreator = new lingcod.MpaCreator(manip_list, panels);
-        mpaCreator.startMpaCreation();
     }
         
     /**
@@ -73,6 +70,9 @@
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
+        panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
+        mpaCreator = new lingcod.MpaCreator(manip_list, panels);
+        mpaCreator.startMpaCreation();
     }
     
     /**
