@@ -14,7 +14,11 @@ urlpatterns = patterns('',
     (r'^staticmap/', include('lingcod.staticmap.urls')),
     (r'^wave/', include('lingcod.wave.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
-    (r'^mpa/', include('lingcod.mpa.urls')),
+    #(r'^mpa/', include('lingcod.mpa.urls')),
+    (r'^mpa/$', 'simple.views.simpleCommit'),
+    (r'^mpa/save/form/$', 'simple.views.simpleCommit'),
+    (r'^mpa/load/$', 'simple.views.simpleLoad'),
+    (r'^mpa/load/form/$', 'simple.views.simpleLoadForm'),
     (r'^simple-app/', include('simple.simple_app.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

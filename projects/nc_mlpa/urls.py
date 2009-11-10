@@ -16,7 +16,11 @@ urlpatterns = patterns('',
     (r'^faq/', include('lingcod.simplefaq.urls')),
     (r'^wave/', include('lingcod.wave.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
-    (r'^mpa/', include('lingcod.mpa.urls')),
+    #(r'^mpa/', include('lingcod.mpa.urls')),
+    (r'^mpa/$', 'nc_mlpa.views.mlpaMpaCommit'),
+    (r'^mpa/save/form/$', 'nc_mlpa.views.mlpaMpaCommit'),
+    (r'^mpa/load/$', 'nc_mlpa.views.mlpaMpaLoad'),
+    (r'^mpa/load/form/$', 'nc_mlpa.views.mlpaMpaLoadForm'),
     (r'^mlpa/', include('mlpa.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

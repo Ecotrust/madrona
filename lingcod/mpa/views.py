@@ -9,32 +9,28 @@ from django.utils import simplejson
 import models
 from forms import MpaForm, LoadForm
 
-def mpaLoadForm(request, form_template='mpa/mpa_load_form.html'):
+def mpaLoadForm(request, loadform, form_template='mpa/mpa_load_form.html'):
     '''
         Handler for load form request
     '''
     if request.method == 'GET':
-        loadform = LoadForm()
         #action = '/mpa/'
         opts = {
             'form': loadform,
             #'action': action,
         }
         return render_to_response(form_template, RequestContext(request, opts))
-"""
-def mpaLoad(request, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
+
+def mpaLoad(request, loadform, mpas, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
     '''
         Handler for load form submission
     '''
     if request.method == 'GET':
-        loadform = LoadForm(request.GET)
         if loadform.is_valid():
             user = loadform.cleaned_data['user']
             name = loadform.cleaned_data['name']
             #if there's more than one, then take the last one 
             #this is temporary until we have other things in place, such as user log in, and arrays
-            from nc_mlpa.mlpa.models import MlpaMpa
-            mpas = MlpaMpa.objects.filter(user=user, name=name)
             if len(mpas) > 0:
                 mpa = mpas[len(mpas)-1] 
                 return buildJsonResponse(mpa, loaded_template)
@@ -48,13 +44,12 @@ def mpaLoad(request, loaded_template='mpa/mpa_loaded.html', form_template='mpa/m
                 'action': action,
             }
             return render_to_response(form_template, RequestContext(request, opts))
-"""   
-def mpaCommit(request, form_template='mpa/mpa_save_form.html', mpa_template='mpa/mpa_saved.html'):
+   
+def mpaCommit(request, mpaform, form_template='mpa/mpa_save_form.html', mpa_template='mpa/mpa_saved.html'):
     '''
         Handler for save form request and submission
     '''
     if request.method == 'POST':
-        mpaform = MpaForm(request.POST)
         if mpaform.is_valid():
             transformForDB(mpaform.cleaned_data['geometry_orig'])
             transformForDB(mpaform.cleaned_data['geometry_final'])
@@ -71,14 +66,13 @@ def mpaCommit(request, form_template='mpa/mpa_save_form.html', mpa_template='mpa
             }
             return render_to_response(form_template, RequestContext(request, opts))
     if request.method == 'GET':
-        mpaform = MpaForm()
         action = '/mpa/'
         opts = {
             'form': mpaform,
             'action': action,
         }
         return render_to_response(form_template, RequestContext(request, opts))
-       
+     
 def buildJsonResponse(mpa, template):
     '''
         Given an mpa (query return from db), and a template (html),
