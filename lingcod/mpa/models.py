@@ -26,19 +26,17 @@ class Mpa(models.Model):
         ``geometry_final``      PolygonField representing the MPA boundary
                                 after postprocessing.
         ======================  ==============================================
-"""   
+    """   
+    #id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(User)
     name = models.TextField(verbose_name="MPA Name")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     editable = models.NullBooleanField(default=True,null=True, blank=True, editable=False)
-    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True, verbose_name="Original MPA boundary")
-    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True, verbose_name="Final MPA boundary")   
+    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
+    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")   
     objects = models.GeoManager()
     
-    class Options:
-        manipulators = [ ClipToStudyRegionManipulator ]
-        
     class Meta:
         abstract=True
         

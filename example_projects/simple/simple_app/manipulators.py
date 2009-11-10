@@ -41,7 +41,9 @@ class EastWestManipulator(BaseManipulator):
         
         #ensure the database returned an actual geometry 
         if len(eastern_half) == 0 or len(western_half) == 0: 
-            return {"message": "No geometries found", "clipped_shape": target_shape, "original_shape": target_shape}
+            #message="No geometries found"
+            #return {"message": "No geometries found", "clipped_shape": target_shape, "original_shape": target_shape}
+            return self.result(target_shape)
               
         #ensure the input geometry is in the same projection as the database geometry
         target_shape.transform(settings.GEOMETRY_DB_SRID)
@@ -66,12 +68,14 @@ class EastWestManipulator(BaseManipulator):
         #if there was no eastern geometry overlap (only western)
         if eastern_clip.area == 0.0:
             status_html = self.do_template("0")
-            return self.result(western_clip, target_shape, status_html)
+            #return self.result(western_clip, target_shape, status_html)
+            return self.result(western_clip, status_html)
 
         #if there was no western geometry overlap (only eastern)
         if western_clip.area == 0.0:
             status_html = self.do_template("4")
-            return self.result(eastern_clip, target_shape, status_html)
+            #return self.result(eastern_clip, target_shape, status_html)
+            return self.result(eastern_clip, status_html)
         
         #since the intersection resulted in two parts, determine the largest poly from each
         eastern_clip = LargestPolyFromMulti(eastern_clip)
@@ -79,11 +83,14 @@ class EastWestManipulator(BaseManipulator):
         
         #return the larger of the two polys
         if western_clip.area > eastern_clip.area:
+            success = "1"
             status_html = self.do_template("1")
-            return self.result(western_clip, target_shape, status_html)
+            #return self.result(western_clip, target_shape, status_html)
+            return self.result(western_clip, status_html)
         else: 
             status_html = self.do_template("5")
-            return self.result(eastern_clip, target_shape, status_html)
+            #return self.result(eastern_clip, target_shape, status_html)
+            return self.result(eastern_clip, status_html)
 
      
     class GeometryBuilder():

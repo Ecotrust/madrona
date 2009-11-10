@@ -22,6 +22,8 @@
     <script src="/media/common/js/tools/draw_tool.js"></script>
     <script src="/media/mpa/js/manipulators.js"></script>
     <script src="/media/mpa/js/mpa_creator.js"></script>
+    <script src="/media/mpa/js/mpa_loader.js"></script>
+    <script src="/media/mpa/js/mpa_saver.js"></script>
     <script src="/media/common/js/jquery/jquery-callback-1.2.js"></script>
 
     <script type="text/javascript">
@@ -35,30 +37,14 @@
     var ge_range = 400000;
     var ge_tile = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
-    var manip_list = '';
     var manip_url = '/manipulators/list/mlpa/mlpampa/';
         
     $(document).ready(function() {
-        $.ajaxSetup({ cache: false });
-        $.getJSON( manip_url, init );
-    });    
-     
-    /**
-     * Called at load time.
-     * Creates google earth instance and MpaCreator instance.
-     * Starts mpa creation process.
-     * @param {List} manipulators, list of manipulations to be performed on the target shape (returned from manip_url request)
-     */
-    function init(manipulators) {
-        manip_list = manipulators;
         google.earth.createInstance("map3d", initCallback, failureCallback);
-        panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
-        mpaCreator = new lingcod.MpaCreator(manip_list, panels);
-        mpaCreator.startMpaCreation();
-    }
+    });    
         
     /**
-     * Called from within init() upon success of google.earth.createInstance
+     * Called from within ready() upon success of google.earth.createInstance
      * Sets up the google earth areal view and adds the study region to the map.
      * @param {Google Earth Instance} pluginInstance, returned from google.earth.createInstance
      */
@@ -68,11 +54,15 @@
         
         gex = new GEarthExtensions(pluginInstance);
         gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tile });    
-        //gex.util.displayKml( ge_studyregion_display );
+        gex.util.displayKml( ge_studyregion_display );
         
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
+        
+        drawTool = new lingcod.DrawTool(gex);
+        panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
+        mpaCreator = new lingcod.MpaCreator(drawTool, manip_url, panels);
     }
     
     /**
@@ -88,9 +78,9 @@
 <body> 
     <p><strong>MLPA Manipulator Test</strong></p>
     <!-- results_panel is used to display the templates returned from the manipulators -->   
-    <p><div id="results_panel" style="overflow: auto; width: 500px; height: 200px; border: 1px solid silver;"></div></p>
+    <p><div id="results_panel" style="overflow: auto; width: 600px; height: 200px; border: 1px solid silver;"></div></p>
     <!-- button_panel is used to display buttons such as Create Mpa, Edit Mpa, and Finish Editing -->
     <p><div id="button_panel">  </div></p>
-    <div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;"></div>
+    <div id="map3d" style="overflow: auto; width: 600px; height: 400px; border: 1px solid silver;"></div>
 </body>
 </html>

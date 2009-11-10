@@ -18,7 +18,8 @@ from django.utils import simplejson
 #from cjson import encode as json_encode
  
 def mpaManipulatorList(request, app_name, model_name):
-    '''Handler for AJAX mpa manipulators request
+    '''
+        Handler for AJAX mpa manipulators request
     '''
     try:
         model = ContentType.objects.get(app_label=app_name, model=model_name)
@@ -74,7 +75,7 @@ def multi_generic_manipulator_view(request, manipulators):
                     
                 result = ensure_keys(initial_result)
                 new_shape = result['clipped_shape'] 
-                original_shape = result['original_shape']
+                #original_shape = result['original_shape']
                   
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
@@ -91,26 +92,34 @@ def multi_generic_manipulator_view(request, manipulators):
     #end manipulator for loop      
                                            
     # manipulators ran fine and the resulting shape is ready for outbound processing
-    new_shape.transform(settings.GEOMETRY_DB_SRID)
+    new_shape.transform(settings.GEOMETRY_DB_SRID) 
     #we should probably move this static value 20 to a settings variable
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
-    
-    return respond_with_template(html_response, kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"])
-    
-    
-def respond_with_template(status_html, clipped, original, success="1"):
-    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
-    
+
+    return respond_with_template(html_response, kmlDocWrap(new_shape.kml), str(new_shape), result["success"])
+    #return respond_with_template(html_response, kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"], str(new_shape), str(result["original_shape"]))
+    #return respond_with_template(html_response, new_shape.kml, kmlDocWrap(result["original_shape"].kml), result["success"])
+"""   
+def respond_with_template(status_html, clipped_kml, original_kml, success="1", clipped_poly=None, original_poly=None):
+    return HttpResponse(simplejson.dumps({"clipped_shape": clipped_kml, "original_shape": original_kml, "html": status_html, "success": success, "clipped_geom": clipped_poly, "original_geom":original_poly}))
+"""    
+def respond_with_template(status_html, clipped_kml, clipped_wkt=None, success="1"):
+    return HttpResponse(simplejson.dumps({"clipped_kml": clipped_kml, "clipped_wkt": clipped_wkt, "html": status_html, "success": success}))   
+
+def respond_with_error(key='11', message=''):
+    status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
+    return HttpResponse(simplejson.dumps({"html": status_html, "success": "0"}))
+"""
 def respond_with_error(key='11', message='', clipped=None, original=None, success="0"):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
     return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
-    
+"""    
 def ensure_keys(values):
-    values.setdefault("message", "no message given")
+    #values.setdefault("message", "no message given")
     values.setdefault("html", "")
     values.setdefault("clipped_shape", None)
-    values.setdefault("original_shape", None)
+    #values.setdefault("original_shape", None)
     values.setdefault("success", "1")
     return values
  

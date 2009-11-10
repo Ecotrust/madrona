@@ -16,7 +16,7 @@ class BaseManipulator(object):
             This function generally takes as input a target shape geometry, and should return a dictionary 
             containing the 'clipped_shape', the 'orginal_shape', and optional 'message' and 'html' values.
             'clipped_shape' is the new shape as a result of the manipulator
-            'original_shape' is the original input target shape
+            #'original_shape' is the original input target shape
             'message' can be any message that may be appropriate for the client
             'html' is generally a template that might be displayed by the client
         The do_template() function can be used to render a template with appropriate context
@@ -54,8 +54,10 @@ class BaseManipulator(object):
         target.set_srid(settings.GEOMETRY_CLIENT_SRID) 
         return target
   
-    def result(self, clipped_shape, original_shape, html="", message=""):
-        return {"clipped_shape": clipped_shape, "original_shape": original_shape, "html": html, "message": message}
+    #def result(self, clipped_shape, original_shape, html="", message=""):
+    #    return {"clipped_shape": clipped_shape, "original_shape": original_shape, "html": html, "message": message}
+    def result(self, clipped_shape, html="", success="1"):
+        return {"clipped_shape": clipped_shape, "html": html, "success": success}
     
     class Form:
         available = False
@@ -154,14 +156,16 @@ class ClipToShapeManipulator(BaseManipulator):
         #if there was no overlap (intersection was empty)
         if clipped_shape.area == 0:
             status_html = self.do_template("2")
-            message = "intersection resulted in empty geometry"
-            return self.result(clipped_shape, target_shape, status_html, message)
+            #message = "intersection resulted in empty geometry"
+            #return self.result(clipped_shape, target_shape, status_html, message)
+            return self.result(clipped_shape, status_html)
          
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
         status_html = self.do_template("0")
-        message = "'target_shape' was clipped successfully to 'clip_against'"
-        return self.result(largest_poly, target_shape, status_html, message)
+        #message = "'target_shape' was clipped successfully to 'clip_against'"
+        #return self.result(largest_poly, target_shape, status_html, message)
+        return self.result(largest_poly, status_html)
     '''
     #the following is USED FOR TESTING, 
     #assigns db current studyregion as the shape to clip against
@@ -227,7 +231,6 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         self.study_region = study_region
         
     def manipulate(self):
-
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
 
@@ -263,9 +266,10 @@ class ClipToStudyRegionManipulator(BaseManipulator):
             
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
-        message = "target_shape was clipped to study region"
+        #message = "target_shape was clipped to study region"
         status_html = self.do_template("0")
-        return self.result(largest_poly, target_shape, status_html, message)
+        #return self.result(largest_poly, target_shape, status_html, message)
+        return self.result(largest_poly, status_html)
         
         
     class Options:
@@ -329,14 +333,17 @@ class ClipToGraticuleManipulator(BaseManipulator):
 
         #if there was no overlap (intersection was empty)
         if clipped_shape.area == 0:
+            #message = "clipped geometry is empty (there was no intersection/overlap with the graticules)"
             status_html = render_to_string(self.Options.html_templates["2"], {'MEDIA_URL':settings.MEDIA_URL})
-            return {"message": "clipped geometry is empty (there was no intersection/overlap with the graticules)", "html": status_html, "clipped_shape": clipped_shape, "original_shape": target_shape}
+            #return {"message": "clipped geometry is empty (there was no intersection/overlap with the graticules)", "html": status_html, "clipped_shape": clipped_shape, "original_shape": target_shape}
+            return self.result(clipped_shape, status_html)
         
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
+        #message = "Graticule clipping was a success"
         status_html = render_to_string(self.Options.html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
-        return {"message": "Graticule clipping was a success", "html": status_html, "clipped_shape": clipped_shape, "original_shape": target_shape}
-                
+        #return {"message": "Graticule clipping was a success", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
+        return self.result(largest_poly, status_html)        
     
     class GraticuleBoxBuilder():
         '''

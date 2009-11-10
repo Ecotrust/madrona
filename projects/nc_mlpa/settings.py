@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'lingcod.manipulators',
     'lingcod.wave',
     'mlpa',
+    'lingcod.mpa',
 )
 
 from lingcod.common import assets

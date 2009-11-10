@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     (r'^faq/', include('lingcod.simplefaq.urls')),
     (r'^wave/', include('lingcod.wave.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
+    (r'^mpa/', include('lingcod.mpa.urls')),
     (r'^mlpa/', include('mlpa.urls')),
 
     #accessing manipulators app

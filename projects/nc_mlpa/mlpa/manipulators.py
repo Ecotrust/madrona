@@ -78,7 +78,9 @@ class ClipToEstuariesManipulator(BaseManipulator):
         
         #check for existence of estuaries (if there are no estuaries, we're done here)
         if len(estuaries) == 0: 
-            return self.result(target_shape, target_shape, message="No estuaries found")
+            #message="No estuaries found"
+            #return self.result(target_shape, target_shape, message="No estuaries found")
+            return self.result(target_shape)
         
         #intersect the two geometries
         try:
@@ -101,25 +103,34 @@ class ClipToEstuariesManipulator(BaseManipulator):
         
         #if there was no estuary overlap
         if estuary_clip is None or estuary_clip.area == 0:
+            #message = "No overlap with estuary"
             status_html = self.do_template("0")
-            return self.result(target_shape, target_shape, status_html, "No overlap with estuary")
+            oceanic_clip = target_shape
+            #return self.result(oceanic_clip, target_shape, status_html, "No overlap with estuary")
+            return self.result(oceanic_clip, status_html)
+        
         estuary_clip.transform(settings.GEOMETRY_CLIENT_SRID)
         
         #if there was only estuary overlap (no oceanic overlap)
         if oceanic_clip is None or oceanic_clip.area == 0:
+            #message = "Mpa is estuary only"
             status_html = self.do_template("4")
-            return self.result(estuary_clip, target_shape, status_html, "Mpa is estuary only")
+            #return self.result(estuary_clip, target_shape, status_html, "Mpa is estuary only")
+            return self.result(estuary_clip, status_html)
+        
         oceanic_clip.transform(settings.GEOMETRY_CLIENT_SRID)  
         
         #if there was both estuary and oceanic overlap then return the larger of the two
         if oceanic_clip.area > estuary_clip.area:
             message = "Non-Estuary Part"
             status_html = self.do_template("2", message)
-            return self.result(oceanic_clip, target_shape, status_html, message) 
+            #return self.result(oceanic_clip, target_shape, status_html, message) 
+            return self.result(oceanic_clip, status_html) 
         else: 
             message = "Estuary Part"
             status_html = self.do_template("2", message)
-            return self.result(estuary_clip, target_shape, status_html, message) 
+            #return self.result(estuary_clip, target_shape, status_html, message) 
+            return self.result(estuary_clip, status_html) 
             
     class Options:
         name = 'ClipToEstuaries'  
