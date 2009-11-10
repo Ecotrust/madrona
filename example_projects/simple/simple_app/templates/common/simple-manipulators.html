@@ -22,6 +22,8 @@
     <script src="/media/common/js/tools/draw_tool.js"></script>
     <script src="/media/mpa/js/manipulators.js"></script>
     <script src="/media/mpa/js/mpa_creator.js"></script>
+    <script src="/media/mpa/js/mpa_loader.js"></script>
+    <script src="/media/mpa/js/mpa_saver.js"></script>
     <script src="/media/common/js/jquery/jquery-callback-1.2.js"></script>
 
     <script type="text/javascript">
@@ -35,27 +37,14 @@
     var ge_range = 400000;
     var ge_tile = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
-    var manip_list = '';
     var manip_url = '/manipulators/list/simple_app/mpa/';
         
     $(document).ready(function() {
-        $.ajaxSetup({ cache: false });
-        $.getJSON( manip_url, init );
+        google.earth.createInstance("map3d", initCallback, failureCallback);
     });    
      
     /**
-     * Called at load time.
-     * Creates google earth instance and MpaCreator instance.
-     * Starts mpa creation process.
-     * @param {List} manipulators, list of manipulations to be performed on the target shape (returned from manip_url request)
-     */
-    function init(manipulators) {
-        manip_list = manipulators;
-        google.earth.createInstance("map3d", initCallback, failureCallback);
-    }
-        
-    /**
-     * Called from within init() upon success of google.earth.createInstance
+     * Called from within ready() upon success of google.earth.createInstance
      * Sets up the google earth areal view and adds the study region to the map.
      * @param {Google Earth Instance} pluginInstance, returned from google.earth.createInstance
      */
@@ -65,14 +54,15 @@
         
         gex = new GEarthExtensions(pluginInstance);
         gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tile });    
-        //gex.util.displayKml( ge_studyregion_display );
+        gex.util.displayKml( ge_studyregion_display );
         
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
+        
+        drawTool = new lingcod.DrawTool(gex);
         panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
-        mpaCreator = new lingcod.MpaCreator(manip_list, panels);
-        mpaCreator.startMpaCreation();
+        mpaCreator = new lingcod.MpaCreator(drawTool, manip_url, panels);
     }
     
     /**

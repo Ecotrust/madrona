@@ -21,7 +21,7 @@ def mpaLoadForm(request, form_template='mpa/mpa_load_form.html'):
             #'action': action,
         }
         return render_to_response(form_template, RequestContext(request, opts))
-
+"""
 def mpaLoad(request, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
     '''
         Handler for load form submission
@@ -48,7 +48,7 @@ def mpaLoad(request, loaded_template='mpa/mpa_loaded.html', form_template='mpa/m
                 'action': action,
             }
             return render_to_response(form_template, RequestContext(request, opts))
-   
+"""   
 def mpaCommit(request, form_template='mpa/mpa_save_form.html', mpa_template='mpa/mpa_saved.html'):
     '''
         Handler for save form request and submission

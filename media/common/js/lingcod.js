@@ -29,8 +29,8 @@ var lingcod = {
         
         //part of mpa creation -- draw_panels and mpaCreator
         //will need to come up with a better solution for manipulator url
-        this.draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
-        this.mpaCreator = new lingcod.MpaCreator(this.drawTool, '/manipulators/list/mlpa/mlpampa/', this.draw_panels);
+        //this.draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
+        //this.mpaCreator = new lingcod.MpaCreator(this.drawTool, '/manipulators/list/mlpa/mlpampa/', this.draw_panels);
         
         var self = this;
         $('#measure_distance').click(function(){
@@ -50,8 +50,8 @@ var lingcod = {
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', window.studyregion, {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
-        //part of mpa creation -- removed mpa_draw and mpa_clear buttons (they are created automatically by MpaCreator)
-        /*$('#mpa_draw').click(function(){
+        //part of mpa creation -- will remove mpa_draw and mpa_clear buttons (they are created automatically by MpaCreator)
+        $('#mpa_draw').click(function(){
             document.getElementById("mpa_draw_results").innerHTML = '';
             self.drawTool.clear();
             self.drawTool.drawShape( lingcod.drawMpaComplete ); 
@@ -59,7 +59,7 @@ var lingcod = {
         $('#mpa_clear').click(function(){
             document.getElementById("mpa_draw_results").innerHTML = '';
             self.drawTool.clear();
-        });*/
+        });
     },
     
     studyRegionLoaded: function(kmlObject, node){

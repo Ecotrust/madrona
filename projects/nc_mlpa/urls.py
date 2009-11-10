@@ -18,9 +18,6 @@ urlpatterns = patterns('',
     (r'^manipulators/', include('lingcod.manipulators.urls')),
     (r'^mpa/', include('lingcod.mpa.urls')),
     (r'^mlpa/', include('mlpa.urls')),
-
-    #accessing manipulators app
-    (r'^manipulators/', include('lingcod.manipulators.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

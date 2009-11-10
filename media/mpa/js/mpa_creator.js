@@ -41,7 +41,7 @@ lingcod.MpaCreator.prototype.initializeButtons = function() {
     this.finish_button = $('#finish_edit');
     this.finish_button.click($.delegate(this.finishEdit, this));
     this.load_button = $('#load_button');
-    this.load_button.click($.delegate(this.loadMpa, this));
+    //this.load_button.click($.delegate(this.loadMpa, this));
     this.clear_mpa_button = $('#clear_mpa_button');
     this.clear_mpa_button.click($.delegate(this.clearMpa, this));
     this.clear_all_button = $('#clear_all_button');
