@@ -18,9 +18,6 @@
 # DATABASE_USER = 'postgres'
 # DATABASE_PASSWORD = 'my-secret-password'
 
-# Define the models which will represent the MPA and Array child classes
-# MPA_MODEL = 'simple_app.models.Mpa'
-# ARRAY_MODEL = 'simple_app.models.MpaArray'
 
 # Uncomment this line to cause MarineMap to go into maintenance mode
 # It will not be accessible without logging in as staff
