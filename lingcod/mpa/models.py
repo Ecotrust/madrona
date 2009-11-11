@@ -3,6 +3,8 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.common.utils import LookAtKml
 from lingcod.manipulators.manipulators import *
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 class Mpa(models.Model):
     """Model used for representing marine protected areas or MPAs
@@ -17,14 +19,19 @@ class Mpa(models.Model):
         ``date_created``        When the MPA was created. Is not changed on
                                 updates.
         ``date_modified``       When the MPA geometry was last updated.
-
-        ``editable``            Whether or not the MPA can modified.
         
         ``geometry_orig``       PolygonField representing the MPA boundary as
                                 originally drawn by the user
         
         ``geometry_final``      PolygonField representing the MPA boundary
                                 after postprocessing.
+                                
+        ``content_type``        Content type of the associated Array 
+                                (Generic One-to-Many)
+                                
+        ``object_id``           pk of the specific array object
+        
+        ``array``               Use to access the associated Array (read-only)
         ======================  ==============================================
     """   
     #id = models.IntegerField(primary_key=True)
@@ -33,7 +40,13 @@ class Mpa(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
-    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")   
+    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
+    
+    # Array relation fields
+    content_type = models.ForeignKey(ContentType, blank=True, null=True)
+    object_id = models.PositiveIntegerField(blank=True,null=True)
+    array = generic.GenericForeignKey('content_type', 'object_id')
+    
     objects = models.GeoManager()
     
     class Meta:
@@ -74,4 +87,13 @@ class Mpa(models.Model):
         Return a kml folder containing the kml for this mpa's final and orginal geometry
         """
         return '<Document><name>MPAs</name><Folder>' + '<name>' + self.name + '</name>' + self.kmlFinalGeom(style_domain) + self.kmlOrigGeom(style_domain) + '</Folder></Document>'
+
+    def add_to_array(self, array):
+        """Adds the MPA to the specified array."""
+        self.array = array
+        self.save()
         
+    def remove_from_array(self):
+        """Sets the MPA's `array` property to None."""
+        self.array = None
+        self.save()

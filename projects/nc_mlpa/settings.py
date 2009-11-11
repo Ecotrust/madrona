@@ -129,4 +129,8 @@ COMPRESS_JS = {
 COMPRESS_VERSION = True
 COMPRESS_AUTO = True
 
+# Define the models which will represent the MPA and Array child classes
+MPA_CLASS = 'nc_mlpa.models.MlpaMpa'
+ARRAY_CLASS = 'nc_mlpa.models.Array'
+
 from settings_local import *

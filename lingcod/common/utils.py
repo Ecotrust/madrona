@@ -70,3 +70,21 @@ def ComputeLookAt( geometry ):
     lookAtParams['heading'] = 0
 
     return lookAtParams
+    
+def get_class(path):
+    from django.utils import importlib
+    module,dot,klass = path.rpartition('.')
+    m = importlib.import_module(module)
+    return m.__getattribute__(klass)
+    
+def get_mpa_class():
+    try:
+        return get_class(settings.MPA_CLASS)
+    except:
+        raise Exception("Problem importing MPA class. Is MPA_CLASS defined correctly in your settings?")
+
+def get_array_class():
+    try:
+        return get_class(settings.ARRAY_CLASS)
+    except:
+        raise Exception("Problem importing Array class. Is ARRAY_CLASS defined correctly in your settings?")
