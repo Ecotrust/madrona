@@ -64,5 +64,5 @@ from django.core.management import setup_environ
 setup_environ(project_settings)
 
 from django.core import management
-management.call_command('test')
-print "Done testing"
+print "Running tests"
+management.call_command('test', interactive=False)
