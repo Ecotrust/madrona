@@ -25,7 +25,6 @@ class MlpaTest(TestCase):
         """
         test views.mpaKmlAllGeom
         """
-
         response = self.client.get('/mlpa/mpa/1/kmlAllGeom/', {})
         self.assertEquals(response.status_code, 200)
         

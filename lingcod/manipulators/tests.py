@@ -114,9 +114,7 @@ class ManipulatorsTest(TestCase):
         shape_clipper = ClipToShapeManipulator(target_shape=self.code0_poly.wkt, clip_against=self.study_region.wkt)
         result = shape_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1) 
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #empty intersection
         response2 = self.client.post('/manipulators/ClipToShape/', {'target_shape': self.code2_poly.wkt, 'clip_against': self.study_region.wkt})
@@ -124,9 +122,7 @@ class ManipulatorsTest(TestCase):
         shape_clipper = ClipToShapeManipulator(target_shape=self.code2_poly.wkt, clip_against=self.study_region.wkt)
         result = shape_clipper.manipulate()
         self.assertEquals(result["clipped_shape"].area, 0)
-        self.assertAlmostEquals(result["original_shape"].area, 1, places=1)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #invalid geometr(y/ies)
         response3 = self.client.post('/manipulators/ClipToShape/', {'target_shape': self.code3_poly.wkt, 'clip_against': self.study_region.wkt})
@@ -162,9 +158,7 @@ class ManipulatorsTest(TestCase):
         #I tested it independently and it returns the same 1.9552852... value as ClipToStudyRegionManipulator
         #just part of transforming and intersecting I reckon
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1) 
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
 
         #outside of study region
         response2 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': self.code2_poly.wkt, 'study_region': self.study_region.wkt})
@@ -206,9 +200,7 @@ class ManipulatorsTest(TestCase):
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, east=.5, west=-.5)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #another clip to graticule test
         response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'north': .5, 'south': -.5})
@@ -216,9 +208,7 @@ class ManipulatorsTest(TestCase):
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, north=.5, south=-.5)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #another clip to graticule test
         response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'west': 0})
@@ -226,9 +216,7 @@ class ManipulatorsTest(TestCase):
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=0)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #test with bad graticule values
         response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt, 'west': 3})
@@ -236,9 +224,7 @@ class ManipulatorsTest(TestCase):
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly, west=3)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 0, places=1)
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #test with no graticule values
         response1 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code1_poly.wkt})
@@ -246,9 +232,7 @@ class ManipulatorsTest(TestCase):
         graticule_clipper = ClipToGraticuleManipulator(target_shape=self.code1_poly)
         result = graticule_clipper.manipulate()
         self.assertAlmostEquals(result["clipped_shape"].area, 4, places=1)
-        self.assertAlmostEquals(result["original_shape"].area, 4, places=7)
         self.assertEquals(result["clipped_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
-        self.assertEquals(result["original_shape"].srid, settings.GEOMETRY_CLIENT_SRID)
         
         #test with bad geometry
         response3 = self.client.post('/manipulators/ClipToGraticule/', {'target_shape': self.code3_poly.wkt})
