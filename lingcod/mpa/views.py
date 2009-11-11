@@ -21,7 +21,7 @@ def mpaLoadForm(request, loadform, form_template='mpa/mpa_load_form.html'):
         }
         return render_to_response(form_template, RequestContext(request, opts))
 
-def mpaLoad(request, loadform, mpas, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
+def mpaLoad(request, mpas, loadform, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
     '''
         Handler for load form submission
     '''

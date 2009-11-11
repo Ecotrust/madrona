@@ -18,7 +18,7 @@ def simpleLoad(request):
         user = loadform.cleaned_data['user']
         name = loadform.cleaned_data['name']
         mpas = Mpa.objects.filter(user=user, name=name)
-    return mpaLoad(request, loadform, mpas)
+    return mpaLoad(request, mpas, loadform)
 
 def simpleCommit(request):
     '''

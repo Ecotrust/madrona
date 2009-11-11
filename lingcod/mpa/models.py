@@ -40,9 +40,7 @@ class Mpa(models.Model):
         abstract=True
         
     class Options:
-        manipulators = [ ClipToStudyRegionManipulator ]  #, EastWestManipulator ]
-        #manipulators = [ ClipToShapeManipulator ]
-        #manipulators = [ ClipToGraticuleManipulator ]
+        manipulators = [ ClipToStudyRegionManipulator ]  
 
     def __unicode__(self):
         return self.name

@@ -8,4 +8,5 @@ class Mpa(models.Mpa):
         #manipulators = [ ClipToGraticuleManipulator ]
 
     class Meta(models.Mpa.Meta):
+        db_table = u'simple_mpa'
         pass
