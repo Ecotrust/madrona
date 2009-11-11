@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
-from lingcod.common import mimetypes
+from lingcod.common import mimetypes, utils
 
 import settings
 
@@ -43,8 +43,8 @@ def show(request, map_name='default'):
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
 
     # Replace table names for mpas and mpaarrays
-    xmltext = xmltext.replace("MM_MPA", "simple_app_mpa") #TODO getMpaTablename())
-    #xmltext = xmltext.replace("MM_ARRAY", getMpaArrayTablename())
+    mpa_class = utils.get_mpa_class()
+    xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
     conn = connection.settings_dict
     connection_string = ""
