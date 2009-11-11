@@ -12,7 +12,7 @@ var load_clear_html = '<p><button id="load_button">Load Mpa</button><button id="
  * @param {List} manip_list, list of manipulators to be executed
  * @param {Dictionary} panels, the ids of the button panel and the results panel
  */
-lingcod.MpaCreator = function( drawTool, manip_url, panels) {
+lingcod.MpaCreator = function( drawTool, panels) {
     //we've put the gex back into draw_tool via the constructor (was needed to run lingcod.js)
     //will need to re-examine this public gex at some point...
     this.drawTool = drawTool;
@@ -23,7 +23,7 @@ lingcod.MpaCreator = function( drawTool, manip_url, panels) {
     this.button_panel.html(button_html);
     this.template_buttons = []
     
-    this.manipulators = new lingcod.Manipulators(this.results_panel, $.delegate(this.finishManipulatorDisplay, this), manip_url, this.drawTool);
+    this.manipulators = new lingcod.Manipulators(this.results_panel, $.delegate(this.finishManipulatorDisplay, this), this.drawTool);
     this.mpaLoader = new lingcod.MpaLoader(this.drawTool, this.results_panel, $.delegate(this.finishLoadDisplay, this), "1");
     this.mpaSaver = new lingcod.MpaSaver(this.results_panel, $.delegate(this.finishSave, this));
     

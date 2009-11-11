@@ -1,9 +1,4 @@
-<!--if we would rather extend from common/base.html than be sure and add the following lines:
-    <file path="mpa/js/manipulators.js" />
-    <file path="mpa/js/mpa_creator.js" />
-    <file path="common/js/jquery/jquery-callback-1.2.js" />
-    to media/js_includes.xml, so that load compressed in base.html will find those files (after a dev-server reload)
-    -->
+<!--would like to extend from base.html but that formatting causes the loss of the scroll bar-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 
@@ -37,7 +32,7 @@
     var ge_range = 400000;
     var ge_tile = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
-    var manip_url = '/manipulators/list/mlpa/mlpampa/';
+    //var manip_url = '/manipulators-list/';
         
     $(document).ready(function() {
         google.earth.createInstance("map3d", initCallback, failureCallback);
@@ -62,7 +57,7 @@
         
         drawTool = new lingcod.DrawTool(gex);
         panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
-        mpaCreator = new lingcod.MpaCreator(drawTool, manip_url, panels);
+        mpaCreator = new lingcod.MpaCreator(drawTool, panels);
     }
     
     /**

@@ -1,4 +1,5 @@
 from forms import MLPASaveForm, MLPALoadForm
+from django.shortcuts import redirect
 from mlpa.models import *
 from lingcod.mpa.views import *
 
@@ -28,3 +29,6 @@ def mlpaMpaCommit(request):
     if request.method == 'POST':
         mpaform = MLPASaveForm(request.POST)
     return mpaCommit(request, mpaform)
+
+def manipulatorList(request):
+    return redirect('/manipulators/list/mlpa/mlpampa/')

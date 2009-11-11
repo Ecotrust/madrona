@@ -14,7 +14,7 @@ def mpaLoadForm(request, loadform, form_template='mpa/mpa_load_form.html'):
         Handler for load form request
     '''
     if request.method == 'GET':
-        #action = '/mpa/'
+        #action = '/mpa/load/'
         opts = {
             'form': loadform,
             #'action': action,

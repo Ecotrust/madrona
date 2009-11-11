@@ -2,12 +2,6 @@
 
 {% block head %}
     <script src="http://wave-api.appspot.com/public/embed.js" type="text/javascript"></script>
-    <!--<script src="/media/common/js/tools/draw_tool.js"></script>
-    <script src="/media/mpa/js/manipulators.js"></script>
-    <script src="/media/mpa/js/mpa_creator.js"></script>
-    <script src="/media/mpa/js/mpa_loader.js"></script>
-    <script src="/media/mpa/js/mpa_saver.js"></script>
-    <script src="/media/common/js/jquery/jquery-callback-1.2.js"></script>-->
     <script type="text/javascript">
         window.public_data_layers = '{% url public-data-layers %}';
         window.studyregion = '{% url studyregion-kml %}';
@@ -142,6 +136,7 @@
                         <p><strong>Area: </strong><span id="area">N/A</span></p>
                         <hr>
                     </div>
+                    <!--
                     <div style="padding:1em;">
                         <h4>MPA Draw Tool</h4>
                         <button id="mpa_draw">draw mpa</button>
@@ -149,11 +144,10 @@
                         <p><span id="mpa_draw_results"></span></p>
                         <hr>
                     </div>
-                    <!--
+                    -->
                     <div style="padding:1em;"><h4>MPA Draw Tool</h4></div>
                     <div id="mpa_draw_panel" style="padding:1em;"></div>
                     <div id="mpa_results_panel" style="padding:1em; overflow: auto"></div>
-                    -->
                     {% block tools_append %}{% endblock %}   
             {% endtab %}
         {% endtabpanel %}        

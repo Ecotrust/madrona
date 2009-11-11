@@ -1,6 +1,7 @@
 {% extends "common/base.html" %}
 
 {% block head %}
+
 <script type="text/javascript">
     google.load("earth", "1");
 
@@ -28,63 +29,14 @@
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
 
-        drawTool = new lingcod.drawTool();
-        drawTool.drawShape( gex, drawMpaComplete );  
+        drawTool = new lingcod.DrawTool(gex);
+        draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
+        mpaCreator = new lingcod.MpaCreator(drawTool, draw_panels);
+        //drawTool.drawShape( gex, drawMpaComplete );  
     }
 
     function failureCallback(errorCode) {
         alert("Failure loading the Google Earth Plugin: " + errorCode);
-    }
-    
-    function drawMpaComplete(){
-        $.getJSON(
-            '{% url mpa-manipulator-list %}',
-            processManipulators
-        );
-    }
-    
-    function processManipulators(manipulator_list) {
-        manip_string = stringFromList(manipulator_list);
-        
-        target_wkt = placemarkToWkt(drawTool.placemark);
-        <!--- this is where the template is added to the sandbox --->
-        $.post(
-            '/manipulators/'+manip_string+'/', 
-            { target_shape: target_wkt },
-            renderManipulatorResults
-        );
-    }
-    
-    function stringFromList(list) {
-        string_result = '';
-        for ( var i = 0; i < list.length; i++ )
-        {
-            if (i > 0)
-                string_result = string_result + ',';
-            string_result = string_result + list[i];
-        }
-        return string_result
-    }
-    
-    function renderManipulatorResults(manip_data) {
-        ret_obj = eval( '(' + manip_data + ')' );
-        document.getElementById("area").innerHTML=ret_obj.html;
-        gex.util.displayKmlString(ret_obj.clipped_shape);
-        drawTool.clear();
-    }
-    
-    function placemarkToWkt(placemark) {
-        var linearRing = placemark.getGeometry().getOuterBoundary();
-        var wkt = 'POLYGON((';
-        for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ )
-        {
-            if (i > 0)
-                wkt = wkt + ',';
-            wkt = wkt + linearRing.getCoordinates().get(i).getLongitude() + ' ' + linearRing.getCoordinates().get(i).getLatitude();
-        }
-        wkt = wkt + '))'
-        
-        return wkt;
     }
     
     $(document).ready(function(){
@@ -93,8 +45,9 @@
         
 </script>
 {% endblock %}
-{% block body %} <!--- modified div to include scroll bar with 'overflow: auto'--->
-<div id="map3d" style="overflow: auto; width: 500px; height: 500px; border: 1px solid silver;">
-<p><strong>Distance: </strong><span id="distance">N/A</span></p>
-<p><strong>Area: </strong><span id="area">N/A</span></p></div>
+{% block body %} 
+<div id="map3d" style="overflow: auto; width: 500px; height: 200px; border: 1px solid silver;"></div>
+<div style="padding:1em;"><h4>MPA Draw Tool</h4></div>
+<div id="mpa_draw_panel" style="padding:1em;"></div>
+<div id="mpa_results_panel" style="padding:1em; overflow: auto"></div>
 {% endblock %}

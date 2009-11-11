@@ -1,5 +1,5 @@
 var try_again_html = '<p><button id="try_again_button">Try Again</button></p>';
-
+var manip_url = '/manipulators-list/';
 /**
  * Creates a new Manipulator instance.
  * @constructor
@@ -8,7 +8,7 @@ var try_again_html = '<p><button id="try_again_button">Try Again</button></p>';
  * @param {List} manip_list, list of manipulators to process
  * @param {DrawTool} drawTool, object used to draw and edit shapes on the map
  */
-lingcod.Manipulators = function(results_panel, renderCallBack, manip_url, drawTool) { 
+lingcod.Manipulators = function(results_panel, renderCallBack, drawTool) { 
     this.results_panel = results_panel;
     this.renderCallBack = renderCallBack;
     this.drawTool = drawTool;

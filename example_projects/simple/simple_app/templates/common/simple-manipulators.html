@@ -37,7 +37,7 @@
     var ge_range = 400000;
     var ge_tile = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
-    var manip_url = '/manipulators/list/simple_app/mpa/';
+    //var manip_url = '/manipulators-list/';
         
     $(document).ready(function() {
         google.earth.createInstance("map3d", initCallback, failureCallback);
@@ -62,7 +62,7 @@
         
         drawTool = new lingcod.DrawTool(gex);
         panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
-        mpaCreator = new lingcod.MpaCreator(drawTool, manip_url, panels);
+        mpaCreator = new lingcod.MpaCreator(drawTool, panels);
     }
     
     /**

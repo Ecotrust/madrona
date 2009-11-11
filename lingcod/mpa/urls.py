@@ -6,5 +6,4 @@ urlpatterns = patterns('lingcod.mpa.views',
     (r'^save/form/$', 'mpaCommit'),
     (r'^load/$', 'mpaLoad'),
     (r'^load/form/$', 'mpaLoadForm'),
-    #(r'^[A-Za-z0-9_,]+/$', 'mpaLoad'),
 )

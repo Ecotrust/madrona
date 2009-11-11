@@ -5,7 +5,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
     (r'^$', 'lingcod.common.views.map', {'template_name': 'common/map-ext.html'}),
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html', 'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
     (r'^layers/', include('lingcod.layers.urls')),
@@ -14,6 +13,7 @@ urlpatterns = patterns('',
     (r'^staticmap/', include('lingcod.staticmap.urls')),
     (r'^wave/', include('lingcod.wave.urls')),
     (r'^manipulators/', include('lingcod.manipulators.urls')),
+    (r'^manipulators-list/', 'simple.views.manipulatorList'),
     #(r'^mpa/', include('lingcod.mpa.urls')),
     (r'^mpa/$', 'simple.views.simpleCommit'),
     (r'^mpa/save/form/$', 'simple.views.simpleCommit'),

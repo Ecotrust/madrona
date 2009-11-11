@@ -1,4 +1,5 @@
 from forms import SimpleSaveForm, SimpleLoadForm
+from django.shortcuts import redirect
 from simple_app.models import *
 from lingcod.mpa.views import *
 
@@ -28,3 +29,6 @@ def simpleCommit(request):
     if request.method == 'POST':
         saveform = SimpleSaveForm(request.POST)
     return mpaCommit(request, saveform)
+
+def manipulatorList(request):
+    return redirect('/manipulators/list/simple_app/mpa/')
