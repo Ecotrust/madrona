@@ -65,3 +65,4 @@ setup_environ(project_settings)
 
 from django.core import management
 management.call_command('test')
+print "Done testing"
