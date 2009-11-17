@@ -6,6 +6,29 @@ from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+class MpaDesignation(models.Model):
+    """Model used to represent the designation of the MPA
+        ======================  ==============================================
+        Attribute               Description
+        ======================  ==============================================
+        ``name``                Designation of the MPA
+
+        ``acronym``             The acronym for this MPA designation
+
+        ``poly_outline_color``  Hex Color for rendering the outline/border
+
+        ``poly_fill_color``     Hex Color for rendering the polygon area
+        ======================  ==============================================
+    """
+    name = models.TextField(verbose_name="Designation Name")
+    acronym = models.CharField(max_length=10, verbose_name="Designation Acronym")
+    poly_outline_color = models.CharField(max_length=6, verbose_name="Hex Color for rendering outline/border")
+    poly_fill_color = models.CharField(max_length=6, verbose_name="Hex Color for rendering polygon area")
+    url = models.URLField(verify_exists=False,verbose_name="URL to more info on this MPA Designation")
+
+    def __unicode__(self):
+        return "(%s) %s" % (self.acronym, self.name)
+
 class Mpa(models.Model):
     """Model used for representing marine protected areas or MPAs
 
@@ -47,6 +70,8 @@ class Mpa(models.Model):
     object_id = models.PositiveIntegerField(blank=True,null=True)
     array = generic.GenericForeignKey('content_type', 'object_id')
     
+    designation = models.ForeignKey(MpaDesignation)
+
     objects = models.GeoManager()
     
     class Meta:
@@ -58,6 +83,13 @@ class Mpa(models.Model):
     def __unicode__(self):
         return self.name
         
+    def geom_as_kml(self):
+        """
+        returns the final geometry as a kml geometry string projected into wgs84
+        """
+        wgs84_geom = self.geometry_final.transform(4326, clone=True)
+        return wgs84_geom.kml
+
     def lookAtKml(self):
         """
         Get the kml for a camera perspective looking at the MPA's final geometry
