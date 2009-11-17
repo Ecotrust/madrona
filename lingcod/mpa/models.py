@@ -69,7 +69,7 @@ class Mpa(models.Model):
     object_id = models.PositiveIntegerField(blank=True,null=True)
     array = generic.GenericForeignKey('content_type', 'object_id')
     
-    designation = models.ForeignKey(MpaDesignation)
+    designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
 
     objects = models.GeoManager()
     
