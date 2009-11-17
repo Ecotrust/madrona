@@ -1,0 +1,26 @@
+{% extends "style.kml" %}
+{% block folders_and_placemarks %}
+{% for array, mpas in shapes.items %}
+ <Folder>
+  <name>{{ array }}</name>
+  <visibility>1</visibility>
+  <open>0</open>
+ {% for mpa in mpas %} 
+  <Placemark id="mpa_{{ mpa.id }}">
+    <name>{{ mpa.name }}</name>
+    <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
+    <ExtendedData>
+      <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
+      <Data name="name"><value>{{ mpa.name }}</value></Data>
+      <Data name="user"><value>{{ mpa.user }}</value></Data>
+      <Data name="created"><value>{{ mpa.date_created }}</value></Data>
+      <Data name="modified"><value>{{ mpa.date_modified }}</value></Data>
+      <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
+      <Data name="designation"><value>{{ mpa.designation }}</value></Data>
+    </ExtendedData>
+    {{ mpa.geom_as_kml|safe }} 
+  </Placemark>
+ {% endfor %}
+ </Folder>
+{% endfor %}
+{% endblock %}
