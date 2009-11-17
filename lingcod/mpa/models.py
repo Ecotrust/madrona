@@ -21,9 +21,9 @@ class MpaDesignation(models.Model):
         ======================  ==============================================
     """
     name = models.TextField(verbose_name="Designation Name")
-    acronym = models.CharField(max_length=10, verbose_name="Designation Acronym")
-    poly_outline_color = models.CharField(max_length=6, verbose_name="Hex Color for rendering outline/border")
-    poly_fill_color = models.CharField(max_length=6, verbose_name="Hex Color for rendering polygon area")
+    acronym = models.CharField(max_length=10, unique=True, verbose_name="Designation Acronym")
+    poly_outline_color = models.CharField(max_length=8, default="ffffffff", verbose_name="Hex Color for rendering outline/border")
+    poly_fill_color = models.CharField(max_length=8, default="ff0000ff", verbose_name="Hex Color for rendering polygon area")
     url = models.URLField(verify_exists=False,verbose_name="URL to more info on this MPA Designation")
 
     def __unicode__(self):
@@ -57,7 +57,6 @@ class Mpa(models.Model):
         ``array``               Use to access the associated Array (read-only)
         ======================  ==============================================
     """   
-    #id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(User)
     name = models.TextField(verbose_name="MPA Name")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")

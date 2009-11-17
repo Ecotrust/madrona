@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
-from lingcod.mpa.models import Mpa
+from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from django.contrib.auth.models import *
 
@@ -31,6 +31,7 @@ class MpaTest(TestCase):
         mpa = TestMpa.objects.create(
             name='Test MPA',
             user=user,
+            designation=MpaDesignation.objects.create(name="Test",acronym="T"),
             geometry_final=geom_final
         )
         array = TestArray.objects.create(name='My new array', user=user)
@@ -42,6 +43,7 @@ class MpaTest(TestCase):
         mpa = TestMpa.objects.create(
             name='Test MPA',
             user=user,
+            designation=MpaDesignation.objects.create(name="Test",acronym="T"),
             geometry_final=geom_final
         )
         array = TestArray.objects.create(name='My new array', user=user)
