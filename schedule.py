@@ -73,13 +73,12 @@ for ticket in tickets:
                 fillcolor = 'palegoldenrod'
                 fontcolor = 'black'
                 style= 'filled'
-                    
         if ticket['status'] == 'WontFix' or ticket['status'] == 'Fixed' or ticket['status'] == 'Done' or ticket['status'] == 'Duplicate' or ticket['status'] == 'Invalid':
             fillcolor = 'lightslategray'
             fontcolor = 'black'
         if ticket['status'] == 'Started':
             fillcolor = 'palegreen'
             
-        print '%s [URL="http://code.google.com/p/marinemap/issues/detail?id=%s",label="%s\\n%s\\n%s\\n%s\\nStatus: %s\\nOwner: %s",fontsize=24,fillcolor=%s,fontcolor=%s, style=%s];' % (ticket['id'], ticket['id'], ticket['summary'], ticket['estimatedtime'], ticket['priority'], ticket['component'], ticket['status'], ticket['owner'], fillcolor, fontcolor, style)
+        print '%s [URL="http://code.google.com/p/marinemap/issues/detail?id=%s",label="%s\\n%s\\n%s\\n%s\\nStatus: %s\\nOwner: %s",fontsize=24,fillcolor=%s,fontcolor=%s,style=%s];' % (ticket['id'], ticket['id'], ticket['summary'], ticket['estimatedtime'], ticket['priority'], ticket['component'], ticket['status'], ticket['owner'], fillcolor, fontcolor, style)
         
 print "}"
