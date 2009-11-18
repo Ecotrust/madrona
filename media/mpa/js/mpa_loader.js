@@ -30,8 +30,6 @@ lingcod.MpaLoader.prototype.getFormAndLoadMpa = function() {
 lingcod.MpaLoader.prototype.displayForm = function(mpa_form) {
     //I'm adding the submit button here because I couldn't figure out how to get the submitted form to return 
     //the next template to the display panel (it would display the resulting template to the whole window)
-    //This solution however leaves intact the problem of the user hitting <enter> from a text box
-    //in which case the application reloads (problem)
     mpa_form += form_buttons;
     this.displayPanel.html(mpa_form);
     this.initializeButtons();
@@ -78,7 +76,7 @@ lingcod.MpaLoader.prototype.handleFormCompletion = function(load_results) {
     if($('#id_user').val() == "" || $('#id_name').val() == "") {
         this.displayForm(load_results);
     } else {
-        this.renderLoadResults(load_results);
+        this.renderResults(load_results);
     }
 };
 
@@ -88,16 +86,20 @@ lingcod.MpaLoader.prototype.handleFormCompletion = function(load_results) {
  * Regardless, display returned template and return control to the callback
  * @param {JSON} load_data, the json dictionary containing the loaded mpa
  */
-lingcod.MpaLoader.prototype.renderLoadResults = function(load_data) {
-    ret_obj = eval( '(' + load_data + ')' );
-    success = ret_obj.success == '1';
+lingcod.MpaLoader.prototype.renderResults = function(load_data) {
+    var ret_obj = eval( '(' + load_data + ')' );
+    var success = ret_obj.success == '1';
     if(success) {
         //this.drawTool.setMpaID(ret_obj.id);
-        this.drawTool.setClippedShape(ret_obj.clipped_wkt, ret_obj.clipped_kml);
-        this.drawTool.setTargetShape(ret_obj.original_coords);
+        var geojson_clipped = eval( '(' + ret_obj.geojson_clipped + ')' );
+        this.drawTool.setClippedShape(geojson_clipped);
+        
+        var geojson_orig = eval( '(' + ret_obj.geojson_orig + ')' );
+        this.drawTool.setTargetShape(geojson_orig);
         this.drawTool.displayClipped(); 
     }
     this.displayPanel.html(ret_obj.html);
     this.renderCallBack.call(this.renderCallBack, success);
 };
+
 

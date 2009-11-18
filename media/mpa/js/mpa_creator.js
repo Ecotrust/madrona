@@ -8,8 +8,7 @@ var load_clear_html = '<p><button id="load_button">Load Mpa</button><button id="
  * Initializes panels and buttons
  * Creates a new Manipulators instance, MpaLoader instance, and MpaSaver instance
  * @constructor
- * @param {drawTool} drawTool, initialized drawTool object
- * @param {List} manip_list, list of manipulators to be executed
+ * @param {DrawTool} drawTool, initialized drawTool object
  * @param {Dictionary} panels, the ids of the button panel and the results panel
  */
 lingcod.MpaCreator = function( drawTool, panels) {
@@ -47,10 +46,8 @@ lingcod.MpaCreator.prototype.initializeButtons = function() {
     this.clear_all_button = $('#clear_all_button');
     this.clear_all_button.click($.delegate(this.clearAll, this));
     
-    //this.disableButton(this.create_button);
     this.disableButton(this.edit_button);
     this.disableButton(this.finish_button);
-    //this.disableButton(this.load_button);
     this.disableButton(this.clear_mpa_button);
     this.disableButton(this.clear_all_button);
 }
@@ -135,7 +132,7 @@ lingcod.MpaCreator.prototype.acceptLoad = function() {
 
 /**
  * Starts shape drawing process
- * Callback (when user finishes drawing) returns control to this.manipulators.process
+ * Callback from drawShape (when user finishes drawing) returns control to this.manipulators.process
  */
 lingcod.MpaCreator.prototype.createMpa = function() {
     this.results_panel.html("");
@@ -263,7 +260,8 @@ lingcod.MpaCreator.prototype.clearShapeFromDrawTool = function() {
 }
 
 /**
- * Removes shape references from drawTool
+ * Enables Create Mpa and Load Mpa buttons
+ * Disables Edit Mpa and Finish Edit buttons
  */
 lingcod.MpaCreator.prototype.enableCreateAndLoad = function() {
     this.enableButton(this.create_button);

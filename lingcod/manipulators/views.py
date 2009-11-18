@@ -9,7 +9,6 @@ from django.db import models
 
 from django.contrib.gis.geos import *
 from lingcod.studyregion.models import StudyRegion
-from lingcod.common.utils import KmlWrap
 from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
@@ -67,25 +66,24 @@ def multi_generic_manipulator_view(request, manipulators):
                     if form.is_valid():
                         initial_result = form.manipulation
                     else: # invalid parameters - bounce form back to user
-                        return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string( 'common/base_form.html', {'form': form}, RequestContext(request)), "clipped_shape": None, "original_shape": None}))
+                        return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string( 'common/base_form.html', {'form': form}, RequestContext(request))}))
                 else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
                     manip_inst = manipClass( **kwargs )
                     initial_result = manip_inst.manipulate()
                     
                 result = ensure_keys(initial_result)
                 new_shape = result['clipped_shape'] 
-                #original_shape = result['original_shape']
                   
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
                 html_response = html_response + '<br/>' + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
-            return respond_with_template(e.html, None, None, e.success)
+            return respond_with_template(e.html, None, e.success)
         except manipClass.InternalException, e:
-            return respond_with_template(e.html, None, None, e.success)
+            return respond_with_template(e.html, None, e.success)
         except manipClass.HaltManipulations, e:
-            return respond_with_template(e.html, None, None, e.success)
+            return respond_with_template(e.html, None, e.success)
         except Exception, e:
             return respond_with_error('11', e.message)      
     #end manipulator for loop      
@@ -96,39 +94,21 @@ def multi_generic_manipulator_view(request, manipulators):
     new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
 
-    return respond_with_template(html_response, kmlDocWrap(new_shape.kml), str(new_shape), result["success"])
-    #return respond_with_template(html_response, kmlDocWrap(new_shape.kml), kmlDocWrap(result["original_shape"].kml), result["success"], str(new_shape), str(result["original_shape"]))
+    return respond_with_template(html_response, new_shape.geojson, result["success"])
 
-"""   
-#removing original_kml and original_poly
-def respond_with_template(status_html, clipped_kml, original_kml, success="1", clipped_poly=None, original_poly=None):
-    return HttpResponse(simplejson.dumps({"clipped_shape": clipped_kml, "original_shape": original_kml, "html": status_html, "success": success, "clipped_geom": clipped_poly, "original_geom":original_poly}))
-"""    
-def respond_with_template(status_html, clipped_kml, clipped_wkt=None, success="1"):
-    return HttpResponse(simplejson.dumps({"clipped_kml": clipped_kml, "clipped_wkt": clipped_wkt, "html": status_html, "success": success}))   
+def respond_with_template(status_html, geojson_clipped, success="1"):
+    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": geojson_clipped, "success": success}))   
 
 def respond_with_error(key='11', message=''):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    return HttpResponse(simplejson.dumps({"html": status_html, "success": "0"}))
-"""
-#removing clipped, original, success
-def respond_with_error(key='11', message='', clipped=None, original=None, success="0"):
-    status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    return HttpResponse(simplejson.dumps({"clipped_shape": clipped, "original_shape": original, "html": status_html, "success": success}))
-"""    
+    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": None, "success": "0"}))
+  
 def ensure_keys(values):
-    #values.setdefault("message", "no message given")
     values.setdefault("html", "")
     values.setdefault("clipped_shape", None)
-    #values.setdefault("original_shape", None)
     values.setdefault("success", "1")
     return values
- 
-    
-def kmlDocWrap( string ):
-    return '<Document><Placemark> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+string+'</Placemark></Document>'
-
-    
+     
 def testView( request ):
     trans_geom = StudyRegion.objects.current().geometry 
         

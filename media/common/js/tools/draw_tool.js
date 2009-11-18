@@ -1,4 +1,3 @@
-//var studyregionKML = 'http://' + document.location.host + '/studyregion/kml/';
 
 /**
  * Creates a new draw tool.
@@ -11,6 +10,7 @@ lingcod.DrawTool = function(gex) {
     this.clippedShapeWKT = null;
     this.clippedShapeKML = null;
     this.gex = gex;
+    this.formats = new lingcod.Formats();
 };
 
 lingcod.DrawTool.prototype.setMpaID = function(id) {
@@ -23,12 +23,11 @@ lingcod.DrawTool.prototype.getMpaID = function(id) {
 
 /**
  * Assigns local variables related to clipped shape geometries
- * @param {String} clipped_wkt, clipped geometry in wkt
- * @param {String} clipped_kml, clipped geometry in kml
+ * @param {GeoJSON} geojson_obj, geojson representation of the clipped geometry 
  */
-lingcod.DrawTool.prototype.setClippedShape = function(clipped_wkt, clipped_kml) {
-    this.clippedShapeWKT = clipped_wkt;
-    this.clippedShapeKML = clipped_kml;
+lingcod.DrawTool.prototype.setClippedShape = function(geojson_obj) {
+    this.clippedShapeWKT = this.formats.geojsonToWkt(geojson_obj);
+    this.clippedShapeKML = this.formats.geojsonToKml(geojson_obj);
 };
 
 /**
@@ -39,58 +38,16 @@ lingcod.DrawTool.prototype.getClippedShape = function() {
 };
 
 /**
- * Displays clipped shape on the map
- */
-lingcod.DrawTool.prototype.displayClipped = function() {
-    //it's important to know here why we reassign clippedShapeKML
-    this.clippedShapeKML = this.gex.util.displayKmlString(this.clippedShapeKML);
-};
-
-/**
- * Removes clipped shape from display 
- * Removes any references to clipped shape in draw tool
- */
-lingcod.DrawTool.prototype.removeClipped = function() {
-    if ( this.clippedShapeKML ) {
-        //this.gex.edit.endEditLineString( this.clippedShapeKML.getGeometry().getOuterBoundary() );
-        this.gex.dom.removeObject( this.clippedShapeKML );
-        this.id = null;
-        this.clippedShapeWKT = null;
-        this.clippedShapeKML = null;
-    }
-};
-
-/**
- * Displays target shape (user drawn shape) on the map
- */
-lingcod.DrawTool.prototype.displayTarget = function() {
-    this.gex.util.displayKmlString(this.targetShape);
-};
-
-/**
- * Displays given shape on the map
- * @param {String} shape, kml version of shape
- */
-lingcod.DrawTool.prototype.displayShape = function(shape) {
-    return this.gex.util.displayKmlString(shape);
-};
-
-/**
- * Removes given shape from the map
- * @param {String} shape, kml version of shape
- */
-lingcod.DrawTool.prototype.removeShape = function(shape) {
-    this.gex.dom.removeObject(shape);
-};
-
-//var test_shape = '<Document><Placemark id="coords"> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style><Polygon><outerBoundaryIs><LinearRing><coordinates>-118.380493164,32.6103172302,0 -118.167098999,32.8235702515,0 -118.238487244,33.0850410461,0 -118.696723938,33.1927986145,0 -118.837890625,32.8370475769,0 -118.380493164,32.6103172302,0</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document>';
-
-
-/**
  * Creates and assigns new Target Shape from given coordinate list
- * @param {List} coords, list of coordinates [(long, lat)]
+ * @param {GeoJSON} geojson_obj, geojson representation of the user-drawn geometry 
  */
-lingcod.DrawTool.prototype.setTargetShape = function(coords) {
+lingcod.DrawTool.prototype.setTargetShape = function(geojson_obj) {
+    //I'm uncomfortable with this [0] reference
+    //however, a user-drawn shape cannot be a multi-polygon, so perhaps this is acceptable
+    //I'd also like to find a better way of building the targetShape placemark
+    //Seems like there should be a better way than extracting and reversing the coordinate pairs
+    //Seems like we should be able to use a kml geometry to build the placemark but failed to get that to work
+    var coords = this.formats.geojsonToCoords(geojson_obj)[0];
     this.clear();
     this.targetShape = this.gex.dom.addPlacemark({
         visibility: false,
@@ -101,7 +58,6 @@ lingcod.DrawTool.prototype.setTargetShape = function(coords) {
         }
     });
 };
-//maybe we should add function editThisShape that merges editShape with setTargetShape?
 
 /**
  * Start accepting user input for shape-draw. Sets callbacks to keep measures updated and to switch to edit mode on completion.
@@ -132,13 +88,61 @@ lingcod.DrawTool.prototype.drawShape = function( finishedCallback ) {
 };
 
 /**
+ * Displays target shape (user drawn shape) on the map
+ */
+lingcod.DrawTool.prototype.displayTarget = function() {
+    this.gex.util.displayKmlString(this.targetShape);
+};
+
+/**
+ * Displays clipped shape on the map
+ */
+lingcod.DrawTool.prototype.displayClipped = function() {
+    //it's important to know here why we reassign clippedShapeKML (I don't know why)
+    this.clippedShapeKML = this.gex.util.displayKmlString(this.clippedShapeKML);
+};
+
+/**
+ * Removes clipped shape from display 
+ * Removes any references to clipped shape in draw tool
+ */
+lingcod.DrawTool.prototype.removeClipped = function() {
+    if ( this.clippedShapeKML ) {
+        //this.gex.edit.endEditLineString( this.clippedShapeKML.getGeometry().getOuterBoundary() );
+        this.gex.dom.removeObject( this.clippedShapeKML );
+        this.id = null;
+        this.clippedShapeWKT = null;
+        this.clippedShapeKML = null;
+    }
+};
+
+/**
+ * Displays given shape on the map
+ * @param {String} shape, kml version of shape
+ */
+lingcod.DrawTool.prototype.displayShape = function(shape) {
+    return this.gex.util.displayKmlString(shape);
+};
+
+/**
+ * Removes given shape from the map
+ * @param {String} shape, kml version of shape
+ */
+lingcod.DrawTool.prototype.removeShape = function(shape) {
+    this.gex.dom.removeObject(shape);
+};
+
+/**
  * Wraps the targetShape coordinates in a wkt representation
  */
 lingcod.DrawTool.prototype.targetToWkt = function() {
+    //Once again, it seems safe for now to assume a single polygon for target shape (user-drawn)
+    //Perhaps this function should be changed to placemarkToWkt and placed in formats.js?
+    //Can placemarks be multipolygons?
     var linearRing = this.targetShape.getGeometry().getOuterBoundary();
     var wkt = 'POLYGON((';
     for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ ) {
-        if (i > 0)
+        if ( i > 0 )
             wkt = wkt + ',';
         wkt = wkt + linearRing.getCoordinates().get(i).getLongitude() + ' ' + linearRing.getCoordinates().get(i).getLatitude();
     }
@@ -147,6 +151,7 @@ lingcod.DrawTool.prototype.targetToWkt = function() {
     return wkt;
 };
 
+
 /**
  * Begin editing process
  */
@@ -154,6 +159,7 @@ lingcod.DrawTool.prototype.editShape = function() {
     this.targetShape.setVisibility(true);
     this.gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
 };
+//maybe we should add function editThisShape that merges editShape with setTargetShape?
 
 /**
  * Stops the editing process.
@@ -201,4 +207,5 @@ lingcod.DrawTool.prototype.hide = function() {
         this.targetShape.setVisibility(false);
     }
 };
+
 

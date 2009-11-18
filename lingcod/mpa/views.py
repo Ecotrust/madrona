@@ -14,12 +14,14 @@ def mpaLoadForm(request, loadform, form_template='mpa/mpa_load_form.html'):
         Handler for load form request
     '''
     if request.method == 'GET':
-        #action = '/mpa/load/'
+        #action = '.'
         opts = {
             'form': loadform,
             #'action': action,
         }
         return render_to_response(form_template, RequestContext(request, opts))
+    else:
+        return HttpResponse( "MPA Load Form request received unexpected " + request.method + " request.", status=400 )
 
 def mpaLoad(request, mpas, loadform, loaded_template='mpa/mpa_loaded.html', form_template='mpa/mpa_load_form.html', error_template='mpa/mpa_load_error.html'):
     '''
@@ -44,6 +46,8 @@ def mpaLoad(request, mpas, loadform, loaded_template='mpa/mpa_loaded.html', form
                 'action': action,
             }
             return render_to_response(form_template, RequestContext(request, opts))
+    else:
+        return HttpResponse( "MPA Load request received unexpected " + request.method + " request.", status=400 )
    
 def mpaCommit(request, mpaform, form_template='mpa/mpa_save_form.html', mpa_template='mpa/mpa_saved.html'):
     '''
@@ -65,13 +69,15 @@ def mpaCommit(request, mpaform, form_template='mpa/mpa_save_form.html', mpa_temp
                 'action': action,
             }
             return render_to_response(form_template, RequestContext(request, opts))
-    if request.method == 'GET':
+    elif request.method == 'GET':
         action = '/mpa/'
         opts = {
             'form': mpaform,
             'action': action,
         }
         return render_to_response(form_template, RequestContext(request, opts))
+    else:
+        return HttpResponse( "MPA Commit request received unexpected " + request.method + " request.", status=400 )
      
 def buildJsonResponse(mpa, template):
     '''
@@ -79,15 +85,16 @@ def buildJsonResponse(mpa, template):
             returns an json response
     '''
     #id = mpa.id
-    clipped_geom, clipped_kml = transformAndWrapForClient(mpa.geometry_final)
-    original_geom, original_kml = transformAndWrapForClient(mpa.geometry_orig)
     status_html = render_to_string(template, {'MEDIA_URL':settings.MEDIA_URL, 'name':mpa.name})
     success = '1'
-    clipped_wkt = str(clipped_geom) 
-    original_coords = extractCoords(original_geom)
-    return HttpResponse(simplejson.dumps({"clipped_kml": clipped_kml, "clipped_wkt": clipped_wkt, "original_coords":original_coords, "html": status_html, "success": success}))
-    #return HttpResponse(simplejson.dumps({"id": id, "clipped_kml": clipped_kml, "clipped_wkt": clipped_wkt, "original_coords":original_coords, "html": status_html, "success": success}))
- 
+        
+    mpa.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID)
+    geojson_orig = mpa.geometry_orig.geojson
+    mpa.geometry_final.transform(settings.GEOMETRY_CLIENT_SRID)
+    geojson_clipped = mpa.geometry_final.geojson
+    
+    return HttpResponse(simplejson.dumps({"geojson_orig": geojson_orig, "geojson_clipped": geojson_clipped, "html": status_html, "success": success}))
+
 def extractCoords(geom):
     '''
         Extracts coordinates from a geometry into (long,lat) list 
@@ -95,17 +102,7 @@ def extractCoords(geom):
     points = [point for point in geom[0]]
     rpoints = [(point[1],point[0]) for point in points]
     return rpoints
-     
-def transformAndWrapForClient(geom):
-    '''
-        transforms geometry to client srid 
-        returns a wkt version of the geometry, and a kml wrapped version of geometry 
-    '''
-    new_geom = geom
-    new_geom.transform(settings.GEOMETRY_CLIENT_SRID)
-    new_kml = kmlDocWrap(new_geom.kml) 
-    return new_geom, new_kml
-          
+    
 def transformForDB(geom):
     '''
         Assumes a client side srid

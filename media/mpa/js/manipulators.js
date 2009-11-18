@@ -16,6 +16,10 @@ lingcod.Manipulators = function(results_panel, renderCallBack, drawTool) {
     $.getJSON( manip_url, $.delegate(this.initialize_list, this) );
 };
 
+/**
+ * Called in response to a completed GET request for the list of manipulators 
+ * Assigns manipulator_list with a string representation of the list of manipulators to be executed
+ */
 lingcod.Manipulators.prototype.initialize_list = function(manip_list) {
     this.manipulator_list = this.stringFromList(manip_list);
 }
@@ -47,7 +51,8 @@ lingcod.Manipulators.prototype.renderResults = function(manip_data) {
     this.success = manip_ret.success=='1';
     
     if(this.success) {
-        this.drawTool.setClippedShape(manip_ret.clipped_wkt, manip_ret.clipped_kml);
+        var geojson_clipped = eval( '(' + manip_ret.geojson_clipped + ')' );
+        this.drawTool.setClippedShape(geojson_clipped);
         this.drawTool.hide();
         this.drawTool.displayClipped();
         this.results_panel.html(manip_ret.html);
@@ -56,7 +61,6 @@ lingcod.Manipulators.prototype.renderResults = function(manip_data) {
     else {
         this.displayFail(manip_ret.html);
     }
-    //WONDERING IF WE REALLY NEED TO SEND BOTH clipped_shape AND clipped_geom BACK FROM SERVER...
 };
 
 /**

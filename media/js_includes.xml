@@ -29,6 +29,7 @@
     <test path="common/js/test/tree/kmlForest.js" />
     <file path="common/js/lib/json2.js" />
     <file path="common/js/tools/draw_tool.js" />
+    <file path="common/js/tools/formats.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
     <file path="mpa/js/manipulators.js" />
     <file path="mpa/js/mpa_creator.js" />
