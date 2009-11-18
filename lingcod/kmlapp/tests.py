@@ -48,6 +48,13 @@ class KMLAppTest(TestCase):
         response = self.client.get('/kml/dummy/mpa.kml', {})
         self.assertEquals(response.status_code, 200)
 
+    def test_dummy_kmz_view(self):
+        """ 
+        Tests that dummy user can retrieve a zipped KML file (ie KMZ)
+        """
+        response = self.client.get('/kml/dummy/mpa.kmz', {})
+        self.assertEquals(response.status_code, 200)
+
     def test_valid_kml(self):
         """ 
         Tests that dummy kml is valid (requires feedvalidator)
