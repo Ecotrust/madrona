@@ -35,7 +35,7 @@
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
         {% endif %}
         
-        drawTool = new lingcod.DrawTool(gex);
+        drawTool = new lingcod.DrawTool(ge, gex);
         panels = { button_panel: 'button_panel', results_panel: 'results_panel' };
         mpaCreator = new lingcod.MpaCreator(drawTool, panels);
     }

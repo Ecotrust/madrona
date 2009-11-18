@@ -66,7 +66,7 @@ lingcod.MpaSaver.prototype.initializeFormFieldsAndButtons = function() {
 lingcod.MpaSaver.prototype.handleFormCompletion = function(save_results) {
     this.displayPanel.html(save_results); //this line allows the id_geometry_orig check to work
     if ($('#id_geometry_orig').val() == undefined) {
-        success = true;
+        var success = true;
         this.renderCallBack.call(this.renderCallBack, success);
     }
     else {
@@ -96,7 +96,7 @@ lingcod.MpaSaver.prototype.submitForm = function() {
  * Returns control to callback
  */
 lingcod.MpaSaver.prototype.cancelForm = function() {
-    success = false;
+    var success = false;
     this.displayPanel.html("");
     this.renderCallBack.call(this.renderCallBack, success);
 };

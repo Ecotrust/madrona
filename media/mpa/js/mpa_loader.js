@@ -61,7 +61,7 @@ lingcod.MpaLoader.prototype.submitForm = function() {
  * Clears the display panel and returns control to the callback
  */
 lingcod.MpaLoader.prototype.cancelForm = function() {
-    success = false;
+    var success = false;
     this.displayPanel.html("");
     this.renderCallBack.call(this.renderCallBack, success);
 };

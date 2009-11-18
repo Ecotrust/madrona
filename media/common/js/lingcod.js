@@ -25,7 +25,7 @@ var lingcod = {
         this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
         this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         this.measureTool = new lingcod.measureTool();
-        this.drawTool = new lingcod.DrawTool(gex);
+        this.drawTool = new lingcod.DrawTool(ge, gex);
         
         //part of mpa creation -- draw_panels and mpaCreator
         //will need to come up with a better solution for manipulator url

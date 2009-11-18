@@ -9,7 +9,6 @@ lingcod.Formats = function() {
  * Builds a [lat,lon] list (reversing the order of geojson coordinates) of coordinates from a geojson polygon representation
  * (used to create new placemark (targetShape))
  * @param {Geojson} geojson_obj, geojson representation of a polygon
- */
 lingcod.Formats.prototype.geojsonToCoords = function(geojson_obj) {
     var coords = geojson_obj.coordinates;
     var numPolys = coords.length;
@@ -25,6 +24,7 @@ lingcod.Formats.prototype.geojsonToCoords = function(geojson_obj) {
     }
     return rev_coords;
 };
+ */
 
 /**
  * Builds the wkt polygon representation from a geojson polygon representation
@@ -52,14 +52,13 @@ lingcod.Formats.prototype.geojsonToWkt = function(geojson_obj) {
 };
 
 /**
- * Builds the kml polygon representation from a geojson polygon representation
+ * Builds the kml placemark representation from a geojson encoded polygon 
  * @param {Geojson} geojson_obj, geojson representation of a polygon
  */
-lingcod.Formats.prototype.geojsonToKml = function(geojson_obj) {
+lingcod.Formats.prototype.geojsonToKmlPlacemark = function(geojson_obj) {
     var coords = geojson_obj.coordinates;
-    var kml = '';
     var inner_kml = this.innerKml(coords);
-    kml = '<Document><Placemark id="coords"> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+inner_kml+'</Placemark></Document>';
+    var kml = '<Placemark> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+inner_kml+'</Placemark>';
     
     return kml;
 };

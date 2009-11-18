@@ -18,7 +18,7 @@ lingcod.MpaCreator = function( drawTool, panels) {
         
     this.results_panel = $('#'+panels.results_panel);
     this.button_panel = $('#'+panels.button_panel);
-    button_html = create_edit_finish_html + load_clear_html;
+    var button_html = create_edit_finish_html + load_clear_html;
     this.button_panel.html(button_html);
     this.template_buttons = []
     
@@ -101,7 +101,7 @@ lingcod.MpaCreator.prototype.loadMpa = function() {
  */
 lingcod.MpaCreator.prototype.finishLoadDisplay = function(success) {
     if (success) {
-        load_html = this.results_panel.html() + accept_html;
+        var load_html = this.results_panel.html() + accept_html;
         this.results_panel.html(load_html);
                         
         this.accept_button = $('#accept_button');
@@ -152,7 +152,7 @@ lingcod.MpaCreator.prototype.createMpa = function() {
  */
 lingcod.MpaCreator.prototype.finishManipulatorDisplay = function(success) {
     if(success) {
-        display = this.results_panel.html() + accept_html;
+        var display = this.results_panel.html() + accept_html;
         this.results_panel.html(display);
         
         this.accept_button = $('#accept_button');
@@ -219,8 +219,8 @@ lingcod.MpaCreator.prototype.finishEdit = function() {
  * Saves the clipped shape (and original geometry) to the database.
  */
 lingcod.MpaCreator.prototype.saveMpa = function() {
-    //this.mpaSaver.getFormAndPostData(this.drawTool.getMpaID(), this.drawTool.targetToWkt(), this.drawTool.getClippedShape());
-    this.mpaSaver.getFormAndPostData(this.drawTool.targetToWkt(), this.drawTool.getClippedShape());
+    //this.mpaSaver.getFormAndPostData(this.drawTool.getMpaID(), this.drawTool.targetToWkt(), this.drawTool.getClippedWKT());
+    this.mpaSaver.getFormAndPostData(this.drawTool.targetToWkt(), this.drawTool.getClippedWKT());
 }
 
 /**

@@ -13,6 +13,8 @@ lingcod.Manipulators = function(results_panel, renderCallBack, drawTool) {
     this.results_panel = results_panel;
     this.renderCallBack = renderCallBack;
     this.drawTool = drawTool;
+    this.manipulator_list = null;
+    this.success = false; 
     $.ajaxSetup({ cache: false });
     $.getJSON( manip_url, $.delegate(this.initialize_list, this) );
 };
@@ -29,7 +31,7 @@ lingcod.Manipulators.prototype.initialize_list = function(manip_list) {
  * Executes an ajax POST request to /manipulators/<manipulator-list> with the user-drawn geometry
  */
 lingcod.Manipulators.prototype.process = function() { 
-    target_wkt = this.drawTool.targetToWkt();
+    var target_wkt = this.drawTool.targetToWkt();
     $.post(
         '/manipulators/'+this.manipulator_list+'/', 
         { target_shape: target_wkt },
@@ -48,7 +50,7 @@ lingcod.Manipulators.prototype.process = function() {
  * @param {JSON} manip_data, the json dictionary containing the manipulated mpa
  */
 lingcod.Manipulators.prototype.renderResults = function(manip_data) {
-    manip_ret = eval( '(' + manip_data + ')' );
+    var manip_ret = eval( '(' + manip_data + ')' );
     this.success = manip_ret.success=='1';
     
     if(this.success) {
@@ -70,7 +72,7 @@ lingcod.Manipulators.prototype.renderResults = function(manip_data) {
  * @param {String} display_html, the template explaining the failure
  */
 lingcod.Manipulators.prototype.displayFail = function(display_html) {
-    display = display_html + try_again_html;
+    var display = display_html + try_again_html;
     this.results_panel.html(display);
     
     this.try_again_button = $('#try_again_button');
@@ -89,7 +91,7 @@ lingcod.Manipulators.prototype.tryAgain = function() {
  * @param {List} 
  */
 lingcod.Manipulators.prototype.stringFromList = function(list) {
-    string_result = '';
+    var string_result = '';
     for ( var i = 0; i < list.length; i++ ) {
         if (i > 0)
             string_result = string_result + ',';

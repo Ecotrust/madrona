@@ -4,11 +4,12 @@
  * @constructor
  * @param {GEarthExtensions} gex, the Google Earth Extensions object
  */
-lingcod.DrawTool = function(gex) {
+lingcod.DrawTool = function(ge, gex) {
     this.id = null;
     this.targetShape = null;
     this.clippedShapeWKT = null;
     this.clippedShapeKML = null;
+    this.ge = ge;
     this.gex = gex;
     this.formats = new lingcod.Formats();
 };
@@ -17,7 +18,7 @@ lingcod.DrawTool.prototype.setMpaID = function(id) {
     this.id = id;
 };
 
-lingcod.DrawTool.prototype.getMpaID = function(id) {
+lingcod.DrawTool.prototype.getMpaID = function() {
     return this.id;
 };
 
@@ -27,13 +28,13 @@ lingcod.DrawTool.prototype.getMpaID = function(id) {
  */
 lingcod.DrawTool.prototype.setClippedShape = function(geojson_obj) {
     this.clippedShapeWKT = this.formats.geojsonToWkt(geojson_obj);
-    this.clippedShapeKML = this.formats.geojsonToKml(geojson_obj);
+    this.clippedShapeKML = this.formats.geojsonToKmlPlacemark(geojson_obj);
 };
 
 /**
  * Returns wkt of clipped shape
  */
-lingcod.DrawTool.prototype.getClippedShape = function() {
+lingcod.DrawTool.prototype.getClippedWKT = function() {
     return this.clippedShapeWKT;
 };
 
@@ -42,21 +43,11 @@ lingcod.DrawTool.prototype.getClippedShape = function() {
  * @param {GeoJSON} geojson_obj, geojson representation of the user-drawn geometry 
  */
 lingcod.DrawTool.prototype.setTargetShape = function(geojson_obj) {
-    //I'm uncomfortable with this [0] reference
-    //however, a user-drawn shape cannot be a multi-polygon, so perhaps this is acceptable
-    //I'd also like to find a better way of building the targetShape placemark
-    //Seems like there should be a better way than extracting and reversing the coordinate pairs
-    //Seems like we should be able to use a kml geometry to build the placemark but failed to get that to work
-    var coords = this.formats.geojsonToCoords(geojson_obj)[0];
     this.clear();
-    this.targetShape = this.gex.dom.addPlacemark({
-        visibility: false,
-        polygon: coords,
-        style: {
-            line: { width: 2, color: '#ff0' },
-            poly: { color: '8000ffff' }
-        }
-    });
+    var targetKmlString = this.formats.geojsonToKmlPlacemark(geojson_obj);
+    var targetKml = this.ge.parseKml(targetKmlString);
+    this.targetShape = this.ge.getFeatures().appendChild(targetKml);
+    this.targetShape.setVisibility(false);
 };
 
 /**
@@ -85,6 +76,25 @@ lingcod.DrawTool.prototype.drawShape = function( finishedCallback ) {
     };
 
     this.gex.edit.drawLineString( this.targetShape.getGeometry().getOuterBoundary(), drawLineStringOptions );
+};
+
+/**
+ * Begin editing process
+ */
+lingcod.DrawTool.prototype.editShape = function() {
+    this.targetShape.setVisibility(true);
+    this.gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
+};
+//maybe we should add function editThisShape that merges editShape with setTargetShape?
+
+/**
+ * Stops the editing process.
+ * @param {Function} finishedCallback, function called after editing is halted.
+ */
+lingcod.DrawTool.prototype.endEdit = function( finishedCallback ) {
+    this.gex.edit.endEditLineString(this.targetShape.getGeometry().getOuterBoundary());
+    finishedCallback.call();
+    
 };
 
 /**
@@ -149,26 +159,6 @@ lingcod.DrawTool.prototype.targetToWkt = function() {
     wkt = wkt + '))'
     
     return wkt;
-};
-
-
-/**
- * Begin editing process
- */
-lingcod.DrawTool.prototype.editShape = function() {
-    this.targetShape.setVisibility(true);
-    this.gex.edit.editLineString( this.targetShape.getGeometry().getOuterBoundary() );
-};
-//maybe we should add function editThisShape that merges editShape with setTargetShape?
-
-/**
- * Stops the editing process.
- * @param {Function} finishedCallback, function called after editing is halted.
- */
-lingcod.DrawTool.prototype.endEdit = function( finishedCallback ) {
-    this.gex.edit.endEditLineString(this.targetShape.getGeometry().getOuterBoundary());
-    finishedCallback.call();
-    
 };
 
 /**
