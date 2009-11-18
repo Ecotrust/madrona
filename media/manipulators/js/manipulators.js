@@ -1,5 +1,6 @@
 var try_again_html = '<p><button id="try_again_button">Try Again</button></p>';
 var manip_url = '/manipulators-list/';
+
 /**
  * Creates a new Manipulator instance.
  * @constructor
