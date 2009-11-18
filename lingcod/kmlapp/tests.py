@@ -1,7 +1,7 @@
 """
 Unit tests for the KML App
 """
-import settings
+from django.conf import settings
 from django.test import TestCase
 from django.contrib.gis.geos import GEOSGeometry 
 from django.contrib.auth.models import *
