@@ -59,29 +59,12 @@ class KMLAppTest(TestCase):
         """ 
         Tests that dummy kml is valid (requires feedvalidator)
         """
-        import feedvalidator
-        from feedvalidator import compatibility
-
         response = self.client.get('/kml/dummy/mpa.kml', {})
-        events = feedvalidator.validateString(response.content, firstOccurrenceOnly=1)['loggedEvents'] 
 
-        # Three levels of compatibility
-        # "A" is most basic level
-        # "AA" mimics online validator
-        # "AAA" is experimental; these rules WILL change or disappear in future versions
-        filterFunc = getattr(compatibility, "AA")
-
-        # there are a few bugs in feedvalidator, doesn't recognize valid ExtendedData element so we ignore
-        events = [x for x in filterFunc(events) 
-                 if not (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData')]
-
-        from feedvalidator.formatter.text_plain import Formatter
-        output = Formatter(events)
-
-        if output:
-            print "\n".join(output)
+        from lingcod.common.utils import kml_errors
+        errors = kml_errors(response.content)
+        if errors:
+            print errors
             raise Exception("Invalid KML")
-        else:
-            print "No KML errors or warnings"
 
         self.assertEquals(response.status_code, 200)

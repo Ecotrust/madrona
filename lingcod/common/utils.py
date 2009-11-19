@@ -88,3 +88,37 @@ def get_array_class():
         return get_class(settings.ARRAY_CLASS)
     except:
         raise Exception("Problem importing Array class. Is ARRAY_CLASS defined correctly in your settings?")
+
+def kml_errors(kmlstring):
+    import feedvalidator
+    from feedvalidator import compatibility
+    events = feedvalidator.validateString(kmlstring, firstOccurrenceOnly=1)['loggedEvents'] 
+
+    # Three levels of compatibility
+    # "A" is most basic level
+    # "AA" mimics online validator
+    # "AAA" is experimental; these rules WILL change or disappear in future versions
+    filterFunc = getattr(compatibility, "AA")
+    events = filterFunc(events)
+
+    # there are a few annoyances with feedvalidator; specifically it doesn't recognize 
+    # KML ExtendedData element 
+    # or our custom 'mm' namespance 
+    # or our custom atom link relation
+    # so we ignore all related events
+    events = [x for x in events if not (
+                (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData') or
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.update_form') or
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org')
+                )]
+
+    from feedvalidator.formatter.text_plain import Formatter
+    output = Formatter(events)
+
+    if output:
+        errors = []
+        for i in range(len(output)):
+            errors.append( (events[i],events[i].params,output[i],kmlstring.splitlines()[events[i].params['backupline']]) )
+        return errors
+    else:
+        return None
