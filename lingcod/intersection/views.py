@@ -37,6 +37,8 @@ def test_drawing_intersect(request):
                     return render_to_response('generic_results.html', {'result': result})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
+                elif format=='json':
+                    return HttpResponse(json_encode(result), mimetype='text/json')
             else:
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
@@ -44,6 +46,8 @@ def test_drawing_intersect(request):
                     return render_to_response('transformed_results.html', {'result': result})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
+                elif format=='json':
+                    return HttpResponse(json_encode(result), mimetype='text/json')
     else:
         form = TestIntersectionForm()
     return render_to_response('polygon_form.html', {'form': form})
@@ -76,6 +80,8 @@ def test_poly_intersect(request):
                     return render_to_response('generic_results.html', {'result': result})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
+                elif format=='json':
+                    return HttpResponse(json_encode(result), mimetype='text/json')
             else:
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
@@ -83,6 +89,8 @@ def test_poly_intersect(request):
                     return render_to_response('transformed_results.html', {'result': result})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
+                elif format=='json':
+                    return HttpResponse(json_encode(result), mimetype='text/json')
     else:
         form = TestPolygonIntersectionForm()
     return render_to_response('testpolygon_intersection.html', {'form': form})
@@ -105,6 +113,8 @@ def organized_intersection(request, org_scheme, format, geom_wkt):
         return render_to_response('transformed_results.html', {'result': result})
     elif format=='csv':
         return build_csv_response(result, str(hash(geom)) )
+    elif format=='json':
+        return HttpResponse(json_encode(result), mimetype='text/json')
 
 def org_scheme_info(request, org_id):
     osc = OrganizationScheme.objects.get(pk=org_id)

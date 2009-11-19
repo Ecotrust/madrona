@@ -28,7 +28,7 @@ def upload_singlefeature_point(file_name='test_points.zip'):
     zip_file.close()
 
 class SumResultsTest(TestCase):
-    def text_sum_results(self):
+    def test_sum_results(self):
         summed = sum_results([[{'feature_name': u'test points','percent_of_total': 10,'result': 1.0,'sort': 0.5,'units': u'count'},{'feature_name': u'Beaches','percent_of_total': 0.2,'result': 1.0,'sort': 0.6,'units': u'miles'},{'feature_name': u'Rocky Shores','percent_of_total': 1.0,'result': 10.0,'sort': 0.7,'units': u'miles'}],[{'feature_name': u'test points','percent_of_total': 10,'result': 1.0,'sort': 0.5,'units': u'count'},{'feature_name': u'Beaches','percent_of_total': 0.2,'result': 1.0,'sort': 0.6,'units': u'miles'},{'feature_name': u'Rocky Shores','percent_of_total': 2.0,'result': 20.0,'sort': 0.7,'units': u'miles'}]])
         
         self.assertEquals(summed.__len__(),3)

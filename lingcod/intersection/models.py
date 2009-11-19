@@ -134,7 +134,9 @@ def sum_results(results):
       'units': u'miles'}]]
     '''
     # These keys will be summed.  Any other key will be the last value encountered.
-    sum_keys_dict = {'result': 0.0,'percent_of_total': 0.0,'geo_collection': geos.fromstr('GEOMETRYCOLLECTION EMPTY') }
+    sum_keys_dict = {'result': 0.0,'percent_of_total': 0.0}
+    if 'geo_collection' in results[0][0].keys():
+        sum_keys_dict['geo_collection'] = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
     sum_keys = sum_keys_dict.keys()
     
     summed_results = []

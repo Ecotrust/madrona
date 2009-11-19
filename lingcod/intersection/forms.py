@@ -28,7 +28,7 @@ class TestIntersectionForm(forms.ModelForm):
     OrganizationScheme_Choices = [('None', 'Default')]
     [OrganizationScheme_Choices.append((osc.pk,osc.name)) for osc in OrganizationScheme.objects.all()]
     org_scheme = forms.ChoiceField(choices=OrganizationScheme_Choices)
-    FormatChoices = [('html', 'HTML'), ('csv', 'CSV')]
+    FormatChoices = [('html', 'HTML'), ('csv', 'CSV'), ('json','JSON')]
     format = forms.ChoiceField(choices=FormatChoices)
     geometry = forms.CharField(widget=PolygonWidget() )
     class Meta:
@@ -40,7 +40,7 @@ class TestPolygonIntersectionForm(forms.ModelForm):
     OrganizationScheme_Choices = [('None', 'Default')]
     [OrganizationScheme_Choices.append((osc.pk,osc.name)) for osc in OrganizationScheme.objects.all()]
     org_scheme = forms.ChoiceField(choices=OrganizationScheme_Choices)
-    FormatChoices = [('html', 'HTML'), ('csv', 'CSV')]
+    FormatChoices = [('html', 'HTML'), ('csv', 'CSV'), ('json','JSON')]
     format = forms.ChoiceField(choices=FormatChoices)
     TestPoly_Choices = [(tp.geometry.wkt,tp.pk) for tp in TestPolygon.objects.all()]
     geometry = forms.ChoiceField(choices=TestPoly_Choices)
