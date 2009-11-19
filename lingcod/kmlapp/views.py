@@ -55,7 +55,7 @@ def create_kmz(kml, zippath):
     # zip it up into a kmz
     kmzbuffer = StringIO()
     zipout = zipfile.ZipFile(kmzbuffer,'w',zipfile.ZIP_DEFLATED)
-    zipout.write(kmlfile.name, zippath) 
+    zipout.write(kmlfile.name, zippath.encode('ascii')) 
     zipout.close()
     # close out the tempfile
     kmlfile.close()
@@ -86,7 +86,7 @@ def create_mpa_kmz(request, input_username):
 
     t = get_template('main.kml')
     kml = t.render(Context({'shapes': shapes, 'designations': designations}))
-    kmz = create_kmz(kml, '%s_mpa/doc.kml' % user.username)
+    kmz = create_kmz(kml, 'user_mpas/doc.kml')
 
     response = HttpResponse()
     response['Content-Type'] = mimetypes.KMZ
