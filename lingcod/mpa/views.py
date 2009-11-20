@@ -116,3 +116,18 @@ def kmlDocWrap( string ):
         Wraps a given string (should be kml geometry) in Placemark kml
     '''
     return '<Document><Placemark id="coords"> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+string+'</Placemark></Document>'
+
+
+from lingcod.rest.views import delete, update
+from lingcod.common.utils import get_mpa_class
+
+def mpa(request, pk):
+    """
+    Implements lingcod.rest.update, delete, and attributes html view
+    """
+    if request.method == 'DELETE':
+        return delete(request, get_mpa_class(), pk)
+    elif request.method == 'GET':
+        # return attributes html
+    elif request.method == 'POST':
+        update(request, get_mpa_class.Options.form_class, pk)

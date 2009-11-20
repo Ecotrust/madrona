@@ -25,6 +25,18 @@ class MpaTest(TestCase):
         self.assertEquals(Mpa, get_mpa_class())
         settings.MPA_CLASS = old_setting
         
+    def test_get_mpa_form(self):
+        """
+        Tests function that retrieves the mpa class using the MPA_CLASS
+        setting.
+        """
+        from lingcod.common.utils import get_mpa_form
+        from lingcod.mpa.forms import MpaForm
+        old_setting = settings.MPA_FORM
+        settings.MPA_FORM = 'lingcod.mpa.forms.MpaForm'
+        self.assertEquals(MpaForm, get_mpa_form())
+        settings.MPA_FORM = old_setting
+        
     def test_add_to_array(self):
         """Make sure MPAs can be added to Arrays"""
         user = User.objects.all()[0]

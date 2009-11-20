@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from lingcod.mpa.models import *
-
+from lingcod.mpa.models import Mpa
 
 class MpaForm(ModelForm):
     name = forms.CharField(max_length=100)

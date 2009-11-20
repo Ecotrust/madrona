@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'lingcod.mpa',
     'lingcod.kmlapp',
     'lingcod.array',
+    'lingcod.rest',
     'simple.simple_app',
 )
 
