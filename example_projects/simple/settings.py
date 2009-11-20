@@ -138,5 +138,6 @@ COMPRESS_AUTO = True
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'simple_app.models.Mpa'
 ARRAY_CLASS = 'simple_app.models.MpaArray'
+MPA_FORM = 'lingcod.mpa.forms.MpaForm'
 
 from settings_local import *
