@@ -12,5 +12,4 @@ The images should be saved in media/projects/nc_mlpa/screencasts/images (see set
 
 The .flv videos are currently in maps14 (in media/screencasts) and will have to be updated from mm v1 to mm v2.
 
-
-
+Also, the Screencast model uses ImageField which may require the installation of PIL (Python Image Library)
