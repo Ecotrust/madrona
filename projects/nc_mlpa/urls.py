@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     (r'^mpa/load/$', 'nc_mlpa.views.mlpaMpaLoad'),
     (r'^mpa/load/form/$', 'nc_mlpa.views.mlpaMpaLoadForm'),
     (r'^mlpa/', include('mlpa.urls')),
+    (r'^screencasts/', include('lingcod.screencasts.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

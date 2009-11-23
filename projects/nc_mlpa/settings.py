@@ -57,6 +57,11 @@ MEDIA_URL = '/media/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
+#Screencast videos, images, and video-player locations
+SCREENCASTS = 'projects/nc_mlpa/screencasts/'
+SCREENCAST_IMAGES = 'projects/nc_mlpa/screencasts/images'
+VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '6c(kr8r%aqf#r8%arr=0py_7t9m)wgocwyp5g@!j7eb0erm(2+'
 
@@ -101,6 +106,7 @@ INSTALLED_APPS = (
     'lingcod.wave',
     'mlpa',
     'lingcod.mpa',
+    'lingcod.screencasts',
 )
 
 from lingcod.common import assets

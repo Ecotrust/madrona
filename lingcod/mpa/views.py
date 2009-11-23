@@ -129,5 +129,6 @@ def mpa(request, pk):
         return delete(request, get_mpa_class(), pk)
     elif request.method == 'GET':
         # return attributes html
+        pass
     elif request.method == 'POST':
         update(request, get_mpa_class.Options.form_class, pk)

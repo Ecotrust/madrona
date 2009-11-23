@@ -1,0 +1,16 @@
+Screencasts SETUP
+
+This app requires videos, images, and a video player.
+Screencast fields (including videos, images, title, description, etc) can be adjusted via the admin.
+The video player can be downloaded from http://www.longtailvideo.com/players/jw-flv-player/ 
+The video player should be saved in media/screencasts/video-player (see settings.VIDEO_PLAYER)
+
+The following storage guidelines are for the north coast nc_mlpa project:
+
+The videos should be saved in media/projects/nc_mlpa/screencasts (see settings.SCREENCASTS)
+The images should be saved in media/projects/nc_mlpa/screencasts/images (see settings.SCREENCAST_IMAGES)
+
+The .flv videos are currently in maps14 (in media/screencasts) and will have to be updated from mm v1 to mm v2.
+
+
+

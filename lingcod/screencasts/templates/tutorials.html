@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+{% endblock %}
+
+{% block body %}
+<h4 style="margin:14px;">Movie Tutorials</h4>
+
+<div class="screencast-link" >
+
+{% for screencast in screencast_list %}
+<p class="screencast-link">
+	<a href="{{screencast.urlname}}" target="_blank">
+        <img src="{{screencast.image.url}}" align="left" />
+			<span>{{screencast.title}}</span>
+			<br />
+			{{screencast.description}}
+	</a>
+</p>
+{% endfor %}
+
+{% endblock %}

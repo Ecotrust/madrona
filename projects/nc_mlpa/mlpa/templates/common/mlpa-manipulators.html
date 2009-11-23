@@ -10,9 +10,8 @@
     var gex = null;
     var ge_lookAt = [33.5, -118];
     var ge_range = 400000;
-    var ge_tile = 20;
+    var ge_tilt = 20;
     var ge_studyregion_display = 'http://' + document.location.host + '/studyregion/kml/';
-    //var manip_url = '/manipulators-list/';
         
     $(document).ready(function() {
         google.earth.createInstance("map3d", initCallback, failureCallback);
@@ -28,7 +27,7 @@
         ge.getWindow().setVisibility(true); // required
         
         gex = new GEarthExtensions(pluginInstance);
-        gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tile });    
+        gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tilt });    
         gex.util.displayKml( ge_studyregion_display );
         
         {% if extra_kml %}

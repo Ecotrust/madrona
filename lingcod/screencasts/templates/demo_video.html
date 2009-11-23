@@ -1,0 +1,14 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+<body style='background-color:#99BBCC; font-family:helvetica; overflow:auto;'>
+{% endblock %}
+
+{% block body %}
+<div align='center'>
+    <h2>Video Demonstration On {{screencast.title}}</h2>
+    <div id='container' style='width:600px;height:465px;'>
+        <embed type="application/x-shockwave-flash" src="{{videoplayer}}" style="" id="ply" name="ply" bgcolor="#FFFFFF" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file={{screencast.video.url}}" height="100%" width="100%">
+    </div>
+</div>
+{% endblock %}
