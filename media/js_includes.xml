@@ -33,6 +33,7 @@
     <test path="common/js/test/tools/draw_tool.js" />
     <file path="common/js/tools/formats.js" />
     <file path="manipulators/js/manipulators.js" />
+    <test path="manipulators/js/test/manipulators.js" />
     <file path="mpa/js/mpa_creator.js" />
     <file path="mpa/js/mpa_loader.js" />
     <file path="mpa/js/mpa_saver.js" />
