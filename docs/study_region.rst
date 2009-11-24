@@ -32,7 +32,6 @@ syncdb management command.
 
 Changing the Study Region boundaries on a deployed application presents many 
 problems.
-
   * All Marine Protected Areas affected by the Study Region geometry changes will need to be re-clipped.
   * Any reports associated with those MPAs will need to be regenerated.
   * Some cached data structures such as the network graph used for calculating Array spacing will need to be regenerated.

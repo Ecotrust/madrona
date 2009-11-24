@@ -17,6 +17,7 @@ MarineMap Decision Support Tool Documentation
    waves
    marine_protected_areas
    arrays
+   manipulators
    reports
    ui
    templatetags
