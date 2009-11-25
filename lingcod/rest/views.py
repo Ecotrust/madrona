@@ -86,8 +86,9 @@ def create(request, form_class=None, action=None, title=None,
         classname = form_class.Meta.model.__name__
         title = 'New %s' % (classname.capitalize())
     if request.method == 'POST':
-        request.POST['user'] = request.user.pk
-        form = form_class(request.POST)
+        values = request.POST.copy()
+        values.__setitem__('user', request.user.pk)
+        form = form_class(values)
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
@@ -193,8 +194,9 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
         raise Exception('Model to be edited must have a name attribute.')
         
     if request.method == 'POST':
-        request.POST['user'] = request.user.pk
-        form = form_class(request.POST)
+        values = request.POST.copy()
+        values.__setitem__('user', request.user.pk)
+        form = form_class(values)
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
