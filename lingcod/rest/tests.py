@@ -66,8 +66,7 @@ class DeleteTest(TestCase):
         response = self.client.delete('/delete/%d/' % (self.test_instance.pk, ))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(RestTestModel.objects.filter(pk=pk).count(), 0)
-        
-    
+            
     def test_delete_authorized(self):
         """
         Users can delete objects that belong to them
@@ -291,3 +290,43 @@ class ResourceTest(TestCase):
         self.client.login(username='resttest', password='pword')
         response = self.client.get('/rest_test_models/%s/' % (self.test_instance.pk, ))
         self.assertContains(response, self.test_instance.name, status_code=200)
+        
+class FormResourcesTest(TestCase):
+    
+    urls = 'lingcod.rest.test_urls'
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
+        self.test_instance = RestTestModel(user=self.user, name="My Name")
+        self.test_instance.save()
+    
+    def test_create_form(self):
+        response = self.client.get('/rest_test_models/forms/')
+        self.assertEqual(response.status_code, 401)
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get('/rest_test_models/forms/')
+        self.assertContains(response, 'form', status_code=200)
+        # Title automatically assigned if not given
+        self.assertContains(response, 'New Resttestmodel', status_code=200)
+    
+    def test_create_submit(self):
+        response = self.client.post('/rest_test_models/forms/', {
+            'name': "My Test", 'user': 1
+        })
+        self.assertEqual(response.status_code, 401)
+        self.client.login(username='resttest', password='pword')
+        old_count = RestTestModel.objects.count()
+        response = self.client.post('/rest_test_models/forms/', {
+            'name': "My Test", 'user': 1
+        })
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(old_count < RestTestModel.objects.count())
+    
+    def test_update_form(self):
+        response = self.client.get('/rest_test_models/forms/%d/' % (self.test_instance.pk, ))
+        self.assertEqual(response.status_code, 401)
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get('/rest_test_models/forms/%d/' % (self.test_instance.pk, ))
+        self.assertContains(response, 'form', status_code=200)
+        self.assertContains(response, "Edit &#39;My Name&#39;", status_code=200)

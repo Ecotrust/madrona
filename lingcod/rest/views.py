@@ -62,21 +62,13 @@ def delete(request, model=None, pk=None):
         instance.delete()
         return HttpResponse('Deleted.')
     else:
-        return HttpResponse('DELETE http method must be used to delete', status=405)
+        return HttpResponse('DELETE http method must be used to delete', 
+            status=405)
 
-def create(request, form_class=None, action=None, title="New"):
+def create(request, form_class=None, action=None, title=None, 
+    template='rest/form.html', extra_context={}):
     """
         When calling, provide the request object and a ModelForm class
-        
-        request types:
-            GET:    Provides a form to create a new instance of the model 
-                    represented by the ModelForm
-
-                Possible response codes:
-
-                200: OK. Form rendered properly.
-                401: Not logged in.
-                5xx: Server error.
                 
             POST:   Create a new instance from filled out ModelForm
 
@@ -90,6 +82,9 @@ def create(request, form_class=None, action=None, title="New"):
         raise Exception('create view not configured properly.')
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)    
+    if title == None:
+        classname = form_class.Meta.model.__name__
+        title = 'New %s' % (classname.capitalize())
     if request.method == 'POST':
         request.POST['user'] = request.user.pk
         form = form_class(request.POST)
@@ -100,18 +95,19 @@ def create(request, form_class=None, action=None, title="New"):
             response['Location'] = m.get_absolute_url()
             return response
         else:
-            c = RequestContext(request, {
+            extra_context.update({
                 'form': form,
                 'title': title,
                 'action': action,
             })
-            t = loader.get_template('rest/form.html')
+            c = RequestContext(request, extra_context)
+            t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
     else:
         return HttpResponse('Invalid http method', status=405)
 
 def create_form(request, form_class=None, action=None, extra_context={}, 
-    title="New", template='rest/form.html'):
+    title=None, template='rest/form.html'):
     """
     Serves a form for creating new objects
     
@@ -121,31 +117,54 @@ def create_form(request, form_class=None, action=None, extra_context={},
         raise Exception('create_form view is not configured properly.')
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
+    if title == None:
+        classname = form_class.Meta.model.__name__
+        title = 'New %s' % (classname.capitalize())
     if request.method == 'GET':
-        return render_to_response(template, {
+        extra_context.update({
             'form': form_class(),
             'title': title,
             'action': action,
         })
+        return render_to_response(template, extra_context)
     else:
         return HttpResponse('Invalid http method', status=405)
-        
 
-def update(request, form_class=None, pk=None):
+def update_form(request, form_class=None, pk=None, extra_context={}, 
+    template='rest/form.html'):
+    """
+    Returns a form for editing features
+    """
+    if form_class is None or pk is None:
+        raise Exception('update view not configured properly.')
+    instance = get_object_for_editing(request, form_class.Meta.model, pk)
+    if isinstance(instance, HttpResponse):
+        # get_object_for_editing is trying to return a 404, 401, or 403
+        return instance
+    try:
+        instance.get_absolute_url()
+    except:
+        raise Exception('Model to be edited must have get_absolute_url defined.')
+    try:
+        instance.name
+    except:
+        raise Exception('Model to be edited must have a name attribute.')
+
+    if request.method == 'GET':
+        form = form_class(instance=instance)
+        extra_context.update({
+            'form': form,
+            'title': "Edit '%s'" % (instance.name, ),
+            'action': instance.get_absolute_url(),
+        })
+        return render_to_response(template, extra_context)
+    else:
+        return HttpResponse('Invalid http method', status=405)        
+
+def update(request, form_class=None, pk=None, extra_context={}, template='rest/form.html'):
     """
         When calling, provide the request object, a model class, and the
         primary key of the instance to be updated.
-        
-        request type:
-            GET:    Provides a form for updating the instance.
-            
-                possible response codes:
-                
-                200: OK. Form provided in response body.
-                401: Not logged in.
-                403: Forbidden. User is not staff or does not own object. 
-                404: Instance for pk not found.
-                5xx: Server error.
                 
             POST: Update instance.
             
@@ -167,7 +186,7 @@ def update(request, form_class=None, pk=None):
     try:
         instance.get_absolute_url()
     except:
-        raise Exception('Model to be edited must have get_absolute_url defined.')
+        raise Exception('Model must have get_absolute_url defined.')
     try:
         instance.name
     except:
@@ -181,47 +200,18 @@ def update(request, form_class=None, pk=None):
             m = form.save()
             return HttpResponse('updated', status=200)
         else:
-            c = RequestContext(request, {
+            extra_context.update({
                 'form': form,
-                'title': instance.name,
+                'title': "Edit '%s'" % (instance.name, ),
                 'action': instance.get_absolute_url(),
             })
-            t = loader.get_template('rest/form.html')
+            c = RequestContext(request, extra_context)
+            t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
     else:
         return HttpResponse("""Invalid http method. 
         Yes we know, PUT is supposed to be used rather than POST, 
         but it was much easier to implement as POST :)""", status=405)
-
-def update_form(request, form_class=None, pk=None, extra_context={}, 
-    template='rest/form.html'):
-    """
-    Returns a form for editing features
-    """
-    if form_class is None or pk is None:
-        raise Exception('update view not configured properly.')
-    instance = get_object_for_editing(request, form_class.Meta.model, pk)
-    if isinstance(instance, HttpResponse):
-        # get_object_for_editing is trying to return a 404, 401, or 403
-        return instance
-    try:
-        instance.get_absolute_url()
-    except:
-        raise Exception('Model to be edited must have get_absolute_url defined.')
-    try:
-        instance.name
-    except:
-        raise Exception('Model to be edited must have a name attribute.')
-        
-    if request.method == 'GET':
-        form = form_class(instance=instance)
-        return render_to_response(template, {
-            'form': form,
-            'title': instance.name,
-            'action': instance.get_absolute_url(),
-        })
-    else:
-        return HttpResponse('Invalid http method', status=405)
         
     
 def resource(request, form_class=None, pk=None, get_func=None, 
@@ -245,7 +235,7 @@ def resource(request, form_class=None, pk=None, get_func=None,
     Makes use of lingcod.rest.views.update and lingcod.rest.views.delete
     """
     if form_class is None or pk is None:
-        raise Exception('lingcod.rest.views.resource not setup with correct arguments')
+        raise Exception('lingcod.rest.views.resource not setup correctly')
     if request.method == 'DELETE':
         return delete(request, form_class.Meta.model, pk)
     elif request.method == 'GET':
@@ -253,8 +243,42 @@ def resource(request, form_class=None, pk=None, get_func=None,
         if get_func is not None:
             return get_func(request, instance)
         else:
-            return render_to_response(template, {
+            extra_context.update({
                 'instance': instance,
             })
+            return render_to_response(template, extra_context)
     elif request.method == 'POST':
         return update(request, form_class, pk)
+        
+def form_resources(request, form_class=None, pk=None, extra_context={}, 
+    template='rest/form.html', create_title=None):
+    if request.method == 'POST':
+        if pk is None:
+            return create(
+                request,
+                form_class=form_class, 
+                action=request.build_absolute_uri(), 
+                title=create_title, 
+                extra_context=extra_context)
+        else:
+            return HttpResponse('Invalid http method', status=405)        
+    elif request.method == 'GET':
+        if pk is None:
+            # Get the create form
+            return create_form(
+                request, 
+                form_class=form_class, 
+                action=request.build_absolute_uri(), 
+                extra_context=extra_context, 
+                title=create_title, 
+                template=template)
+        else:
+            # get the update form
+            return update_form(
+                request, 
+                form_class=form_class, 
+                pk=pk, 
+                extra_context=extra_context, 
+                template=template)
+    else:
+        return HttpResponse('Invalid http method', status=405)        
