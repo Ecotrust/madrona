@@ -302,31 +302,34 @@ class FormResourcesTest(TestCase):
         self.test_instance.save()
     
     def test_create_form(self):
-        response = self.client.get('/rest_test_models/forms/')
+        response = self.client.get('/rest_test_models/form/')
         self.assertEqual(response.status_code, 401)
         self.client.login(username='resttest', password='pword')
-        response = self.client.get('/rest_test_models/forms/')
+        response = self.client.get('/rest_test_models/form/')
         self.assertContains(response, 'form', status_code=200)
         # Title automatically assigned if not given
         self.assertContains(response, 'New Resttestmodel', status_code=200)
     
     def test_create_submit(self):
-        response = self.client.post('/rest_test_models/forms/', {
+        response = self.client.post('/rest_test_models/form/', {
             'name': "My Test", 'user': 1
         })
         self.assertEqual(response.status_code, 401)
         self.client.login(username='resttest', password='pword')
         old_count = RestTestModel.objects.count()
-        response = self.client.post('/rest_test_models/forms/', {
+        response = self.client.post('/rest_test_models/form/', {
             'name': "My Test", 'user': 1
         })
         self.assertEqual(response.status_code, 201)
         self.assertTrue(old_count < RestTestModel.objects.count())
     
     def test_update_form(self):
-        response = self.client.get('/rest_test_models/forms/%d/' % (self.test_instance.pk, ))
+        response = self.client.get('/rest_test_models/%d/form/' % (self.test_instance.pk, ))
         self.assertEqual(response.status_code, 401)
         self.client.login(username='resttest', password='pword')
-        response = self.client.get('/rest_test_models/forms/%d/' % (self.test_instance.pk, ))
+        response = self.client.get('/rest_test_models/%d/form/' % (self.test_instance.pk, ))
         self.assertContains(response, 'form', status_code=200)
         self.assertContains(response, "Edit &#39;My Name&#39;", status_code=200)
+
+
+# TODO: Add tests for optional arguments like template, extra_context, title

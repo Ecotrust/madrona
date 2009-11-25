@@ -94,6 +94,12 @@ def get_mpa_form():
         return get_class(settings.MPA_FORM)
     except:
         raise Exception("Problem importing MPA form. Is MPA_FORM defined correctly in your settings?")
+        
+def get_array_form():
+    try:
+        return get_class(settings.ARRAY_FORM)
+    except:
+        raise Exception("Problem importing Array form. Is ARRAY_FORM defined correctly in your settings?")
     
 def kml_errors(kmlstring):
     import feedvalidator

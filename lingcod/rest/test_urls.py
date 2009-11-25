@@ -9,6 +9,6 @@ urlpatterns = patterns('lingcod.rest.views',
     (r'^update/(?P<pk>\d+)/form/$', 'update_form', {'form_class': RestTestForm}),
     
     url(r'^rest_test_models/(?P<pk>\d+)/$', 'resource', {'form_class': RestTestForm}, name='rest_test_resource'),
-    url(r'^rest_test_models/forms/$', 'form_resources', {'form_class': RestTestForm }),
-    url(r'^rest_test_models/forms/(?P<pk>\d*)/$', 'form_resources', {'form_class': RestTestForm }),
+    url(r'^rest_test_models/form/$', 'form_resources', {'form_class': RestTestForm }),
+    url(r'^rest_test_models/(?P<pk>\d+)/form/$', 'form_resources', {'form_class': RestTestForm }),
 )

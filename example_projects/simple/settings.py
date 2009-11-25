@@ -1,6 +1,6 @@
 import os
 
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+from lingcod.common.default_settings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,12 +19,6 @@ DATABASE_USER = 'postgres'             # Not used with sqlite3.
 # DATABASE_PASSWORD = ''         # Not used with sqlite3.
 # DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 # DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
-GEOMETRY_DB_SRID = 3310
-GEOMETRY_CLIENT_SRID = 4326
-
-# localhost Google key:
-GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -67,15 +61,6 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-MIDDLEWARE_CLASSES = (
-    # GZip speeds up downloads by compressing on the fly
-    'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'maintenancemode.middleware.MaintenanceModeMiddleware',
-)
-
 ROOT_URLCONF = 'simple.urls'
 
 TEMPLATE_DIRS = (
@@ -85,66 +70,12 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
-
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.admin',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.gis',
-    'compress',
-    'lingcod.common',
-    'lingcod.layers',
-    'lingcod.studyregion',
-    'lingcod.simplefaq',
-    'lingcod.staticmap',
-    'lingcod.manipulators',
-    'lingcod.mpa',
-    'lingcod.wave',
-    'lingcod.mpa',
-    'lingcod.kmlapp',
-    'lingcod.array',
-)
-
 INSTALLED_APPS += (
-    'lingcod.rest',
     'simple.simple_app',
 )
 
-from lingcod.common import assets
-
-COMPRESS_CSS = {
-    'application': {
-        'source_filenames': assets.get_css_files(),
-        'output_filename': 'marinemap.r?.css',
-        'extra_context': {
-            'media': 'all'
-        }
-    }
-}
-
-COMPRESS_JS = {
-    'application': {
-        'source_filenames': assets.get_js_files(),
-        'output_filename': 'marinemap.r?.js'
-    },
-    'tests': {
-        'source_filenames': assets.get_js_test_files(),
-        'output_filename': 'marinemap_tests.r?.js'
-    }
-}
-
-COMPRESS_VERSION = True
-COMPRESS_AUTO = True
-
-# Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'simple_app.models.Mpa'
 ARRAY_CLASS = 'simple_app.models.MpaArray'
-MPA_FORM = 'lingcod.mpa.forms.MpaForm'
-ARRAY_FORM = 'lingcod.array.forms.ArrayForm'
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
 
 from settings_local import *

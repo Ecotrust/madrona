@@ -26,7 +26,8 @@ MarineMap Decision Support Tool Documentation
    postgis_django_tests
    static_map_configuration
    rest
-
+   settings
+   
 API
 ***
 

@@ -1,3 +1,5 @@
+.. _mpas:
+
 Marine Protected Areas
 ======================
 

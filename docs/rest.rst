@@ -1,3 +1,5 @@
+.. _rest:
+
 REST Framework
 ==============
 
@@ -9,6 +11,12 @@ objects, such as Marine Protected Areas and Arrays. For a particular model
 this framework can provide RESTful web services, client modules to interact 
 with those services, and a consistent user interface for create, update, and 
 delete operations.
+
+.. note::
+
+  If you are simply trying to change aspects of the MPA and Array services, 
+  try checking out the :ref:`Marine Protected Areas<mpas>` documentation 
+  before doing a deep dive into this.
 
 .. note::
   
@@ -36,6 +44,7 @@ Once configured, MarineMap's user interface can be configured to display a
 listing of all user created objects for display on the map, as well as 
 controls to add to the list and modify existing objects. :ref:`Manipulators<manipulators>`
 can also be integrated for preprocessing spatial data.
+
 
 Creating New Resources
 **********************
