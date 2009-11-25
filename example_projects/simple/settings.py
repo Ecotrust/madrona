@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -105,6 +105,9 @@ INSTALLED_APPS = (
     'lingcod.mpa',
     'lingcod.kmlapp',
     'lingcod.array',
+)
+
+INSTALLED_APPS += (
     'lingcod.rest',
     'simple.simple_app',
 )
@@ -139,5 +142,9 @@ COMPRESS_AUTO = True
 MPA_CLASS = 'simple_app.models.Mpa'
 ARRAY_CLASS = 'simple_app.models.MpaArray'
 MPA_FORM = 'lingcod.mpa.forms.MpaForm'
+ARRAY_FORM = 'lingcod.array.forms.ArrayForm'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 from settings_local import *
