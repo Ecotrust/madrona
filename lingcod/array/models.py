@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from lingcod.common.utils import get_mpa_class, get_array_class
+from lingcod.array.managers import ArrayManager
 
 class MpaArray(models.Model):
     """
@@ -30,6 +31,8 @@ class MpaArray(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     
+    class Meta:
+        abstract=True
     
     def __unicode__(self):
         return self.name
@@ -60,3 +63,5 @@ class MpaArray(models.Model):
         return Mpa.objects.filter(
             content_type=ContentType.objects.get_for_model(self),
             object_id=self.pk)
+    
+    objects = ArrayManager()

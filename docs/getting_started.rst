@@ -22,6 +22,8 @@ MarineMap.
     * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
     * `sphinx <http://sphinx.pocoo.org/>`_ (used for generating documentation)
     * `mapnik <http://mapnik.org/>`_ (generates static maps for reports)
+    * `feedvalidator <http://www.feedvalidator.org/docs/howto/install_and_run.html>`_
+    * `beautiful soup <http://www.crummy.com/software/BeautifulSoup/>`_ is necessary for running tests
     
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 

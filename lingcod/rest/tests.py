@@ -331,5 +331,122 @@ class FormResourcesTest(TestCase):
         self.assertContains(response, 'form', status_code=200)
         self.assertContains(response, "Edit &#39;My Name&#39;", status_code=200)
 
+class UtilsTest(TestCase):
 
+    def test_rest_uid(self):
+        from lingcod.rest.utils import rest_uid
+        self.assertEqual(rest_uid(RestTestModel), 'rest_resttestmodel')
+
+from elementtree.ElementTree import fromstring
+
+def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
+    user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
+    response = testcase.client.get(url)
+    testcase.assertContains(response, 'kml', status_code=200)
+    root = fromstring(response.content)
+    found = False
+    
+    # look for create form link
+    for link in root.findall("*//{http://www.w3.org/2005/Atom}link"):
+        if link.attrib['rel'] == 'marinemap.create_form':
+            if link.attrib["{http://marinemap.org}model"] == rest_uid:
+                found = link
+    testcase.assertTrue(found != False, 'Could not find link. %s' % (url, ))
+    
+    # Now follow the link to get the form
+    response = testcase.client.get(found.attrib['href'])
+    testcase.assertEqual(response.status_code, 401, "Must be authenticated")
+    testcase.client.login(username='resttest', password='pword')
+    response = testcase.client.get(found.attrib['href'])
+    testcase.assertContains(response, 'form', status_code=200)
+    
+    # get form action
+    from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+    soup = BeautifulSoup(response.content)
+    action = soup.find('form')['action']
+    testcase.assertTrue(action != None)
+    
+    # check for validation errors
+    import copy
+    invalid_form_data = copy.deepcopy(valid_form_data)
+    invalid_form_data['name'] = ''
+    response = testcase.client.post(action, invalid_form_data)
+    testcase.assertContains(response, 'form', status_code=400)
+
+    # make sure submission works
+    response = testcase.client.post(action, valid_form_data)
+    testcase.assertEqual(response.status_code, 201, 'New resource created with valid form data')
+    location = response['Location']
+    
+    # Get Attributes
+    response = testcase.client.get(location)
+    testcase.assertContains(response, valid_form_data['name'], status_code=200)
+	
+    # Use link to look for element in refreshed list
+    response = testcase.client.get(url)
+    testcase.assertContains(response, 'kml', status_code=200)
+    root = BeautifulStoneSoup(response.content)
+    found = False
+    for link in root.findAll('atom:link', attrs={'rel': 'self'}):
+        if location.find(link['href']) != -1:
+            found = link
+
+    resource_url = found['href']
+    testcase.assertTrue(found != False, 'Should be able to find self link with url %s that matches the location header of our newly created object.' % (url, ))
+    element = link.parent
+    name = element.find('name').contents[0]
+    testcase.assertEqual(name, unicode(valid_form_data['name']))
+    
+    # look for update form
+    text = str(element)
+    form_link = element.find('atom:link', attrs={'rel': 'marinemap.update_form'})
+    testcase.assertTrue(form_link != None, 'Should find link with marinemap.update_form rel')
+    href = form_link['href']
+    
+    # grab it
+    response = testcase.client.get(href)
+    testcase.assertContains(response, 'myname', status_code=200)
+    # action should match resource location
+    soup = BeautifulSoup(response.content)
+    action = soup.find('form')['action']
+    testcase.assertEqual(resource_url, action)
+    
+    # try posting invalid form data
+    response = testcase.client.post(action, invalid_form_data)
+    testcase.assertContains(response, 'form', status_code=400)
+    
+    # try changing the name and posting valid form data
+    valid_form_data['name'] = valid_form_data['name'] + ' Edited'
+    response = testcase.client.post(action, valid_form_data)
+    new_name = valid_form_data['name']
+    testcase.assertEqual(response.status_code, 200)
+    
+    # should find changes in list resources
+    response = testcase.client.get(url)
+    testcase.assertContains(response, 'kml', status_code=200)
+    root = BeautifulStoneSoup(response.content)
+    found = False
+    for link in root.findAll('atom:link', attrs={'rel': 'self'}):
+        if location.find(link['href']) != -1:
+            found = link
+
+    resource_url = found['href']
+    testcase.assertTrue(found != False, 'Need to find our object again')
+    element = link.parent
+    name = element.find('name').contents[0]
+    testcase.assertEqual(name, unicode(new_name))
+    
+    # Now delete
+    response = testcase.client.delete(resource_url)
+    testcase.assertEqual(response.status_code, 200)
+    # make sure it can't be found now
+    response = testcase.client.get(url)
+    testcase.assertContains(response, 'kml', status_code=200)
+    root = BeautifulStoneSoup(response.content)
+    found = False
+    for link in root.findAll('atom:link', attrs={'rel': 'self'}):
+        if location.find(link['href']) != -1:
+            found = link
+    testcase.assertTrue(found == False, 'Shouldnt be able to find deleted object now')
+    
 # TODO: Add tests for optional arguments like template, extra_context, title

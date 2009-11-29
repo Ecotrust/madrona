@@ -15,15 +15,18 @@ def get_mpa_data(user):
     Mpa = utils.get_mpa_class()
 
     mpas = Mpa.objects.filter(user=user)
-    shapes = {'Unattached':[]}
+    unattached = utils.get_array_class()(name='Unattached')
+    shapes = {unattached:[]}
     for mpa in mpas:
         if not mpa.array:
-            shapes['Unattached'].append(mpa)
+            shapes[unattached].append(mpa)
         else:
             if mpa.array.name in shapes:
                 shapes[mpa.array.name].append(mpa)
             else:
                 shapes[mpa.array.name] = [mpa]
+    for array in utils.get_array_class().objects.empty():
+        shapes[array] = []
     designations = MpaDesignation.objects.all()
     return shapes, designations
 

@@ -121,6 +121,7 @@ def kml_errors(kmlstring):
     events = [x for x in events if not (
                 (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.update_form') or
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.create_form') or
                 (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org')
                 )]
 

@@ -1,18 +1,21 @@
 {% extends "style.kml" %}
 {% block folders_and_placemarks %}
+{% load rest_uid array_uid mpa_uid %}
 {% for array, mpas in shapes.items %}
  <Folder>
-  <name>{{ array }}</name>
-  <atom:link rel="marinemap.update_form" title="Edit" mm:icon="http://marinemap.org/path/to/icon.jpg" mm:model="simple_app_array" href="http://marinemap.org/path/to/form/1" />
-  <atom:link rel="self" title="{{ array }}" mm:model="simple_app_mpa" href="http://marinemap.org/path/to/mpa/attributes" />
+  <name>{{ array.name }}</name>
+	{% if array.id %}
+  	<atom:link rel="marinemap.update_form" title="Edit {{array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=array.id %}" />
+  	<atom:link rel="self" title="{{ array.name }}" mm:model="{% array_uid %}" href="{{ array.get_absolute_url }}" />	
+	{% endif %}
   <visibility>1</visibility>
   <open>0</open>
  {% for mpa in mpas %} 
   <Placemark id="mpa_{{ mpa.id }}">
     <name>{{ mpa.name }}</name>
     <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
-    <atom:link rel="marinemap.update_form" title="Edit" mm:icon="http://marinemap.org/path/to/icon.jpg" mm:model="simple_app_mpa" href="http://marinemap.org/path/to/form/1" />
-    <atom:link rel="self" title="{{mpa.name}}" mm:model="simple_app_mpa" href="http://marinemap.org/path/to/mpa/attributes" />
+    <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="/path/to/form/1" />
+    <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="/path/to/mpa/attributes" />
     <ExtendedData>
       <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
       <Data name="name"><value>{{ mpa.name }}</value></Data>
