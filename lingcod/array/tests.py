@@ -13,11 +13,7 @@ class ArrayTestArray(MpaArray):
     extra_attr = models.CharField(max_length=255, blank=True)
     # 
     # objects = MpaArray.objects
-    @models.permalink
-    def get_absolute_url(self):
-        return ('array_resource', (), {
-            'pk': self.pk
-        })
+
         
 from lingcod.rest.forms import UserForm
 

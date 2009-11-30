@@ -64,4 +64,9 @@ class MpaArray(models.Model):
             content_type=ContentType.objects.get_for_model(self),
             object_id=self.pk)
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('array_resource', (), {
+            'pk': self.pk
+        })
     objects = ArrayManager()
