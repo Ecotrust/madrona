@@ -14,7 +14,7 @@ def get_user_mpa_data(user):
     Just basically a data structure manipulation on the queryset.
 
     The template expects something like:
-     {'array name': {'array': array_object, 'mpas': [mpa1, mpa2] } }
+     {'array name + id': {'array': array_object, 'mpas': [mpa1, mpa2] } }
     """
     Mpa = utils.get_mpa_class()
 
@@ -25,12 +25,14 @@ def get_user_mpa_data(user):
         if not mpa.array:
             shapes['Unattached']['mpas'].append(mpa)
         else:
+            array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
             if mpa.array.name in shapes.keys():
-                shapes[mpa.array.name]['mpas'].append(mpa)
+                shapes[array_nameid]['mpas'].append(mpa)
             else:
-                shapes[mpa.array.name] = {'array': mpa.array, 'mpas':[mpa]}
+                shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
     for array in utils.get_array_class().objects.empty():
-        shapes[array.name] = {'array': array, 'mpas':[]}
+        array_nameid = "%s_%d" % (array.name, array.id)
+        shapes[array_nameid] = {'array': array, 'mpas':[]}
     designations = MpaDesignation.objects.all()
     return shapes, designations
 
@@ -48,10 +50,11 @@ def get_array_mpa_data(user, input_array_id):
     except:
         raise Http404
     mpas = the_array.mpa_set
-    shapes = {the_array.name: {'array':the_array, 'mpas': []} }
+    array_nameid = "%s_%d" % (the_array.name, the_array.id)
+    shapes = {array_nameid: {'array':the_array, 'mpas': []} }
     for mpa in mpas:
-        if mpa.array.name in shapes.keys():
-            shapes[the_array.name]['mpas'].append(mpa)
+        if array_nameid in shapes.keys():
+            shapes[array_nameid]['mpas'].append(mpa)
         else:
             raise Http404
     designations = MpaDesignation.objects.all()
@@ -70,7 +73,8 @@ def get_single_mpa_data(user, input_mpa_id):
     except:
         raise Http404
     if mpa.array:
-        shapes = {mpa.array.name: {'array':mpa.array, 'mpas': [mpa]} }
+        array_nameid = "%s_%d" % (the_array.name, the_array.id)
+        shapes = {array_nameid: {'array':mpa.array, 'mpas': [mpa]} }
     else:
         unattached = utils.get_array_class()(name='Unattached')
         shapes = {'Unattached': {'array': unattached, 'mpas':[mpa]} }

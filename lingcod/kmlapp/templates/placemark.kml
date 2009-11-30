@@ -1,7 +1,7 @@
 {% extends "style.kml" %}
 {% block folders_and_placemarks %}
 {% load rest_uid array_uid mpa_uid %}
-{% for array_name, a in shapes.items %}
+{% for array_nameid, a in shapes.items %}
  <Folder>
   <name>{{ a.array.name }}</name>
 	{% if a.array.id %}
