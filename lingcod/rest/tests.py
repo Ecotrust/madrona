@@ -385,12 +385,11 @@ def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
     # Use link to look for element in refreshed list
     response = testcase.client.get(url)
     testcase.assertContains(response, 'kml', status_code=200)
-    root = BeautifulStoneSoup(response.content)
+    root = BeautifulStoneSoup(response.content, selfClosingTags=['atom:link'])
     found = False
     for link in root.findAll('atom:link', attrs={'rel': 'self'}):
         if location.find(link['href']) != -1:
             found = link
-
     resource_url = found['href']
     testcase.assertTrue(found != False, 'Should be able to find self link with url %s that matches the location header of our newly created object.' % (url, ))
     element = link.parent
@@ -424,7 +423,7 @@ def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
     # should find changes in list resources
     response = testcase.client.get(url)
     testcase.assertContains(response, 'kml', status_code=200)
-    root = BeautifulStoneSoup(response.content)
+    root = BeautifulStoneSoup(response.content, selfClosingTags=['atom:link'])
     found = False
     for link in root.findAll('atom:link', attrs={'rel': 'self'}):
         if location.find(link['href']) != -1:
