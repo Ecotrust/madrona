@@ -392,7 +392,7 @@ def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
             found = link
     resource_url = found['href']
     testcase.assertTrue(found != False, 'Should be able to find self link with url %s that matches the location header of our newly created object.' % (url, ))
-    element = link.parent
+    element = found.parent
     name = element.find('name').contents[0]
     testcase.assertEqual(name, unicode(valid_form_data['name']))
     
@@ -431,7 +431,7 @@ def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
 
     resource_url = found['href']
     testcase.assertTrue(found != False, 'Need to find our object again')
-    element = link.parent
+    element = found.parent
     name = element.find('name').contents[0]
     testcase.assertEqual(name, unicode(new_name))
     

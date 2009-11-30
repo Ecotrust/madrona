@@ -196,11 +196,11 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
     if request.method == 'POST':
         values = request.POST.copy()
         values.__setitem__('user', request.user.pk)
-        form = form_class(values)
+        form = form_class(values, instance=instance)
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
-            return HttpResponse('updated', status=200)
+            return HttpResponse('updated' + m.name, status=200)
         else:
             extra_context.update({
                 'form': form,
