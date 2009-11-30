@@ -149,5 +149,5 @@ class ArrayResourcesTestCase(TestCase):
         from lingcod.rest.utils import rest_uid
         self.settings_manager.set(ARRAY_FORM = 'lingcod.array.tests.ArrayTestForm', ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray')
         self.assertEquals(ArrayTestArray, get_array_class())
-        assertImplementsRestInterface(self, '/kml/dummy/mpa.kml', 
+        assertImplementsRestInterface(self, '/kml/dummy/user_mpa.kml', 
             rest_uid(ArrayTestArray), {'name': 'myname'})
