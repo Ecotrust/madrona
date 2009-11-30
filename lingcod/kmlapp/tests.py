@@ -40,31 +40,42 @@ class KMLAppTest(TestCase):
         array2.save()
         array2.add_mpa(mpa2)
 
-
-    def test_dummy_kml_view(self):
+    def test_array_kml(self):
         """ 
-        Tests that dummy user can retrieve a KML file 
+        Tests that Array can be represented as valid KML
         """
-        response = self.client.get('/kml/dummy/mpa.kml', {})
-        self.assertEquals(response.status_code, 200)
-
-    def test_dummy_kmz_view(self):
-        """ 
-        Tests that dummy user can retrieve a zipped KML file (ie KMZ)
-        """
-        response = self.client.get('/kml/dummy/mpa.kmz', {})
-        self.assertEquals(response.status_code, 200)
-
-    def test_valid_kml(self):
-        """ 
-        Tests that dummy kml is valid (requires feedvalidator)
-        """
-        response = self.client.get('/kml/dummy/mpa.kml', {})
-
+        response = self.client.get('/kml/2/array.kml', {})
         from lingcod.common.utils import kml_errors
         errors = kml_errors(response.content)
         if errors:
-            print errors
-            raise Exception("Invalid KML")
+            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertEquals(response.status_code, 200)
 
+    def test_single_kml(self):
+        """ 
+        Tests that single MPA can be represented as valid KML
+        """
+        response = self.client.get('/kml/2/mpa.kml', {})
+        from lingcod.common.utils import kml_errors
+        errors = kml_errors(response.content)
+        if errors:
+            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertEquals(response.status_code, 200)
+
+    def test_user_kml(self):
+        """ 
+        Tests that user can retrieve valid KML file of all users MPAs
+        """
+        response = self.client.get('/kml/dummy/user_mpa.kml', {})
+        from lingcod.common.utils import kml_errors
+        errors = kml_errors(response.content)
+        if errors:
+            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertEquals(response.status_code, 200)
+
+    def test_kmz_view(self):
+        """ 
+        Tests that we can retrieve a zipped KML file (ie KMZ)
+        """
+        response = self.client.get('/kml/dummy/user_mpa.kmz', {})
         self.assertEquals(response.status_code, 200)

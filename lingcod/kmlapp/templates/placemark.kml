@@ -1,16 +1,16 @@
 {% extends "style.kml" %}
 {% block folders_and_placemarks %}
 {% load rest_uid array_uid mpa_uid %}
-{% for array, mpas in shapes.items %}
+{% for array_name, a in shapes.items %}
  <Folder>
-  <name>{{ array.name }}</name>
-	{% if array.id %}
-  	<atom:link rel="marinemap.update_form" title="Edit {{array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=array.id %}" />
-  	<atom:link rel="self" title="{{ array.name }}" mm:model="{% array_uid %}" href="{{ array.get_absolute_url }}" />
+  <name>{{ a.array.name }}</name>
+	{% if a.array.id %}
+  	<atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
+  	<atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
 	{% endif %}
   <visibility>1</visibility>
   <open>0</open>
- {% for mpa in mpas %} 
+ {% for mpa in a.mpas %} 
   <Placemark id="mpa_{{ mpa.id }}">
     <name>{{ mpa.name }}</name>
     <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
