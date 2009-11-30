@@ -1,5 +1,4 @@
-from django.test import TestCase
-from django.conf import settings
+from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from django.contrib.auth.models import *
@@ -19,11 +18,9 @@ class MpaTest(TestCase):
         Tests function that retrieves the mpa class using the MPA_CLASS
         setting.
         """
-        from lingcod.common.utils import get_mpa_class
-        old_setting = settings.MPA_CLASS
-        settings.MPA_CLASS = 'lingcod.mpa.models.Mpa'
+        from lingcod.common.utils import get_mpa_class        
+        self.settings_manager.set(MPA_CLASS = 'lingcod.mpa.models.Mpa')
         self.assertEquals(Mpa, get_mpa_class())
-        settings.MPA_CLASS = old_setting
         
     def test_get_mpa_form(self):
         """
@@ -32,10 +29,8 @@ class MpaTest(TestCase):
         """
         from lingcod.common.utils import get_mpa_form
         from lingcod.mpa.forms import MpaForm
-        old_setting = settings.MPA_FORM
-        settings.MPA_FORM = 'lingcod.mpa.forms.MpaForm'
+        self.settings_manager.set(MPA_FORM = 'lingcod.mpa.forms.MpaForm')
         self.assertEquals(MpaForm, get_mpa_form())
-        settings.MPA_FORM = old_setting
         
     def test_add_to_array(self):
         """Make sure MPAs can be added to Arrays"""

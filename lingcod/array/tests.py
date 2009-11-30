@@ -1,4 +1,4 @@
-from django.test import TestCase
+from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.array.models import MpaArray
 from lingcod.mpa.models import Mpa, MpaDesignation
 from django.contrib.auth.models import *
@@ -47,10 +47,8 @@ class ArrayTest(TestCase):
         setting.
         """
         from lingcod.common.utils import get_array_class
-        old_setting = settings.ARRAY_CLASS
-        settings.ARRAY_CLASS = 'lingcod.array.models.MpaArray'
+        self.settings_manager.set(ARRAY_CLASS='lingcod.array.models.MpaArray')
         self.assertEquals(MpaArray, get_array_class())
-        settings.ARRAY_CLASS = old_setting
 
 
     def test_add_mpa(self):
@@ -84,10 +82,8 @@ class ArrayTest(TestCase):
         self.assertRaises(Exception, array.remove_mpa, mpa)
     
     def test_mpa_set(self):
-        old_array_setting = settings.ARRAY_CLASS
-        settings.ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray'
-        old_mpa_setting = settings.MPA_CLASS
-        settings.MPA_CLASS = 'lingcod.array.tests.ArrayTestMpa'
+        self.settings_manager.set(ARRAY_CLASS='lingcod.array.tests.ArrayTestArray')
+        self.settings_manager.set(MPA_CLASS='lingcod.array.tests.ArrayTestMpa')
         user = User.objects.all()[0]
         designation = MpaDesignation.objects.create(name="Test",acronym="T")
         mpa = ArrayTestMpa.objects.create(
@@ -109,16 +105,12 @@ class ArrayTest(TestCase):
         self.assertEquals(array.mpa_set.count(), 2)
         self.assertTrue(mpa2 in array.mpa_set.filter(name='Test MPA 2'))
         self.assertEqual(array.mpa_set.filter(user=user).count(), 2)
-        settings.ARRAY_CLASS = old_array_setting
-        settings.MPA_CLASS = old_mpa_setting
 
 class ArrayManagerTest(TestCase):
     
     def test_manager_empty(self):
-        old_array_setting = settings.ARRAY_CLASS
-        settings.ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray'
-        old_mpa_setting = settings.MPA_CLASS
-        settings.MPA_CLASS = 'lingcod.array.tests.ArrayTestMpa'
+        self.settings_manager.set(ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray')
+        self.settings_manager.set(MPA_CLASS = 'lingcod.array.tests.ArrayTestMpa')
         user = User.objects.all()[0]
         old_count = ArrayTestArray.objects.empty().count()
         designation = MpaDesignation.objects.create(name="Test",acronym="T")
@@ -149,8 +141,6 @@ class ArrayManagerTest(TestCase):
         )
         array.add_mpa(mpa3)
         self.assertEqual(old_count, ArrayTestArray.objects.empty().count())
-        settings.ARRAY_CLASS = old_array_setting
-        settings.MPA_CLASS = old_mpa_setting
         
 
 class ArrayResourcesTestCase(TestCase):
@@ -161,12 +151,7 @@ class ArrayResourcesTestCase(TestCase):
         from lingcod.rest.tests import assertImplementsRestInterface
         from lingcod.common.utils import get_array_class
         from lingcod.rest.utils import rest_uid
-        old_setting = settings.ARRAY_CLASS
-        old_form = settings.ARRAY_FORM
-        settings.ARRAY_FORM = 'lingcod.array.tests.ArrayTestForm'
-        settings.ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray'
+        self.settings_manager.set(ARRAY_FORM = 'lingcod.array.tests.ArrayTestForm', ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray')
         self.assertEquals(ArrayTestArray, get_array_class())
         assertImplementsRestInterface(self, '/kml/dummy/mpa.kml', 
             rest_uid(ArrayTestArray), {'name': 'myname'})
-        settings.ARRAY_CLASS = old_setting
-        settings.ARRAY_FORM = old_form

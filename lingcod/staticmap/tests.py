@@ -4,7 +4,6 @@ Unit tests for staticmap rendering via mapnik
 
 from django.test import TestCase, Client
 from lingcod.staticmap.models import *
-from django.conf import settings
 from django.conf.urls.defaults import *
 
 
