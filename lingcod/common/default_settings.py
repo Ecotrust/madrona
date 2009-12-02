@@ -13,8 +13,8 @@ GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQ
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = None
 ARRAY_CLASS = None
-MPA_FORM = 'lingcod.mpa.forms.MpaForm'
-ARRAY_FORM = 'lingcod.array.forms.ArrayForm'
+MPA_FORM = None
+ARRAY_FORM = None
 
 from lingcod.common import assets
 
