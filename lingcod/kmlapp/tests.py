@@ -7,6 +7,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.models import *
 from lingcod.common import utils 
 from lingcod.mpa.models import MpaDesignation
+from lingcod.common.utils import kml_errors
+
 Mpa = utils.get_mpa_class()
 MpaArray = utils.get_array_class()
 
@@ -45,7 +47,6 @@ class KMLAppTest(TestCase):
         Tests that Array can be represented as valid KML
         """
         response = self.client.get('/kml/2/array.kml', {})
-        from lingcod.common.utils import kml_errors
         errors = kml_errors(response.content)
         if errors:
             raise Exception("Invalid KML\n%s" % str(errors))
@@ -56,7 +57,6 @@ class KMLAppTest(TestCase):
         Tests that single MPA can be represented as valid KML
         """
         response = self.client.get('/kml/2/mpa.kml', {})
-        from lingcod.common.utils import kml_errors
         errors = kml_errors(response.content)
         if errors:
             raise Exception("Invalid KML\n%s" % str(errors))
@@ -67,7 +67,16 @@ class KMLAppTest(TestCase):
         Tests that user can retrieve valid KML file of all users MPAs
         """
         response = self.client.get('/kml/dummy/user_mpa.kml', {})
-        from lingcod.common.utils import kml_errors
+        errors = kml_errors(response.content)
+        if errors:
+            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertEquals(response.status_code, 200)
+
+    def test_user_kmz_links(self):
+        """ 
+        Tests that user can retrieve valid KML file with network links to arrays
+        """
+        response = self.client.get('/kml/dummy/user_mpa_links.kml', {})
         errors = kml_errors(response.content)
         if errors:
             raise Exception("Invalid KML\n%s" % str(errors))

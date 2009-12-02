@@ -162,6 +162,34 @@ def create_mpa_kmz(request, input_username=None, input_array_id=None, input_mpa_
 
     response = HttpResponse()
     response['Content-Type'] = mimetypes.KMZ
-    response['Content-Disposition'] = 'attachment;filename=%s_mpa.kmz' % user.username
+    response['Content-Disposition'] = 'attachment'
+    response.write(kmz)
+    return response
+
+def create_mpa_kml_links(request, input_username):
+    """
+    Returns a KML containing MPAs owned by a user, each array is a network link to an array.kml 
+    """
+    user = get_user(request,input_username)
+    shapes, designations = get_user_mpa_data(user)
+    response = render_to_response('main_links.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
+    response['Content-Type'] = mimetypes.KML
+    response['Content-Disposition'] = 'attachment' 
+    return response
+
+def create_mpa_kmz_links(request, input_username):
+    """
+    Returns a KMZ containing MPAs owned by a user, each array is a network link to an array.kml 
+    """
+    user = get_user(request,input_username)
+    shapes, designations = get_user_mpa_data(user)
+
+    t = get_template('main_links.kml')
+    kml = t.render(Context({'shapes': shapes, 'designations': designations}))
+    kmz = create_kmz(kml, 'mpa/doc.kml')
+
+    response = HttpResponse()
+    response['Content-Type'] = mimetypes.KMZ
+    response['Content-Disposition'] = 'attachment'
     response.write(kmz)
     return response
