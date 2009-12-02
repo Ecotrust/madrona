@@ -12,6 +12,7 @@
             }
             this.element.addClass('marinemap-kml-forest');
             this.kmlObjects = {};
+            var self = this;
             $(this.element).tree({animate: this.options.animate})
                 .bind('itemToggle', function(e, clickedData, checked){
                     for(var i=0; i<clickedData.length; i++){
@@ -29,7 +30,7 @@
                     }else{
                         // do something
                         var aspectRatio = $(this.div).width() / $(this.div).height();
-                        gex.util.flyToObject(kml, {
+                        self.gex.util.flyToObject(kml, {
                             boundsFallback: true,
                             aspectRatio: aspectRatio
                         });
@@ -90,7 +91,7 @@
         _buildTreeUI: function(kmlObject, callback){
             var self = this;
             var topNode;
-            gex.dom.walk({
+            this.gex.dom.walk({
                 visitCallback: function(context){
                     var type = this.getType();
                     var child = $(self.element).tree('add', {
@@ -141,7 +142,7 @@
                 throw('Could not find node in kmlForest that represents the kml object.');
             }
             delete this.kmlObjects[url];
-            gex.dom.removeObject(obj);
+            this.gex.dom.removeObject(obj);
         },
         
         refresh: function(kml){
