@@ -76,6 +76,6 @@ INSTALLED_APPS += (
 
 MPA_CLASS = 'simple_app.models.Mpa'
 ARRAY_CLASS = 'simple_app.models.MpaArray'
-
+ARRAY_FORM = 'simple_app.forms.SimpleArrayForm'
 
 from settings_local import *
