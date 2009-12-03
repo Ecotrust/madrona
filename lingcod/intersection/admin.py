@@ -64,6 +64,7 @@ class ShapefileFieldInline(admin.TabularInline):
     extra = 0
 
 class FeatureMappingInline(admin.TabularInline):
+    filter_horizontal = ('feature',)
     model = FeatureMapping
     extra = 1
     

@@ -485,6 +485,9 @@ class IntersectionFeature(models.Model):
 #    geometry_poly = models.MultiPolygonField(null=True, blank=True, srid=3310)
 #    geometry_point = models.MultiPointField(null=True, blank=True, srid=3310)
     objects = models.GeoManager()
+    
+    class Meta:
+        ordering = ('name',)
    
     def __unicode__(self):
         return self.name
@@ -539,10 +542,9 @@ class OrganizationScheme(models.Model):
         subdict['name'] = self.name
         subdict['pk'] = self.pk
         subdict['num_features'] = self.featuremapping_set.all().count()
-        feature_dict = {}
+        subdict['feature_info'] = {}
         for f in self.featuremapping_set.all().order_by('sort'):
-            feature_dict[f.name] = f.units
-        subdict['feature_names_units'] = feature_dict
+            subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort} } )
         return subdict
     
     def validate(self):

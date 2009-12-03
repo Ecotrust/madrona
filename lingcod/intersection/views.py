@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
 from lingcod.intersection.models import *
@@ -21,7 +22,9 @@ def split_to_single_shapefiles(request, mfshp_pk):
     else:
         return HttpResponseForbidden
     
-    return render_to_response('split_to_single_feature_shapefiles.html', {'form': form, 'mfshp_pk_key': mfshp_pk})
+    c = csrf(request)
+    c.update({'form': form, 'mfshp_pk_key': mfshp_pk})
+    return render_to_response('split_to_single_feature_shapefiles.html', c)
 
 def test_drawing_intersect(request):
     if request.method == 'POST':
