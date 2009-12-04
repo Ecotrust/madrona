@@ -22,7 +22,7 @@ MarineMap.
     * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
     * `sphinx <http://sphinx.pocoo.org/>`_ (used for generating documentation)
     * `mapnik <http://mapnik.org/>`_ (generates static maps for reports)
-    * `feedvalidator <http://www.feedvalidator.org/docs/howto/install_and_run.html>`_
+    * `feedvalidator <http://www.feedvalidator.org/docs/howto/install_and_run.html>`_ for testing KML
     * `beautiful soup 3.0 <http://www.crummy.com/software/BeautifulSoup/>`_ is necessary for running tests. Be sure you have version >= 3.0
     
 .. note::
@@ -159,6 +159,7 @@ needed:
    waves
    marine_protected_areas
    static_map_configuration
+   kml_configuration
    
 The setup this guide has walked through only specifies how to run the django
 development server. To setup a public facing website using Apache, consult the

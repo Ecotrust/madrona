@@ -25,6 +25,7 @@ MarineMap Decision Support Tool Documentation
    maintenance_mode
    postgis_django_tests
    static_map_configuration
+   kml_configuration
    rest
    settings
    
