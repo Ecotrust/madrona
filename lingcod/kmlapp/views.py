@@ -136,7 +136,7 @@ def create_mpa_kml(request, input_username=None, input_array_id=None, input_mpa_
     else:
         raise 404
 
-    response = render_to_response('main.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
+    response = render_to_response('placemark.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
     response['Content-Type'] = mimetypes.KML
     response['Content-Disposition'] = 'attachment' 
     return response
@@ -156,7 +156,7 @@ def create_mpa_kmz(request, input_username=None, input_array_id=None, input_mpa_
     else:
         raise 404
 
-    t = get_template('main.kml')
+    t = get_template('placemark.kml')
     kml = t.render(Context({'shapes': shapes, 'designations': designations}))
     kmz = create_kmz(kml, 'mpa/doc.kml')
 
@@ -172,7 +172,7 @@ def create_mpa_kml_links(request, input_username):
     """
     user = get_user(request,input_username)
     shapes, designations = get_user_mpa_data(user)
-    response = render_to_response('main_links.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
+    response = render_to_response('placemark_links.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
     response['Content-Type'] = mimetypes.KML
     response['Content-Disposition'] = 'attachment' 
     return response
@@ -184,7 +184,7 @@ def create_mpa_kmz_links(request, input_username):
     user = get_user(request,input_username)
     shapes, designations = get_user_mpa_data(user)
 
-    t = get_template('main_links.kml')
+    t = get_template('placemark_links.kml')
     kml = t.render(Context({'shapes': shapes, 'designations': designations}))
     kmz = create_kmz(kml, 'mpa/doc.kml')
 

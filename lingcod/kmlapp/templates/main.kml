@@ -1,3 +1,0 @@
-{% extends "placemark.kml" %}
-{% block array_addons %} {% endblock %}
-{% block docname %} MPAs and Arrays {% endblock %}
