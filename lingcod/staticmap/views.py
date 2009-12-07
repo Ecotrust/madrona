@@ -33,9 +33,13 @@ def show(request, map_name='default'):
     # get a list of the MPA ids to display
     # construct filter and replace the MPA_FILTER tag
     try:
-        mpas = ['[id] = %d' % int(x) for x in str(request.REQUEST['mpas']).split(',')]
-        xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpas))
-    except:
+        mpas = str(request.REQUEST['mpas']).split(',')
+        # make sure all given mpas are integers
+        mpas = [int(x) for x in mpas if x.isdigit()]
+        mpa_queries = ['[id] = %d' % x for x in mpas] 
+        xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpa_queries))
+    except KeyError:
+        # If MPAs are not specified, don't render ANY of them
         xmltext = xmltext.replace("MPA_FILTER",'')
 
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
