@@ -106,10 +106,10 @@ Things to keep in mind as you create your own manipulators:
   * Your manipulator should provide a definition for a ``manipulate()`` function (overriding the empty definition in ``BaseManipulator``).  
       * This function will be called automatically when your manipulator class is included 
         in the ``Options.manipulators`` list.  
-      * This function should return a call to self.result() with required parameter ``'clipped_shape'``:
-        a geometry in the projection/srid of the client -- 4326 in the case of Google Earth, 
-        and two optional parameters, ``'html'`` and ``'success'``, a template explaining the manipulative action to 
-        the client, and an indication of success (either '1' or '0'), respectively.
+      * This function should return a call to self.result() with required parameter ``'clipped_shape'``,
+        a geometry in the projection/srid of the client -- 4326 in the case of Google Earth.  This function 
+        also allows two optional parameters, ``'html'`` and ``'success'``.  The former being a template generally used
+        to explain the manipulative action to the client, and the latter an indication of success (either '1' or '0').
   * Three Exceptions are provided by the ``BaseManipulator`` class.  Their use will trigger relevant templates to be rendered by the manipulators app.  
       * ``InternalException`` should be raised when an unexpected error out of your control occurs, 
         such as when code that is not yours raises an exception. 
@@ -120,13 +120,13 @@ Things to keep in mind as you create your own manipulators:
       * ``HaltManipulations`` is typically raised when your function recognizes that it is no 
         longer necessary for additional manipulations to take place (such as when the 
         clipped shape is reduced to an empty geometry).  
-  * ``BaseManipulator`` also provides some useful functions such as the following:
+  * ``BaseManipulator`` provides the following useful functions:
       * ``target_to_valid_geom(self, shape)``, is used to build a valid geometry from the target 
         shape.
       * ``do_template(self, key, internal_message='', extra_context{})``, which uses as context, 
         the ``internal_message`` and any ``extra_context``, in rendering a particular template 
         (identified by ``'key'``) in ``Options.html_templates`` (inherited or not).  The result of 
-        this function should be used as the second argument to the ``result()`` function which 
+        this function can be used as the second argument to the ``result()`` function which 
         we'll describe next.
       * ``result(self, clipped_shape, html="", success="1")``, should be used as the return 
         result for your ``manipulators()`` function.  It ensures that the required keys are 
@@ -139,13 +139,13 @@ Things to keep in mind as you create your own manipulators:
         ...
         #target_shape is manipulated in some way
         ...
-        status_html = self.do_template("0")
+        status_html = self.do_template("1")
         return self.result(manipulated_shape, status_html)
 ..
    
       * Finally, ``BaseManipulator`` provides access to some useful templates in ``Options.html_templates``.  
-        Providing such a dictionary in your manipulators Options class is required if you want 
-        to also use the inherited ``do_template()`` function described earlier.  
+        Providing such a dictionary in your manipulators Options class will allow you to seamlessly use the 
+        inherited ``do_template()`` function described earlier.  
         
 .. code-block:: python
   
@@ -158,7 +158,7 @@ Things to keep in mind as you create your own manipulators:
         }
 ..
 
-  * And as mentioned earlier, each manipulator class in your ``manipulators.py`` should provide 
+  * As mentioned earlier, each manipulator class in your ``manipulators.py`` should provide 
     a dictionary entry for ``manipulatorsDict``.  This allows your manipulator to be seen from 
     the manipulators application.  
 
