@@ -106,12 +106,10 @@ Things to keep in mind as you create your own manipulators:
   * Your manipulator should provide a definition for a ``manipulate()`` function (overriding the empty definition in ``BaseManipulator``).  
       * This function will be called automatically when your manipulator class is included 
         in the ``Options.manipulators`` list.  
-      * This function returns a dictionary containing the manipulated shape, ``'clipped_shape'``, 
-        (in the projection/srid of the client -- 4326 in the case of Google Earth)
-        a rendered template, ``'html'``, that is used to explain the manipulative action to the client, 
-        and an indication of success, ``'success'`` (either '1' or '0').  
-        The dictionary that is returned can be packaged by the inherited ``result()`` function 
-        that we'll describe shortly. 
+      * This function should return a call to self.result() with required parameter ``'clipped_shape'``:
+        a geometry in the projection/srid of the client -- 4326 in the case of Google Earth, 
+        and two optional parameters, ``'html'`` and ``'success'``, a template explaining the manipulative action to 
+        the client, and an indication of success (either '1' or '0'), respectively.
   * Three Exceptions are provided by the ``BaseManipulator`` class.  Their use will trigger relevant templates to be rendered by the manipulators app.  
       * ``InternalException`` should be raised when an unexpected error out of your control occurs, 
         such as when code that is not yours raises an exception. 
@@ -156,13 +154,9 @@ Things to keep in mind as you create your own manipulators:
         html_templates = {
             '1':'manipulators/template1.html',
             '2':'manipulators/template2.html',
-            '4':'manipulators/template4.html',
+            '3':'manipulators/template3.html',
         }
 ..
-
-      * NOTE:  Be aware that template keys 3, 9, and 11 are already being used by 
-        ``BaseManipulator.Options.html_templates`` and should not be used without the 
-        intention of overriding those definitions.
 
   * And as mentioned earlier, each manipulator class in your ``manipulators.py`` should provide 
     a dictionary entry for ``manipulatorsDict``.  This allows your manipulator to be seen from 

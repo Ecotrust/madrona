@@ -13,16 +13,15 @@ class BaseManipulator(object):
         BaseManipulator should be used as the parent class to all manipulator classes.
         The manipulate() function should be overridden with suitable definition, it is this function that will
             be called automatically when your manipulator class is included in the Mpa.Options.manipulators list.
-            This function generally takes as input a target shape geometry, and should return a dictionary 
-            containing the 'clipped_shape', the 'orginal_shape', and optional 'message' and 'html' values.
+            This function generally takes as input a target shape geometry, and should return a call to result() 
+            containing the 'clipped_shape' and optionally a rendered template 'html' and 'success' value.
             'clipped_shape' is the new shape as a result of the manipulator
-            #'original_shape' is the original input target shape
-            'message' can be any message that may be appropriate for the client
             'html' is generally a template that might be displayed by the client
+            'success' is a signal, '1' or '0', as to whether the manipulation succeeded or not
         The do_template() function can be used to render a template with appropriate context
         The target_to_valid_geom() function can be used to generate a geometry from target shape
         The result() function should be used for the manipulator return value to ensure that all necessary
-            dictionary key/value pairs are provided.
+            key/value pairs are provided.
         Three useful exceptions are provided as well:
             InternalException is used for exceptions or errors that are considered 'server-side' 
                 or 'out of the users control', such as failed database access, or failed geometry operation.
@@ -54,8 +53,6 @@ class BaseManipulator(object):
         target.set_srid(settings.GEOMETRY_CLIENT_SRID) 
         return target
   
-    #def result(self, clipped_shape, original_shape, html="", message=""):
-    #    return {"clipped_shape": clipped_shape, "original_shape": original_shape, "html": html, "message": message}
     def result(self, clipped_shape, html="", success="1"):
         return {"clipped_shape": clipped_shape, "html": html, "success": success}
     
@@ -66,16 +63,16 @@ class BaseManipulator(object):
         name = 'Manipulator base class'
         template_name = 'manipulators/manipulator_default.html'
         html_templates = {
-            '3':'manipulators/invalid_geometry.html',
-            '9':'manipulators/internal_error.html',
-            '11':'manipulators/unexpected_error.html'
+            'invalid_geom':'manipulators/invalid_geometry.html',
+            'internal':'manipulators/internal_error.html',
+            'unexpected':'manipulators/unexpected_error.html'
         }
     
     class InternalException(Exception):
         def __init__(self, message="", status_html=None, success="0"):
             self.message = message
             if status_html == None:
-                self.template = BaseManipulator.do_template(BaseManipulator(), '9', message)
+                self.template = BaseManipulator.do_template(BaseManipulator(), 'internal', message)
                 self.html = self.template
             else:
                 self.html = status_html
@@ -87,7 +84,7 @@ class BaseManipulator(object):
         def __init__(self, message="", status_html=None, success="0"):
             self.message = message
             if status_html == None:
-                self.template = BaseManipulator.do_template(BaseManipulator(), '3', message)
+                self.template = BaseManipulator.do_template(BaseManipulator(), 'invalid_geom', message)
                 self.html = self.template
             else:
                 self.html = status_html
@@ -111,16 +108,24 @@ class ClipToShapeManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
-            all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
-            'clipped_shape' will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against' 
-        
-        html_templates==9   This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                The clipped shape will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against' 
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
+
+        html_templates=='internal'   
+                            This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from "clip_against" 
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates==3   This represents an 'user error' and is accessed by raising an InvalidGeometryException
+        html_templates=='invalid_geom'   
+                            This represents an 'user error' and is accessed by raising an InvalidGeometryException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from "target_shape" 
                                 or if "target_shape" is not a valid geometry
@@ -208,16 +213,24 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
-            all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
-            the clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region 
-        
-        html_templates==9   This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                The clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region 
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
+            
+        html_templates=='internal'   
+                            This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if Study Region not found in database
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates==3   This represents an 'user error' and is accessed by raising a InvalidGeometryException
+        html_templates=='invalid_geom'   
+                            This represents an 'user error' and is accessed by raising a InvalidGeometryException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from target_shape 
                                 or if target_shape is not a valid geometry
@@ -292,16 +305,24 @@ class ClipToGraticuleManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
-            all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
-            the clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s) 
-        
-        html_templates==9   This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                The clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s) 
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
+            
+        html_templates=='invalid'   
+                            This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if polygon could not be created from graticules
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates==3   This represents an 'user error' and is accessed by raising a InvalidGeometryException
+        html_templates=='invalid_geom'   
+                            This represents an 'user error' and is accessed by raising a InvalidGeometryException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from target_shape 
                                 or target_shape is not valid geometry

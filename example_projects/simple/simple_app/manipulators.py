@@ -13,10 +13,16 @@ class EastWestManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
-            All of the returned shape geometries should be in srid GEOMETRY_CLIENT_SRID (4326 for Google Earth) 
-            In the case where there is both eastern and western overlap, the largest poly is returned 
-            otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                In the case where there is both eastern and western overlap, the largest poly is returned 
+                otherwise, the original 'target_shape' geometry is returned un-modified as 'clipped_shape'
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
     '''
 
     def __init__(self, target_shape, **kwargs):
@@ -68,13 +74,11 @@ class EastWestManipulator(BaseManipulator):
         #if there was no eastern geometry overlap (only western)
         if eastern_clip.area == 0.0:
             status_html = self.do_template("0")
-            #return self.result(western_clip, target_shape, status_html)
             return self.result(western_clip, status_html)
 
         #if there was no western geometry overlap (only eastern)
         if western_clip.area == 0.0:
             status_html = self.do_template("4")
-            #return self.result(eastern_clip, target_shape, status_html)
             return self.result(eastern_clip, status_html)
         
         #since the intersection resulted in two parts, determine the largest poly from each
@@ -85,11 +89,9 @@ class EastWestManipulator(BaseManipulator):
         if western_clip.area > eastern_clip.area:
             success = "1"
             status_html = self.do_template("1")
-            #return self.result(western_clip, target_shape, status_html)
             return self.result(western_clip, status_html)
         else: 
             status_html = self.do_template("5")
-            #return self.result(eastern_clip, target_shape, status_html)
             return self.result(eastern_clip, status_html)
 
      

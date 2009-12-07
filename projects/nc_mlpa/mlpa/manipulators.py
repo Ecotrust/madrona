@@ -14,17 +14,25 @@ class ClipToEstuariesManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a dictionary containing the 'clipped_shape', and the 'orginal_shape', and optional 'message' and 'html' values
-            all of the returned shape geometries will be in srid GEOMETRY_CLIENT_SRID (4326) 
-            in the case where there is estuary overlap, the largest poly (oceanic or estuary) is returned 
-            otherwise, the original target_shape geometry is returned un-modified as 'clipped_shape'
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                In the case where there is estuary overlap, the largest poly (oceanic or estuary) is returned 
+                otherwise, the original target_shape geometry is returned un-modified as 'clipped_shape'
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
         
-        html_templates==9   This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
+        html_templates=='internal'   
+                            This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if Estuaries not found in database
                                 or geometry manipulations failed
                             clipped_shape will be returned as None
-        html_templates==3   This represents an 'user error' and is accessed by raising a InvalidGeometryException
+        html_templates=='invalid_geom'   
+                            This represents an 'user error' and is accessed by raising a InvalidGeometryException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from target_shape 
                                 or if target_shape is not a valid geometry
