@@ -53,6 +53,15 @@
     </Datasource>
 </Layer>
 
+<Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
+    <StyleName>region_style</StyleName>
+    <Datasource>
+      <Parameter name="type">postgis</Parameter>
+      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
+      DATABASE_CONNECTION
+    </Datasource>
+</Layer>
+
 <Layer name="mpa" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
     <!-- NOTE that the 'mpa_style' is overridden by staticmap to provide styling accd to designation -->
     <StyleName>mpa_style</StyleName>
@@ -61,15 +70,6 @@
       <Parameter name="geometry_field">geometry_final</Parameter>
       <!-- NOTE that the subselect for mpa MUST have all these fields for filtering purposes -->
       <Parameter name="table">(select id, geometry_final, name, designation_id from MM_MPA) as mpa</Parameter>
-      DATABASE_CONNECTION
-    </Datasource>
-</Layer>
-
-<Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
-    <StyleName>region_style</StyleName>
-    <Datasource>
-      <Parameter name="type">postgis</Parameter>
-      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
       DATABASE_CONNECTION
     </Datasource>
 </Layer>
