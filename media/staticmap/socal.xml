@@ -3,16 +3,17 @@
 
 <Style name="land_style">
 <Rule>
-<PolygonSymbolizer>
-<CssParameter name="fill">rgb(244,238,203)</CssParameter>
-</PolygonSymbolizer>
-<LineSymbolizer>
-<CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
-<CssParameter name="stroke-width">0.1</CssParameter>
-</LineSymbolizer>
+    <PolygonSymbolizer>
+        <CssParameter name="fill">rgb(244,238,203)</CssParameter>
+    </PolygonSymbolizer>
+    <LineSymbolizer>
+        <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
+        <CssParameter name="stroke-width">0.1</CssParameter>
+    </LineSymbolizer>
 </Rule>
 </Style>
 
+<!-- NOTE that mpa_style is overridden in staticmap
 <Style name="mpa_style">
 <Rule>
     <PolygonSymbolizer>
@@ -24,14 +25,14 @@
     </LineSymbolizer>
     <Filter> MPA_FILTER </Filter>
 </Rule>
-</Style>
+</Style> -->
 
 <Style name="region_style">
 <Rule>
-<LineSymbolizer>
-<CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
-<CssParameter name="stroke-width">1</CssParameter>
-</LineSymbolizer>
+    <LineSymbolizer>
+        <CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
+        <CssParameter name="stroke-width">1</CssParameter>
+    </LineSymbolizer>
 </Rule>
 </Style>
 
@@ -53,11 +54,13 @@
 </Layer>
 
 <Layer name="mpa" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
+    <!-- NOTE that the 'mpa_style' is overridden by staticmap to provide styling accd to designation -->
     <StyleName>mpa_style</StyleName>
     <Datasource>
       <Parameter name="type">postgis</Parameter>
       <Parameter name="geometry_field">geometry_final</Parameter>
-      <Parameter name="table">(select id, geometry_final, name from MM_MPA) as mpa</Parameter>
+      <!-- NOTE that the subselect for mpa MUST have all these fields for filtering purposes -->
+      <Parameter name="table">(select id, geometry_final, name, designation_id from MM_MPA) as mpa</Parameter>
       DATABASE_CONNECTION
     </Datasource>
 </Layer>

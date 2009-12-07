@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
 from lingcod.common import mimetypes, utils
+from lingcod.mpa.models import MpaDesignation
 
 import settings
 
@@ -53,7 +54,8 @@ def show(request, map_name='default'):
 
     # construct filter and replace the MPA_FILTER tag
     mpa_queries = ['[id] = %d' % x for x in mpas] 
-    xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpa_queries))
+    mpa_filter_string = " or ".join(mpa_queries)
+    xmltext = xmltext.replace("MPA_FILTER", mpa_filter_string)
 
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
@@ -75,6 +77,19 @@ def show(request, map_name='default'):
 
     xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
     mapnik.load_map_from_string(m,xmltext)
+
+    # Override the mpa_style according to MPA designations
+    s = mapnik.Style()
+    designations = MpaDesignation.objects.all()
+    for d in designations:
+        r = mapnik.Rule()
+        fill = utils.hex8_to_rgba(d.poly_fill_color)
+        outl = utils.hex8_to_rgba(d.poly_outline_color)
+        r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (fill[0],fill[1],fill[2]))))
+        r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (outl[0],outl[1],outl[2])),0.8))
+        r.filter = mapnik.Filter("[designation_id] = %d and (%s)" % (d.id, mpa_filter_string)) 
+        s.rules.append(r)
+    m.append_style('mpa_style',s)
 
     # Grab the bounding coordinates and set them if specified
     try:
