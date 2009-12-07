@@ -135,3 +135,16 @@ def kml_errors(kmlstring):
         return errors
     else:
         return None
+
+def hex8_to_rgba(hex8):
+    """
+    Takes an 8 digit hex color string (used by Google Earth) and converts it to RGBA colorspace
+    * 8-digit hex codes use AABBGGRR (R - red, G - green, B - blue, A - alpha transparency)
+    """
+    hex8 = str(hex8.replace('#',''))
+    if len(hex8) != 8:
+        raise Exception("Hex8 value must be exactly 8 digits")
+    hex_values = [hex8[i:i+2:1] for i in xrange(0, len(hex8), 2)]
+    rgba_values = [int(x,16) for x in hex_values]
+    rgba_values.reverse()
+    return rgba_values
