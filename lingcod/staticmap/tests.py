@@ -27,3 +27,10 @@ class StaticMapTest(TestCase):
         """
         response = self.client.get('/staticmap/default/?mpas=2,3,4', {})
         self.assertEquals(response.status_code, 200)
+
+    def testArrayMap(self):
+        """
+        See if mapnik filter can render all mpas in a given array
+        """
+        response = self.client.get('/staticmap/default/?array=1', {})
+        self.assertEquals(response.status_code, 200)

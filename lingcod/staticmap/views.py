@@ -31,16 +31,29 @@ def show(request, map_name='default'):
     xmltext = open(mapfile).read()
 
     # get a list of the MPA ids to display
-    # construct filter and replace the MPA_FILTER tag
     try:
         mpas = str(request.REQUEST['mpas']).split(',')
         # make sure all given mpas are integers
         mpas = [int(x) for x in mpas if x.isdigit()]
-        mpa_queries = ['[id] = %d' % x for x in mpas] 
-        xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpa_queries))
     except KeyError:
         # If MPAs are not specified, don't render ANY of them
-        xmltext = xmltext.replace("MPA_FILTER",'')
+        mpas = []
+
+    # If an array is specified, it's mpas are appended to the mpa list
+    try:
+        input_array_id = request.REQUEST['array']
+        # Find that array object and get all associated mpas
+        MpaArray = utils.get_array_class()
+        the_array = MpaArray.objects.get(id=input_array_id)
+        mpaids = [x.id for x in the_array.mpa_set]
+        for mpaid in mpaids:
+            mpas.append(mpaid)
+    except:
+        pass
+
+    # construct filter and replace the MPA_FILTER tag
+    mpa_queries = ['[id] = %d' % x for x in mpas] 
+    xmltext = xmltext.replace("MPA_FILTER", " or ".join(mpa_queries))
 
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
