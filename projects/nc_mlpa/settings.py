@@ -1,5 +1,7 @@
 import os
 
+from lingcod.common.default_settings import *
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
@@ -20,12 +22,6 @@ DATABASE_USER = 'postgres'             # Not used with sqlite3.
 # DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 # DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
-GEOMETRY_DB_SRID = 3310
-GEOMETRY_CLIENT_SRID = 4326
-
-# localhost Google key:
-GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -42,15 +38,6 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
-
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -72,15 +59,6 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-MIDDLEWARE_CLASSES = (
-    # GZip speeds up downloads by compressing on the fly
-    'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'maintenancemode.middleware.MaintenanceModeMiddleware',
-)
-
 ROOT_URLCONF = 'nc_mlpa.urls'
 
 TEMPLATE_DIRS = (
@@ -90,50 +68,10 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.admin',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.gis',
-    'compress',
-    'lingcod.common',
-    'lingcod.layers',
-    'lingcod.studyregion',
-    'lingcod.simplefaq',
-    'lingcod.manipulators',
-    'lingcod.wave',
-    'mlpa',
-    'lingcod.mpa',
+INSTALLED_APPS += (
     'lingcod.screencasts',
+    'mlpa', 
 )
-
-from lingcod.common import assets
-
-COMPRESS_CSS = {
-    'application': {
-        'source_filenames': assets.get_css_files(),
-        'output_filename': 'marinemap.r?.css',
-        'extra_context': {
-            'media': 'all'
-        }
-    }
-}
-
-COMPRESS_JS = {
-    'application': {
-        'source_filenames': assets.get_js_files(),
-        'output_filename': 'marinemap.r?.js'
-    },
-    'tests': {
-        'source_filenames': assets.get_js_test_files(),
-        'output_filename': 'marinemap_tests.r?.js'
-    }
-}
-
-COMPRESS_VERSION = True
-COMPRESS_AUTO = True
 
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'nc_mlpa.models.MlpaMpa'
