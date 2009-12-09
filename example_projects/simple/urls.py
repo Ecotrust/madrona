@@ -23,8 +23,8 @@ urlpatterns = patterns('',
     (r'^simple-app/', include('simple.simple_app.urls')),
     
     (r'^arrays/', include('lingcod.array.urls')),
-    (r'^login/$', 'django.contrib.auth.views.login'),
-    
+    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
