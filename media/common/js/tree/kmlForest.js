@@ -97,7 +97,7 @@
                     var child = $(self.element).tree('add', {
                         name: this.getName() || "No name specified in kml",
                         parent: context.current,
-                        collapsible: !(this == kmlObject) && (type == 'KmlFolder' || type == 'KmlDocument'),
+                        collapsible: !(this == kmlObject) && (type == 'KmlFolder' || type == 'KmlDocument' || type == 'KmlNetworkLink'),
                         open: this.getOpen(),
                         hideByDefault: false,
                         toggle: !(this == kmlObject),

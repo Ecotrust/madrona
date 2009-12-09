@@ -50,6 +50,8 @@ var lingcod = {
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', window.studyregion, {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
+        $('#myshapestree').kmlForest({ge: ge, gex: gex, div: $('#map')})
+            .kmlForest('add', window.myshapes_layers, {cachebust: true});
         //part of mpa creation -- will remove mpa_draw and mpa_clear buttons (they are created automatically by MpaCreator)
         /*
         $('#mpa_draw').click(function(){

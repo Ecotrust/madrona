@@ -4,6 +4,7 @@
     <script src="http://wave-api.appspot.com/public/embed.js" type="text/javascript"></script>
     <script type="text/javascript">
         window.public_data_layers = '{% url public-data-layers %}';
+        window.myshapes_layers = '/kml/dummy/user_mpa_links.kmz'; // TODO no hardcoding!
         window.studyregion = '{% url studyregion-kml %}';
         google.load("earth", "1");
         google.load('maps', '3', {"other_params":"sensor=false"});
@@ -111,7 +112,8 @@
             {% tab "My Shapes" %}
                 {% block my_shapes_prepend %}{% endblock %}
                 <p>
-                    <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />
+                    <div style="font-size:1em;" id="myshapestree"></div>
+                    <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />-->
                     <a href="javascript:alert('create mpa');">create mpa</a> |
                     <a href="javascript:alert('create array');">create array</a>
                 </p>                    
