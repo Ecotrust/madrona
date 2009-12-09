@@ -3,7 +3,7 @@ module('DrawTool');
 /**
  * Simply verify that the widget loads without throwing any errors (unless of course the proper options were not defined).
  */
-test('initialize', function(){
+earthTest('initialize', function(ge, gex){
     tool = new lingcod.DrawTool(ge, gex);
     equals(tool.gex, gex);
     equals(tool.targetShape, null);

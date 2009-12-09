@@ -3,14 +3,13 @@ module('kmlForest');
 /**
  * Simply verify that the widget loads without throwing any errors (unless of course the proper options were not defined).
  */
-test('initialize', function(){
+earthTest('initialize', 1, function(ge, gex){
     $(document.body).append('<div id="treetest"></div>');
     $('#treetest').kmlForest({ge: ge, gex: gex, animate: false, div: $('#map3d')});
     ok($('#treetest').kmlForest('length') == 0, 'No kml files loaded yet');
 });
 
-test('add', function(){
-    stop();
+earthAsyncTest('add', 2, function(ge, gex){
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
         ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
@@ -18,7 +17,7 @@ test('add', function(){
     }});
 });
 
-test('clear', function(){
+earthTest('clear', 2, function(ge, gex){
     $('#treetest').kmlForest('clear');
     ok($('#treetest').kmlForest('length') == 0, 'All kml files removed');
     equals($('#treetest li').length, 0, 'All nodes from kmlForest removed along with them');
@@ -26,16 +25,14 @@ test('clear', function(){
 
 // this is here just to make sure the following tests can deal with more than
 // one kml file being displayed
-test('add extra kml file before continuing tests', function(){
-    stop();
+earthAsyncTest('add extra kml file before continuing tests', 1, function(ge, gex){
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/example_camera_view.kml', {cachebust: true, callback: function(){
         start();
         ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
     }});
 });
 
-test('getByUrl', function(){
-    stop();
+earthAsyncTest('getByUrl', 2, function(ge, gex){
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
         var kmlObject = $('#treetest').kmlForest('getByUrl', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz');
@@ -47,16 +44,14 @@ test('getByUrl', function(){
 
 // this is here just to make sure the following tests can deal with more than
 // one kml file being displayed
-test('add extra kml file before continuing tests', function(){
-    stop();
+earthAsyncTest('add extra kml file before continuing tests', 1, function(ge, gex){
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/example_camera_view.kml', {cachebust: true, callback: function(){
         ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
         start();
     }});
 });
 
-test('remove', function(){
-    stop();
+earthAsyncTest('remove', function(ge, gex){
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
         ok($('#treetest').kmlForest('length') == 2, 'KML file successfully loaded');
@@ -66,19 +61,18 @@ test('remove', function(){
     }});
 });
 
-test('add with relative path', function(){
+earthTest('add with relative path', function(ge, gex){
     $('#treetest').kmlForest('clear');    
     // Not sure how to test this considering the location of the kml files in relation to where the tests are run
 });
 
-test('refresh', function(){
+earthTest('refresh', 0, function(ge, gex){
     // Not going to address this yet, since it requires remembering the on/off/open state of each element.
 });
 
 
-test('appropriate category header', function(){
+earthAsyncTest('appropriate category header', function(ge, gex){
     $('#treetest').kmlForest('clear');
-    stop();
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
         ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
@@ -86,9 +80,8 @@ test('appropriate category header', function(){
     }});
 });
 
-test('supports kml <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#open">open tag</a>', function(){
+earthAsyncTest('supports kml <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#open">open tag</a>', function(ge, gex){
     $('#treetest').kmlForest('clear');
-    stop();
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
         ok($('#treetest').kmlForest('length') == 1, 'KML file successfully loaded');
@@ -97,8 +90,7 @@ test('supports kml <a href="http://code.google.com/apis/kml/documentation/kmlref
     }});    
 });
 
-test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#visibility">visibility tag</a>', function(){
-    stop();
+earthAsyncTest('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#visibility">visibility tag</a>', function(ge, gex){
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -113,8 +105,7 @@ test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreferen
     }});    
 });
 
-test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#snippet">snippet tag</a>', function(){
-    stop();
+earthAsyncTest('supports <a href="http://code.google.com/apis/kml/documentation/kmlreference.html#snippet">snippet tag</a>', function(ge, gex){
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -125,9 +116,8 @@ test('supports <a href="http://code.google.com/apis/kml/documentation/kmlreferen
     
 });
 
-test('toggle on/off features', function(){
+earthAsyncTest('toggle on/off features', function(ge, gex){
     // check that toggling a feature works
-    stop();
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -201,9 +191,8 @@ test('toggle on/off features', function(){
     // then check that it hasn't messed with any of the others
 });
 
-test('toggle on/off folders toggles children', function(){
+earthAsyncTest('toggle on/off folders toggles children', function(ge, gex){
     // same as is tested in the tree tests, just check getVisibility()
-    stop();
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -222,12 +211,11 @@ test('toggle on/off folders toggles children', function(){
     }});
 });
 
-test('semi-toggled state for parents with some children visible', function(){
+earthTest('semi-toggled state for parents with some children visible', function(ge, gex){
     // this will require custom icons
 });
 
-test('features with descriptions have balloon link', function(){
-    stop();
+earthAsyncTest('features with descriptions have balloon link', function(ge, gex){
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -249,8 +237,7 @@ test('features with descriptions have balloon link', function(){
 
 var firstLat;
 
-test('double click feature flys to feature', function(){
-    stop();
+earthAsyncTest('double click feature flys to feature', function(ge, gex){
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -261,8 +248,7 @@ test('double click feature flys to feature', function(){
     }});
 });
 
-test('finish double click feature flys to feature', function(){
-    stop();
+earthAsyncTest('finish double click feature flys to feature', 1, function(ge, gex){
     setTimeout(function(){
         var secondLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
         ok(firstLat != secondLat, "Viewport has changed after double-clicking the placemark");
@@ -270,27 +256,27 @@ test('finish double click feature flys to feature', function(){
     }, 500);
 });
 
-test('proper default icons given to folders, network links, features, etc', function(){
+earthTest('proper default icons given to folders, network links, features, etc', function(ge, gex){
     // Just check the class for KmlFolder, KmlGroundOverlay, KmlPlacemark, KmlNetworkLink, etc
 });
 
-test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: radioFolder. All ListStyle support depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=303">this ticket</a>', function(){
+earthTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: radioFolder. All ListStyle support depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=303">this ticket</a>', function(ge, gex){
     
 });
 
-test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: checkOffOnly', function(){
+earthTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: checkOffOnly', function(ge, gex){
     
 });
 
-test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: checkHideChildren', function(){
+earthTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: checkHideChildren', function(ge, gex){
     
 });
 
-test('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: ItemIcon', function(){
+earthTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: ItemIcon', function(ge, gex){
     
 });
 
-test('Contents of NetworkLinks can be displayed. Depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=260&q=NetworkLink&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars#c3">this ticket</a>, or a hack', function(){
+earthTest('Contents of NetworkLinks can be displayed. Depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=260&q=NetworkLink&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars#c3">this ticket</a>, or a hack', function(ge, gex){
     
 });
 
@@ -299,8 +285,7 @@ test('Contents of NetworkLinks can be displayed. Depends on <a href="http://code
 // wouldn't be detected. Should really be a ge.getTourPlayer().getTour() api.
 // A feature request has been submitted for that function
 // http://code.google.com/p/earth-api-samples/issues/detail?id=309
-test('tours are activated when double-clicked.', function(){
-    stop();
+earthAsyncTest('tours are activated when double-clicked.', function(ge, gex){
     $('#treetest').kmlForest('clear');
     $('#treetest').kmlForest('add', 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz', {cachebust: true, callback: function(){
         start();
@@ -313,4 +298,8 @@ test('tours are activated when double-clicked.', function(){
         ok(firstLat != secondLat, "Assuming the latitude changes after double-clicking the tour, it must be active.");
         ge.getTourPlayer().pause();
     }});    
+});
+
+test('cleanup test fixtures (no assertions)', 0, function(){
+    $('#treetest').remove();
 });

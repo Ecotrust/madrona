@@ -1,59 +1,40 @@
 {% extends "common/base.html" %}
 
 {% block head %}
-    <link rel="stylesheet" href="http://jqueryjs.googlecode.com/svn/trunk/qunit/testsuite.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://geojs.googlecode.com/files/geo-0.1.2.pack.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
-    <script src="{{MEDIA_URL}}common/js/lib/qunit/testrunner.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="{{MEDIA_URL}}common/js/lib/qunit/qunit.css" type="text/css" media="screen">
+	<script type="text/javascript" src="{{MEDIA_URL}}common/js/lib/qunit/qunit.js"></script>
     {% load compressed %}
     {% compressed_js 'tests' %}
     <script type="text/javascript" charset="utf-8">
-        stop();
         google.load("earth", "1");
-        var ge;
-        var gex;
-        var bothReady = false;
-
-        $(document).ready(function(){
-            google.earth.createInstance("map3d", initCallback, failureCallback);
-        });
-                
-        function initCallback(pluginInstance){
-            // console.log('document ready');
-            ge = pluginInstance;
-            gex = new GEarthExtensions(ge);
-            window.runTest();
-        }
-        
-        function failureCallback(){
-            alert('failed to load google earth plugin.');
-        }
-        
-        if ( typeof fireunit === "object" ) {
-            QUnit.log = fireunit.ok;
-            QUnit.done = fireunit.testDone;
-        }
+		
+		var REST_INTERFACES = {
+			'arrays and mpas': "{% url user_mpa_kml 'testuser' %}"
+		}		// init();
     </script>
     <style type="text/css" media="screen">
         body,html {
             overflow:auto;
         }
         #map3d {
-            width:400px;
-            height:400px;
+            width:500px;
+            height:4.5em;
             position:absolute;
-            right:1em;
-            top:15em;
+            left:-1000px;
+            top:0em;
         }
         
     </style>
 {% endblock %}
 {% block body %}
-    <h1>MarineMap Client Unit Tests</h1>
-    <h2 id="banner"></h2>
-    <h2 id="userAgent"></h2>
-    <ol id="tests"></ol>
+	<h1 id="qunit-header">MarineMap Client Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
     <div id="main"></div>
     <!-- Any HTML you may require for your tests to work properly -->
     <div id="map3d"></div>

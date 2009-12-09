@@ -1,6 +1,6 @@
 module('micro-templating');
 
-test("list template", function(){
+test("list template", 1, function(){
     template = [
         "<ul>",
             "<% for (var i=0; i < users.length; i++) { %>",

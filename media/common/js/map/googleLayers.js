@@ -8,7 +8,7 @@
 lingcod.map.googleLayers = function(ge, options_form, layers_form){
     this.layers = $(layers_form);
     this.options = $(options_form);
-    this.get = ge;
+    this.ge = ge;
     var self = this;
     $(this.layers).find('input').click(function(){
         self.updateLayers();
@@ -26,8 +26,9 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
  * Looks at the layers form and updates the map to match form values
  */
 lingcod.map.googleLayers.prototype.updateLayers = function(){
+    var self = this;
     this.layers.find('input').each(function(){
-        ge.getLayerRoot().enableLayerById(ge[$(this).attr('name')], $(this).attr('checked'));
+        self.ge.getLayerRoot().enableLayerById(self.ge[$(this).attr('name')], $(this).attr('checked'));
     });
 };
 
@@ -40,7 +41,8 @@ lingcod.map.googleLayers.prototype.updateLayers = function(){
  *      &lt;input name=&quot;setGridVisibility&quot; /&gt;
  */
 lingcod.map.googleLayers.prototype.updateOptions = function(){
-    var options = ge.getOptions();
+    var self = this;
+    var options = self.ge.getOptions();
     this.options.find('input').each(function(){
         var $input = $(this);
         var name = $input.attr('name');
@@ -51,17 +53,17 @@ lingcod.map.googleLayers.prototype.updateOptions = function(){
     
     if(this.options.find('input[name="nav"]').length){
         if (this.options.find('input[name="nav"]:checked').length) {
-            ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+            self.ge.getNavigationControl().setVisibility(self.ge.VISIBILITY_SHOW);
         }else{
-            ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+            self.ge.getNavigationControl().setVisibility(self.ge.VISIBILITY_HIDE);
         }
     }
     
     if(this.options.find('input[name="sun"]').length){
         if(this.options.find('input[name="sun"]:checked').length){
-            ge.getSun().setVisibility(true);
+            self.ge.getSun().setVisibility(true);
         }else{
-            ge.getSun().setVisibility(false);
+            self.ge.getSun().setVisibility(false);
         }
     }
 };

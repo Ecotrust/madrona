@@ -41,12 +41,12 @@
                     if(target.hasClass('description')){
                         target.find('input[checked=false]').click();
                         kml.setVisibility(true);
-                        var balloon = ge.createFeatureBalloon('');
+                        var balloon = self.ge.createFeatureBalloon('');
                         balloon.setFeature(kml);
                         balloon.setMinWidth(400);
-                        ge.setBalloon(balloon);
+                        self.ge.setBalloon(balloon);
                     }else{
-                        ge.setBalloon(null);
+                        self.ge.setBalloon(null);
                     }
                 });
         },

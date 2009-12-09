@@ -1,6 +1,6 @@
 module('googleLayers');
 
-test("layers", function(){
+earthTest("layers", 4, function(ge, gex){
     // append form for layers
     $(document.body).append('<form name="ge_layers"><li><input type="checkbox" name="LAYER_BORDERS">Borders</li><li><input type="checkbox" name="LAYER_ROADS">Roads</li></form>');
     // append form for options
@@ -15,9 +15,14 @@ test("layers", function(){
     equals(ge.getLayerRoot().getLayerById(ge['LAYER_ROADS']).getVisibility(), false);
 });
 
-test("options", function(){
+earthTest("options", function(ge, gex){
     equals(ge.getOptions().getGridVisibility(), false);
     $('input[name="setGridVisibility"]').click();
     $('input[name="setGridVisibility"]').click();
     equals(ge.getOptions().getGridVisibility(), true);
+});
+
+test('cleanup (no assertions)', function(){
+    $("form[name='ge_layers']").remove();
+    $("form[name='ge_options']").remove();
 });

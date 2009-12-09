@@ -1,6 +1,6 @@
 module('measure tool')
 
-test("unit conversions", function(){
+test("unit conversions", 22, function(){
     measureTool = new lingcod.measureTool()
     
     // metric tests
