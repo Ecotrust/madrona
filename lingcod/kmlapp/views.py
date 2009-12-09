@@ -88,8 +88,8 @@ def get_user(request, input_username):
     user = request.user
     if user.username != input_username or user.is_anonymous or not user.is_authenticated:
         # TODO return HttpResponse('You must be logged in.', status=401)
-        # right now this assumes a fixture with username dummy exists
-        user = User.objects.get(username="dummy")
+        # right now this assumes a fixture with username default_user exists
+        user = User.objects.get(username="default_user")
     return user
 
 def create_kmz(kml, zippath):

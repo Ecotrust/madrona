@@ -12,7 +12,7 @@ from lingcod.common.utils import kml_errors
 Mpa = utils.get_mpa_class()
 MpaArray = utils.get_array_class()
 
-user = User.objects.get(username="dummy")
+user = User.objects.get(username="default_user")
 
 class KMLAppTest(TestCase):
     def setUp(self):
@@ -66,7 +66,7 @@ class KMLAppTest(TestCase):
         """ 
         Tests that user can retrieve valid KML file of all users MPAs
         """
-        response = self.client.get('/kml/dummy/user_mpa.kml', {})
+        response = self.client.get('/kml/default_user/user_mpa.kml', {})
         errors = kml_errors(response.content)
         if errors:
             raise Exception("Invalid KML\n%s" % str(errors))
@@ -76,7 +76,7 @@ class KMLAppTest(TestCase):
         """ 
         Tests that user can retrieve valid KML file with network links to arrays
         """
-        response = self.client.get('/kml/dummy/user_mpa_links.kml', {})
+        response = self.client.get('/kml/default_user/user_mpa_links.kml', {})
         errors = kml_errors(response.content)
         if errors:
             raise Exception("Invalid KML\n%s" % str(errors))
@@ -86,5 +86,5 @@ class KMLAppTest(TestCase):
         """ 
         Tests that we can retrieve a zipped KML file (ie KMZ)
         """
-        response = self.client.get('/kml/dummy/user_mpa.kmz', {})
+        response = self.client.get('/kml/default_user/user_mpa.kmz', {})
         self.assertEquals(response.status_code, 200)
