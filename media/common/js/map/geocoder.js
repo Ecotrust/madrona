@@ -17,12 +17,17 @@ lingcod.map.geocoder = function(gex, form){
         self.geocoder.geocode({ address: location, country: '.us'}, function(results, status){
             if(status == google.maps.GeocoderStatus.OK && results.length){
                 if(status != google.maps.GeocoderStatus.ZERO_RESULTS){
+                    //provide appropriate map extent (bounding box) for each location
+                    var viewport = results[0].geometry.viewport; 
+                    var sw = new geo.Point(viewport.getSouthWest());
+                    var ne = new geo.Point(viewport.getNorthEast());
+                    var bounds = new geo.Bounds(sw, ne);
+                    var opts = {aspectRatio: 1.0};
+                    var bounding_view = gex.view.createBoundsView(bounds, opts);
+                    ge.getView().setAbstractView(bounding_view);
+                    
                     var point = results[0].geometry.location;
-                    var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
-                    lookAt.setLatitude(point.lat());
-                    lookAt.setLongitude(point.lng());
-                    ge.getView().setAbstractView(lookAt);
-                    var p = gex.dom.addPointPlacemark([point.lat(), point.lng()], {
+                    gex.dom.addPointPlacemark([point.lat(), point.lng()], {
                       // stockIcon: 'pal3/icon60.png',
                       name: location
                     });
