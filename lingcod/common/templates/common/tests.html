@@ -6,17 +6,22 @@
     <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="{{MEDIA_URL}}common/js/lib/qunit/qunit.css" type="text/css" media="screen">
 	<script type="text/javascript" src="{{MEDIA_URL}}common/js/lib/qunit/qunit.js"></script>
-    {% load compressed %}
+    {% load compressed mpa_uid array_uid %}
     {% compressed_js 'tests' %}
     <script type="text/javascript" charset="utf-8">
         google.load("earth", "1");
 		
 		var DEFAULT_USERNAME = 'integration_tester';
         var DEFAULT_PASSWORD = 'password';
-		
-		var REST_INTERFACES = {
-			'arrays and mpas': "{% url user_mpa_kml 'testuser' %}"
-		}		// init();
+		//'{% mpa_uid %}',
+		lingcod.rest.testInterface('arrays and mpas', '{% url user_mpa_kml input_username='integration_tester' %}', {
+		    '{% array_uid %}': {
+		        form_values: {
+		            name: 'My Array Name'
+		        }
+		    }
+		});
+
     </script>
     <style type="text/css" media="screen">
         body,html {
@@ -41,4 +46,5 @@
     <div id="main"></div>
     <!-- Any HTML you may require for your tests to work properly -->
     <div id="map3d"></div>
+    <div id="testpanel"></div>
 {% endblock %}

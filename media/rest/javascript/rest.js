@@ -1,13 +1,14 @@
 lingcod.rest = {}
 
-lingcod.rest.client = function(gex){
+lingcod.rest.client = function(gex, panel){
     var that;
     
     if(!gex){
-        throw({
-            name: 'InvalidOptions',
-            message: 'earth-api-utility-library instance required.'
-        });
+        throw('earth-api-utility-library instance required.');
+    }
+    
+    if(!panel){
+        throw('lingcod.panel instance required.');
     }
     
     that = {};
@@ -15,7 +16,18 @@ lingcod.rest.client = function(gex){
     // Reads a kml document (from a string) and returns an array of objects that
     // can be used as input to client.create().
     var parseDocument = function(kml){
-        
+        var xml = $(kml);
+        var return_values = {};
+        xml.find("atom\\:link[rel='marinemap.create_form']").each(function(){
+            $link = $(this);
+            return_values[$link.attr('mm:model')] = {
+                model: $link.attr('mm:model'),
+                href: $link.attr('href'),
+                icon: $link.attr('mm:icon'),
+                title: $link.attr('title')                
+            }
+        });
+        return return_values;
     }
     
     that.parseDocument = parseDocument;
@@ -26,8 +38,23 @@ lingcod.rest.client = function(gex){
     
     that.parseResource = parseResource;
     
-    var create = function(configOrFeature, options){
-        
+    var create = function(config, options){
+        $.ajax({
+            url: config.href,
+            type: 'GET',
+            success: function(data, status){
+                if(status === 'success'){
+                    var html = $(data)[5].innerHTML;
+                    var elements = $(html);
+                    panel.showContent(elements);
+                }else{
+                    throw('could not get form at '+config.href);
+                }
+            },
+            error: function(e, b){
+                throw('could not get form at '+config.href);
+            }
+        });
     }
     
     that.create = create;
