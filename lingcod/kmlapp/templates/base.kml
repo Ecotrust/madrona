@@ -1,9 +1,9 @@
 {% load rest_uid array_uid %}<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org">
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document>
   <name>{% block docname %}MarineMap MPAs{% endblock %}</name>
-	<atom:link rel="marinemap.create_form" title="Create a new Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url array_create_form %}" />
-  {% block style %}{% endblock %}
+  <open>1</open>
+  <atom:link rel="marinemap.create_form" title="Create a new Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url array_create_form %}"></atom:link>{% block style %}{% endblock %}
   {% block folders_and_placemarks %}{% endblock %}
 </Document>
 </kml>

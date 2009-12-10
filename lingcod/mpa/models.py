@@ -87,7 +87,13 @@ class Mpa(models.Model):
         returns the final geometry as a kml geometry string projected into wgs84
         """
         wgs84_geom = self.geometry_final.transform(4326, clone=True)
-        return wgs84_geom.kml
+        prepend = """<Polygon>
+      <extrude>0</extrude>
+      <tessellate>0</tessellate>
+      <altitudeMode>clampToGround</altitudeMode>
+        """
+        kml = wgs84_geom.kml.replace("<Polygon>", prepend) 
+        return kml
 
     def lookAtKml(self):
         """

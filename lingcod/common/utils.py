@@ -122,7 +122,8 @@ def kml_errors(kmlstring):
                 (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.update_form') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.create_form') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org')
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org') or
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://www.google.com/kml/ext/2.2')
                 )]
 
     from feedvalidator.formatter.text_plain import Formatter
