@@ -67,7 +67,6 @@ INSTALLED_APPS = (
     'lingcod.manipulators',
     'lingcod.mpa',
     'lingcod.wave',
-    'lingcod.mpa',
     'lingcod.array',
     'lingcod.kmlapp',
     'lingcod.rest',
