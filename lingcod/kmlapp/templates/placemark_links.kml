@@ -31,7 +31,7 @@
       <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
       <Data name="designation"><value>{{ mpa.designation }}</value></Data>
     </ExtendedData>
-    {{ mpa.geom_as_kml|safe }} 
+    {{ mpa.kml|safe }} 
   </Placemark>
  {% endfor %}
  </Folder>

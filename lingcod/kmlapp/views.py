@@ -18,7 +18,8 @@ def get_user_mpa_data(user):
     """
     Mpa = utils.get_mpa_class()
 
-    mpas = Mpa.objects.filter(user=user)
+    mpas = Mpa.objects.filter(user=user).add_kml()
+
     unattached = utils.get_array_class()(name='Unattached')
     shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
@@ -49,7 +50,7 @@ def get_array_mpa_data(user, input_array_id):
         the_array = MpaArray.objects.get(id=input_array_id)
     except:
         raise Http404
-    mpas = the_array.mpa_set
+    mpas = the_array.mpa_set.add_kml()
     array_nameid = "%s_%d" % (the_array.name, the_array.id)
     shapes = {array_nameid: {'array':the_array, 'mpas': []} }
     for mpa in mpas:
@@ -69,7 +70,8 @@ def get_single_mpa_data(user, input_mpa_id):
 
     # TODO: sharing and permissions
     try:
-        mpa = Mpa.objects.get(id=input_mpa_id)
+        mpas = Mpa.objects.filter(id=input_mpa_id).add_kml()
+        mpa = mpas[0]
     except:
         raise Http404
     if mpa.array:

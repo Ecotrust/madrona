@@ -5,6 +5,7 @@ from lingcod.common.utils import LookAtKml
 from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db.models.query import QuerySet
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
@@ -28,6 +29,13 @@ class MpaDesignation(models.Model):
 
     def __unicode__(self):
         return "(%s) %s" % (self.acronym, self.name)
+
+class GeoQuerySetManager(models.GeoManager):
+    """ 
+    Used to extend the queryset manager; see http://simonwillison.net/2008/May/1/orm/
+    """
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
 
 class Mpa(models.Model):
     """Model used for representing marine protected areas or MPAs
@@ -71,7 +79,23 @@ class Mpa(models.Model):
     
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
 
-    objects = models.GeoManager()
+    objects = GeoQuerySetManager()
+
+    class QuerySet(QuerySet):
+        def add_kml(self):
+            """
+            Custom queryset method which adds an 'extra' .kml property to the returned object -
+                a kml string with correct dimensions and Left-Hand Rule (LHR) enforced (ie the reversed RHR)
+                Ensures proper styling and clickability compared to the GEOSGeometry.kml property in geodjango
+                See issue #190 for more details
+            Warning: This relies on postgis-specific SQL and assumes 'geometry_final' is the geometry column name
+            Usage: 
+                mpas = Mpa.objects.filter(...).add_kml()
+                mpas[0].kml
+                # Note you can still access the geodjango way (may not render correctly in GE though)
+                mpas[0].geometry_final.kml
+            """
+            return self.extra(select={'kml':'AsKML(ST_Reverse(ST_ForceRHR("%s"."geometry_final")))' % str(self.model._meta.db_table)})
     
     class Meta:
         abstract=True
@@ -84,7 +108,10 @@ class Mpa(models.Model):
         
     def geom_as_kml(self):
         """
+        DEPRECATED
         returns the final geometry as a kml geometry string projected into wgs84
+        Note: this is not guaranteed to be valid at geodjango's GEOSGeometry.kml may not behave properly in GE
+        Use the queryset method add_kml() then use the objects' .kml property instead 
         """
         wgs84_geom = self.geometry_final.transform(4326, clone=True)
         prepend = """<Polygon>
