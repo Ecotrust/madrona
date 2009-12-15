@@ -13,8 +13,8 @@ lingcod.rest.client = function(gex, panel){
     
     that = {};
     
-    // Reads a kml document (from a string) and returns an array of objects that
-    // can be used as input to client.create().
+    // Reads a kml document (from a string) and returns an array of objects 
+    // that can be used as input to client.create().
     var parseDocument = function(kml){
         var xml = $(kml);
         var return_values = {};
