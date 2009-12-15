@@ -17,11 +17,20 @@
   <visibility>1</visibility>
   <open>0</open>
  {% for mpa in a.mpas %} 
+ <Folder>
+  <name>{{ mpa.name }}</name>
+  <open>0</open>
+  <visibility>1</visibility>
   <Placemark id="mpa_{{ mpa.id }}">
-    <name>{{ mpa.name }}</name>
+    <name>{{ mpa.name }} polygon</name>
     <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
-    <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="/path/to/form/1"></atom:link>
-    <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="/path/to/mpa/attributes"></atom:link>
+    {{ mpa.kml|safe }} 
+  </Placemark>
+  <Placemark id="mpa_{{ mpa.id }}_point">
+    <name>{{ mpa.name }}</name>
+    <styleUrl>#{{ mpa.designation.acronym }}-point-style</styleUrl>
+    <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="/path/to/form/1" />
+    <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="/path/to/mpa/attributes" />
     <ExtendedData>
       <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
       <Data name="name"><value>{{ mpa.name }}</value></Data>
@@ -31,8 +40,9 @@
       <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
       <Data name="designation"><value>{{ mpa.designation }}</value></Data>
     </ExtendedData>
-    {{ mpa.kml|safe }} 
+    {{ mpa.centroid_kml|safe }} 
   </Placemark>
+  </Folder>
  {% endfor %}
  </Folder>
     {% endif %}

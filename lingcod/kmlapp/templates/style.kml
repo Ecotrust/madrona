@@ -1,13 +1,15 @@
 {% extends "base.kml" %}
 {% block style %}
  {% for designation in designations %}
-  <Style id="{{ designation.acronym }}-style">
-    <PolyStyle>
-        <color>{{ designation.poly_fill_color }}</color>
-    </PolyStyle>
-    <LineStyle>
-        <color>{{ designation.poly_outline_color }}</color>
-    </LineStyle>
+  <Style id="{{ designation.acronym }}-point-style">
+      <IconStyle>
+         <color>{{ designation.poly_fill_color }}</color>
+         <colorMode>normal</colorMode>
+         <scale>0.6</scale>
+         <Icon>
+           <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href>
+         </Icon>
+      </IconStyle>
     <BalloonStyle>
       <text>
         <![CDATA[
@@ -23,6 +25,17 @@
         ]]>
       </text>
     </BalloonStyle>
+  </Style>
+  <Style id="{{ designation.acronym }}-style">
+    <PolyStyle>
+        <color>{{ designation.poly_fill_color }}</color>
+    </PolyStyle>
+    <LineStyle>
+        <color>{{ designation.poly_outline_color }}</color>
+    </LineStyle>
+    <ListStyle>
+    </ListStyle>
+
   </Style>
  {% endfor %}
 {% endblock %}

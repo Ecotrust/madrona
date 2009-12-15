@@ -106,6 +106,10 @@ class Mpa(models.Model):
     def __unicode__(self):
         return self.name
         
+    def centroid_kml(self):
+        geom = self.geometry_final.transform(4326, clone=True)
+        return geom.point_on_surface.kml
+
     def geom_as_kml(self):
         """
         DEPRECATED
