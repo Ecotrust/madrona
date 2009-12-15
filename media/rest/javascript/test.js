@@ -172,11 +172,6 @@ lingcod.rest.testInterface = function(name, document_url, types){
                     start();
                 }
             });
-            // now we need to check that validation errors are handled gracefully.
-            // fill out form values
-            // submit
-            // how do we know when it is done? - event listeners - show
-            // 
         });
         
         asyncTest('create - part 2 '+model, 2, function(){
@@ -407,7 +402,7 @@ lingcod.rest.testInterface = function(name, document_url, types){
                         var resource = client.findResourceInString(
                             created_object_location, text);
                         equals(resource, false, 
-                            'Should no longer find resource in kml listing service.');
+                            'Should no longer find in kml listing service.');
                         start();
                     }
                 },
