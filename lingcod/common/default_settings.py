@@ -42,6 +42,8 @@ COMPRESS_JS = {
 COMPRESS_VERSION = True
 COMPRESS_AUTO = True
 
+GOOGLE_ANALYTICS_MODEL = True
+
 MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
@@ -59,6 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.gis',
     'compress',
+    'lingcod.google-analytics', 
     'lingcod.common',
     'lingcod.layers',
     'lingcod.studyregion',

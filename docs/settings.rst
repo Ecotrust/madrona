@@ -67,6 +67,14 @@ MarineMap Settings
     The `django-compress <http://code.google.com/p/django-compress/>`_ app
     is setup to compress css and js assets described in 
     ``media/css_includes.xml`` and ``media/js_includes.xml``
+    
+.. _GOOGLE_ANALYTICS:
+
+``GOOGLE_ANALYTICS_MODEL``
+    The `lingcod.google-analytics <http://code.google.com/p/django-google-analytics/>`_ app
+    (with alterations made to models.py and admin.py) 
+    allows for managing of Google Analytics accounts from the Django admin page.
+    
 
 Django Settings
 ---------------
@@ -104,7 +112,7 @@ Django Settings
 ``LOGIN_URL``
     set to /login/
 
-.. _LOGIN_URL:
+.. _LOGIN_REDIRECT_URL:
 
 ``LOGIN_REDIRECT_URL``
     Set to the map view at the root ( ``/`` )

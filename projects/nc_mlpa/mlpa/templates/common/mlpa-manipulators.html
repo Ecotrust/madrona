@@ -28,7 +28,7 @@
         
         gex = new GEarthExtensions(pluginInstance);
         gex.util.lookAt(ge_lookAt, { range: ge_range, tilt: ge_tilt });    
-        gex.util.displayKml( ge_studyregion_display );
+        //gex.util.displayKml( ge_studyregion_display );
         
         {% if extra_kml %}
         gex.util.displayKmlString( '{{ extra_kml|safe }}' );
