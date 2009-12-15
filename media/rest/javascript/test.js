@@ -294,9 +294,7 @@ lingcod.rest.testInterface = function(name, document_url, types){
         
         var updateFormShown = function(){
             $(testPanel).unbind('show', updateFormShown);
-            console.log(form_values.name);
             var el = testPanel.getEl();
-            console.log(el.find(':input[name=name]').val());
             equals(form_values.name, el.find(':input[name=name]').val(),
                 'Form shown with correct name.');
             var form = el.find('form');
@@ -323,7 +321,6 @@ lingcod.rest.testInterface = function(name, document_url, types){
             $(testPanel).bind('show', updateFormShown);
             client.update(kmlResource, {
                 success: function(location){
-                    console.log('success called');
                     equals(resourceConfig.location, location, 
                         'Should pass the function a location.');
                     ok(testPanel.closed, 'Panel should now be closed.');
@@ -352,7 +349,6 @@ lingcod.rest.testInterface = function(name, document_url, types){
                         var resource = client.findResourceInString(
                             created_object_location, text);
                         ok(resource, 'Object found within listing document');
-                        console.log(resource);
                         equals(edited_form_values.name, 
                             resource.find('name').text(), 'Correctly named.');
                         start();

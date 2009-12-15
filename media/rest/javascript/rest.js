@@ -71,7 +71,6 @@ lingcod.rest.client = function(gex, panel){
                     
                     case 200:
                         // object edited successfully
-                        console.info('object edited');
                         if(options.success){
                             panel.close();
                             options.success(options.location);
@@ -85,7 +84,7 @@ lingcod.rest.client = function(gex, panel){
                     
                     default:
                         // serious error
-                        console.error('serious error');
+                        // console.error('serious error');
                 }
             }
         });
