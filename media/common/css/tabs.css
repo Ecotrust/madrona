@@ -19,8 +19,12 @@
     margin: 0;
     padding: 0 0 0 4px;
     position:absolute;
-    top:-2.1em;
+    top:0em;
+    z-index:4;
+
 }
+
+
 .ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
     display: block;
     clear: both;
@@ -37,16 +41,18 @@
     display: block;
 /*    padding: 0 10px;*/
 /*    background: white;*/
-    background-color:#E2E2E2;
+/*    background-color:#E2E2E2;*/
+    font-size:1.2em;
     padding:0.5em;
 }
 
 .ui-tabs-nav a {
     margin: 1px 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
     padding-left: 0;
-    color: #102233;
+/*    color: #102233;*/
+    color:white;
     font-weight: bold;
-    line-height: 1.2;
+    line-height: 1;
     text-align: center;
     text-decoration: none;
     white-space: nowrap; /* required in IE 6 */    
@@ -65,6 +71,7 @@
     -moz-box-shadow: 2px -2px 3px #B6B6B6;
 */    border-bottom:none;
     background-color:#FFF;
+    color:black;
 /*    -webkit-border-top-right-radius:15px;
     -webkit-border-top-left-radius:2px;
     -moz-border-radius-topright:15px;

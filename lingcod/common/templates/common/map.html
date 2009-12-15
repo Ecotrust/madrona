@@ -11,39 +11,8 @@
 
         var ge = null;
         var gex = null;
-        var wavePanel;
         $(document).ready(function(){            
-            lingcod.init(); 
-                        
-            // WAVE STUFF
-            
-            $(window).bind('message', function(e){
-                e = e.originalEvent;
-                if(e.origin === 'https://0-wave-opensocial.googleusercontent.com'){
-                    var data = JSON.parse(e.data);
-                    if(data.message == 'getSnapshot'){
-                        var message = {
-                            "message": "setSnapshot",
-                            "camera": gex.view.serialize()
-                        };
-                        e.source.postMessage(JSON.stringify(message), e.origin);
-                    }else if(data.message == 'displaySnapshot'){
-                        var data = JSON.parse(e.data);
-                        if(data.camera){
-                            gex.view.deserialize(data.camera);
-                        }
-                    }else{
-                        console.error('invalid message');
-                    }
-                    // console.log('message', e.source, e.origin, e.data);
-                    // e.source.postMessage('I see you ;)', e.origin);
-                }
-            });
-            
-            wavePanel = new WavePanel('http://wave.google.com/a/wavesandbox.com/');
-            wavePanel.loadWave('{{WAVE_ID}}');
-            wavePanel.setUIConfig('white', 'black', 'Arial', '12px');
-            wavePanel.init(document.getElementById('waveframe'));
+            lingcod.init();
         });
     </script>
 
@@ -52,11 +21,11 @@
             font-size:1em;
             font-family:verdana;
         }
+        
     </style>    
 {% endblock %}
 
 {% block body %}
-    {% load layout_tags %}
     <div id="meta-navigation">
         <ul>
             <li><a href="profile">cburt</a> | </li>
@@ -68,93 +37,114 @@
         </ul>
         <br />
     </div>
-    <div id="panelManager">
-        {% tabpanel "Home" %}
-            {% tab "Data Layers" %}
-                {% block data_layers_before_tree %}{% endblock %}
-                <div style="font-size:1em;" id="datalayerstree"></div>
-                {% block data_layers_after_tree %}{% endblock %}
-                {% footer %}
-                    <h3>Earth Options</h3>
-                    <ul>
-                        <form id="ge_options">
-                            <li><input type="checkbox" name="setStatusBarVisibility" checked />Status Bar</li>
-                            <li><input type="checkbox" name="nav" />Navigation Control</li>
-                            <li><input type="checkbox" name="setGridVisibility" />Grid</li>
-                            <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li>
-                            <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li>
-                            <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li>
-                            <li><input type="checkbox" name="sun" />Sun</li>      
-                        </form>
-                    </ul>
-                    <h3>Google Layers</h3>
-                    <ul>
-                        <form id="ge_layers">
-                            <li><input type="checkbox" name="LAYER_BORDERS">Borders</li>
-                            <li><input type="checkbox" name="LAYER_ROADS">Roads</li>
-                            <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li>
-                            <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li>
-                            <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                
-                        </form>
-                    </ul>
-                    <h3>Find a place</h3>
-                    <form id="flyToLocation" method="GET">
-                        <ul>
-                            <li>
-                                <input type="text" name="flyto_location" value="">
-                                <input type="submit" value="Fly here">                                    
-                            </li>
-                        </ul>
-                    </form>
-                    {% block data_layers_footer_append %}{% endblock %}
-                {% endfooter %}
-            {% endtab %}
-            {% tab "My Shapes" %}
-                {% block my_shapes_prepend %}{% endblock %}
-                <p>
-                    <div style="font-size:1em;" id="myshapestree"></div>
-                    <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />-->
-                    <a href="javascript:alert('create mpa');">create mpa</a> |
-                    <a href="javascript:alert('create array');">create array</a>
-                </p>                    
-                {% block my_shapes_append %}{% endblock %}
-            {% endtab %}
-            {% tab "Collaborate" %}
-                <div id="waveframe" style="height:98%;overflow:hidden;margin:3px;"></div>
-            {% endtab %}
-            {% tab "Tools" %}
-                    {% block tools_prepend %}{% endblock %}
-                    <div style="padding:1em;">
-                        <h4>Measurement Tool</h4>
-                        <button id="measure_distance">measure distance</button>
-                        <button id="measure_area">measure area</button>
-                        <button id="measure_clear">clear</button>
-                        <select id="measure_units">
-                            <option value="metric">metric</option>
-                            <option value="english">english</option>
-                            <option value="nautical">nautical</option>                            
-                        </select>
-                        <p><strong>Distance: </strong><span id="distance">N/A</span></p>
-                        <p><strong>Area: </strong><span id="area">N/A</span></p>
-                        <hr>
-                    </div>
-                    <!--
-                    <div style="padding:1em;">
-                        <h4>MPA Draw Tool</h4>
-                        <button id="mpa_draw">draw mpa</button>
-                        <button id="mpa_clear">clear</button>
-                        <p><span id="mpa_draw_results"></span></p>
-                        <hr>
-                    </div>
-                    -->
-                    <div style="padding:1em;"><h4>MPA Draw Tool</h4></div>
-                    <div id="mpa_draw_panel" style="padding:1em;"></div>
-                    <div id="mpa_results_panel" style="padding:1em; overflow: auto"></div>
-                    {% block tools_append %}{% endblock %}   
-            {% endtab %}
-        {% endtabpanel %}        
+    <div id="sidebar">
+        <ul>
+            <li><a href="#DataLayers"><span>Data Layers</span></a></li>
+            <li><a href="#MyShapes"><span>My Shapes</span></a></li>
+            <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
+        </ul>
+        <div id="DataLayers">
+            <div style="font-size:1em;" id="datalayerstree"></div>
+        </div>
+        <div id="MyShapes">
+            <div style="font-size:1em;" id="myshapestree"></div>
+            <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />-->
+            <a href="javascript:alert('create mpa');">create mpa</a> |
+            <a href="javascript:alert('create array');">create array</a>
+        </div>                    
+        <div id="SharedShapes">
+            Shared shapes go here
+        </div>
     </div>
     <div id="map_container">
         <div id="map"></div>
     </div>
+    
+    {# {% load layout_tags %} #}
+    {# <div id="panelManager"> #}
+    {#     {% tabpanel "Home" %} #}
+    {#         {% tab "Data Layers" %} #}
+    {#             {% block data_layers_before_tree %}{% endblock %} #}
+    {#             <div style="font-size:1em;" id="datalayerstree"></div> #}
+    {#             {% block data_layers_after_tree %}{% endblock %} #}
+    {#             {% footer %} #}
+    {#                 <h3>Earth Options</h3> #}
+    {#                 <ul> #}
+    {#                     <form id="ge_options"> #}
+    {#                         <li><input type="checkbox" name="setStatusBarVisibility" checked />Status Bar</li> #}
+    {#                         <li><input type="checkbox" name="nav" />Navigation Control</li> #}
+    {#                         <li><input type="checkbox" name="setGridVisibility" />Grid</li> #}
+    {#                         <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li> #}
+    {#                         <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li> #}
+    {#                         <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li> #}
+    {#                         <li><input type="checkbox" name="sun" />Sun</li>       #}
+    {#                     </form> #}
+    {#                 </ul> #}
+    {#                 <h3>Google Layers</h3> #}
+    {#                 <ul> #}
+    {#                     <form id="ge_layers"> #}
+    {#                         <li><input type="checkbox" name="LAYER_BORDERS">Borders</li> #}
+    {#                         <li><input type="checkbox" name="LAYER_ROADS">Roads</li> #}
+    {#                         <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li> #}
+    {#                         <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li> #}
+    {#                         <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                 #}
+    {#                     </form> #}
+    {#                 </ul> #}
+    {#                 <h3>Find a place</h3> #}
+    {#                 <form id="flyToLocation" method="GET"> #}
+    {#                     <ul> #}
+    {#                         <li> #}
+    {#                             <input type="text" name="flyto_location" value=""> #}
+    {#                             <input type="submit" value="Fly here">                                     #}
+    {#                         </li> #}
+    {#                     </ul> #}
+    {#                 </form> #}
+    {#                 {% block data_layers_footer_append %}{% endblock %} #}
+    {#             {% endfooter %} #}
+    {#         {% endtab %} #}
+    {#         {% tab "My Shapes" %} #}
+    {#             {% block my_shapes_prepend %}{% endblock %} #}
+    {#             <p> #}
+    {#                 <div style="font-size:1em;" id="myshapestree"></div> #}
+    {#                 <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />--> #}
+    {#                 <a href="javascript:alert('create mpa');">create mpa</a> | #}
+    {#                 <a href="javascript:alert('create array');">create array</a> #}
+    {#             </p>                     #}
+    {#             {% block my_shapes_append %}{% endblock %} #}
+    {#         {% endtab %} #}
+    {#         {% tab "Collaborate" %} #}
+    {#             <div id="waveframe" style="height:98%;overflow:hidden;margin:3px;"></div> #}
+    {#         {% endtab %} #}
+    {#         {% tab "Tools" %} #}
+    {#                 {% block tools_prepend %}{% endblock %} #}
+    {#                 <div style="padding:1em;"> #}
+    {#                     <h4>Measurement Tool</h4> #}
+    {#                     <button id="measure_distance">measure distance</button> #}
+    {#                     <button id="measure_area">measure area</button> #}
+    {#                     <button id="measure_clear">clear</button> #}
+    {#                     <select id="measure_units"> #}
+    {#                         <option value="metric">metric</option> #}
+    {#                         <option value="english">english</option> #}
+    {#                         <option value="nautical">nautical</option>                             #}
+    {#                     </select> #}
+    {#                     <p><strong>Distance: </strong><span id="distance">N/A</span></p> #}
+    {#                     <p><strong>Area: </strong><span id="area">N/A</span></p> #}
+    {#                     <hr> #}
+    {#                 </div> #}
+    {#                 <!-- #}
+    {#                 <div style="padding:1em;"> #}
+    {#                     <h4>MPA Draw Tool</h4> #}
+    {#                     <button id="mpa_draw">draw mpa</button> #}
+    {#                     <button id="mpa_clear">clear</button> #}
+    {#                     <p><span id="mpa_draw_results"></span></p> #}
+    {#                     <hr> #}
+    {#                 </div> #}
+    {#                 --> #}
+    {#                 <div style="padding:1em;"><h4>MPA Draw Tool</h4></div> #}
+    {#                 <div id="mpa_draw_panel" style="padding:1em;"></div> #}
+    {#                 <div id="mpa_results_panel" style="padding:1em; overflow: auto"></div> #}
+    {#                 {% block tools_append %}{% endblock %}    #}
+    {#         {% endtab %} #}
+    {#     {% endtabpanel %}         #}
+    {# </div> #}
 {% endblock %}

@@ -3,7 +3,7 @@ var lingcod = {
     isnamespace_:true,
     
     init: function(){
-        $('#panelManager').panelManager({top: '1em', left: 0});
+        $('#sidebar').tabs();
         this.resize();
         var self = this;
         google.earth.createInstance(
@@ -52,18 +52,6 @@ var lingcod = {
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         $('#myshapestree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', window.myshapes_layers, {cachebust: true});
-        //part of mpa creation -- will remove mpa_draw and mpa_clear buttons (they are created automatically by MpaCreator)
-        /*
-        $('#mpa_draw').click(function(){
-            document.getElementById("mpa_draw_results").innerHTML = '';
-            self.drawTool.clear();
-            self.drawTool.drawShape( lingcod.drawMpaComplete ); 
-        });
-        $('#mpa_clear').click(function(){
-            document.getElementById("mpa_draw_results").innerHTML = '';
-            self.drawTool.clear();
-        });
-        */
     },
     
     studyRegionLoaded: function(kmlObject, node){
@@ -87,9 +75,12 @@ var lingcod = {
     },
     
     resize: function(){
-        var h = $(document.body).height() - $('#meta-navigation').outerHeight();
-        $('#panelManager').height(h);
-        var w = $(document.body).width() - $('#panelManager').width();
+        var mh = $('#meta-navigation').outerHeight();
+        var h = $(document.body).height() - mh;
+        $('#sidebar').css({top: mh, height: h});
+        
+        // $('#panelManager').height(h);
+        var w = $(document.body).width() - $('#sidebar').width();
         $('#map_container').height(h).width(w);
         
         // $('#layout').height($(window).height())
