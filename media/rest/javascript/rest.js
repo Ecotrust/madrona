@@ -103,6 +103,8 @@ lingcod.rest.client = function(gex, panel){
             onsubmit(e, form, options);
             return false;
         });
+        // Manipulators stuff could go here:
+        // manipulator.processForm(form);
         panel.showContent(html);        
     }
     
@@ -196,6 +198,31 @@ lingcod.rest.client = function(gex, panel){
     
     that.destroy = destroy;
     
+    // client.show
+    // ===========
+    // Show a feature's attributes in the panel.
+    // 
+    // Returns a config object for the passed feature.
+    // 
+    // @param {KmlFeatureObject or Object} configOrFeature, the feature to show 
+    // or a config object for a feature.
+    // 
+    // @param {Object} options, an object with optional success and error 
+    // callbacks.
+    // 
+    // Usage:
+    //      var config = client.show(kmlFeatureObject, {
+    //          success: function(location){
+    //              do something
+    //          },
+    //          error: function(response, status){
+    //              do something
+    //          }
+    //      });
+    // 
+    // now I can call client.show with config:
+    //      client.show(config, options);
+    // 
     var show = function(configOrFeature, options){
         var config = getConfig(configOrFeature);
         options['load_msg'] = 'Loading '+config['title'];
@@ -205,10 +232,6 @@ lingcod.rest.client = function(gex, panel){
     that.show = show;
     
     // Private methods
-    
-    var showForm = function(options){
-        
-    }
  
     // to make up for the fact that the Location header returns the full path,
     // and get_absolute_url calls for each resource in the kml will not 
@@ -220,7 +243,13 @@ lingcod.rest.client = function(gex, panel){
     
     that.getPath = getPath;
     
+    
+    // METHODS TO AID IN TESTING
+    // =========================
+    
     // Inefficient. Really only for testing
+    // Finds Kml Feature within a text file that contains a Feature with 
+    // matching location.
     var findResourceInString = function(location, text){
         var path = getPath(location);
         var link = $(text).find('atom\\:link[href='+path+']');
@@ -237,6 +266,8 @@ lingcod.rest.client = function(gex, panel){
     that.findResourceInString = findResourceInString;
     
     // Inefficient, only for testing.
+    // Given the location of a resource and a kmlObject that contains it,
+    // find the KmlFeatureObject that represents it.
     var findResource = function(location, kmlObject){
         var resource = false;
         gex.dom.walk({
