@@ -14,13 +14,22 @@
 		var DEFAULT_USERNAME = 'integration_tester';
         var DEFAULT_PASSWORD = 'password';
 		//'{% mpa_uid %}',
+	    {% block array_test_script %}
+
 		lingcod.rest.testInterface('arrays and mpas', '{% url user_mpa_kml input_username='integration_tester' %}', {
 		    '{% array_uid %}': {
 		        form_values: {
 		            name: 'My Array Name'
+		        },
+		        invalid_form_values: {
+		            name: ''
 		        }
 		    }
 		});
+	       
+	    {% endblock array_test_script %}
+		
+		{% block test_script %}{% endblock test_script %}
 
     </script>
     <style type="text/css" media="screen">

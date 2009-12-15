@@ -1,3 +1,4 @@
+{% if not is_ajax %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -6,7 +7,8 @@
     <title>{% block title %}title not set. use block title.{% endblock %}</title>
     {% block head %}{% endblock %}
   </head>
-  <body>
+  <body>    
+{% endif %}
     <div id="panel">
       {% block panel %}
         <h1>Example Panel</h1>
@@ -15,5 +17,7 @@
         </p>
       {% endblock %}      
     </div>
+{% if not is_ajax %}
   </body>
-</html>
+</html>    
+{% endif %}

@@ -100,6 +100,7 @@ def create(request, form_class=None, action=None, title=None,
                 'form': form,
                 'title': title,
                 'action': action,
+                'is_ajax': request.is_ajax(),
             })
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
@@ -126,6 +127,7 @@ def create_form(request, form_class=None, action=None, extra_context={},
             'form': form_class(),
             'title': title,
             'action': action,
+            'is_ajax': request.is_ajax(),
         })
         return render_to_response(template, extra_context)
     else:
@@ -157,6 +159,7 @@ def update_form(request, form_class=None, pk=None, extra_context={},
             'form': form,
             'title': "Edit '%s'" % (instance.name, ),
             'action': instance.get_absolute_url(),
+            'is_ajax': request.is_ajax(),
         })
         return render_to_response(template, extra_context)
     else:
@@ -206,6 +209,7 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
                 'form': form,
                 'title': "Edit '%s'" % (instance.name, ),
                 'action': instance.get_absolute_url(),
+                'is_ajax': request.is_ajax(),
             })
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
@@ -247,6 +251,7 @@ def resource(request, form_class=None, pk=None, get_func=None,
         else:
             extra_context.update({
                 'instance': instance,
+                'is_ajax': request.is_ajax(),
             })
             return render_to_response(template, extra_context)
     elif request.method == 'POST':
