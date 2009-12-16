@@ -149,5 +149,9 @@ class ArrayResourcesTestCase(TestCase):
         from lingcod.rest.utils import rest_uid
         self.settings_manager.set(ARRAY_FORM = 'lingcod.array.tests.ArrayTestForm', ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray')
         self.assertEquals(ArrayTestArray, get_array_class())
-        assertImplementsRestInterface(self, '/kml/default_user/user_mpa.kml', 
+        password = 'pword'
+        user = User.objects.create_user('resttest', 'resttest@marinemap.org', password=password)
+        from django.core.urlresolvers import reverse
+        url = reverse('user_mpa_kml', kwargs={'input_username': user.username})
+        assertImplementsRestInterface(self, user, password, url, 
             rest_uid(ArrayTestArray), {'name': 'myname'})

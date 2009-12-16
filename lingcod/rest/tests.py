@@ -339,9 +339,12 @@ class UtilsTest(TestCase):
 
 from elementtree.ElementTree import fromstring
 
-def assertImplementsRestInterface(testcase, url, rest_uid, valid_form_data):
-    user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
+def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid_form_data):
+    print user.username, password
+    print testcase.client.login(username=user.username, password=password)
+    print url
     response = testcase.client.get(url)
+    print response.content
     testcase.assertContains(response, 'kml', status_code=200)
     root = fromstring(response.content)
     found = False
