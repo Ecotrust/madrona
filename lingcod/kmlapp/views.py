@@ -8,6 +8,9 @@ from lingcod.common import utils
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 
+class Http401(Exception): pass
+class Http403(Exception): pass
+
 def get_user_mpa_data(user):
     """
     Organizes user's MPAs into arrays and provides their designations.
@@ -74,25 +77,15 @@ def get_single_mpa_data(user, input_mpa_id):
         mpa = mpas[0]
     except:
         raise Http404
+
     if mpa.array:
-        array_nameid = "%s_%d" % (the_array.name, the_array.id)
+        array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
         shapes = {array_nameid: {'array':mpa.array, 'mpas': [mpa]} }
     else:
         unattached = utils.get_array_class()(name='Unattached')
         shapes = {'Unattached': {'array': unattached, 'mpas':[mpa]} }
     designations = [mpa.designation]
     return shapes, designations
-
-def get_user(request, input_username):
-    """
-    Logic to determine what user's KMLs get returned
-    """
-    user = request.user
-    if user.username != input_username or user.is_anonymous or not user.is_authenticated:
-        # TODO return HttpResponse('You must be logged in.', status=401)
-        # right now this assumes a fixture with username default_user exists
-        user = User.objects.get(username="default_user")
-    return user
 
 def create_kmz(kml, zippath):
     """
@@ -128,7 +121,12 @@ def create_mpa_kml(request, input_username=None, input_array_id=None, input_mpa_
     """
     Returns a KML containing MPAs (organized into folders by array)
     """
-    user = get_user(request,input_username)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=403)
+
     if input_username:
         shapes, designations = get_user_mpa_data(user)
     elif input_array_id:
@@ -136,7 +134,7 @@ def create_mpa_kml(request, input_username=None, input_array_id=None, input_mpa_
     elif input_mpa_id:
         shapes, designations = get_single_mpa_data(user, input_mpa_id)
     else:
-        raise 404
+        raise Http404
 
     response = render_to_response('placemark.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
     response['Content-Type'] = mimetypes.KML
@@ -148,7 +146,12 @@ def create_mpa_kmz(request, input_username=None, input_array_id=None, input_mpa_
     """
     Returns a KMZ containing MPAs (organized into folders by array)
     """
-    user = get_user(request,input_username)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=403)
+
     if input_username:
         shapes, designations = get_user_mpa_data(user)
     elif input_array_id:
@@ -156,7 +159,7 @@ def create_mpa_kmz(request, input_username=None, input_array_id=None, input_mpa_
     elif input_mpa_id:
         shapes, designations = get_single_mpa_data(user, input_mpa_id)
     else:
-        raise 404
+        raise Http404
 
     t = get_template('placemark.kml')
     kml = t.render(Context({'shapes': shapes, 'designations': designations}))
@@ -172,7 +175,12 @@ def create_mpa_kml_links(request, input_username):
     """
     Returns a KML containing MPAs owned by a user, each array is a network link to an array.kml 
     """
-    user = get_user(request,input_username)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=403)
+
     shapes, designations = get_user_mpa_data(user)
     response = render_to_response('placemark_links.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
     response['Content-Type'] = mimetypes.KML
@@ -183,7 +191,12 @@ def create_mpa_kmz_links(request, input_username):
     """
     Returns a KMZ containing MPAs owned by a user, each array is a network link to an array.kml 
     """
-    user = get_user(request,input_username)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=403)
+
     shapes, designations = get_user_mpa_data(user)
 
     t = get_template('placemark_links.kml')
