@@ -53,23 +53,13 @@
 
         // options = {callback, cachebust, }
         add: function(url, opts){
+            var options = opts || {};
             if(url in this.kmlObjects){
                 throw('KML file with url '+url+' already added.');
             }
-            var original_url = url;
-            var options = opts || {};
             var self = this;
-            // can be removed when the following ticket is resolved:
-            // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
-            if(!url.match('http')){
-                url = window.location.protocol + "//" + window.location.host + "/" + url;
-                url = url.replace(/(\w)\/\//g, '$1/');
-            }
-            if(options.cachebust){
-                url = url + '?' + (new Date()).valueOf();
-            }
-            google.earth.fetchKml(this.ge, url,
-            function(kmlObject) {
+            var original_url = url;
+            var processKmlObject = function(kmlObject){
                 if (!kmlObject) {
                     // show error
                     setTimeout(function() {
@@ -80,9 +70,35 @@
                 }
                 self.kmlObjects[original_url] = kmlObject;
                 self._addKmlObject(kmlObject, options.callback);
-            });            
+            }
+            if(options.native_xhr){
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    cache: !options.cachebust,
+                    success: function(data, status){
+                        var kmlObject = self.ge.parseKml(data);
+                        processKmlObject(kmlObject);
+                    },
+                    error: function(){
+                        processKmlObject();
+                    },
+                    dataType: 'html'
+                });
+            }else{
+                // can be removed when the following ticket is resolved:
+                // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
+                if(!url.match('http')){
+                    url = window.location.protocol + "//" + window.location.host + "/" + url;
+                    url = url.replace(/(\w)\/\//g, '$1/');
+                }
+                if(options.cachebust){
+                    url = url + '?' + (new Date()).valueOf();
+                }
+                google.earth.fetchKml(this.ge, url, processKmlObject);                
+            }
         },
-        
+                
         _addKmlObject: function(kmlObject, callback){
             this.ge.getFeatures().appendChild(kmlObject);
             this._buildTreeUI(kmlObject, callback);

@@ -14,7 +14,7 @@ lingcod.rest.kmlEditor = function(options){
                     success: function(location){
                         // possible memory leak!!!!!!!
                         that.el.kmlForest('refresh', options.url, {
-                            cachebust: true, callback: kmlLoaded});
+                            cachebust: true, callback: kmlLoaded, native_xhr: true});
                     }
                 });
                 return false;
@@ -31,7 +31,7 @@ lingcod.rest.kmlEditor = function(options){
 
     that.el.kmlForest({ge: options.ge, gex: options.gex, div: options.div})
         .kmlForest('add', options.url, {cachebust: true, 
-            callback: kmlLoaded});
+            callback: kmlLoaded, native_xhr: true});
     
     that.el.addClass('kmlEditor');
 }

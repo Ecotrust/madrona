@@ -14,7 +14,7 @@
         var options = {};
         {% block myshapes %}
         {% if user.is_authenticated %}
-        options.myshapes = ["{% url user_mpa_kmz input_username=user.username %}"];
+        options.myshapes = ["{% url user_mpa_kml input_username=user.username %}"];
         {% endif %}
         {% endblock myshapes %}
         
