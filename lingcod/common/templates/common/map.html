@@ -4,7 +4,6 @@
     <script src="http://wave-api.appspot.com/public/embed.js" type="text/javascript"></script>
     <script type="text/javascript">
         window.public_data_layers = '{% url public-data-layers %}';
-        window.myshapes_layers = '/kml/{{user.username}}/user_mpa_links.kmz';
         window.studyregion = '{% url studyregion-kml %}';
         google.load("earth", "1");
         google.load('maps', '3', {"other_params":"sensor=false"});
@@ -72,7 +71,6 @@
     <div id="map_container">
         <div id="map"></div>
     </div>
-    
     {# {% load layout_tags %} #}
     {# <div id="panelManager"> #}
     {#     {% tabpanel "Home" %} #}

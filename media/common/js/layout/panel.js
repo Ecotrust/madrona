@@ -11,15 +11,23 @@ lingcod.panel = function(options){
     $(document.body).append(el);
 
     that.showContent = function(elements){
+        that.addContent(elements);
+        that.show();        
+    }
+    
+    that.addContent = function(elements){
         content.html('');
-        content.append(elements);
+        content.append(elements);        
+    }
+    
+    that.show = function(){
         el.show();
-        $(that).trigger('show', that);
+        $(that).trigger('show', that);        
     }
     
     that.close = function(){
-        el.find('div.content').html('');
         el.hide();
+        el.find('div.content').html('');
     }
     
     that.spin = function(message){

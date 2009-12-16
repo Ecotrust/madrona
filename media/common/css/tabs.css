@@ -136,3 +136,26 @@
 *:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
     display: inline-block;
 }
+
+.marinemap-panel .ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 4px;
+    position:relative;
+/*    top:0em;*/
+/*    z-index:4;*/
+}
+
+.marinemap-panel .tabs .ui-state-disabled {
+    display:none;
+}
+
+.marinemap-panel .ui-tabs-nav a {
+    color:#3A6469;
+    background-color:none;
+}
+
+.marinemap-panel .ui-tabs-nav .ui-tabs-selected a {
+    color:#3A6469;
+    background-color:#CDDEDC;
+}

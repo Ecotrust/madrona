@@ -86,6 +86,13 @@ html, body {
     z-index:10;
     background-color:white;
     -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-    
+    -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);   
+}
+
+.marinemap-panel .close {
+    float:right;
+}
+
+ul.errorlist li {
+    background-color:#FF676A;
 }

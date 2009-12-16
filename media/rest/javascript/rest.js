@@ -79,12 +79,12 @@ lingcod.rest.client = function(gex, panel){
 
                     case 400:
                         // validation error
+                        options['validation_error'] = true;
                         setupForm(req.responseText, options);
                         break;
                     
                     default:
                         // serious error
-                        // console.error('serious error');
                 }
             }
         });
@@ -96,15 +96,34 @@ lingcod.rest.client = function(gex, panel){
     }
     
     var setupForm = function(text, options){
+        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>geometry</span></a></li><li><a href="#PanelAttributes"><span>attributes</span></a></li></ul><div id="PanelGeometry">geometry</div><div id="PanelAttributes"></div></div>');
         var html = $(text);
+        var h1 = html.find('h1');
+        h1.remove();
+        content.prepend(h1);
         var form = html.find('form');
+        content.find('#PanelAttributes').append(html);
         form.submit(function(e){
             onsubmit(e, form, options);
             return false;
         });
-        // Manipulators stuff could go here:
-        // manipulator.processForm(form);
-        panel.showContent(html);        
+        panel.addContent(content);
+        var tabs = content.find('.tabs').tabs();
+
+        // so this is how it might work:
+        // var manipulations_needed = manipulators.needed(form);
+        var manipulations_needed = true;
+        if(manipulations_needed){
+            // fill in the geometry tab:
+            // $('#PanelGeometry')...
+        }else{
+            tabs.tabs('select', '#PanelAttributes');
+            tabs.tabs('disable', 0);
+        }
+        if(options.validation_error){
+            tabs.tabs('select', '#PanelAttributes');
+        }
+        panel.show();
     }
     
     var create = function(config, options){
