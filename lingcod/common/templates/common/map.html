@@ -11,11 +11,18 @@
 
         var ge = null;
         var gex = null;
-        $(document).ready(function(){            
-            lingcod.init();
+        
+        var options = {};
+        {% block myshapes %}
+        {% if user.is_authenticated %}
+        options.myshapes = ["{% url user_mpa_kmz input_username=user.username %}"];
+        {% endif %}
+        {% endblock myshapes %}
+        
+        $(document).ready(function(){
+            lingcod.init(options);
         });
     </script>
-
     <style type="text/css" media="screen">
         body {
             font-size:1em;
@@ -24,15 +31,20 @@
         
     </style>    
 {% endblock %}
-
 {% block body %}
     <div id="meta-navigation">
         <ul>
-            <li><a href="profile">cburt</a> | </li>
+            {% if user.is_authenticated %}
+            <li><a href="profile">{{user.username}}</a> | </li>
+            {% endif %}
             <li><a href="http://marinemap.org">about marinemap</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
             <li><a href="help">help</a> | </li>
-            <li><a href="sign out">sign out</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url logout %}">sign out</a></li>
+            {% else %}
+            <li><a href="{% url login %}">sign in</a></li>
+            {% endif %}
             {% block meta_navigation_list_append %}{% endblock %}
         </ul>
         <br />
@@ -40,18 +52,19 @@
     <div id="sidebar">
         <ul>
             <li><a href="#DataLayers"><span>Data Layers</span></a></li>
-            <li><a href="#MyShapes"><span>My Shapes</span></a></li>
+            {% if user.is_authenticated %}
+            <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
+            {% endif %}
             <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
         </ul>
         <div id="DataLayers">
             <div style="font-size:1em;" id="datalayerstree"></div>
         </div>
+        {% if user %}
         <div id="MyShapes">
             <div style="font-size:1em;" id="myshapestree"></div>
-            <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />-->
-            <a href="javascript:alert('create mpa');">create mpa</a> |
-            <a href="javascript:alert('create array');">create array</a>
-        </div>                    
+        </div>            
+        {% endif %}
         <div id="SharedShapes">
             Shared shapes go here
         </div>

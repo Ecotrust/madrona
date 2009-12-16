@@ -9,7 +9,10 @@ from django.conf import settings
 def map(request, template_name='common/map.html'):
     """Main application window
     """
-    return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY, 'WAVE_ID': settings.WAVE_ID}))
+    return render_to_response(template_name, RequestContext(request,{
+        'api_key':settings.GOOGLE_API_KEY, 
+        'WAVE_ID': settings.WAVE_ID
+        }))
     
 
     

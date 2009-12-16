@@ -71,7 +71,18 @@ html, body {
     width:460px;
     overflow:auto;
 /*    position:absolute;*/
-    margin-top:2.5em;
+    margin-top:3em;
     padding:0;
     overflow-x:hidden;
+    font-size:0.8em;
+}
+
+.marinemap-panel {
+    position:absolute;
+    left:10px;
+    top:0px;
+    height:100%;
+    width:450px;
+    z-index:10;
+    background-color:white;
 }

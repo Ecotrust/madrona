@@ -145,7 +145,9 @@
             this.gex.dom.removeObject(obj);
         },
         
-        refresh: function(kml){
+        refresh: function(url, options){
+            this.remove(url);
+            this.add(url, options);
         },
         
         getByUrl: function(url){

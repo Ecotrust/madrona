@@ -2,7 +2,8 @@ var lingcod = {
     
     isnamespace_:true,
     
-    init: function(){
+    init: function(options){
+        this.options = options;
         $('#sidebar').tabs();
         this.resize();
         var self = this;
@@ -50,8 +51,20 @@ var lingcod = {
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', window.studyregion, {cachebust: true, callback: this.studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
-        $('#myshapestree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-            .kmlForest('add', window.myshapes_layers, {cachebust: true});
+        
+        var panel = lingcod.panel();
+        this.client = lingcod.rest.client(gex, panel);
+        
+        for(var i=0;i<options.myshapes.length; i++){
+            lingcod.rest.kmlEditor({
+                ge: ge,
+                gex: gex,
+                appendTo: '#myshapestree',
+                div: '#map',
+                url: options.myshapes[i],
+                client: this.client
+            });
+        }
     },
     
     studyRegionLoaded: function(kmlObject, node){

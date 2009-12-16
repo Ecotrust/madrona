@@ -15,7 +15,7 @@
     <test path="common/js/test/lib/ge_utility_lib_patches.js" />
     <file path="common/js/tools/measure_tool.js" />
     <test path="common/js/test/tools/measure_tool.js" />
-    <!-- <file path="common/js/layout/panel.js" /> -->
+    <file path="common/js/layout/panel.js" />
     <!-- <test path="common/js/test/layout/panel.js" /> -->
     <!-- <file path="common/js/layout/panel_manager.js" /> -->
     <!-- <test path="common/js/test/layout/panel_manager.js" /> -->
@@ -39,5 +39,6 @@
     <file path="mpa/js/mpa_loader.js" />
     <file path="mpa/js/mpa_saver.js" />
     <file path="rest/javascript/rest.js" />
+    <file path="rest/javascript/kmlEditor.js" />
     <test path="rest/javascript/test.js" />
 </javascripts>

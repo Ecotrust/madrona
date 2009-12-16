@@ -62,8 +62,8 @@ lingcod.rest.client = function(gex, panel){
                 switch(req.status){
                     case 201:
                         // new object created, get location header
-                        if(options.success){
-                            panel.close();
+                        panel.close();
+                        if(options && options.success){
                             options.success(
                                 req.getResponseHeader('Location'));
                         }
@@ -108,6 +108,7 @@ lingcod.rest.client = function(gex, panel){
     }
     
     var create = function(config, options){
+        options = options || {};
         $.ajax({
             cache: false,
             url: config.href,
@@ -223,6 +224,7 @@ lingcod.rest.client = function(gex, panel){
     //      client.show(config, options);
     // 
     var show = function(configOrFeature, options){
+        options = options || {};
         var config = getConfig(configOrFeature);
         options['load_msg'] = 'Loading '+config['title'];
         panel.showUrl(config['location'], options);

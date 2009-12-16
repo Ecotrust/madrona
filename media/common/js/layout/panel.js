@@ -1,104 +1,75 @@
-(function($){
-
-    $.widget("ui.panel", {
-        _init: function() {
-            if(this.element.find('ul.tabs')){
-                this.element.tabs({selected: 0});
-            }
-            if(this.options.toptabs){
-                this.element.find('.sidebar-header h1').hide();
-            }
-            if (this.options.hidden){
-                this.hide();
-            }
-            if(this.options.html){
-                this.element.html(this.options.html);
-            }
-            // set size
-            // this.element.width(this.options.width);
-            // this.element.height(this.options.height)
-            if(this.options.title){
-                this.title(this.options.title);
-            }
-            // this.resize({width: this.options.width, height: this.options.height});
-        },
-
-        title: function(title){
-            if(!this.element.find('h1').length){
-                this.element.prepend('<h1>'+title+'</h1>');
-            }
-            // this.resize();
-        },
-
-        setContent: function(html){
-            this.element.html(html);
-        },
-
-        // resize: function(opts){
-        //     opts = opts || {};
-        //     opts.width = opts.width || this.element.width();
-        //     opts.height = opts.height || this.element.height();
-        //     this.element.width(opts.width);
-        //     var h1 = this.element.find('.sidebar-header');
-        //     var hh = 0;
-        //     if(h1.length){
-        //         hh = h1.outerHeight();
-        //     }
-        //     this.element.height(opts.height);
-        //     var el = this.element;
-        //     this.element.find('.sidebar-body').each(function(){
-        //         var body = $(this);
-        //         var footer = body.find('.sidebar-footer');
-        //         footer.css('margin-top', 0);
-        //         body.height(opts.height - hh);
-        //         if(footer.length){
-        //             var wh = body.find('.sidebar-wrapper').height();
-        //             var bh = body.height();
-        //             if(wh < bh){
-        //                 var diff = bh - wh;
-        //                 footer.css('margin-top', diff);                        
-        //             }
-        //         }
-        //     });
-        // },
+lingcod.panel = function(options){
         
-        width: function(){
-            return this.element.outerWidth();
-        },
-        
-        height: function(){
-            return this.element.height();
-        },
-        
-        hide: function(){
-            this.element.css({
-                position: 'absolute',
-                left: '-1000px',
-                top: '0px'
-            });
-        },
-        
-        // TODO: Beautify
-        showSpinner: function(text){
-            var text = text || "Loading...";
-            
-        },
-        
-        hideSpinner: function(){
-            
-        }
+    var that = {};
+    
+    var el = $('<div style="display:none;" class="marinemap-panel"><a class="close" href="#">close</a><div class="content"></div></div>');
+    el.find('a.close').click(function(){
+        that.close();
     });
+    var content = el.find('.content');
+    
+    $(document.body).append(el);
 
-    $.extend($.ui.panel, {
-        getter: "width height",
-        defaults: {
-            hidden: true,
-            width: 360,
-            height: 400,
-            html: false,
-            tabs: false,
-            title: null,
-            toptabs: false
-        }
-    });
-})(jQuery);
+    that.showContent = function(elements){
+        content.html('');
+        content.append(elements);
+        el.show();
+        $(that).trigger('show', that);
+    }
+    
+    that.close = function(){
+        el.find('div.content').html('');
+        el.hide();
+    }
+    
+    that.spin = function(message){
+        el.show();
+    }
+    
+    that.showError = function(title, message){
+        
+    }
+    
+    that.showUrl = function(url, options){
+        // throw('what the fucking fuck!');
+        var new_url = url;
+        that.spin(options.load_msg || "Loading");
+        $.ajax({
+            url: url,
+            method: 'GET',
+            complete: function(response, status){
+                switch(response.status){
+                    case 200:
+                        that.showContent(response.responseText)
+                        if(options && options.success){
+                            options.success(response, status);
+                            $(that).trigger('show', response, status);
+                        }
+                        // get content
+                        // that.showContent
+                        break;
+                        
+                    default:
+                        that.showError('A Server Error Occured.', 
+                            'Please try again.');
+                            
+                        if(options && options.error){
+                            options.error(response, status);
+                        }
+                        $(that).trigger('error', response, status);
+                }
+            }
+        });
+    }
+    
+    // Methods needed for test management        
+    that.destroy = function(){
+        that.getEl().remove();
+    }
+    
+    that.getEl = function(){
+        return el;
+    }
+            
+    return that;
+};
