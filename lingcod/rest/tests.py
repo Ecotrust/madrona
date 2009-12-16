@@ -340,11 +340,8 @@ class UtilsTest(TestCase):
 from elementtree.ElementTree import fromstring
 
 def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid_form_data):
-    print user.username, password
-    print testcase.client.login(username=user.username, password=password)
-    print url
+    testcase.client.login(username=user.username, password=password)
     response = testcase.client.get(url)
-    print response.content
     testcase.assertContains(response, 'kml', status_code=200)
     root = fromstring(response.content)
     found = False
@@ -357,9 +354,10 @@ def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid
     testcase.assertTrue(found != False, 'Could not find link. %s' % (url, ))
     
     # Now follow the link to get the form
+    testcase.client.logout()
     response = testcase.client.get(found.attrib['href'])
     testcase.assertEqual(response.status_code, 401, "Must be authenticated")
-    testcase.client.login(username='resttest', password='pword')
+    testcase.client.login(username=user.username, password=password)
     response = testcase.client.get(found.attrib['href'])
     testcase.assertContains(response, 'form', status_code=200)
     
