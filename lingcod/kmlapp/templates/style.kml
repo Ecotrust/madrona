@@ -25,6 +25,10 @@
         ]]>
       </text>
     </BalloonStyle>
+    <LabelStyle>
+       <color>ffffffff</color>
+       <scale>0.7</scale>
+    </LabelStyle>
   </Style>
   <Style id="{{ designation.acronym }}-style">
     <PolyStyle>
@@ -33,9 +37,6 @@
     <LineStyle>
         <color>{{ designation.poly_outline_color }}</color>
     </LineStyle>
-    <ListStyle>
-    </ListStyle>
-
   </Style>
  {% endfor %}
 {% endblock %}
