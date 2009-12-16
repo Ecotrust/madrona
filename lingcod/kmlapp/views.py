@@ -48,9 +48,9 @@ def get_array_mpa_data(user, input_array_id):
     Mpa = utils.get_mpa_class()
     MpaArray = utils.get_array_class()
 
-    # TODO: sharing and permissions
+    # TODO: sharing 
     try:
-        the_array = MpaArray.objects.get(id=input_array_id)
+        the_array = MpaArray.objects.get(id=input_array_id, user=user)
     except:
         raise Http404
     mpas = the_array.mpa_set.add_kml()
@@ -71,9 +71,9 @@ def get_single_mpa_data(user, input_mpa_id):
     """
     Mpa = utils.get_mpa_class()
 
-    # TODO: sharing and permissions
+    # TODO: sharing 
     try:
-        mpas = Mpa.objects.filter(id=input_mpa_id).add_kml()
+        mpas = Mpa.objects.filter(id=input_mpa_id, user=user).add_kml()
         mpa = mpas[0]
     except:
         raise Http404
