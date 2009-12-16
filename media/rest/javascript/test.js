@@ -13,16 +13,24 @@ lingcod.rest.testInterface = function(name, document_url, types){
     var testPanel = (function(){
                 
         var that = {};
-        that.closed = true;
         
         that.showContent = function(elements){
+            that.addContent(elements);
+            that.show();        
+        }
+
+        that.addContent = function(elements){
             var el = that.getEl();
             el.html('');
-            el.append(elements);
-            el.show();
-            that.closed = false;
-            $(that).trigger('show', that);
+            el.append(elements);        
         }
+
+        that.show = function(){
+            var el = that.getEl();
+            el.show();
+            $(that).trigger('show', that);        
+        }
+        
         
         that.close = function(){
             var el = that.getEl();
