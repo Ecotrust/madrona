@@ -22,32 +22,27 @@
   <visibility>1</visibility>
   <open>0</open>
  {% for mpa in a.mpas %} 
-  <Folder>
-    <name>{{ mpa.name }}</name>
-    <open>0</open>
-    <visibility>1</visibility>
+
     <Placemark id="mpa_{{ mpa.id }}">
-        <name>{{ mpa.name }} polygon</name>
-        <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
-        {{ mpa.kml|safe }} 
-    </Placemark>
-    <Placemark id="mpa_{{ mpa.id }}_point">
         <name>{{ mpa.name }}</name>
-        <styleUrl>#{{ mpa.designation.acronym }}-point-style</styleUrl>
+        <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
         <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa_update_form pk=mpa.pk %}" />
         <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="{{mpa.get_absolute_url}}" />
         <ExtendedData>
-        <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
-        <Data name="name"><value>{{ mpa.name }}</value></Data>
-        <Data name="user"><value>{{ mpa.user }}</value></Data>
-        <Data name="created"><value>{{ mpa.date_created }}</value></Data>
-        <Data name="modified"><value>{{ mpa.date_modified }}</value></Data>
-        <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
-        <Data name="designation"><value>{{ mpa.designation }}</value></Data>
+            <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
+            <Data name="name"><value>{{ mpa.name }}</value></Data>
+            <Data name="user"><value>{{ mpa.user }}</value></Data>
+            <Data name="created"><value>{{ mpa.date_created }}</value></Data>
+            <Data name="modified"><value>{{ mpa.date_modified }}</value></Data>
+            <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
+            <Data name="designation"><value>{{ mpa.designation }}</value></Data>
         </ExtendedData>
+        <MultiGeometry>
         {{ mpa.centroid_kml|safe }} 
+        {{ mpa.kml|safe }} 
+        </MultiGeometry>
     </Placemark>
-  </Folder>
+
  {% endfor %}
  </Folder>
 
