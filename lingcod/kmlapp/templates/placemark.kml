@@ -23,8 +23,8 @@
   <Placemark id="mpa_{{ mpa.id }}_point">
     <name>{{ mpa.name }}</name>
     <styleUrl>#{{ mpa.designation.acronym }}-point-style</styleUrl>
-    <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="/path/to/form/1" />
-    <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="/path/to/mpa/attributes" />
+    <atom:link rel="marinemap.update_form" title="Edit {{mpa.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa_update_form pk=mpa.id %}" />
+  	<atom:link rel="self" title="{{ mpa.name }}" mm:model="{% mpa_uid %}" href="{{ mpa.get_absolute_url }}" />
     <ExtendedData>
       <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
       <Data name="name"><value>{{ mpa.name }}</value></Data>

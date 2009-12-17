@@ -103,7 +103,7 @@ lingcod.rest.testInterface = function(name, document_url, types){
     
     var configs;
     
-    testLoggedInAsync("parseDocument", 5, function(){
+    testLoggedInAsync("parseDocument", function(){
         $.ajax({
             dataType: "text",
             error: function(request, status, error){

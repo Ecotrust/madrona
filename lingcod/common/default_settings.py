@@ -68,9 +68,9 @@ INSTALLED_APPS = (
     'lingcod.simplefaq',
     'lingcod.staticmap',
     'lingcod.manipulators',
+    'lingcod.array',
     'lingcod.mpa',
     'lingcod.wave',
-    'lingcod.array',
     'lingcod.kmlapp',
     'lingcod.rest',
 )

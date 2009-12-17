@@ -351,7 +351,7 @@ def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid
         if link.attrib['rel'] == 'marinemap.create_form':
             if link.attrib["{http://marinemap.org}model"] == rest_uid:
                 found = link
-    testcase.assertTrue(found != False, 'Could not find link. %s' % (url, ))
+    testcase.assertTrue(found != False, 'Could not find link with rel=marinemap.create_form within %s' % (url, ))
     
     # Now follow the link to get the form
     testcase.client.logout()
@@ -391,6 +391,7 @@ def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid
     for link in root.findAll('atom:link', attrs={'rel': 'self'}):
         if location.find(link['href']) != -1:
             found = link
+    testcase.assertNotEqual(False, found, 'Could not find link with rel=self for resources')
     resource_url = found['href']
     testcase.assertTrue(found != False, 'Should be able to find self link with url %s that matches the location header of our newly created object.' % (url, ))
     element = found.parent

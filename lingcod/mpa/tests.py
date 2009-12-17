@@ -2,6 +2,7 @@ from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from django.contrib.auth.models import *
+# from lingcod.array.tests import ArrayTestArray as TestArray
 
 class TestMpa(Mpa):
     pass
@@ -61,3 +62,27 @@ class MpaTest(TestCase):
         mpa = TestMpa.objects.get(pk=mpa.pk)
         # Make sure it sticks
         self.assertEquals(mpa.array, None)
+
+from lingcod.mpa.forms import MpaForm
+
+class MpaTestForm(MpaForm):
+    class Meta:
+        model = TestMpa
+        # fields = ('user', 'name')
+
+class MpaResourcesTestCase(TestCase):
+
+    urls = 'lingcod.mpa.test_urls'
+
+    def test_mpa_resources(self):
+        from lingcod.rest.tests import assertImplementsRestInterface
+        from lingcod.common.utils import get_mpa_class
+        from lingcod.rest.utils import rest_uid
+        self.settings_manager.set(MPA_FORM = 'lingcod.mpa.tests.MpaTestForm', MPA_CLASS = 'lingcod.mpa.tests.TestMpa')
+        self.assertEquals(TestMpa, get_mpa_class())
+        password = 'pword'
+        user = User.objects.create_user('resttest', 'resttest@marinemap.org', password=password)
+        from django.core.urlresolvers import reverse
+        url = reverse('user_mpa_kml', kwargs={'input_username': user.username})
+        assertImplementsRestInterface(self, user, password, url, 
+            rest_uid(TestMpa), {'name': 'myname'})

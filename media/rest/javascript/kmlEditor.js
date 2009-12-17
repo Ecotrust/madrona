@@ -9,8 +9,9 @@ lingcod.rest.kmlEditor = function(options){
         for(var key in configs){
             var config = configs[key];
             var link = $('<a class="create" href="#js">'+config.title+"</a>");
+            link.data('config', configs[key]);
             link.click(function(){
-                options.client.create(config, {
+                options.client.create($(this).data('config'), {
                     success: function(location){
                         // possible memory leak!!!!!!!
                         that.el.kmlForest('refresh', options.url, {

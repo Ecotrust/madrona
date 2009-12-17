@@ -21,7 +21,6 @@ def view_or_basicauth(view, request, test_func, realm = "", *args, **kwargs):
     #
     if 'HTTP_AUTHORIZATION' in request.META:
         auth = request.META['HTTP_AUTHORIZATION'].split()
-        print base64.b64decode(auth[1])
         if len(auth) == 2:
             # NOTE: We are only support basic authentication for now.
             #

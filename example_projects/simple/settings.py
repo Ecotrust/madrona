@@ -75,6 +75,7 @@ INSTALLED_APPS += (
 )
 
 MPA_CLASS = 'simple_app.models.Mpa'
+MPA_FORM = 'simple_app.forms.SimpleMpaForm'
 ARRAY_CLASS = 'simple_app.models.MpaArray'
 ARRAY_FORM = 'simple_app.forms.SimpleArrayForm'
 
