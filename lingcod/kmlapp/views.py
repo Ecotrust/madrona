@@ -30,7 +30,7 @@ def get_user_mpa_data(user):
             shapes['Unattached']['mpas'].append(mpa)
         else:
             array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
-            if mpa.array.name in shapes.keys():
+            if array_nameid in shapes.keys():
                 shapes[array_nameid]['mpas'].append(mpa)
             else:
                 shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
