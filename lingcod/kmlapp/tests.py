@@ -60,7 +60,7 @@ class KMLAppTest(TestCase):
         self.client.login(username=other_user.username, password='pword')
         response = self.client.get('/kml/%s/user_mpa.kml' % self.user.username, {})
         errors = kml_errors(response.content)
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
     def test_user_kml(self):
         """ 
