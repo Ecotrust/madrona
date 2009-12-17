@@ -163,7 +163,7 @@ class ArrayResourcesTestCase(TestCase):
         password = 'pword'
         user = User.objects.create_user('resttest', 'resttest@marinemap.org', password=password)
         from django.core.urlresolvers import reverse
-        url = reverse('user_mpa_kml', kwargs={'input_username': user.username})
+        url = reverse('kmlapp-user-kml', kwargs={'input_username': user.username})
         assertImplementsRestInterface(self, user, password, url, 
             rest_uid(ArrayTestArray), {'name': 'myname'})
 

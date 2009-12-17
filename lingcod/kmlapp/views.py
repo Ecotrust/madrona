@@ -117,15 +117,13 @@ def create_kmz(kml, zippath):
 
     return kmz
 
-
 from lingcod.common.basic_auth import logged_in_or_basicauth
-
 realm = 'marinemap'
 
 @logged_in_or_basicauth(realm)
-def create_mpa_kml(request, input_username=None, input_array_id=None, input_mpa_id=None):
+def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, links=False, kmz=False):
     """
-    Returns a KML containing MPAs (organized into folders by array)
+    Returns a KML/KMZ containing MPAs (organized into folders by array)
     """
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
@@ -146,75 +144,17 @@ def create_mpa_kml(request, input_username=None, input_array_id=None, input_mpa_
     else:
         raise Http404
 
-    response = render_to_response('placemark.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
-    response['Content-Type'] = mimetypes.KML
-    response['Content-Disposition'] = 'attachment' 
-    return response
+    t = get_template('placemarks.kml')
+    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': links}))
 
-
-def create_mpa_kmz(request, input_username=None, input_array_id=None, input_mpa_id=None):
-    """
-    Returns a KMZ containing MPAs (organized into folders by array)
-    """
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
-        return HttpResponse('Access denied', status=403)
-
-    if input_username:
-        shapes, designations = get_user_mpa_data(user)
-    elif input_array_id:
-        shapes, designations = get_array_mpa_data(user, input_array_id)
-    elif input_mpa_id:
-        shapes, designations = get_single_mpa_data(user, input_mpa_id)
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment'
+    if kmz:
+        kmz = create_kmz(kml, 'mpa/doc.kml')
+        response['Content-Type'] = mimetypes.KMZ
+        response.write(kmz)
     else:
-        raise Http404
-
-    t = get_template('placemark.kml')
-    kml = t.render(Context({'shapes': shapes, 'designations': designations}))
-    kmz = create_kmz(kml, 'mpa/doc.kml')
-
-    response = HttpResponse()
-    response['Content-Type'] = mimetypes.KMZ
-    response['Content-Disposition'] = 'attachment'
-    response.write(kmz)
-    return response
-
-def create_mpa_kml_links(request, input_username):
-    """
-    Returns a KML containing MPAs owned by a user, each array is a network link to an array.kml 
-    """
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
-        return HttpResponse('Access denied', status=403)
-
-    shapes, designations = get_user_mpa_data(user)
-    response = render_to_response('placemark_links.kml', {'shapes': shapes, 'designations': designations}, mimetype=mimetypes.KML)
-    response['Content-Type'] = mimetypes.KML
-    response['Content-Disposition'] = 'attachment' 
-    return response
-
-def create_mpa_kmz_links(request, input_username):
-    """
-    Returns a KMZ containing MPAs owned by a user, each array is a network link to an array.kml 
-    """
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
-        return HttpResponse('Access denied', status=403)
-
-    shapes, designations = get_user_mpa_data(user)
-
-    t = get_template('placemark_links.kml')
-    kml = t.render(Context({'shapes': shapes, 'designations': designations}))
-    kmz = create_kmz(kml, 'mpa/doc.kml')
-
-    response = HttpResponse()
-    response['Content-Type'] = mimetypes.KMZ
-    response['Content-Disposition'] = 'attachment'
-    response.write(kmz)
+        response['Content-Type'] = mimetypes.KML
+        response.write(kml)
+        
     return response

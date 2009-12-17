@@ -1,0 +1,56 @@
+{% extends "style.kml" %}
+{% block folders_and_placemarks %}
+{% load rest_uid array_uid mpa_uid absurl %}
+{% for array_nameid, a in shapes.items %}
+	{% if a.array.id and use_network_links %}
+    <NetworkLink>
+     <name>{{ a.array.name }}</name>
+     <open>1</open>
+     <visibility>0</visibility>
+     <Link>
+      <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id %}</href>
+     </Link>
+    </NetworkLink>
+    {% else %}
+
+ <Folder>
+  <name>{{ a.array.name }}</name>
+  {% if a.array.id %}
+  <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
+  <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
+  {% endif %}
+  <visibility>1</visibility>
+  <open>0</open>
+ {% for mpa in a.mpas %} 
+  <Folder>
+    <name>{{ mpa.name }}</name>
+    <open>0</open>
+    <visibility>1</visibility>
+    <Placemark id="mpa_{{ mpa.id }}">
+        <name>{{ mpa.name }} polygon</name>
+        <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
+        {{ mpa.kml|safe }} 
+    </Placemark>
+    <Placemark id="mpa_{{ mpa.id }}_point">
+        <name>{{ mpa.name }}</name>
+        <styleUrl>#{{ mpa.designation.acronym }}-point-style</styleUrl>
+        <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="/path/to/form/1" />
+        <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="/path/to/mpa/attributes" />
+        <ExtendedData>
+        <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
+        <Data name="name"><value>{{ mpa.name }}</value></Data>
+        <Data name="user"><value>{{ mpa.user }}</value></Data>
+        <Data name="created"><value>{{ mpa.date_created }}</value></Data>
+        <Data name="modified"><value>{{ mpa.date_modified }}</value></Data>
+        <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
+        <Data name="designation"><value>{{ mpa.designation }}</value></Data>
+        </ExtendedData>
+        {{ mpa.centroid_kml|safe }} 
+    </Placemark>
+  </Folder>
+ {% endfor %}
+ </Folder>
+
+    {% endif %}
+{% endfor %}
+{% endblock %}
