@@ -130,11 +130,7 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     elif input_username and user.username != input_username:
-        # return HttpResponse('Access denied', status=401)
-        response = HttpResponse()
-        response.status_code = 401
-        response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
-        return response
+        return HttpResponse('Access denied', status=401)
 
     if input_username:
         shapes, designations = get_user_mpa_data(user)
