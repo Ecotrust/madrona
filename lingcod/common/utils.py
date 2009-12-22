@@ -149,3 +149,10 @@ def hex8_to_rgba(hex8):
     rgba_values = [int(x,16) for x in hex_values]
     rgba_values.reverse()
     return rgba_values
+    
+from django.utils.importlib import import_module
+
+def load_session(request, session_key):
+    if session_key and session_key != '0':
+        engine = import_module(settings.SESSION_ENGINE)
+        request.session = engine.SessionStore(session_key)

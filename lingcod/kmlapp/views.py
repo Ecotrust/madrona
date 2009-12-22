@@ -7,6 +7,7 @@ from lingcod.common import mimetypes
 from lingcod.common import utils 
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
+from lingcod.common.utils import load_session
 
 class Http401(Exception): pass
 class Http403(Exception): pass
@@ -34,7 +35,7 @@ def get_user_mpa_data(user):
                 shapes[array_nameid]['mpas'].append(mpa)
             else:
                 shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
-    for array in utils.get_array_class().objects.empty():
+    for array in utils.get_array_class().objects.empty().filter(user=user):
         array_nameid = "%s_%d" % (array.name, array.id)
         shapes[array_nameid] = {'array': array, 'mpas':[]}
     designations = MpaDesignation.objects.all()
@@ -117,14 +118,14 @@ def create_kmz(kml, zippath):
 
     return kmz
 
-from lingcod.common.basic_auth import logged_in_or_basicauth
-realm = 'marinemap'
+from django.views.decorators.cache import cache_control
 
-@logged_in_or_basicauth(realm)
-def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, links=False, kmz=False):
+@cache_control(no_cache=True)
+def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, links=False, kmz=False, session_key='0'):
     """
     Returns a KML/KMZ containing MPAs (organized into folders by array)
     """
+    load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
@@ -145,7 +146,7 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         raise Http404
 
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': links}))
+    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': links, 'request_path': request.path, 'session_key': session_key}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'

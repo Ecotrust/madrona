@@ -11,7 +11,8 @@ def map(request, template_name='common/map.html'):
     """
     return render_to_response(template_name, RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
-        'WAVE_ID': settings.WAVE_ID
+        'WAVE_ID': settings.WAVE_ID,
+        'session_key': request.session.session_key,
         }))
     
 

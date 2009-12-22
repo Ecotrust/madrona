@@ -1,6 +1,6 @@
 {% extends "style.kml" %}
 {% block folders_and_placemarks %}
-{% load rest_uid array_uid mpa_uid absurl %}
+{% load rest_uid array_uid mpa_uid relurl %}
 {% for array_nameid, a in shapes.items %}
 	{% if a.array.id and use_network_links %}
     <NetworkLink>
@@ -8,7 +8,7 @@
      <open>1</open>
      <visibility>0</visibility>
      <Link>
-      <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id %}</href>
+      <href>{% relurl request_path kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
      </Link>
     </NetworkLink>
     {% else %}
