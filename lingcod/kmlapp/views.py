@@ -9,9 +9,6 @@ from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 from lingcod.common.utils import load_session
 
-class Http401(Exception): pass
-class Http403(Exception): pass
-
 def get_user_mpa_data(user):
     """
     Organizes user's MPAs into arrays and provides their designations.
