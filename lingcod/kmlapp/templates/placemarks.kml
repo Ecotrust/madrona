@@ -21,23 +21,6 @@
   {% endif %}
   <visibility>1</visibility>
   <open>0</open>
-  	<Placemark>
-		<name>test</name>
-		<LookAt>
-			<longitude>-119.9992614752373</longitude>
-			<latitude>33.95393012330412</latitude>
-			<altitude>0</altitude>
-			<range>206039.6304487483</range>
-			<tilt>0</tilt>
-			<heading>0.2347482162429508</heading>
-			<altitudeMode>relativeToGround</altitudeMode>
-			<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-		</LookAt>
-		<styleUrl>#msn_ylw-pushpin</styleUrl>
-		<Point>
-			<coordinates>-119.9992614752373,33.95393012330412,0</coordinates>
-		</Point>
-	</Placemark>
  {% for mpa in a.mpas %} 
 
     <Placemark id="mpa_{{ mpa.id }}">
