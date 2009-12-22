@@ -3,9 +3,11 @@
  {% for designation in designations %}
   <Style id="{{ designation.acronym }}-style">
     <IconStyle>
-        <color>{{ designation.poly_fill_color }}</color>
+        <!-- Almost transparent = it is hoverable/clickable but not really visible -->
+        <color>01000000</color> 
         <colorMode>normal</colorMode>
-        <scale>0</scale> <!-- Use 0.6 if you want pushpin to be visible -->
+        <!-- Use 0 if you want pushpin to be invisible (changes hover/click behavior) -->
+        <scale>0.7</scale> 
         <Icon>
         <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href>
         </Icon>
