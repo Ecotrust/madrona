@@ -9,7 +9,8 @@ import os
 register = Library()
 
 class RelativeURLNode(URLNode):
-    
+    """Only works with python 2.6
+    """
     request_path = None
     
     def render(self, context):
