@@ -19,7 +19,7 @@
     margin: 0;
     padding: 0 0 0 4px;
     position:absolute;
-    top:0em;
+    top:5px;
     z-index:4;
 
 }
@@ -35,6 +35,13 @@
     float: left;
     margin: 0 0 0 1px;
     min-width: 84px; /* be nice to Opera */
+    padding:0;
+    margin-right:-40px;
+}
+
+.ui-tabs-nav a {
+    width:182px;
+    height:36px;
 }
 
 .ui-tabs-nav a, .ui-tabs-nav a span {
@@ -42,8 +49,8 @@
 /*    padding: 0 10px;*/
 /*    background: white;*/
 /*    background-color:#E2E2E2;*/
-    font-size:1.2em;
-    padding:0.5em;
+    font-size:12px;
+    padding:0em;
 }
 
 .ui-tabs-nav a {
@@ -51,8 +58,8 @@
     padding-left: 0;
 /*    color: #102233;*/
     color:white;
+    font-size:12px;
     font-weight: bold;
-    line-height: 1;
     text-align: center;
     text-decoration: none;
     white-space: nowrap; /* required in IE 6 */    
@@ -66,11 +73,20 @@
     color:#17314A;
 }
 
+.ui-tabs-nav .ui-tabs-selected {
+    background: url(../images/tab_bg.png) no-repeat;
+}
+
+.ui-tabs-nav {
+/*    margin-left:-20px;*/
+}
+
 .ui-tabs-nav .ui-tabs-selected a {
 /*    -webkit-box-shadow: 2px -2px 3px #3373B2;
     -moz-box-shadow: 2px -2px 3px #B6B6B6;
 */    border-bottom:none;
-    background-color:#FFF;
+    font-size:12px;
+/*    background-color:#FFF;*/
     color:black;
 /*    -webkit-border-top-right-radius:15px;
     -webkit-border-top-left-radius:2px;
@@ -79,42 +95,19 @@
 */   
 /*    margin-right:-5px;*/
     position: relative;
-    padding-bottom:7px;
-    top: 0px;
+/*    padding-bottom:7px;*/
+/*    top: 0px;*/
     z-index: 2;
 /*    margin-top: 0;*/
 /*    margin-bottom:-5px;*/
     color: #1A3752;
 }
 .ui-tabs-nav a span {
-    width: 64px; /* IE 6 treats width as min-width */
-    min-width: 64px;
-    height: 18px; /* IE 6 treats height as min-height */
-    min-height: 18px;
-    padding-top: 6px;
-    padding-right: 0;
+    padding-top:12px;
 }
-*>.ui-tabs-nav a span { /* hide from IE 6 */
-    width: auto;
-    height: auto;
-}
+
+
 .ui-tabs-nav .ui-tabs-selected a span {
-    padding-bottom: 1px;
-}
-.ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
-    background-position: 100% -150px;
-}
-.ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
-    background-position: 100% -100px;
-}
-.ui-tabs-nav .ui-tabs-selected a span, .ui-tabs-nav a:hover span, .ui-tabs-nav a:focus span, .ui-tabs-nav a:active span {
-    background-position: 0 -50px;
-}
-.ui-tabs-nav a span, .ui-tabs-nav .ui-tabs-disabled a:hover span, .ui-tabs-nav .ui-tabs-disabled a:focus span, .ui-tabs-nav .ui-tabs-disabled a:active span {
-    background-position: 0 0;
-}
-.ui-tabs-nav .ui-tabs-selected a:link, .ui-tabs-nav .ui-tabs-selected a:visited, .ui-tabs-nav .ui-tabs-disabled a:link, .ui-tabs-nav .ui-tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
-    cursor: text;
 }
 .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active,
 .ui-tabs-nav .ui-tabs-deselectable a:hover, .ui-tabs-nav .ui-tabs-deselectable a:focus, .ui-tabs-nav .ui-tabs-deselectable a:active { /* @ Opera, we need to be explicit again here now... */

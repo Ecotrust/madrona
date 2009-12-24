@@ -48,13 +48,17 @@
         </ul>
         <br />
     </div>
+    <ul id="header_buttons">
+        <li><a href="#"><img src="{{MEDIA_URL}}/common/images/layers.png" width="29" height="31"></a></li>
+        <li><a href="#"><img src="{{MEDIA_URL}}/common/images/gear.png" width="31" height="32"></a></li>
+    </ul>
     <div id="sidebar">
         <ul>
             <li><a href="#DataLayers"><span>Data Layers</span></a></li>
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
-            <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
+            {# <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li> #}
         </ul>
         <div id="DataLayers">
             <div style="font-size:1em;" id="datalayerstree"></div>
@@ -64,9 +68,9 @@
             <div style="font-size:1em;" id="myshapestree"></div>
         </div>            
         {% endif %}
-        <div id="SharedShapes">
-            Shared shapes go here
-        </div>
+        {# <div id="SharedShapes"> #}
+        {#     Shared shapes go here #}
+        {# </div> #}
     </div>
     <div id="map_container">
         <div id="map"></div>
