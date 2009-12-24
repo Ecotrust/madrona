@@ -65,6 +65,10 @@ var lingcod = {
                 client: this.client
             });
         }
+        var url = this.options.media_url + 'common/kml/shadow.kmz';
+        google.earth.fetchKml(ge, url, function(k){
+            ge.getFeatures().appendChild(k);
+        });
     },
     
     studyRegionLoaded: function(kmlObject, node){
