@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis import geos
 import numpy as np
 
 # Create your models here.
@@ -107,3 +108,174 @@ class OrganismParameters(models.Model):
         return np.array([self.organism.pk,self.habitat.pk,self.range.pk,self.biogeography.pk,self.pelagic_larval_duration,self.spawn_start,self.spawn_end,self.home_range,
                          self.length_units.pk,self.asymtotic_length,self.instantaneous_growth,self.age_at_length_zero,self.c_one,self.c_two, self.age_at_maturity,self.maximum_age,
                          self.natural_mortality,self.compensation_ratio])
+        
+    def relevant_habitat_grid(self,with_geometries=False):
+        if with_geometries:
+            return GridAttributes.objects.filter(habitat=self.habitat,value__gt=0.0)
+        else:
+            return GridAttributes.objects.filter(habitat=self.habitat,value__gt=0.0).defer('grid__geometry')
+
+class StudyRegionManager(models.GeoManager):
+    
+    def multigeometry(self):
+        # Returns a multipolygon of the whole study region
+        mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
+        for sr in self.iterator():
+            mgeom.append(sr.geometry)
+        return mgeom
+    
+    def convex_hull_multigeometry(self):
+        mgeom = geos.fromstr('MULTIPOLYGON EMPTY').convex_hull
+        for sr in self.iterator():
+            mgeom.append(sr.geometry)
+        return mgeom
+    
+    def extent(self):
+        # Returns the extent of the entire study region in the format (xmin, ymin, xmax, ymax)
+        mgeom = self.multigeometry()
+        return mgeom.extent
+ 
+class StudyRegion(models.Model):
+    name = models.CharField(max_length=255,null=True,blank=True)
+    geometry = models.PolygonField(srid=3310, null=True, blank=True)
+    objects = StudyRegionManager()
+    
+    def __unicode__(self):
+        return 'Study Region: %s'  % self.name
+
+class PolygonGridManager(models.GeoManager):
+    
+    def load_attributes(self, habitat_list=None):
+        if not habitat_list:
+            habitat_list = Habitat.objects.all()
+        for pg in self.iterator():
+            pg.load_attributes(habitat_list)
+        
+
+class PolygonGrid(models.Model):
+    geometry = models.PolygonField(srid=3310)
+    objects = PolygonGridManager()
+    
+    def load_attributes(self, habitat_list):
+        for habitat in habitat_list:
+            result = habitat.habitat.transformed_results(self.geometry)
+            ga = GridAttributes()
+            ga.grid = self
+            ga.name = result['feature_name']
+            ga.habitat = habitat
+            ga.value = result['result']
+            ga.save()
+    
+class GridAttributes(models.Model):
+    name = models.CharField(max_length=255)
+    grid = models.ForeignKey(PolygonGrid)
+    value = models.FloatField()
+    habitat = models.ForeignKey(Habitat,null=True,blank=True)
+
+
+
+def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_size=1000):
+    # returns an array of points that are within sqrt(2) * cell_size of mgeom
+    threshold = cell_size * np.sqrt(2)
+    simp_mgeom = mgeom.simplify(cell_size / 3,preserve_topology=True).buffer(threshold)
+    xmin = bbox[0]
+    ymin = bbox[1]
+    xmax = bbox[2]
+    ymax = bbox[3]
+    xdist = xmax - xmin
+    ydist = ymax - ymin
+    xcells = int(xdist/cell_size) + 1
+    ycells = int(ydist/cell_size) + 1
+    
+    x_current = xmin
+    y_current = ymin
+    points = []
+    for y_num in range(0,ycells):
+        y_current = ymin + (y_num * cell_size)
+        print '.',
+        for x_num in range(0,xcells):
+            x_current = xmin + (x_num * cell_size)
+            corner_pnt = geos.Point(x_current,y_current)
+#            dist = corner_pnt.distance(mgeom)
+            if corner_pnt.within(simp_mgeom): #dist < threshold:
+                points.append(corner_pnt)
+    return points
+
+def create_grid_cell(corner_pnt, cell_size, mgeom = StudyRegion.objects.multigeometry(), test_intersection=True, srid=3310):
+    bbox = (corner_pnt.x,corner_pnt.y,cell_size + corner_pnt.x,cell_size + corner_pnt.y)
+    poly = geos.Polygon.from_bbox(bbox)
+    if not test_intersection:
+        print '+',
+        pg = PolygonGrid()
+        pg.geometry = poly
+        pg.save()
+        return True
+    elif poly.intersects(mgeom):
+        print '+',
+        pg = PolygonGrid()
+        pg.geometry = poly
+        pg.save()
+        return True
+    else:
+        return False
+
+def create_relevent_grid(cell_size=1000):
+    sr_extent = StudyRegion.objects.extent()
+    PolygonGrid.objects.all().delete()
+    points = corner_point_array(sr_extent)
+    for pnt in points:
+        create_grid_cell(pnt,cell_size)
+
+def create_full_study_region_grid(cell_size=1000):
+    sr_extent = StudyRegion.objects.extent()
+    PolygonGrid.objects.all().delete()
+    xmin = sr_extent[0]
+    ymin = sr_extent[1]
+    xmax = sr_extent[2]
+    ymax = sr_extent[3]
+    xdist = xmax - xmin
+    ydist = ymax - ymin
+    xcells = int(xdist/cell_size) + 1
+    ycells = int(ydist/cell_size) + 1
+    
+    x_current = xmin
+    y_current = ymin
+    count = 0
+    for y_num in range(0,ycells):
+        y_current = ymin + (y_num * cell_size)
+        print '.',
+        for x_num in range(0,xcells):
+            x_current = xmin + (x_num * cell_size)
+            corner_pnt = geos.Point(x_current,y_current)
+            create_grid_cell(corner_pnt,cell_size)
+            if create_grid_cell(corner_pnt,cell_size):
+                count += 1
+    return count
+
+def convert_to_color_ramp(the_list,base_color='green',alpha=0.5):
+    # kml color format: aabbggrr
+    # change the alpha to a hex value
+    hex_alpha = hex(int(alpha*255))[2:]
+    min = np.min(the_list)
+    max = np.max(the_list)
+    # transform the list into a range of color values
+    def color_int(x): return int(((x-min)/(max-min))*255)
+    color_int_list = map(color_int,the_list)
+    def hex_string(x):
+        if x==0:
+            return '00'
+        else:
+            return hex(x)[2:]
+    hex_mapped = map(hex_string,color_int_list)
+    if base_color=='green':
+        def green(hex_num): return '%s00%s00' % ( str(hex_alpha),str(hex_num) )
+        color_hex_list = [ green(x) for x in hex_mapped ]
+    return dict(zip(the_list,color_hex_list))
+
+class PointScrap(models.Model):
+    geometry = models.PointField(srid=3310)
+    objects = models.GeoManager()
+
+class Scrap(models.Model):
+    geometry = models.PolygonField(srid=3310)
+    objects = models.GeoManager()

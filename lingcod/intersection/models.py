@@ -231,6 +231,7 @@ class MultiFeatureShapefile(Shapefile):
         self.link_field_names()
     
     def link_field_names(self):
+        self.shapefilefield_set.all().delete()
         info_dict = self.field_info()
         for f in info_dict.keys():
             sf = ShapefileField(name=f,distinct_values=info_dict[f],shapefile=self)
@@ -347,6 +348,40 @@ class SingleFeatureShapefile(Shapefile):
     def __unicode__(self):
         return self.name
     
+    def load_geometry_to_model(self, feature_model, verbose=False):
+        shpfile = self.unzip_to_temp()
+        file_name = os.path.basename(shpfile)
+        feature_name = self.name
+        ds = DataSource(shpfile)
+        #Data source objects can have different layers of geospatial features; however, 
+        #shapefiles are only allowed to have one layer
+        lyr = ds[0] 
+        
+        for feat in lyr:
+            if feat.geom.__class__.__name__.startswith('Multi'):
+                if verbose:
+                    print '(',
+                for f in feat.geom: #get the individual geometries
+                    fm = feature_model()
+                    fm.geometry=f.geos
+                    if not fm.geometry.valid:
+                        fm.geometry = clean_geometry(fm.geometry)
+                    fm.save()
+                    if verbose:
+                        print '-',
+                if verbose:
+                    print ')',
+            else:
+                fm = feature_model()
+                fm.geometry=f.geos
+                if not fm.geometry.valid:
+                    fm.geometry = clean_geometry(fm.geometry)
+                fm.save()
+                if verbose:
+                    print '.',
+        
+        
+    
     def load_to_features(self, verbose=False):
         ## This method loads individual features (with polygon, linestring, or point geometry) into
         # the appropriate model and loads relevant data 
@@ -372,8 +407,6 @@ class SingleFeatureShapefile(Shapefile):
         if created:
             intersection_feature = IntersectionFeature.objects.get(name=feature_name)
         
-        ds = DataSource(shpfile)
-        lyr = ds[0]
         if lyr.geom_type=='LineString':
             feature_model = LinearFeature
             out_units = LINEAR_OUT_UNITS
@@ -570,33 +603,8 @@ class OrganizationScheme(models.Model):
     def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
         new_results = []
         for fm in self.featuremapping_set.all():
-            dict = {}
-            #features = fm.feature.all()
-            dict['feature_name'] = fm.name
-            feature_pks = [f.pk for f in fm.feature.all()]
-            results = intersect_the_features(geom, feature_list=feature_pks, with_geometries=with_geometries or with_kml, with_kml=with_kml)
-            intersection_total = 0.0
-            sr_total = 0.0
-            if with_geometries or with_kml:
-                f_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
-            for pk in feature_pks:
-                for result in results:
-                    if result['hab_id']==pk:
-                        intersection_total += result['result']
-                        #percent_sr_total += result['percent_of_total'] #wrong, can't add these percentages up have to determine total/total available
-                        sr_total += IntersectionFeature.objects.get(pk=pk).study_region_total
-                        if with_geometries or with_kml:
-                            f_gc = f_gc + result['geo_collection']
-            dict['result'] = intersection_total
-            dict['percent_of_total'] = (intersection_total / sr_total) * 100
-            dict['sort'] = fm.sort
-            dict['units'] = fm.feature.all()[0].output_units
-            if with_geometries:
-                dict['geo_collection'] = f_gc
-            if with_kml:
-                dict['kml'] = f_gc.kml
+            dict = fm.transformed_results_single_geom(geom,with_geometries=with_geometries,with_kml=with_kml)
             new_results.append(dict)
-        
         return new_results
             
     
@@ -611,6 +619,49 @@ class FeatureMapping(models.Model):
     
     def __unicode__(self):
         return self.name  
+    
+    def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
+        if geom_or_collection.geom_type.lower().endswith('polygon'):
+            return self.transformed_results_single_geom(geom_or_collection, with_geometries=with_geometries, with_kml=with_kml)
+        elif geom_or_collection.geom_type.lower().endswith('collection'):
+            #do stuff for a collection
+            results_matrix = []
+            for geom in geom_or_collection:
+                geom_results = self.transformed_results_single_geom(geom, with_geometries=with_geometries, with_kml=with_kml)
+                results_matrix.append(geom_results)
+            summed_results = sum_results(results_matrix)
+            return summed_results
+        else:
+            raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
+    
+    def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
+        dict = {}
+        #features = self.feature.all()
+        dict['feature_name'] = self.name
+        feature_pks = [f.pk for f in self.feature.all()]
+        results = intersect_the_features(geom, feature_list=feature_pks, with_geometries=with_geometries or with_kml, with_kml=with_kml)
+        intersection_total = 0.0
+        sr_total = 0.0
+        if with_geometries or with_kml:
+            f_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        for pk in feature_pks:
+            for result in results:
+                if result['hab_id']==pk:
+                    intersection_total += result['result']
+                    #percent_sr_total += result['percent_of_total'] #wrong, can't add these percentages up have to determine total/total available
+                    sr_total += IntersectionFeature.objects.get(pk=pk).study_region_total
+                    if with_geometries or with_kml:
+                        f_gc = f_gc + result['geo_collection']
+        dict['result'] = intersection_total
+        dict['percent_of_total'] = (intersection_total / sr_total) * 100
+        dict['sort'] = self.sort
+        dict['units'] = self.feature.all()[0].output_units
+        if with_geometries:
+            dict['geo_collection'] = f_gc
+        if with_kml:
+            dict['kml'] = f_gc.kml
+            
+        return dict
     
     @property
     def study_region_total(self):

@@ -219,11 +219,15 @@ class RunIntersectionsWithTestPolygonTest(TestCase):
         f.close()
         
         keys = pickled_result[0].keys()
+#        print pickled_result
+#        print result
         for i in range(0,pickled_result.__len__() ):
             for key in keys:
+#                print key + ': ',
                 if key=='result' or key=='percent_of_total':
                     self.assertEqual(round(result[i][key],7),round(pickled_result[i][key],7))
                 else:
+#                    print 'result: %s, pickle: %s' % (str(result[i][key]),str(pickled_result[i][key]))
                     self.assertEqual(result[i][key],pickled_result[i][key])
                        
     def test_ordered_intersection_with_test_polygon(self):

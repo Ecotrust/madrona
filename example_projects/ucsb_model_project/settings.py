@@ -80,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'lingcod.intersection',
     'lingcod.bioeconomic_model',
+#    'lingcod.shape_uploader',
 )
 
 from settings_local import *
