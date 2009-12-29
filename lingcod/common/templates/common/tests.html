@@ -16,7 +16,7 @@
 		//'{% mpa_uid %}',
 	    {% block array_test_script %}
 
-		lingcod.rest.testInterface('arrays and mpas', '{% url user_mpa_kml input_username='integration_tester' %}', {
+		lingcod.rest.testInterface('arrays and mpas', '{% url kmlapp-user-kml input_username='integration_tester',session_key='0' %}', {
 		    '{% array_uid %}': {
 		        form_values: {
 		            name: 'My Array Name'
