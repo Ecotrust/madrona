@@ -19,7 +19,7 @@ lingcod.panel = function(options){
     
     var close = '';
     if(that.options.showCloseButton){
-        close = '<a class="close" href="#">close</a>';
+        close = '<a class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     }
     var el = $('<div style="display:none;" class="marinemap-panel">'+close+'<div class="content"></div></div>');
     

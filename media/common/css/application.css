@@ -8,6 +8,18 @@ html, body {
     overflow: hidden;
 }
 
+a img {
+    border:none;
+}
+
+a:active {
+  outline: none;
+}
+
+a {
+    outline:none;
+}
+
 #layout {
     border:none;
     width:100%;
@@ -95,6 +107,7 @@ html, body {
 
 .marinemap-panel .close {
     float:right;
+    margin:5px;
 }
 
 ul.errorlist li {
