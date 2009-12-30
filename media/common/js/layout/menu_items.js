@@ -6,24 +6,25 @@ lingcod.menu_items = (function(){
     var init = function(el){
         that.el = el;
         that.el.find('li.item').each(function(){
-            self = $(this);
+            var self = $(this);
             var els = $('<a style="display:none;" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/tool_window_pointer.png" width="23" height="36" /></a></a>');
             els.click(function(){
                 closeAll();
                 return false;
             });
             self.append(els)
-            that.menuLink = self.find('span a');
-            that.menuLink.click(function(){
+            menuLink = self.find('span a');
+            menuLink.click(function(){
                 closeAll();
                 var parent = $(this).parent().parent()[0];
                 openItem(parent);
                 return false;
             });
-            var href = that.menuLink.attr('href');
+            var href = menuLink.attr('href');
             var content = $(href);
             if(content){
                 var panel = lingcod.panel({
+                    scrollable: !self.hasClass('autosize'),
                     content: content,
                     hideOnly: true,
                     showCloseButton: false,

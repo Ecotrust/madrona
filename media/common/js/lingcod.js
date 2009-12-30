@@ -1,6 +1,6 @@
 var lingcod = (function(){
 
-    var options;
+    var options = {};
     var that = {};
     
     that.init = function(opts){
@@ -56,18 +56,19 @@ var lingcod = (function(){
         
         var panel = lingcod.panel({appendTo: $('#panel-holder')});
         that.client = lingcod.rest.client(gex, panel);
-        
-        for(var i=0;i<options.myshapes.length; i++){
-            lingcod.rest.kmlEditor({
-                ge: ge,
-                gex: gex,
-                appendTo: '#myshapestree',
-                div: '#map',
-                url: options.myshapes[i],
-                client: that.client
-            });
+        if(options.myshapes){
+            for(var i=0;i<options.myshapes.length; i++){
+                lingcod.rest.kmlEditor({
+                    ge: ge,
+                    gex: gex,
+                    appendTo: '#myshapestree',
+                    div: '#map',
+                    url: options.myshapes[i],
+                    client: that.client
+                });
+            }            
         }
-        var url = options.media_url + 'common/kml/shadow.kmz';
+        var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);
         });

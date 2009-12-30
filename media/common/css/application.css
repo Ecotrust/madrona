@@ -92,6 +92,10 @@ a {
     font-size:12px;
 }
 
+#sidebar > div {
+    padding:10px;
+}
+
 .marinemap-panel {
     position:absolute;
     left:0px;
@@ -103,6 +107,16 @@ a {
     background-color:#f4f8fb;
     -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);   
+}
+
+.marinemap-panel-noscroll {
+    overflow-y:hidden;
+    max-height:95%;
+    height:auto;
+}
+
+.marinemap-panel .content {
+    padding:10px;
 }
 
 .marinemap-panel .close {

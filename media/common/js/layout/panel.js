@@ -7,6 +7,7 @@ lingcod.panel = function(options){
         showCloseButton: true,
         content: false,
         appendTo: window.document.body,
+        scrollable: true
     }
     
     var that = {
@@ -22,7 +23,8 @@ lingcod.panel = function(options){
     if(that.options.showCloseButton){
         close = '<a class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     }
-    var el = $('<div style="display:none;" class="marinemap-panel">'+close+'<div class="content"></div></div>');
+    var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
+    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'">'+close+'<div class="content"></div></div>');
     
     var anotherel = el;
     

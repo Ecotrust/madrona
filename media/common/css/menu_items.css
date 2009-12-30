@@ -52,6 +52,11 @@
     background: url(../images/gear.png) 0px 0px;
 }
 
+.menu_items li a:hover {
+    cursor: pointer;
+    background-position: -44px 0px !important;
+}
+
 .menu_items li.toggled a {
     background-position: -44px 0px !important;
 }
