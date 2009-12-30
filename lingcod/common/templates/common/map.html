@@ -49,32 +49,48 @@
         </ul>
         <br />
     </div>
-    <ul id="header_buttons">
-        <li><a href="#"><img src="{{MEDIA_URL}}/common/images/layers.png" width="29" height="31"></a></li>
-        <li><a href="#"><img src="{{MEDIA_URL}}/common/images/gear.png" width="31" height="32"></a></li>
+    <ul class="menu_items" id="header_buttons">
+        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
+        <li id="layers_menu" class="item full">
+            <span>
+                <a href="#DataLayers"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
+            </span>
+        </li>
+        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
+        <li id="tools_menu" class="item auto">
+            <span>
+                <a href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
+            </span>
+        </li>
+        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
     </ul>
     <div id="sidebar">
+        <div id="sidebar-mask"></div>
         <ul>
-            <li><a href="#DataLayers"><span>Data Layers</span></a></li>
+            {# <li><a href="#DataLayers"><span>Data Layers</span></a></li> #}
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
-            {# <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li> #}
+            <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
         </ul>
         <div id="DataLayers">
-            <div style="font-size:1em;" id="datalayerstree"></div>
+            <div id="datalayerstree"></div>
         </div>
         {% if user %}
         <div id="MyShapes">
             <div style="font-size:1em;" id="myshapestree"></div>
         </div>            
         {% endif %}
-        {# <div id="SharedShapes"> #}
-        {#     Shared shapes go here #}
-        {# </div> #}
+        <div id="SharedShapes">
+            Shared shapes go here
+        </div>
     </div>
     <div id="map_container">
         <div id="map"></div>
+    </div>
+    <div class="marinemap-panel" style="display:none;" id="tools">
+        <h1>tools</h1>
+        you are a tool
     </div>
     {# {% load layout_tags %} #}
     {# <div id="panelManager"> #}

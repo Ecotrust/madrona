@@ -16,6 +16,7 @@ var lingcod = {
                 self.geFailure(code);
             });
         this.setupListeners();
+        lingcod.menu_items.init($('.menu_items'));
     },
     
     geInit: function(pluginInstance){
@@ -89,6 +90,15 @@ var lingcod = {
         $(window).resize(function(){
             self.resize();
         });
+        $('#meta-navigation').click(function(){
+            lingcod.menu_items.closeAll();
+        });
+        $('#sidebar').bind('tabsselect', function(){
+            lingcod.menu_items.closeAll();
+        });
+        $('#sidebar-mask').click(function(){
+            lingcod.menu_items.closeAll();
+        });
     },
     
     resize: function(){
@@ -110,6 +120,14 @@ var lingcod = {
         // $('.sidebar-panel').panel('resize', {height: body_height -10});
         // // $('div.sidebar-panel').height(body_height - 10);
         // $('#map_container').width(map_width - 10);
+    },
+    
+    maskSidebar: function(){
+        $('#sidebar').addClass('masked');
+    },
+    
+    unmaskSidebar: function(){
+        $('#sidebar').removeClass('masked');
     }
 };
 

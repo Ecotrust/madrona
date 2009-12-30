@@ -1,14 +1,34 @@
 lingcod.panel = function(options){
-        
-    var that = {};
     
-    var el = $('<div style="display:none;" class="marinemap-panel"><a class="close" href="#">close</a><div class="content"></div></div>');
-    el.find('a.close').click(function(){
-        that.close();
-    });
+    var defaults = {
+        hideOnly: false,
+        showCloseButton: true,
+        content: false
+    }
+    
+    var that = {
+        options: $.extend({}, defaults, options)
+    };
+    var close = '';
+    if(that.options.showCloseButton){
+        close = '<a class="close" href="#">close</a>';
+    }
+    var el = $('<div style="display:none;" class="marinemap-panel">'+close+'<div class="content"></div></div>');
+    if(that.options.showCloseButton){
+        el.find('a.close').click(function(){
+            that.close();
+        });
+    }
+    
     var content = el.find('.content');
     
     $(document.body).append(el);
+    
+    if(that.options.content && $(that.options.content).length){
+        var c = $(that.options.content);
+        c.remove();
+        content.append(c);
+    }
 
     that.showContent = function(elements){
         that.addContent(elements);
@@ -16,8 +36,10 @@ lingcod.panel = function(options){
     }
     
     that.addContent = function(elements){
-        content.html('');
-        content.append(elements);        
+        if(!that.options.content){
+            content.html('');
+            content.append(elements);            
+        }
     }
     
     that.show = function(){
@@ -26,8 +48,10 @@ lingcod.panel = function(options){
     }
     
     that.close = function(){
-        el.hide();
-        el.find('div.content').html('');
+        if(!that.options.hideOnly){
+            el.hide();
+            el.find('div.content').html('');            
+        }
     }
     
     that.spin = function(message){
@@ -77,6 +101,10 @@ lingcod.panel = function(options){
     
     that.getEl = function(){
         return el;
+    }
+    
+    that.hide = function(){
+        el.hide();
     }
             
     return that;

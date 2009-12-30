@@ -27,7 +27,7 @@ html, body {
     width:100%;
     height:40px;
 /*    background-color:#3F4C5B;*/
-/*    background: -webkit-gradient(linear, left top, left bottom, from(#3D4455), to(#2F3444));*/
+/*    background: -webkit-gradient(linear, left top, left bottom, from(#324555), to(#262f3d));*/
     background: url(../images/header_bg.gif) repeat-x;
 /*    background: -webkit-gradient(linear, left top, left bottom, from(#4a648b), to(#4a648b));*/
 }
@@ -55,28 +55,13 @@ html, body {
     border-left:solid 3px #5A7798;
 /*    font-size:.8em;*/
     position:absolute;
-    left:460px;
+    left:500px;
     top:40px;
     width:10%;
     background-color:black;
     margin:0;
     padding:0;
 /*    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);*/
-}
-
-#header_buttons {
-    list-style:none;
-    position:absolute;
-    left:375px;
-    top:5px;
-    padding:0;
-    margin:0;
-}
-
-#header_buttons li {
-    float:left;
-    padding:0 8px;
-    margin:0;
 }
 
 #map {
@@ -86,7 +71,7 @@ html, body {
 
 #sidebar {
     background-color:#f4f8fb;
-    width:460px;
+    width:500px;
     overflow:auto;
 /*    position:absolute;*/
     margin-top:40px;
@@ -98,12 +83,12 @@ html, body {
 
 .marinemap-panel {
     position:absolute;
-    left:10px;
-    top:10px;
+    left:0px;
+    top:54px;
     height:90%;
-    width:450px;
+    width:499px;
     z-index:10;
-    background-color:white;
+    background-color:#f4f8fb;
     -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);   
 }
@@ -114,4 +99,21 @@ html, body {
 
 ul.errorlist li {
     background-color:#FF676A;
+}
+
+#sidebar-mask {
+    margin:0;
+    padding:0;
+    opacity:.5;
+    position:absolute;
+    top:40px;
+    left:0;
+    width:500px;
+    height:100%;
+    background-color:gray;
+    display:none;
+}
+
+.masked #sidebar-mask {
+    display:block;
 }

@@ -1,0 +1,61 @@
+.menu_items {
+    list-style:none;    
+    margin:0;
+    padding:0;
+}
+
+.menu_items li {
+    float:left;
+    padding:0;
+    margin:0;
+}
+
+.menu_items li.item {
+    position:relative;
+    width:44px;
+    height:48px;
+}
+
+
+.menu_items li.toggled span {
+    background: url(../images/header_bg_dark.gif) repeat-x;
+}
+
+.menu_items li.item span, .menu_items li.item a{
+    position:absolute;
+    width:44px;
+    height:48px;
+    top:-2px;
+}
+
+.menu_items li.divider {
+    margin-top:3px;
+    width:2;
+    height:42;
+}
+
+#header_buttons {
+    position:absolute;
+    left:400px;
+    top:0px;
+}
+
+#layers_menu a {
+    background: url(../images/layers.png) 0px 0px;
+}
+
+#tools_menu a {
+    background: url(../images/gear.png) 0px 0px;
+}
+
+.menu_items li.toggled a {
+    background-position: -44px 0px !important;
+}
+
+.menu_items li.item a.close {
+    background:none !important;
+    position:absolute;
+    top:35px;
+    left:10px;
+    z-index:20;
+}

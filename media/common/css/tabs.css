@@ -69,12 +69,20 @@
     -moz-box-shadow: 2px -2px 3px #3373B2;
 */}
 
+.masked .ui-tabs-nav a {
+    color:#808080;
+}
+
 .sidebar-panel .ui-tabs-nav a {
     color:#17314A;
 }
 
 .ui-tabs-nav .ui-tabs-selected {
-    background: url(../images/tab_bg.png) no-repeat;
+    background: url(../images/tab_bg.png)  no-repeat 0px 0px;
+}
+
+.masked .ui-tabs-selected {
+    background: url(../images/tab_bg.png)  no-repeat -182px 0px;
 }
 
 .ui-tabs-nav {
