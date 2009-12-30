@@ -1,60 +1,61 @@
-var lingcod = {
+var lingcod = (function(){
+
+    var options;
+    var that = {};
     
-    isnamespace_:true,
-    
-    init: function(options){
-        this.options = options;
+    that.init = function(opts){
+        options = opts;
+        that.options = opts;
+        
         $('#sidebar').tabs();
-        this.resize();
-        var self = this;
+        resize();
         google.earth.createInstance(
             "map", 
             function(i){
-                self.geInit(i);
+                geInit(i);
             },
             function(code){
-                self.geFailure(code);
+                geFailure(code);
             });
-        this.setupListeners();
+        setupListeners();
         lingcod.menu_items.init($('.menu_items'));
-    },
-    
-    geInit: function(pluginInstance){
+    };
+
+    var geInit = function(pluginInstance){
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
         gex = new GEarthExtensions(ge);
         
-        this.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
-        this.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
-        this.measureTool = new lingcod.measureTool();
-        this.drawTool = new lingcod.DrawTool(ge, gex);
+        that.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
+        that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
+        that.measureTool = new lingcod.measureTool();
+        that.drawTool = new lingcod.DrawTool(ge, gex);
         
         //part of mpa creation -- draw_panels and mpaCreator
         //will need to come up with a better solution for manipulator url
-        this.draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
-        this.mpaCreator = new lingcod.MpaCreator(this.drawTool, this.draw_panels);
+        that.draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
+        that.mpaCreator = new lingcod.MpaCreator(that.drawTool, that.draw_panels);
         
-        var self = this;
         $('#measure_distance').click(function(){
-            self.measureTool.clear();
-            self.measureTool.measureDistance(gex, "distance");
+            that.measureTool.clear();
+            that.measureTool.measureDistance(gex, "distance");
         });
         $('#measure_area').click(function(){
-            self.measureTool.clear();
-            self.measureTool.measureArea(gex, "area");
+            that.measureTool.clear();
+            that.measureTool.measureArea(gex, "area");
         });
         $('#measure_clear').click(function(){
-            self.measureTool.clear();
+            that.measureTool.clear();
         });
         $('#measure_units').change(function(){
-            self.measureTool.setUnits($(this).val());
+            that.measureTool.setUnits($(this).val());
         });
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-            .kmlForest('add', window.studyregion, {cachebust: true, callback: this.studyRegionLoaded})
+            .kmlForest('add', window.studyregion, {cachebust: true, callback: studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         
         var panel = lingcod.panel();
-        this.client = lingcod.rest.client(gex, panel);
+        that.client = lingcod.rest.client(gex, panel);
         
         for(var i=0;i<options.myshapes.length; i++){
             lingcod.rest.kmlEditor({
@@ -63,32 +64,30 @@ var lingcod = {
                 appendTo: '#myshapestree',
                 div: '#map',
                 url: options.myshapes[i],
-                client: this.client
+                client: that.client
             });
         }
-        var url = this.options.media_url + 'common/kml/shadow.kmz';
+        var url = options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);
         });
-    },
+    };
     
-    studyRegionLoaded: function(kmlObject, node){
+    var studyRegionLoaded = function(kmlObject, node){
         // Reorder so studyRegion is on top of the list
         $('#datalayerstree').prepend(node);
         if (kmlObject.getAbstractView()){
             ge.getView().setAbstractView(kmlObject.getAbstractView());
-        }
-        
-    },
+        }   
+    };
     
-    geFailure: function(errorCode){
+    var geFailure = function(errorCode){
         alert("Failure loading the Google Earth Plugin: " + errorCode);
-    },
+    }
     
-    setupListeners: function(){
-        var self = this;
-        $(window).resize(function(){
-            self.resize();
+    var setupListeners = function(){
+        $(window).smartresize(function(){
+            resize();
         });
         $('#meta-navigation').click(function(){
             lingcod.menu_items.closeAll();
@@ -100,23 +99,63 @@ var lingcod = {
         $('#sidebar-mask').click(function(){
             lingcod.menu_items.closeAll();
         });
-    },
+    };
     
-    resize: function(){
+    var resize = function(){
         var mh = $('#meta-navigation').outerHeight();
         var h = $(document.body).height() - mh;
         $('#sidebar').css({top: mh, height: h});
         
         var w = $(document.body).width() - $('#sidebar').width();
         $('#map_container').height(h).width(w);
-    },
+    };
     
-    maskSidebar: function(){
+    that.maskSidebar = function(){
         $('#sidebar').addClass('masked');
+    };
+    
+    that.unmaskSidebar = function(){
+        $('#sidebar').removeClass('masked');
+    };
+    
+    var panels = [];
+    
+    that.addPanel = function(panel){
+        // console.log('adding panel', panel);
+        panels.push(panel);
+        $(panel).bind('panelshow', onPanelShown);
+        $(panel).bind('panelhide', onPanelHide);
+        $(panel).bind('panelclose', onPanelHide);
+        // console.log(this.panels);
     },
     
-    unmaskSidebar: function(){
-        $('#sidebar').removeClass('masked');
-    }    
-};
+    that.removePanel = function(panel){
+        // console.log('removing panel', panel)
+        panels.remove(panel);
+        $(panel).unbind('panelshow', onPanelShown);
+        $(panel).unbind('panelhide', onPanelHide);
+        $(panel).unbind('panelclose', onPanelHide);
+        // console.log(this.panels);
+    };
+    
+    var onPanelShown = function(e, panel){
+        that.maskSidebar();
+    };
+    
+    var onPanelHide = function(e, panel){
+        var count = 0;
+        for(var i=0; i<panels.length; i++){
+            var p = panels[i];
+            if(p.shown){
+                count++;
+            }
+        }
+        if(count > 0){
+            // console.log('another panel still shown');
+        }else{
+            that.unmaskSidebar();
+        }
+    };
 
+    return that;
+})();

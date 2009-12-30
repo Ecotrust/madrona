@@ -28,6 +28,7 @@ lingcod.menu_items = (function(){
                     hideOnly: true,
                     showCloseButton: false
                 });
+                panel.getEl().css('z-index', '11');
                 $.data(self[0], 'panel', that.panels.length)
                 that.panels.push(panel);
             }
@@ -50,7 +51,7 @@ lingcod.menu_items = (function(){
                 }
             });
         }
-        lingcod.unmaskSidebar();
+        // lingcod.unmaskSidebar();
     }
     
     that.closeAll = closeAll;

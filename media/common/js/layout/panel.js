@@ -1,3 +1,5 @@
+// Do not create an infinite number of these components or it may result in
+// memory leaks
 lingcod.panel = function(options){
     
     var defaults = {
@@ -7,8 +9,14 @@ lingcod.panel = function(options){
     }
     
     var that = {
-        options: $.extend({}, defaults, options)
+        options: $.extend({}, defaults, options),
+        shown: false
     };
+    
+    if(lingcod && lingcod.addPanel){
+        lingcod.addPanel(that);
+    }
+    
     var close = '';
     if(that.options.showCloseButton){
         close = '<a class="close" href="#">close</a>';
@@ -47,13 +55,16 @@ lingcod.panel = function(options){
     
     that.show = function(){
         $(el[0]).show();
-        $(that).trigger('panelshow', that);        
+        that.shown = true;
+        $(that).trigger('panelshow', that);       
     }
     
     that.close = function(){
         if(!that.options.hideOnly){
             el.hide();
-            el.find('div.content').html('');            
+            that.shown = false;
+            el.find('div.content').html('');
+            $(that).trigger('panelclose', that);
         }
     }
     
@@ -78,7 +89,6 @@ lingcod.panel = function(options){
                         that.showContent(response.responseText)
                         if(options && options.success){
                             options.success(response, status);
-                            $(that).trigger('panelshow', response, status);
                         }
                         // get content
                         // that.showContent
@@ -100,6 +110,12 @@ lingcod.panel = function(options){
     // Methods needed for test management        
     that.destroy = function(){
         that.getEl().remove();
+        if(lingcod && lingcod.removePanel){
+            if(that.shown){
+                that.close();
+            }
+            lingcod.removePanel(that);
+        }
     }
     
     that.getEl = function(){
@@ -108,6 +124,8 @@ lingcod.panel = function(options){
     
     that.hide = function(){
         el.hide();
+        that.shown = false;
+        $(that).trigger('panelhide', that);
     }
                 
     return that;

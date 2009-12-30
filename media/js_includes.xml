@@ -10,6 +10,7 @@
     <test path="common/js/test/qunit_extensions.js" />
     <file path="common/js/lingcod.js" />
     <file path="common/js/lib/tmpl.js" />
+    <file path="common/js/lib/smartresize.js" />
     <test path="common/js/test/lib/tmpl.js" />
     <file path="common/js/lib/ge_utility_lib_patches.js" />
     <test path="common/js/test/lib/ge_utility_lib_patches.js" />
