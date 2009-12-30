@@ -14,6 +14,9 @@ lingcod.panel = function(options){
         close = '<a class="close" href="#">close</a>';
     }
     var el = $('<div style="display:none;" class="marinemap-panel">'+close+'<div class="content"></div></div>');
+    
+    var anotherel = el;
+    
     if(that.options.showCloseButton){
         el.find('a.close').click(function(){
             that.close();
@@ -43,8 +46,8 @@ lingcod.panel = function(options){
     }
     
     that.show = function(){
-        el.show();
-        $(that).trigger('show', that);        
+        $(el[0]).show();
+        $(that).trigger('panelshow', that);        
     }
     
     that.close = function(){
@@ -75,7 +78,7 @@ lingcod.panel = function(options){
                         that.showContent(response.responseText)
                         if(options && options.success){
                             options.success(response, status);
-                            $(that).trigger('show', response, status);
+                            $(that).trigger('panelshow', response, status);
                         }
                         // get content
                         // that.showContent
@@ -106,6 +109,6 @@ lingcod.panel = function(options){
     that.hide = function(){
         el.hide();
     }
-            
+                
     return that;
 };

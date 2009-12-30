@@ -4,6 +4,10 @@
     padding:0;
 }
 
+.menu_items a img {
+    border:none;
+}
+
 .menu_items li {
     float:left;
     padding:0;

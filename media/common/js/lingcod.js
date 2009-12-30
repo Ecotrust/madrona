@@ -93,8 +93,9 @@ var lingcod = {
         $('#meta-navigation').click(function(){
             lingcod.menu_items.closeAll();
         });
-        $('#sidebar').bind('tabsselect', function(){
+        $('#sidebar').bind('mouseup', function(e){
             lingcod.menu_items.closeAll();
+            return false;
         });
         $('#sidebar-mask').click(function(){
             lingcod.menu_items.closeAll();
@@ -106,20 +107,8 @@ var lingcod = {
         var h = $(document.body).height() - mh;
         $('#sidebar').css({top: mh, height: h});
         
-        // $('#panelManager').height(h);
         var w = $(document.body).width() - $('#sidebar').width();
         $('#map_container').height(h).width(w);
-        
-        // $('#layout').height($(window).height())
-        // $('#panelManager').panelManager('resize');
-        // var size = [$(window).width(), $(window).height()];
-        // var top_height = $('#meta-navigation').height();
-        // var body_height = size[1] - top_height - 7;
-        // var map_width = size[0] - $('.sidebar-panel').panel('width') - 20;
-        // $('#map_container').height(body_height - 10);
-        // $('.sidebar-panel').panel('resize', {height: body_height -10});
-        // // $('div.sidebar-panel').height(body_height - 10);
-        // $('#map_container').width(map_width - 10);
     },
     
     maskSidebar: function(){
@@ -128,6 +117,6 @@ var lingcod = {
     
     unmaskSidebar: function(){
         $('#sidebar').removeClass('masked');
-    }
+    }    
 };
 

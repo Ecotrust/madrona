@@ -1,5 +1,8 @@
 lingcod.menu_items = (function(){
     var that = {};
+    
+    that.panels = [];
+    
     var init = function(el){
         that.el = el;
         that.el.find('li.item').each(function(){
@@ -13,7 +16,8 @@ lingcod.menu_items = (function(){
             that.menuLink = self.find('span a');
             that.menuLink.click(function(){
                 closeAll();
-                openItem($(this).parent().parent()[0]);
+                var parent = $(this).parent().parent()[0];
+                openItem(parent);
                 return false;
             });
             var href = that.menuLink.attr('href');
@@ -24,7 +28,8 @@ lingcod.menu_items = (function(){
                     hideOnly: true,
                     showCloseButton: false
                 });
-                self.data('panel', panel);
+                $.data(self[0], 'panel', that.panels.length)
+                that.panels.push(panel);
             }
         });
     }
@@ -38,7 +43,7 @@ lingcod.menu_items = (function(){
             open.find('a.close').hide();
             open.each(function(){
                 var item = $(this);
-                var panel = item.data('panel');
+                var panel = that.panels[item.data('panel')];
                 if(panel){
                     panel.hide();
                 }else{
@@ -55,8 +60,11 @@ lingcod.menu_items = (function(){
         item = $(item);
         item.addClass('toggled');
         item.find('a.close').show();
-        if(item.data('panel')){
-            item.data('panel').show();
+        if(item.data('panel') || item.data('panel') === 0){
+            var panel = that.panels[item.data('panel')];
+            panel.show();
+        }else{
+            // console.log('couldnt get index');
         }
     }
     
