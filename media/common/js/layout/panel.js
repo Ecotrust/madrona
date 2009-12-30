@@ -5,7 +5,8 @@ lingcod.panel = function(options){
     var defaults = {
         hideOnly: false,
         showCloseButton: true,
-        content: false
+        content: false,
+        appendTo: window.document.body,
     }
     
     var that = {
@@ -33,7 +34,7 @@ lingcod.panel = function(options){
     
     var content = el.find('.content');
     
-    $(document.body).append(el);
+    $(that.options.appendTo).append(el);
     
     if(that.options.content && $(that.options.content).length){
         var c = $(that.options.content);

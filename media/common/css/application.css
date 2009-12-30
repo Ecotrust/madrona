@@ -88,7 +88,6 @@ a {
 /*    position:absolute;*/
     margin-top:40px;
     padding:0;
-    padding-top:10px;
     overflow-x:hidden;
     font-size:12px;
 }
@@ -96,9 +95,10 @@ a {
 .marinemap-panel {
     position:absolute;
     left:0px;
-    top:54px;
-    height:90%;
+    top:14px;
+    height:95%;
     width:499px;
+    overflow-y:auto;
     z-index:10;
     background-color:#f4f8fb;
     -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
@@ -118,6 +118,7 @@ ul.errorlist li {
     margin:0;
     padding:0;
     opacity:.5;
+    filter: alpha(opacity=50);
     position:absolute;
     top:40px;
     left:0;
@@ -129,4 +130,14 @@ ul.errorlist li {
 
 .masked #sidebar-mask {
     display:block;
+}
+
+#panel-holder {
+    width:500px;
+    height:100%;
+    padding:0;
+    position:absolute;
+    top:40px;
+    left:0px;
+    z-index:5;
 }

@@ -26,7 +26,8 @@ lingcod.menu_items = (function(){
                 var panel = lingcod.panel({
                     content: content,
                     hideOnly: true,
-                    showCloseButton: false
+                    showCloseButton: false,
+                    appendTo: $('#panel-holder')
                 });
                 panel.getEl().css('z-index', '11');
                 $.data(self[0], 'panel', that.panels.length)

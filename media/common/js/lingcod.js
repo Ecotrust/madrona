@@ -54,7 +54,7 @@ var lingcod = (function(){
             .kmlForest('add', window.studyregion, {cachebust: true, callback: studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         
-        var panel = lingcod.panel();
+        var panel = lingcod.panel({appendTo: $('#panel-holder')});
         that.client = lingcod.rest.client(gex, panel);
         
         for(var i=0;i<options.myshapes.length; i++){
@@ -105,16 +105,19 @@ var lingcod = (function(){
         var mh = $('#meta-navigation').outerHeight();
         var h = $(document.body).height() - mh;
         $('#sidebar').css({top: mh, height: h});
+        $('#panel-holder').css({top: mh, height: h});
         
         var w = $(document.body).width() - $('#sidebar').width();
         $('#map_container').height(h).width(w);
     };
     
     that.maskSidebar = function(){
+        $('#panel-holder').show();
         $('#sidebar').addClass('masked');
     };
     
     that.unmaskSidebar = function(){
+        $('#panel-holder').hide();
         $('#sidebar').removeClass('masked');
     };
     
