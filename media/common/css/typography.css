@@ -6,3 +6,24 @@
 html {
     font-family: Verdana, sans-serif;
 }
+
+h1 {
+    margin:12px 0;
+    padding:0;
+    font-size:18px;
+    color:#1A3752;
+    text-shadow: #FFF 0px 1px 0px;
+    -moz-text-shadow: #FFF 0px 1px 0px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family:sans-serif;    
+}
+
+h2 {
+    font-size:16px;
+}
+
+h3 {
+    font-size: 14px;
+}

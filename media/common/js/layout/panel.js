@@ -24,7 +24,7 @@ lingcod.panel = function(options){
         close = '<a class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     }
     var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
-    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'">'+close+'<div class="content"></div></div>');
+    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'">'+close+'<div class="content container_12"></div></div>');
     
     var anotherel = el;
     

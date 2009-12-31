@@ -73,9 +73,6 @@
             {% endif %}
             <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
         </ul>
-        <div id="DataLayers">
-            <div id="datalayerstree"></div>
-        </div>
         {% if user %}
         <div id="MyShapes">
             <div style="font-size:1em;" id="myshapestree"></div>
@@ -89,8 +86,31 @@
         <div id="map"></div>
     </div>
     <div id="tools">
-        <h1>tools</h1>
-        you are a tool
+        <h1>Tools</h1>
+        <h3>Find a place</h3>
+        <form id="flyToLocation" method="GET">
+            <ul>
+                <li>
+                    <input type="text" name="flyto_location" value="">
+                    <input type="submit" value="Fly here">                                    
+                </li>
+            </ul>
+        </form>
+        <h3>Measurement Tool</h4>
+        <button id="measure_distance">measure distance</button>
+        <button id="measure_area">measure area</button>
+        <button id="measure_clear">clear</button>
+        <select id="measure_units">
+            <option value="metric">metric</option>
+            <option value="english">english</option>
+            <option value="nautical">nautical</option>                            
+        </select>
+        <p><strong>Distance: </strong><span id="distance">N/A</span></p>
+        <p><strong>Area: </strong><span id="area">N/A</span></p>
+    </div>
+    <div id="DataLayers">
+        <h1>Data Layers</h1>
+        <div id="datalayerstree"></div>
     </div>
     <div style="display:none;" id="panel-holder"></div>
     {# {% load layout_tags %} #}
@@ -123,15 +143,6 @@
     {#                         <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                 #}
     {#                     </form> #}
     {#                 </ul> #}
-    {#                 <h3>Find a place</h3> #}
-    {#                 <form id="flyToLocation" method="GET"> #}
-    {#                     <ul> #}
-    {#                         <li> #}
-    {#                             <input type="text" name="flyto_location" value=""> #}
-    {#                             <input type="submit" value="Fly here">                                     #}
-    {#                         </li> #}
-    {#                     </ul> #}
-    {#                 </form> #}
     {#                 {% block data_layers_footer_append %}{% endblock %} #}
     {#             {% endfooter %} #}
     {#         {% endtab %} #}
@@ -150,20 +161,6 @@
     {#         {% endtab %} #}
     {#         {% tab "Tools" %} #}
     {#                 {% block tools_prepend %}{% endblock %} #}
-    {#                 <div style="padding:1em;"> #}
-    {#                     <h4>Measurement Tool</h4> #}
-    {#                     <button id="measure_distance">measure distance</button> #}
-    {#                     <button id="measure_area">measure area</button> #}
-    {#                     <button id="measure_clear">clear</button> #}
-    {#                     <select id="measure_units"> #}
-    {#                         <option value="metric">metric</option> #}
-    {#                         <option value="english">english</option> #}
-    {#                         <option value="nautical">nautical</option>                             #}
-    {#                     </select> #}
-    {#                     <p><strong>Distance: </strong><span id="distance">N/A</span></p> #}
-    {#                     <p><strong>Area: </strong><span id="area">N/A</span></p> #}
-    {#                     <hr> #}
-    {#                 </div> #}
     {#                 <!-- #}
     {#                 <div style="padding:1em;"> #}
     {#                     <h4>MPA Draw Tool</h4> #}
