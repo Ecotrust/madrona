@@ -97,16 +97,23 @@ lingcod.rest.client = function(gex, panel){
     
     var setupForm = function(text, options){
         var geo_panel = $('#geopanel').html();
-        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div></div>');
+        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
         var html = $(text);
         var h1 = html.find('h1');
         h1.remove();
         content.prepend(h1);
+        html.find('input[type=submit]').hide();
         var form = html.find('form');
         content.find('#PanelAttributes').append(html);
         form.submit(function(e){
             onsubmit(e, form, options);
             return false;
+        });
+        content.find('.submit_button').click(function(){
+            form.trigger('submit');
+        });
+        content.find('.cancel_button').click(function(){
+            panel.close();
         });
         panel.addContent(content);
         var tabs = content.find('.tabs').tabs();

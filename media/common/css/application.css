@@ -225,3 +225,20 @@ p.instructions {
 div.panel div, div.panel p {
     margin:16px 0px;
 }
+
+.form_controls {
+    margin-top:10px;
+    width:100%;
+    position:relative;
+    bottom:0px;
+    background-color:none;
+    padding:10px 0;
+    width:100%;
+    left:0;
+    border-top:solid 1px #BAC0CC;
+}
+
+.form_controls .button {
+    float:right;
+    margin-right:10px;
+}
