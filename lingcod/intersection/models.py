@@ -242,7 +242,7 @@ class MultiFeatureShapefile(Shapefile):
         ds = DataSource(file_path)
         lyr = ds[0]
         if field_name not in lyr.fields:
-            raise Exception('Specified field (%s) not found in %s' % (field_name,file_name) )
+            raise Exception('Specified field (%s) not found in %s' % (field_name,self.name) )
         field = lyr.get_fields(field_name)
         distinct_values = dict.fromkeys(field).keys()
         
