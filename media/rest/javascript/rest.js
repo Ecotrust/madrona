@@ -113,13 +113,17 @@ lingcod.rest.client = function(gex, panel){
 
         // so this is how it might work:
         // var manipulations_needed = manipulators.needed(form);
-        var manipulations_needed = true;
+        
+        // This boolean test is by no means a recommended impementation Scott,
+        // just something I did to tide me over while working on form styles.
+        var manipulations_needed = html.find('#id_geometry_orig').length === 1;
         if(manipulations_needed){
             // fill in the geometry tab:
             // $('#PanelGeometry')...
         }else{
             tabs.tabs('select', '#PanelAttributes');
             tabs.tabs('disable', 0);
+            tabs.find('> .ui-tabs-nav').hide();
         }
         if(options.validation_error){
             tabs.tabs('select', '#PanelAttributes');
