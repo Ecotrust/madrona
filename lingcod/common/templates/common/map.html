@@ -194,26 +194,36 @@
     {# </div> #}
     <div id="geopanel">
         {% block shapeDefinitionPanel %}
+        {#  This text is defined within a block here so that individual #}
+        {#  projects can extend this block to modify the text #}
         <div class="panel">
             <div class="new">
+                {% block shapeDefinitionPanelNewShape %}
                 <p>
                     To begin defining a shape, press the button below and 
                     click on the map where you would like to place a vertex. 
                     When finished, double click the last vertex of your shape.
-                </p>
+                </p>                    
+                {% endblock shapeDefinitionPanelNewShape %}
                 <a href="#" class="draw_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/pencil.png">Draw Shape</span></a>                
             </div>
             <div class="edit" style="display:none;">
+                {% block shapeDefinitionPanelEditShape %}
                 <p>
                     To edit this shape, press the button below and drag its 
                     handles.
-                </p>
+                </p>                    
+                {% endblock shapeDefinitionPanelEditShape %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
             <div class="manipulated" style="display:none;">
+                {% block shapeDefinitionPanelBeforeManipulatorContent %}                    
+                {% endblock shapeDefinitionPanelBeforeManipulatorContent %}
                 <p>
                     CONTENT FROM SERVER
                 </p>
+                {% block shapeDefinitionPanelAfterManipulatorContent %}                    
+                {% endblock shapeDefinitionPanelAfterManipulatorContent %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
             {#  The following section is for debugging purposes only !! #}
