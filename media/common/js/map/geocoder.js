@@ -11,9 +11,26 @@ lingcod.map.geocoder = function(gex, form){
     this.form = form;
     this.get = ge;
     var self = this;
-    $(this.form).submit(function(e){
-        e.preventDefault();
-        var location = $(this).find('input:first').val();
+    
+    var clearPlacemark = function(dont_clear_input){
+        if(self.placemark){
+            gex.dom.removeObject(self.placemark);
+            self.placemark = false;
+        }
+        if(dont_clear_input !== true){
+            $(self.form).find('input[name=flyto_location]').val('');
+        }
+        $(self.form).find('#flytoclear').addClass('disabled');
+        return false;
+    };
+    
+    var callback = function(e){
+        clearPlacemark(true);
+        var location = $(self.form).find('input:first').val();
+        if(!location){
+            alert('You need to type in a location name.');
+            return false;
+        }
         self.geocoder.geocode({ address: location, country: '.us'}, function(results, status){
             if(status == google.maps.GeocoderStatus.OK && results.length){
                 if(status != google.maps.GeocoderStatus.ZERO_RESULTS){
@@ -27,23 +44,31 @@ lingcod.map.geocoder = function(gex, form){
                     ge.getView().setAbstractView(bounding_view);
                     
                     var point = results[0].geometry.location;
-                    gex.dom.addPointPlacemark([point.lat(), point.lng()], {
-                      // stockIcon: 'pal3/icon60.png',
+                    self.placemark = gex.dom.addPointPlacemark([point.lat(), point.lng()], {
+                      stockIcon: 'shapes/cross-hairs',
                       name: location
                     });
+                    $(self.form).find('#flytoclear').removeClass('disabled');
                 }else{
                     alert("geocoder didn't find any results.");
                 }
             }else{
                 alert("Geocoder failed due to: " + status);
             }
-        });
-    });
+        });        
+        e.preventDefault();
+        return false;        
+    }
+    $(this.form).find('#flytogo').click(callback);
+    $(this.form).find('#flytoclear').click(clearPlacemark);
+    $(this.form).submit(callback);
+    
 };
 
 /**
  * Prepare instance for destruction by remove event listeners.
  */
 lingcod.map.geocoder.prototype.destroy = function(){
+    $(this.form).find('#flytogo').unbind('click');
     $(this.form).unbind('submit');
 };

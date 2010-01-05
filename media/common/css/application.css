@@ -20,6 +20,10 @@ a {
     outline:none;
 }
 
+li {
+    list-style:none;
+}
+
 #layout {
     border:none;
     width:100%;
@@ -154,4 +158,60 @@ ul.errorlist li {
     top:40px;
     left:0px;
     z-index:5;
+}
+
+.marinemap-panel form {
+    margin: 10px;
+}
+
+#tools a.button {
+    font-size:14px;
+}
+
+#flyToLocation input{
+    font-size:16px; 
+    width:250px;
+    float:left; 
+    margin-right:6px;
+}
+
+p {
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+}
+
+p.instructions {
+    padding:10px 0;
+    font-size:14px;
+}
+
+#tools p {
+    padding: 10px 0;
+    font-size:12px;
+/*    font-family:sans-serif;*/
+    color:#4C4C4C;
+}
+
+#measureAmount {
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+    color:#4C4C4C;
+    padding-top:10px;
+    font-size:18px;
+}
+
+#measure_units {
+    position:absolute;
+    right:75px;
+    font-size:14px;
+}
+
+#tools {
+    margin-bottom:40px;
+}
+
+#measureAmountHolder {
+    display:none;
+    position:relative;
+    width:100%;
+    margin-top:-10px;
+    height:20px;
 }

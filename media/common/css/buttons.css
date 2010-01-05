@@ -1,0 +1,94 @@
+a.button {
+    background: transparent url('../images/bg_button_a.gif') no-repeat scroll top right;
+    color: #444;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+    margin-top:2px;
+}
+
+a.button span {
+    background: transparent url('../images/bg_button_span.gif') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+    height:14px;
+}
+
+a.button.blue {
+    background: transparent url('../images/bg_button_a_blue.gif') no-repeat scroll top right;
+}
+
+a.button.blue span {
+    background: transparent url('../images/bg_button_span_blue.gif') no-repeat;
+}
+
+a.button.steel {
+    background: transparent url('../images/bg_button_a_steel.gif') no-repeat scroll top right;
+}
+
+a.button.steel span {
+    background: transparent url('../images/bg_button_span_steel.gif') no-repeat;
+}
+
+a.button.red {
+    background: transparent url('../images/bg_button_a_red.gif') no-repeat scroll top right;
+}
+
+a.button.red span {
+    background: transparent url('../images/bg_button_span_red.gif') no-repeat;
+}
+
+a.button:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.button:active span {
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+}
+
+.clear {
+    clear:both;
+}
+
+a.disabled {
+    opacity:.50;
+    filter: alpha(opacity=50);
+}
+
+a.disabled:hover, a.disabled {
+    cursor: default;
+}
+
+a.button.disabled:active {
+    background-position: top right;
+    color: #444;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.button.disabled:active span {
+    background-position: top left;
+    padding: 5px 0 5px 18px; /* push text down 1px */
+}
+
+hr {
+    color:white;
+    border:none;
+    border-top:1px solid #EBEBEB;
+    margin:20px 0px;
+}
+
+a.button span img {
+    float:left;
+    padding:0;
+    margin:0;
+    margin-top:-2px;
+    margin-right:4px;
+}

@@ -38,14 +38,20 @@ var lingcod = (function(){
         
         $('#measure_distance').click(function(){
             that.measureTool.clear();
-            that.measureTool.measureDistance(gex, "distance");
+            that.measureTool.measureDistance(gex, "measureAmount");
+            $('#measure_clear').removeClass('disabled');
+            $('#measureAmountHolder').show();
         });
         $('#measure_area').click(function(){
             that.measureTool.clear();
-            that.measureTool.measureArea(gex, "area");
+            that.measureTool.measureArea(gex, "measureAmount");
+            $('#measure_clear').removeClass('disabled');
+            $('#measureAmountHolder').show();
         });
         $('#measure_clear').click(function(){
             that.measureTool.clear();
+            $(this).addClass('disabled');
+            $('#measureAmountHolder').hide();
         });
         $('#measure_units').change(function(){
             that.measureTool.setUnits($(this).val());
