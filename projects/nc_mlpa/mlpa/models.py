@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from lingcod.mpa.models import Mpa
 from lingcod.manipulators.manipulators import *
 from manipulators import *
+from lingcod.array.models import MpaArray as BaseArray
 
 class MlpaMpa(Mpa):
     """Model used for representing marine protected areas as part of the MLPA initiative
@@ -131,3 +132,6 @@ class Estuaries(models.Model):
     
     class Meta:
         db_table = u'mm_estuaries' 
+
+class MpaArray(BaseArray):
+    pass

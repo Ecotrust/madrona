@@ -74,7 +74,10 @@ INSTALLED_APPS += (
 )
 
 # Define the models which will represent the MPA and Array child classes
-MPA_CLASS = 'nc_mlpa.models.MlpaMpa'
-ARRAY_CLASS = 'nc_mlpa.models.Array'
+MPA_CLASS = 'mlpa.models.MlpaMpa'
+ARRAY_CLASS = 'mlpa.models.MpaArray'
+MPA_FORM = 'mlpa.forms.MpaForm'
+ARRAY_FORM = 'mlpa.forms.ArrayForm'
+
 
 from settings_local import *
