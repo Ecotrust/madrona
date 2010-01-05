@@ -192,4 +192,37 @@
     {#         {% endtab %} #}
     {#     {% endtabpanel %}         #}
     {# </div> #}
+    <div id="geopanel">
+        {% block shapeDefinitionPanel %}
+        <div class="panel">
+            <div class="new">
+                <p>
+                    To begin defining a shape, press the button below and 
+                    click on the map where you would like to place a vertex. 
+                    When finished, double click the last vertex of your shape.
+                </p>
+                <a href="#" class="draw_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/pencil.png">Draw Shape</span></a>                
+            </div>
+            <div class="edit" style="display:none;">
+                <p>
+                    To edit this shape, press the button below and drag its 
+                    handles.
+                </p>
+                <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
+            </div>
+            <div class="manipulated" style="display:none;">
+                <p>
+                    CONTENT FROM SERVER
+                </p>
+                <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
+            </div>
+            {#  The following section is for debugging purposes only !! #}
+            <p style="clear:both; margin-top:150px;">
+                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.new').show(); return false;">show new state</a>
+                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.edit').show(); return false;">show edit state</a>
+                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.manipulated').show(); return false;">show manipulated state</a>                
+            </p>
+        </div>
+        {% endblock shapeDefinitionPanel %}
+    </div>
 {% endblock %}

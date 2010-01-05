@@ -160,7 +160,7 @@ ul.errorlist li {
     z-index:5;
 }
 
-.marinemap-panel form {
+#tools form {
     margin: 10px;
 }
 
@@ -177,6 +177,8 @@ ul.errorlist li {
 
 p {
     font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+    font-size:14px;
+    color:#4C4C4C;
 }
 
 p.instructions {
@@ -214,4 +216,12 @@ p.instructions {
     width:100%;
     margin-top:-10px;
     height:20px;
+}
+
+#measurement_tools {
+    margin-left:10px;
+}
+
+div.panel div, div.panel p {
+    margin:16px 0px;
 }

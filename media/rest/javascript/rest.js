@@ -96,7 +96,8 @@ lingcod.rest.client = function(gex, panel){
     }
     
     var setupForm = function(text, options){
-        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>geometry</span></a></li><li><a href="#PanelAttributes"><span>attributes</span></a></li></ul><div id="PanelGeometry">geometry</div><div id="PanelAttributes"></div></div>');
+        var geo_panel = $('#geopanel').html();
+        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div></div>');
         var html = $(text);
         var h1 = html.find('h1');
         h1.remove();

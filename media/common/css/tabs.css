@@ -2,7 +2,7 @@
 /* Caution! Ensure accessibility in print and other media types... */
 .ui-tabs-hide {
     position:absolute;
-    left:-1000px;
+    left:-10000px;
     top:0px;
 }
 /*}*/
@@ -141,22 +141,53 @@
 .marinemap-panel .ui-tabs-nav {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 4px;
+    padding: 0;
     position:relative;
 /*    top:0em;*/
 /*    z-index:4;*/
+}
+
+.marinemap-panel .ui-tabs-nav {
+    margin-top:-5px;
+    margin-bottom:20px;
 }
 
 .marinemap-panel .tabs .ui-state-disabled {
     display:none;
 }
 
+.marinemap-panel .tabs {
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+}
+
 .marinemap-panel .ui-tabs-nav a {
-    color:#3A6469;
+    color:#333;
     background-color:none;
 }
 
 .marinemap-panel .ui-tabs-nav .ui-tabs-selected a {
-    color:#3A6469;
-    background-color:#CDDEDC;
+    background-color:none;
+    background-image:none;
+    text-decoration:underline;
+}
+
+.marinemap-panel .ui-tabs-nav a {
+    width:auto;
+    height:auto;
+    margin:0 0 0px 0;
+    padding:0;
+}
+
+.marinemap-panel .ui-tabs-nav li {
+    margin:0 15px 0px 0;
+    min-width:0;
+}
+
+.marinemap-panel .ui-tabs-nav .ui-tabs-selected {
+    background-image:none;
+}
+
+.marinemap-panel .ui-tabs-nav a span {
+    padding-top:0px;
+    margin-top:0px;
 }
