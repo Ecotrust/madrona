@@ -60,7 +60,7 @@ var lingcod = (function(){
             .kmlForest('add', window.studyregion, {cachebust: true, callback: studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         
-        var panel = lingcod.panel({appendTo: $('#panel-holder')});
+        var panel = lingcod.panel({appendTo: $('#panel-holder'), showCloseButton: false});
         that.client = lingcod.rest.client(gex, panel);
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
