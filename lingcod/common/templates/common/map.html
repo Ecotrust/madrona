@@ -15,8 +15,8 @@
         {% block myshapes %}
         {% if user.is_authenticated %}
         options.myshapes = ["{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"];
-        options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         {% endif %}
+        options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         {% endblock myshapes %}
         
         $(document).ready(function(){
