@@ -26,15 +26,18 @@ var lingcod = (function(){
         ge.getWindow().setVisibility(true); // required
         gex = new GEarthExtensions(ge);
         
-        that.googleLayers = new lingcod.map.googleLayers(ge, $('#ge_options'), $('#ge_layers'));
+        that.googleLayers = new lingcod.map.googleLayers(ge, 
+            $('#ge_options'), $('#ge_layers'));
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
         that.drawTool = new lingcod.DrawTool(ge, gex);
         
         //part of mpa creation -- draw_panels and mpaCreator
         //will need to come up with a better solution for manipulator url
-        that.draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
-        that.mpaCreator = new lingcod.MpaCreator(that.drawTool, that.draw_panels);
+        that.draw_panels = { button_panel: 'mpa_draw_panel', 
+            results_panel: 'mpa_results_panel' };
+        that.mpaCreator = new lingcod.MpaCreator(that.drawTool, 
+            that.draw_panels);
         
         $('#measure_distance').click(function(){
             that.measureTool.clear();
@@ -57,10 +60,12 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-            .kmlForest('add', window.studyregion, {cachebust: true, callback: studyRegionLoaded})
+            .kmlForest('add', window.studyregion, {cachebust: true, 
+                callback: studyRegionLoaded})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         
-        var panel = lingcod.panel({appendTo: $('#panel-holder'), showCloseButton: false});
+        var panel = lingcod.panel({appendTo: $('#panel-holder'), 
+            showCloseButton: false});
         that.client = lingcod.rest.client(gex, panel);
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
