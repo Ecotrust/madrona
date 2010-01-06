@@ -66,7 +66,7 @@ class Mpa(models.Model):
         ======================  ==============================================
     """   
     user = models.ForeignKey(User)
-    name = models.TextField(verbose_name="MPA Name")
+    name = models.CharField(verbose_name="MPA Name", max_length="255")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")

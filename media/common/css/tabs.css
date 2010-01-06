@@ -168,7 +168,8 @@
 .marinemap-panel .ui-tabs-nav .ui-tabs-selected a {
     background-color:none;
     background-image:none;
-    text-decoration:underline;
+/*    text-decoration:underline;*/
+    border-bottom:2px solid #888;
 }
 
 .marinemap-panel .ui-tabs-nav a {

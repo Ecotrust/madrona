@@ -117,7 +117,13 @@ lingcod.rest.client = function(gex, panel){
         });
         panel.addContent(content);
         var tabs = content.find('.tabs').tabs();
-
+        tabs.bind('tabsshow', function(e){
+            var div = $(this).parent().parent().parent();
+            console.log(div);
+            // scroll to 1, then 0 for the benefit of dumb firefox
+            div.scrollTop(1);
+            div.scrollTop(0);
+        });
         // so this is how it might work:
         // var manipulations_needed = manipulators.needed(form);
         
@@ -127,6 +133,7 @@ lingcod.rest.client = function(gex, panel){
         if(manipulations_needed){
             // fill in the geometry tab:
             // $('#PanelGeometry')...
+            tabs.tabs('select', '#PanelGeometry');
         }else{
             tabs.tabs('select', '#PanelAttributes');
             tabs.tabs('disable', 0);

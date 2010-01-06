@@ -12,4 +12,5 @@ class ArrayForm(BaseArrayForm):
 class MpaForm(BaseMpaForm):
     class Meta:
         model = MlpaMpa
-        fields = ('user', 'name', 'geometry_orig', 'geometry_final')
+        # fields = ('user', 'name', 'geometry_orig', 'geometry_final')
+        exclude = ('content_type', 'object_id', 'cluster_id', 'is_estuary', 'group_before_edits', )
