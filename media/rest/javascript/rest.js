@@ -119,7 +119,6 @@ lingcod.rest.client = function(gex, panel){
         var tabs = content.find('.tabs').tabs();
         tabs.bind('tabsshow', function(e){
             var div = $(this).parent().parent().parent();
-            console.log(div);
             // scroll to 1, then 0 for the benefit of dumb firefox
             div.scrollTop(1);
             div.scrollTop(0);
