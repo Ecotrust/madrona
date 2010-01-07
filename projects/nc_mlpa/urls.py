@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     
-    url(r'^$', 'lingcod.common.views.map', name="map" ),
+    url(r'^$', 'lingcod.common.views.map', {'template_name': 'common/map_ext.html'}, name="map"),
     
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html', 'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
     

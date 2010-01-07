@@ -28,7 +28,7 @@ lingcod.rest.client = function(gex, panel){
             }
         });
         return return_values;
-    }
+    };
     
     that.parseDocument = parseDocument;
     
@@ -48,11 +48,11 @@ lingcod.rest.client = function(gex, panel){
         }else{
             throw('REST Client: Could not parse resource.');
         }
-    }
+    };
     
     that.parseResource = parseResource;
     
-    var onsubmit = function(e, form, options){
+    var onsubmit = function(e, form, options, config){
         var action = $(form).attr('action');
         $.ajax({
             url: action,
@@ -80,7 +80,7 @@ lingcod.rest.client = function(gex, panel){
                     case 400:
                         // validation error
                         options['validation_error'] = true;
-                        setupForm(req.responseText, options);
+                        setupForm(req.responseText, options, config);
                         break;
                     
                     default:
@@ -93,11 +93,11 @@ lingcod.rest.client = function(gex, panel){
         // if(options && options['error']){
         //     error(title, msg);
         // }
-    }
+    };
     
-    var setupForm = function(text, options){
+    var setupForm = function(text, options, config){
         var geo_panel = $('#geopanel').html();
-        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
+        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div><br class="clear" /></br><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
         var html = $(text);
         var h1 = html.find('h1');
         h1.remove();
@@ -106,7 +106,7 @@ lingcod.rest.client = function(gex, panel){
         var form = html.find('form');
         content.find('#PanelAttributes').append(html);
         form.submit(function(e){
-            onsubmit(e, form, options);
+            onsubmit(e, form, options, config);
             return false;
         });
         content.find('.submit_button').click(function(){
@@ -142,9 +142,11 @@ lingcod.rest.client = function(gex, panel){
             tabs.tabs('select', '#PanelAttributes');
         }
         panel.show();
-    }
+        $(that).trigger('form_shown', [panel, config.model]);
+    };
     
     var create = function(config, options){
+        var self = this;
         options = options || {};
         $.ajax({
             cache: false,
@@ -152,7 +154,7 @@ lingcod.rest.client = function(gex, panel){
             type: 'GET',
             success: function(data, status){
                 if(status === 'success'){
-                    setupForm(data, options);
+                    setupForm(data, options, config);
                 }else{
                     throw('could not get form at '+config.href);
                 }
@@ -161,7 +163,7 @@ lingcod.rest.client = function(gex, panel){
                 throw('could not get form at '+config.href);
             }
         });
-    }
+    };
     
     that.create = create;
     
@@ -171,7 +173,7 @@ lingcod.rest.client = function(gex, panel){
         }else{
             return configOrFeature;
         }
-    }
+    };
     
     var update = function(configOrFeature, options){
         var config = getConfig(configOrFeature);
@@ -183,7 +185,7 @@ lingcod.rest.client = function(gex, panel){
             type: 'GET',
             success: function(data, status){
                 if(status === 'success'){
-                    setupForm(data, options);
+                    setupForm(data, options, config);
                 }else{
                     throw('could not get form at '+config.form_link);
                 }
@@ -194,7 +196,7 @@ lingcod.rest.client = function(gex, panel){
                 }
             }
         });
-    }
+    };
 
     that.update = update;
     
@@ -231,7 +233,7 @@ lingcod.rest.client = function(gex, panel){
                 cancel(config.location);
             }
         }
-    }
+    };
     
     that.destroy = destroy;
     
@@ -265,7 +267,7 @@ lingcod.rest.client = function(gex, panel){
         var config = getConfig(configOrFeature);
         options['load_msg'] = 'Loading '+config['title'];
         panel.showUrl(config['location'], options);
-    }
+    };
     
     that.show = show;
     
@@ -277,7 +279,7 @@ lingcod.rest.client = function(gex, panel){
     // See http://code.djangoproject.com/wiki/ReplacingGetAbsoluteUrl
     function getPath(url) {
         return $('<a/>').attr('href',url)[0].pathname.replace(/^[^\/]/,'/');
-    }
+    };
     
     that.getPath = getPath;
     
@@ -299,7 +301,7 @@ lingcod.rest.client = function(gex, panel){
         }else{
             return false;
         }
-    }
+    };
     
     that.findResourceInString = findResourceInString;
     
@@ -321,9 +323,9 @@ lingcod.rest.client = function(gex, panel){
             }
         });
         return resource;
-    }
+    };
     
     that.findResource = findResource;
            
     return that;
-}
+};

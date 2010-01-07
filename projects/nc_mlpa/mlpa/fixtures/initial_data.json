@@ -2,4 +2,111 @@
 {"pk": 1, "model": "mpa.mpadesignation", "fields": {"acronym": "SMR", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smr", "poly_fill_color": "ff0000ff", "name": "State Marine Reserve", "poly_outline_color": "ffffffff"}}, 
 {"pk": 2, "model": "mpa.mpadesignation", "fields": {"acronym": "SMCA", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smca", "poly_fill_color": "ffA80700", "name": "State Marine Conservation Area", "poly_outline_color": "ffffffff"}}, 
 {"pk": 3, "model": "mpa.mpadesignation", "fields": {"acronym": "SMP", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smp", "poly_fill_color": "ffFFFF00", "name": "State Marine Park", "poly_outline_color": "ffFFFFFF"}}
+,{
+    "pk": 1,
+     "model": "mlpa.goalcategory",
+     "fields": 
+    {
+        "name": "Goal 1",
+         "description": "To protect the natural diversity and abundance of marine life, and the structure function, and integrity of marine ecosystems."
+    }
+},
+ 
+{
+    "pk": 2,
+     "model": "mlpa.goalcategory",
+     "fields": 
+    {
+        "name": "Goal 2",
+         "description": "To help sustain, conserve, and protect marine life populations, including those of economic value, and rebuild those that are depleted."
+    }
+},
+ 
+{
+    "pk": 1,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 1,
+         "name": "Objective 1",
+         "description": "Protect and maintain species diversity and abundance consistent with natural fluctuations, including areas of high native species diversity and representative habitats."
+    }
+},
+ 
+{
+    "pk": 2,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 1,
+         "name": "Objective 2",
+         "description": "Protect areas with diverse habitat types in close proximity to each other."
+    }
+},
+ 
+{
+    "pk": 3,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 1,
+         "name": "Objective 3",
+         "description": "Protect natural size and age structure and genetic diversity of populations in representative habitats."
+    }
+},
+ 
+{
+    "pk": 4,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 1,
+         "name": "Objective 4",
+         "description": "Protect biodiversity, natural trophic structure and food webs in representative habitats."
+    }
+},
+ 
+{
+    "pk": 5,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 1,
+         "name": "Objective 5",
+         "description": "Promote recovery of natural communities from disturbances, both natural and human induced, including water quality. "
+    }
+},
+ 
+{
+    "pk": 6,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 2,
+         "name": "Objective 1",
+         "description": "Help protect or rebuild populations of rare, threatened, endangered, depressed, depleted, or overfished species, and the habitats and ecosystem functions upon which they rely."
+    }
+},
+ 
+{
+    "pk": 7,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 2,
+         "name": "Objective 2",
+         "description": "Sustain or increase reproduction by species likely to benefit from MPAs with emphasis on those species identified as more likely to benefit from MPAs and promote retention of large, mature individuals."
+    }
+},
+ 
+{
+    "pk": 8,
+     "model": "mlpa.goalobjective",
+     "fields": 
+    {
+        "goal_category": 2,
+         "name": "Objective 3",
+         "description": "Sustain or increase reproduction by species likely to benefit from MPAs with emphasis on those species identified as more likely to benefit from MPAs through protection of breeding, spawning, foraging, rearing or nursery areas or other areas where species congregate."
+    }
+}
 ]

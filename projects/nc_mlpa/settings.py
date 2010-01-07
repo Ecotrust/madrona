@@ -79,5 +79,8 @@ ARRAY_CLASS = 'mlpa.models.MpaArray'
 MPA_FORM = 'mlpa.forms.MpaForm'
 ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
+COMPRESS_JS['application']['source_filenames'] += (
+    'projects/nc_mlpa/allowed_uses.js',
+)
 
 from settings_local import *

@@ -4,7 +4,28 @@
 {% block panel %}
   <h1>{{title}}</h1>
   <form action="{{action}}" method="post">
-    {{form.as_p}}
+  {% for field in form.visible_fields %}
+    <div class="field{% if field.field.required %} required{% endif %}">
+        {# Include the hidden fields in the form #}
+        {% if forloop.first %}
+            {% for hidden in form.hidden_fields %}
+            <div style="display:none;">
+                {{ hidden.errors }}
+            </div>
+            {{ hidden }}
+            {% endfor %}
+        {% endif %}
+        
+        {{ field.label_tag }}
+        {{ field.errors }}
+        {% if field.help_text %}
+        <p class="help_text">
+            {{ field.help_text }}            
+        </p>            
+        {% endif %}
+        {{ field }}            
+    </div>
+  {% endfor %}
     <p><input type="submit" value="submit"></p>
   </form>
 {% endblock %}

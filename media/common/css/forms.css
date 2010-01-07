@@ -1,0 +1,106 @@
+.form_controls {
+    clear:both;
+    margin-top:20px;
+    width:100%;
+    position:relative;
+    bottom:0px;
+    background-color:none;
+    padding:10px 0;
+    width:100%;
+    left:0;
+    border-top:solid 1px #BAC0CC;
+}
+
+.form_controls .button {
+    float:right;
+    margin-right:10px;
+}
+
+.marinemap-panel form {
+    
+}
+
+.marinemap-panel form label {
+    clear:both;
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    padding:0;
+    margin:0 0 5px 0;
+    color:#344E63;
+    text-shadow: 0 1px 0 #FCFAFF;
+    -moz-text-shadow: #FCFAFF 0px 1px 0px;
+}
+
+.marinemap-panel form textarea {
+/*    float:right;*/
+    width:100%;
+}
+
+.marinemap-panel form textarea, .marinemap-panel form input {
+    margin-bottom:10px;
+}
+
+.marinemap-panel form input[type=text] {
+    width:250px;
+}
+
+.marinemap-panel form input[type=checkbox] {
+/*    float:right;*/
+/*    margin-right:20px;*/
+    position:relative;
+    top:-10px;
+}
+
+.marinemap-panel form p.help_text {
+    font-size:12px;
+    margin:0;
+    padding:0;
+    margin-bottom:10px;
+}
+
+
+.marinemap-panel form .required label:after {
+    content: " * ";
+}
+
+div.field ul {
+    font-size:12px;
+    margin:0;
+    padding:0;
+    margin-bottom:10px;
+    padding-left:20px;
+}
+
+div.field ul h4 {
+    clear:both;
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    padding:0;
+    margin:0 0 5px 0;
+    color:#344E63;
+    text-shadow: 0 1px 0 #FCFAFF;
+    -moz-text-shadow: #FCFAFF 0px 1px 0px;
+}
+
+.marinemap-panel form ul li {
+    padding-left:40px;
+}
+
+.marinemap-panel form ul input[type=checkbox] {
+    display:relative;
+    top:0px;
+    margin-left:-20px;
+}
+
+div.field ul p {
+    padding:0;
+    margin:0 5px;
+    font-size:12px;
+}
+
+div.field ul label {
+    margin:0;
+    margin-top:5px;
+}

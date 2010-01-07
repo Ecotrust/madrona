@@ -6,4 +6,3 @@ from lingcod.rest.forms import UserForm
 class ArrayForm(UserForm):
     class Meta:
         model = MpaArray
-        fields = ('user', 'name')

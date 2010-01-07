@@ -1,0 +1,9 @@
+{% extends 'common/map.html' %}
+{% load mpa_uid %}
+{% block addToOptions %}
+    options.form_shown = function(e, panel, model){
+        if(model === '{% mpa_uid %}'){
+            console.log('mpa form shown');
+        }
+    }
+{% endblock addToOptions %}

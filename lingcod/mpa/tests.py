@@ -85,4 +85,4 @@ class MpaResourcesTestCase(TestCase):
         from django.core.urlresolvers import reverse
         url = reverse('kmlapp-user-kml', kwargs={'input_username': user.username, 'session_key': 0})
         assertImplementsRestInterface(self, user, password, url, 
-            rest_uid(TestMpa), {'name': 'myname'})
+            rest_uid(TestMpa), {'name': 'myname', 'geometry_orig': geom_final, 'geometry_final': geom_final})

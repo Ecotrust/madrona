@@ -9,6 +9,9 @@ a.button {
     padding-right: 18px; /* sliding doors padding */
     text-decoration: none;
     margin-top:2px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
 a.button span {

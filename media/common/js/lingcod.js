@@ -67,6 +67,9 @@ var lingcod = (function(){
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
         that.client = lingcod.rest.client(gex, panel);
+        if(typeof options.form_shown === 'function'){
+            $(that.client).bind('form_shown', options.form_shown);
+        }
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
                 lingcod.rest.kmlEditor({

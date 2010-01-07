@@ -88,7 +88,7 @@ def create(request, form_class=None, action=None, title=None,
     if request.method == 'POST':
         values = request.POST.copy()
         values.__setitem__('user', request.user.pk)
-        form = form_class(values)
+        form = form_class(values, label_suffix='')
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
@@ -124,7 +124,7 @@ def create_form(request, form_class=None, action=None, extra_context={},
         title = 'New %s' % (classname.capitalize())
     if request.method == 'GET':
         extra_context.update({
-            'form': form_class(),
+            'form': form_class(label_suffix=''),
             'title': title,
             'action': action,
             'is_ajax': request.is_ajax(),
@@ -154,7 +154,7 @@ def update_form(request, form_class=None, pk=None, extra_context={},
         raise Exception('Model to be edited must have a name attribute.')
 
     if request.method == 'GET':
-        form = form_class(instance=instance)
+        form = form_class(instance=instance, label_suffix='')
         extra_context.update({
             'form': form,
             'title': "Edit '%s'" % (instance.name, ),
@@ -199,7 +199,7 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
     if request.method == 'POST':
         values = request.POST.copy()
         values.__setitem__('user', request.user.pk)
-        form = form_class(values, instance=instance)
+        form = form_class(values, instance=instance, label_suffix='')
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
