@@ -9,7 +9,9 @@ from itertools import chain
 from django.utils.safestring import mark_safe
 from django.utils.encoding import StrAndUnicode, force_unicode
 from django.utils.html import escape, conditional_escape
-
+from mlpa.models import AllowedUse, AllowedMethod, AllowedPurpose, AllowedTarget, DesignationsPurposes
+from django.utils import simplejson as json
+from django.conf import settings
 
 class ArrayForm(BaseArrayForm):
     class Meta(BaseArrayForm.Meta):
@@ -50,11 +52,90 @@ class GoalObjectivesWidget(forms.CheckboxSelectMultiple):
                 output.append(u'</li>')
             output.append(u'</ul>')
         return mark_safe(u'\n'.join(output))
+
+
+class AllowedUsesWidget(forms.SelectMultiple):
+    def render(self, *args, **kwargs):
+        data = {
+            'allowed_uses': {},
+            'methods': {},
+            'targets': {},
+            'purposes': {},
+            'designations-purposes': {},
+        }
+        for use in AllowedUse.objects.all():
+            data['allowed_uses'][use.pk] = {
+                'pk': use.pk,
+                'method': use.method_id,
+                'target': use.target_id,
+                'purpose': use.purpose_id,
+            }
+        for method in AllowedMethod.objects.all():
+            data['methods'][method.pk] = {
+                'pk': method.pk, 
+                'name': method.name
+            }
+        for target in AllowedTarget.objects.all():
+            data['targets'][target.pk] = {
+                'pk': target.pk,
+                'name': target.name
+            }
+        for purpose in AllowedPurpose.objects.all():
+            data['purposes'][purpose.pk] = {
+                'pk': purpose.pk,
+                'name': purpose.name
+            }
+        for mapping in DesignationsPurposes.objects.all():
+            data['designations-purposes'][mapping.designation_id] = list(mapping.purpose.values_list('pk', flat=True))
+        
+        json_string = json.dumps(data)
+        output = super(AllowedUsesWidget, self).render(*args, **kwargs)
+        return output + mark_safe("""
+        <p class="help_text">
+            The list of allowed uses has been updated as of 2/19/2009. To ensure that the most accurate level of protection information is provided, allowed uses selections have been updated with information specific to the north coast Study Region. The allowed uses list now includes only uses that the North Coast Science Advisory Team has assigned a level of protection. If you indicate an allowed use that is not listed below, MLPA Initiative staff may forward this allowed use to the Science Advisory Team so that it can be assigned a level of protection.
+        </p>
+        <p class="help_text">
+            To add allowed uses, choose a combination of Target, Method, and Use Type. <strong>Please note</strong>, some options may be disabled depending on your choices. For example, if you choose Salmon from the Target menu, you will not be able to select "Hand Harvest" from the Method menu.
+        </p>
+        <p class="help_text">
+            If you would like to propose an allowed use not listed above, please contact: <a href="mailto:help@lists.marinemap.org">help@lists.marinemap.org</a>
+        </p>
+        <table class="allowed_uses">
+            <thead>
+                <tr class="headers">
+                    <th>Target</th>
+                    <th>Method</th>
+                    <th colspan="2">Purpose</th>
+                </tr>
+                <tr class="form">
+                    <th class="target"></th>
+                    <th class="method"></th>
+                    <th class="purpose"></th>
+                    <th class="add"><a href="#"><img src="%s/common/images/silk/add.png" width="16" height="16" /></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="chosen">
+                    <td colspan="4">chosen allowed uses</td>
+                </tr>
+                <tr class="none">
+                    <td colspan="4">none</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <p style="display:none;" id="allowed_uses_json">%s</p>
+        """ % (settings.MEDIA_URL, json_string, ))
+        
         
 class MpaForm(BaseMpaForm):
     goal_objectives = forms.ModelMultipleChoiceField(GoalObjective.objects, widget=GoalObjectivesWidget, required=False)
-
+    allowed_uses = forms.ModelMultipleChoiceField(AllowedUse.objects, widget=AllowedUsesWidget, required=False)
+    
     class Meta:
         model = MlpaMpa
-        # fields = ('user', 'name', 'geometry_orig', 'geometry_final')
-        exclude = ('content_type', 'object_id', 'cluster_id', 'is_estuary', 'group_before_edits', )
+        fields = ('user', 'geometry_orig', 'geometry_final', 
+            'name', 'designation', 'allowed_uses', 'other_allowed_uses',
+            'other_regulated_activities', 'specific_objective', 
+            'goal_objectives', 'design_considerations', 
+            'boundary_description', 'evolution')

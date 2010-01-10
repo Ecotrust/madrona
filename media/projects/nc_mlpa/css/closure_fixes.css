@@ -1,0 +1,31 @@
+div.panel .goog-menu-button {
+    margin:0;
+}
+
+div.panel .goog-inline-block {
+    display:inline-block;
+}
+
+div.panel .goog-menu-button p, div.panel .goog-menu-button div {
+    margin:0px;
+}
+
+.goog-menu-vertical {
+    z-index:100;
+    margin-bottom:15px;
+}
+
+div.panel th .goog-menu-button {
+    display:inline-block;
+    font-size:10px;
+}
+
+div.panel th .goog-menu-button-caption {
+    white-space:nowrap;
+    width:120px;
+    overflow:hidden;
+}
+
+.goog-menu-vertical {
+    overflow:auto;
+}

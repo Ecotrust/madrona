@@ -3,7 +3,7 @@
 {% block addToOptions %}
     options.form_shown = function(e, panel, model){
         if(model === '{% mpa_uid %}'){
-            console.log('mpa form shown');
+            mlpa.prepareForm(panel);
         }
     }
 {% endblock addToOptions %}

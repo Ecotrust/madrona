@@ -54,6 +54,7 @@ lingcod.rest.client = function(gex, panel){
     
     var onsubmit = function(e, form, options, config){
         var action = $(form).attr('action');
+        panel.close();
         $.ajax({
             url: action,
             type: 'POST',
@@ -62,7 +63,6 @@ lingcod.rest.client = function(gex, panel){
                 switch(req.status){
                     case 201:
                         // new object created, get location header
-                        panel.close();
                         if(options && options.success){
                             options.success(
                                 req.getResponseHeader('Location'));
@@ -72,7 +72,6 @@ lingcod.rest.client = function(gex, panel){
                     case 200:
                         // object edited successfully
                         if(options.success){
-                            panel.close();
                             options.success(options.location);
                         }                        
                         break;

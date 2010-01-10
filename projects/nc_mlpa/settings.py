@@ -80,7 +80,14 @@ MPA_FORM = 'mlpa.forms.MpaForm'
 ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
 COMPRESS_JS['application']['source_filenames'] += (
-    'projects/nc_mlpa/allowed_uses.js',
+    'projects/nc_mlpa/js/mlpa.js',
+    'projects/nc_mlpa/js/mpa_form_compiled.js',
+)
+
+
+COMPRESS_CSS['application']['source_filenames'] += (
+    'projects/nc_mlpa/css/closure_fixes.css',
+    'projects/nc_mlpa/css/mlpa_forms.css',
 )
 
 from settings_local import *

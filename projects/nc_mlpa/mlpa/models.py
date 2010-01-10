@@ -95,7 +95,19 @@ class AllowedUse(models.Model):
 
     def flat_attr(self):
         return ':'.join([self.target.name, self.method.name, self.purpose.name])
-        
+
+
+from lingcod.mpa.models import MpaDesignation
+
+
+# Maps the relationship between MPA designations and what allowedpurposes can
+# be permitted there
+class DesignationsPurposes(models.Model):
+    designation = models.ForeignKey(MpaDesignation, unique=True)
+    purpose = models.ManyToManyField(AllowedPurpose, help_text='Which allowed use purposes are available for this designation', blank=True)
+
+    def __unicode__(self):
+        return self.designation.name #':'.join([self.name, self.description]) 
         
 class GoalCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -192,6 +204,7 @@ class MlpaMpa(Mpa):
     #sharing_groups = models.ManyToManyField(Group, blank=True)
     #allowed_uses = ManyToManyFieldWithCustomColumns(DomainAllowedUse,db_table='x_mpas_allowed_uses',db_column='allowed_uses_id',null=True, blank=True, verbose_name="Allowed Uses")
 
+    allowed_uses = models.ManyToManyField(AllowedUse,null=True, blank=True, verbose_name="Allowed Uses", help_text="useful help text.")
     is_estuary = models.NullBooleanField(null=True, blank=True, verbose_name="Is Estuary?")
     cluster_id = models.IntegerField(null=True, blank=True)
     boundary_description = models.TextField(null=True, blank=True, verbose_name="Boundary Description", help_text="Written description of the MPA boundaries.")
@@ -204,9 +217,7 @@ class MlpaMpa(Mpa):
     sat_explanation = models.TextField(null=True, blank=True, verbose_name="SAT Explanation")
     other_regulated_activities = models.TextField(null=True, blank=True, verbose_name='Other Regulated Activities', help_text="""List here any proposed regulations that apply to activities other than extractive use. For instance, proposed regulations that prohibit anchoring, wading, etc may be included here.""")
     other_allowed_uses = models.TextField(null=True, blank=True, verbose_name="Additional Proposed Allowed Uses", help_text="""List here proposed regulations that apply to extractive use activities NOT listed in the drop down menu above. These regulations should be listed here in the form of proposed allowed uses. Please note that the allowed uses listed above have been reviewed by the MLPA Science Advisory Team (SAT) and assigned a level of protection that is used in several MarineMap reporting functions. Any additional allowed uses listed below can not be assigned a level of protection until they are reviewed by the SAT. Thus, including any allowed uses below will disable reporting functions in MarineMap that use levels of protection. """)
-    evolution = models.TextField(null=True, blank=True, verbose_name='Staff MPA Evolution Notes')
     goal_objectives = models.ManyToManyField(GoalObjective,null=True, blank=True, verbose_name="Goals and Regional Objectives")
-    allowed_uses = models.ManyToManyField(AllowedUse,null=True, blank=True, verbose_name="Allowed Uses")
 
     class Meta:
         # db_table = u'mlpa_mpa' <- don't need this!
