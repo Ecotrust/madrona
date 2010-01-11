@@ -81,7 +81,7 @@ ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
 COMPRESS_JS['application']['source_filenames'] += (
     'projects/nc_mlpa/js/mlpa.js',
-    'projects/nc_mlpa/js/mpa_form_compiled.js',
+    'projects/nc_mlpa/js/mpa_form.js',
 )
 
 

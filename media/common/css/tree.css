@@ -247,3 +247,7 @@
     color:#6C7C90;
     white-space: normal;
 }
+
+.kmlEditor .toolbar {
+    margin-top:-10px;
+}

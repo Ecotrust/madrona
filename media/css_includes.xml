@@ -13,4 +13,5 @@
     <file path="common/css/menu_items.css" />
     <file path="common/css/buttons.css" />
     <file path="common/css/forms.css" />
+    <file path="common/css/closure-fixes.css" />
 </stylesheets>

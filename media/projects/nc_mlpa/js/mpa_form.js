@@ -1,7 +1,3 @@
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.Option');
-goog.require('goog.ui.Select');
-
 mlpa.prepareForm = function(panel){
     var native_select = $('#id_designation');
     native_select.hide();

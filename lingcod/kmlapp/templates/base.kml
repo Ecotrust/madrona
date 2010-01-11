@@ -3,8 +3,8 @@
 <Document>
   <name>{% block docname %}MarineMap MPAs{% endblock %}</name>
   <open>1</open>
-  <atom:link rel="marinemap.create_form" title="Create a new Marine Protected Area" mm:icon="/path/to/icon.png" mm:model="{% mpa_uid %}" href="{% url mpa_create_form %}"></atom:link>
-  <atom:link rel="marinemap.create_form" title="Create a new Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url array_create_form %}"></atom:link>
+  <atom:link rel="marinemap.create_form" title="Marine Protected Area" mm:icon="/path/to/icon.png" mm:model="{% mpa_uid %}" href="{% url mpa_create_form %}"></atom:link>
+  <atom:link rel="marinemap.create_form" title="Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url array_create_form %}"></atom:link>
   {% block style %}{% endblock %}
   {% block folders_and_placemarks %}{% endblock %}
 </Document>
