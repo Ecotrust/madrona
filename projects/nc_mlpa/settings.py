@@ -90,4 +90,8 @@ COMPRESS_CSS['application']['source_filenames'] += (
     'projects/nc_mlpa/css/mlpa_forms.css',
 )
 
+# Location where Ecotrust Fishing Data layers can be found
+# This variable should actually be set in settings_local.py, just placed here to ensure correct compile
+GIS_DATA_ROOT = ''
+
 from settings_local import *
