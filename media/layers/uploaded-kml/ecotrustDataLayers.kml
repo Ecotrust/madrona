@@ -1,0 +1,2273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+    <Style id="mainStyle">
+        <ListStyle>
+            <listItemType>checkOffOnly</listItemType>
+        </ListStyle>
+    </Style>
+    <Style id="groupStyle">
+        <ListStyle>
+            <listItemType>checkOffOnly</listItemType>
+        </ListStyle>
+    </Style>
+    <Style id="portStyle">
+        <ListStyle>
+            <listItemType>checkOffOnly</listItemType>
+        </ListStyle>
+    </Style>
+    <Style id="speciesStyle">
+        <ListStyle>
+            <listItemType>radioFolder</listItemType>
+        </ListStyle>
+    </Style>
+    <Style id="dataStyle">
+        <ListStyle>
+            <listItemType>checkHideChildren</listItemType>
+        </ListStyle>
+    </Style>
+    
+	<name>Ecotrust Data Layers</name>
+    <styleUrl>#mainStyle</styleUrl>
+    
+    <Folder>
+        <name>Ecotrust Fishing Ground Maps </name>
+        <visibility>0</visibility>
+        <styleUrl>#groupStyle</styleUrl>
+        <description></description>
+        <Folder>
+            <name>Commercial</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Entire Study Region</name>
+                <styleUrl>#speciesStyle</styleUrl>
+                <visibility>0</visibility>
+                <Folder>
+                    <name>Anchovy</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Anchovy Map">
+                        <name>Anchovy Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/map/com/achv_all/</href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Anchovy Contours">
+                        <name>Anchovy Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/com/achv_all_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <LookAt>
+                        <longitude>-123.75</longitude>
+                        <latitude>39.75</latitude>
+                        <altitude>0</altitude>
+                        <range>400000</range>
+                        <tilt>0</tilt>
+                        <altitudeMode>relativeToGround</altitudeMode>
+                    </LookAt>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/map/com/dcrabt_all/</href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/com/dcrabt_all_kd_line/</href>
+                            <!--<href>http://localhost:8080/1.0.0/ecotrust/0/0/0.kml</href>-->
+                            <!--<href>http://localhost:8000/layers/ecotrust/tiles/contour/ecotrust/0/0/0.kml</href>-->
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/map/com/salt_all/</href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/com/salt_all_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Shrimp</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Shrimp Map">
+                        <name>Shrimp Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Shrimp Contours">
+                        <name>Shrimp Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Smelt</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Smelt Map">
+                        <name>Smelt Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Smelt Contours">
+                        <name>Smelt Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Surf Perch</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Surf Perch Map">
+                        <name>Surf Perch Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Surf Perch Contours">
+                        <name>Surf Perch Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Urchin</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Urchin Map">
+                        <name>Urchin Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Urchin Contours">
+                        <name>Urchin Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Albion</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Urchin</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Urchin Map">
+                        <name>Urchin Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Urchin Contours">
+                        <name>Urchin Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Crescent City</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Herring</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Herring Map">
+                        <name>Pacific Herring Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Herring Contours">
+                        <name>Pacific Herring Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Shrimp</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Shrimp Map">
+                        <name>Shrimp Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Shrimp Contours">
+                        <name>Shrimp Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Smelt</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Smelt Map">
+                        <name>Smelt Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Smelt Contours">
+                        <name>Smelt Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Surf Perch</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Surf Perch Map">
+                        <name>Surf Perch Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Surf Perch Contours">
+                        <name>Surf Perch Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Eureka</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Herring</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Herring Map">
+                        <name>Pacific Herring Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Herring Contours">
+                        <name>Pacific Herring Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Sardines</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Sardines Map">
+                        <name>Sardines Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Sardines Contours">
+                        <name>Sardines Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Smelt</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Smelt Map">
+                        <name>Smelt Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Smelt Contours">
+                        <name>Smelt Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Surf Perch</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Surf Perch Map">
+                        <name>Surf Perch Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Surf Perch Contours">
+                        <name>Surf Perch Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Urchin</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Urchin Map">
+                        <name>Urchin Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Urchin Contours">
+                        <name>Urchin Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Fort Bragg</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Urchin</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Urchin Map">
+                        <name>Urchin Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Urchin Contours">
+                        <name>Urchin Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Shelter Cove</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Trinidad</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Commercial Passenger Fishing Vessel</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Crescent City</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Eureka</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Fort Bragg</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Shelter Cove</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Trinidad</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Recreational Dive</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Crescent City</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Abalone</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Abalone Map">
+                        <name>Abalone Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Abalone Contours">
+                        <name>Abalone Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/abal_cc_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/rckf_cc_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Eureka</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Abalone</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Abalone Map">
+                        <name>Abalone Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Abalone Contours">
+                        <name>Abalone Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/abal_ek_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/rckf_ek_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Fort Bragg / Albion</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Abalone</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Abalone Map">
+                        <name>Abalone Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Abalone Contours">
+                        <name>Abalone Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/abal_fb_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/dcrab_fb_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/rckf_fb_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Shelter Cove</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Abalone</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Abalone Map">
+                        <name>Abalone Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Abalone Contours">
+                        <name>Abalone Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/abal_sc_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/rckf_sc_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Trinidad</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Abalone</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Abalone Map">
+                        <name>Abalone Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Abalone Contours">
+                        <name>Abalone Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/abal_td_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href>tiles/contour/div/rckf_td_kd_line/</href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Recreational Kayak</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Fort Bragg / Albion</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Trinidad</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Recreational Vessel</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Crescent City</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Eureka</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Fort Bragg / Albion</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Shelter Cove</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Trinidad</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>California Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="California Halibut Map">
+                        <name>California Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="California Halibut Contours">
+                        <name>California Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Dungeness Crab</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Dungeness Crab Map">
+                        <name>Dungeness Crab Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Dungeness Crab Contours">
+                        <name>Dungeness Crab Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Pacific Halibut</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Pacific Halibut Map">
+                        <name>Pacific Halibut Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Pacific Halibut Contours">
+                        <name>Pacific Halibut Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Rockfish (post RCA)</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Rockfish (post RCA) Map">
+                        <name>Rockfish (post RCA) Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Rockfish (post RCA) Contours">
+                        <name>Rockfish (post RCA) Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+                <Folder>
+                    <name>Salmon</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Salmon Map">
+                        <name>Salmon Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Salmon Contours">
+                        <name>Salmon Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Edible Seaweed (Commercial)</name>
+            <visibility>0</visibility>
+            <styleUrl>#portStyle</styleUrl>
+            <Folder>
+                <name>Crescent City</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>All Edible Seaweed Species</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Seaweed Map">
+                        <name>Seaweed Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Seaweed Contours">
+                        <name>Seaweed Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Elk</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>All Edible Seaweed Species</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Seaweed Map">
+                        <name>Seaweed Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Seaweed Contours">
+                        <name>Seaweed Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+            <Folder>
+                <name>Fort Bragg</name>
+                <visibility>0</visibility>
+                <styleUrl>#speciesStyle</styleUrl>
+                <Folder>
+                    <name>All Edible Seaweed Species</name>
+                    <visibility>0</visibility>
+                    <description></description>
+                    <NetworkLink id="Seaweed Map">
+                        <name>Seaweed Map</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                    <NetworkLink id="Seaweed Contours">
+                        <name>Seaweed Contours</name>
+                        <styleUrl>#dataStyle</styleUrl>
+                        <visibility>0</visibility>
+                        <Link>
+                            <href></href>
+                        </Link>
+                    </NetworkLink>
+                </Folder>
+            </Folder>
+        </Folder>
+    </Folder>
+</Document>
+</kml>
