@@ -3,7 +3,7 @@
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
   <ul class="object-tools"><li><a href="history/" class="historylink">History</a></li>
-  <li><a href='splitonfield/' class="viewsitelink">Split to Single Feature Shapefiles</a></li>
+  <li><a href='{% url admin:split_to_single_shapefiles object_id %}' class="viewsitelink">Split to Single Feature Shapefiles</a></li>
   {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">View on site</a></li>{% endif%}
   </ul>
 {% endif %}{% endif %}

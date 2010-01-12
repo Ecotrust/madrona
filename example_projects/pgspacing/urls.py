@@ -22,6 +22,6 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/intersection/multifeatureshapefile/(\d+)/splitonfield/$', split_to_single_shapefiles, name='split_to_single_shapefiles'),
+    #url(r'^admin/intersection/multifeatureshapefile/(\d+)/splitonfield/$', split_to_single_shapefiles, name='split_to_single_shapefiles'),
     (r'^admin/', include(admin.site.urls)),
 )

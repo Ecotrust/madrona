@@ -23,7 +23,7 @@ def split_to_single_shapefiles(request, mfshp_pk):
         return HttpResponseForbidden
     
     c = csrf(request)
-    c.update({'form': form, 'mfshp_pk_key': mfshp_pk})
+    c.update({'form': form, 'mfshp_pk_key': mfshp_pk}, current_app='intersection.admin')
     return render_to_response('split_to_single_feature_shapefiles.html', c)
 
 def test_drawing_intersect(request):

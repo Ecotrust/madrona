@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     
     (r'^mpas/', include('lingcod.mpa.urls')),
     (r'^arrays/', include('lingcod.array.urls')),
+    (r'^data_distributor/', include('lingcod.data_distributor.urls')),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

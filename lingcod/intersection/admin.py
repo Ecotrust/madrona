@@ -2,6 +2,7 @@ from django.contrib.gis import admin
 from lingcod.intersection.models import *
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.conf.urls.defaults import patterns, url
 
 def load_to_features(modeladmin, request, queryset):
     for shp in queryset:
@@ -81,6 +82,14 @@ class MultiFeatureShapefileAdmin(admin.ModelAdmin):
         ('Descriptive information', {'fields': ('description','metadata')}),
     ]
     inlines = [ShapefileFieldInline]
+    
+    def get_urls(self):
+        from lingcod.intersection.views import split_to_single_shapefiles as splitview
+        urls = super(MultiFeatureShapefileAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^splitonfield/(\d+)$', splitview, name='split_to_single_shapefiles')
+        )
+        return my_urls + urls
     
 admin.site.register(MultiFeatureShapefile, MultiFeatureShapefileAdmin)
 

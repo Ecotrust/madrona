@@ -8,6 +8,11 @@ class ShapefileInline(admin.TabularInline):
     #max_num = 2
     extra = 1
 
+class ShapefileFieldInline(admin.TabularInline):
+    model = ShapefileField
+#    sort = sort
+    extra = 0
+    
 class GeneralFileInline(admin.TabularInline):
     model = GeneralFile
     extra = 1
@@ -26,6 +31,7 @@ class ShapefileAdmin(admin.ModelAdmin):
     list_filter = ('data_layer','update_display_layer','update_analysis_layer')
     search_fields = ('comment', )
     ordering = ['-date_modified']
+    #inlines = [ShapefileFieldInline]
 admin.site.register(Shapefile, ShapefileAdmin)
 
 class GeneralFileAdmin(admin.ModelAdmin):

@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 INSTALLED_APPS = (
@@ -73,6 +74,10 @@ INSTALLED_APPS = (
     'lingcod.wave',
     'lingcod.kmlapp',
     'lingcod.rest',
+    'lingcod.intersection',
+    'lingcod.bioregions',
+    'lingcod.data_manager',
+    'lingcod.data_distributor',
 )
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'

@@ -1,8 +1,10 @@
 {% extends "admin/change_form.html" %}
 
 {% block content %}
-
-	<form action='/admin/intersection/multifeatureshapefile/{{mfshp_pk_key}}/splitonfield/' method='POST'>
+	{% comment %}
+		<form action='/admin/intersection/multifeatureshapefile/{{mfshp_pk_key}}/splitonfield/' method='POST'>
+	{% endcomment %}
+	<form action='{% url admin:split_to_single_shapefiles mfshp_pk_key %}' method='POST'>
 		{{ form.as_p }}
 		<input type='submit' value='Submit' />
 	</form>

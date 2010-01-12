@@ -176,7 +176,7 @@ class Shapefile(models.Model):
 #        super(Shapefile, self).save(*args, **kwargs)
         
     def unzip_to_temp(self):
-        # unzip to a temp directory and return the path to the .shp file
+        '''unzip to a temp directory and return the path to the .shp file'''
         valid, error = validate_zipped_shp(self.shapefile.path)
         if not valid:
             raise Exception(error)
@@ -216,6 +216,38 @@ class Shapefile(models.Model):
             distinct_values_count = dict.fromkeys(field).keys().__len__()
             result[fname] = distinct_values_count
         return result
+    
+    def load_geometry_to_model(self, feature_model, verbose=False):
+        shpfile = self.unzip_to_temp()
+        file_name = os.path.basename(shpfile)
+        feature_name = self.name
+        ds = DataSource(shpfile)
+        #Data source objects can have different layers of geospatial features; however, 
+        #shapefiles are only allowed to have one layer
+        lyr = ds[0] 
+
+        for feat in lyr:
+            if feat.geom.__class__.__name__.startswith('Multi'):
+                if verbose:
+                    print '(',
+                for f in feat.geom: #get the individual geometries
+                    fm = feature_model()
+                    fm.geometry=f.geos
+                    if not fm.geometry.valid:
+                        fm.geometry = clean_geometry(fm.geometry)
+                    fm.save()
+                    if verbose:
+                        print '-',
+                if verbose:
+                    print ')',
+            else:
+                fm = feature_model()
+                fm.geometry=f.geos
+                if not fm.geometry.valid:
+                    fm.geometry = clean_geometry(fm.geometry)
+                fm.save()
+                if verbose:
+                    print '.',
         
 class MultiFeatureShapefile(Shapefile):
     # These shape files may contain geometries that we want to turn into multiple intersection features.
@@ -347,41 +379,7 @@ class SingleFeatureShapefile(Shapefile):
     
     def __unicode__(self):
         return self.name
-    
-    def load_geometry_to_model(self, feature_model, verbose=False):
-        shpfile = self.unzip_to_temp()
-        file_name = os.path.basename(shpfile)
-        feature_name = self.name
-        ds = DataSource(shpfile)
-        #Data source objects can have different layers of geospatial features; however, 
-        #shapefiles are only allowed to have one layer
-        lyr = ds[0] 
         
-        for feat in lyr:
-            if feat.geom.__class__.__name__.startswith('Multi'):
-                if verbose:
-                    print '(',
-                for f in feat.geom: #get the individual geometries
-                    fm = feature_model()
-                    fm.geometry=f.geos
-                    if not fm.geometry.valid:
-                        fm.geometry = clean_geometry(fm.geometry)
-                    fm.save()
-                    if verbose:
-                        print '-',
-                if verbose:
-                    print ')',
-            else:
-                fm = feature_model()
-                fm.geometry=f.geos
-                if not fm.geometry.valid:
-                    fm.geometry = clean_geometry(fm.geometry)
-                fm.save()
-                if verbose:
-                    print '.',
-        
-        
-    
     def load_to_features(self, verbose=False):
         ## This method loads individual features (with polygon, linestring, or point geometry) into
         # the appropriate model and loads relevant data 
@@ -795,8 +793,16 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                 geom_set = int_feature.geometries_set.filter(geometry__intersects=geom)
                 for g in geom_set:
                     intersect_geom = geom.intersection(g.geometry)
-                    geom_area = geom.area
-                    f_gc.append(intersect_geom)
+                    #geom_area = geom.area
+                    try:
+                        f_gc.append(intersect_geom)
+                    except:
+                        # if this fails, it's probably because the intersection returned a multigeometry
+                        # so we'll assume that's what happened and stick all the geometries in there.
+                        # This is a bit weird because we might be putting in a line with our polys or vice versa
+                        # but it shouldn't really matter when we measure the length or area.
+                        for wtf in intersect_geom:
+                            f_gc.append(wtf)
             else:
                 geom_set = int_feature.geometries_set.filter(geometry__within=geom)
                 for p in geom_set:

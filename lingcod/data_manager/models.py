@@ -3,6 +3,7 @@ from django.contrib.gis.gdal import *
 from django.contrib.gis import geos
 from django.contrib.gis.measure import *
 from django.template.defaultfilters import slugify
+from django.conf import settings
 from osgeo import ogr
 #from django.contrib.gis.utils import LayerMapping
 import os
@@ -23,10 +24,10 @@ def zip_check(ext, zip_file):
     return True
     
 def validate_zipped_shp(file_path):
-    # Just check to see if it's a valid zip and that it has the four necessary parts.
-    # We're not checking to make sure it can be read as a shapefile  probably should somewhere.
-    # We should also probably verify that the projection is what we expect.
-    # I got a lot of this code from Dane Sprinmeyer's django-shapes app
+    """Just check to see if it's a valid zip and that it has the four necessary parts.
+    We're not checking to make sure it can be read as a shapefile  probably should somewhere.
+    We should also probably verify that the projection is what we expect.
+    I got a lot of this code from Dane Sprinmeyer's django-shapes app"""
     if not zipfile.is_zipfile(file_path):
         return False, 'That file is not a valid Zip Archive'
     else:
@@ -43,7 +44,7 @@ def validate_zipped_shp(file_path):
         return True, None
 
 def largest_poly_from_multi(geom):
-    # takes a polygon or a multipolygon and returns only the largest polygon
+    ''' takes a polygon or a multipolygon and returns only the largest polygon '''
     if geom.num_geom > 1:
         geom_area = 0.0
         for g in geom: # find the largest polygon in the multi polygon and use that
@@ -100,6 +101,11 @@ class DataLayer(models.Model):
     
     def __unicode__(self):
         return self.name
+        
+    @property
+    def latest_shapefile(self):
+        """return the most recently modified shapefile."""
+        return self.shapefile_set.latest('date_modified')
     
 class GeneralFile(models.Model):
     name = models.CharField(max_length=255)
@@ -132,7 +138,7 @@ class Shapefile(models.Model):
             trunc_com += '...'
         self.truncated_comment = trunc_com
         # make the file name what we want it to be before saving.
-        self.shapefile.name = self.new_filename()
+        self.shapefile = self.new_filename_and_path()
         super(Shapefile, self).save()
         self.link_field_names()
         self.load_field_info()
@@ -145,19 +151,34 @@ class Shapefile(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.data_layer.name, self.shapefile.name)
     
-    def new_filename(self):
+    def new_filename_and_path(self):
         import time
         from django.template.defaultfilters import slugify
+        time_str = time.strftime('%y%m%d', time.localtime() )
+        old_path = self.shapefile.path
+        
         dir = os.path.dirname(self.shapefile.name)
-        newbasename = '%s_%s.zip' % (slugify(self.data_layer.name), time.strftime('%y%m%d', time.localtime() ))
-        newname = os.path.join(dir, newbasename)
-        #self.shapefile.name = newname
-        return newname
+        newbasename = '%s_%s.zip' % (slugify(self.data_layer.name), time_str)
+        self.shapefile.name = os.path.join(dir, newbasename)
+        
+        #dir = os.path.dirname(self.shapefile.path)
+        #self.shapefile.path = os.path.join(dir, newbasename)
+        # turns out that you can't do that but magically, you don't need to.  the magical
+        # ponies inside django do it for you!
+        
+        if os.path.exists(old_path):
+            from django.core.files.move import file_move_safe
+            file_move_safe(old_path,self.shapefile.path)
+        
+        return self.shapefile
     
     def unzip_to_temp(self):
         # unzip to a temp directory and return the path to the .shp file
         valid, error = validate_zipped_shp(self.shapefile.path)
         if not valid:
+            is_it_there = os.path.exists(self.shapefile.path)
+            name = self.shapefile.name
+            path = self.shapefile.path
             raise Exception(error)
         
         tmpdir = tempfile.gettempdir()
@@ -211,6 +232,55 @@ class Shapefile(models.Model):
     
     def load_field_info(self):
         self.field_description = self.field_info_str()
+        
+    def load_to_model(self, feature_model, geometry_only=True, origin_field_name=None, target_field_name=None, verbose=False):
+        shpfile = self.unzip_to_temp()
+        file_name = os.path.basename(shpfile)
+        # feature_name = self.name
+        ds = DataSource(shpfile)
+        #Data source objects can have different layers of geospatial features; however, 
+        #shapefiles are only allowed to have one layer
+        lyr = ds[0] 
+
+        for feat in lyr:
+            if feat.geom.__class__.__name__.startswith('Multi'):
+                if verbose:
+                    print '(',
+                for f in feat.geom: #get the individual geometries
+                    fm = feature_model()
+                    load_single_record(f, fm, geometry_only, feat, origin_field_name, target_field_name)
+                    fm.save()
+                    if verbose:
+                        print '-',
+                if verbose:
+                    print ')',
+            else:
+                fm = feature_model()
+                load_single_record(feat.geom, fm, geometry_only, feat, origin_field_name, target_field_name)
+                fm.save()
+                if verbose:
+                    print '.',
+
+def load_single_record(geom,target_model_instance,geometry_only=True,origin_feature=None,origin_field_name=None,target_field_name=None):
+    """docstring for load_single_record"""
+    if not geometry_only:
+        if not origin_field_name or not target_field_name:
+            raise Exception('If you want to import attribute values, you must specify an Origin Field and a Target Field in the Load Setup.  Otherwise make sure the Geometry Only option is checked.')
+        target_model_instance.__setattr__(target_field_name,origin_feature.__getitem__(origin_field_name).value)
+    target_model_instance = load_single_geometry(geom,target_model_instance)
+    return target_model_instance    
+                    
+def load_single_geometry(geom, target_model_instance):
+    """Take a geometry and a model_instance.  Check the projections.  If different from the srid defined in settings, transform the geom to match.
+    Check the validity of the geometry.  Clean if neccessary.  Return the model_instance with the geometry loaded.  For now, I'm assuming
+    that the geometry field is named geometry.  Down the road we may want to generalize by detecting the name of the geometry field."""
+    tmi = target_model_instance
+    if not geom.srid == settings.GEOMETRY_DB_SRID:
+        geom.transform(settings.GEOMETRY_DB_SRID)
+    tmi.geometry = geom.geos
+    if not tmi.geometry.valid:
+        tmi.geometry = clean_geometry(tmi.geometry)
+    return tmi
     
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
