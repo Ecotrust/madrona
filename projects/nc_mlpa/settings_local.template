@@ -29,8 +29,8 @@
 #TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
 # ID of Wave to be used in demo of the conversation tab
-WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
+# WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
 
 # Location where Ecotrust Fishing Data layers can be found
 # This path is used by lingcod.layers.views to handle requests initiated via EcotrustDataLayers.kml
-GIS_DATA_ROOT = 'U:/dev/ecotrust_data_layers/SocioEconomicFishingNC/display/'
+# GIS_DATA_ROOT = 'U:/dev/ecotrust_data_layers/SocioEconomicFishingNC/display/'
