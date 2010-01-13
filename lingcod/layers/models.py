@@ -87,3 +87,8 @@ class EcotrustLayerList(models.Model):
             # Ensure that any previously active layer is deactivated
             # There can be only one!
             EcotrustLayerList.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
+            
+    class Meta:
+        permissions = (
+            ("view_ecotrustlayerlist", "Can view ecotrust data layer list"),
+        )

@@ -62,7 +62,6 @@ var lingcod = (function(){
         $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
             .kmlForest('add', window.studyregion, {cachebust: true, 
                 callback: studyRegionLoaded})
-            .kmlForest('add', window.ecotrust_data_layers, {cachebust: true})
             .kmlForest('add', window.public_data_layers, {cachebust: true});
         
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
@@ -70,6 +69,10 @@ var lingcod = (function(){
         that.client = lingcod.rest.client(gex, panel);
         if(typeof options.form_shown === 'function'){
             $(that.client).bind('form_shown', options.form_shown);
+        }
+        if(options.ecotrust){
+            $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
+                .kmlForest('add', options.ecotrust, {cachebust: true});
         }
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){

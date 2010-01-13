@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from models import *
+from lingcod.common.utils import load_session
 from lingcod.common import mimetypes
 from django.conf import settings
 import os
@@ -12,13 +13,27 @@ def get_public_layers(request):
     layer = get_object_or_404(PublicLayerList, active=True)
     return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
     
-def get_ecotrust_layers(request):
+def get_ecotrust_layers(request, session_key='0', input_username=None):
     """Returns uploaded kml from the :class:`EcotrustLayerList <lingcod.layers.models.EcotrustLayerList>` object marked ``active``.
     """
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+        
     layer = get_object_or_404(EcotrustLayerList, active=True)
     return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
     
-def get_map(request, group_name, layer_name, z=None, x=None, y=None, ext=None, root=settings.GIS_DATA_ROOT):
+def get_map(request, session_key, input_username, group_name, layer_name, z=None, x=None, y=None, ext=None, root=settings.GIS_DATA_ROOT):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+        
     #old root was 'U:/dev/ecotrust_data_layers/maps/'
     root_path = os.path.join(root, 'pvg', group_name, layer_name)
     if z is None:
@@ -34,7 +49,14 @@ def get_map(request, group_name, layer_name, z=None, x=None, y=None, ext=None, r
         tile_png = open(png_file, "rb").read()
         return HttpResponse(tile_png, mimetype='image/png')
    
-def get_contour(request, group_name, layer_name, z=None, x=None, y=None, ext=None, root=settings.GIS_DATA_ROOT):
+def get_contour(request, session_key, input_username, group_name, layer_name, z=None, x=None, y=None, ext=None, root=settings.GIS_DATA_ROOT):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+        
     root_path = os.path.join(root, 'pvc', group_name, layer_name)
     if z is None:
         doc_file = os.path.join(root_path, 'doc.kml')

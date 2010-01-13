@@ -4,7 +4,6 @@
     <script src="http://wave-api.appspot.com/public/embed.js" type="text/javascript"></script>
     <script type="text/javascript">
         window.public_data_layers = '{% url public-data-layers %}';
-        window.ecotrust_data_layers = '{% url ecotrust-data-layers %}';
         window.studyregion = '{% url studyregion-kml %}';
         google.load("earth", "1");
         google.load('maps', '3', {"other_params":"sensor=false"});
@@ -15,7 +14,10 @@
         var options = {};
         {% block myshapes %}
         {% if user.is_authenticated %}
-        options.myshapes = ["{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"];
+            options.myshapes = ["{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"];
+            {% if perms.layers.view_ecotrustlayerlist %}
+                options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
+            {% endif %}
         {% endif %}
         options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         {% endblock myshapes %}
