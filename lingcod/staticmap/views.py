@@ -65,14 +65,29 @@ def show(request, map_name='default'):
     mpa_class = utils.get_mpa_class()
     xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
+    # Deal with deprecated connection settings 
+    # (http://docs.djangoproject.com/en/dev/ref/settings/#deprecated-settings)
+    # Maintain compatibility with django pre-1.2
     conn = connection.settings_dict
+    try:
+        DB_NAME = conn['NAME']
+        DB_USER = conn['USER']
+        DB_PASSWORD = conn['PASSWORD']
+        DB_HOST = conn['HOST']
+    except:
+        DB_NAME = conn['DATABASE_NAME']
+        DB_USER = conn['DATABASE_USER']
+        DB_PASSWORD = conn['DATABASE_PASSWORD']
+        DB_HOST = conn['DATABASE_HOST']
+
     connection_string = ""
-    connection_string += "<Parameter name='dbname'>%s</Parameter>" % conn['DATABASE_NAME']
-    connection_string += "<Parameter name='user'>%s</Parameter>" % conn['DATABASE_USER']
-    connection_string += "<Parameter name='password'>%s</Parameter>" % conn['DATABASE_PASSWORD']
-    connection_string += "<Parameter name='host'>%s</Parameter>" % conn['DATABASE_HOST']
+    connection_string += "<Parameter name='dbname'>%s</Parameter>" % DB_NAME
+    connection_string += "<Parameter name='user'>%s</Parameter>" % DB_USER
+    connection_string += "<Parameter name='password'>%s</Parameter>" % DB_PASSWORD
+    connection_string += "<Parameter name='host'>%s</Parameter>" % DB_HOST
+
     # if testing via django unit tests, close out the connection
-    if conn['DATABASE_NAME'] != settings.DATABASE_NAME:
+    if DB_NAME != settings.DATABASE_NAME:
         connection_string += "<Parameter name='persist_connection'>false</Parameter>"
 
     xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
@@ -110,7 +125,7 @@ def show(request, map_name='default'):
     response.write(img)
 
     # if testing via django unit tests, close out the connection
-    if conn['DATABASE_NAME'] != settings.DATABASE_NAME:
+    if DB_NAME != settings.DATABASE_NAME:
         del m
 
     return response
