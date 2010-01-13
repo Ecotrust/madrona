@@ -1,17 +1,3 @@
-// goog.require('goog.events');
-// goog.require('goog.ui.Button');
-// goog.require('goog.ui.Menu');
-// goog.require('goog.ui.MenuItem');
-// goog.require('goog.ui.MenuSeparator');
-// goog.require('goog.ui.Option');
-// goog.require('goog.ui.Separator');
-// goog.require('goog.ui.Toolbar');
-// goog.require('goog.ui.ToolbarButton');
-// goog.require('goog.ui.ToolbarMenuButton');
-// goog.require('goog.ui.ToolbarSelect');
-// goog.require('goog.ui.ToolbarSeparator');
-// goog.require('goog.ui.ToolbarToggleButton');
-
 lingcod.rest.kmlEditor = function(options){
     
     if(!options || !options.url || !options.appendTo || !options.gex || !options.ge || !options.div || !options.client){
@@ -50,8 +36,10 @@ lingcod.rest.kmlEditor = function(options){
         options.client.create(e.target.mm_data, {
             success: function(location){
                 // possible memory leak!!!!!!!
-                that.kmlEl.kmlForest('refresh', options.url, {
-                    cachebust: true, callback: kmlLoaded});
+                forest.refresh(options.url, {
+                    cachebust: true, 
+                    callback: kmlLoaded                    
+                });
             }
         });
     });
@@ -84,8 +72,22 @@ lingcod.rest.kmlEditor = function(options){
     tbar.render(that.el.find('.toolbar')[0]);
 
     $(options.appendTo).append(that.el);
-
-    that.kmlEl.kmlForest({ge: options.ge, gex: options.gex, div: options.div})
-        .kmlForest('add', options.url, {cachebust: true, 
-            callback: kmlLoaded});
+    
+    var forest = lingcod.kmlForest({
+        ge: options.ge, 
+        gex: options.gex, 
+        div: options.div,
+        element: that.kmlEl
+    });
+    
+    // $(forest.tree).bind('itemClick', function(){
+    //     console.log('itemClick hayooo!', this);
+    // });
+    
+    forest.add(options.url, {
+        cachebust: true, 
+        callback: kmlLoaded
+    });
+    
+    return that;
 }

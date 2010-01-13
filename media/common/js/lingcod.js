@@ -59,21 +59,40 @@ var lingcod = (function(){
         $('#measure_units').change(function(){
             that.measureTool.setUnits($(this).val());
         });
-        $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-            .kmlForest('add', window.studyregion, {cachebust: true, 
-                callback: studyRegionLoaded})
-            .kmlForest('add', window.public_data_layers, {cachebust: true});
+        
+        var forest = lingcod.kmlForest({
+            element: $('#datalayerstree'),
+            ge: ge,
+            gex: gex,
+            div: $('#map')
+        });
+        
+        forest.add(window.studyregion, {
+            cachebust: true,
+            callback: function(kmlObject, topNode){
+                topNode.find('> ul > li > a').trigger('dblclick');            
+            }
+        });
+        
+        forest.add(window.public_data_layers, {
+            cachebust: true
+        });
         
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
+            
         that.client = lingcod.rest.client(gex, panel);
+        
         if(typeof options.form_shown === 'function'){
             $(that.client).bind('form_shown', options.form_shown);
         }
+        
         if(options.ecotrust){
-            $('#datalayerstree').kmlForest({ge: ge, gex: gex, div: $('#map')})
-                .kmlForest('add', options.ecotrust, {cachebust: true});
+            forest.add(options.ecotrust, {
+                cachebust: true
+            });
         }
+        
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
                 lingcod.rest.kmlEditor({
@@ -86,6 +105,7 @@ var lingcod = (function(){
                 });
             }            
         }
+        
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);

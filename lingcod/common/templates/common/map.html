@@ -79,7 +79,7 @@
             {% endif %}
             <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
         </ul>
-        {% if user %}
+        {% if user.is_authenticated %}
         <div id="MyShapes">
             <div style="font-size:1em;" id="myshapestree"></div>
         </div>            
