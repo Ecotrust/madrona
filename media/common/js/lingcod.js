@@ -88,9 +88,9 @@ var lingcod = (function(){
         }
         
         if(options.ecotrust){
-            // forest.add(options.ecotrust, {
-            //     cachebust: true
-            // });
+            forest.add(options.ecotrust, {
+                cachebust: true
+            });
         }
         
         if(options.myshapes){
