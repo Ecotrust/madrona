@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from lingcod.intersection.models import *
 from lingcod.intersection.forms import *
-from cjson import encode as json_encode
+from django.utils.simplejson import dumps as json_encode
 import csv
 
 def split_to_single_shapefiles(request, mfshp_pk):
@@ -118,11 +118,20 @@ def organized_intersection(request, org_scheme, format, geom_wkt):
         return build_csv_response(result, str(hash(geom)) )
     elif format=='json':
         return HttpResponse(json_encode(result), mimetype='text/json')
+        
+def organized_intersection_by_name(request, org_scheme_name, format, geom_wkt):
+    org_scheme_pk = OrganizationScheme.objects.get(name=org_scheme_name).pk
+    return organized_intersection(request, org_scheme_pk, format, geom_wkt)
 
 def org_scheme_info(request, org_id):
     osc = OrganizationScheme.objects.get(pk=org_id)
     subdict = osc.info
     return HttpResponse(json_encode(subdict), mimetype='text/json')
+    
+def org_scheme_pk_from_name(request, name):
+    osc_pk = OrganizationScheme.objects.get(name=name).pk
+    result = {'pk': osc_pk}
+    return HttpResponse(json_encode(result), mimetype='text/json')
 
 def all_org_scheme_info(request):
     oscs = OrganizationScheme.objects.all()

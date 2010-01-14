@@ -381,9 +381,10 @@ class SingleFeatureShapefile(Shapefile):
         return self.name
         
     def load_to_features(self, verbose=False):
-        ## This method loads individual features (with polygon, linestring, or point geometry) into
-        # the appropriate model and loads relevant data 
-        
+        """
+        This method loads individual features (with polygon, linestring, or point geometry) into
+        the appropriate model and loads relevant data 
+        """
         shpfile = self.unzip_to_temp()
         file_name = os.path.basename(shpfile)
         feature_name = self.name

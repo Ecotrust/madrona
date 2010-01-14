@@ -70,8 +70,13 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS += (
     'lingcod.screencasts',
-    'mlpa', 
+    'mlpa',
+    'report',
 )
+
+# lingcod.intersection configuration
+SAT_OPEN_COAST = 'satopencoast'
+SAT_ESTURINE = 'satestuarine'
 
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'mlpa.models.MlpaMpa'

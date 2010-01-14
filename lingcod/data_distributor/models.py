@@ -3,52 +3,72 @@ from django.conf import settings
 from lingcod.data_manager.models import DataLayer
 import sys
 
-def apps_in_module(module='lingcod'):
-    """This will return a list of modules found in a given module"""
+def modules_in_module(module='lingcod',exclude_list=['views']):
+    """This will return a list of modules found in a given module while excluding
+    modules whos name is in the exclude_list."""
     result = []
-    mod = __import__(module)
+    mod = sys.modules[module]
     for key in dir(mod):
-        if mod.__dict__[key].__class__.__name__ == 'module':
-            result.append(key)
-    return result
-
-def models_in_app(app_models):
-    """Returns a list of models for a given app.models module"""
-    result = []
-    for key in dir(app_models):
-        if app_models.__dict__[key].__class__.__name__ == 'ModelBase':
-            result.append(key)
-    return result
-
-def models_in_module(module='lingcod'):
-    """Returns a list of dicts with model names as keys and the module where they live as values for a given module"""
-    result = {}
-    for app_str in apps_in_module(module):
-        app_str = module + '.' + app_str
-        app = sys.modules[app_str]
         try:
-            app.models
+            if mod.__dict__[key].__class__.__name__ == 'module' and key not in exclude_list:
+                key = '.'.join([module,key])
+                try:
+                    sys.modules[key]
+                except KeyError:
+                    pass
+                else:
+                    result.append(key)
+                    
+        except AttributeError:
+            pass
+    return result
+
+def models_in_module(module):
+    """Returns a list of models for a given module"""
+    result = []
+    mod = sys.modules[module]
+    for key in dir(mod):
+        try:
+            if mod.__dict__[key].__class__.__name__ == 'ModelBase':
+                result.append(key)
         except AttributeError:
             continue
-        else:
-            for model in models_in_app(app.models):
-                module_str = '%s.models' % (app.__name__)
-                model_str = model
-                result[model_str] = module_str
+            
+    return result
+
+def models_in_module_recursive(modules=settings.INSTALLED_APPS,exclude_django=True):
+    """Returns a list of dicts with model names as keys and the module where they live as values for a given module"""
+    # I'm going to re-write this so it's flexible.  I'm going to look for models recursively until I find them.
+    result = {}
+    new_modules = modules
+    while new_modules:
+        for module in modules:
+            new_modules = modules_in_module(module)
+            for new in new_modules:
+                #new = '.'.join([module,new])
+                if new not in modules:
+                    modules.append(new)
+    for module in modules:
+        the_models = models_in_module(module)
+        if the_models:
+            for the_model in the_models:
+                if not exclude_django or not module.startswith('django.'):
+                    result[the_model] = module
+        
     return result
 
 def fields_in_model(the_model):
     result = [ f.name for f in the_model._meta.fields ]
     return result
 
-def load_potential_targets(module='lingcod',keep_previous=False,geometry_models_only=True):
+def load_potential_targets(modules=settings.INSTALLED_APPS,keep_previous=False,geometry_models_only=True):
     """Find all the models in all the apps within the module (lingcod)
     and load their info into the PotentialTarget model and the 
     PotentialTargetField model.  If geometry_models_only is True,
     delete records where there is no potential target field named geometry."""
     if not keep_previous:
         PotentialTarget.objects.all().delete()
-    result = models_in_module(module=module)
+    result = models_in_module_recursive(modules)
     for k,v in result.items():
         pt = PotentialTarget(name=k,module_text=v)
         pt.save()

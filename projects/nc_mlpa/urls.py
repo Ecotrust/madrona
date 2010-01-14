@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     (r'^mlpa/', include('mlpa.urls')),
+    (r'^intersection/', include('lingcod.intersection.urls')),
+    (r'^report/', include('report.urls')),
     (r'^screencasts/', include('lingcod.screencasts.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
@@ -30,6 +32,7 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
+    (r'^admin/data_distributor', include('lingcod.data_distributor.admin_urls')),
     (r'^admin/', include(admin.site.urls)),
 )
 

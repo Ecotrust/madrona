@@ -24,12 +24,9 @@ class Estuaries(models.Model):
     """   
     name = models.TextField(verbose_name="Estuary Name")
     
-    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Estuary boundary")
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Estuary boundary")
        
     objects = EstuariesManager()
-    
-    class Meta:
-        db_table = u'mm_estuaries' 
 
 class MpaArray(BaseArray):
     description = models.TextField(blank=True)

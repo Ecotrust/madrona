@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     (r'^intersect/testpolygon/$', test_poly_intersect),    
     (r'^info/organization_scheme/(\d+)$', org_scheme_info ),
     (r'^info/organization_schemes/$', all_org_scheme_info ),
-    (r'(\d+)/(\w+)/(.*)$', organized_intersection ),
+    (r'^(\w+)/(\w+)/(.*)$', organized_intersection_by_name ),
     (r'(\w+)/(.*)$', default_intersection ),
 #    (r'^intersect/testpolygon/csv$', test_poly_intersect_csv),
 )

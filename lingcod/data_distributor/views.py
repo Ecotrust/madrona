@@ -3,9 +3,9 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
 
-def load_potential_targets_view(request, module='lingcod'):
+def load_potential_targets_view(request):
     if request.user.is_staff:
-        load_potential_targets(module=module)
+        load_potential_targets(modules=settings.INSTALLED_APPS)
         return HttpResponseRedirect('/admin/data_distributor/potentialtarget/')
     else:
         return HttpResponseForbidden
