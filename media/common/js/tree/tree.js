@@ -50,14 +50,14 @@ lingcod.Tree = function(options){
         return false;
     });
     
-    el.find('li a').live('contextmenu', function(event){
-        var item = $(event.target).parent();
-        if(item.hasClass('context')){
-            $(self).trigger('itemContext', [event, item]);
-        }
-        event.preventDefault();
-        return false;
-    });
+    // el.find('li a').live('contextmenu', function(event){
+    //     var item = $(event.target).parent();
+    //     if(item.hasClass('context')){
+    //         $(self).trigger('itemContext', [event, item]);
+    //     }
+    //     event.preventDefault();
+    //     return false;
+    // });
     
     el.find('li.marinemap-tree-item a').live('click', function(event){
         if(event.button == 2){

@@ -4,7 +4,8 @@ lingcod.kmlForest = function(opts){
     var defaults = {
         animate: false,
          //matches google earth desktop behavior if set to false
-        selectToggles: false
+        selectToggles: false,
+        contextMenu: false
     }
     
     var opts = $.extend({}, defaults, opts);
@@ -124,9 +125,12 @@ lingcod.kmlForest = function(opts){
     
     var buildTreeUI = function(kmlObject, callback){
         var topNode;
+        var component_options = options;
         opts.gex.dom.walk({
             visitCallback: function(context){
                 var type = this.getType();
+                var kml = this.getKml();
+                var select = $(kml).find('atom\\:link[rel=self]').length === 1;
                 var child = that.tree.add({
                     name: this.getName() || "No name specified in kml",
                     parent: context.current,
@@ -136,14 +140,20 @@ lingcod.kmlForest = function(opts){
                     toggle: !(this == kmlObject),
                     classname: (this == kmlObject) ? 'marinemap-tree-category' : this.getType(),
                     checked: this.getVisibility(),
-                    select: false,
+                    select: select,
                     snippet: this.getSnippet(),
                     doubleclick: true,
-                    description: this.getDescription()
+                    description: this.getDescription(),
+                    context: false
                 });
                 if(this == kmlObject){
                     topNode = child;
                 }
+                // if(that.options.contextMenu && select){
+                //     console.log('attaching');
+                //     console.log(child.find('>a'));
+                //     that.options.contextMenu.attach(child.find('>a')[0], goog.positioning.Corner.BOTTOM_RIGHT, goog.positioning.Corner.TOP_LEFT, true);
+                // }
                 child.data('kml', this);
                 context.child = child;
             },

@@ -88,9 +88,9 @@ var lingcod = (function(){
         }
         
         if(options.ecotrust){
-            forest.add(options.ecotrust, {
-                cachebust: true
-            });
+            // forest.add(options.ecotrust, {
+            //     cachebust: true
+            // });
         }
         
         if(options.myshapes){
@@ -163,21 +163,17 @@ var lingcod = (function(){
     var panels = [];
     
     that.addPanel = function(panel){
-        // console.log('adding panel', panel);
         panels.push(panel);
         $(panel).bind('panelshow', onPanelShown);
         $(panel).bind('panelhide', onPanelHide);
         $(panel).bind('panelclose', onPanelHide);
-        // console.log(this.panels);
     },
     
     that.removePanel = function(panel){
-        // console.log('removing panel', panel)
         panels.remove(panel);
         $(panel).unbind('panelshow', onPanelShown);
         $(panel).unbind('panelhide', onPanelHide);
         $(panel).unbind('panelclose', onPanelHide);
-        // console.log(this.panels);
     };
     
     var onPanelShown = function(e, panel){

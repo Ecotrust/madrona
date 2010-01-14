@@ -167,7 +167,7 @@ lingcod.rest.client = function(gex, panel){
     that.create = create;
     
     var getConfig = function(configOrFeature){
-        if(typeof configOrFeature === 'object' && configOrFeature.getType){
+        if((typeof configOrFeature === 'object' || typeof configOrFeature === 'function') && configOrFeature.getType){
             return parseResource(configOrFeature);
         }else{
             return configOrFeature;
@@ -265,6 +265,7 @@ lingcod.rest.client = function(gex, panel){
         options = options || {};
         var config = getConfig(configOrFeature);
         options['load_msg'] = 'Loading '+config['title'];
+        options['showClose'] = true;
         panel.showUrl(config['location'], options);
     };
     

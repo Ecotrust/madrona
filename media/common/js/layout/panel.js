@@ -19,20 +19,21 @@ lingcod.panel = function(options){
         lingcod.addPanel(that);
     }
     
-    var close = '';
-    if(that.options.showCloseButton){
-        close = '<a class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
+    var s = '';
+    if(!that.options.showCloseButton){
+        s = 'display:none';
     }
+    
+    close = '<a style="'+s+'" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
+    
     var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
     var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'">'+close+'<div class="content container_12"></div></div>');
     
     var anotherel = el;
-    
-    if(that.options.showCloseButton){
-        el.find('a.close').click(function(){
-            that.close();
-        });
-    }
+        
+    el.find('a.close').click(function(){
+        that.close();
+    });
     
     var content = el.find('.content');
     
@@ -44,9 +45,12 @@ lingcod.panel = function(options){
         content.append(c);
     }
 
-    that.showContent = function(elements){
+    that.showContent = function(elements, opts){
         that.addContent(elements);
-        that.show();        
+        if(opts && opts.showClose){
+            el.find('a.close').show();
+        }
+        that.show();
     }
     
     that.addContent = function(elements){
@@ -63,6 +67,9 @@ lingcod.panel = function(options){
     }
     
     that.close = function(){
+        if(options.showCloseButton === false){
+            el.find('a.close').hide();
+        }
         if(!that.options.hideOnly){
             el.hide();
             that.shown = false;
@@ -89,7 +96,7 @@ lingcod.panel = function(options){
             complete: function(response, status){
                 switch(response.status){
                     case 200:
-                        that.showContent(response.responseText)
+                        that.showContent(response.responseText, {showClose: options.showClose});
                         if(options && options.success){
                             options.success(response, status);
                         }
@@ -129,6 +136,9 @@ lingcod.panel = function(options){
         el.hide();
         that.shown = false;
         $(that).trigger('panelhide', that);
+        if(options.showCloseButton === false){
+            el.find('a.close').hide();
+        }
     }
                 
     return that;

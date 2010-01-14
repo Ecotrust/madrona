@@ -28,6 +28,26 @@ lingcod.rest.kmlEditor = function(options){
     
     that.kmlEl = that.el.find('.kmllist');
     
+    // var create_menu_children = function(){
+    //     var children = [];
+    //     var attr = new goog.ui.MenuItem('View Attributes');
+    //     children.push(attr);
+    //     var edit = new goog.ui.MenuItem('Edit');
+    //     children.push(edit);
+    //     var copy = new goog.ui.MenuItem('Copy');
+    //     children.push(copy);
+    //     var share = new goog.ui.MenuItem('Share');
+    //     children.push(share);
+    //     children.push(new goog.ui.MenuSeparator());
+    //     return children;
+    // }
+    
+    var setSelectionMenuItemEnabled = function(enabled){
+        for(var i=0;i<enableWhenSelected.length;i++){
+            enableWhenSelected[i].setEnabled(enabled);
+        }
+    }
+    
     var tbar = new goog.ui.Toolbar();
     var create_menu = new goog.ui.Menu();
     var create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
@@ -40,6 +60,7 @@ lingcod.rest.kmlEditor = function(options){
                     cachebust: true, 
                     callback: kmlLoaded                    
                 });
+                setSelectionMenuItemEnabled(false);
             }
         });
     });
@@ -47,15 +68,30 @@ lingcod.rest.kmlEditor = function(options){
     
     var attr = new goog.ui.ToolbarButton('Attributes');
     attr.setEnabled(false);
+    attr.setTooltip("Show the selected feature's attributes");
+    goog.events.listen(attr, 'action', function(e) {
+        options.client.show(that.selected.data('kml'));
+    });
     tbar.addChild(attr, true);
     
     var edit = new goog.ui.ToolbarButton('Edit');
     edit.setEnabled(false);
+    goog.events.listen(edit, 'action', function(e) {
+        options.client.update(that.selected.data('kml'), {
+            success: function(location){
+                forest.refresh(options.url, {
+                    cachebust: true, 
+                    callback: kmlLoaded                    
+                });
+                setSelectionMenuItemEnabled(false);                
+            }
+        });
+    });
     tbar.addChild(edit, true);
         
     var export_menu = new goog.ui.Menu();
-    export_menu.addItem(new goog.ui.MenuItem('to kml (Google Earth)'));
-    export_menu.addItem(new goog.ui.MenuItem('to shapefile'));
+    // export_menu.addItem(new goog.ui.MenuItem('to kml (Google Earth)'));
+    // export_menu.addItem(new goog.ui.MenuItem('to shapefile'));
     var export_button = new goog.ui.ToolbarMenuButton('Export', export_menu);
     export_button.setEnabled(false);
     tbar.addChild(export_button, true);
@@ -68,20 +104,77 @@ lingcod.rest.kmlEditor = function(options){
     share.setEnabled(false);
     tbar.addChild(share, true);
     
+    var enableWhenSelected = [attr, edit, export_button, copy, share];
     
     tbar.render(that.el.find('.toolbar')[0]);
 
     $(options.appendTo).append(that.el);
+    
+    // var pm = new goog.ui.PopupMenu();
+    // var items = create_menu_children();
+    // for(var i=0;i<items.length; i++){
+    //     pm.addItem(items[i]);
+    // }
     
     var forest = lingcod.kmlForest({
         ge: options.ge, 
         gex: options.gex, 
         div: options.div,
         element: that.kmlEl
+        // contextMenu: pm
     });
     
-    // $(forest.tree).bind('itemClick', function(){
-    //     console.log('itemClick hayooo!', this);
+    $(forest.tree).bind('itemSelect', function(e, selected, previously){
+        that.selected = selected;
+        setSelectionMenuItemEnabled(!!selected);
+        // clear export menu
+        while(export_menu.getItemCount() > 0){
+            var item = export_menu.getItemAt(0);
+            export_menu.removeItemAt(0);
+            item.dispose();
+        }
+        if(that.selected){
+            var kmlObject = that.selected.data('kml');
+            addExportItems(export_menu, kmlObject);
+        }
+    });
+    
+    var addExportItems = function(menu, kmlObject){
+        $(kmlObject.getKml()).find('atom\\:link[rel=alt]').each(function(){
+            var title = $(this).attr('title');
+            var href = $(this).attr('href');
+            var item = new goog.ui.MenuItem(title);
+            menu.addItem(item);
+            goog.events.listen(item, 'action', function(e) {
+                window.location = href;
+            });
+        });
+    }
+    
+    $(forest.tree).bind('itemDoubleClick', function(e, item){
+        var kmlObject = item.data('kml');
+        if(kmlObject && $(kmlObject.getKml()).find('atom\\:link[rel=self]').length === 1){
+            options.client.show(item.data('kml'));
+        }
+    });
+    
+    // $(forest.tree).bind('itemContext', function(e, d, item){
+    //     var kmlObject = item.data('kml');
+    //     if(kmlObject && $(kmlObject.getKml()).find('atom\\:link[rel=self]').length === 1){
+    //         var pm = new goog.ui.PopupMenu();
+    //         var items = create_menu_children();
+    //         for(var i=0;i<items.length; i++){
+    //             pm.addItem(items[i]);
+    //         }
+    //         pm.render(document.body);
+    // 
+    //         pm.attach(
+    //             item[0],
+    //             goog.positioning.Corner.TOP_LEFT,
+    //             goog.positioning.Corner.BOTTOM_LEFT);
+    // 
+    //         // pm.attach(item[0]);
+    //     }
     // });
     
     forest.add(options.url, {
