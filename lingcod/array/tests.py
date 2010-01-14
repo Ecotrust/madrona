@@ -1,9 +1,14 @@
 from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.array.models import MpaArray
 from lingcod.mpa.models import Mpa, MpaDesignation
+from lingcod.mpa.tests import TestMpa, MpaTestForm
+from lingcod.common import utils 
 from django.contrib.auth.models import *
 from django.conf import settings
-from lingcod.mpa.tests import TestMpa, MpaTestForm
+from django.test.client import Client
+from django.contrib.gis.geos import GEOSGeometry 
+from django.core.urlresolvers import reverse
+
 
 # These classes are each given these strange names because there are already
 # models named TestMpa and TestArray in lingcod.mpa.tests
@@ -167,3 +172,144 @@ class ArrayResourcesTestCase(TestCase):
         assertImplementsRestInterface(self, user, password, url, 
             rest_uid(ArrayTestArray), {'name': 'myname'})
 
+
+
+class MpaArrayServiceTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.password = 'iluvmpas'
+        self.user = User.objects.create_user('mpaarraytest', 'test@marinemap.org', password=self.password)
+
+        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+
+        smr = MpaDesignation.objects.create(name="Reserve of some sort", acronym="R")
+        smr.save()
+
+        mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation=smr, user=self.user, geometry_final=g1)
+        mpa1.save()
+        self.test_mpa_id = mpa1.id
+
+        array1 = ArrayTestArray.objects.create( name='Test_Array_1', user=self.user)
+        array1.save()
+        self.test_array_id = array1.id
+        
+        array2 = ArrayTestArray.objects.create( name='Test_Array_2', user=self.user)
+        array2.save()
+        self.test_array2_id = array2.id
+
+        wrong_user = User.objects.create_user('badbad', 'bad@marinemap.org', password=self.password)
+        array3 = ArrayTestArray.objects.create( name='Test_Array_3', user=wrong_user)
+        array3.save()
+        self.test_array3_id = array3.id
+        mpa3 = TestMpa.objects.create( name='Test_MPA_3', designation=smr, user=wrong_user, geometry_final=g1)
+        mpa3.save()
+        self.test_mpa3_id = mpa3.id
+
+    def test_add_mpa(self):
+        """
+        Make sure MPAs can be added to Arrays
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_add_mpa_again(self):
+        """
+        Make sure MPA cannot be added to an array if its already associated with one
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        # The second request should fail
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 500)
+
+    def test_remove_mpa(self):
+        """
+        Make sure MPA can be removed from an array 
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        # Remove
+        url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_remove_mpa_invalid(self):
+        """
+        Make sure we get an error if we try to remove an MPA from an array 
+        and it is not associated with one
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 500)
+
+    def test_remove_mpa_wrong_array(self):
+        """
+        Make sure we get an error if we try to remove an MPA from an array 
+        but that MPA is associated with a different array
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        # Remove from wrong array
+        url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array2_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 500)
+
+    def test_add_to_other_users_array(self):
+        """
+        Make sure we get an error if we try to add an MPA to an array that is not ours
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add to other users' array
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array3_id)})
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_add_other_users_mpa(self):
+        """
+        Make sure we get an error if we try to add someone else's MPA to our array
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add to other users' array
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % self.test_mpa3_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_add_to_phantom_array(self):
+        """
+        Make sure we get an error if we try to add an MPA to a non-existent array 
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add to other users' array
+        url = reverse('array-add-mpa', kwargs={'pk': 1234567 })
+        url += "?mpa_id=%d" % self.test_mpa_id
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_add_phantom_mpa(self):
+        """
+        Make sure we get an error if we try to add a non-existent MPA to our array
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        # Add to other users' array
+        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
+        url += "?mpa_id=%d" % 1234567
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
