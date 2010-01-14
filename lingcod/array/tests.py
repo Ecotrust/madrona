@@ -213,7 +213,7 @@ class MpaArrayServiceTestCase(TestCase):
         self.client.login(username=self.user.username, password=self.password)
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 200)
 
     def test_add_mpa_again(self):
@@ -223,9 +223,9 @@ class MpaArrayServiceTestCase(TestCase):
         self.client.login(username=self.user.username, password=self.password)
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         # The second request should fail
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 500)
 
     def test_remove_mpa(self):
@@ -236,11 +236,11 @@ class MpaArrayServiceTestCase(TestCase):
         # Add
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         # Remove
         url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 200)
 
     def test_remove_mpa_invalid(self):
@@ -251,7 +251,7 @@ class MpaArrayServiceTestCase(TestCase):
         self.client.login(username=self.user.username, password=self.password)
         url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 500)
 
     def test_remove_mpa_wrong_array(self):
@@ -263,11 +263,11 @@ class MpaArrayServiceTestCase(TestCase):
         # Add
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         # Remove from wrong array
         url = reverse('array-remove-mpa', kwargs={'pk': int(self.test_array2_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 500)
 
     def test_add_to_other_users_array(self):
@@ -278,7 +278,7 @@ class MpaArrayServiceTestCase(TestCase):
         # Add to other users' array
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array3_id)})
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 404)
 
     def test_add_other_users_mpa(self):
@@ -289,7 +289,7 @@ class MpaArrayServiceTestCase(TestCase):
         # Add to other users' array
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % self.test_mpa3_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 404)
 
     def test_add_to_phantom_array(self):
@@ -300,7 +300,7 @@ class MpaArrayServiceTestCase(TestCase):
         # Add to other users' array
         url = reverse('array-add-mpa', kwargs={'pk': 1234567 })
         url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 404)
 
     def test_add_phantom_mpa(self):
@@ -311,5 +311,5 @@ class MpaArrayServiceTestCase(TestCase):
         # Add to other users' array
         url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
         url += "?mpa_id=%d" % 1234567
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEquals(response.status_code, 404)

@@ -9,7 +9,7 @@ def add_mpa(request, pk):
     '''
         Add and MPA to a given array
     '''
-    if request.method == 'GET': # TODO change to POST only!
+    if request.method == 'POST':
         try:
             mpa_id = request.REQUEST['mpa_id']
         except:
@@ -47,7 +47,7 @@ def remove_mpa(request, pk):
     '''
         Remove an MPA from its array
     '''
-    if request.method == 'GET': # TODO change to POST only!
+    if request.method == 'POST':
         try:
             mpa_id = request.REQUEST['mpa_id']
         except:
