@@ -33,7 +33,7 @@ def get_map(request, session_key, input_username, group_name, layer_name, z=None
         return HttpResponse('You must be logged in', status=401)
     elif input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
-        
+
     #old root was 'U:/dev/ecotrust_data_layers/maps/'
     root_path = os.path.join(root, 'pvg', group_name, layer_name)
     if z is None:
@@ -82,5 +82,21 @@ def get_contour(request, session_key, input_username, group_name, layer_name, z=
         tile = open(file_path, "rb").read()
         return HttpResponse(tile, mimetype='image/png')
 
-    
+        
+def get_other(request, session_key, input_username, folder, file, root=settings.GIS_DATA_ROOT):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+
+    #legend is stored in SocioEconomicFishingNC/display/images
+    #this will change when we change kml to kmz
+    doc_path = os.path.join(root, folder, file)
+    if folder == 'images':
+        contents = open(doc_path, "rb").read()
+        return HttpResponse(contents, mimetype='image/png')
+    else:
+        return HttpResponse(folder + ' not implemented', status=501)
  

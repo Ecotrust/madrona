@@ -19,10 +19,6 @@
     <Style id="speciesStyle">
         <ListStyle>
             <listItemType>radioFolder</listItemType>
-        </ListStyle>
-    </Style>
-    <Style id="dataStyle">
-        <ListStyle>
             <listItemType>checkHideChildren</listItemType>
         </ListStyle>
     </Style>
@@ -33,15 +29,30 @@
     <Folder>
         <name>Ecotrust Fishing Ground Maps </name>
         <visibility>0</visibility>
-        <styleUrl>#groupStyle</styleUrl>
+        <styleUrl>#mainStyle</styleUrl>
         <description></description>
+        <ScreenOverlay>
+            <name>Legend</name>
+            <visibility>0</visibility>
+            <description>
+                <font size="2">
+                <a href="http://ecotrust.org">Ecotrust</a> has generated these maps through a series of interviews with commercial and recreational fishermen throughout the North Coast region of California.  More information, more information, more information.
+                </font>
+            </description>
+            <Icon>
+                <href>other/images/socioecon-legend.png</href>
+            </Icon>
+            <overlayXY x="1" y="1" xunits="fraction" yunits="fraction"/>
+            <screenXY x="10" y="10" xunits="insetPixels" yunits="insetPixels"/>
+            <size x="83" y="255" xunits="pixels" yunits="pixels"/>
+        </ScreenOverlay>
         <Folder>
             <name>Commercial</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Entire Study Region</name>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <visibility>0</visibility>
                 <Folder>
                     <name>Anchovy</name>
@@ -49,7 +60,7 @@
                     <description></description>
                     <NetworkLink id="Anchovy Map">
                         <name>Anchovy Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/achv_all/</href>
@@ -57,7 +68,7 @@
                     </NetworkLink>
                     <NetworkLink id="Anchovy Contours">
                         <name>Anchovy Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/achv_all_kd_line/</href>
@@ -78,7 +89,7 @@
                     </LookAt>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_all/</href>
@@ -86,7 +97,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_all_kd_line/</href>
@@ -99,7 +110,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_all/</href>
@@ -107,7 +118,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_all_kd_line/</href>
@@ -120,7 +131,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_all/</href>
@@ -128,7 +139,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_all_kd_line/</href>
@@ -141,7 +152,7 @@
                     <description></description>
                     <NetworkLink id="Shrimp Map">
                         <name>Shrimp Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/shrmpt_all/</href>
@@ -149,7 +160,7 @@
                     </NetworkLink>
                     <NetworkLink id="Shrimp Contours">
                         <name>Shrimp Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/shrmpt_all_kd_line/</href>
@@ -162,7 +173,7 @@
                     <description></description>
                     <NetworkLink id="Smelt Map">
                         <name>Smelt Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/smtb_all/</href>
@@ -170,7 +181,7 @@
                     </NetworkLink>
                     <NetworkLink id="Smelt Contours">
                         <name>Smelt Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/smtb_all_kd_line/</href>
@@ -183,7 +194,7 @@
                     <description></description>
                     <NetworkLink id="Surf Perch Map">
                         <name>Surf Perch Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/sphkl_all/</href>
@@ -191,7 +202,7 @@
                     </NetworkLink>
                     <NetworkLink id="Surf Perch Contours">
                         <name>Surf Perch Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/sphkl_all_kd_line/</href>
@@ -204,7 +215,7 @@
                     <description></description>
                     <NetworkLink id="Urchin Map">
                         <name>Urchin Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/urchd_all/</href>
@@ -212,7 +223,7 @@
                     </NetworkLink>
                     <NetworkLink id="Urchin Contours">
                         <name>Urchin Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/urchd_all_kd_line/</href>
@@ -223,14 +234,14 @@
             <Folder>
                 <name>Albion</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_ab/</href>
@@ -238,7 +249,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_ab_kd_line/</href>
@@ -251,7 +262,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_ab/</href>
@@ -259,7 +270,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_ab_kd_line/</href>
@@ -272,7 +283,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_ab/</href>
@@ -280,7 +291,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href></href>
@@ -293,7 +304,7 @@
                     <description></description>
                     <NetworkLink id="Urchin Map">
                         <name>Urchin Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/urchd_ab/</href>
@@ -301,7 +312,7 @@
                     </NetworkLink>
                     <NetworkLink id="Urchin Contours">
                         <name>Urchin Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/urchd_ab_kd_line/</href>
@@ -312,14 +323,14 @@
             <Folder>
                 <name>Crescent City</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_cc/</href>
@@ -327,7 +338,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_cc_kd_line/</href>
@@ -340,7 +351,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Herring Map">
                         <name>Pacific Herring Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/herg_cc/</href>
@@ -348,7 +359,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Herring Contours">
                         <name>Pacific Herring Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/herg_cc_kd_line/</href>
@@ -361,7 +372,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_cc/</href>
@@ -369,7 +380,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_cc_kd_line/</href>
@@ -382,7 +393,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_cc/</href>
@@ -390,7 +401,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_cc_kd_line/</href>
@@ -403,7 +414,7 @@
                     <description></description>
                     <NetworkLink id="Shrimp Map">
                         <name>Shrimp Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/shrmpt_cc/</href>
@@ -411,7 +422,7 @@
                     </NetworkLink>
                     <NetworkLink id="Shrimp Contours">
                         <name>Shrimp Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/shrmpt_cc_kd_line/</href>
@@ -424,7 +435,7 @@
                     <description></description>
                     <NetworkLink id="Smelt Map">
                         <name>Smelt Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/smtb_cc/</href>
@@ -432,7 +443,7 @@
                     </NetworkLink>
                     <NetworkLink id="Smelt Contours">
                         <name>Smelt Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/smtb_cc_kd_line/</href>
@@ -445,7 +456,7 @@
                     <description></description>
                     <NetworkLink id="Surf Perch Map">
                         <name>Surf Perch Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/sphkl_cc/</href>
@@ -453,7 +464,7 @@
                     </NetworkLink>
                     <NetworkLink id="Surf Perch Contours">
                         <name>Surf Perch Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/sphkl_cc_kd_line/</href>
@@ -464,14 +475,14 @@
             <Folder>
                 <name>Eureka</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_ek/</href>
@@ -479,7 +490,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_ek_kd_line/</href>
@@ -492,7 +503,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Herring Map">
                         <name>Pacific Herring Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/herg_ek/</href>
@@ -500,7 +511,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Herring Contours">
                         <name>Pacific Herring Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/herg_ek_kd_line/</href>
@@ -513,7 +524,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_ek/</href>
@@ -521,7 +532,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_ek_kd_line/</href>
@@ -534,7 +545,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_ek/</href>
@@ -542,7 +553,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_ek_kd_line/</href>
@@ -555,7 +566,7 @@
                     <description></description>
                     <NetworkLink id="Sardines Map">
                         <name>Sardines Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/sard_ek/</href>
@@ -563,7 +574,7 @@
                     </NetworkLink>
                     <NetworkLink id="Sardines Contours">
                         <name>Sardines Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/sard_ek_kd_line/</href>
@@ -576,7 +587,7 @@
                     <description></description>
                     <NetworkLink id="Smelt Map">
                         <name>Smelt Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/smtb_ek/</href>
@@ -584,7 +595,7 @@
                     </NetworkLink>
                     <NetworkLink id="Smelt Contours">
                         <name>Smelt Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/smtb_ek_kd_line/</href>
@@ -597,7 +608,7 @@
                     <description></description>
                     <NetworkLink id="Surf Perch Map">
                         <name>Surf Perch Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/sphkl_ek/</href>
@@ -605,7 +616,7 @@
                     </NetworkLink>
                     <NetworkLink id="Surf Perch Contours">
                         <name>Surf Perch Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/sphkl_ek_kd_line/</href>
@@ -618,7 +629,7 @@
                     <description></description>
                     <NetworkLink id="Urchin Map">
                         <name>Urchin Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/urchd_ek/</href>
@@ -626,7 +637,7 @@
                     </NetworkLink>
                     <NetworkLink id="Urchin Contours">
                         <name>Urchin Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/urchd_ek_kd_line/</href>
@@ -637,14 +648,14 @@
             <Folder>
                 <name>Fort Bragg</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_fb/</href>
@@ -652,7 +663,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_fb_kd_line/</href>
@@ -665,7 +676,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_fb/</href>
@@ -673,7 +684,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_fb_kd_line/</href>
@@ -686,7 +697,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_fb/</href>
@@ -694,7 +705,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_fb_kd_line/</href>
@@ -707,7 +718,7 @@
                     <description></description>
                     <NetworkLink id="Urchin Map">
                         <name>Urchin Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/urchd_fb/</href>
@@ -715,7 +726,7 @@
                     </NetworkLink>
                     <NetworkLink id="Urchin Contours">
                         <name>Urchin Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/urchd_fb_kd_line/</href>
@@ -726,14 +737,14 @@
             <Folder>
                 <name>Shelter Cove</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_fb/</href>
@@ -741,7 +752,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_sc_kd_line/</href>
@@ -754,7 +765,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_fb/</href>
@@ -762,7 +773,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_sc_kd_line/</href>
@@ -775,7 +786,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_fb/</href>
@@ -783,7 +794,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_sc_kd_line/</href>
@@ -794,14 +805,14 @@
             <Folder>
                 <name>Trinidad</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/dcrabt_td/</href>
@@ -809,7 +820,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/dcrabt_td_kd_line/</href>
@@ -822,7 +833,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/rklc_td/</href>
@@ -830,7 +841,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/rklc_td_kd_line/</href>
@@ -843,7 +854,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/com/salt_td/</href>
@@ -851,7 +862,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/com/salt_td_kd_line/</href>
@@ -863,18 +874,18 @@
         <Folder>
             <name>Commercial Passenger Fishing Vessel</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Crescent City</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/dcrab_cc/</href>
@@ -882,7 +893,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/dcrab_cc_kd_line/</href>
@@ -895,7 +906,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/rckpo_cc/</href>
@@ -903,7 +914,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/rckpo_cc_kd_line/</href>
@@ -916,7 +927,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/sal_cc/</href>
@@ -924,7 +935,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/sal_cc_kd_line/</href>
@@ -935,14 +946,14 @@
             <Folder>
                 <name>Eureka</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/chal_ek/</href>
@@ -950,7 +961,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/chal_ek_kd_line/</href>
@@ -963,7 +974,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/dcrab_ek/</href>
@@ -971,7 +982,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/dcrab_ek_kd_line/</href>
@@ -984,7 +995,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/phal_ek/</href>
@@ -992,7 +1003,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/phal_ek_kd_line/</href>
@@ -1005,7 +1016,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/rckpo_ek/</href>
@@ -1013,7 +1024,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/rkpo_ek_kd_line/</href>
@@ -1026,7 +1037,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/sal_ek/</href>
@@ -1034,7 +1045,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/sal_ek_kd_line/</href>
@@ -1045,14 +1056,14 @@
             <Folder>
                 <name>Fort Bragg</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Dungeness Crab</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/dcrab_fb/</href>
@@ -1060,7 +1071,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/dcrab_fb_kd_line/</href>
@@ -1073,7 +1084,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/rckpo_fb/</href>
@@ -1081,7 +1092,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/rckpo_fb_kd_line/</href>
@@ -1094,7 +1105,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/sal_fb/</href>
@@ -1102,7 +1113,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/sal_fb_kd_line/</href>
@@ -1113,14 +1124,14 @@
             <Folder>
                 <name>Shelter Cove</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Pacific Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/phal_sc/</href>
@@ -1128,7 +1139,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/phal_sc_kd_line/</href>
@@ -1141,7 +1152,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/rckpo_sc/</href>
@@ -1149,7 +1160,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/rckpo_sc_kd_line/</href>
@@ -1162,7 +1173,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/sal_sc/</href>
@@ -1170,7 +1181,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/sal_sc_kd_line/</href>
@@ -1181,14 +1192,14 @@
             <Folder>
                 <name>Trinidad</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/chal_td/</href>
@@ -1196,7 +1207,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/chal_td_kd_line/</href>
@@ -1209,7 +1220,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/dcrab_td/</href>
@@ -1217,7 +1228,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/dcrab_td_kd_line/</href>
@@ -1230,7 +1241,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/phal_td/</href>
@@ -1238,7 +1249,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/phal_td_kd_line/</href>
@@ -1251,7 +1262,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/rckpo_td/</href>
@@ -1259,7 +1270,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/rckpo_td_kd_line/</href>
@@ -1272,7 +1283,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/cpfv/sal_td/</href>
@@ -1280,7 +1291,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/cpfv/sal_td_kd_line/</href>
@@ -1292,18 +1303,18 @@
         <Folder>
             <name>Recreational Dive</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Crescent City</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Abalone</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Abalone Map">
                         <name>Abalone Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/abal_cc/</href>
@@ -1311,7 +1322,7 @@
                     </NetworkLink>
                     <NetworkLink id="Abalone Contours">
                         <name>Abalone Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/abal_cc_kd_line/</href>
@@ -1324,7 +1335,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/rckf_cc/</href>
@@ -1332,7 +1343,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/rckf_cc_kd_line/</href>
@@ -1343,14 +1354,14 @@
             <Folder>
                 <name>Eureka</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Abalone</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Abalone Map">
                         <name>Abalone Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/abal_ek/</href>
@@ -1358,7 +1369,7 @@
                     </NetworkLink>
                     <NetworkLink id="Abalone Contours">
                         <name>Abalone Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/abal_ek_kd_line/</href>
@@ -1371,7 +1382,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/rckf_ek/</href>
@@ -1379,7 +1390,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/rckf_ek_kd_line/</href>
@@ -1390,14 +1401,14 @@
             <Folder>
                 <name>Fort Bragg / Albion</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Abalone</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Abalone Map">
                         <name>Abalone Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/abal_fb/</href>
@@ -1405,7 +1416,7 @@
                     </NetworkLink>
                     <NetworkLink id="Abalone Contours">
                         <name>Abalone Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/abal_fb_kd_line/</href>
@@ -1418,7 +1429,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/dcrab_fb/</href>
@@ -1426,7 +1437,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/dcrab_fb_kd_line/</href>
@@ -1439,7 +1450,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/rckf_fb/</href>
@@ -1447,7 +1458,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/rckf_fb_kd_line/</href>
@@ -1458,14 +1469,14 @@
             <Folder>
                 <name>Shelter Cove</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Abalone</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Abalone Map">
                         <name>Abalone Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/abal_sc/</href>
@@ -1473,7 +1484,7 @@
                     </NetworkLink>
                     <NetworkLink id="Abalone Contours">
                         <name>Abalone Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/abal_sc_kd_line/</href>
@@ -1486,7 +1497,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/rckf_sc/</href>
@@ -1494,7 +1505,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/rckf_sc_kd_line/</href>
@@ -1505,14 +1516,14 @@
             <Folder>
                 <name>Trinidad</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Abalone</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Abalone Map">
                         <name>Abalone Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/abal_td/</href>
@@ -1520,7 +1531,7 @@
                     </NetworkLink>
                     <NetworkLink id="Abalone Contours">
                         <name>Abalone Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/abal_td_kd_line/</href>
@@ -1533,7 +1544,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/div/rckf_td/</href>
@@ -1541,7 +1552,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/div/rckf_td_kd_line/</href>
@@ -1553,18 +1564,18 @@
         <Folder>
             <name>Recreational Kayak</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Fort Bragg / Albion</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Rockfish (post RCA)</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/kyk/rckf_fb/</href>
@@ -1572,7 +1583,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/kyk/rckf_fb_kd_line/</href>
@@ -1585,7 +1596,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/kyk/sal_fb/</href>
@@ -1593,7 +1604,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/kyk/sal_fb_kd_line/</href>
@@ -1604,14 +1615,14 @@
             <Folder>
                 <name>Trinidad</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>Rockfish (post RCA)</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/kyk/rckf_td/</href>
@@ -1619,7 +1630,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/kyk/rckf_td_kd_line/</href>
@@ -1631,18 +1642,18 @@
         <Folder>
             <name>Recreational Vessel</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Crescent City</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/chal_cc/</href>
@@ -1650,7 +1661,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/chal_cc_kd_line/</href>
@@ -1663,7 +1674,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/dcrab_cc/</href>
@@ -1671,7 +1682,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/dcrab_cc_kd_line/</href>
@@ -1684,7 +1695,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/phal_cc/</href>
@@ -1692,7 +1703,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/phal_cc_kd_line/</href>
@@ -1705,7 +1716,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/rckf_cc/</href>
@@ -1713,7 +1724,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/rckf_cc_kd_line/</href>
@@ -1726,7 +1737,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/sal_cc/</href>
@@ -1734,7 +1745,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/sal_cc_kd_line/</href>
@@ -1745,14 +1756,14 @@
             <Folder>
                 <name>Eureka</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/chal_ek/</href>
@@ -1760,7 +1771,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/chal_ek_kd_line/</href>
@@ -1773,7 +1784,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/dcrab_ek/</href>
@@ -1781,7 +1792,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/dcrab_ek_kd_line/</href>
@@ -1794,7 +1805,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/phal_ek/</href>
@@ -1802,7 +1813,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/phal_ek_kd_line/</href>
@@ -1815,7 +1826,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/rckf_ek/</href>
@@ -1823,7 +1834,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/rckf_ek_kd_line/</href>
@@ -1836,7 +1847,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/sal_ek/</href>
@@ -1844,7 +1855,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/sal_ek_kd_line/</href>
@@ -1855,14 +1866,14 @@
             <Folder>
                 <name>Fort Bragg / Albion</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/chal_fb/</href>
@@ -1870,7 +1881,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/chal_fb_kd_line/</href>
@@ -1883,7 +1894,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/dcrab_fb/</href>
@@ -1891,7 +1902,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/dcrab_fb_kd_line/</href>
@@ -1904,7 +1915,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/phal_fb/</href>
@@ -1912,7 +1923,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/phal_fb_kd_line/</href>
@@ -1925,7 +1936,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/rckf_fb/</href>
@@ -1933,7 +1944,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/rckf_fb_kd_line/</href>
@@ -1946,7 +1957,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/sal_fb/</href>
@@ -1954,7 +1965,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/sal_fb_kd_line/</href>
@@ -1965,14 +1976,14 @@
             <Folder>
                 <name>Shelter Cove</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/chal_sc/</href>
@@ -1980,7 +1991,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/chal_sc_kd_line/</href>
@@ -1993,7 +2004,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/dcrab_sc/</href>
@@ -2001,7 +2012,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/dcrab_sc_kd_line/</href>
@@ -2014,7 +2025,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/phal_sc/</href>
@@ -2022,7 +2033,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/phal_sc_kd_line/</href>
@@ -2035,7 +2046,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/rckf_sc/</href>
@@ -2043,7 +2054,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/rckf_sc_kd_line/</href>
@@ -2056,7 +2067,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/sal_sc/</href>
@@ -2064,7 +2075,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/sal_sc_kd_line/</href>
@@ -2075,14 +2086,14 @@
             <Folder>
                 <name>Trinidad</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>California Halibut</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="California Halibut Map">
                         <name>California Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/chal_td/</href>
@@ -2090,7 +2101,7 @@
                     </NetworkLink>
                     <NetworkLink id="California Halibut Contours">
                         <name>California Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/chal_td_kd_line/</href>
@@ -2103,7 +2114,7 @@
                     <description></description>
                     <NetworkLink id="Dungeness Crab Map">
                         <name>Dungeness Crab Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/dcrab_td/</href>
@@ -2111,7 +2122,7 @@
                     </NetworkLink>
                     <NetworkLink id="Dungeness Crab Contours">
                         <name>Dungeness Crab Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/dcrab_td_kd_line/</href>
@@ -2124,7 +2135,7 @@
                     <description></description>
                     <NetworkLink id="Pacific Halibut Map">
                         <name>Pacific Halibut Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/phal_td/</href>
@@ -2132,7 +2143,7 @@
                     </NetworkLink>
                     <NetworkLink id="Pacific Halibut Contours">
                         <name>Pacific Halibut Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/phal_td_kd_line/</href>
@@ -2145,7 +2156,7 @@
                     <description></description>
                     <NetworkLink id="Rockfish (post RCA) Map">
                         <name>Rockfish (post RCA) Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/rckf_td/</href>
@@ -2153,7 +2164,7 @@
                     </NetworkLink>
                     <NetworkLink id="Rockfish (post RCA) Contours">
                         <name>Rockfish (post RCA) Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/rckf_td_kd_line/</href>
@@ -2166,7 +2177,7 @@
                     <description></description>
                     <NetworkLink id="Salmon Map">
                         <name>Salmon Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/pvt/sal_td/</href>
@@ -2174,7 +2185,7 @@
                     </NetworkLink>
                     <NetworkLink id="Salmon Contours">
                         <name>Salmon Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/contour/pvt/sal_td_kd_line/</href>
@@ -2186,18 +2197,18 @@
         <Folder>
             <name>Edible Seaweed (Commercial)</name>
             <visibility>0</visibility>
-            <styleUrl>#portStyle</styleUrl>
+            <styleUrl>#groupStyle</styleUrl>
             <Folder>
                 <name>Crescent City</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>All Edible Seaweed Species</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Seaweed Map">
                         <name>Seaweed Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/swd/eswd_cc/</href>
@@ -2205,7 +2216,7 @@
                     </NetworkLink>
                     <NetworkLink id="Seaweed Contours">
                         <name>Seaweed Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href></href>
@@ -2216,14 +2227,14 @@
             <Folder>
                 <name>Elk</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>All Edible Seaweed Species</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Seaweed Map">
                         <name>Seaweed Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/swd/eswd_elk/</href>
@@ -2231,7 +2242,7 @@
                     </NetworkLink>
                     <NetworkLink id="Seaweed Contours">
                         <name>Seaweed Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href></href>
@@ -2242,14 +2253,14 @@
             <Folder>
                 <name>Fort Bragg</name>
                 <visibility>0</visibility>
-                <styleUrl>#speciesStyle</styleUrl>
+                <styleUrl>#portStyle</styleUrl>
                 <Folder>
                     <name>All Edible Seaweed Species</name>
                     <visibility>0</visibility>
                     <description></description>
                     <NetworkLink id="Seaweed Map">
                         <name>Seaweed Map</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href>tiles/map/swd/eswd_fb/</href>
@@ -2257,7 +2268,7 @@
                     </NetworkLink>
                     <NetworkLink id="Seaweed Contours">
                         <name>Seaweed Contours</name>
-                        <styleUrl>#dataStyle</styleUrl>
+                        <styleUrl>#speciesStyle</styleUrl>
                         <visibility>0</visibility>
                         <Link>
                             <href></href>
