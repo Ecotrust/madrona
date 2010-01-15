@@ -70,8 +70,9 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS += (
     'lingcod.screencasts',
-    'mlpa',
-    'report',
+    'nc_mlpa.mlpa',
+    'nc_mlpa.report',
+    'nc_mlpa.layers',
 )
 
 # lingcod.intersection configuration

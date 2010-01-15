@@ -1,1 +1,1 @@
-[{"pk": 1, "model": "layers.publiclayerlist", "fields": {"active": true, "kml": "layers/uploaded-kml/publicDataLayers.kmz", "creation_date": "2009-08-17 08:55:04"}}, {"pk": 1, "model": "layers.ecotrustlayerlist", "fields": {"active": true, "kml": "layers/uploaded-kml/ecotrustDataLayers.kml", "creation_date": "2009-12-16 00:00:00"}}]
+[{"pk": 1, "model": "layers.publiclayerlist", "fields": {"active": true, "kml": "layers/uploaded-kml/publicDataLayers.kmz", "creation_date": "2009-08-17 08:55:04"}}]
