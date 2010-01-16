@@ -44,7 +44,7 @@
             </Icon>
             <overlayXY x="1" y="1" xunits="fraction" yunits="fraction"/>
             <screenXY x="10" y="10" xunits="insetPixels" yunits="insetPixels"/>
-            <size x="83" y="255" xunits="pixels" yunits="pixels"/>
+            <size x="120" y="399" xunits="pixels" yunits="pixels"/>
         </ScreenOverlay>
         <Folder>
             <name>Commercial</name>
