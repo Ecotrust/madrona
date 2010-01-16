@@ -3,11 +3,40 @@ from lingcod.mpa.models import Mpa
 from lingcod.manipulators.manipulators import *
 from manipulators import *
 from lingcod.array.models import MpaArray as BaseArray
+from lingcod.studyregion.models import StudyRegion
+from django.contrib.gis import geos
+from django.contrib.gis.measure import A, D
 
 #THE FOLLOWING ESTUARIES RELATED CLASSES ARE INCOMPLETE AND HAVE BEEN ADDED HERE FOR TESTING PURPOSES!!!
 class EstuariesManager(models.GeoManager):
     def current(self):
         return self.all()
+    
+    @property    
+    def geometry_collection(self):
+        """return a geometry collection containing all of the estuary geometries.  NOTE: This is NOT clipped to the study region
+        so the area of this collection will be much larger than the actual estuarine area."""
+        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        for est in self.all():
+            gc.append(est.geometry)
+        return gc
+        
+    @property
+    def multipolygon_clipped(self):
+        """return a multipolygon that has been clipped to the study region."""
+        unclipped_estuaries = self.geometry_collection
+        sr = StudyRegion.objects.current()
+        return unclipped_estuaries.intersection(sr.geometry)
+        
+    @property
+    def total_area_sq_mi(self):
+        """return the total area of estuary within the study region in square miles"""
+        return A(sq_m=self.multipolygon_clipped.area).sq_mi
+        
+    def contains_centroid(self, geom):
+        """return true if the centroid of the supplied geometry falls inside the unclipped estuaries or false if it does not.
+        This method can be used to determine if an mpa is estuarine."""
+        return self.geometry_collection.contains(geom.centroid)
         
 class Estuaries(models.Model):
     """Model used for representing Estuaries
@@ -22,16 +51,43 @@ class Estuaries(models.Model):
                                 
         ======================  ==============================================
     """   
-    name = models.TextField(verbose_name="Estuary Name")
-    
+    name = models.CharField(max_length=255,default='unknown',verbose_name="Estuary Name")
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Estuary boundary")
-       
     objects = EstuariesManager()
+    
+    def __unicode__(self):
+        return self.name
 
 class MpaArray(BaseArray):
     description = models.TextField(blank=True)
     proposed = models.BooleanField(help_text="Submit as a Proposal to the I-Team", default=False)
     public_proposal = models.BooleanField(help_text="Mark this MPA as a public proposal (can be viewed without an account)", default=False)
+    
+    @property
+    def opencoast_mpa_set(self):
+        """return a query set that includes the MPAs within the array that are not estuarine."""
+        return self.mpa_set.filter(is_estuary=False)
+        
+    @property
+    def estuarine_mpa_set(self):
+        """return a query set that includes the MPAs within the array that are not estuarine."""
+        return self.mpa_set.filter(is_estuary=True)
+        
+    @property
+    def opencoast_geometry_collection(self):
+        """return a geometry collection of all non-estuarine MPAs in the array"""
+        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        for mpa in self.opencoast_mpa_set:
+            gc.append(mpa.geometry_final)
+        return gc
+        
+    @property
+    def estuarine_geometry_collection(self):
+        """return a geometry collection of all estuarine MPAs in the array"""
+        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        for mpa in self.estuarine_mpa_set:
+            gc.append(mpa.geometry_final)
+        return gc
     
 class Lop(models.Model):
     name = models.CharField(max_length=255, verbose_name='level of protection')
@@ -202,7 +258,7 @@ class MlpaMpa(Mpa):
     #allowed_uses = ManyToManyFieldWithCustomColumns(DomainAllowedUse,db_table='x_mpas_allowed_uses',db_column='allowed_uses_id',null=True, blank=True, verbose_name="Allowed Uses")
 
     allowed_uses = models.ManyToManyField(AllowedUse,null=True, blank=True, verbose_name="Allowed Uses", help_text="useful help text.")
-    is_estuary = models.NullBooleanField(null=True, blank=True, verbose_name="Is Estuary?")
+    is_estuary = models.BooleanField(verbose_name="Is Estuary?")
     cluster_id = models.IntegerField(null=True, blank=True)
     boundary_description = models.TextField(null=True, blank=True, verbose_name="Boundary Description", help_text="Written description of the MPA boundaries.")
     specific_objective = models.TextField(verbose_name='Site Specific Rationale', null=True, blank=True, help_text="""In one or two sentences, please describe how this MPA contributes to meeting the goals of your planning process. This section should describe the main reason that an MPA is proposed in this location.""")
@@ -227,3 +283,11 @@ class MlpaMpa(Mpa):
 
     def __str__(self):
         return self.name
+        
+    def save(self):
+        self.is_estuary = self.in_estuary()
+        super(MlpaMpa,self).save()
+        
+    def in_estuary(self):
+        """docstring for in_estuary"""
+        return Estuaries.objects.contains_centroid(self.geometry_final)

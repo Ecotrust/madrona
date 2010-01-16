@@ -28,7 +28,7 @@ admin.site.register(Lop)
 # admin.site.register(SatHabitat, SatHabitatAdmin)
 class MpasAdmin (admin.ModelAdmin):
     list_display = ( 'pk', 'name', 'user')
-    list_filter = ['user']
+    list_filter = ['user','is_estuary']
 admin.site.register(MlpaMpa, MpasAdmin)
 
 from django.contrib.auth.models import Permission

@@ -99,65 +99,100 @@ def zip_from_shp(shp_path):
     return filename, File( open(zfile_path) )
 
 def sum_results(results):
-    '''Sum a matrix of intersection results appropriately.  
+    """
+    Take a list of dictionaries and sum them appropriately into a single dictionary.
     
-    Here's an example of a data structure that can be summed
-    [[{'feature_name': u'test points',
-      'percent_of_total': 20.0,
-      'result': 2.0,
-      'sort': 0.5,
-      'units': u'count'},
-     {'feature_name': u'Beaches',
-      'percent_of_total': 0.40000000000000002,
-      'result': 2.0,
-      'sort': 0.59999999999999998,
-      'units': u'miles'},
-     {'feature_name': u'Rocky Shores',
-      'percent_of_total': 3.0,
-      'result': 30.0,
-      'sort': 0.69999999999999996,
-      'units': u'miles'}],
-      [{'feature_name': u'test points',
-      'percent_of_total': 20.0,
-      'result': 2.0,
-      'sort': 0.5,
-      'units': u'count'},
-     {'feature_name': u'Beaches',
-      'percent_of_total': 0.40000000000000002,
-      'result': 2.0,
-      'sort': 0.59999999999999998,
-      'units': u'miles'},
-     {'feature_name': u'Rocky Shores',
-      'percent_of_total': 3.0,
-      'result': 30.0,
-      'sort': 0.69999999999999996,
-      'units': u'miles'}]]
-    '''
-    # These keys will be summed.  Any other key will be the last value encountered.
-    sum_keys_dict = {'result': 0.0,'percent_of_total': 0.0}
-    if 'geo_collection' in results[0][0].keys():
-        sum_keys_dict['geo_collection'] = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
-    sum_keys = sum_keys_dict.keys()
+    Example of expected format:
+    results = \
+    [{u'Beaches': {'feature_map_id': 1,                                                     \
+                  'geo_collection': <GeometryCollection object at 0x1005bfa30>,             \
+                  'org_scheme_id': 1,                                                       \
+                  'percent_of_total': 6.9427176904575987,                                   \
+                  'result': 27.874960403097003,                                             \
+                  'sort': 1.0,                                                              \
+                  'units': u'miles'},                                                       \
+     u'Coastal Marsh': {'feature_map_id': 2,                                                \
+                        'geo_collection': <GeometryCollection object at 0x1035e0b50>,       \
+                        'org_scheme_id': 1,                                                 \
+                        'percent_of_total': 0.0,                                            \
+                        'result': 0.0,                                                      \
+                        'sort': 2.0,                                                        \
+                        'units': u'miles'}},                                                \
+    {u'Beaches': {'feature_map_id': 1,                                                      \
+                  'geo_collection': <GeometryCollection object at 0x1005bfa30>,             \
+                  'org_scheme_id': 1,                                                       \
+                  'percent_of_total': 6.9427176904575987,                                   \
+                  'result': 27.874960403097003,                                             \
+                  'sort': 1.0,                                                              \
+                  'units': u'miles'},                                                       \
+     u'Coastal Marsh': {'feature_map_id': 2,                                                \
+                        'geo_collection': <GeometryCollection object at 0x1035e0b50>,       \
+                        'org_scheme_id': 1,                                                 \
+                        'percent_of_total': 0.0,                                            \
+                        'result': 0.0,                                                      \
+                        'sort': 2.0,                                                        \
+                        'units': u'miles'}}]                                                \
+                        
+    from that we would expect this result:
+    {u'Beaches': {'feature_map_id': 1,
+                  'org_scheme_id': 1,
+                  'percent_of_total': 13.885435380915197,
+                  'result': 55.749920806194005,
+                  'sort': 1.0,
+                  'units': u'miles'},
+     u'Coastal Marsh': {'feature_map_id': 2,
+                        'org_scheme_id': 1,
+                        'percent_of_total': 0.0,
+                        'result': 0.0,
+                        'sort': 2.0,
+                        'units': u'miles'}}
     
-    summed_results = []
-    for hab in range(0,results[0].__len__()):
-        dict = {}
-        # set up initial values
-        for key in sum_keys: dict[key]=sum_keys_dict[key]
-        for i in range(0,results.__len__()):
-            for key in results[i][hab].keys():
-                if key in sum_keys:
-                    dict[key] += results[i][hab][key]
-                elif key=='kml':
-                    raise Exception("I haven't figured out how to sum kml so don't ask for kml when getting intersection results for Geometry collections")
-                else:
-                    if i <> 0:
-                        # Since we're not summing these values, let's make sure they're actually the same.
-                        try: assert(dict[key]==results[i][hab][key]) #print '%s = %s' % (dict[key], results[i][hab][key]) 
-                        except: raise Exception('sum_results has been passed an incorrect results matrix.')
-                    dict[key] = results[i][hab][key]
-        summed_results.append(dict)
-    return summed_results
+    in other words:
+    >>> sum_results( [{u'Beaches': {'feature_map_id': 1, 'org_scheme_id': 1, 'percent_of_total': 6.9427176904575987, 'result': 27.874960403097003, 'sort': 1.0, 'units': u'miles'}, u'Coastal Marsh': {'feature_map_id': 2, 'org_scheme_id': 1, 'percent_of_total': 0.0, 'result': 0.0, 'sort': 2.0, 'units': u'miles'}}, {u'Beaches': {'feature_map_id': 1, 'org_scheme_id': 1, 'percent_of_total': 6.9427176904575987, 'result': 27.874960403097003, 'sort': 1.0, 'units': u'miles'}, u'Coastal Marsh': {'feature_map_id': 2, 'org_scheme_id': 1, 'percent_of_total': 0.0, 'result': 0.0, 'sort': 2.0, 'units': u'miles'}}] )
+    {u'Coastal Marsh': {'sort': 2.0, 'result': 0.0, 'units': u'miles', 'percent_of_total': 0.0, 'feature_map_id': 2, 'org_scheme_id': 1}, u'Beaches': {'sort': 1.0, 'result': 55.749920806194005, 'units': u'miles', 'percent_of_total': 13.885435380915197, 'feature_map_id': 1, 'org_scheme_id': 1}}
+    
+    """
+    # These keys will be summed.  Any other key will be set to the first value encountered.
+    sum_keys = ['result','percent_of_total','geo_collection']
+    # The values for these keys should be equal for items we sum
+    must_be_equal = ['units']
+    # If the values for these keys are not equal, let's make the value null
+    null_if_not_equal = ['feature_map_id','org_scheme_id']
+    # I don't know how to sum kml in any convenient way
+    cant_handle = ['kml']
+    
+    # make dictionary to hold the summed results and a list of all the unique habitat keys
+    summed = {}
+    for result in results:
+        for r_key in result.keys():
+            summed[r_key] = {}
+    hab_key_list = summed.keys()
+    
+    for hab in hab_key_list:
+        for result in results:
+            if hab not in result.keys():
+                continue # This may happen when summing open coast and estuary results.  A particular habitat may not show up every time.
+            sub_dict = result[hab]
+            for k,v in sub_dict.iteritems():
+                if k in cant_handle:
+                    # we don't know how to sum some things
+                    pass
+                elif k not in summed[hab].keys():
+                    # this is the first time we've encountered this key, so just add the key/value pair
+                    summed[hab].update({k:v})
+                elif k in sum_keys:
+                    # these are the things we need to actually sum so add it to what we've got so far
+                    summed[hab][k] += v
+                elif k in null_if_not_equal and summed[hab][k]<>v:
+                    summed[hab][k] = None
+                elif k in must_be_equal:
+                    # we've gotten this key in already and it must be equal across all sub_dicts that we're summing
+                    try: assert(summed[hab][k]==v)
+                    except: raise Exception('sum_results has been passed an incorrect results matrix.')
+    return summed
+    
+def result_geometries_to_wkt(results):
+    pass
     
 class Shapefile(models.Model):
     #shapefile = models.FileField(upload_to='intersection/shapefiles')
@@ -502,7 +537,6 @@ class IntersectionFeature(models.Model):
     study_region_total = models.FloatField(null=True, blank=True, help_text="This is the quantity of this habitat type available within the study region. This value will be generated programmatically and should not be manually altered")
     native_units = models.CharField(max_length=255,null=True, blank=True, help_text="Units native to this layer's projection.")
     output_units = models.CharField(max_length=255,null=True, blank=True, help_text="Unit label to be displayed after results from this table.")
-    #shapefile_name = models.TextField(null=True, blank=True, help_text="The name of the shapefile that was imported to the database.")
     shapefile = models.ForeignKey(SingleFeatureShapefile, null=True)
     multi_shapefile = models.ForeignKey(MultiFeatureShapefile,null=True)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -513,9 +547,6 @@ class IntersectionFeature(models.Model):
                     ('PointFeature', 'Point'),
                    )
     feature_model = models.CharField(null=True, blank=True, max_length=20, choices=TYPE_CHOICES)
-#    geometry_line = models.MultiLineStringField(null=True, blank=True, srid=3310)
-#    geometry_poly = models.MultiPolygonField(null=True, blank=True, srid=3310)
-#    geometry_point = models.MultiPointField(null=True, blank=True, srid=3310)
     objects = models.GeoManager()
     
     class Meta:
@@ -586,24 +617,31 @@ class OrganizationScheme(models.Model):
         return True
     
     def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
+        if geom_or_collection.empty: # If we've been given empty
+            geom_or_collection = geos.fromstr('SRID=3310;POLYGON ((386457.8191845841938630 87468.5562629736959934, 386725.8874563252902590 87481.1556781106628478, 386612.4574658756027929 87036.4770780648104846, 386457.8191845841938630 87468.5562629736959934))')
         if geom_or_collection.geom_type.lower().endswith('polygon'):
             return self.transformed_results_single_geom(geom_or_collection, with_geometries=with_geometries, with_kml=with_kml)
         elif geom_or_collection.geom_type.lower().endswith('collection'):
             #do stuff for a collection
-            results_matrix = []
+            list_of_dicts = []
             for geom in geom_or_collection:
                 geom_results = self.transformed_results_single_geom(geom, with_geometries=with_geometries, with_kml=with_kml)
-                results_matrix.append(geom_results)
-            summed_results = sum_results(results_matrix)
+                list_of_dicts.append(geom_results)
+            summed_results = sum_results(list_of_dicts)
             return summed_results
         else:
             raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
     
     def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
-        new_results = []
+        new_results = {}
         for fm in self.featuremapping_set.all():
-            dict = fm.transformed_results_single_geom(geom,with_geometries=with_geometries,with_kml=with_kml)
-            new_results.append(dict)
+            result_dict = fm.transformed_results_single_geom(geom,with_geometries=with_geometries,with_kml=with_kml)
+            if not True in [ k in result_dict.keys() for k in new_results.keys() ]:
+                for key in result_dict.keys():
+                    result_dict[key].update({'org_scheme_id': self.pk})
+                new_results.update(result_dict)
+            else:
+                raise Exception('You are getting the same key more than once in your dictionary.  You need to sum instead of update.')
         return new_results
             
     
@@ -624,19 +662,18 @@ class FeatureMapping(models.Model):
             return self.transformed_results_single_geom(geom_or_collection, with_geometries=with_geometries, with_kml=with_kml)
         elif geom_or_collection.geom_type.lower().endswith('collection'):
             #do stuff for a collection
-            results_matrix = []
+            list_of_dicts = []
             for geom in geom_or_collection:
                 geom_results = self.transformed_results_single_geom(geom, with_geometries=with_geometries, with_kml=with_kml)
-                results_matrix.append(geom_results)
-            summed_results = sum_results(results_matrix)
+                list_of_dicts.append(geom_results)
+            summed_results = sum_results(list_of_dicts)
             return summed_results
         else:
             raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
     
     def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
-        dict = {}
-        #features = self.feature.all()
-        dict['feature_name'] = self.name
+        return_dict = {}
+        return_dict[self.name] = {}
         feature_pks = [f.pk for f in self.feature.all()]
         results = intersect_the_features(geom, feature_list=feature_pks, with_geometries=with_geometries or with_kml, with_kml=with_kml)
         intersection_total = 0.0
@@ -644,28 +681,29 @@ class FeatureMapping(models.Model):
         if with_geometries or with_kml:
             f_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         for pk in feature_pks:
-            for result in results:
-                if result['hab_id']==pk:
-                    intersection_total += result['result']
+            for hab, had_dict in results.iteritems():
+                if had_dict['hab_id']==pk:
+                    intersection_total += had_dict['result']
                     #percent_sr_total += result['percent_of_total'] #wrong, can't add these percentages up have to determine total/total available
-                    sr_total += IntersectionFeature.objects.get(pk=pk).study_region_total
+                    #sr_total += IntersectionFeature.objects.get(pk=pk).study_region_total
                     if with_geometries or with_kml:
-                        f_gc = f_gc + result['geo_collection']
-        dict['result'] = intersection_total
-        dict['percent_of_total'] = (intersection_total / sr_total) * 100
-        dict['sort'] = self.sort
-        dict['units'] = self.feature.all()[0].output_units
+                        f_gc = f_gc + had_dict['geo_collection']
+        return_dict[self.name]['result'] = intersection_total
+        return_dict[self.name]['units'] = self.feature.all()[0].output_units
+        return_dict[self.name]['percent_of_total'] = (intersection_total / self.study_region_total) * 100
+        return_dict[self.name]['sort'] = self.sort
+        return_dict[self.name]['feature_map_id'] = self.pk
         if with_geometries:
-            dict['geo_collection'] = f_gc
+            return_dict[self.name]['geo_collection'] = f_gc
         if with_kml:
-            dict['kml'] = f_gc.kml
+            return_dict[self.name]['kml'] = f_gc.kml
             
-        return dict
+        return return_dict
     
     @property
     def study_region_total(self):
         total = 0.0
-        for feature in self.feature.all():
+        for feature in self.feature.all().only('study_region_total'):
             total += feature.study_region_total
         return total
     
@@ -772,22 +810,22 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
     # if no feature list is specified, get all the features
     if not feature_list:
         feature_list = [i.pk for i in IntersectionFeature.objects.all()]
-    dict_list = []
+    result_dict = {}
     for f_pk in feature_list:
-        dict = {}
         f_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         int_feature = IntersectionFeature.objects.get(pk=f_pk)
-        dict['hab_id'] = f_pk
-        dict['feature_name'] = int_feature.name
-        dict['units'] = int_feature.output_units
+        result_dict[int_feature.name] = {}
+        dict = {}
+        result_dict[int_feature.name]['hab_id'] = f_pk
+        result_dict[int_feature.name]['units'] = int_feature.output_units
         try: # get results from cache if they're there
             rc = ResultCache.objects.get( wkt_hash=str(geom.wkt.__hash__()), intersection_feature=int_feature )
-            dict['result'] = rc.result
-            dict['percent_of_total'] = rc.percent_of_total
+            result_dict[int_feature.name]['result'] = rc.result
+            result_dict[int_feature.name]['percent_of_total'] = rc.percent_of_total
             if with_geometries:
-                dict['geo_collection'] = rc.geometry
+                result_dict[int_feature.name]['geo_collection'] = rc.geometry
             if with_kml:
-                dict['kml'] = rc.geometry.kml 
+                result_dict[int_feature.name]['kml'] = rc.geometry.kml 
                 
         except ResultCache.DoesNotExist: # Calculate if cached results doen't exist
             if not int_feature.feature_model=='PointFeature':
@@ -810,27 +848,26 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                     f_gc.append(p.geometry)
                 
             if with_geometries:
-                dict['geo_collection'] = f_gc
+                result_dict[int_feature.name]['geo_collection'] = f_gc
             if with_kml:
-                dict['kml'] = f_gc.kml    
+                result_dict[int_feature.name]['kml'] = f_gc.kml    
                 
             if int_feature.feature_model=='ArealFeature':
-                dict['result'] = A(sq_m=f_gc.area).sq_mi
+                result_dict[int_feature.name]['result'] = A(sq_m=f_gc.area).sq_mi
             elif int_feature.feature_model=='LinearFeature':
-                dict['result'] = D(m=f_gc.length).mi
+                result_dict[int_feature.name]['result'] = D(m=f_gc.length).mi
             elif int_feature.feature_model=='PointFeature':
-                dict['result'] = f_gc.num_geom
+                result_dict[int_feature.name]['result'] = f_gc.num_geom
                 
-            dict['percent_of_total'] = (dict['result'] / int_feature.study_region_total) * 100
+            result_dict[int_feature.name]['percent_of_total'] = (result_dict[int_feature.name]['result'] / int_feature.study_region_total) * 100
             
             # Cache the results we've calculated
             rc = ResultCache( wkt_hash=geom.wkt.__hash__(), intersection_feature=int_feature )
-            rc.result = dict['result']
+            rc.result = result_dict[int_feature.name]['result']
             rc.units = int_feature.output_units
-            rc.percent_of_total = dict['percent_of_total']
+            rc.percent_of_total = result_dict[int_feature.name]['percent_of_total']
             rc.geometry = f_gc
             rc.save()
-            
-        dict_list.append(dict)
-    return dict_list
+        
+    return result_dict
     

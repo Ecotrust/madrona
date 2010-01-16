@@ -55,14 +55,21 @@ def test_drawing_intersect(request):
         form = TestIntersectionForm()
     return render_to_response('polygon_form.html', {'form': form})
 
-def build_csv_response(result, file_name):
+def build_csv_response(results, file_name):
     response = HttpResponse(mimetype='application/csv')
     response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
     writer = csv.writer(response)
-    header_row = result[0].keys()
+    if results.__class__.__name__<>'list':
+        results = [results]
+    header_row = ['habitat']
+    header_row.extend( results[0][results[0].keys()[0]].keys() )
     row_matrix = [header_row]
-    for dict in result:
-        row_matrix.append(dict.values())
+        
+    for result in results:
+        for hab,sub_dict in result.iteritems():
+            new_row = [hab]
+            new_row.extend(sub_dict.values())
+            row_matrix.append(new_row)
     
     for row in row_matrix:
         writer.writerow(row)
