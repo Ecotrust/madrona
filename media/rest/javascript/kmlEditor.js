@@ -42,6 +42,14 @@ lingcod.rest.kmlEditor = function(options){
     //     return children;
     // }
     
+    var refresh = function(){
+        forest.refresh(options.url, {
+            cachebust: true, 
+            callback: kmlLoaded                    
+        });
+        setSelectionMenuItemEnabled(false);
+    }
+    
     var setSelectionMenuItemEnabled = function(enabled){
         for(var i=0;i<enableWhenSelected.length;i++){
             enableWhenSelected[i].setEnabled(enabled);
@@ -84,11 +92,7 @@ lingcod.rest.kmlEditor = function(options){
         options.gex.dom.removeObject(kmlObject);
         options.client.update(kmlObject, {
             success: function(location){
-                forest.refresh(options.url, {
-                    cachebust: true, 
-                    callback: kmlLoaded                    
-                });
-                setSelectionMenuItemEnabled(false);                
+                refresh();
             },
             cancel: function(){
                 options.ge.getFeatures().appendChild(kmlObject);
@@ -107,8 +111,7 @@ lingcod.rest.kmlEditor = function(options){
         var kmlObject = that.selected.data('kml');
         options.client.destroy(kmlObject, {
             success: function(location){
-                options.gex.dom.removeObject(kmlObject);
-                that.selected.remove();
+                refresh();
             },
             error: function(){
                 alert('An error occured while trying to delete this feature.');
