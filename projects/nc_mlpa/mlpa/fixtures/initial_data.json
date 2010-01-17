@@ -1,7 +1,7 @@
 [
-{"pk": 1, "model": "mpa.mpadesignation", "fields": {"acronym": "SMR", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smr", "poly_fill_color": "ff0000ff", "name": "State Marine Reserve", "poly_outline_color": "ffffffff"}}, 
-{"pk": 2, "model": "mpa.mpadesignation", "fields": {"acronym": "SMCA", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smca", "poly_fill_color": "ffA80700", "name": "State Marine Conservation Area", "poly_outline_color": "ffffffff"}}, 
-{"pk": 3, "model": "mpa.mpadesignation", "fields": {"acronym": "SMP", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smp", "poly_fill_color": "ffFFFF00", "name": "State Marine Park", "poly_outline_color": "ffFFFFFF"}}
+{"pk": 1, "model": "mpa.mpadesignation", "fields": {"acronym": "SMR", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smr", "poly_fill_color": "770000ff", "name": "State Marine Reserve", "poly_outline_color": "ffffffff"}}, 
+{"pk": 2, "model": "mpa.mpadesignation", "fields": {"acronym": "SMCA", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smca", "poly_fill_color": "77A80700", "name": "State Marine Conservation Area", "poly_outline_color": "ffffffff"}}, 
+{"pk": 3, "model": "mpa.mpadesignation", "fields": {"acronym": "SMP", "url": "http://www.dfg.ca.gov/mlpa/defs.asp#smp", "poly_fill_color": "77FFFF00", "name": "State Marine Park", "poly_outline_color": "ffFFFFFF"}}
 ,{
     "pk": 1,
      "model": "mlpa.goalcategory",
