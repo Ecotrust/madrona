@@ -1,6 +1,6 @@
 lingcod.rest = {}
 
-lingcod.rest.client = function(gex, panel){
+lingcod.rest.client = function(gex, panel, manipulators){
     var that;
     
     if(!gex){
@@ -66,6 +66,10 @@ lingcod.rest.client = function(gex, panel){
                         if(options && options.success){
                             options.success(
                                 req.getResponseHeader('Location'));
+                        }else{
+                            if(options.error){
+                                options.error();
+                            }
                         }
                         break;
                     
@@ -73,6 +77,10 @@ lingcod.rest.client = function(gex, panel){
                         // object edited successfully
                         if(options.success){
                             options.success(options.location);
+                        }else{
+                            if(options.error){
+                                options.error();
+                            }                            
                         }                        
                         break;
 
@@ -83,7 +91,9 @@ lingcod.rest.client = function(gex, panel){
                         break;
                     
                     default:
-                        // serious error
+                        if(options.error){
+                            options.error();
+                        }
                 }
             }
         });
@@ -95,8 +105,7 @@ lingcod.rest.client = function(gex, panel){
     };
     
     var setupForm = function(text, options, config){
-        var geo_panel = $('#geopanel').html();
-        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry">'+geo_panel+'</div><div id="PanelAttributes"></div><br class="clear" /></br><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
+        var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry"></div><div id="PanelAttributes"></div><br class="clear" /></br><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
         var html = $(text);
         var h1 = html.find('h1');
         h1.remove();
@@ -104,17 +113,8 @@ lingcod.rest.client = function(gex, panel){
         html.find('input[type=submit]').hide();
         var form = html.find('form');
         content.find('#PanelAttributes').append(html);
-        form.submit(function(e){
-            onsubmit(e, form, options, config);
-            return false;
-        });
-        content.find('.submit_button').click(function(){
-            form.trigger('submit');
-        });
-        content.find('.cancel_button').click(function(){
-            panel.close();
-        });
         panel.addContent(content);
+        var el = panel.getEl();
         var tabs = content.find('.tabs').tabs();
         tabs.bind('tabsshow', function(e){
             var div = $(this).parent().parent().parent();
@@ -124,23 +124,59 @@ lingcod.rest.client = function(gex, panel){
         });
         // so this is how it might work:
         // var manipulations_needed = manipulators.needed(form);
-        
-        // This boolean test is by no means a recommended impementation Scott,
-        // just something I did to tide me over while working on form styles.
-        var manipulations_needed = html.find('#id_geometry_orig').length === 1;
-        if(manipulations_needed){
-            // fill in the geometry tab:
-            // $('#PanelGeometry')...
+        var manipulator = new lingcod.Manipulator(gex, html.find('form'), $('#PanelGeometry'));
+        if(manipulator && manipulator.needed){
             tabs.tabs('select', '#PanelGeometry');
         }else{
+            manipulator = false;
             tabs.tabs('select', '#PanelAttributes');
             tabs.tabs('disable', 0);
-            tabs.find('> .ui-tabs-nav').hide();
+            tabs.find('> .ui-tabs-nav').hide();            
         }
+        el.find('form').submit(function(e){
+            if(manipulator){
+                var errMsg = false;
+                if(manipulator.isDefiningShape()){
+                    if(manipulator.isInvalidGeometry){
+                        errMsg = 'The shape you defined is invalid. Please correct any mistakes using the Geometry form.';
+                    }else if(manipulator.isDefiningNewShape()){
+                        errMsg = 'You must finish defining your shape before creating this feature. Double-Click on the last vertex to finish drawing your shape.';
+                    }else{
+                        errMsg = 'You must finish defining your shape before creating this feature. Click "Done Editing", when you are finished';
+                    }
+                }else if(manipulator.isShapeDefined() === false){
+                    errMsg = 'You must create a geometry for this feature before continuing. Click on "Draw Shape" to begin.';
+                }
+                if(errMsg){
+                    tabs.tabs('select', '#PanelGeometry');
+                    alert(errMsg);
+                    return false;
+                }else{
+                    // can proceed with form submission
+                    manipulator.destroy();
+                }
+            }
+            onsubmit(e, form, options, config);
+            return false;
+        });
+        el.find('.submit_button').click(function(){
+            form.trigger('submit');
+        });
+        el.find('.cancel_button').click(function(){
+            if(manipulator){
+                manipulator.destroy();
+            }
+            panel.close();
+            if(options.cancel){
+                options.cancel();
+            }
+        });
         if(options.validation_error){
             tabs.tabs('select', '#PanelAttributes');
+            $('#PanelAttributes').scrollTop(1).scrollTop(0);
         }
         panel.show();
+        $('#PanelAttributes').scrollTop(1).scrollTop(0);
         $(that).trigger('form_shown', [panel, config.model]);
     };
     
@@ -155,11 +191,17 @@ lingcod.rest.client = function(gex, panel){
                 if(status === 'success'){
                     setupForm(data, options, config);
                 }else{
-                    throw('could not get form at '+config.href);
+                    alert('Could not retrieve form. Your computer was unable to contact the server.');
+                    if(options.error){
+                        options.error();
+                    }
                 }
             },
             error: function(e, b){
-                throw('could not get form at '+config.href);
+                alert('Could not retrieve form. Your computer was unable to contact the server.');
+                if(options.error){
+                    options.error();
+                }            
             }
         });
     };
@@ -186,12 +228,16 @@ lingcod.rest.client = function(gex, panel){
                 if(status === 'success'){
                     setupForm(data, options, config);
                 }else{
-                    throw('could not get form at '+config.form_link);
+                    alert('Could not retrieve form. Your computer was unable to contact the server.');
+                    if(options.error){
+                        options.error();
+                    }
                 }
             },
             error: function(e, b){
                 if(options && options.error){
-                    options.error(e, b);
+                    alert('Could not retrieve form. Your computer was unable to contact the server.');
+                    options.error();
                 }
             }
         });

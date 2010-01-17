@@ -41,7 +41,7 @@
     <div id="meta-navigation">
         <ul>
             {% if user.is_authenticated %}
-            <li><a href="profile">{{user.username}}</a> | </li>
+            <li>{{user.username}} | </li>
             {% endif %}
             <li><a href="http://marinemap.org">about marinemap</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
@@ -203,7 +203,7 @@
         {#  This text is defined within a block here so that individual #}
         {#  projects can extend this block to modify the text #}
         <div class="panel">
-            <div class="new">
+            <div class="new" style="display:none;">
                 {% block shapeDefinitionPanelNewShape %}
                 <p>
                     To begin defining a shape, press the button below and 
@@ -222,6 +222,19 @@
                 {% endblock shapeDefinitionPanelEditShape %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
+            <div class="editing" style="display:none;">
+                {% block editingShape %}
+                <p>
+                    Drag the handles of the shape to edit. You can add 
+                    vertices to the shape by dragging the handle shown at the
+                    midpoint of a line. To remove a vertex, double-click on 
+                    it.
+                    <br />
+                    When you are done, click on the button below.
+                </p>
+                <a href="#" class="done_editing button" onclick="this.blur(); return false;"><span>Done Editing</span></a>                
+                {% endblock editingShape %}
+            </div>
             <div class="manipulated" style="display:none;">
                 {% block shapeDefinitionPanelBeforeManipulatorContent %}                    
                 {% endblock shapeDefinitionPanelBeforeManipulatorContent %}
@@ -232,12 +245,17 @@
                 {% endblock shapeDefinitionPanelAfterManipulatorContent %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
+            <div id="manipulators_server_error" style="display:none;">
+                <h3>Server Error</h3>
+                <p>There was a server error processing your shape. You can try editing this shape again by pressing the "Edit Shape" button below. If problem may be specific to the region you are drawing within.</p>
+                <p>Please contact an administrator at help@marinemap.org if the problem persists.</p>
+            </div>
             {#  The following section is for debugging purposes only !! #}
-            <p style="clear:both; margin-top:150px;">
-                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.new').show(); return false;">show new state</a>
-                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.edit').show(); return false;">show edit state</a>
-                <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.manipulated').show(); return false;">show manipulated state</a>                
-            </p>
+            {# <p style="clear:both; margin-top:150px;"> #}
+            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.new').show(); return false;">show new state</a> #}
+            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.edit').show(); return false;">show edit state</a> #}
+            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.manipulated').show(); return false;">show manipulated state</a>                 #}
+            {#             </p> #}
         </div>
         {% endblock shapeDefinitionPanel %}
     </div>

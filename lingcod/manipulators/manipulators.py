@@ -4,6 +4,8 @@ from lingcod.studyregion.models import *
 from django.conf import settings
 from lingcod.common.utils import LargestPolyFromMulti
 from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
+
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
 manipulatorsDict = {}
 
@@ -99,7 +101,7 @@ class BaseManipulator(object):
             self.success = success
         def __str__(self):
             return repr(self.message)
-       
+           
 class ClipToShapeManipulator(BaseManipulator):
     '''
         required arguments:
@@ -445,4 +447,10 @@ class ClipToGraticuleManipulator(BaseManipulator):
         }
 
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
-    
+
+
+def get_url_for_model(model):
+    names = []
+    for manipulator in model.Options.manipulators:
+        names.append(manipulator.Options.name)
+    return reverse('manipulate', args=[','.join(names)])

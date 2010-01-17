@@ -1,101 +1,225 @@
-var try_again_html = '<p><button id="try_again_button">Try Again</button></p>';
-var manip_url = '/manipulators-list/';
+lingcod.Manipulator = function(gex, form, render_target){
+    var json = false;
+    var data = form.find('.json').html();
+    if(data){
+        json = JSON.parse(data);
+    }
+    this.needed = true;
+    // Return false if manipulations are not needed, else proceed.
+    if(!json || !json.manipulators){
+        this.needed = false;
+        return false;
+    }
+    this.shape_;
+    this.manipulators_ = json.manipulators;
+    this.gex_ = gex;
+    this.form_ = form;
+    this.render_target_ = render_target;
+    this.formats_ = new lingcod.Formats();
 
-/**
- * Creates a new Manipulator instance.
- * @constructor
- * @param {Panel} results_panel, used for displaying templates related to manipulator processing
- * @param {Function} renderCallBack, function called after manipulator processing attempt is complete
- * @param {List} manip_list, list of manipulators to process
- * @param {DrawTool} drawTool, object used to draw and edit shapes on the map
- */
-lingcod.Manipulators = function(results_panel, renderCallBack, drawTool) { 
-    this.results_panel = results_panel;
-    this.renderCallBack = renderCallBack;
-    this.drawTool = drawTool;
-    this.manipulator_list = null;
-    this.success = false; 
-    $.ajaxSetup({ cache: false });
-    $.getJSON( manip_url, $.delegate(this.initialize_list, this) );
-};
-
-/**
- * Called in response to a completed GET request for the list of manipulators 
- * Assigns manipulator_list with a string representation of the list of manipulators to be executed
- */
-lingcod.Manipulators.prototype.initialize_list = function(manip_list) {
-    this.manipulator_list = this.stringFromList(manip_list);
+    // Fill in the form with content from map.html
+    this.render_target_.html($('#geopanel').html());
+    
+    var self = this;
+    
+    // Setup event listeners
+    this.render_target_.find('.draw_shape').click(function(){
+        if(!$(this).hasClass('disabled')){
+            $(this).addClass('disabled');
+            self.drawNewShape_();
+        }
+    });
+    
+    this.render_target_.find('div.manipulated .edit_shape').click(function(){
+        if(!$(this).hasClass('disabled')){
+            $(this).addClass('disabled');
+            self.editExistingShape_();
+        }
+    });
+    
+    this.render_target_.find('.done_editing').click(function(){
+        self.render_target_.find('.done_editing').addClass('disabled');
+        self.finishedEditingCallback_();
+    });
+    
+    this.render_target_.find('div.edit .edit_shape').click(function(){
+        if(!$(this).hasClass('disabled')){
+            $(this).addClass('disabled');
+            self.editExistingShape_();
+        }
+    });
+    
+    // Figure out if there is an existing shape in the form, or if a new one
+    // needs to be drawn
+    if(this.form_.find('#id_geometry_final').val()){
+        this.enterExistingShapeState_();
+    }else{
+        this.enterNewState_();
+    }
 }
-      
-/**
- * Executes an ajax POST request to /manipulators/<manipulator-list> with the user-drawn geometry
- */
-lingcod.Manipulators.prototype.process = function() { 
-    var target_wkt = this.drawTool.targetToWkt();
-    $.post(
-        '/manipulators/'+this.manipulator_list+'/', 
-        { target_shape: target_wkt },
-        $.delegate(this.renderResults, this)
-    );
-};
 
-/**
- * Called upon manipulator completion
- * Assigns clipped shape to drawTool
- * If clipping was a success
- *      Display clipped geometry on map
- *      Display returned template on results panel
- *      Return control to callback
- * Otherwise, display returned template on results panel 
- * @param {JSON} manip_data, the json dictionary containing the manipulated mpa
- */
-lingcod.Manipulators.prototype.renderResults = function(manip_data) {
-    var manip_ret = eval( '(' + manip_data + ')' );
-    this.success = manip_ret.success=='1';
+lingcod.Manipulator.prototype.drawNewShape_ = function(){
+    this.is_defining_shape_ = true;
+    this.is_defining_new_shape_ = true;
+    this.addNewShape_();
+    var bounds = this.shape_.getGeometry().getOuterBoundary();
+    var self = this;
+    this.gex_.edit.drawLineString(bounds, {
+        bounce: false,
+        finishCallback: function(){
+            self.finishedEditingCallback_();
+        }
+    });
+}
+
+lingcod.Manipulator.prototype.addNewShape_ = function(kml){
+    this.clearShape_();
+    if(kml){
+        this.shape_ = this.gex_.util.displayKmlString(kml);
+    }else{
+        this.shape_ = this.gex_.dom.addPlacemark({
+            visibility: true,
+            polygon: [],
+            style: {
+                line: { width: 2, color: 'ffffffff' },
+                poly: { color: '8000ff00' }
+            }
+        });        
+    }
+    return this.shape_;
+}
+
+lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
+    var orig_wkt = this.formats_.kmlToWkt(this.shape_);
+    var self = this;
+    this.process(orig_wkt, this.manipulators_, function(data){
+        if(data.success === '1'){
+            var g = JSON.parse(data.geojson_clipped);
+            var kml = self.formats_.geojsonToKmlPlacemark(g);
+            var kmlObject = self.addNewShape_(kml);
+            // that.finalKmlObject = gex.util.displayKmlString(kml);
+            self.gex_.util.flyToObject(kmlObject, {
+                boundsFallback: true});
+            self.setGeometryFields_(orig_wkt, self.formats_.geojsonToWkt(g));
+            // setGeomFields(wkt, formats.geojsonToWkt(g));
+            self.enterManipulatedState_(data.html, true);            
+        }else{
+            self.setGeometryFields_(orig_wkt, '');
+            self.gex_.util.flyToObject(self.shape_, {
+                boundsFallback: true});
+            self.enterManipulatedState_(data.html, false);
+        }
+    });
+}
+
+lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, final_wkt){
+    this.form_.find('#id_geometry_final').val('SRID=4326;'+final_wkt);
+    this.form_.find('#id_geometry_orig').val('SRID=4326;'+original_wkt);
+}
+
+lingcod.Manipulator.prototype.hideStates_ = function(){
+    this.render_target_.find('div.new, div.edit, div.manipulated, div.editing').hide();
+}
+
+lingcod.Manipulator.prototype.enterManipulatedState_ = function(html, success){
+    this.hideStates_();
+    if(success === true){
+        this.render_target_.find('div.manipulated').removeClass('error');
+        this.is_invalid_geometry = false;
+        this.is_defining_shape_ = false;
+        this.is_defining_new_shape_ = false;
+    }else{
+        this.is_invalid_geometry = true;
+        this.render_target_.find('div.manipulated').addClass('error');
+    }
+    this.render_target_.find('div.manipulated a.edit_shape').removeClass('disabled');
+    this.render_target_.find('div.manipulated').show().find('>p')
+        .html(html);
+}
+
+lingcod.Manipulator.prototype.isInvalidGeometry = function(){
+    return this.is_invalid_geometry;
+}
+
+lingcod.Manipulator.prototype.enterNewState_ = function(){
+    this.hideStates_();
+    // this.is_defining_shape_ = true;
+    this.render_target_.find('div.new').show();
+    this.render_target_.find('a.draw_shape').removeClass('disabled');
+}
+
+lingcod.Manipulator.prototype.isDefiningNewShape = function(){
+    return this.is_defining_new_shape_;
+}
+
+lingcod.Manipulator.prototype.enterEditingState_ = function(){
+    this.hideStates_();
+    this.is_defining_shape_ = true;
+    this.render_target_.find('.done_editing').removeClass('disabled');
+    this.render_target_.find('div.editing').show();
+}
+
+lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
+    this.hideStates_();
+    this.is_defining_shape = false;
+    this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
+    this.render_target_.find('div.edit').show();
+    var wkt = this.form_.find('#id_geometry_final').val();
+    var kml = this.formats_.wktPolyToKml(wkt);
+    this.addNewShape_(kml);
+    this.gex_.util.flyToObject(this.shape_, {
+        boundsFallback: true});
+}
+
+lingcod.Manipulator.prototype.isShapeDefined = function(){
+    return !!this.form_.find('#id_geometry_final').val();
+}
+
+lingcod.Manipulator.prototype.isDefiningShape = function(){
+    return this.is_defining_shape_;
+}
+
+lingcod.Manipulator.prototype.process = function(wkt, url, callback){
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: { target_shape: wkt },
+        success: function(data, status){
+            if(status === 'success'){
+                callback(JSON.parse(data));
+            }else{
+                alert('there was an error processing your shape.');
+                $(this).trigger('error', "There was an error processing your shape.");
+                callback({success: false, html: $('#manipulators_server_error')});
+            }
+        },
+        error: function(data, status){
+            $(this).trigger('error', 'There was an error processing your shape.');
+            callback({success: false, html: $('#manipulators_server_error').html()});
+        }
+    });
+}
+
+lingcod.Manipulator.prototype.editExistingShape_ = function(){
+    var wkt = this.form_.find('#id_geometry_orig').val();
+    var kml = this.formats_.wktPolyToKml(wkt);
+    this.addNewShape_(kml);
+    window.shape = this.shape_;
+    this.gex_.util.flyToObject(this.shape_, {
+        boundsFallback: true});
+    this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
+    this.enterEditingState_();
     
-    if(this.success) {
-        var geojson_clipped = eval( '(' + manip_ret.geojson_clipped + ')' );
-        this.drawTool.setClippedShape(geojson_clipped);
-        this.drawTool.hide();
-        this.drawTool.displayClipped();
-        this.results_panel.html(manip_ret.html);
-        this.renderCallBack.call(this.renderCallBack, this.success);
-    }
-    else {
-        this.displayFail(manip_ret.html);
-    }
-};
+}
 
-/**
- * Called from renderResults upon manipulator failure
- * Display the failure template and associated buttons
- * @param {String} display_html, the template explaining the failure
- */
-lingcod.Manipulators.prototype.displayFail = function(display_html) {
-    var display = display_html + try_again_html;
-    this.results_panel.html(display);
-    
-    this.try_again_button = $('#try_again_button');
-    this.try_again_button.click($.delegate(this.tryAgain, this));
-};
-
-/**
- * Returns control to callback with 'success' parameter
- */
-lingcod.Manipulators.prototype.tryAgain = function() {
-    this.renderCallBack.call(this.success);
-};
-
-/**
- * Creates a comma separated string from a list object.
- * @param {List} 
- */
-lingcod.Manipulators.prototype.stringFromList = function(list) {
-    var string_result = '';
-    for ( var i = 0; i < list.length; i++ ) {
-        if (i > 0)
-            string_result = string_result + ',';
-        string_result = string_result + list[i];
+lingcod.Manipulator.prototype.clearShape_ = function(){
+    if(this.shape_ && this.shape_.getParentNode()){
+        this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
+        gex.dom.removeObject(this.shape_);
+        this.shape_ = false;
     }
-    return string_result
-};
+}
+
+lingcod.Manipulator.prototype.destroy = function(){
+    this.clearShape_();
+}

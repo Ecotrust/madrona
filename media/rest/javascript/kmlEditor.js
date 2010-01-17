@@ -61,6 +61,9 @@ lingcod.rest.kmlEditor = function(options){
                     callback: kmlLoaded                    
                 });
                 setSelectionMenuItemEnabled(false);
+            },
+            error: function(){
+                alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
             }
         });
     });
@@ -77,13 +80,22 @@ lingcod.rest.kmlEditor = function(options){
     var edit = new goog.ui.ToolbarButton('Edit');
     edit.setEnabled(false);
     goog.events.listen(edit, 'action', function(e) {
-        options.client.update(that.selected.data('kml'), {
+        var kmlObject = that.selected.data('kml');
+        options.gex.dom.removeObject(kmlObject);
+        options.client.update(kmlObject, {
             success: function(location){
                 forest.refresh(options.url, {
                     cachebust: true, 
                     callback: kmlLoaded                    
                 });
                 setSelectionMenuItemEnabled(false);                
+            },
+            cancel: function(){
+                options.ge.getFeatures().appendChild(kmlObject);
+            },
+            error: function(){
+                alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
+                options.ge.getFeatures().appendChild(kmlObject);
             }
         });
     });

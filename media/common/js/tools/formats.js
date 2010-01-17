@@ -51,6 +51,19 @@ lingcod.Formats.prototype.geojsonToWkt = function(geojson_obj) {
     return wkt;
 };
 
+lingcod.Formats.prototype.kmlToWkt = function(shape) {
+    var linearRing = shape.getGeometry().getOuterBoundary();
+    var wkt = 'POLYGON((';
+    for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ ) {
+        if ( i > 0 )
+            wkt = wkt + ',';
+        wkt = wkt + linearRing.getCoordinates().get(i).getLongitude() + ' ' + linearRing.getCoordinates().get(i).getLatitude();
+    }
+    wkt = wkt + '))'
+    return wkt;
+};
+
+
 /**
  * Builds the kml placemark representation from a geojson encoded polygon 
  * @param {Geojson} geojson_obj, geojson representation of a polygon
@@ -90,3 +103,18 @@ lingcod.Formats.prototype.innerKml = function(coords) {
     kml += '</Polygon>';
     return kml;
 };
+
+lingcod.Formats.prototype.wktPolyToKml = function(wkt){
+    var wkt = wkt.replace('POLYGON', '');
+    wkt = wkt.replace('SRID=4326;', '');
+    wkt = jQuery.trim(wkt.replace('((', '').replace('))', ''));
+    var coords = wkt.split(',');
+    var new_coords = [];
+    for(var i=0; i<coords.length;i++){
+        var values = jQuery.trim(coords[i]).split(' ');
+        new_coords.push([values[0], values[1]]);
+    }
+    var inner_kml = this.innerKml([new_coords]);
+    var kml = '<Placemark> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+inner_kml+'</Placemark>';
+    return kml;
+}

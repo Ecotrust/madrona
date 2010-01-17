@@ -374,8 +374,10 @@ mlpa.uses = function(options){
     var getAllowedPurposes = function(designation_id){
         var keys = data['designations-purposes'][designation_id];
         var purposes = [];
-        for(var i=0;i<keys.length;i++){
-            purposes.push(data['purposes'][keys[i]]);
+        if(keys){
+            for(var i=0;i<keys.length;i++){
+                purposes.push(data['purposes'][keys[i]]);
+            }            
         }
         return purposes;
     }

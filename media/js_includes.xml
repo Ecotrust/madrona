@@ -32,8 +32,6 @@
     <test path="common/js/test/tree/kmlForest.js" />
     <file path="common/js/lib/json2.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
-    <file path="common/js/tools/draw_tool.js" />
-    <test path="common/js/test/tools/draw_tool.js" />
     <file path="common/js/tools/formats.js" />
     <file path="manipulators/js/manipulators.js" />
     <test path="manipulators/js/test/manipulators.js" />

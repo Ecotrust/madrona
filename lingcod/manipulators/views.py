@@ -76,7 +76,7 @@ def multi_generic_manipulator_view(request, manipulators):
                   
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
-                html_response = html_response + '<br/>' + result["html"] 
+                html_response = html_response + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
             return respond_with_template(e.html, None, e.success)

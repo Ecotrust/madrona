@@ -102,6 +102,7 @@ def create(request, form_class=None, action=None, title=None,
                 'action': action,
                 'is_ajax': request.is_ajax(),
             })
+            extra_context = decorate_with_manipulators(extra_context, form_class)
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
@@ -129,6 +130,7 @@ def create_form(request, form_class=None, action=None, extra_context={},
             'action': action,
             'is_ajax': request.is_ajax(),
         })
+        extra_context = decorate_with_manipulators(extra_context, form_class)
         return render_to_response(template, extra_context)
     else:
         return HttpResponse('Invalid http method', status=405)
@@ -161,6 +163,7 @@ def update_form(request, form_class=None, pk=None, extra_context={},
             'action': instance.get_absolute_url(),
             'is_ajax': request.is_ajax(),
         })
+        extra_context = decorate_with_manipulators(extra_context, form_class)
         return render_to_response(template, extra_context)
     else:
         return HttpResponse('Invalid http method', status=405)        
@@ -211,6 +214,7 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
                 'action': instance.get_absolute_url(),
                 'is_ajax': request.is_ajax(),
             })
+            extra_context = decorate_with_manipulators(extra_context, form_class)
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
@@ -289,3 +293,14 @@ def form_resources(request, form_class=None, pk=None, extra_context={},
                 template=template)
     else:
         return HttpResponse('Invalid http method', status=405)        
+
+from lingcod.manipulators.manipulators import get_url_for_model
+from django.utils import simplejson
+
+def decorate_with_manipulators(extra_context, form_class):
+    try:
+        extra_context['json'] = simplejson.dumps(
+            {'manipulators': get_url_for_model(form_class.Meta.model)})
+    except:
+        extra_context['json'] = False
+    return extra_context

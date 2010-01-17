@@ -19,6 +19,10 @@ var lingcod = (function(){
             });
         setupListeners();
         lingcod.menu_items.init($('.menu_items'));
+        // makes button clicking a lot more reliable!!
+        $(document).find('a.button').live('dragstart', function(){
+            return false;
+        });
     };
 
     var geInit = function(pluginInstance){
@@ -31,14 +35,7 @@ var lingcod = (function(){
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
         that.drawTool = new lingcod.DrawTool(ge, gex);
-        
-        //part of mpa creation -- draw_panels and mpaCreator
-        //will need to come up with a better solution for manipulator url
-        that.draw_panels = { button_panel: 'mpa_draw_panel', 
-            results_panel: 'mpa_results_panel' };
-        that.mpaCreator = new lingcod.MpaCreator(that.drawTool, 
-            that.draw_panels);
-        
+                
         $('#measure_distance').click(function(){
             that.measureTool.clear();
             that.measureTool.measureDistance(gex, "measureAmount");
