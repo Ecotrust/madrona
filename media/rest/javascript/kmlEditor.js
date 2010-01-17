@@ -100,6 +100,24 @@ lingcod.rest.kmlEditor = function(options){
         });
     });
     tbar.addChild(edit, true);
+
+    var del = new goog.ui.ToolbarButton('Delete');
+    del.setEnabled(false);
+    goog.events.listen(del, 'action', function(e) {
+        var kmlObject = that.selected.data('kml');
+        options.client.destroy(kmlObject, {
+            success: function(location){
+                options.gex.dom.removeObject(kmlObject);
+                that.selected.remove();
+            },
+            error: function(){
+                alert('An error occured while trying to delete this feature.');
+            }
+        });
+    });
+    tbar.addChild(del, true);
+
+
         
     var export_menu = new goog.ui.Menu();
     // export_menu.addItem(new goog.ui.MenuItem('to kml (Google Earth)'));
@@ -116,7 +134,7 @@ lingcod.rest.kmlEditor = function(options){
     share.setEnabled(false);
     tbar.addChild(share, true);
     
-    var enableWhenSelected = [attr, edit, export_button, copy, share];
+    var enableWhenSelected = [attr, edit, del, export_button, copy, share];
     
     tbar.render(that.el.find('.toolbar')[0]);
 
