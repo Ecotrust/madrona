@@ -191,7 +191,7 @@ lingcod.Tree.prototype._template = tmpl([
     '</li>'
 ].join(''));
 
-lingcod.Tree.prototype.selectItem = function(item, scrollTo){
+lingcod.Tree.prototype.selectItem = function(item, scrollTo, fireEvent){
     var wasHidden = false;
     if(typeof item == 'string'){
         item = this.element.find(item);
@@ -232,10 +232,18 @@ lingcod.Tree.prototype.selectItem = function(item, scrollTo){
             s.scrollTop(position - (ph / 2) + 20);
         }
     }
+    if(fireEvent){
+        var e = jQuery.Event("itemSelect");
+        $(this).trigger(e, [item]);
+    }
 }
 
-lingcod.Tree.prototype.clearSelection = function(){
+lingcod.Tree.prototype.clearSelection = function(fireEvent){
     $(".marinemap-tree li.selected").removeClass('selected');
+    if(fireEvent){
+        var e = jQuery.Event('itemSelect');
+        $(this).trigger(e, [null, null]);
+    }
 }
 
 lingcod.Tree.prototype.add = function(options){

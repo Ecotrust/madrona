@@ -89,18 +89,28 @@ var lingcod = (function(){
             });
         }
         
+        var editors = [];
+        
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
-                lingcod.rest.kmlEditor({
+                editors.push(lingcod.rest.kmlEditor({
                     ge: ge,
                     gex: gex,
                     appendTo: '#myshapestree',
                     div: '#map',
                     url: options.myshapes[i],
                     client: that.client
-                });
+                }));
             }            
         }
+        
+        $('#sidebar, #meta-navigation').click(function(e){
+            if(e.target === this || e.target === $('#MyShapes')[0]){
+                for(var i=0;i<editors.length;i++){
+                    editors[0].forest.clearSelection();
+                }
+            }
+        });
         
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){

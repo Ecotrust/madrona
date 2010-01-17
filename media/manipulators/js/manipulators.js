@@ -1,4 +1,4 @@
-lingcod.Manipulator = function(gex, form, render_target){
+lingcod.Manipulator = function(gex, form, render_target, div){
     var json = false;
     var data = form.find('.json').html();
     if(data){
@@ -10,6 +10,7 @@ lingcod.Manipulator = function(gex, form, render_target){
         this.needed = false;
         return false;
     }
+    this.div = div;
     this.shape_;
     this.manipulators_ = json.manipulators;
     this.gex_ = gex;
@@ -99,14 +100,14 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
             var kmlObject = self.addNewShape_(kml);
             // that.finalKmlObject = gex.util.displayKmlString(kml);
             self.gex_.util.flyToObject(kmlObject, {
-                boundsFallback: true});
+                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
             self.setGeometryFields_(orig_wkt, self.formats_.geojsonToWkt(g));
             // setGeomFields(wkt, formats.geojsonToWkt(g));
             self.enterManipulatedState_(data.html, true);            
         }else{
             self.setGeometryFields_(orig_wkt, '');
             self.gex_.util.flyToObject(self.shape_, {
-                boundsFallback: true});
+                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
             self.enterManipulatedState_(data.html, false);
         }
     });
@@ -168,7 +169,7 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     var kml = this.formats_.wktPolyToKml(wkt);
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
-        boundsFallback: true});
+        boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
 }
 
 lingcod.Manipulator.prototype.isShapeDefined = function(){
@@ -206,7 +207,7 @@ lingcod.Manipulator.prototype.editExistingShape_ = function(){
     this.addNewShape_(kml);
     window.shape = this.shape_;
     this.gex_.util.flyToObject(this.shape_, {
-        boundsFallback: true});
+        boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
     this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
     this.enterEditingState_();
     

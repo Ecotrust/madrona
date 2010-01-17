@@ -1,5 +1,48 @@
 lingcod.kmlForest = function(opts){
     var that = {};
+    // reference table for getting tree nodes by kml ID.
+    that.byId = [];
+    
+    google.earth.addEventListener(opts.ge.getGlobe(), 'click', function(e, d){
+        var target = e.getTarget();
+        var balloon = opts.ge.getBalloon();
+        if(target.getType() === 'GEGlobe' && !balloon){
+            // Seems like this combo makes balloons close when the user clicks
+            // on the globe. When that !balloon test is not there, random 
+            // click events fired when the user zooms in and out close the 
+            // balloon. Not sure why
+            clearSelection();
+        }else if(target.getType() === 'KmlPlacemark'){
+            var id = target.getId();
+            if(id){
+                var node = that.byId[id];
+                if(node){
+                    that.tree.selectItem(node, true, true);
+                }else{
+                    clearSelection();
+                }
+            }else{
+                clearSelection();
+            }
+        }
+    });
+    
+    opts.element.click(function(e){
+        if(e.target === this){
+            clearSelection();
+        }else{
+            if($(e.target).hasClass('toggle') && !$(e.target).hasClass('select')){
+                clearSelection();
+            }
+        }
+    });
+    
+    var clearSelection = function(){
+        that.tree.clearSelection(true);
+        opts.ge.setBalloon(null);
+    }
+    
+    that.clearSelection = clearSelection;
         
     var defaults = {
         animate: false,
@@ -45,23 +88,47 @@ lingcod.kmlForest = function(opts){
     }
     
     var itemClick = function(e, target, ev){
-        var kml = target.data('kml');
-        if(target.hasClass('description')){
+        if(target && target.hasClass('description')){
+            var kml = target.data('kml');
             target.find('input[checked=false]').click();
-            kml.setVisibility(true);
-            var balloon = opts.ge.createFeatureBalloon('');
-            balloon.setFeature(kml);
-            balloon.setMinWidth(400);
-            opts.ge.setBalloon(balloon);
+            openBalloon(kml);
         }else{
             opts.ge.setBalloon(null);
         }
         // $(opts.element).trigger('itemClick');
     }
+    
+    // For some reason GEAPI can't switch between features when opening new
+    // balloons accurately. Have to clear the old popup and add a timeout to
+    // make sure the balloon A is closed before balloon b is opened.
+    var openBalloon = function(kmlObject){
+        // console.log('openBalloon', kmlObject.getName());
+        var balloonA = opts.ge.getBalloon();
+        if(balloonA){
+            var feature = balloonA.getFeature();
+            if(feature === kmlObject){
+                // do nothing
+                return;
+            }else{
+                // close balloonA
+                opts.ge.setBalloon(null);
+                setTimeout(openBalloon, 50, kmlObject);
+                // console.log('setting timeout', kmlObject.getName());
+            }
+        }else{
+            // if balloonA is closed or never existed, create & open balloonB
+            kmlObject.setVisibility(true);
+            var balloonB = opts.ge.createFeatureBalloon('');
+            balloonB.setFeature(kmlObject);
+            balloonB.setMinWidth(400);
+            opts.ge.setBalloon(balloonB);
+        }
+    }
             
     that.tree = new lingcod.Tree({
         element: opts.element,
-        animate: opts.animate
+        animate: opts.animate,
+        selectToggles: opts.selectToggles
     });
     $(that.tree).bind('itemToggle', itemToggle)
     $(that.tree).bind('itemDoubleClick', itemDoubleClick)
@@ -130,7 +197,7 @@ lingcod.kmlForest = function(opts){
             visitCallback: function(context){
                 var type = this.getType();
                 var kml = this.getKml();
-                var select = $(kml).find('atom\\:link[rel=self]').length === 1;
+                var select = $(kml).find('> Placemark > atom\\:link[rel=self]').length === 1;
                 var child = that.tree.add({
                     name: this.getName() || "No name specified in kml",
                     parent: context.current,
@@ -143,7 +210,7 @@ lingcod.kmlForest = function(opts){
                     select: select,
                     snippet: this.getSnippet(),
                     doubleclick: true,
-                    description: this.getDescription(),
+                    description: this.getDescription() || select,
                     context: false
                 });
                 if(this == kmlObject){
@@ -155,6 +222,9 @@ lingcod.kmlForest = function(opts){
                 //     that.options.contextMenu.attach(child.find('>a')[0], goog.positioning.Corner.BOTTOM_RIGHT, goog.positioning.Corner.TOP_LEFT, true);
                 // }
                 child.data('kml', this);
+                if(this.getId()){
+                    that.byId[this.getId()] = child;
+                }
                 context.child = child;
             },
             rootContext: false,
@@ -193,8 +263,10 @@ lingcod.kmlForest = function(opts){
     that.remove = remove;
     
     var refresh = function(url, options){
+        that.byId = [];
         remove(url);
         add(url, options);
+        opts.ge.setBalloon(null);
     }
     
     that.refresh = refresh;

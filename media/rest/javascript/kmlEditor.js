@@ -61,6 +61,7 @@ lingcod.rest.kmlEditor = function(options){
     var create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
     tbar.addChild(create_button, true);
     goog.events.listen(create_menu, 'action', function(e) {
+        that.forest.clearSelection();
         options.client.create(e.target.mm_data, {
             success: function(location){
                 // possible memory leak!!!!!!!
@@ -75,7 +76,17 @@ lingcod.rest.kmlEditor = function(options){
             }
         });
     });
+    
+    // For testing purposes only, will be removed on launch
+    var ref = new goog.ui.ToolbarButton('Refresh');
+    ref.setEnabled(true);
+    goog.events.listen(ref, 'action', function(e) {
+        refresh();
+    });
+    tbar.addChild(ref, true);
+    
     tbar.addChild(new goog.ui.ToolbarSeparator(), true);
+        
     
     var attr = new goog.ui.ToolbarButton('Attributes');
     attr.setEnabled(false);
@@ -88,6 +99,7 @@ lingcod.rest.kmlEditor = function(options){
     var edit = new goog.ui.ToolbarButton('Edit');
     edit.setEnabled(false);
     goog.events.listen(edit, 'action', function(e) {
+        options.ge.setBalloon(null);
         var kmlObject = that.selected.data('kml');
         options.gex.dom.removeObject(kmlObject);
         options.client.update(kmlObject, {
@@ -153,9 +165,12 @@ lingcod.rest.kmlEditor = function(options){
         ge: options.ge, 
         gex: options.gex, 
         div: options.div,
-        element: that.kmlEl
+        element: that.kmlEl,
+        selectToggles: true
         // contextMenu: pm
     });
+    
+    that.forest = forest;
     
     $(forest.tree).bind('itemSelect', function(e, selected, previously){
         that.selected = selected;
