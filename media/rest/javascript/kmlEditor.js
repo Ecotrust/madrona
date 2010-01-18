@@ -42,10 +42,17 @@ lingcod.rest.kmlEditor = function(options){
     //     return children;
     // }
     
-    var refresh = function(){
+    var refresh = function(callback){
+        var cback = kmlLoaded;
+        if(callback){
+            cback = function(kml){
+                kmlLoaded(kml);
+                callback(kml);
+            }
+        }
         forest.refresh(options.url, {
             cachebust: true, 
-            callback: kmlLoaded                    
+            callback: cback                  
         });
         setSelectionMenuItemEnabled(false);
     }
@@ -64,12 +71,9 @@ lingcod.rest.kmlEditor = function(options){
         that.forest.clearSelection();
         options.client.create(e.target.mm_data, {
             success: function(location){
-                // possible memory leak!!!!!!!
-                forest.refresh(options.url, {
-                    cachebust: true, 
-                    callback: kmlLoaded                    
+                refresh(function(){
+                    that.forest.selectById(location);
                 });
-                setSelectionMenuItemEnabled(false);
             },
             error: function(){
                 alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
@@ -104,14 +108,18 @@ lingcod.rest.kmlEditor = function(options){
         options.gex.dom.removeObject(kmlObject);
         options.client.update(kmlObject, {
             success: function(location){
-                refresh();
+                refresh(function(){
+                    that.forest.selectById(location);
+                });
             },
             cancel: function(){
                 options.ge.getFeatures().appendChild(kmlObject);
+                that.forest.selectById(kmlObject.getId());
             },
             error: function(){
                 alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
                 options.ge.getFeatures().appendChild(kmlObject);
+                that.forest.selectById(kmlObject.getId());
             }
         });
     });

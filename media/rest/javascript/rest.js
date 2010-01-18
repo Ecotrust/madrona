@@ -13,6 +13,14 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     that = {};
     
+    var processLocation = function(location){
+        var mydomain=window.location.href.match(/:\/\/(.[^/]+)/)[1];
+        if(location.search(mydomain) !== -1){
+            location = location.split(mydomain)[1];
+        }
+        return location;
+    }
+    
     // Reads a kml document (from a string) and returns an array of objects 
     // that can be used as input to client.create().
     var parseDocument = function(kml){
@@ -65,7 +73,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                         // new object created, get location header
                         if(options && options.success){
                             options.success(
-                                req.getResponseHeader('Location'));
+                                processLocation(req.getResponseHeader('Location')));
                         }else{
                             if(options.error){
                                 options.error();
@@ -76,7 +84,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                     case 200:
                         // object edited successfully
                         if(options.success){
-                            options.success(options.location);
+                            options.success(processLocation(options.location));
                         }else{
                             if(options.error){
                                 options.error();
@@ -262,7 +270,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 complete: function(response, status){
                     if(status === 'success'){
                         if(options.success){
-                            options.success(config.location);
+                            options.success(processLocation(config.location));
                         }
                     }else{
                         // show an error
@@ -275,7 +283,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
             });
         }else{
             if(options.cancel){
-                cancel(config.location);
+                cancel(processLocation(config.location));
             }
         }
     };

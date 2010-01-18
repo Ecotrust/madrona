@@ -1,7 +1,7 @@
 lingcod.kmlForest = function(opts){
     var that = {};
     // reference table for getting tree nodes by kml ID.
-    that.byId = [];
+    that.byId = {};
     
     google.earth.addEventListener(opts.ge.getGlobe(), 'click', function(e, d){
         var target = e.getTarget();
@@ -43,6 +43,19 @@ lingcod.kmlForest = function(opts){
     }
     
     that.clearSelection = clearSelection;
+    
+    var selectById = function(id){
+        var node = that.byId[id];
+        if(node){
+            that.tree.selectItem(node, true, true);
+            var kml = $(node).data('kml');
+            openBalloon(kml);
+        }else{
+            return false;
+        }
+    }
+    
+    that.selectById = selectById;
         
     var defaults = {
         animate: false,
@@ -102,7 +115,6 @@ lingcod.kmlForest = function(opts){
     // balloons accurately. Have to clear the old popup and add a timeout to
     // make sure the balloon A is closed before balloon b is opened.
     var openBalloon = function(kmlObject){
-        // console.log('openBalloon', kmlObject.getName());
         var balloonA = opts.ge.getBalloon();
         if(balloonA){
             var feature = balloonA.getFeature();
@@ -113,7 +125,6 @@ lingcod.kmlForest = function(opts){
                 // close balloonA
                 opts.ge.setBalloon(null);
                 setTimeout(openBalloon, 50, kmlObject);
-                // console.log('setting timeout', kmlObject.getName());
             }
         }else{
             // if balloonA is closed or never existed, create & open balloonB
@@ -197,7 +208,8 @@ lingcod.kmlForest = function(opts){
             visitCallback: function(context){
                 var type = this.getType();
                 var kml = this.getKml();
-                var select = $(kml).find('> Placemark > atom\\:link[rel=self]').length === 1;
+                var linkself = $(kml).find('> Placemark > atom\\:link[rel=self]');
+                var select = linkself.length === 1;
                 var child = that.tree.add({
                     name: this.getName() || "No name specified in kml",
                     parent: context.current,
@@ -223,7 +235,7 @@ lingcod.kmlForest = function(opts){
                 // }
                 child.data('kml', this);
                 if(this.getId()){
-                    that.byId[this.getId()] = child;
+                    that.byId[this.getId()] = child[0];
                 }
                 context.child = child;
             },
@@ -263,7 +275,7 @@ lingcod.kmlForest = function(opts){
     that.remove = remove;
     
     var refresh = function(url, options){
-        that.byId = [];
+        that.byId = {};
         remove(url);
         add(url, options);
         opts.ge.setBalloon(null);

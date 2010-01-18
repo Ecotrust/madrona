@@ -195,9 +195,11 @@ lingcod.Tree.prototype.selectItem = function(item, scrollTo, fireEvent){
     var wasHidden = false;
     if(typeof item == 'string'){
         item = this.element.find(item);
-        wasHidden = this._expandAndToggleRecursive(item);
     }else{
         item = $(item);
+    }
+    if(item.find('>input:visible').length === 0){
+        wasHidden = this._expandAndToggleRecursive(item);
     }
     var input = item.find('>input');
     var wasChecked = input.attr('checked');
