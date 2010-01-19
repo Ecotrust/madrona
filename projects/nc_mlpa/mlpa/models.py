@@ -75,6 +75,14 @@ class MpaArray(BaseArray):
         return self.mpa_set.filter(is_estuary=True)
         
     @property
+    def clusterable_mpa_set(self):
+        pk_list = []
+        for mpa in self.opencoast_mpa_set:
+            if mpa.can_be_clustered:
+                pk_list.append(mpa.pk)
+        return self.opencoast_mpa_set.filter(pk__in=pk_list)
+            
+    @property
     def opencoast_geometry_collection(self):
         """return a geometry collection of all non-estuarine MPAs in the array"""
         gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
@@ -310,6 +318,17 @@ class MlpaMpa(Mpa):
             self.lop
             mpa_lop = MpaLop.objects.get(mpa=self)
         return mpa_lop.reason
+        
+    @property
+    def can_be_clustered(self):
+        if self.is_estuary:
+            return False
+        else:
+            run_lops = Lop.objects.filter(run=True)
+            if self.lop in run_lops:
+                return True
+            else:
+                return False
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()

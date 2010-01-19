@@ -79,6 +79,9 @@ INSTALLED_APPS += (
 SAT_OPEN_COAST = 'satopencoast'
 SAT_ESTUARINE = 'satestuarine'
 
+# clustering configuration
+MIN_CLUSTER_SIZE = 9.0 # sq miles
+
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'mlpa.models.MlpaMpa'
 ARRAY_CLASS = 'mlpa.models.MpaArray'
