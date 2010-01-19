@@ -39,7 +39,7 @@ if options.docs_output:
 # Remove settings_local if it exists
 try:
     # os.remove('example_projects/simple/settings_local.py')
-    os.remove('projects/nc_mlpa/settings_local.py')
+    os.remove('projects/nc_mlpa/settings_local.py')    
 except:
     pass
 
@@ -54,6 +54,7 @@ f.write("""
 TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
 TEST_OUTPUT_DESCRIPTIONS=True
 DEBUG=False
+POSTGIS_TEMPLATE='template1'
 """)
 
 f.close()
@@ -62,12 +63,14 @@ template.close()
 # Add paths of example projects
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/example_projects/simple')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/projects/nc_mlpa')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'projects.nc_mlpa.settings'
+# from example_projects.simple import settings as project_settings
+# from projects.nc_mlpa import settings as project_settings
 
-from projects.nc_mlpa import settings as project_settings
-
-from django.core.management import setup_environ
-setup_environ(project_settings)
+from django.conf import settings
+# from django.core.management import setup_environ
+# setup_environ(settings)
 
 from django.core import management
-management.call_command('test')
-print "Done testing"
+print "Running tests"
+management.call_command('test', interactive=False)
