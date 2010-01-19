@@ -342,8 +342,15 @@ class MlpaMpa(Mpa):
             1: 'MPA has no assigned designation',
             2: 'SMRs are always assigned a very high LOP',
             3: 'derived from allowed uses',
-            4: 'text in other allowed uses field'
+            4: 'text in other allowed uses field',
+            5: 'there are no LOPs entered in the system'
         }
+        # set this variable to the highest value LOP to initialize it and then track the lowest encountered
+        try:
+            lowest_lop = Lop.objects.all().order_by('-value')[0]
+        except IndexError:
+            return None, reasons[5]
+            
         if self.designation == None:
             return None, reasons[1]
         elif self.designation.acronym.lower() == 'smr': 
@@ -351,9 +358,7 @@ class MlpaMpa(Mpa):
         else:
             if self.other_allowed_uses:
                 return None, reasons[4]
-            else:
-                # set this variable to the highest value LOP to initialize it and then track the lowest encountered
-                lowest_lop = Lop.objects.all().order_by('-value')[0]
+            else:    
                 for au in self.allowed_uses.all():
                     if au.lop: # if this is null it means it's a rule and needs to be evaluated
                         if au.lop.value < lowest_lop.value:
@@ -390,4 +395,22 @@ class MpaLop(models.Model):
     def __unicode__(self):
         return '%s - %s' % (mpa.name,lop.name)
 
-    
+class MpaGeoSort(models.Model):
+    """(MpaGeoSort description)"""
+    mpa = models.ForeignKey(MlpaMpa)
+    sort = models.FloatField()
+
+    class Meta:
+        ordering = ['-sort']
+        verbose_name, verbose_name_plural = "", "s"
+
+    def __unicode__(self):
+        return "%s geographic sort number" % self.mpa.name
+        
+    def save(self, *args, **kwargs):
+        self.sort = self.get_sort_number()
+        super(MpaGeoSort,self).save()
+        
+    def get_sort_number(self):
+        sort_num = self.mpa.geometry_final.centroid.y
+        return sort_num
