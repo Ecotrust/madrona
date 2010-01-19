@@ -70,6 +70,10 @@ class MpaTestForm(MpaForm):
         model = TestMpa
         # fields = ('user', 'name')
 
+from django.contrib.gis.geos import fromstr
+from django.conf import settings
+from settings import GEOMETRY_CLIENT_SRID, GEOMETRY_DB_SRID
+
 class MpaResourcesTestCase(TestCase):
 
     urls = 'lingcod.mpa.test_urls'
@@ -84,5 +88,8 @@ class MpaResourcesTestCase(TestCase):
         user = User.objects.create_user('resttest', 'resttest@marinemap.org', password=password)
         from django.core.urlresolvers import reverse
         url = reverse('kmlapp-user-kml', kwargs={'input_username': user.username, 'session_key': 0})
+        final = fromstr(geom_final)
+        final.srid = GEOMETRY_DB_SRID
+        final.transform(GEOMETRY_CLIENT_SRID)
         assertImplementsRestInterface(self, user, password, url, 
-            rest_uid(TestMpa), {'name': 'myname', 'geometry_orig': geom_final, 'geometry_final': geom_final})
+            rest_uid(TestMpa), {'name': 'myname', 'geometry_orig': final.wkt, 'geometry_final': final.wkt})
