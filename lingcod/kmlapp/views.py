@@ -97,7 +97,7 @@ def create_kmz(kml, zippath):
 
     # write out the kml to tempfile
     kmlfile = tempfile.NamedTemporaryFile()
-    kmlfile.write(kml)
+    kmlfile.write(kml.encode('utf-8'))
     kmlfile.flush()
 
     # zip it up into a kmz

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# ^^^ this is required on 1st or 2nd line; see http://www.python.org/dev/peps/pep-0263/
 """
 Unit tests for the KML App
 """
@@ -33,7 +35,7 @@ class KMLAppTest(TestCase):
         smr.save()
 
         mpa1 = Mpa.objects.create( name='Test_MPA_1', designation=smr, user=self.user, geometry_final=g1)
-        mpa2 = Mpa.objects.create( name='Test_MPA_2', designation=smr, user=self.user, geometry_final=g2)
+        mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', designation=smr, user=self.user, geometry_final=g2)
         mpa3 = Mpa.objects.create( name='Test_MPA_3', designation=smr, user=self.user, geometry_final=g3)
         mpa1.save()
         mpa2.save()
