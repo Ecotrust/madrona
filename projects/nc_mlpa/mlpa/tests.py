@@ -18,28 +18,6 @@ urlpatterns = patterns('',
     (r'/mlpa/', include('mlpa.urls')),
 )
 
-
-class MlpaTest(TestCase):
-        
-    def testKmlAllGeom(self):
-        """
-        test views.mpaKmlAllGeom
-        """
-        response = self.client.get('/mlpa/mpa/1/kmlAllGeom/', {})
-        self.assertEquals(response.status_code, 200)
-        
-    def testKmlView(self):
-        """
-        test views.kml
-        """
-        response = self.client.get('/mlpa/mpa/1/kml/', {})
-        self.assertEquals(response.status_code, 200)
-        
-    #def testExternalKmlStyle(self):
-    #    response = self.client.get('/media/studyregion/styles.kml', {})
-    #    self.assertEquals(response.status_code, 200)
-
-
 class MlpaValidateTest(TestCase):
     '''
         Commands used to run the following test (from the python shell command line):
