@@ -4,6 +4,7 @@ from lingcod.manipulators.manipulators import *
 from manipulators import *
 from lingcod.array.models import MpaArray as BaseArray
 from lingcod.studyregion.models import StudyRegion
+import lingcod.intersection.models as int_models
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 
@@ -285,9 +286,89 @@ class MlpaMpa(Mpa):
         return self.name
         
     def save(self):
+        self.delete_cached_lop()
         self.is_estuary = self.in_estuary()
         super(MlpaMpa,self).save()
+        self.lop # calling this will calculate and store the LOP
+        
+    @property
+    def lop(self):
+        try:
+            mpa_lop = MpaLop.objects.get(mpa=self)
+        except MpaLop.DoesNotExist:
+            mpa_lop = MpaLop()
+            mpa_lop.mpa = self
+            mpa_lop.lop, mpa_lop.reason = self.calculate_lop()
+            mpa_lop.save()
+        return mpa_lop.lop
+
+    @property
+    def lop_reason(self):
+        try:
+            mpa_lop = MpaLop.objects.get(mpa=self)
+        except MpaLop.DoesNotExist:
+            self.lop
+            mpa_lop = MpaLop.objects.get(mpa=self)
+        return mpa_lop.reason
+        
+    def delete_cached_lop(self):
+        MpaLop.objects.filter(mpa=self).delete()
         
     def in_estuary(self):
         """docstring for in_estuary"""
         return Estuaries.objects.contains_centroid(self.geometry_final)
+        
+    def calculate_lop(self):
+        reasons = {
+            1: 'MPA has no assigned designation',
+            2: 'SMRs are always assigned a very high LOP',
+            3: 'derived from allowed uses',
+            4: 'text in other allowed uses field'
+        }
+        if self.designation == None:
+            return None, reasons[1]
+        elif self.designation.acronym.lower() == 'smr': 
+            return Lop.objects.get(value=10), reasons[2]
+        else:
+            if self.other_allowed_uses:
+                return None, reasons[4]
+            else:
+                # set this variable to the highest value LOP to initialize it and then track the lowest encountered
+                lowest_lop = Lop.objects.all().order_by('-value')[0]
+                for au in self.allowed_uses.all():
+                    if au.lop: # if this is null it means it's a rule and needs to be evaluated
+                        if au.lop.value < lowest_lop.value:
+                            lowest_lop = au.lop
+                    elif au.rule:
+                        # The naming convention is that 'Rule 1' will correspond to MlpaMpa method lop_rule_1.  'Rule 2' -> lop_rule_2, etc.
+                        method_name = 'lop_' + au.rule.name.lower().replace(' ','_')
+                        rule_lop = self.__getattribute__(method_name)()
+                        if rule_lop.value < lowest_lop.value:
+                            lowest_lop = rule_lop
+                return lowest_lop, reasons[3]
+                        
+    def lop_rule_1(self):
+        """If there is more than 0.2 sq miles in the 0 - 50m depth range, LOP = 6.  Else, LOP = 8"""
+        osc = int_models.OrganizationScheme.objects.get(name='lessthan50m')
+        results = osc.transformed_results(self.geometry_final)
+        shallow_area = results[results.keys()[0]]['result']
+        if shallow_area > 0.2:
+            lop_value = 6
+        else:
+            lop_value = 8
+        return Lop.objects.get(value=lop_value)
+
+class MpaLop(models.Model):
+    """(MpaLop description)"""
+    mpa = models.ForeignKey(MlpaMpa)
+    lop = models.ForeignKey(Lop,blank=True,null=True)
+    reason = models.TextField(blank=True)
+
+    class Meta:
+        ordering = []
+        verbose_name, verbose_name_plural = "", "s"
+
+    def __unicode__(self):
+        return '%s - %s' % (mpa.name,lop.name)
+
+    
