@@ -293,10 +293,10 @@ class MlpaMpa(Mpa):
     def __str__(self):
         return self.name
         
-    def save(self):
+    def save(self, *args, **kwargs):
         self.delete_cached_lop()
         self.is_estuary = self.in_estuary()
-        super(MlpaMpa,self).save()
+        super(MlpaMpa,self).save(*args, **kwargs)
         self.lop # calling this will calculate and store the LOP
         
     @property
