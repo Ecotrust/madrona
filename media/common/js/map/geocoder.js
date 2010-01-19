@@ -25,6 +25,8 @@ lingcod.map.geocoder = function(gex, form){
     };
     
     var callback = function(e){
+        var start_time = new Date().getTime();
+        self.latest_geocode = start_time;
         clearPlacemark(true);
         var location = $(self.form).find('input:first').val();
         if(!location){
@@ -34,21 +36,25 @@ lingcod.map.geocoder = function(gex, form){
         self.geocoder.geocode({ address: location, country: '.us'}, function(results, status){
             if(status == google.maps.GeocoderStatus.OK && results.length){
                 if(status != google.maps.GeocoderStatus.ZERO_RESULTS){
-                    //provide appropriate map extent (bounding box) for each location
-                    var viewport = results[0].geometry.viewport; 
-                    var sw = new geo.Point(viewport.getSouthWest());
-                    var ne = new geo.Point(viewport.getNorthEast());
-                    var bounds = new geo.Bounds(sw, ne);
-                    var opts = {aspectRatio: 1.0};
-                    var bounding_view = gex.view.createBoundsView(bounds, opts);
-                    ge.getView().setAbstractView(bounding_view);
-                    
-                    var point = results[0].geometry.location;
-                    self.placemark = gex.dom.addPointPlacemark([point.lat(), point.lng()], {
-                      stockIcon: 'shapes/cross-hairs',
-                      name: location
-                    });
-                    $(self.form).find('#flytoclear').removeClass('disabled');
+                    // Only proceed if this is the latest geocoder initiated
+                    // If not, do nothing since it has been "orphaned" by a newer query 
+                    if (start_time == self.latest_geocode) {
+                        //provide appropriate map extent (bounding box) for each location
+                        var viewport = results[0].geometry.viewport; 
+                        var sw = new geo.Point(viewport.getSouthWest());
+                        var ne = new geo.Point(viewport.getNorthEast());
+                        var bounds = new geo.Bounds(sw, ne);
+                        var opts = {aspectRatio: 1.0};
+                        var bounding_view = gex.view.createBoundsView(bounds, opts);
+                        ge.getView().setAbstractView(bounding_view);
+                        
+                        var point = results[0].geometry.location;
+                        self.placemark = gex.dom.addPointPlacemark([point.lat(), point.lng()], {
+                        stockIcon: 'shapes/cross-hairs',
+                        name: location
+                        });
+                        $(self.form).find('#flytoclear').removeClass('disabled');
+                    }
                 }else{
                     alert("geocoder didn't find any results.");
                 }
