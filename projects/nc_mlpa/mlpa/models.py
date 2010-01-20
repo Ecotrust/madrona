@@ -97,6 +97,12 @@ class MpaArray(BaseArray):
         for mpa in self.estuarine_mpa_set:
             gc.append(mpa.geometry_final)
         return gc
+        
+    @property
+    def clusters(self):
+        from report.models import Cluster
+        qs = Cluster.objects.build_clusters_for_array(self)
+        return qs
     
 class Lop(models.Model):
     name = models.CharField(max_length=255, verbose_name='level of protection')
@@ -280,12 +286,14 @@ class MlpaMpa(Mpa):
     other_regulated_activities = models.TextField(null=True, blank=True, verbose_name='Other Regulated Activities', help_text="""List here any proposed regulations that apply to activities other than extractive use. For instance, proposed regulations that prohibit anchoring, wading, etc may be included here.""")
     other_allowed_uses = models.TextField(null=True, blank=True, verbose_name="Additional Proposed Allowed Uses", help_text="""List here proposed regulations that apply to extractive use activities NOT listed in the drop down menu above. These regulations should be listed here in the form of proposed allowed uses. Please note that the allowed uses listed above have been reviewed by the MLPA Science Advisory Team (SAT) and assigned a level of protection that is used in several MarineMap reporting functions. Any additional allowed uses listed below can not be assigned a level of protection until they are reviewed by the SAT. Thus, including any allowed uses below will disable reporting functions in MarineMap that use levels of protection. """)
     goal_objectives = models.ManyToManyField(GoalObjective,null=True, blank=True, verbose_name="Goals and Regional Objectives")
+    objects = models.GeoManager()
 
     class Meta:
         # db_table = u'mlpa_mpa' <- don't need this!
         permissions = (
             ("can_share_mpas", "Can Share Mpas"),
         )
+        ordering = ['-mpageosort__sort']
 
     class Options:
         manipulators = [ ClipToStudyRegionManipulator, ClipToEstuariesManipulator, ]
@@ -297,6 +305,10 @@ class MlpaMpa(Mpa):
         self.delete_cached_lop()
         self.is_estuary = self.in_estuary()
         super(MlpaMpa,self).save(*args, **kwargs)
+        # if MpaGeoSort.objects.filter(mpa=self).count() > 1: # This shouldn't be necessary as long as we always use get_or_create on this model
+        #     MpaGeoSort.objects.filter(mpa=self).delete()
+        mgs, created = MpaGeoSort.objects.get_or_create(mpa=self)
+        mgs.save()
         self.lop # calling this will calculate and store the LOP
         
     @property
@@ -396,7 +408,7 @@ class MpaLop(models.Model):
         return '%s - %s' % (mpa.name,lop.name)
 
 class MpaGeoSort(models.Model):
-    """(MpaGeoSort description)"""
+    """The MLPA North Coast study region is a pretty simple shape so we're just going to use the y coordinate to sort the geometries"""
     mpa = models.ForeignKey(MlpaMpa)
     sort = models.FloatField()
 

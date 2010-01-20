@@ -190,9 +190,7 @@ def sum_results(results):
                     try: assert(summed[hab][k]==v)
                     except: raise Exception('sum_results has been passed an incorrect results matrix.')
     return summed
-    
-def result_geometries_to_wkt(results):
-    pass
+
     
 class Shapefile(models.Model):
     #shapefile = models.FileField(upload_to='intersection/shapefiles')

@@ -81,6 +81,7 @@ SAT_ESTUARINE = 'satestuarine'
 
 # clustering configuration
 MIN_CLUSTER_SIZE = 9.0 # sq miles
+CLUSTER_THRESHOLD = 500 # an mpa must be this close to another mpa to get clustered with it. (in meters)
 
 # Define the models which will represent the MPA and Array child classes
 MPA_CLASS = 'mlpa.models.MlpaMpa'

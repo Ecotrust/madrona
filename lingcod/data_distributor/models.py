@@ -3,7 +3,7 @@ from django.conf import settings
 from lingcod.data_manager.models import DataLayer
 import sys
 
-def modules_in_module(module='lingcod',exclude_list=['views']):
+def modules_in_module(module='lingcod',exclude_list=['views','urls']):
     """This will return a list of modules found in a given module while excluding
     modules whos name is in the exclude_list."""
     result = []
