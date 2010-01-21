@@ -21,14 +21,14 @@ class StudyRegionTest(TestCase):
         """
         Check presence of test study region
         """
-        self.assertEquals(StudyRegion.objects.count(), 1)
+        self.assertTrue(StudyRegion.objects.count() > 1)
         self.assertEquals(StudyRegion.objects.all()[0].id, 1)
         
     def testComputeLookAt(self):
         """
         Check computing of lookat values
         """
-        region = StudyRegion.objects.current()
+        region = StudyRegion.objects.get(pk=1);
         region.lookAt_Lat = 0
         region.lookAt_Lon = 0
         self.assertEquals(region.lookAt_Lat, 0.0)
@@ -82,8 +82,9 @@ class StudyRegionTest(TestCase):
     def testOnlyOneActive(self):
         # Only need to create one to test since there is an active study 
         # region fixture
-        self.assertTrue(StudyRegion.objects.count() == 1)
+        count = StudyRegion.objects.count()
+        self.assertTrue(count > 0)
         studyregion = StudyRegion.objects.create(active=True)
-        self.assertTrue(StudyRegion.objects.count() == 2)
+        self.assertTrue(StudyRegion.objects.count() > count)
         self.assertTrue(StudyRegion.objects.filter(active=True).count() == 1)
         self.assertTrue(StudyRegion.objects.get(active=True).pk == studyregion.pk)
