@@ -31,7 +31,7 @@ class MpaArray(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group)
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this array with the following groups")
     
     class Meta:
         permissions = (("can_share_arrays", "Can share arrays"),)

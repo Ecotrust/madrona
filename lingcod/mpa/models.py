@@ -78,7 +78,7 @@ class Mpa(models.Model):
     object_id = models.PositiveIntegerField(blank=True,null=True)
     array = generic.GenericForeignKey('content_type', 'object_id')
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True)
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this MPA with the following groups")
 
     objects = GeoQuerySetManager()
     class QuerySet(QuerySet):
