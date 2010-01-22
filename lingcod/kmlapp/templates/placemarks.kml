@@ -48,7 +48,7 @@
             <Data name="name"><value>{{ mpa.name }}</value></Data>
             <Data name="user"><value>{{ mpa.user }}</value></Data>
             <Data name="created"><value>{{ mpa.date_created }}</value></Data>
-            <Data name="modified"><value>{{ mpa.date_modified }}</value></Data>
+            <Data name="modified"><value>{{ mpa.date_modified|date:"M d,Y" }}</value></Data>
             <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
             <Data name="designation"><value>{{ mpa.designation }}</value></Data>
         </ExtendedData>
