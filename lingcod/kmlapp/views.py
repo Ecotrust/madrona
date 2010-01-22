@@ -21,7 +21,7 @@ def get_user_mpa_data(user):
 
     mpas = Mpa.objects.filter(user=user).add_kml()
 
-    unattached = utils.get_array_class()(name='Unattached')
+    unattached = utils.get_array_class()(name='Marine Protected Areas')
     shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
         if not mpa.array:

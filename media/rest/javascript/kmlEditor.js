@@ -4,7 +4,8 @@ lingcod.rest.kmlEditor = function(options){
         throw('kmlEditor needs url, appendTo, ge, gex, client, and div options');
     }
                     
-    var kmlLoaded = function(kml){
+    var kmlLoaded = function(e, kml){
+        $(tree).unbind('kmlLoaded', kmlLoaded);
         var configs = options.client.parseDocument(kml.getKml());
         while(create_menu.getItemCount() > 0){
             create_menu.removeItemAt(0);
@@ -43,17 +44,12 @@ lingcod.rest.kmlEditor = function(options){
     // }
     
     var refresh = function(callback){
-        var cback = kmlLoaded;
-        if(callback){
-            cback = function(kml){
-                kmlLoaded(kml);
-                callback(kml);
-            }
+        var cback = function(e, kmlObject){
+            $(tree).unbind('kmlLoaded', cback);
+            callback(e, kmlObject);
         }
-        forest.refresh(options.url, {
-            cachebust: true, 
-            callback: cback                  
-        });
+        $(tree).bind('kmlLoaded', cback);
+        tree.refresh(true);
         setSelectionMenuItemEnabled(false);
     }
     
@@ -68,11 +64,11 @@ lingcod.rest.kmlEditor = function(options){
     var create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
     tbar.addChild(create_button, true);
     goog.events.listen(create_menu, 'action', function(e) {
-        that.forest.clearSelection();
+        tree.clearSelection();
         options.client.create(e.target.mm_data, {
             success: function(location){
                 refresh(function(){
-                    that.forest.selectById(location);
+                    tree.selectById(location);
                 });
             },
             error: function(){
@@ -96,30 +92,34 @@ lingcod.rest.kmlEditor = function(options){
     attr.setEnabled(false);
     attr.setTooltip("Show the selected feature's attributes");
     goog.events.listen(attr, 'action', function(e) {
-        options.client.show(that.selected.data('kml'));
+        options.client.show(tree.lookup(that.selected));
     });
     tbar.addChild(attr, true);
     
     var edit = new goog.ui.ToolbarButton('Edit');
     edit.setEnabled(false);
     goog.events.listen(edit, 'action', function(e) {
+        tbar.setEnabled(false);
         options.ge.setBalloon(null);
-        var kmlObject = that.selected.data('kml');
-        options.gex.dom.removeObject(kmlObject);
+        var kmlObject = tree.lookup(that.selected);
+        kmlObject.setVisibility(false);
         options.client.update(kmlObject, {
             success: function(location){
+                tbar.setEnabled(true);
                 refresh(function(){
-                    that.forest.selectById(location);
+                    tree.selectById(location);
                 });
             },
             cancel: function(){
-                options.ge.getFeatures().appendChild(kmlObject);
-                that.forest.selectById(kmlObject.getId());
+                tbar.setEnabled(true);
+                kmlObject.setVisibility(true);
+                tree.selectById(kmlObject.getId());
             },
             error: function(){
+                tbar.setEnabled(true);
                 alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
-                options.ge.getFeatures().appendChild(kmlObject);
-                that.forest.selectById(kmlObject.getId());
+                kmlObject.setVisibility(true);
+                tree.selectById(kmlObject.getId());
             }
         });
     });
@@ -128,13 +128,19 @@ lingcod.rest.kmlEditor = function(options){
     var del = new goog.ui.ToolbarButton('Delete');
     del.setEnabled(false);
     goog.events.listen(del, 'action', function(e) {
-        var kmlObject = that.selected.data('kml');
+        tbar.setEnabled(false);
+        var kmlObject = tree.lookup(that.selected);
         options.client.destroy(kmlObject, {
             success: function(location){
+                tbar.setEnabled(true);
                 refresh();
             },
             error: function(){
+                tbar.setEnabled(true);
                 alert('An error occured while trying to delete this feature.');
+            },
+            cancel: function(){
+                tbar.setEnabled(true);
             }
         });
     });
@@ -163,26 +169,29 @@ lingcod.rest.kmlEditor = function(options){
 
     $(options.appendTo).append(that.el);
     
-    // var pm = new goog.ui.PopupMenu();
-    // var items = create_menu_children();
-    // for(var i=0;i<items.length; i++){
-    //     pm.addItem(items[i]);
-    // }
+    var testFunction = function(kmlObject){
+        return $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self]').length === 1;
+    };
     
-    var forest = lingcod.kmlForest({
+    var tree = lingcod.kmlTree({
+        url: options.url,
         ge: options.ge, 
         gex: options.gex, 
-        div: options.div,
+        animate: false, 
+        map_div: options.div, 
         element: that.kmlEl,
-        selectToggles: true
-        // contextMenu: pm
+        trans: lingcod.options.media_url + 'common/images/transparent.gif',
+        title: false,
+        fireEvents: testFunction,
+        enableSelection: testFunction
     });
+    that.tree = tree;
     
-    that.forest = forest;
+    that.clearSelection = tree.clearSelection;
     
-    $(forest.tree).bind('itemSelect', function(e, selected, previously){
-        that.selected = selected;
-        setSelectionMenuItemEnabled(!!selected);
+    $(tree).bind('select', function(e, node, kmlObject){
+        that.selected = node;
+        setSelectionMenuItemEnabled(!!node);
         // clear export menu
         while(export_menu.getItemCount() > 0){
             var item = export_menu.getItemAt(0);
@@ -190,7 +199,6 @@ lingcod.rest.kmlEditor = function(options){
             item.dispose();
         }
         if(that.selected){
-            var kmlObject = that.selected.data('kml');
             addExportItems(export_menu, kmlObject);
         }
     });
@@ -207,36 +215,12 @@ lingcod.rest.kmlEditor = function(options){
         });
     }
     
-    $(forest.tree).bind('itemDoubleClick', function(e, item){
-        var kmlObject = item.data('kml');
-        if(kmlObject && $(kmlObject.getKml()).find('atom\\:link[rel=self]').length === 1){
-            options.client.show(item.data('kml'));
-        }
+    $(tree).bind('dblclick', function(e, node, kmlObject){
+        options.client.show(kmlObject);
     });
     
-    // $(forest.tree).bind('itemContext', function(e, d, item){
-    //     var kmlObject = item.data('kml');
-    //     if(kmlObject && $(kmlObject.getKml()).find('atom\\:link[rel=self]').length === 1){
-    //         var pm = new goog.ui.PopupMenu();
-    //         var items = create_menu_children();
-    //         for(var i=0;i<items.length; i++){
-    //             pm.addItem(items[i]);
-    //         }
-    //         pm.render(document.body);
-    // 
-    //         pm.attach(
-    //             item[0],
-    //             goog.positioning.Corner.TOP_LEFT,
-    //             goog.positioning.Corner.BOTTOM_LEFT);
-    // 
-    //         // pm.attach(item[0]);
-    //     }
-    // });
-    
-    forest.add(options.url, {
-        cachebust: true, 
-        callback: kmlLoaded
-    });
+    $(tree).bind('kmlLoaded', kmlLoaded);
+    tree.load(true);
     
     return that;
 }

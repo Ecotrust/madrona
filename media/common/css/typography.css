@@ -14,6 +14,10 @@ h1 {
     color:#1A3752;
     text-shadow: #FFF 0px 1px 0px;
     -moz-text-shadow: #FFF 0px 1px 0px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    
 }
 
 h1, h2, h3, h4, h5, h6 {

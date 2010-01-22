@@ -56,23 +56,52 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
-        var forest = lingcod.kmlForest({
-            element: $('#datalayerstree'),
-            ge: ge,
-            gex: gex,
-            div: $('#map')
+        $('#datalayerstree').append('<div id="study_region"></div><div id="public_data"></div><div id="ecotrust_data"></div>');
+
+        var studyRegion = lingcod.kmlTree({
+            url: window.studyregion,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map'), 
+            element: $('#study_region'),
+            trans: options.media_url + 'common/images/transparent.gif',
+            title: true
         });
+        $(studyRegion).bind('kmlLoaded', function(){
+            $('#study_region').find('li').dblclick();
+        });
+        studyRegion.load();
+
+        var publicData = lingcod.kmlTree({
+            url: window.public_data_layers,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map'), 
+            element: $('#public_data'),
+            trans: options.media_url + 'common/images/transparent.gif',
+            title: true
+        });
+        publicData.load(true);
         
-        forest.add(window.studyregion, {
-            cachebust: true,
-            callback: function(kmlObject, topNode){
-                topNode.find('> ul > li > a').trigger('dblclick');            
-            }
-        });
-        
-        forest.add(window.public_data_layers, {
-            cachebust: true
-        });
+        // var forest = lingcod.kmlForest({
+        //     element: $('#datalayerstree'),
+        //     ge: ge,
+        //     gex: gex,
+        //     div: $('#map')
+        // });
+        // 
+        // forest.add(window.studyregion, {
+        //     cachebust: true,
+        //     callback: function(kmlObject, topNode){
+        //         topNode.find('> ul > li > a').trigger('dblclick');            
+        //     }
+        // });
+        // 
+        // forest.add(window.public_data_layers, {
+        //     cachebust: true
+        // });
         
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
@@ -84,9 +113,17 @@ var lingcod = (function(){
         }
         
         if(options.ecotrust){
-            forest.add(options.ecotrust, {
-                cachebust: true
+            var ecotrustData = lingcod.kmlTree({
+                url: options.ecotrust,
+                ge: ge, 
+                gex: gex, 
+                animate: false, 
+                map_div: $('#map'), 
+                element: $('#ecotrust_data'),
+                trans: options.media_url + 'common/images/transparent.gif',
+                title: true
             });
+            ecotrustData.load(true);
         }
         
         var editors = [];
@@ -107,7 +144,7 @@ var lingcod = (function(){
         $('#sidebar, #meta-navigation').click(function(e){
             if(e.target === this || e.target === $('#MyShapes')[0]){
                 for(var i=0;i<editors.length;i++){
-                    editors[0].forest.clearSelection();
+                    editors[0].clearSelection();
                 }
             }
         });

@@ -1,3 +1,5 @@
+# make sure any new manipulators get added to lingcod.manipulators' additionalManipulators
+from mlpa.manipulators import *
 from django.contrib.gis.db import models
 from lingcod.mpa.models import Mpa
 from lingcod.manipulators.manipulators import *

@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from lingcod.studyregion import models
-
+from django.views.decorators.cache import cache_page
 
 def studyregion(request, template_name='studyregion/studyregion.html'):
     """Main application window
@@ -26,6 +26,7 @@ def kml(request, pk):
     region = get_object_or_404(models.StudyRegion, pk=pk)    
     return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type=mimetypes.KML) 
     
+@cache_page(60 * 60 * 24)
 def regionKml(request):
     """Handler for AJAX regionKml request
     """

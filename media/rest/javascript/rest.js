@@ -283,7 +283,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
             });
         }else{
             if(options.cancel){
-                cancel(processLocation(config.location));
+                options.cancel(processLocation(config.location));
             }
         }
     };

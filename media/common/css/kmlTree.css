@@ -1,0 +1,185 @@
+div.marinemap-kmltree {
+    font-family:sans-serif;
+    font-size:12px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+div.marinemap-kmltree ul{
+    list-style:none;
+    padding-left:18px;
+}
+
+div.marinemap-kmltree li ul {
+    display:none;
+}
+
+div.marinemap-kmltree li.open > ul {
+    display: block;
+}
+
+span.kmlId {
+    display:none;
+}
+
+li.marinemap-kmltree-item span.name {
+    font-family:sans-serif;
+    font-size:12px;
+    color:#313841;
+}
+
+li.marinemap-kmltree-item {
+/*    overflow:hidden;*/
+    white-space:nowrap;
+    margin:0em 0;
+    padding:5px 0;
+}
+
+li.marinemap-kmltree-item.hasDescription span.name:hover, li.marinemap-kmltree-item.select span.name:hover {
+    border-bottom:1px solid #7F7F7F;
+    cursor: pointer;
+}
+
+div.marinemap-kmltree h4.marinemap-kmltree-title {
+    font-size:12px;
+    color:#6C7C90;
+    font-weight:bold;
+    margin:0 0 -5px 0;
+/*    margin-top:0px;
+    margin-bottom:-10px;
+    margin-left:5px;
+*/    text-shadow: #FCFAFF 0px 1px 0px;
+    -moz-text-shadow: #FCFAFF 0px 1px 0px;
+}
+
+
+span.expander, span.toggler, span.icon {
+    margin:0;
+    padding:0;
+    float:left;
+    width:16px;
+    height:16px;
+}
+
+span.expander {
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat -15px 0px;
+    margin-left:-16px;
+}
+
+div.marinemap-kmltree li.open > span.expander {
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat top left;
+}
+
+span.toggler {
+    margin-right:3px;
+    background: transparent url(../images/checkbox.png) no-repeat -15px -20px;
+}
+
+span.toggler:hover {
+    background: transparent url(../images/checkbox.png) no-repeat -15px -120px;
+}
+
+li.visible > span.toggler {
+    background: transparent url(../images/checkbox.png) no-repeat -15px -220px;
+}
+
+li.visible > span.toggler:hover {
+    background: transparent url(../images/checkbox.png) no-repeat -15px -320px;
+}
+
+li.radioFolder > ul > li > span.toggler {
+    margin-right:3px;
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -20px;
+}
+
+li.radioFolder > ul > li > span.toggler:hover {
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -120px;
+}
+
+li.radioFolder > ul > li.visible > span.toggler {
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -220px;
+}
+
+li.radioFolder > span.toggler {
+    margin-right:3px;
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -20px;
+}
+
+li.radioFolder > span.toggler:hover {
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -120px;
+}
+
+li.radioFolder.visible > span.toggler {
+    background: transparent url(../images/radiobutton.png) no-repeat -15px -220px;
+}
+
+
+li.KmlPlacemark span.expander, li.KmlPhotoOverlay span.expander, li.KmlGroundOverlay span.expander, li.KmlTour span.expander {
+    display:none;
+}
+
+div.marinemap-kmltree li.checkHideChildren ul {
+    display:none;
+}
+
+div.marinemap-kmltree li.checkHideChildren span.expander {
+    display:none;
+}
+
+div.marinemap-kmltree span.icon {
+    display:none;
+}
+
+li.KmlFolder > span.icon {
+    margin-right:3px;
+    display:block;
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat -33px -2px;    
+}
+
+li.KmlTour > span.icon {
+    margin-right:3px;
+    display:block;
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat -48px -1px;    
+}
+
+li.KmlPhotoOverlay > span.icon, li.KmlGroundOverlay > span.icon {
+    margin-right:3px;
+    display:block;
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat -64px 0px;    
+}
+
+
+li.marinemap-kmltree-item p.snippet {
+    text-indent: 0px;
+    width:80%;
+    font-size:12px;
+    font-family:sans-serif;
+    margin:5px 0px 5px 20px;
+    color:#6C7C90;
+    white-space: normal;
+}
+
+span.name {
+    clear:both;
+    position:relative;
+    top:1px;
+}
+
+div.marinemap-kmltree li.selected {
+    background-color:#B2E1FF;
+    padding-left:5px;
+    margin-left:-5px;
+}
+
+div.marinemap-kmltree li.selected span.name {
+/*    color:white;*/
+    font-weight:bold;
+    border-bottom:none;
+/*    text-shadow: #003C53 0px 1px 0px;*/
+/*    -moz-text-shadow: #003C53 0px 1px 0px;*/
+}
+
+div.marinemap-kmltree li.selected span.name:hover {
+    border:none;
+}
