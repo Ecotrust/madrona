@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.common.utils import LookAtKml
+from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -30,7 +31,7 @@ class MpaDesignation(models.Model):
     def __unicode__(self):
         return "(%s) %s" % (self.acronym, self.name)
 
-class GeoQuerySetManager(models.GeoManager):
+class GeoQuerySetManager(ShareableGeoManager):
     """ 
     Used to extend the queryset manager; see http://simonwillison.net/2008/May/1/orm/
     """
@@ -71,16 +72,15 @@ class Mpa(models.Model):
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
-    
+    designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
     # Array relation fields
     content_type = models.ForeignKey(ContentType, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True,null=True)
     array = generic.GenericForeignKey('content_type', 'object_id')
-    
-    designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
+    # Expose sharing functionality
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True)
 
     objects = GeoQuerySetManager()
-
     class QuerySet(QuerySet):
         def add_kml(self):
             """
@@ -98,6 +98,7 @@ class Mpa(models.Model):
             return self.extra(select={'kml':'AsKML(ST_Reverse(ST_ForceRHR("%s"."geometry_final")))' % str(self.model._meta.db_table)})
     
     class Meta:
+        permissions = (("can_share_mpas", "Can share MPAs"),)
         abstract=True
         
     class Options:

@@ -1,8 +1,9 @@
 from django.contrib.gis.db import models
 from lingcod.common import utils
 from django.contrib.contenttypes.models import ContentType
+from lingcod.sharing.managers import ShareableGeoManager
 
-class ArrayManager(models.GeoManager):
+class ArrayManager(ShareableGeoManager):
     
     def empty(self):
         Mpa = utils.get_mpa_class()
