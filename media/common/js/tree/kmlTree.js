@@ -133,6 +133,7 @@ lingcod.kmlTree = (function(){
                 return;
             }
             that.kmlObject = kmlObject;
+            that.kmlObject.setVisibility(true);
             var options = buildOptions(kmlObject);
             
             
