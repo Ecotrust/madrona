@@ -6,7 +6,7 @@ from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.db.models.query import QuerySet
+from django.contrib.gis.db.models.query import GeoQuerySet
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
@@ -81,7 +81,7 @@ class Mpa(models.Model):
     sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this MPA with the following groups")
 
     objects = GeoQuerySetManager()
-    class QuerySet(QuerySet):
+    class QuerySet(GeoQuerySet):
         def add_kml(self):
             """
             Custom queryset method which adds an 'extra' .kml property to the returned object -
