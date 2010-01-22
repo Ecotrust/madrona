@@ -482,6 +482,10 @@ lingcod.kmlTree = (function(){
         // Google Earth Plugin Events
         
         google.earth.addEventListener(ge.getGlobe(), 'click', function(e, d){
+            if(e.getButton() === -1){
+                // related to scrolling, ignore
+                return;
+            }
             var target = e.getTarget();
             var balloon = ge.getBalloon();
             if(target.getType() === 'GEGlobe' && !balloon){
@@ -499,17 +503,6 @@ lingcod.kmlTree = (function(){
                 }else{
                     // there should be an optimal way to handle this.
                 }
-                // should handle all this login within selectNode & selectNodeBy Id
-                // if(id){
-                //     var node = lookup(id);
-                //     if(node){
-                //         selectNodeById(node, true, true);
-                //     }else{
-                //         clearSelection();
-                //     }
-                // }else{
-                //     clearSelection();
-                // }
             }
         });
         
