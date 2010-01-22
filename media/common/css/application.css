@@ -72,6 +72,9 @@ li {
 }
 
 #map_container {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
     border-left:solid 3px #5A7798;
 /*    font-size:.8em;*/
     position:absolute;
