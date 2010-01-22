@@ -145,7 +145,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
             if(manipulator){
                 var errMsg = false;
                 if(manipulator.isDefiningShape()){
-                    if(manipulator.isInvalidGeometry){
+                    if(manipulator.isInvalidGeometry()){
                         errMsg = 'The shape you defined is invalid. Please correct any mistakes using the Geometry form.';
                     }else if(manipulator.isDefiningNewShape()){
                         errMsg = 'You must finish defining your shape before creating this feature. Double-Click on the last vertex to finish drawing your shape.';

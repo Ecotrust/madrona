@@ -106,6 +106,8 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
             self.enterManipulatedState_(data.html, true);            
         }else{
             self.setGeometryFields_(orig_wkt, '');
+            var shape = self.shape_;
+            self.addNewShape_(shape.getKml());
             self.gex_.util.flyToObject(self.shape_, {
                 boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
             self.enterManipulatedState_(data.html, false);
@@ -155,7 +157,9 @@ lingcod.Manipulator.prototype.isDefiningNewShape = function(){
 
 lingcod.Manipulator.prototype.enterEditingState_ = function(){
     this.hideStates_();
+    this.is_invalid_geometry = false;
     this.is_defining_shape_ = true;
+    this.is_defining_new_shape_ = false;
     this.render_target_.find('.done_editing').removeClass('disabled');
     this.render_target_.find('div.editing').show();
 }
