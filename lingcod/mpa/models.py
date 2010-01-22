@@ -95,7 +95,7 @@ class Mpa(models.Model):
                 # Note you can still access the geodjango way (may not render correctly in GE though)
                 mpas[0].geometry_final.kml
             """
-            return self.extra(select={'kml':'AsKML(ST_Reverse(ST_ForceRHR("%s"."geometry_final")))' % str(self.model._meta.db_table)})
+            return self.extra(select={'kml':'replace(AsKML(ST_Reverse(ST_ForceRHR(ST_Translate(ST_Force_3d("%s"."geometry_final"), 0, 0, 100)))), \'<Polygon>\', \'<Polygon><altitudeMode>relativeToGround</altitudeMode><extrude>1</extrude>\')' % str(self.model._meta.db_table)})
     
     class Meta:
         permissions = (("can_share_mpas", "Can share MPAs"),)
