@@ -116,7 +116,7 @@ class Mpa(models.Model):
             
     def centroid_kml(self):
         geom = self.geometry_final.transform(4326, clone=True)
-        return clean_geometry(geom.point_on_surface.kml)
+        return clean_geometry(geom).point_on_surface.kml
 
     def geom_as_kml(self):
         """
