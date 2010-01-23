@@ -75,7 +75,7 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
         drawCallback: function(i){
             var coords = bounds.getCoordinates();
             var coord = coords.get(i);
-            coord.setAltitude(this.altitude);
+            coord.setAltitude(self.altitude);
             coords.set(i, coord);
         },
         ensureCounterClockwise: false
