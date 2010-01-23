@@ -5,7 +5,6 @@ from django.conf import settings
 from lingcod.common.utils import LargestPolyFromMulti
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
-
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
 manipulatorsDict = {}
 

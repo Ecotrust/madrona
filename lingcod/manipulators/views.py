@@ -13,6 +13,7 @@ from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils import simplejson
+from lingcod.data_manager.models import clean_geometry
 
  
 def mpaManipulatorList(request, app_name, model_name):
@@ -91,8 +92,9 @@ def multi_generic_manipulator_view(request, manipulators):
     #manipulators ran fine and the resulting shape is ready for outbound processing
     new_shape.transform(settings.GEOMETRY_DB_SRID) 
     #we should probably move this static value 20 to a settings variable
-    new_shape = new_shape.simplify(20, preserve_topology=True)
+    # new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
+    new_shape = clean_geometry(new_shape)
 
     return respond_with_template(html_response, new_shape.geojson, result["success"])
 
