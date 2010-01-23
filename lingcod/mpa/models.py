@@ -7,6 +7,7 @@ from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.gis.db.models.query import GeoQuerySet
+from lingcod.data_manager.models import clean_geometry
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
