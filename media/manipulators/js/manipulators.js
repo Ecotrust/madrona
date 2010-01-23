@@ -1,4 +1,6 @@
 lingcod.Manipulator = function(gex, form, render_target, div){
+    
+    this.altitude = 100;
     var json = false;
     var data = form.find('.json').html();
     if(data){
@@ -69,7 +71,14 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
         bounce: false,
         finishCallback: function(){
             self.finishedEditingCallback_();
-        }
+        },
+        drawCallback: function(i){
+            var coords = bounds.getCoordinates();
+            var coord = coords.get(i);
+            coord.setAltitude(this.altitude);
+            coords.set(i, coord);
+        },
+        ensureCounterClockwise: false
     });
 }
 
@@ -86,6 +95,15 @@ lingcod.Manipulator.prototype.addNewShape_ = function(kml){
                 poly: { color: '8000ff00' }
             }
         });        
+    }
+    this.shape_.getGeometry().setAltitudeMode(ge.ALTITUDE_ABSOLUTE);
+    this.shape_.getGeometry().setExtrude(true);
+    var coords = this.shape_.getGeometry().getOuterBoundary().getCoordinates();
+    var length = coords.getLength();
+    for(var i =0; i<length;i++){
+        var coord = coords.get(i)
+        coord.setAltitude(this.altitude);
+        coords.set(i, coord);
     }
     return this.shape_;
 }
