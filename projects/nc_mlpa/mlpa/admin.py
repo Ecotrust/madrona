@@ -1,5 +1,6 @@
 from django.contrib import admin
 from mlpa.models import *
+from lingcod.mpa.admin import MpaAdmin
 
 class GoalObjectiveAdmin (admin.ModelAdmin):
     list_display = ( 'goal_category', 'name', 'description')
@@ -26,7 +27,7 @@ admin.site.register(Lop)
 # class SatHabitatAdmin (admin.ModelAdmin):
 #     list_display = ('name', 'type', 'sat_standard')
 # admin.site.register(SatHabitat, SatHabitatAdmin)
-class MpasAdmin (admin.ModelAdmin):
+class MpasAdmin (MpaAdmin):
     list_display = ( 'pk', 'name', 'user')
     list_filter = ['user','is_estuary']
 admin.site.register(MlpaMpa, MpasAdmin)
