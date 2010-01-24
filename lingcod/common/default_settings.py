@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'lingcod.kmlapp',
     'lingcod.rest',
     'lingcod.intersection',
+    'lingcod.replication',
     'lingcod.bioregions',
     'lingcod.data_manager',
     'lingcod.data_distributor',

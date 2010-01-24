@@ -131,7 +131,7 @@ class LoadSetup(models.Model):
         
     def save(self):
         super(LoadSetup,self).save()
-        self.origin_field_choices = self.origin_data_layer.latest_shapefile.field_info_str()
+        self.origin_field_choices = self.origin_data_layer.latest_shapefile.field_info_str().replace('\n',',  ')
         self.target_field_choices = ', '.join( [ ptf.name for ptf in self.target_model.potentialtargetfield_set.all() ] )
         super(LoadSetup,self).save()
     

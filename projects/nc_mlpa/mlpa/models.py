@@ -7,6 +7,7 @@ from manipulators import *
 from lingcod.array.models import MpaArray as BaseArray
 from lingcod.studyregion.models import StudyRegion
 import lingcod.intersection.models as int_models
+import lingcod.replication.models as rep_models
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 
@@ -102,9 +103,72 @@ class MpaArray(BaseArray):
         
     @property
     def clusters(self):
+        """
+        If clusters exist and they have a newer date modified than the array, retrieve them.
+        If they do exist but are older, regenerate them.
+        If they don't exist, generate them.
+        Don't do anything about the habitat reports attached to the clusters (in other words
+        if those reports have already been generated, they'll be there otherwise, they won't)
+        """
         from report.models import Cluster
-        qs = Cluster.objects.build_clusters_for_array(self)
+        qs = self.cluster_set.filter(date_modified__gt=self.date_modified)
+        if not qs:
+            qs = Cluster.objects.build_clusters_for_array(self,with_hab=False)
         return qs
+        
+    @property
+    def clusters_with_habitat(self):
+        """
+        If don't exist, generate them with habitat info.  If clusters exist but are out of date,
+        regenerated them with habitat info.  If clusters exist and are new enough, check the 
+        habitat info.  If the hab_info is in date return the whole slough.  If hab_info is out of
+        date, regenerate it for the existing clusters and send it all back.
+
+        ...well, really we're just returning the clusters but the hab info will be available as 
+        cluster.clusterhabitatinfo_set.all()
+        """
+        from report.models import Cluster, ClusterHabitatInfo
+        qs = self.cluster_set.filter(date_modified__gt=self.date_modified)
+        if not qs: # there were no up to date clusters for this array
+            qs = Cluster.objects.build_clusters_for_array(self,with_hab=True)
+        else:  # check if habitat calculations are up to date
+            habinfo = ClusterHabitatInfo.objects.filter(cluster__in=qs)
+            if not habinfo:
+                for cl in qs:
+                    cl.calculate_habitat_info()
+            elif True in [ self.date_modified > h.date_modified for h in habinfo ]:
+                for cl in qs:
+                    cl.calculate_habitat_info()
+        return qs
+        
+    # @property
+    # def replication_report(self):
+    #     lops = Lop.objects.filter(run=True)
+    #     results = {}
+    #     for lop in lops:
+    #         results[lop.value] = self.replication_report_by_lop(lop)
+    #     return results
+    # 
+    # def replication_report_by_lop(self,lop):
+    #     from lingcod.replication.models import ReplicationSetup
+    #     rs = ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST)
+    #     input_dict = self.cluster_habitat_input_by_lop(lop)
+    #     return rs.analyze(input_dict)
+    #     
+    # def clusters_by_lop(self, lop):
+    #     from report.models import Cluster
+    #     qs = Cluster.objects.build_clusters_for_array_by_lop(self, lop)
+    #     return qs
+    #     
+    # def cluster_habitat_input_by_lop(self, lop, regenerate_clusters=True):
+    #     if regenerate_clusters:
+    #         clusters = self.clusters_by_lop(lop)
+    #     else:
+    #         clusters = self.cluster_set.filter(lop=lop)
+    #     input_dict = {}
+    #     for cluster in clusters:
+    #         input_dict[cluster.pk] = cluster.geometry_collection
+    #     return input_dict
     
 class Lop(models.Model):
     name = models.CharField(max_length=255, verbose_name='level of protection')
@@ -148,6 +212,7 @@ class AllowedUse(models.Model):
     lop = models.ForeignKey(Lop, null=True, blank=True)
     purpose = models.ForeignKey(AllowedPurpose)
     rule = models.ForeignKey(LopRule, null=True, blank=True)
+    draft = models.BooleanField(default=False, help_text='If the LOP or rule for this allowed use has not been approved by the SAT, then it should be marked as draft.')
 
     class Meta:
         ordering = ['target']
@@ -291,7 +356,7 @@ class MlpaMpa(Mpa):
 
     class Meta(Mpa.Meta):
         # db_table = u'mlpa_mpa' <- don't need this!
-        ordering = ['-mpageosort__sort']
+        ordering = ['-geo_sort__number']
 
     class Options:
         manipulators = [ ClipToStudyRegionManipulator, ClipToEstuariesManipulator, ]
@@ -300,11 +365,13 @@ class MlpaMpa(Mpa):
         return self.name
         
     def save(self, *args, **kwargs):
+        from report.models import Cluster
         self.delete_cached_lop()
         self.is_estuary = self.in_estuary()
         super(MlpaMpa,self).save(*args, **kwargs)
-        # if MpaGeoSort.objects.filter(mpa=self).count() > 1: # This shouldn't be necessary as long as we always use get_or_create on this model
-        #     MpaGeoSort.objects.filter(mpa=self).delete()
+        if self.array:
+            Cluster.objects.filter(array=self.array).delete()
+            self.array.save() # We have to do this so the modification date on the array is updated
         mgs, created = MpaGeoSort.objects.get_or_create(mpa=self)
         mgs.save()
         self.lop # calling this will calculate and store the LOP
@@ -339,6 +406,15 @@ class MlpaMpa(Mpa):
                 return True
             else:
                 return False
+                
+    @property
+    def bioregion(self):
+        from lingcod.bioregions.models import Bioregion
+        return Bioregion.objects.which_bioregion(self.geometry_final)
+        
+    @property
+    def sort_num(self):
+        return self.geo_sort.number
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()
@@ -403,22 +479,26 @@ class MpaLop(models.Model):
         verbose_name, verbose_name_plural = "", "s"
 
     def __unicode__(self):
-        return '%s - %s' % (mpa.name,lop.name)
+        if self.lop:
+            lop_name = self.lop.name
+        else:
+            lop_name = 'undetermined'
+        return '%s - %s' % (self.mpa.name,lop_name)
 
 class MpaGeoSort(models.Model):
     """The MLPA North Coast study region is a pretty simple shape so we're just going to use the y coordinate to sort the geometries"""
-    mpa = models.ForeignKey(MlpaMpa)
-    sort = models.FloatField()
+    mpa = models.OneToOneField(MlpaMpa, related_name="geo_sort")
+    number = models.FloatField()
 
     class Meta:
-        ordering = ['-sort']
+        ordering = ['-number']
         verbose_name, verbose_name_plural = "", "s"
 
     def __unicode__(self):
-        return "%s geographic sort number" % self.mpa.name
+        return "%s geographic sort number: %f" % (self.mpa.name,self.number)
         
     def save(self, *args, **kwargs):
-        self.sort = self.get_sort_number()
+        self.number = self.get_sort_number()
         super(MpaGeoSort,self).save()
         
     def get_sort_number(self):

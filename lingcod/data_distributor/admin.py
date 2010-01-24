@@ -22,6 +22,7 @@ class LoadSetupAdmin(admin.ModelAdmin):
         (None,               {'fields': ('name','origin_data_layer','target_model','geometry_only')}),
         ('Field Setup',      {'fields': ('origin_field_choices','origin_field','target_field_choices','target_field')}),
     ]
+    readonly_fields = ['origin_field_choices','target_field_choices']
     actions = [run_load_setups]
     
 admin.site.register(LoadSetup,LoadSetupAdmin)

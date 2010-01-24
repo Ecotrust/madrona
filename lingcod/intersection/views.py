@@ -61,8 +61,8 @@ def build_csv_response(results, file_name):
     writer = csv.writer(response)
     if results.__class__.__name__<>'list':
         results = [results]
-    header_row = ['habitat']
-    header_row.extend( results[0][results[0].keys()[0]].keys() )
+    header_row = ['Habitat']
+    header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
     row_matrix = [header_row]
         
     for result in results:

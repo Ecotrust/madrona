@@ -61,6 +61,8 @@ admin.site.register(IntersectionFeature, IntersectionFeatureAdmin)
 
 class ShapefileFieldInline(admin.TabularInline):
     model = ShapefileField
+    fields = ['name','distinct_values']
+    readonly_fields = ['name','distinct_values']
 #    sort = sort
     extra = 0
 

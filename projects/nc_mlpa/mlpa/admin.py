@@ -12,8 +12,8 @@ class GoalCategoryAdmin (admin.ModelAdmin):
 admin.site.register(GoalCategory, GoalCategoryAdmin)
 
 class AllowedUseAdmin (admin.ModelAdmin):
-    list_display = ('target', 'method', 'purpose', 'lop', 'rule')
-    list_filter = ['purpose', 'lop']
+    list_display = ('target', 'method', 'purpose', 'lop', 'draft', 'rule',)
+    list_filter = ['purpose', 'lop', 'draft']
 admin.site.register(AllowedUse, AllowedUseAdmin)
 admin.site.register(AllowedMethod)
 admin.site.register(AllowedPurpose)
