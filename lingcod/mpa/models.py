@@ -178,6 +178,7 @@ class Mpa(models.Model):
         super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
 
     def apply_manipulators(self, force=False):
+        from lingcod.data_manager.models import clean_geometry
         if force or self.geometry_final is None:
             print "applying manipulators"
             target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
@@ -187,6 +188,9 @@ class Mpa(models.Model):
                 result = m.manipulate()
                 target_shape = result['clipped_shape'].wkt
             geo = result['clipped_shape']
+            geo.transform(settings.GEOMETRY_DB_SRID)
+            geo.transform(settings.GEOMETRY_CLIENT_SRID)
+            geo = clean_geometry(geo)
             geo.transform(settings.GEOMETRY_DB_SRID)
             if geo:
                 self.geometry_final = geo
