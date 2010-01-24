@@ -173,7 +173,7 @@ class Mpa(models.Model):
         self.array = None
         self.save()
 
-    def save(self):
+    def save(self, *args, **kwargs):
         target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
         result = False
         for manipulator in self.__class__.Options.manipulators:
