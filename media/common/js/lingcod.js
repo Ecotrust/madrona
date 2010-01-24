@@ -28,10 +28,12 @@ var lingcod = (function(){
     var geInit = function(pluginInstance){
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
+        ge.getOptions().setStatusBarVisibility(true);
+        ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
         gex = new GEarthExtensions(ge);
         
-        that.googleLayers = new lingcod.map.googleLayers(ge, 
-            $('#ge_options'), $('#ge_layers'));
+        // that.googleLayers = new lingcod.map.googleLayers(ge, 
+        //     $('#ge_options'), $('#ge_layers'));
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
                 
