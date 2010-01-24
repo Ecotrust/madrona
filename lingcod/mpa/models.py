@@ -172,3 +172,18 @@ class Mpa(models.Model):
         """Sets the MPA's `array` property to None."""
         self.array = None
         self.save()
+
+    def save(self):
+        target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
+        result = False
+        for manipulator in self.__class__.Options.manipulators:
+            m = manipulator(target_shape)
+            result = m.manipulate()
+            target_shape = result['clipped_shape'].wkt
+        geo = result['clipped_shape']
+        geo.transform(settings.GEOMETRY_DB_SRID)
+        if geo:
+            self.geometry_final = geo
+        else:
+            raise Exception('Could not pre-process geometry')
+        super(Mpa, self).save() # Call the "real" save() method

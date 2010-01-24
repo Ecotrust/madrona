@@ -1,6 +1,5 @@
 from lingcod.manipulators.manipulators import * 
 from django.contrib.gis.geos import *
-from mlpa.models import *
 from lingcod.common.utils import LargestPolyFromMulti
 
 
@@ -65,7 +64,8 @@ class ClipToEstuariesManipulator(BaseManipulator):
                     estuary_clip = estuary_clip.union(intersected_geom)
         return estuary_clip
                     
-    def manipulate(self): 
+    def manipulate(self):
+        from mlpa.models import Estuaries
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
         #extract estuaries geometry
@@ -79,11 +79,7 @@ class ClipToEstuariesManipulator(BaseManipulator):
             except Exception, e:
                 raise self.InternalException("Exception raised in ClipToEstuariesManipulator while initializing estuaries geometry: " + e.message)
         else:
-            try:
-                estuaries = [est.geometry for est in Estuaries.objects.all()]
-            except Exception, e:
-                raise self.InternalException("Exception raised in ClipToEstuariesManipulator while obtaining estuaries geometry from database: " + e.message)    
-        
+            estuaries = [est.geometry for est in Estuaries.objects.all()]
         #check for existence of estuaries (if there are no estuaries, we're done here)
         if len(estuaries) == 0: 
             #message="No estuaries found"

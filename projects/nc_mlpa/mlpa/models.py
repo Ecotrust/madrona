@@ -3,7 +3,6 @@ from mlpa.manipulators import *
 from django.contrib.gis.db import models
 from lingcod.mpa.models import Mpa
 from lingcod.manipulators.manipulators import *
-from manipulators import *
 from lingcod.array.models import MpaArray as BaseArray
 from lingcod.studyregion.models import StudyRegion
 import lingcod.intersection.models as int_models
@@ -365,10 +364,10 @@ class MlpaMpa(Mpa):
         return self.name
         
     def save(self, *args, **kwargs):
+        super(MlpaMpa,self).save(*args, **kwargs)
         from report.models import Cluster
         self.delete_cached_lop()
         self.is_estuary = self.in_estuary()
-        super(MlpaMpa,self).save(*args, **kwargs)
         if self.array:
             Cluster.objects.filter(array=self.array).delete()
             self.array.save() # We have to do this so the modification date on the array is updated

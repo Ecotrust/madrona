@@ -134,7 +134,7 @@ class MpaForm(BaseMpaForm):
     
     class Meta:
         model = MlpaMpa
-        fields = ('user', 'geometry_orig', 'geometry_final', 
+        fields = ('user', 'geometry_orig', 'geometry_final',
             'name', 'designation', 'allowed_uses', 'other_allowed_uses',
             'other_regulated_activities', 'specific_objective', 
             'goal_objectives', 'design_considerations', 

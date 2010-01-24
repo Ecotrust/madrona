@@ -39,7 +39,7 @@ def multi_generic_manipulator_view(request, manipulators):
     kwargs = {}
     for key,val in request.POST.items():
         kwargs[str(key)] = str(val)
-                
+    submitted = kwargs['target_shape']            
     # parse out which manipulators are requested
     manipulator_list = manipulators.split(',')
     
@@ -91,15 +91,24 @@ def multi_generic_manipulator_view(request, manipulators):
                                            
     #manipulators ran fine and the resulting shape is ready for outbound processing
     new_shape.transform(settings.GEOMETRY_DB_SRID) 
-    #we should probably move this static value 20 to a settings variable
-    # new_shape = new_shape.simplify(20, preserve_topology=True)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
     new_shape = clean_geometry(new_shape)
+    # #we should probably move this static value 20 to a settings variable
+    # # new_shape = new_shape.simplify(20, preserve_topology=True)
+    # new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
+    # new_shape = clean_geometry(new_shape)
 
-    return respond_with_template(html_response, new_shape.geojson, result["success"])
+    return respond_with_template(html_response, submitted, new_shape, result["success"])
 
-def respond_with_template(status_html, geojson_clipped, success="1"):
-    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": geojson_clipped, "success": success}))   
+def respond_with_template(status_html, submitted, final_shape, success="1"):
+    if final_shape:
+        final_shape_kml = display_kml(final_shape)
+    else:
+        final_shape_kml = ''
+    user_shape = parsekmlpoly(submitted)
+    user_shape.srid = settings.GEOMETRY_CLIENT_SRID
+    user_shape.transform(settings.GEOMETRY_DB_SRID)
+    return HttpResponse(simplejson.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))   
 
 def respond_with_error(key='unexpected', message=''):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})

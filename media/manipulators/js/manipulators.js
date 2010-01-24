@@ -18,7 +18,6 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     this.gex_ = gex;
     this.form_ = form;
     this.render_target_ = render_target;
-    this.formats_ = new lingcod.Formats();
 
     // Fill in the form with content from map.html
     this.render_target_.html($('#geopanel').html());
@@ -54,7 +53,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     
     // Figure out if there is an existing shape in the form, or if a new one
     // needs to be drawn
-    if(this.form_.find('#id_geometry_final').val()){
+    if(this.form_.find('#id_geometry_orig').val()){
         this.enterExistingShapeState_();
     }else{
         this.enterNewState_();
@@ -85,7 +84,10 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
 lingcod.Manipulator.prototype.addNewShape_ = function(kml){
     this.clearShape_();
     if(kml){
-        this.shape_ = this.gex_.util.displayKmlString(kml);
+        this.shape_ = this.gex_.pluginInstance.parseKml(kml);
+        // console.log(this.shape_);
+        // this.setZ(this.shape_, this.altitude);
+        this.gex_.pluginInstance.getFeatures().appendChild(this.shape_);
     }else{
         this.shape_ = this.gex_.dom.addPlacemark({
             visibility: true,
@@ -94,38 +96,38 @@ lingcod.Manipulator.prototype.addNewShape_ = function(kml){
                 line: { width: 2, color: 'ffffffff' },
                 poly: { color: '8000ff00' }
             }
-        });        
-    }
-    this.shape_.getGeometry().setAltitudeMode(ge.ALTITUDE_ABSOLUTE);
-    this.shape_.getGeometry().setExtrude(true);
-    var coords = this.shape_.getGeometry().getOuterBoundary().getCoordinates();
-    var length = coords.getLength();
-    for(var i =0; i<length;i++){
-        var coord = coords.get(i)
-        coord.setAltitude(this.altitude);
-        coords.set(i, coord);
+        });
+        this.setZ(this.shape_, this.altitude);
     }
     return this.shape_;
 }
 
+lingcod.Manipulator.prototype.setZ = function(kmlObject, z){
+    var geo = kmlObject.getGeometry();
+    geo.setAltitudeMode(ge.ALTITUDE_ABSOLUTE);
+    geo.setExtrude(true);
+    var coords = geo.getOuterBoundary().getCoordinates();
+    var length = coords.getLength();
+    for(var i =0; i<length;i++){
+        var coord = coords.get(i)
+        coord.setAltitude(z);
+        coords.set(i, coord);
+    }
+    return kmlObject;
+}
+
 lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
-    var orig_wkt = this.formats_.kmlToWkt(this.shape_);
     var self = this;
-    this.process(orig_wkt, this.manipulators_, function(data){
+    this.process(this.shape_.getKml(), this.manipulators_, function(data){
         if(data.success === '1'){
-            var g = JSON.parse(data.geojson_clipped);
-            var kml = self.formats_.geojsonToKmlPlacemark(g);
-            var kmlObject = self.addNewShape_(kml);
-            // that.finalKmlObject = gex.util.displayKmlString(kml);
+            var kmlObject = self.addNewShape_(data.final_shape_kml);
             self.gex_.util.flyToObject(kmlObject, {
                 boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
-            self.setGeometryFields_(orig_wkt, self.formats_.geojsonToWkt(g));
-            // setGeomFields(wkt, formats.geojsonToWkt(g));
+            self.setGeometryFields_(data.user_shape, data.submitted, data.final_shape, data.final_shape_kml);
             self.enterManipulatedState_(data.html, true);            
         }else{
-            self.setGeometryFields_(orig_wkt, '');
-            var shape = self.shape_;
-            self.addNewShape_(shape.getKml());
+            self.setGeometryFields_('', data.submitted, '', '');
+            self.addNewShape_(data.submitted);
             self.gex_.util.flyToObject(self.shape_, {
                 boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
             self.enterManipulatedState_(data.html, false);
@@ -133,9 +135,10 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
     });
 }
 
-lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, final_wkt){
-    this.form_.find('#id_geometry_final').val('SRID=4326;'+final_wkt);
-    this.form_.find('#id_geometry_orig').val('SRID=4326;'+original_wkt);
+lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, original_kml, final_wkt, final_kml){
+    this.form_.find('#id_geometry_orig').val(original_wkt);
+    $('#geometry_final_kml').text(final_kml);
+    $('#geometry_orig_kml').text(original_kml);
 }
 
 lingcod.Manipulator.prototype.hideStates_ = function(){
@@ -187,15 +190,15 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     this.is_defining_shape = false;
     this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
     this.render_target_.find('div.edit').show();
-    var wkt = this.form_.find('#id_geometry_final').val();
-    var kml = this.formats_.wktPolyToKml(wkt);
+    var kml = jQuery.trim($('#geometry_final_kml').text());
+    // console.log('klm', kml);
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
 }
 
 lingcod.Manipulator.prototype.isShapeDefined = function(){
-    return !!this.form_.find('#id_geometry_final').val();
+    return !!this.form_.find('#id_geometry_orig').val();
 }
 
 lingcod.Manipulator.prototype.isDefiningShape = function(){
@@ -224,10 +227,8 @@ lingcod.Manipulator.prototype.process = function(wkt, url, callback){
 }
 
 lingcod.Manipulator.prototype.editExistingShape_ = function(){
-    var wkt = this.form_.find('#id_geometry_orig').val();
-    var kml = this.formats_.wktPolyToKml(wkt);
+    var kml = jQuery.trim($('#geometry_orig_kml').text());
     this.addNewShape_(kml);
-    window.shape = this.shape_;
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
     this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());

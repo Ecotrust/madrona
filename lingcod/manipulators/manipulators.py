@@ -1,4 +1,4 @@
-from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing
+from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing, fromstr
 from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
@@ -7,7 +7,65 @@ from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
 manipulatorsDict = {}
+from elementtree.ElementTree import fromstring
+from django.contrib.gis.geos import LinearRing, Polygon
 
+def simplify(geom):
+    if geom.srid != settings.GEOMETRY_DB_SRID:
+        geom.transform(settings.GEOMETRY_DB_SRID)
+    from django.db import connection
+    cursor = connection.cursor()
+    query = "select simplify(st_geomfromewkt(\'%s\'), 20) as geometry" % geom.ewkt
+    cursor.execute(query)
+    row = cursor.fetchone()
+    newgeom = fromstr(row[0])
+    newgeom.transform(settings.GEOMETRY_CLIENT_SRID)
+    return newgeom
+
+def display_kml(geom):
+    geom = simplify(geom)
+    coords = []
+    for coord in geom.shell.coords:
+        coords.append(str(coord[0])+','+str(coord[1])+',100')
+    coords = ' '.join(coords)
+    return """<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+    <Placemark>
+        <Style>
+            <LineStyle>
+                <color>ffffffff</color>
+                <width>2</width>
+            </LineStyle>
+            <PolyStyle>
+                <color>8000ff00</color>
+            </PolyStyle>
+        </Style>
+        <Polygon>
+            <extrude>1</extrude>
+            <altitudeMode>absolute</altitudeMode>
+            <outerBoundaryIs>
+                <LinearRing>
+                <coordinates>%s</coordinates>
+                </LinearRing>
+            </outerBoundaryIs>
+        </Polygon>
+    </Placemark>
+</kml>""" % (coords, )
+
+def parsekmlpoly(kmlstring):
+    e = fromstring(kmlstring)
+    coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Polygon/{http://www.opengis.net/kml/2.2}outerBoundaryIs/{http://www.opengis.net/kml/2.2}LinearRing/{http://www.opengis.net/kml/2.2}coordinates').text
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '');
+    lra = []
+    for yxz in coords.split(' '):
+        a = yxz.split(',')
+        lra.append((float(a[0]), float(a[1])))
+    lr = LinearRing(lra)
+    poly = Polygon(lr)
+    return poly 
+
+def iskml(string):
+    return (string.rfind('kml') != -1)
 
 class BaseManipulator(object):
     '''
@@ -46,12 +104,16 @@ class BaseManipulator(object):
   
     def target_to_valid_geom(self, shape):
         try:
-            target = GEOSGeometry(shape)     
+            if iskml(shape):
+                target = parsekmlpoly(shape)
+            else:
+                target = GEOSGeometry(shape)
         except Exception, e:
             raise self.InvalidGeometryException(e.message)
         if not target.valid:
             raise self.InvalidGeometryException()
-        target.set_srid(settings.GEOMETRY_CLIENT_SRID) 
+        # if target.srid != settings.GEOMETRY_DB_SRID:
+        target.set_srid(settings.GEOMETRY_CLIENT_SRID)
         return target
   
     def result(self, clipped_shape, html="", success="1"):
