@@ -1,0 +1,10 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    {% if instance.is_estuary %}
+        Is an estuary
+    {% else %}
+        not an estuary
+    {% endif %}
+{% endblock panel %}

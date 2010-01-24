@@ -14,6 +14,6 @@ MpaForm = get_mpa_form()
 
 urlpatterns += patterns('lingcod.rest.views',
     url(r'^form/$', 'form_resources', {'form_class': MpaForm, 'create_title': 'Create a New Marine Protected Area'}, name='mpa_create_form'),
-    url(r'^(?P<pk>\d+)/$', 'resource', {'form_class': MpaForm}, name='mpa_resource'),
+    url(r'^(?P<pk>\d+)/$', 'resource', {'form_class': MpaForm, 'template': 'mpa/show.html'}, name='mpa_resource'),
     url(r'^(?P<pk>\d+)/form/$', 'form_resources', {'form_class': MpaForm}, name='mpa_update_form'),
 )

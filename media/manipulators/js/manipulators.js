@@ -85,8 +85,6 @@ lingcod.Manipulator.prototype.addNewShape_ = function(kml){
     this.clearShape_();
     if(kml){
         this.shape_ = this.gex_.pluginInstance.parseKml(kml);
-        // console.log(this.shape_);
-        // this.setZ(this.shape_, this.altitude);
         this.gex_.pluginInstance.getFeatures().appendChild(this.shape_);
     }else{
         this.shape_ = this.gex_.dom.addPlacemark({
@@ -191,7 +189,9 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
     this.render_target_.find('div.edit').show();
     var kml = jQuery.trim($('#geometry_final_kml').text());
-    // console.log('klm', kml);
+    if(!kml){
+        var kml = jQuery.trim($('#geometry_orig_kml').text());
+    }
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});

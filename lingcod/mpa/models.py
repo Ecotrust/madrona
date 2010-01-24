@@ -174,16 +174,21 @@ class Mpa(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-        target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
-        result = False
-        for manipulator in self.__class__.Options.manipulators:
-            m = manipulator(target_shape)
-            result = m.manipulate()
-            target_shape = result['clipped_shape'].wkt
-        geo = result['clipped_shape']
-        geo.transform(settings.GEOMETRY_DB_SRID)
-        if geo:
-            self.geometry_final = geo
-        else:
-            raise Exception('Could not pre-process geometry')
+        self.apply_manipulators()
         super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
+
+    def apply_manipulators(self, force=False):
+        if force or self.geometry_final is None:
+            print "applying manipulators"
+            target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
+            result = False
+            for manipulator in self.__class__.Options.manipulators:
+                m = manipulator(target_shape)
+                result = m.manipulate()
+                target_shape = result['clipped_shape'].wkt
+            geo = result['clipped_shape']
+            geo.transform(settings.GEOMETRY_DB_SRID)
+            if geo:
+                self.geometry_final = geo
+            else:
+                raise Exception('Could not pre-process geometry')

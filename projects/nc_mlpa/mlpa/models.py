@@ -364,13 +364,14 @@ class MlpaMpa(Mpa):
         return self.name
         
     def save(self, *args, **kwargs):
-        super(MlpaMpa,self).save(*args, **kwargs)
         from report.models import Cluster
         self.delete_cached_lop()
+        self.apply_manipulators()
         self.is_estuary = self.in_estuary()
         if self.array:
             Cluster.objects.filter(array=self.array).delete()
             self.array.save() # We have to do this so the modification date on the array is updated
+        super(MlpaMpa,self).save(*args, **kwargs)
         mgs, created = MpaGeoSort.objects.get_or_create(mpa=self)
         mgs.save()
         self.lop # calling this will calculate and store the LOP
@@ -413,7 +414,10 @@ class MlpaMpa(Mpa):
         
     @property
     def sort_num(self):
-        return self.geo_sort.number
+        if self.geo_sort:
+            return self.geo_sort.number
+        else:
+            return 0
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()
