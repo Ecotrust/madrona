@@ -186,4 +186,4 @@ class Mpa(models.Model):
             self.geometry_final = geo
         else:
             raise Exception('Could not pre-process geometry')
-        super(Mpa, self).save() # Call the "real" save() method
+        super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
