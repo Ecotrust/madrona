@@ -19,7 +19,7 @@ div.marinemap-kmltree li.open > ul {
     display: block;
 }
 
-span.kmlId {
+span.kmlId, span.nlDocId {
     display:none;
 }
 
@@ -141,6 +141,12 @@ li.KmlNetworkLink.loading > span.icon {
     margin-right:3px;
     display:block;
     background: transparent url(../images/kml-throbber.gif) no-repeat;
+}
+
+li.KmlNetworkLink.error > span.icon {
+    margin-right:3px;
+    display:block;
+    background: transparent url(../images/kmlTreeSprites.png) no-repeat -81px -2px;    
 }
 
 li.KmlTour > span.icon {

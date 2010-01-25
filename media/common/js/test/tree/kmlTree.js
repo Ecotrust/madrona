@@ -944,6 +944,7 @@ module('kmlTree');
     });
 
     earthAsyncTest('Contents of NetworkLinks can be displayed. Depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=260&q=NetworkLink&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars#c3">this ticket</a>, or a hack', function(ge, gex){
+        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
         $(document.body).append('<div id="kmltreetest"></div>');
         var tree = lingcod.kmlTree({
             url: kmlTreeUrl2,
@@ -958,14 +959,63 @@ module('kmlTree');
         $(tree).bind('kmlLoaded', function(e, kmlObject){
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             $(tree).unbind('kmlLoaded');
+            var nlink = $('#kmltreetest').find('span:contains(networklink a)').parent();
+            var nlinkobject = tree.lookup(nlink);
             $(tree).bind('networklinkload', function(e, node, kmlObject){
-                console.log('networklinkload', e, node, kmlObject);
-                equals($('#kmltreetest').find('span:contains(NetworkLink Content)').length, 1);
-                // tree.destroy();
-                // $('#kmltreetest').remove();
-                // start();
+                equals(kmlObject.getName(), 'linka.kmz');
+                equals($('#kmltreetest').find('span:contains(NetworkLink Content)').length, 1, 'NetworkLink contents displayed.');
+                equals(nlinkobject.getVisibility(), kmlObject.getVisibility());
+                var pmark = $('#kmltreetest').find('li:contains(NetworkLink Content) span:contains(Untitled Placemark)');
+                equals(pmark.length, 1);
+                // toggling-off networklink toggles off linked document
+                nlink.find('.toggler').click();
+                equals(nlinkobject.getVisibility(), false, 'NetworkLink visibility off');
+                console.log(nlinkobject.getName(), kmlObject.getName());
+                equals(nlinkobject.getVisibility(), kmlObject.getVisibility(), 'Parent document visibility tracks NetworkLink visibility.');
+                // Events still work (testing double-click on tree node)
+                pmark.dblclick();
+                setTimeout(function(){
+                    var secondLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+                    ok(secondLat !== firstLat, 'Events on tree nodes should still function.');
+                    tree.destroy();
+                    $('#kmltreetest').remove();
+                    start();                    
+                }, 200);
             });
-            $('#kmltreetest').find('span:contains(networklink a)').parent().find('.expander').click();
+            nlink.find('.expander').click();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+    
+    earthAsyncTest('Networklinks that start out with visibility=0 should not be visible just because they have been loaded.', function(ge, gex){
+        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: kmlTreeUrl2,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;}
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            var nlink = $('#kmltreetest').find('span:contains(networklink off)').parent();
+            equals(nlink.length, 1);
+            var nlinkobject = tree.lookup(nlink);
+            $(tree).bind('networklinkload', function(e, node, kmlObject){
+                equals(kmlObject.getName(), 'linka.kmz');
+                equals($('#kmltreetest').find('span:contains(NetworkLink Content)').length, 1, 'NetworkLink contents displayed.');
+                equals(nlinkobject.getVisibility(), kmlObject.getVisibility());
+                tree.destroy();
+                $('#kmltreetest').remove();
+                start();                    
+            });
+            nlink.find('.expander').click();
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
@@ -994,11 +1044,6 @@ module('kmlTree');
         tree.load(true);
     });
 
-    earthAsyncTest('networklink content fetched when expanded', function(ge, gex){
-        $(document.body).append('<div id="kmltreetest"></div>');
-        $('#kmltreetest').remove();
-        start();
-    });
 
     earthAsyncTest('refresh reloads kml tree', function(ge, gex){
         $(document.body).append('<div id="kmltreetest"></div>');
