@@ -162,7 +162,7 @@ lingcod.kmlTree = (function(){
                     var lookupId = addLookup(docid, this);
                     var child = {
                         renderOptions: renderOptions,
-                        name: this.getName(),
+                        name: this.getName() || '&nbsp;',
                         visible: !!this.getVisibility(),
                         type: this.getType(),
                         open: this.getOpen() && this.getType() !== 'KmlNetworkLink',
