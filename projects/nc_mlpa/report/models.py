@@ -95,9 +95,13 @@ class ClusterHabitatInfo(models.Model):
     habitat = models.ForeignKey(int_models.FeatureMapping)
     replicate = models.NullBooleanField(null=True,blank=True)
     result = models.FloatField()
+    units = models.CharField(null=True,blank=True, max_length=255)
     additional_required = models.FloatField(null=True,blank=True)
     sort = models.FloatField()
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    
+    class Meta:
+        ordering = ['sort']
     
     def __unicode__(self):
         return self.habitat.name
@@ -132,4 +136,5 @@ class ClusterHabitatInfo(models.Model):
         self.sort = hab_result['sort']
         self.additional_required = hab_result['additional_required']
         self.result = hab_result['result']
+        self.units = hab_result['units']
         self.save()

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>{{array.name}} Replication Report</title>
+        
+        <script src="{{MEDIA_URL}}js/jquery-1.2.6.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+        </script>
+        <style type="text/css" media="all">
+            body {
+                background-image: url(/marinemap/media/images/marinemap-ui/modal_bg.png);
+                overflow-y: scroll;
+                height: 100%;
+            }
+            table {
+                border-width: 1px;
+                border-spacing: 0px;
+                border-style: solid;
+                border-color: gray;
+                border-collapse: separate;
+                margin: 0px;
+                font-size: small;
+            }
+            table td {
+                border-width: 1px;
+                border-style: solid;
+                border-color: gray;
+                -moz-border-radius: 0px;
+            }
+            
+            table td.selected {
+                border-color: red;
+            }
+        
+            h1 {
+                background:#CDDBED url(/marinemap/media/images/marinemap-ui/wait_bg.png) top repeat-x;
+                color:#303A44;
+                padding:0.5em 0 0.5em 0.5em;
+                font-size:1.4em;
+                margin:0 0 0 0;
+            }
+            div.unrounded {
+            	-webkit-box-shadow: 5px 5px 5px #666;
+            	-moz-box-shadow: 5px 5px 5px #666;
+            	box-shadow: 5px 5px 5px #666;
+            	-moz-border-radius: 3px;
+				-webkit-border-radius: 3px;
+                background: white;
+                border: thin solid black;
+                margin: 6px;
+                padding: 10px;
+                display: none;
+                position: absolute;
+            }
+            div.hab_description {
+            	-webkit-box-shadow: 6px 6px 5px #666;
+            	-moz-box-shadow: 6px 6px 5px #666;
+            	box-shadow: 6px 6px 5px #666;
+            	-moz-border-radius: 3px;
+				-webkit-border-radius: 3px;
+                background: white;
+                border: thin solid black;
+                width: 350px;
+                margin: 6px;
+                padding: 10px;
+                display: none;
+                position: absolute;
+            }
+            #center {
+                width:800px;
+                min-height:1800px;
+                padding:0 0 0 0;
+                margin: 0 auto 0 auto;
+                border:solid 1px #ADC3ED;
+                border-top:none;
+                border-bottom:none;
+                background-color:white;
+            }
+            
+            .metadata-and-tools {
+                float:left;
+                width:300px;
+                height:200px;
+/*                border:solid black 1px;*/
+                margin:0 0 0 0;
+            }
+            
+            .map {
+                margin:0 0 0 0;
+                background-color:grey;
+                float:right;
+                width:500px;
+                height:200px;
+            }
+            
+            .section {
+                clear:both;
+            }
+            
+            div.section object, div.section embed {
+                margin-left:-2em;
+            }
+            
+            p.firefox-print-warning {
+                display:none;
+                padding:0.5em 0.5em;
+                margin:1em 0;
+                border:solid red 1px;
+            }
+            
+            div.section.reports {
+                margin-left:1em;
+            }
+            
+        </style>
+        
+    </head>
+    <body>
+        <div class="marinemap-typography" id="center">
+            {% include "array_replication.html" %}
+        </div>
+    </body>
+</html>

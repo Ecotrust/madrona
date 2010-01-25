@@ -9,6 +9,7 @@ import lingcod.intersection.models as int_models
 import lingcod.replication.models as rep_models
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
+from django.db import transaction
 
 #THE FOLLOWING ESTUARIES RELATED CLASSES ARE INCOMPLETE AND HAVE BEEN ADDED HERE FOR TESTING PURPOSES!!!
 class EstuariesManager(models.GeoManager):
@@ -101,6 +102,7 @@ class MpaArray(BaseArray):
         return gc
         
     @property
+    @transaction.commit_on_success
     def clusters(self):
         """
         If clusters exist and they have a newer date modified than the array, retrieve them.
@@ -116,6 +118,7 @@ class MpaArray(BaseArray):
         return qs
         
     @property
+    @transaction.commit_on_success
     def clusters_with_habitat(self):
         """
         If don't exist, generate them with habitat info.  If clusters exist but are out of date,

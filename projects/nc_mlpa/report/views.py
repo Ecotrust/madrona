@@ -59,6 +59,9 @@ def oc_or_est_from_org_scheme(results):
     return results
 
 def geometries_to_wkt(results,srid=None, simplify=None):
+    """
+    Take a dictionary, find values that are geometry objects and replace them with wkt representations of the geometries.
+    """
     geometry_classes = ['GeometryCollection','MultiPolygon','Polygon','MultiLineString','LineString','MultiPoint','Point']
     for k,v in results.iteritems():
         if v.__class__.__name__ in geometry_classes:
@@ -74,9 +77,13 @@ def geometries_to_wkt(results,srid=None, simplify=None):
         elif v.__class__.__name__=='dict':
             v.update(geometries_to_wkt(v,srid,simplify))
     return results
+    
+def array_habitat_replication(request, array_id, format='json'):
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    return render_to_response('array_replication_page.html', {'results': array.clusters_with_habitat} )
             
 def array_habitat_representation_summed(request, array_id, format='json', with_geometries=False, with_kml=False, oc_est_combined=False):
-    if format<>'json':
+    if format != 'json':
         with_geometries = False
         with_kml = False
     array = mlpa.MpaArray.objects.get(pk=array_id)
