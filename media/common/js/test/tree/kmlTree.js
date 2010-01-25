@@ -970,7 +970,6 @@ module('kmlTree');
                 // toggling-off networklink toggles off linked document
                 nlink.find('.toggler').click();
                 equals(nlinkobject.getVisibility(), false, 'NetworkLink visibility off');
-                console.log(nlinkobject.getName(), kmlObject.getName());
                 equals(nlinkobject.getVisibility(), kmlObject.getVisibility(), 'Parent document visibility tracks NetworkLink visibility.');
                 // Events still work (testing double-click on tree node)
                 pmark.dblclick();
@@ -1022,6 +1021,7 @@ module('kmlTree');
     });
     
     earthAsyncTest("NetworkLinks with listItemType=checkHideChildren don't expand", function(ge, gex){
+        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
         $(document.body).append('<div id="kmltreetest"></div>');
         var tree = lingcod.kmlTree({
             url: kmlTreeUrl2,
@@ -1036,6 +1036,8 @@ module('kmlTree');
         $(tree).bind('kmlLoaded', function(e, kmlObject){
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             $(tree).unbind('kmlLoaded');
+            var nlink = $('#kmltreetest').find('span:contains(networklink checkHideChildren)').parent();
+            equals(nlink.find('.expander:visible').length, 0);
             tree.destroy();
             $('#kmltreetest').remove();
             start();
