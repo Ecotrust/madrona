@@ -945,8 +945,48 @@ module('kmlTree');
 
     earthAsyncTest('Contents of NetworkLinks can be displayed. Depends on <a href="http://code.google.com/p/earth-api-samples/issues/detail?id=260&q=NetworkLink&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars#c3">this ticket</a>, or a hack', function(ge, gex){
         $(document.body).append('<div id="kmltreetest"></div>');
-        $('#kmltreetest').remove();
-        start();
+        var tree = lingcod.kmlTree({
+            url: kmlTreeUrl2,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;}
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            // tree.destroy();
+            // $('#kmltreetest').remove();
+            // start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+    
+    earthAsyncTest("NetworkLinks with listItemType=checkHideChildren don't expand", function(ge, gex){
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: kmlTreeUrl2,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;}
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            tree.destroy();
+            $('#kmltreetest').remove();
+            start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
     });
 
     earthAsyncTest('networklink content fetched when expanded', function(ge, gex){
