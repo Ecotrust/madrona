@@ -60,7 +60,7 @@ lingcod.kmlTree = (function(){
     
     return function(opts){
         var that = {};
-        var lookupTable = [];
+        var lookupTable = {};
         that.kmlObject = null;
         
         var opts = jQuery.extend({}, constructor_defaults, opts);
@@ -148,6 +148,7 @@ lingcod.kmlTree = (function(){
         };
         
         var buildOptions = function(kmlObject){
+            var docid = addDocLookup(kmlObject);
             var topTreeNode;
             var options = {name: kmlObject.getName()};
             opts.gex.dom.walk({
@@ -156,7 +157,7 @@ lingcod.kmlTree = (function(){
                     if(!parent.children){
                         parent.children = [];
                     }
-                    var lookupId = addLookup(this);
+                    var lookupId = addLookup(docid, this);
                     var child = {
                         renderOptions: renderOptions,
                         name: this.getName(),
@@ -230,7 +231,6 @@ lingcod.kmlTree = (function(){
         };
 
         var _render = function(options){
-            window.opts = options;
             var s = template(jQuery.extend({}, defaults, options));
             return s;
         };
@@ -238,7 +238,7 @@ lingcod.kmlTree = (function(){
         var clearLookups = function(){
             // try to clear some memory
             lookupTable = null;
-            lookupTable = [];
+            lookupTable = {};
         };
         
         var refresh = function(){
@@ -280,7 +280,10 @@ lingcod.kmlTree = (function(){
         var lookup = function(li){
             var li = $(li);
             if(li.length && li.find('> .kmlId').length){
-                return lookupTable[parseInt($($(li)[0]).find('> .kmlId').text())];    
+                var ids = $($(li)[0]).find('> .kmlId').text().split('-');
+                var docId = ids[0];
+                var id = parseInt(ids[1]);
+                return lookupTable[docId][id];    
             }else{
                 return false;
             }
@@ -288,9 +291,18 @@ lingcod.kmlTree = (function(){
         
         that.lookup = lookup;
         
-        var addLookup = function(value){
-            lookupTable.push(value);
-            return lookupTable.length - 1;
+        var addLookup = function(docid, value){
+            lookupTable[docid].push(value);
+            return docid + '-' + (lookupTable[docid].length - 1);
+        }
+        
+        var addDocLookup = function(kmlObject){
+            var docid = kmlObject.getName() + (new Date()).getTime();
+            if(lookupTable[docid]){
+                throw('document already added to lookup');
+            }
+            lookupTable[docid] = [];
+            return docid;
         }
                 
         var selectNode = function(node, kmlObject){
@@ -429,10 +441,40 @@ lingcod.kmlTree = (function(){
             $(node).toggleClass('visible', toggling);
         };
         
+        var openNetworkLink = function(node){
+            if(node.find('> ul').length){
+                throw('networklink already loaded');
+            }else{
+                var NetworkLink = lookup(node);
+                var link = NetworkLink.getLink().getHref();
+                console.log(NetworkLink)
+                node.addClass('loading');
+                google.earth.fetchKml(ge, link, function(kmlObject){
+                    ge.getFeatures().appendChild(kmlObject);
+                    kmlObject.setVisibility(true);
+                    NetworkLink.setVisibility(false);
+                    var parent = NetworkLink.getParentNode();
+                    parent.getFeatures().removeChild(NetworkLink);
+                    var data = buildOptions(kmlObject);
+                    var html = renderOptions(data.children[0].children);
+                    node.append('<ul>'+html+'</ul>');
+                    node.addClass('open');
+                    node.removeClass('loading');
+                    $(that).trigger('networklinkload', [node, kmlObject]);
+                });
+            }
+        };
+        
         
         // expand events
         opts.element.find('li > span.expander').live('click', function(){
-            $(this).parent().toggleClass('open');
+            var el = $(this).parent();
+            if(el.hasClass('KmlNetworkLink') && el.find('>ul').length === 0 && !el.hasClass('loading')){
+                console.log(lookup(el).getName());
+                openNetworkLink(el);
+            }else{
+                $(this).parent().toggleClass('open');
+            }
         });
         
         opts.element.find('li > span.toggler').live('click', function(){

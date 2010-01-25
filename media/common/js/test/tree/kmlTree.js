@@ -958,9 +958,14 @@ module('kmlTree');
         $(tree).bind('kmlLoaded', function(e, kmlObject){
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             $(tree).unbind('kmlLoaded');
-            // tree.destroy();
-            // $('#kmltreetest').remove();
-            // start();
+            $(tree).bind('networklinkload', function(e, node, kmlObject){
+                console.log('networklinkload', e, node, kmlObject);
+                equals($('#kmltreetest').find('span:contains(NetworkLink Content)').length, 1);
+                // tree.destroy();
+                // $('#kmltreetest').remove();
+                // start();
+            });
+            $('#kmltreetest').find('span:contains(networklink a)').parent().find('.expander').click();
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
