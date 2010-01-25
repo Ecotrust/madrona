@@ -2,8 +2,9 @@ from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.array.models import MpaArray
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.common import utils 
-from lingcod.sharing.models import get_shareables, share_object_with_group, SharingError
+from lingcod.sharing.models import get_shareables, share_object_with_group, SharingError, ShareableContent
 from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -16,9 +17,21 @@ class SharingTestMpa(Mpa):
 class SharingTestArray(MpaArray):
     extra_attr = models.CharField(max_length=255, blank=True)
 
+settings.MPA_CLASS = 'lingcod.sharing.tests.SharingTestMpa'
+settings.ARRAY_CLASS = 'lingcod.sharing.tests.SharingTestArray'
+
 class SharingTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+
+        # First register the mpas and arrays as shareable content types
+        mpa_ct = ContentType.objects.get(app_label='sharing',model='sharingtestmpa')
+        array_ct = ContentType.objects.get(app_label='sharing',model='sharingtestarray')
+
+        share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
+                                                    container_content_type=array_ct,
+                                                    container_set_property='mpa_set')
+        share_array = ShareableContent.objects.create(shared_content_type=array_ct)
 
         # Create 3 users
         self.password = 'iluvsharing'
@@ -138,6 +151,20 @@ class SharingTestCase(TestCase):
         shared_mpas = SharingTestArray.objects.shared_with_user(self.user3)
         self.assertEquals(len(shared_mpas),0)
 
+    def test_share_container(self):
+        """
+        Arrays are containers of MPAs so their child objects should also appear to be shared
+        """
+        # User1 shares their array1 (which contains MPA1) with Group1
+        array1 = SharingTestArray.objects.get(id=self.array1_id)
+        group1 = Group.objects.get(id=self.group1_id)
+        share_object_with_group(array1, group1) 
+        # User2 should see the mpa contained in array1 (since they're part of Group1)
+        shared_mpas = SharingTestMpa.objects.shared_with_user(self.user2)
+        self.assertEquals(len(shared_mpas),1)
+        # User3 should not see it (since they're not part of Group1)
+        shared_mpas = SharingTestMpa.objects.shared_with_user(self.user3)
+        self.assertEquals(len(shared_mpas),0)
 
     def test_share_unshareable(self):
         """

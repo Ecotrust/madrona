@@ -1,10 +1,33 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
+
+
+class ShareableContent(models.Model):
+    """
+    Defines which objects are shareable and some details about their behavior
+    
+    ======================  ==============================================
+    Attribute               Description
+    ======================  ==============================================
+    ``shared_content_type``     Content type (fk) of the model to be shared
+
+    ``container_content_type``  Type to serve as container 
+
+    ``container_set_property``  Property on the container model to return
+                                a queryset of the associated content types
+
+    ======================  ==============================================
+    """ 
+    shared_content_type = models.ForeignKey(ContentType,related_name="shared_content_type")
+    container_content_type = models.ForeignKey(ContentType,blank=True,null=True,verbose_name="Content type of objects to serve as a 'container' for this type")
+    container_set_property = models.CharField(max_length=40,blank=True,null=True,verbose_name="Property on the container object which returns a queryset of this type")
 
 def get_shareables():
     """
     Introspects the current project and looks for 
     * a can_share* permission and its associated model name
+    * if the model is a registered ShareableContent instance
     * whether those models have a user field (fk to auth Users)
     * whether those models have a sharing_groups ManyToMany field 
     * whether those model managers implement the all_for_user() method (ie the ShareableGeoManager)
@@ -14,10 +37,13 @@ def get_shareables():
     """
     perms = Permission.objects.filter(codename__startswith="can_share")
     shareable = {}
+    entries = ShareableContent.objects.all()
+    shareable_content_types = [x.shared_content_type for x in entries]
     for p in perms:
         model_class = p.content_type.model_class()
         #TODO this checks if field exists but need to do more robust checking on what type of field, where the fk points, etc
-        if model_class.__dict__.has_key('sharing_groups') and \
+        if p.content_type in shareable_content_types and \
+           model_class.__dict__.has_key('sharing_groups') and \
            model_class.__dict__.has_key('user') and \
            model_class.__dict__['user'].__class__.__name__ == 'ReverseSingleRelatedObjectDescriptor' and \
            model_class.__dict__['sharing_groups'].__class__.__name__ == 'ReverseManyRelatedObjectsDescriptor':
