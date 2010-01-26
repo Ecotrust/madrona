@@ -11,5 +11,8 @@ urlpatterns = patterns('lingcod.kmlapp.views',
     url(r'^(?P<session_key>\w+)/(?P<input_mpa_id>\d+)/mpa.kmz$', 'create_kml', {'kmz': True}, name='kmlapp-mpa-kmz'),
     # KML/Zs with network links
     url(r'^(?P<session_key>\w+)/(?P<input_username>\w+)/user_mpa_links.kml$', 'create_kml', {'links': True}, name='kmlapp-userlinks-kml'),
-    url(r'^(?P<session_key>\w+)/(?P<input_username>\w+)/user_mpa_links.kmz$', 'create_kml', {'links': True, 'kmz': True}, name='kmlapp-userlinks-kmz')
+    url(r'^(?P<session_key>\w+)/(?P<input_username>\w+)/user_mpa_links.kmz$', 'create_kml', {'links': True, 'kmz': True}, name='kmlapp-userlinks-kmz'),
+    # Shared KML/Zs with network links
+    url(r'^(?P<session_key>\w+)/(?P<input_username>\w+)/shared_mpa_links.kml$', 'create_kml', {'links': True}, name='kmlapp-sharedlinks-kml'),
+    url(r'^(?P<session_key>\w+)/(?P<input_username>\w+)/shared_mpa_links.kmz$', 'create_kml', {'links': True, 'kmz': True}, name='kmlapp-sharedlinks-kmz'),
 )

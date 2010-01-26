@@ -44,8 +44,9 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var kml = kmlFeatureObject.getKml();
         var self = $(kml).find('atom\\:link[rel=self]');
         var form = $(kml).find('atom\\:link[rel=marinemap.update_form]');
+        var share_form = $(kml).find('atom\\:link[rel=marinemap.share_form]');
         if(self.length === 1 && form.length === 1){
-            return {
+            var resource = {
                 title: self.attr('title'),
                 location: self.attr('href'),
                 model: self.attr('mm:model'),
@@ -53,6 +54,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 form_link: form.attr('href'),
                 form_title: form.attr('title')
             }
+            if (share_form.length === 1) {
+                resource['share_href'] = share_form.attr('href');
+                resource['share_title'] = share_form.attr('title');
+                resource['share_model'] = share_form.attr('mm:model');
+            }
+            return resource;
         }else{
             throw('REST Client: Could not parse resource.');
         }
@@ -122,6 +129,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var form = html.find('form');
         content.find('#PanelAttributes').append(html);
         panel.addContent(content);
+        // TODO
         var el = panel.getEl();
         var tabs = content.find('.tabs').tabs();
         tabs.bind('tabsshow', function(e){
@@ -325,6 +333,19 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     that.show = show;
     
+    // TODO client.share
+    // ===========
+    // Show a feature's sharing UI in the panel.
+    var share = function(configOrFeature, options){
+        options = options || {};
+        var config = getConfig(configOrFeature);
+        options['load_msg'] = 'Loading '+config['title'];
+        options['showClose'] = true;
+        panel.showUrl(config['share_href'], options);
+    };
+    
+    that.share = share;
+
     // Private methods
  
     // to make up for the fact that the Location header returns the full path,

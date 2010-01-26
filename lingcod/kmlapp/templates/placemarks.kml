@@ -34,11 +34,12 @@
     <Placemark id="{{mpa.get_absolute_url}}">
         <name>{{ mpa.name }}</name>
         {% if mpa.designation %}
-        <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrl>
+        <styleUrl>#{{ mpa.designation.acronym }}-style</styleUrlg
         {% else %}
         <styleUrl>#defaultstyle</styleUrl>
         {% endif %}
         <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa_update_form pk=mpa.pk %}" />
+        <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url sharing-object-form session_key=session_key object_type=mpa_ctid pk=mpa.pk %}" />
         <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="{{mpa.get_absolute_url}}" />
         <atom:link rel="alt" href="{% url kmlapp-mpa-kmz input_mpa_id=mpa.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
         <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />

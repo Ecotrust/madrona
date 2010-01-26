@@ -1,0 +1,23 @@
+
+<!-- User :: {{ user.name }} -->
+
+{% if groups %}
+
+    <div> 
+        Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups. 
+    </div>
+
+    <form action="" method="POST">
+    {% for group in groups %} 
+    <p><input type="checkbox" name="group" value="{{group.id}}" /> {{ group.name }} </p>
+    {% endfor %}
+        <input type="submit" value="Submit" />
+    </form>
+
+{% else %}
+
+    <div> 
+        Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> .. you don't belong to any groups with appropriate permissions to share that object. 
+    </div>
+
+{% endif %}

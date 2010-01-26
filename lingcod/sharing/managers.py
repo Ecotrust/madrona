@@ -1,7 +1,6 @@
 from django.contrib.gis.db import models
 from models import get_shareables, ShareableContent
 from django.contrib.auth.models import User, Group, Permission
-from django.contrib.contenttypes.models import ContentType
 
 # TODO DOCUMENT!
 class ShareableGeoManager(models.GeoManager):

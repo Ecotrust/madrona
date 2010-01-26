@@ -8,6 +8,7 @@ from lingcod.common import utils
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 from lingcod.common.utils import load_session
+from lingcod.sharing.models import get_content_type_id
 
 def get_user_mpa_data(user):
     """
@@ -138,8 +139,13 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     else:
         raise Http404
 
+    # determine content types for sharing
+    mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
+    array_ctid = get_content_type_id(utils.get_array_class())
+
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': links, 'request_path': request.path, 'session_key': session_key}))
+    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
+                            'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'

@@ -159,8 +159,13 @@ lingcod.rest.kmlEditor = function(options){
     copy.setEnabled(false);
     tbar.addChild(copy, true);
     
+    // TODO
     var share = new goog.ui.ToolbarButton('Share');
     share.setEnabled(false);
+    share.setTooltip("Share the selected feature");
+    goog.events.listen(share, 'action', function(e) {
+        options.client.share(tree.lookup(that.selected));
+    });
     tbar.addChild(share, true);
     
     var enableWhenSelected = [attr, edit, del, export_button, copy, share];

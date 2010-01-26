@@ -38,17 +38,17 @@ def get_shareables():
     perms = Permission.objects.filter(codename__startswith="can_share")
     shareable = {}
     entries = ShareableContent.objects.all()
-    shareable_content_types = [x.shared_content_type for x in entries]
+    registered_shareable = [x.shared_content_type for x in entries]
     for p in perms:
         model_class = p.content_type.model_class()
         #TODO this checks if field exists but need to do more robust checking on what type of field, where the fk points, etc
-        if p.content_type in shareable_content_types and \
+        if p.content_type in registered_shareable and \
            model_class.__dict__.has_key('sharing_groups') and \
            model_class.__dict__.has_key('user') and \
            model_class.__dict__['user'].__class__.__name__ == 'ReverseSingleRelatedObjectDescriptor' and \
            model_class.__dict__['sharing_groups'].__class__.__name__ == 'ReverseManyRelatedObjectsDescriptor':
             try:
-                model_class.objects.shared_with_user
+                assert model_class.objects.shared_with_user
                 shareable[p.content_type.model] = (model_class, p)
             except:
                 pass
@@ -85,4 +85,14 @@ def share_object_with_group(the_object, the_group):
     # do it
     the_object.sharing_groups.add(the_group)
     the_object.save()
+
+
+def get_content_type_id(model_class):
+    """
+    Returns the content type primnary key for a given model class
+    """
+    try:
+        return ContentType.objects.get(app_label=model_class._meta.app_label, model=model_class.__name__.lower()).id
+    except:
+        raise SharingError("Cannot get content type for %s " % model_class)
 
