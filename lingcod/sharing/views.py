@@ -23,7 +23,7 @@ def get_sharing_groups(ctid, user):
     groups = user.groups.filter(permissions=permission)
     return groups
 
-def share_form(request, pk, session_key, object_type):
+def share_form(request, pk, object_type):
     user = request.user
 
     if request.method == 'GET':
