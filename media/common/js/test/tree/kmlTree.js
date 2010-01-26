@@ -5,6 +5,7 @@ module('kmlTree');
     var kmlTreeUrl = 'http://marinemap.googlecode.com/svn-history/r869/trunk/media/projects/nc_mlpa/layers/uploaded-kml/ecotrustDataLayers.kml';
     var kmlTreeUrl2 = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/kmlForestTest.kmz';
     var trans = 'http://chart.apis.google.com/chart?cht=p3&chs=1x1&chf=bg,s,EFEF0000';
+    var traversal = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/TreeTraversal.kmz';
 
     earthTest('create instance', 2, function(ge, gex){    
         $(document.body).append('<div id="kmltreetest"></div>');
@@ -805,7 +806,7 @@ module('kmlTree');
         $(tree).bind('kmlLoaded', function(e, kmlObject){
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             var node = $('#kmltreetest').find('span:contains(Visibility set to false)').parent();
-            $('#kmltreetest').find('span:contains(Visibility set to false)').dblclick();
+            node.find('span.name').dblclick();
             ok(tree.lookup(node).getVisibility(), 'Feature should be visible.');
             setTimeout(function(){
                 var secondLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
@@ -813,7 +814,7 @@ module('kmlTree');
                 tree.destroy();
                 $('#kmltreetest').remove();
                 start();
-            }, 100);
+            }, 400);
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
@@ -841,7 +842,7 @@ module('kmlTree');
                 tree.destroy();
                 $('#kmltreetest').remove();
                 start();
-            }, 100);
+            }, 400);
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
@@ -979,7 +980,7 @@ module('kmlTree');
                     tree.destroy();
                     $('#kmltreetest').remove();
                     start();                    
-                }, 200);
+                }, 400);
             });
             nlink.find('.expander').click();
         });
@@ -1046,6 +1047,77 @@ module('kmlTree');
         tree.load(true);
     });
 
+
+    earthAsyncTest("tree.walk visits in correct order", function(ge, gex){
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: traversal,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;}
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlFolder', 'Document loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            var order = '';
+            tree.walk(function(node){
+                order += node.find('>span.name').text();
+            });
+            equals('FJBADCEGIH', order);
+            tree.destroy();
+            $('#kmltreetest').remove();
+            start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+    
+    earthAsyncTest("children ignored if callback returns false", function(ge, gex){
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: traversal,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;}
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlFolder', 'Document loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            var order = '';
+            tree.walk(function(node){
+                var name = node.find('>span.name').text();
+                order += name;
+                if(name === 'B'){
+                    return false;
+                }
+            });
+            equals(order, 'FJBGIH');
+            var order = '';
+            tree.walk(function(node){
+                var name = node.find('>span.name').text();
+                order += name;
+                if(name === 'D'){
+                    return false;
+                }
+            });
+            equals('FJBADGIH', order);
+            tree.destroy();
+            $('#kmltreetest').remove();
+            start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+
+    
 
     earthAsyncTest('refresh reloads kml tree', function(ge, gex){
         $(document.body).append('<div id="kmltreetest"></div>');
