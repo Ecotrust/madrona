@@ -87,7 +87,6 @@ lingcod.panel = function(options){
     }
     
     that.showUrl = function(url, options){
-        // throw('what the fucking fuck!');
         var new_url = url;
         that.spin(options.load_msg || "Loading");
         $.ajax({
