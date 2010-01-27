@@ -79,6 +79,10 @@ class Cluster(models.Model):
     @property
     def area_sq_mi(self):
         return A(sq_m=self.geometry_collection.area).sq_mi
+    
+    @property
+    def geo_sort(self):
+        return self.geometry_collection.centroid.y
         
     def calculate_habitat_info(self):
         rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST)

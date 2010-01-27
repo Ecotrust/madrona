@@ -1,45 +1,22 @@
-
-Blah blah
+Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d, Y" }}
 <br><br>
 
 {% regroup results by lop as results_by_lop  %}
+<div class="lop_buttons">
+	{% for lop in results_by_lop %}
+		<style> #{{lop.grouper|cut:" "}} { display:none }</style>
+			<a class="button" href="#" id="{{lop.grouper|cut:" "}}_button">
+				<span>{{lop.grouper|title}}</span>
+			</a>
+			{% comment %}
+				id="{{lop.grouper|cut:" "}}" 
+				<button class="{{lop.grouper|cut:" "}}">{{lop.grouper|title}}</button>
+			{% endcomment %}
+	{% endfor %}
+</div>
+<br><br>
 {% for lop in results_by_lop %}
-    <div id="{{lop.grouper|cut:" "}}" class="results">
-{{ lop.grouper }}
-    <ul>
-    {% regroup lop.list by bioregion as clusters_by_bioregion %}
-    {% for bioregion in clusters_by_bioregion  %}
-        {{ bioregion.grouper }}
-        {% for cluster in bioregion.list %}
-            <table width=600px cellpadding='0'>
-                <tr>
-                    <td width=200px>
-                    {% for mpa in cluster.mpa_set.all %}
-                        {{ mpa.name }},<br> 
-                    {% endfor %}
-                    </td>
-                    <td>    
-                        <table width=400px cellpadding=5px>
-                            <tr>
-                                <th>Habitat</th>
-                                <th>Replicate</th>
-                                <th>Captured</th>
-                                <th>Additional Needed</th>
-                            </tr>
-                            {% for habinfo in cluster.clusterhabitatinfo_set.all  %}
-                            <tr bgcolor={%if habinfo.replicate%}"#c4d5c3"{%else%}"#d5c3c3"{%endif%}>
-                                <td>{{ habinfo }}</td>
-                                <td>{{ habinfo.replicate }}</td>
-                                <td>{{ habinfo.result|floatformat:2 }} {{ habinfo.units|title }}</td>
-                                <td>{{ habinfo.additional_required|floatformat:2 }} {{ habinfo.units|title }}</td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        {% endfor %}
-    {% endfor %}
-    </ul>
-    </div>
+	<div class="lop">
+    	{% include "array_replication_single_lop.html" %}
+	</div>
 {% endfor %}

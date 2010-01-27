@@ -1,0 +1,154 @@
+body {
+    overflow-y: scroll;
+    height: 100%;
+    font-family: arial, sans-serif;
+}
+table {
+    border-width: thin;
+    border-spacing: 0px;
+    border-style: solid;
+    border-color: gray;
+    border-collapse: separate;
+    margin: 0px;
+}
+table.cluster_container {
+    background: white;
+    margin-bottom: 4px;
+    -webkit-box-shadow: 3px 3px 3px #ccc;
+    -moz-box-shadow: 3px 3px 3px #ccc;
+    box-shadow: 3px 3px 3px #ccc;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+table.hab_container {
+    font-size: small;
+    width: 450px;
+    background: #ffffff;
+    padding: 0px;
+    border-spacing: 0px;
+    border-width: 0px;
+    border-color: lightgray;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+table.hab_container td, th {
+    padding: 2px;
+    border-width: 0px;
+}
+table.hab_container th {
+    background: #FAFAFA url(http://closure-library.googlecode.com/svn/trunk/closure/goog/demos/css/../images/toolbar-bg.png) repeat-x scroll left bottom;
+}
+table td, th {
+    text-align: left;
+    border-width: 0px;
+    border-style: solid;
+    border-color: gray;
+}
+table td.selected {
+    border-color: red;
+}
+table td.mpa_names {
+    padding: 5px;
+    font-weight: bold;
+    background: white;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+table tr.replicate {
+    background: #b2e1ff;
+}
+table tr.not_replicate {
+    background: #eeeeee;
+}
+div.bioregion {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: #f3f3f3;
+    border: thin solid lightgrey;
+    width: 455px;
+    padding: 5px;
+    padding-top: 8px;
+}
+div.lop_buttons {
+    clear: both;
+    position: inline;
+}
+div.bioregion span.bioregion_name {
+    color: grey;
+    margin-bottom: 14px;
+}
+div.unrounded {
+    -webkit-box-shadow: 5px 5px 5px #666;
+    -moz-box-shadow: 5px 5px 5px #666;
+    box-shadow: 5px 5px 5px #666;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: white;
+    border: thin solid black;
+    margin: 6px;
+    padding: 10px;
+    display: none;
+    position: absolute;
+}
+div.hab_description {
+    -webkit-box-shadow: 6px 6px 5px #666;
+    -moz-box-shadow: 6px 6px 5px #666;
+    box-shadow: 6px 6px 5px #666;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background: white;
+    border: thin solid black;
+    width: 350px;
+    margin: 6px;
+    padding: 10px;
+    display: none;
+    position: absolute;
+}
+div.lop {
+    visibility: visible;
+}
+#center {
+    width:800px;
+    min-height:1800px;
+    padding:0 0 0 0;
+    margin: 0 auto 0 auto;
+    border:solid 1px #ADC3ED;
+    border-top:none;
+    border-bottom:none;
+    background-color:white;
+}
+
+.metadata-and-tools {
+    float:left;
+    width:300px;
+    height:200px;
+/*                border:solid black 1px;*/
+    margin:0 0 0 0;
+}
+
+.map {
+    margin:0 0 0 0;
+    background-color:grey;
+    float:right;
+    width:500px;
+    height:200px;
+}
+
+.section {
+    clear:both;
+}
+
+div.section object, div.section embed {
+    margin-left:-2em;
+}
+
+p.firefox-print-warning {
+    display:none;
+    padding:0.5em 0.5em;
+    margin:1em 0;
+    border:solid red 1px;
+}
+
+div.section.reports {
+    margin-left:1em;
+}

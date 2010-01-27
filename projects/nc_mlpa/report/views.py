@@ -80,7 +80,11 @@ def geometries_to_wkt(results,srid=None, simplify=None):
     
 def array_habitat_replication(request, array_id, format='json'):
     array = mlpa.MpaArray.objects.get(pk=array_id)
-    return render_to_response('array_replication_page.html', {'results': array.clusters_with_habitat} )
+    if format=='json':
+        template = 'array_replication_page.html'
+    elif format=='print':
+        template = 'array_replication_page_print.html'
+    return render_to_response(template, {'results': array.clusters_with_habitat, 'array': array}, context_instance=RequestContext(request) )
             
 def array_habitat_representation_summed(request, array_id, format='json', with_geometries=False, with_kml=False, oc_est_combined=False):
     if format != 'json':

@@ -1,0 +1,11 @@
+<div id="{{lop.grouper|cut:" "}}" class="results">
+{% regroup lop.list|dictsort:"lop.value" by bioregion as clusters_by_bioregion %}
+{% for bioregion in clusters_by_bioregion  %}
+	<div class="bioregion">
+    <span class="bioregion_name">{{ bioregion.grouper }} Bioregion</span>
+    {% for cluster in bioregion.list|dictsortreversed:"geo_sort" %}
+       {% include "array_replication_single_cluster.html" %}
+    {% endfor %}
+	</div>
+{% endfor %}
+</div>
