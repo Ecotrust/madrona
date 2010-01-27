@@ -132,3 +132,26 @@ def share_object_with_groups(the_object, the_group_ids):
 
     the_object.save()
 
+def groups_users_sharing_with(user):
+    """
+    Get a dict of groups and users that are currently sharing items with a given user
+    """
+    shareables = get_shareables()
+    for s in shareables.keys():
+        model_class = shareables[s][0]
+        permission = shareables[s][1]
+        shared_objects = model_class.objects.shared_with_user(user)
+        groups_sharing = {}
+        for group in user.groups.all():
+            group_objects = shared_objects.filter(sharing_groups=group)
+            user_list = []
+            for gobj in group_objects:
+                if gobj.user.username not in user_list and gobj.user != user:
+                    user_list.append(gobj.user.username)
+            if len(user_list) > 0:
+                groups_sharing[group.name]=user_list
+    if len(groups_sharing.keys()) > 0:
+        return groups_sharing
+    else:
+        return None
+
