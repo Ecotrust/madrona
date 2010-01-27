@@ -336,10 +336,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // TODO client.share
     // ===========
     // Show a feature's sharing UI in the panel.
+    //
+    // Override the forms behavior to make ajax calls 
+    // and place returned html in the panel
     var share = function(configOrFeature, options){
         var config = getConfig(configOrFeature);
         var action = config['share_href'];
-
         options = options || {};
         options['load_msg'] = 'Loading '+config['title'];
         options['showClose'] = true;
@@ -369,8 +371,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                         type: 'POST',
                         data: formdata,
                         success: function(data,textStatus){
-                            panel.addContent(data + '\n' + textStatus);
-                            panel.show();
+                            panel.showContent(data, options);
                         },
                         error: function(xhr, textStatus, errorThrown){
                             alert('There was a problem posting your data to the server.');

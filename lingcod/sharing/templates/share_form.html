@@ -4,15 +4,14 @@
 {% if groups %}
 
     <div> 
-        Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups. 
+        Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups:
     </div>
 
+    <br/>
     <form action="" method="POST">
     <select id="id_groups" name="sharing_groups" multiple="multiple">
     {% for group in groups %} 
-    <p>
         <option {% if group in already_shared_groups %}selected="selected"{% endif %} value="{{group.id}}">{{group.name}}</option>
-    </p>
     {% endfor %}
     </select>
     </form>
