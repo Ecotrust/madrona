@@ -362,7 +362,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 
                 var form = element.find('form');
                 form.after(button_html);
-                form.submit( function() {
+                form.submit( function(e) {
                     var formdata = form.serialize();
                     $.ajax({
                         url: action,
@@ -375,7 +375,8 @@ lingcod.rest.client = function(gex, panel, manipulators){
                         error: function(xhr, textStatus, errorThrown){
                             alert('There was a problem posting your data to the server.');
                         }
-                    }); 
+                    });
+                    e.preventDefault();
                 });
                 element.find('.submit_button').click(function(){
                     form.trigger('submit');
