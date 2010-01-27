@@ -337,11 +337,57 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // ===========
     // Show a feature's sharing UI in the panel.
     var share = function(configOrFeature, options){
-        options = options || {};
         var config = getConfig(configOrFeature);
+        var action = config['share_href'];
+
+        options = options || {};
         options['load_msg'] = 'Loading '+config['title'];
         options['showClose'] = true;
-        panel.showUrl(config['share_href'], options);
+
+        panel.showUrl(config['share_href'], {
+            success: function(){
+                var element = panel.getEl();
+                var button_html = [
+                    '<br class="clear" />',
+                    '<div class="form_controls">',
+                        '<a href="#" class="submit_button button" onclick="this.blur(); return false;">',
+                            '<span>Submit</span>',
+                        '</a>',
+                        '<a href="#" class="cancel_button button red" onclick="this.blur(); return false;">',
+                            '<span>Cancel</span>',
+                        '</a>',
+                        '<br class="clear" />',
+                    '</div>',
+                ].join('');
+                
+                var form = element.find('form');
+                form.after(button_html);
+                form.submit( function() {
+                    var formdata = form.serialize();
+                    $.ajax({
+                        url: action,
+                        type: 'POST',
+                        data: formdata,
+                        success: function(data,textStatus){
+                            panel.addContent(data + '\n' + textStatus);
+                            panel.show();
+                        },
+                        error: function(xhr, textStatus, errorThrown){
+                            alert('There was a problem posting your data to the server.');
+                        }
+                    }); 
+                });
+                element.find('.submit_button').click(function(){
+                    form.trigger('submit');
+                });
+                element.find('.cancel_button').click(function(){
+                    panel.close();
+                });
+            },
+            error: function() {
+                alert('There was a problem getting the sharing form. Please try again; if the problem persists, please contact us.');
+            }
+        });
     };
     
     that.share = share;

@@ -8,16 +8,17 @@
     </div>
 
     <form action="" method="POST">
+    <select id="id_groups" name="sharing_groups" multiple="multiple">
     {% for group in groups %} 
-    <p><input type="checkbox" name="group" value="{{group.id}}" /> {{ group.name }} </p>
+    <p>
+        <option {% if group in already_shared_groups %}selected="selected"{% endif %} value="{{group.id}}">{{group.name}}</option>
+    </p>
     {% endfor %}
-        <input type="submit" value="Submit" />
+    </select>
     </form>
 
 {% else %}
-
     <div> 
         Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> .. you don't belong to any groups with appropriate permissions to share that object. 
     </div>
-
 {% endif %}

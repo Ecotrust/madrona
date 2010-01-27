@@ -36,20 +36,18 @@ def share_form(request, pk, object_type):
         obj = get_shared_content_instance(object_type, pk, user)
         obj_type_verbose = obj._meta.verbose_name
 
+        # Which groups is this object already shared to?
+        already_shared_groups = obj.sharing_groups.all()
+
         # Get a list of users groups that have appropriate permissions for this object
         groups = get_sharing_groups(object_type, user)
 
         #return HttpResponse("User %s is sharing object type %s with pk %s <br/> %s" % (user, object_type, pk, groups ) )
-        return render_to_response('share_form.html', {'groups': groups, 'obj': obj, 'obj_type_verbose': obj_type_verbose,  'user':user}) 
+        return render_to_response('share_form.html', {'groups': groups, 'already_shared_groups': already_shared_groups, 'obj': obj, 
+                                                      'obj_type_verbose': obj_type_verbose,  'user':user}) 
 
     elif request.method == 'POST':
-        # Must supply a 'share_with' parameter in order to take any action
-        try:
-            mpa_id = request.REQUEST['mpa_id']
-        except:
-            return HttpResponse( "Must supply an 'mpa_id' parameter.", status=500 )
-
-        # Check user, group and object permissions
+        return HttpResponse( 'works', status=200 )
 
     else:
         return HttpResponse( "Array-MPA service received unexpected " + request.method + " request.", status=400 )
