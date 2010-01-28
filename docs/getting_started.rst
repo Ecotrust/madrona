@@ -159,6 +159,7 @@ needed:
    waves
    marine_protected_areas
    static_map_configuration
+   sharing_configuration
    kml_configuration
    
 The setup this guide has walked through only specifies how to run the django

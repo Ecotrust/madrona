@@ -26,6 +26,7 @@ MarineMap Decision Support Tool Documentation
    postgis_django_tests
    static_map_configuration
    kml_configuration
+   sharing_configuration
    rest
    settings
    
