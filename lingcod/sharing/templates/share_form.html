@@ -1,23 +1,15 @@
-
 <!-- User :: {{ user.name }} -->
-
+<br/>
 {% if groups %}
-
-    <div> 
-        Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups:
-    </div>
-
-    <br/>
     <form action="" method="POST">
-    <select id="id_groups" name="sharing_groups" multiple="multiple">
-    {% for group in groups %} 
-        <option {% if group in already_shared_groups %}selected="selected"{% endif %} value="{{group.id}}">{{group.name}}</option>
-    {% endfor %}
-    </select>
+        <label for="id_groups"> Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups</label>
+        <p class="help_text"> Hold down "Control", or "Command" on a Mac, to select more than one. </p>
+        <select id="id_groups" name="sharing_groups" multiple="multiple">
+        {% for group in groups %} 
+            <option {% if group in already_shared_groups %}selected="selected"{% endif %} value="{{group.id}}">{{group.name}}</option>
+        {% endfor %}
+        </select>
     </form>
-
 {% else %}
-    <div> 
-        Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> .. you don't belong to any groups with appropriate permissions to share that object. 
-    </div>
+    <label> Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong>. You don't belong to any groups with appropriate permissions to share that object.  </div>
 {% endif %}
