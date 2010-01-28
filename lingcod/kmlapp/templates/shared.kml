@@ -1,0 +1,25 @@
+{% extends "public.kml" %}
+{% load absurl %}
+{% block shared_stuff %}
+
+{% for group, userlist in groups_users.items %}
+ <Folder>
+  <name>{{group}}</name>
+  <visibility>1</visibility>
+  <open>1</open>
+
+  {% for user in userlist %}
+      <NetworkLink>
+        <name>{{user}}</name>
+        <open>1</open>
+        <visibility>1</visibility>
+        <Link>
+         <href>{% absurl kmlapp-sharedby-kmz input_shareuser=user input_sharegroup=group session_key=session_key %}</href>
+        </Link>
+      </NetworkLink>
+  {% endfor %}
+
+ </Folder>
+{% endfor %}
+
+{% endblock %}
