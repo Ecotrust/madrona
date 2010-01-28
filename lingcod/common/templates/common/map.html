@@ -12,8 +12,18 @@
         var gex = null;
         
         var options = {};
+
+        {% block sharedshapes %}
+        {% if user.is_authenticated %}
+            options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
+        {% else %}
+            options.sharedshapes = ["{% url kmlapp-publicshared-kmz %}"];
+        {% endif %}
+        {% endblock sharedshapes %}
+
         {% block myshapes %}
         {% if user.is_authenticated %}
+            options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
             options.myshapes = ["{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"];
             {% if perms.layers.view_ecotrustlayerlist %}
                 options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
@@ -85,7 +95,7 @@
         </div>            
         {% endif %}
         <div id="SharedShapes">
-            Shared shapes go here
+            <div style="font-size:1em;" id="sharedshapestree"></div>
         </div>
     </div>
     <div id="map_container">

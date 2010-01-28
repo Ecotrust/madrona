@@ -386,8 +386,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
                     panel.close();
                 });
             },
-            error: function() {
-                alert('There was a problem getting the sharing form. Please try again; if the problem persists, please contact us.');
+            error: function(req,b) {
+                if (req.status == 404) {
+                    alert(req.responseText);
+                } else {
+                    alert('There was a problem getting the sharing form. Please try again; if the problem persists, please contact us.');
+                }
             }
         });
     };

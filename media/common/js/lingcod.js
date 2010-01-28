@@ -142,6 +142,19 @@ var lingcod = (function(){
                 }));
             }            
         }
+
+        if(options.sharedshapes){
+            for(var i=0;i<options.sharedshapes.length; i++){
+                editors.push(lingcod.rest.kmlEditor({
+                    ge: ge,
+                    gex: gex,
+                    appendTo: '#sharedshapestree',
+                    div: '#map',
+                    url: options.sharedshapes[i],
+                    client: that.client
+                }));
+            }            
+        }
         
         $('#sidebar, #meta-navigation').click(function(e){
             if(e.target === this || e.target === $('#MyShapes')[0]){

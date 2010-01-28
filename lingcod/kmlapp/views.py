@@ -47,7 +47,6 @@ def get_array_mpa_data(user, input_array_id):
     Mpa = utils.get_mpa_class()
     MpaArray = utils.get_array_class()
 
-    # TODO: sharing 
     try:
         the_array = MpaArray.objects.get(id=input_array_id, user=user)
     except:
@@ -70,7 +69,6 @@ def get_single_mpa_data(user, input_mpa_id):
     """
     Mpa = utils.get_mpa_class()
 
-    # TODO: sharing 
     try:
         mpas = Mpa.objects.filter(id=input_mpa_id, user=user).add_kml()
         mpa = mpas[0]
@@ -84,6 +82,35 @@ def get_single_mpa_data(user, input_mpa_id):
         unattached = utils.get_array_class()(name='Unattached')
         shapes = {'Unattached': {'array': unattached, 'mpas':[mpa]} }
     designations = [mpa.designation]
+    return shapes, designations
+
+def get_mpas_shared_by(shareuser, sharegroup, user):
+    """
+    Creates data structure for a single MPA and its designation.
+    Just basically a data structure manipulation on the queryset.
+    """
+    Mpa = utils.get_mpa_class()
+    sg = Group.objects.get(name=sharegroup)
+    su = User.objects.get(username=shareuser)
+
+    # TODO: sharing 
+    try:
+        mpas = Mpa.objects.shared_with_user(user).filter(sharing_groups=sg, user=su).add_kml()
+    except:
+        raise Http404
+
+    unattached = utils.get_array_class()(name='Marine Protected Areas')
+    shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
+    for mpa in mpas:
+        if not mpa.array:
+            shapes['Unattached']['mpas'].append(mpa)
+        else:
+            array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
+            if array_nameid in shapes.keys():
+                shapes[array_nameid]['mpas'].append(mpa)
+            else:
+                shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
+    designations = MpaDesignation.objects.all()
     return shapes, designations
 
 def create_kmz(kml, zippath):
@@ -119,7 +146,7 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, links=False, kmz=False, session_key='0'):
+def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
     """
     Returns a KML/KMZ containing MPAs (organized into folders by array)
     """
@@ -136,6 +163,8 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         shapes, designations = get_array_mpa_data(user, input_array_id)
     elif input_mpa_id:
         shapes, designations = get_single_mpa_data(user, input_mpa_id)
+    elif input_shareuser and input_sharegroup:
+        shapes, designations = get_mpas_shared_by(input_shareuser, input_sharegroup, user)
     else:
         raise Http404
 
@@ -158,3 +187,36 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         response.write(kml)
         
     return response
+
+@cache_control(no_cache=True)
+def create_shared_kml(request, input_username, kmz=False, session_key='0'):
+    """
+    Returns a KML/KMZ containing shared MPAs (organized into folders by groups and users who have shared them)
+    """
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+    
+    from lingcod.sharing.models import groups_users_sharing_with 
+    sharing_with = groups_users_sharing_with(user)
+
+    t = get_template('shared.kml')
+    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key }))
+
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment'
+    if kmz:
+        kmz = create_kmz(kml, 'mpa/doc.kml')
+        response['Content-Type'] = mimetypes.KMZ
+        response.write(kmz)
+    else:
+        response['Content-Type'] = mimetypes.KML
+        response.write(kml)
+        
+    return response
+
+def public_shared(request):
+    return render_to_response('public.kml', {})

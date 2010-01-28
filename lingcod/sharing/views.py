@@ -15,7 +15,7 @@ def get_shared_content_instance(ctid, pk, user):
         obj = ct.model_class().objects.get(pk=pk, user=user)
         return obj
     except:
-        raise Http404
+        return None
     
 def get_sharing_groups(ctid, user):
     """
@@ -27,7 +27,7 @@ def get_sharing_groups(ctid, user):
         groups = user.groups.filter(permissions=permission)
         return groups
     except:
-        raise Http404
+        return None
 
 def share_form(request, pk, object_type):
     # User must be logged in
@@ -37,6 +37,8 @@ def share_form(request, pk, object_type):
 
     # Make sure user owns content and that content is shareable
     obj = get_shared_content_instance(object_type, pk, user)
+    if not obj:
+        return HttpResponse("This object is not shareable.", status=404)
     obj_type_verbose = obj._meta.verbose_name
 
     if request.method == 'GET':
@@ -46,6 +48,8 @@ def share_form(request, pk, object_type):
 
         # Get a list of users groups that have appropriate permissions for this object
         groups = get_sharing_groups(object_type, user)
+        if not groups:
+            return HttpResponse("There are no groups to which you can share your content at this time.", status=404)
 
         #return HttpResponse("User %s is sharing object type %s with pk %s <br/> %s" % (user, object_type, pk, groups ) )
         return render_to_response('share_form.html', {'groups': groups, 'already_shared_groups': already_shared_groups, 'obj': obj, 
