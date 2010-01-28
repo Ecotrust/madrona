@@ -6,51 +6,38 @@
         <title>{{array.name}} Replication Report</title>		
         <link rel="stylesheet" href="{{MEDIA_URL}}common/css/buttons.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
         <link rel="stylesheet" href="{{MEDIA_URL}}report/css/replication.css" type="text/css" media="all" title="no title" charset="utf-8"/>
-		<script src="{{MEDIA_URL}}report/js/jquery-1.2.6.min.js" type="text/javascript" charset="utf-8"></script>
+		<link type="text/css" href="http://jqueryui.com/latest/themes/base/ui.all.css" rel="stylesheet" />
+		<script type="text/javascript" src="http://jqueryui.com/latest/jquery-1.3.2.js"></script>
 		<script src="{{MEDIA_URL}}report/js/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.core.js"></script>
+		<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.tabs.js"></script>
+		
         <script type="text/javascript" charset="utf-8">
 	        $(document).ready(function(){
-	            $("div.results:first").slideDown(1500);
-	            var firstOnId = $("div.results:first").attr('id');
-	            //var buttonSpanId = "#" + firstOnId + "_button";
-	            //$(buttonSpanId).css("border", "thick solid #CDDBED").css("background", "#CDDBED");
-	            $("a.button")
-	                .click(function(){  
-	                    var klass = $(this).attr('class');
-	                    var id = $(this).attr('id');
-						id = "#" + id.replace("_button","")
-	                    //var buttonSpan = id + "_button"
-	                    //$('span.button').css("border","thick solid white").css("background","white");
-	                    //$(buttonSpan).css("border", "thick solid #CDDBED").css("background", "#CDDBED");
-	                    $('div.results:visible').fadeOut("fast", function(){
-							//alert(id);
-	                    	$(id).slideDown("slow");
-	                });
-	            });
-	            $("td.hab_cell").hoverIntent(
+				$("#tabs").tabs();
+				$("td.hab_name").hoverIntent(
 	                function(){
 	                    var cell_id = $(this).attr('id');
 	                    var div_id = "#" + cell_id + "_descript";
 	                    var offset = $(this).offset();
 	                    var height = $(this).height();
-	                    $(this).addClass("selected");
-	                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height + 7).show("slow");
+	                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height).show();
 	                },
 	                function() {
 	                    var cell_id = $(this).attr('id');
 	                    var div_id = "#" + cell_id + "_descript";
 	                    $(this).removeClass("selected");
-	                    $(div_id).hide("fast");
+	                    $(div_id).hide();
 	                }
-	            );
-	            $("td.hab_result").hoverIntent(
+	            );/*
+				$("td.hab_result").click(
 	                function(){
 	                    var cell_id = $(this).attr('id');
 	                    var div_id = "#" + cell_id + "_unrounded";
 	                    var offset = $(this).offset();
-	                    var height = $(this).height();
-	                    $(this).addClass("selected");
-	                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height + 7).show("slow");
+	                    var width = $(this).width();
+	                    $(this).css("visibility","hidden");
+	                    $(div_id).css("position", "absolute").css("width",width).css("left", offset.left).css("top", offset.top).show();
 	                },
 	                function() {
 	                    var cell_id = $(this).attr('id');
@@ -59,7 +46,16 @@
 	                    $(div_id).hide("fast");
 	                }
 	            );
-	        });
+				$("div.unrounded").click(
+					function(){
+						var cell_id = $(this).attr('id');
+						var div_id = "#" + cell_id.replace("_unrounded","")
+						$(this).hide();
+	                    $(div_id).css("visibility","visible");
+					}
+				);*/
+			});
+			
 	    </script>
     </head>
     <body>

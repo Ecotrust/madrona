@@ -3,6 +3,7 @@ from lingcod.intersection.models import *
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.conf.urls.defaults import patterns, url
+from django.forms import TextInput, Textarea
 
 def load_to_features(modeladmin, request, queryset):
     for shp in queryset:
@@ -67,6 +68,11 @@ class ShapefileFieldInline(admin.TabularInline):
     extra = 0
 
 class FeatureMappingInline(admin.TabularInline):
+    formfield_overrides = {
+            models.FloatField: {'widget': TextInput(attrs={'size':'4'})},
+            models.CharField: {'widget': TextInput(attrs={'size':'15'})},
+            models.TextField: {'widget': Textarea(attrs={'rows':17, 'cols':40})},
+        }
     filter_horizontal = ('feature',)
     model = FeatureMapping
     extra = 1

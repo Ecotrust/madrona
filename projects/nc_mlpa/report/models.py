@@ -85,7 +85,7 @@ class Cluster(models.Model):
         return self.geometry_collection.centroid.y
         
     def calculate_habitat_info(self):
-        rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST)
+        rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST_REPLICATION)
         results = rs.analyze_single_item(self.geometry_collection)
         for d in results.values():
             chi = ClusterHabitatInfo()

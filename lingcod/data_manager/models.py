@@ -221,7 +221,7 @@ class Shapefile(models.Model):
         dict = self.field_info()
         return_str = ''
         for key in dict.keys():
-            return_str += '%s: %i distinct values\n' % (key, dict[key])
+            return_str += '%s: %i distinct values, ' % (key, dict[key])
         return return_str
     
     def link_field_names(self):

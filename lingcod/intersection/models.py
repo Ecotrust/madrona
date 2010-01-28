@@ -593,6 +593,7 @@ class IntersectionFeature(models.Model):
 
 class OrganizationScheme(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField(null=True,blank=True,help_text="Description of this organization scheme and what it is used for.")
     
     def __unicode__(self):
         return self.name
@@ -647,7 +648,8 @@ class FeatureMapping(models.Model):
     organization_scheme = models.ForeignKey(OrganizationScheme)
     feature = models.ManyToManyField(IntersectionFeature)
     name = models.CharField(max_length=255)
-    sort = models.FloatField()    
+    sort = models.FloatField()
+    description = models.TextField(null=True,blank=True)
     
     class Meta:
         ordering = ('sort','name')

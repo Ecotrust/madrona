@@ -1,8 +1,13 @@
 from django.contrib import admin
 from lingcod.data_manager.models import *
+from django.forms import TextInput, Textarea
 
 class ShapefileInline(admin.TabularInline):
     template = 'admin/edit_inline/modified_tabular.html'
+    formfield_overrides = {
+            models.TextField: {'widget': Textarea(attrs={'rows':10, 'cols':40})},
+        }
+    readonly_fields = ('field_description',)
     model = Shapefile
 #    sort = sort
     #max_num = 2

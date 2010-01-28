@@ -2,7 +2,7 @@
     <tr>
         <td class="mpa_names">
         {% for mpa in cluster.mpa_set.all %}
-            {{ mpa.name }}{% if not forloop.last %},{% endif %}<br> 
+            {{ mpa.name }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
         </td>
 	</tr>
@@ -11,16 +11,22 @@
             <table class="hab_container">
                 <tr>
                     <th>Habitat</th>
-                    <th>Replicate</th>
-                    <th>Captured</th>
+                    <th>Rep.</th>
+                    <th>Quantity</th>
                     <th>Additional Needed</th>
                 </tr>
                 {% for habinfo in cluster.clusterhabitatinfo_set.all  %}
                 <tr class={%if habinfo.replicate%}"replicate"{%else%}"not_replicate"{%endif%}>
-                    <td>{{ habinfo }}</td>
+                    <td class="hab_name" id="hab{{habinfo.habitat.pk}}">{{ habinfo.habitat.name }}</td>
                     <td>{{ habinfo.replicate }}</td>
-                    <td>{{ habinfo.result|floatformat:2 }} {{ habinfo.units|title }}</td>
-                    <td>{{ habinfo.additional_required|floatformat:2 }} {{ habinfo.units|title }}</td>
+                    <td class="hab_result">
+						<span class="rounded">{{ habinfo.result|floatformat:"-2" }} {{ habinfo.units|title }}</span>
+						<span class="unrounded">{{ habinfo.result|floatformat:"-8" }}</span>
+					</td>
+                    <td class="hab_result">
+						<span class="rounded">{{ habinfo.additional_required|floatformat:"-2" }} {{ habinfo.units|title }}</span>
+						<span class="unrounded">{{ habinfo.additional_required|floatformat:"-8" }}</span>
+					</td>
                 </tr>
                 {% endfor %}
             </table>

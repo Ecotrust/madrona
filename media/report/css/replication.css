@@ -14,11 +14,14 @@ table {
 table.cluster_container {
     background: white;
     margin-bottom: 4px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+table.cluster_container:hover {
     -webkit-box-shadow: 3px 3px 3px #ccc;
     -moz-box-shadow: 3px 3px 3px #ccc;
     box-shadow: 3px 3px 3px #ccc;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
+    border-color: black;
 }
 table.hab_container {
     font-size: small;
@@ -44,8 +47,10 @@ table td, th {
     border-style: solid;
     border-color: gray;
 }
-table td.selected {
-    border-color: red;
+table td.hab_name:hover {
+    background: white;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
 }
 table td.mpa_names {
     padding: 5px;
@@ -60,6 +65,7 @@ table tr.replicate {
 table tr.not_replicate {
     background: #eeeeee;
 }
+
 div.bioregion {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -77,29 +83,58 @@ div.bioregion span.bioregion_name {
     color: grey;
     margin-bottom: 14px;
 }
-div.unrounded {
-    -webkit-box-shadow: 5px 5px 5px #666;
-    -moz-box-shadow: 5px 5px 5px #666;
-    box-shadow: 5px 5px 5px #666;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    background: white;
-    border: thin solid black;
-    margin: 6px;
-    padding: 10px;
+td.hab_result > span.rounded {
+    display: block;
+}
+td.hab_result > span.unrounded {
+    display: none;
+}
+td.hab_result:hover > span.rounded {
+    display: none;
+}
+td.hab_result:hover {
+    padding: 0;
+}
+td.hab_result:hover > span.unrounded {
+    color: white;
+    display: block;
+    background: #005dad;
+    padding: 2px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+/*
+span.unrounded {
+    
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: inset 3px 3px 3px #ccc;
+    
+    border: 2px inset lightgrey;
+    font-size: small;
+    margin: 0px;
+    padding: 0px;
     display: none;
     position: absolute;
+    overflow: hidden;
+    display: none;
 }
+span.unrounded:hover {
+    display: visible;
+}
+*/
 div.hab_description {
-    -webkit-box-shadow: 6px 6px 5px #666;
-    -moz-box-shadow: 6px 6px 5px #666;
-    box-shadow: 6px 6px 5px #666;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
+    -webkit-box-shadow: 5px 5px 5px #555;
+    box-shadow: 5px 5px 5px #555;
+    -moz-box-shadow: 5px 5px 5px #555;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    font-size: small;
     background: white;
-    border: thin solid black;
+    /* border: thin solid white; */
     width: 350px;
     margin: 6px;
+    margin-top: 8;
     padding: 10px;
     display: none;
     position: absolute;

@@ -2,21 +2,28 @@ Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d,
 <br><br>
 
 {% regroup results by lop as results_by_lop  %}
-<div class="lop_buttons">
+<div id="tabs">
+	<ul>
 	{% for lop in results_by_lop %}
-		<style> #{{lop.grouper|cut:" "}} { display:none }</style>
-			<a class="button" href="#" id="{{lop.grouper|cut:" "}}_button">
-				<span>{{lop.grouper|title}}</span>
-			</a>
-			{% comment %}
-				id="{{lop.grouper|cut:" "}}" 
-				<button class="{{lop.grouper|cut:" "}}">{{lop.grouper|title}}</button>
-			{% endcomment %}
+		<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
+	{% endfor %}
+	</ul>
+
+	{% for lop in results_by_lop %}
+		<div id="{{lop.grouper|cut:" "}}" class="lop">
+	    	{% include "array_replication_single_lop.html" %}
+		</div>
 	{% endfor %}
 </div>
-<br><br>
+
 {% for lop in results_by_lop %}
-	<div class="lop">
-    	{% include "array_replication_single_lop.html" %}
-	</div>
+	{% if forloop.first %}
+		{% for cluster in lop.list  %}
+			{% if forloop.first %}
+				{% for habinfo in cluster.clusterhabitatinfo_set.all %}
+					<div class="hab_description" id="hab{{habinfo.habitat.pk}}_descript" style="display:none;">{{habinfo.habitat.description}}</div>
+				{% endfor %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
 {% endfor %}

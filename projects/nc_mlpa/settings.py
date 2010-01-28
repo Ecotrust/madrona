@@ -76,6 +76,7 @@ INSTALLED_APPS += (
 )
 
 # lingcod.intersection configuration
+SAT_OPEN_COAST_REPLICATION = 'satopencoast_replication'
 SAT_OPEN_COAST = 'satopencoast'
 SAT_ESTUARINE = 'satestuarine'
 
