@@ -1,5 +1,67 @@
 lingcod.kmlTree = (function(){
 
+    var NetworkLinkQueue = function(opts){
+        if(opts['success'] && opts['error'] && opts['tree'] && opts['my']){
+            this.queue = [];
+            this.opts = opts;
+        }else{
+            throw('missing required option');
+        }
+    };
+    
+    NetworkLinkQueue.prototype.add = function(node, callback){
+        this.queue.push({node: node, callback: callback, loaded: false, errors: false});
+    };
+    
+    NetworkLinkQueue.prototype.execute = function(){
+        if(this.queue.length === 0){
+            this.opts['success']([]);
+        }else{
+            for(var i=0;i<this.queue.length;i++){
+                var item = this.queue[i];
+                if(!item.loaded && !item.loading){
+                    var self = this;
+                    $(item.node).bind('loaded', function(){
+                        $(item.node).unbind('loaded');
+                        item.callback(item.node);
+                        self.finish(item);
+                    });
+                    this.opts['my'].openNetworkLink(item.node);
+                    item.loading = true;                    
+                }
+            }
+            // start up opening networklinks
+        }
+    };
+    
+    NetworkLinkQueue.prototype.finish = function(item){
+        item.loaded = true;
+        item.loading = false;
+        var done = true;
+        var noerrors = true;
+        for(var i=0;i<this.queue.length;i++){
+            done = (done && this.queue[i].loaded);
+            noerrors = (noerrors && !this.queue[i].errors);
+        }
+        if(done){
+            if(noerrors){
+                this.opts['success'](this.queue);
+                this.destroy();                
+            }else{
+                this.opts['error'](this.queue);
+                this.destroy();                
+            }
+        }
+    };
+    
+    NetworkLinkQueue.prototype.destroy = function(){
+        for(var i=0;i<this.queue.length;i++){
+            var item = this.queue[i];
+            item.node.unbind('load');
+        }
+        this.queue = [];
+    };
+
     var template = tmpl([
         '<li class="',
         '<%= listItemType %> ',
@@ -32,8 +94,10 @@ lingcod.kmlTree = (function(){
         enableSelection: function(){return false;},
         fireEvents: function(){return false;},
         openNetworkLinks: true,
-        historyCookie: true,
-        showTitle: true
+        restoreStateOnRefresh: true,
+        showTitle: true,
+        bustCache: false,
+        restoreState: false
     };
         
     // For some reason GEAPI can't switch between features when opening new
@@ -64,6 +128,7 @@ lingcod.kmlTree = (function(){
         var lookupTable = {};
         that.kmlObject = null;
         var docs = {};
+        var my = {};
         
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
@@ -71,6 +136,16 @@ lingcod.kmlTree = (function(){
         if(!opts.url || !opts.gex || !opts.element || !opts.trans){
             throw('kmlTree must be called with options url, gex, trans & element');
             return false;
+        }
+        
+        if(!opts.element.attr('id')){
+            opts.element.attr('id', 'kml-tree'+(new Date()).getTime());
+        }
+        
+        if(opts.restoreState){
+            $(window).unload(function(){
+                that.destroy();
+            });
         }
         
         var load = function(cachebust){
@@ -84,7 +159,7 @@ lingcod.kmlTree = (function(){
                 url = window.location.protocol + "//" + window.location.host + "/" + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
             }
-            if(cachebust){
+            if(cachebust || opts.bustCache){
                 url = url + '?' + (new Date()).valueOf();
             }
             google.earth.fetchKml(ge, url, function(kmlObject){
@@ -125,11 +200,48 @@ lingcod.kmlTree = (function(){
         
         that.clearSelection = clearSelection;
         
+        var restoreState = function(node, state, queue){
+            if(node && state && queue){
+                var unloadedNL = node.hasClass('KmlNetworkLink') && !node.hasClass('loaded');
+                if(state.name !== 'root'){
+                    if(state['modified']){
+                        if(state['modified']['open'] !== undefined){
+                            if(unloadedNL){
+                                queue.add(node, function(loadedNode){
+                                    restoreState(loadedNode, state, queue);
+                                    queue.execute();
+                                });
+                            }else{
+                                node.toggleClass('open', state['modified']['open']);
+                                setModified(node, 'open', state['modified']['open']);
+                            }
+                        }
+                        if(state['modified']['visibility'] !== undefined){
+                            toggleItem(node, state['modified']['visibility']);
+                        }
+                    }
+                }
+                if(!unloadedNL){
+                    for(var i=0; i<state.children.length; i++){
+                        var child = state.children[i];
+                        var n = node.find('>ul>li>span.name:contains('+child.name+')').parent();
+                        restoreState(n, child, queue);
+                    }                    
+                }
+            }else{
+                throw('called with invalid arguments');
+            }
+        }
+        
         var processKmlObject = function(kmlObject, url){
             if (!kmlObject) {
                 // show error
                 setTimeout(function() {
-                    alert('Error loading KML - '+url);
+                    var content = '<div class="marinemap-kmltree">';
+                    if(opts.title){
+                        content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
+                    }
+                    opts.element.html(content + '<p class="error">could not load kml file with url '+url+'</p></div>');
                 },
                 0);
                 return;
@@ -146,7 +258,33 @@ lingcod.kmlTree = (function(){
             }
             opts.element.html(content + '<ul class="marinemap-kmltree">' + rendered +'</ul></div>');
             ge.getFeatures().appendChild(kmlObject);
-            $(that).trigger('kmlLoaded', kmlObject);
+            var queue = new NetworkLinkQueue({
+                success: function(links){
+                    $(that).trigger('kmlLoaded', kmlObject);
+                },
+                error: function(links){
+                    $(that).trigger('kmlLoaded', kmlObject);
+                },
+                tree: that,
+                my: my
+            });
+            if(!that.previousState){
+                if(opts.restoreState && !!window.localStorage){
+                    that.previousState = getStateFromLocalStorage();
+                }
+            }
+            
+            if(that.previousState && that.previousState.children.length){
+                // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
+                restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
+            }else{
+                queueOpenNetworkLinks(queue, kmlObject);
+            }
+            queue.execute();
+        };
+        
+        var queueOpenNetworkLinks = function(queue, kmlObject){
+            // $(that).trigger('kmlLoaded', kmlObject);
         };
         
         var buildOptions = function(kmlObject){
@@ -252,6 +390,9 @@ lingcod.kmlTree = (function(){
         };
         
         var refresh = function(){
+            if(opts.restoreStateOnRefresh){
+                that.previousState = getState();
+            }
             clearLookups();
             clearKmlObjects();
             clearNetworkLinks();
@@ -281,7 +422,25 @@ lingcod.kmlTree = (function(){
             that.kmlObject = null;
         };
         
+        var getStateFromLocalStorage = function(){
+            var json = localStorage.getItem('marinemap-kmltree-('+opts.url+')');
+            if(json){
+                return JSON.parse(json);
+            }else{
+                return false;
+            }
+        };
+        
+        var setStateInLocalStorage = function(){
+            var state = JSON.stringify(getState());
+            localStorage.setItem('marinemap-kmltree-('+opts.url+')', state);
+        };
+        
+        
         var destroy = function(){
+            if(opts.restoreState && !!window.localStorage){
+                setStateInLocalStorage();
+            }
             clearLookups();
             clearKmlObjects();
             opts.element.find('li > span.name').die();
@@ -449,21 +608,73 @@ lingcod.kmlTree = (function(){
             var data = node.data('modified');
             if(!data){
                 var data = {};
+                data[key] = value;
+                node.data('modified', data);
+                return;
             }
-            data[key] = value;
-            node.data('modified', data);
+            if(typeof data[key] !== 'undefined' && data[key] != value){
+                // all these values are so far boolean, so we can get rid
+                // of the modification data on items that are set back to their
+                // original state
+                delete data[key];
+                var nokeys = true;
+                for(var key in data){
+                    nokeys = false;
+                    return;
+                }
+                if(nokeys){
+                    node.removeData('modified');
+                }else{
+                    node.data('modified', data);
+                }
+            }else{
+                data[key] = value;
+                node.data('modified', data);                
+            }
         };
         
-        var getSerializedState = function(){
-            var state = {name: 'root', children: []};
-            var context = state;
-            var parent = opts.element.find('ul.marinemap-kmltree');
-            var children = parent.find('>li');
-            // while('')
-            // 
+        var getState = function(){
+            var state = {name: 'root', remove: false, children: [], parent: false};
+            walk(function(node, context){
+                var me = {name: node.find('>span.name').text(), remove: true, children: [], parent: context};
+                var modified = node.data('modified');
+                if(modified){
+                    me.modified = modified;
+                    me.remove = false;
+                    var other_context = context;
+                    while(other_context.parent){
+                        other_context.remove = false;
+                        other_context = other_context.parent;
+                    }
+                }
+                context.children.push(me);
+                return me;
+            }, state);
+            
+            // go back and remove any limbs of the tree with remove=true
+            
+            var removeRecursive_ = function(parent){
+                if(parent.remove === true){
+                    return false;
+                }else{
+                    var children = [];
+                    for(var i=0; i<parent.children.length; i++){
+                        var child = removeRecursive_(parent.children[i]);
+                        if(child){
+                            delete child.remove;
+                            delete child.parent;
+                            children.push(child);
+                        }
+                    }
+                    parent.children = children;
+                    return parent;
+                }
+            };
+            var result = removeRecursive_(state);
+            return result;
         };
         
-        that.getSerializedState = getSerializedState;
+        that.getState = getState;
         
         var getDocId = function(kmlObject){
             for(var key in docs){
@@ -480,10 +691,18 @@ lingcod.kmlTree = (function(){
             }else{
                 var NetworkLink = lookup(node);
                 var link = NetworkLink.getLink().getHref();
+                if(opts.bustCache){
+                    var buster = (new Date()).getTime();
+                    if(link.indexOf('?') === -1){
+                        link = link + '?' + buster;
+                    }else{
+                        link = link + '&cachebuster=' + buster;
+                    }
+                }
                 node.addClass('loading');
                 google.earth.fetchKml(ge, link, function(kmlObject){
                     if(!kmlObject){
-                        alert('Error loading ' + link);
+                        // alert('Error loading ' + link);
                         node.addClass('error');
                         node.addClass('checkHideChildren');
                         return;
@@ -496,35 +715,38 @@ lingcod.kmlTree = (function(){
                     var html = renderOptions(data.children[0].children);
                     node.append('<ul>'+html+'</ul>');
                     node.addClass('open');
+                    setModified(node, 'open', node.hasClass('open'));
                     node.removeClass('loading');
                     node.addClass('loaded');
                     node.find('.nlDocId').text(getDocId(kmlObject));
+                    $(node).trigger('loaded', [node, kmlObject]);
                     $(that).trigger('networklinkload', [node, kmlObject]);
                 });
             }
         };
         
+        my.openNetworkLink = openNetworkLink;
+        
         // Depth-first traversal of all nodes in the tree
         // Will start out with all the children of the root KmlDocument, but
         // does not include the KmlDocument itself
-        var walk = function(callback){
-            var rootList = opts.element.find('ul.marinemap-kmltree');
-            var recurse_ = function(children){
-                children.each(function(){
+        var walk = function(callback, context, node){
+            var recurse_ = function(node, context){
+                node.find('>ul>li').each(function(){
                     var el = $(this);
-                    if(callback(el) !== false){
-                        var childs = el.find('>ul>li');
-                        if(childs.length){
-                            return recurse_(childs);
-                        }else{
-                            return true;
-                        }
-                    }else{
+                    var newcontext = callback(el, context);
+                    if(newcontext === false){
+                        // Don't follow into child nodes
                         return true;
+                    }else{
+                        recurse_(el, newcontext);
                     }
                 });
             };
-            recurse_(rootList.find('>li'));
+            if(!node){
+                node = opts.element.find('div.marinemap-kmltree');
+            }
+            recurse_(node, context);
         };
         
         that.walk = walk;
@@ -557,6 +779,8 @@ lingcod.kmlTree = (function(){
         
         // Events to handle clearing selection
         
+        var id = opts.element.attr('id');
+        
         opts.element.click(function(e){
             if(e.target === this){
                 clearSelection();
@@ -568,7 +792,7 @@ lingcod.kmlTree = (function(){
         });
         
         // expand events
-        opts.element.find('li > span.expander').live('click', function(){
+        $('#'+id+' li > span.expander').live('click', function(e){
             var el = $(this).parent();
             if(el.hasClass('KmlNetworkLink') && !el.hasClass('loaded') && !el.hasClass('loading')){
                 openNetworkLink(el);
@@ -578,7 +802,7 @@ lingcod.kmlTree = (function(){
             }
         });
         
-        opts.element.find('li > span.toggler').live('click', function(){
+        $('#'+id+' li > span.toggler').live('click', function(){
             var node = $(this).parent();
             var toggle = !node.hasClass('visible');
             if(!toggle && node.hasClass('selected')){
@@ -596,9 +820,10 @@ lingcod.kmlTree = (function(){
             }
         });
         
-        opts.element.find('li').live('dblclick', function(e){
+        $('#'+id+' li').live('dblclick', function(e){
             var target = $(e.target);
-            if(target.hasClass('expander') || target.hasClass('toggler')){
+            var parent = target.parent();
+            if(target.hasClass('expander') || target.hasClass('toggler') || parent.hasClass('expander') || parent.hasClass('toggler')){
                 // Double-clicking the expander icon or checkbox should not zoom
                 return;
             }

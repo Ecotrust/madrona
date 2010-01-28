@@ -188,7 +188,9 @@ lingcod.rest.kmlEditor = function(options){
         trans: lingcod.options.media_url + 'common/images/transparent.gif',
         title: false,
         fireEvents: testFunction,
-        enableSelection: testFunction
+        enableSelection: testFunction,
+        bustCache: true,
+        restoreState: true
     });
     that.tree = tree;
     

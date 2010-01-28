@@ -6,6 +6,12 @@ div.marinemap-kmltree {
     user-select: none;
 }
 
+div.marinemap-kmltree p.error {
+    -moz-user-select: text;
+    -khtml-user-select: text;
+    user-select: text;
+}
+
 div.marinemap-kmltree ul{
     list-style:none;
     padding-left:18px;

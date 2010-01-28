@@ -68,11 +68,14 @@ var lingcod = (function(){
             map_div: $('#map'), 
             element: $('#study_region'),
             trans: options.media_url + 'common/images/transparent.gif',
-            title: true
+            title: true,
+            restoreState: true
         });
-        $(studyRegion).bind('kmlLoaded', function(){
-            $('#study_region').find('li').dblclick();
-        });
+        if(!setCameraFromLocalStorage()){
+            $(studyRegion).bind('kmlLoaded', function(){
+                $('#study_region').find('li').dblclick();
+            });            
+        }
         studyRegion.load();
 
         var publicData = lingcod.kmlTree({
@@ -83,9 +86,10 @@ var lingcod = (function(){
             map_div: $('#map'), 
             element: $('#public_data'),
             trans: options.media_url + 'common/images/transparent.gif',
-            title: true
+            title: true,
+            restoreState: true
         });
-        publicData.load(true);
+        publicData.load();
         
         // var forest = lingcod.kmlForest({
         //     element: $('#datalayerstree'),
@@ -123,9 +127,10 @@ var lingcod = (function(){
                 map_div: $('#map'), 
                 element: $('#ecotrust_data'),
                 trans: options.media_url + 'common/images/transparent.gif',
-                title: true
+                title: true,
+                restoreState: true
             });
-            ecotrustData.load(true);
+            ecotrustData.load();
         }
         
         var editors = [];
@@ -252,6 +257,24 @@ var lingcod = (function(){
             that.unmaskSidebar();
         }
     };
+    
+    var setCameraToLocalStorage = function(){
+        if(!!window.localStorage){
+            localStorage.setItem('marinemap-camera', gex.view.serialize());
+        }
+    };
+    
+    var setCameraFromLocalStorage = function(){
+        if(!!window.localStorage && localStorage.getItem('marinemap-camera')){
+            gex.view.deserialize(localStorage.getItem('marinemap-camera'));
+            return true;
+        }
+        return false;
+    };
+    
+    $(window).unload(function(){
+        setCameraToLocalStorage();
+    });
 
     return that;
 })();
