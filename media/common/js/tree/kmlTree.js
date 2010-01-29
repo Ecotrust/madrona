@@ -198,6 +198,9 @@ lingcod.kmlTree = (function(){
         var clearSelection = function(keepBalloons){
             var prev = opts.element.find('.selected').removeClass('selected');
             if(prev.length){
+                prev.each(function(){
+                    setModified($(this), 'selected', false);
+                });
                 $(that).trigger('select', [null, null]);                
             }
             var balloon = ge.getBalloon();
@@ -226,6 +229,9 @@ lingcod.kmlTree = (function(){
                         }
                         if(state['modified']['visibility'] !== undefined){
                             toggleItem(node, state['modified']['visibility'].current);
+                        }
+                        if(state['modified']['selected'] !== undefined){
+                            selectNode(node, lookup(node));
                         }
                     }
                 }
@@ -521,6 +527,7 @@ lingcod.kmlTree = (function(){
                 parent.addClass('open');
                 var parent = parent.parent().parent();
             }
+            setModified(node, 'selected', true);
             $(that).trigger('select', [node, kmlObject]);
         };
         
