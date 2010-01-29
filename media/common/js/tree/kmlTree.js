@@ -220,12 +220,12 @@ lingcod.kmlTree = (function(){
                                     queue.execute();
                                 });
                             }else{
-                                node.toggleClass('open', state['modified']['open']);
-                                setModified(node, 'open', state['modified']['open']);
+                                node.toggleClass('open', state['modified']['open'].current);
+                                setModified(node, 'open', state['modified']['open'].current);
                             }
                         }
                         if(state['modified']['visibility'] !== undefined){
-                            toggleItem(node, state['modified']['visibility']);
+                            toggleItem(node, state['modified']['visibility'].current);
                         }
                     }
                 }
@@ -283,7 +283,6 @@ lingcod.kmlTree = (function(){
             }
             
             if(that.previousState && that.previousState.children.length){
-                // console.log(that.previousState);
                 // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
                 restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
             }else{
@@ -605,6 +604,9 @@ lingcod.kmlTree = (function(){
         
         var toggleItem = function(node, toggling){
             var node = $(node);
+            if(node.hasClass('visible') === toggling){
+                return;
+            }
             lookup(node).setVisibility(toggling);
             node.toggleClass('visible', toggling);
             setModified(node, 'visibility', toggling);
@@ -616,34 +618,34 @@ lingcod.kmlTree = (function(){
         
         var setModified = function(node, key, value){
             var data = node.data('modified');
-            if(!data){
-                var data = {};
-                data[key] = value;
+            if(!data || !data[key]){
+                if(!data){
+                    var data = {};
+                }
+                data[key] = {current: value, original: !value};
                 node.data('modified', data);
                 return;
-            }
-            if(typeof data[key] !== 'undefined' && data[key] != value){
-                // all these values are so far boolean, so we can get rid
-                // of the modification data on items that are set back to their
-                // original state
-                delete data[key];
-                var nokeys = true;
-                for(var key in data){
-                    nokeys = false;
-                    return;
-                }
-                if(nokeys){
-                    node.removeData('modified');
-                }else{
-                    node.data('modified', data);
-                }
             }else{
-                data[key] = value;
-                node.data('modified', data);                
+                if(data[key].original !== value){
+                    data[key].current = value;
+                    node.data('modified', data);
+                }else{
+                    delete data[key];
+                    var nokeys = true;
+                    for(var key in data){
+                        nokeys = false;
+                    }
+                    if(nokeys){
+                        node.removeData('modified');
+                    }else{
+                        node.data('modified', data);
+                    }
+                }
             }
         };
         
         var getState = function(){
+            var asdf = opts.element.find('span.name:contains(asdf)').parent().find('ul span.name:contains(asdf)').parent();
             var state = {name: 'root', remove: false, children: [], parent: false};
             walk(function(node, context){
                 var me = {name: node.find('>span.name').text(), remove: true, children: [], parent: context};

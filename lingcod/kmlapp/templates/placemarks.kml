@@ -23,7 +23,7 @@
   <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
   <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
   {% endif %}
-  {% if a.array.name == 'Unattached' %}
+  {% if a.array.name == 'Marine Protected Areas' %}
   <visibility>0</visibility>
   {% else %}
   <visibility>1</visibility>
