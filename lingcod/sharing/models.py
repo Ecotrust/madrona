@@ -115,6 +115,13 @@ def share_object_with_groups(the_object, the_group_ids):
     if not the_object.user.has_perm(perm_label):
         raise SharingError("You don't have permission to share this type of object") 
 
+    # if empty list for group ids, just wipe the slate clean and return
+    if len(the_group_ids) == 0:
+        the_object.sharing_groups.clear()
+        the_object.save()
+        return
+
+    # If we have some groups share with, try it
     try:
         groups = Group.objects.filter(pk__in=the_group_ids)
     except:
@@ -137,11 +144,11 @@ def groups_users_sharing_with(user):
     Get a dict of groups and users that are currently sharing items with a given user
     """
     shareables = get_shareables()
+    groups_sharing = {}
     for s in shareables.keys():
         model_class = shareables[s][0]
         permission = shareables[s][1]
         shared_objects = model_class.objects.shared_with_user(user)
-        groups_sharing = {}
         for group in user.groups.all():
             group_objects = shared_objects.filter(sharing_groups=group)
             user_list = []

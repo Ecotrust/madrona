@@ -56,14 +56,17 @@ def share_form(request, pk, object_type):
                                                       'obj_type_verbose': obj_type_verbose,  'user':user}) 
 
     elif request.method == 'POST':
-        if not request.POST['sharing_groups']:
-            return HttpResponse('sharing_groups not defined',status=500) 
-
-        group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]
+        if not request.POST.get('sharing_groups[]',None):
+            group_ids = []
+        else:
+            group_ids = [int(x) for x in request.POST.getlist('sharing_groups[]')]
 
         try:
             share_object_with_groups(obj,group_ids)
-            restext = "The %s named %s is now shared with groups %s" % (obj_type_verbose, str(obj), ','.join([str(x) for x in group_ids]))
+            if len(group_ids) == 0:
+                restext = "<br/><p id='sharing_response'>The %s named %s is now unshared with all groups.</p id='sharing_response'>" % (obj_type_verbose, str(obj))
+            else:
+                restext = "<br/><p id='sharing_response'>The %s named %s is now shared with groups %s</p id='sharing_response'>" % (obj_type_verbose, str(obj), ','.join([str(x) for x in group_ids]))
             return HttpResponse(restext,status=200)
         except:
             return HttpResponse('Unable to share objects with those specified groups', status=500)

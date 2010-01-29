@@ -1,14 +1,15 @@
 <!-- User :: {{ user.name }} -->
 <br/>
 {% if groups %}
+    <p> Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups</p>
     <form action="" method="POST">
-        <label for="id_groups"> Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups</label>
-        <p class="help_text"> Hold down "Control", or "Command" on a Mac, to select more than one. </p>
-        <select id="id_groups" name="sharing_groups" multiple="multiple">
+
+        <p>
         {% for group in groups %} 
-            <option {% if group in already_shared_groups %}selected="selected"{% endif %} value="{{group.id}}">{{group.name}}</option>
+        <label class="shareform"> <input type="checkbox" class="shareform" name="sharing_groups[]" {% if group in already_shared_groups %}checked="checked"{% endif %} value="{{group.id}}" id="group_{{group.id}}"/> {{group.name}} </label>
         {% endfor %}
-        </select>
+        </p>
+        
     </form>
 {% else %}
     <label> Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong>. You don't belong to any groups with appropriate permissions to share that object.  </div>

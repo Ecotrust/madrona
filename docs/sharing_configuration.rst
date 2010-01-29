@@ -30,7 +30,7 @@ Containers
 **********************
 The sharing app also has the concept of sharing "containers" - shareable objects which imply that the objects "contained" within them are also implicitly shared. For example, MPAs belong to an Array container so that when an Array is shared, all MPAs contained by that Array appear as shared (whether the MPA objects themselves are individually shared or not).
 
-In order to so this, the container field in shareablecontent must point to the appropriate content_type AND a property on the container model which returns a queryset of all contained objects must be specified. For example, Arrays contain a property called 'mpa_set' which returns a queryset of all MPAs belonging to that array. The string 'mpa_set' must be specified in the shareablecontent in order to define the relationship between container and contained. 
+In order to so this, the container field in shareablecontent must point to the appropriate content_type AND a property on the container model which returns a queryset of all contained objects must be specified. For example, Arrays contain a property called 'mpa_set' which returns a queryset of all MPAs belonging to that array. The string 'mpa_set' must be specified in the shareablecontent in order to define the relationship between container and contained. Finally, the container content type must also be registered as shareablecontent. 
 
 Sharing UI
 ***********
