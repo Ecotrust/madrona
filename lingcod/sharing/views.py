@@ -56,10 +56,7 @@ def share_form(request, pk, object_type):
                                                       'obj_type_verbose': obj_type_verbose,  'user':user}) 
 
     elif request.method == 'POST':
-        if not request.POST.get('sharing_groups[]',None):
-            group_ids = []
-        else:
-            group_ids = [int(x) for x in request.POST.getlist('sharing_groups[]')]
+        group_ids = [int(x) for x in request.POST.getlist('sharing_groups[]')]
 
         try:
             share_object_with_groups(obj,group_ids)
