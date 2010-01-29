@@ -283,7 +283,7 @@ lingcod.kmlTree = (function(){
             }
             
             if(that.previousState && that.previousState.children.length){
-                console.log(that.previousState);
+                // console.log(that.previousState);
                 // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
                 restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
             }else{

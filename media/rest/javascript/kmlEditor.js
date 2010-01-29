@@ -175,7 +175,7 @@ lingcod.rest.kmlEditor = function(options){
     $(options.appendTo).append(that.el);
     
     var testFunction = function(kmlObject){
-        return $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self]').length === 1;
+        return $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self]').length === 1;
     };
     
     var tree = lingcod.kmlTree({

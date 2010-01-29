@@ -42,7 +42,7 @@ li.marinemap-kmltree-item {
     padding:5px 0;
 }
 
-li.marinemap-kmltree-item.hasDescription span.name:hover, li.marinemap-kmltree-item.select span.name:hover {
+li.marinemap-kmltree-item.hasDescription span.name:hover, li.marinemap-kmltree-item.select > span.name:hover {
     border-bottom:1px solid #7F7F7F;
     cursor: pointer;
 }
@@ -190,7 +190,7 @@ div.marinemap-kmltree li.selected {
     margin-left:-5px;
 }
 
-div.marinemap-kmltree li.selected span.name {
+div.marinemap-kmltree li.selected > span.name {
 /*    color:white;*/
     font-weight:bold;
     border-bottom:none;
@@ -198,6 +198,6 @@ div.marinemap-kmltree li.selected span.name {
 /*    -moz-text-shadow: #003C53 0px 1px 0px;*/
 }
 
-div.marinemap-kmltree li.selected span.name:hover {
+div.marinemap-kmltree li.selected > span.name:hover {
     border:none;
 }
