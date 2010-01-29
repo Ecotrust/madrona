@@ -90,8 +90,8 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     Just basically a data structure manipulation on the queryset.
     """
     Mpa = utils.get_mpa_class()
-    sg = Group.objects.get(name=sharegroup)
-    su = User.objects.get(username=shareuser)
+    sg = Group.objects.get(pk=sharegroup)
+    su = User.objects.get(pk=shareuser)
 
     # TODO: sharing 
     try:

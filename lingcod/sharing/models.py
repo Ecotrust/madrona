@@ -142,6 +142,7 @@ def share_object_with_groups(the_object, the_group_ids):
 def groups_users_sharing_with(user):
     """
     Get a dict of groups and users that are currently sharing items with a given user
+    returns something like {'our_group': {'group': <Group our_group>, 'users': [<user1>, <user2>,...]}, ... }
     """
     shareables = get_shareables()
     groups_sharing = {}
@@ -153,10 +154,10 @@ def groups_users_sharing_with(user):
             group_objects = shared_objects.filter(sharing_groups=group)
             user_list = []
             for gobj in group_objects:
-                if gobj.user.username not in user_list and gobj.user != user:
-                    user_list.append(gobj.user.username)
+                if gobj.user not in user_list and gobj.user != user:
+                    user_list.append(gobj.user)
             if len(user_list) > 0:
-                groups_sharing[group.name]=user_list
+                groups_sharing[group.name]={'group':group, 'users': user_list}
     if len(groups_sharing.keys()) > 0:
         return groups_sharing
     else:

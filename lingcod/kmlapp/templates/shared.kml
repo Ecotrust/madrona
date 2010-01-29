@@ -2,19 +2,19 @@
 {% load absurl %}
 {% block shared_stuff %}
 
-{% for group, userlist in groups_users.items %}
+{% for key, group_user in groups_users.items %}
  <Folder>
-  <name>{{group}}</name>
-  <visibility>1</visibility>
-  <open>1</open>
+  <name>{{group_user.group.name}}</name>
+  <visibility>0</visibility>
+  <open>0</open>
 
-  {% for user in userlist %}
+  {% for user in group_user.users %}
       <NetworkLink>
-        <name>{{user}}</name>
-        <open>1</open>
-        <visibility>1</visibility>
+        <name>{{user.username}}</name>
+        <open>0</open>
+        <visibility>0</visibility>
         <Link>
-         <href>{% absurl kmlapp-sharedby-kmz input_shareuser=user input_sharegroup=group session_key=session_key %}</href>
+         <href>{% absurl kmlapp-sharedby-kmz input_shareuser=user.id input_sharegroup=group_user.group.id session_key=session_key %}</href>
         </Link>
       </NetworkLink>
   {% endfor %}
