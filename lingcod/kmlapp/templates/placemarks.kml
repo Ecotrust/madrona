@@ -1,36 +1,38 @@
 {% extends "style.kml" %}
-{% block folders_and_placemarks %}
 {% load rest_uid array_uid mpa_uid absurl %}
+
+{% block folders_and_placemarks %}
 {% for array_nameid, a in shapes.items %}
-	{% if a.array.id and use_network_links %}
+{% if a.array.id and use_network_links %}
     <NetworkLink>
-     <name>{{ a.array.name }}</name>
-     <open>0</open>
-     <visibility>0</visibility>
-     <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
-     <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
-     <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
-     <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
-     <Link>
-      <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
-     </Link>
+    <name>{{ a.array.name }}</name>
+    <open>0</open>
+    <visibility>0</visibility>
+    <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
+    <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
+    <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
+    <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
+    <Link>
+    <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
+    </Link>
     </NetworkLink>
-    {% else %}
+{% else %}
+    {% if use_array_folders %}
+        <Folder>
+            <name>{{ a.array.name }}</name>
+            {% if a.array.id %}
+            <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
+            <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
+            <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
+            <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
+            <visibility>1</visibility>
+            {% else %}
+            <visibility>0</visibility>
+            {% endif %}
+            <open>0</open>
+    {% endif %}
 
- <Folder>
-  <name>{{ a.array.name }}</name>
-  {% if a.array.id %}
-  <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
-  <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
-  {% endif %}
-  {% if a.array.name == 'Marine Protected Areas' %}
-  <visibility>0</visibility>
-  {% else %}
-  <visibility>1</visibility>
-  {% endif %}
-  <open>0</open>
- {% for mpa in a.mpas %} 
-
+    {% for mpa in a.mpas %} 
     <Placemark id="{{mpa.get_absolute_url}}">
         <name>{{ mpa.name }}</name>
         {% if mpa.designation %}
@@ -58,10 +60,15 @@
         {{ mpa.kml|safe }} 
         </MultiGeometry>
     </Placemark>
+    {% endfor %}
 
- {% endfor %}
- </Folder>
-
+    {% if a.array.id and use_network_links %}
+    {% else %}
+        {% if use_array_folders %}
+        </Folder>
+        {% endif %}
     {% endif %}
+
+{% endif %}
 {% endfor %}
 {% endblock %}
