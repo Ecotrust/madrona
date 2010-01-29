@@ -61,9 +61,9 @@ def share_form(request, pk, object_type):
         try:
             share_object_with_groups(obj,group_ids)
             if len(group_ids) == 0:
-                restext = "<br/><p id='sharing_response'>The %s named %s is now unshared with all groups.</p id='sharing_response'>" % (obj_type_verbose, str(obj))
+                restext = "<br/><p id='sharing_response'>The %s named %s is now unshared with all groups.</p id='sharing_response'>" % (obj_type_verbose, unicode(obj))
             else:
-                restext = "<br/><p id='sharing_response'>The %s named %s is now shared with groups %s</p id='sharing_response'>" % (obj_type_verbose, str(obj), ','.join([str(x) for x in group_ids]))
+                restext = "<br/><p id='sharing_response'>The %s named %s is now shared with groups %s</p id='sharing_response'>" % (obj_type_verbose, unicode(obj), ','.join([str(x) for x in group_ids]))
             return HttpResponse(restext,status=200)
         except:
             return HttpResponse('Unable to share objects with those specified groups', status=500)
