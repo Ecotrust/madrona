@@ -292,13 +292,22 @@ lingcod.kmlTree = (function(){
                 // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
                 restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
             }else{
-                queueOpenNetworkLinks(queue, kmlObject);
+                queueOpenNetworkLinks(queue, $('#' + opts.element.attr('id')));
             }
             queue.execute();
         };
         
-        var queueOpenNetworkLinks = function(queue, kmlObject){
+        var queueOpenNetworkLinks = function(queue, topNode){
             // $(that).trigger('kmlLoaded', kmlObject);
+            topNode.find('li.KmlNetworkLink.open').each(function(){
+                $(this).removeClass('open');
+                queue.add($(this), function(loadedNode){
+                    loadedNode.add($(this), function(nn){
+                        queueOpenNetworkLinks(queue, nn);
+                    });
+                });
+            });
+            queue.execute();
         };
         
         var buildOptions = function(kmlObject){
@@ -322,7 +331,7 @@ lingcod.kmlTree = (function(){
                             name: this.getName() || '&nbsp;',
                             visible: !!this.getVisibility(),
                             type: this.getType(),
-                            open: this.getOpen() && this.getType() !== 'KmlNetworkLink',
+                            open: this.getOpen(),
                             id: this.getId().replace(/\//g, '-'),
                             description: this.getDescription(),
                             snippet: snippet,

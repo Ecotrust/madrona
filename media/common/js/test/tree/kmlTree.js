@@ -8,7 +8,8 @@ module('kmlTree');
     var traversal = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/TreeTraversal.kmz';
     var NLHistory = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory.kmz';
     var NLHistory2 = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory2.kmz';
-    
+    var openNL = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/openNL.kmz';
+
     earthTest('create instance', 2, function(ge, gex){    
         $(document.body).append('<div id="kmltreetest"></div>');
         var errors = false;
@@ -1075,6 +1076,34 @@ module('kmlTree');
             $(tree).unbind('kmlLoaded');
             var nlink = $('#kmltreetest').find('span.name:contains(networklink checkHideChildren)').parent();
             equals(nlink.find('.expander:visible').length, 0);
+            tree.destroy();
+            $('#kmltreetest').remove();
+            start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+    
+    earthAsyncTest("NetworkLinks with open=1 should automatically be loaded and expanded", function(ge, gex){
+        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: openNL,
+            ge: ge,
+            gex: gex,
+            animate: false,
+            map_div: $('#map3d'),
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;},
+            bustCache: false,
+            restoreState: false
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlFolder', 'Kmz loaded correctly');
+            $(tree).unbind('kmlLoaded');
+            var nlink = $('#kmltreetest').find('span.name:contains(open networklink)').parent();
+            ok(nlink.hasClass('loaded'));
             tree.destroy();
             $('#kmltreetest').remove();
             start();
