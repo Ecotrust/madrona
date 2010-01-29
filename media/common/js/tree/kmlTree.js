@@ -97,13 +97,14 @@ lingcod.kmlTree = (function(){
         restoreStateOnRefresh: true,
         showTitle: true,
         bustCache: false,
-        restoreState: false
+        restoreState: false,
+        whiteListed: false
     };
         
     // For some reason GEAPI can't switch between features when opening new
     // balloons accurately. Have to clear the old popup and add a timeout to
     // make sure the balloon A is closed before balloon b is opened.
-    var openBalloon = function(kmlObject, plugin){
+    var openBalloon = function(kmlObject, plugin, whitelisted){
         var a = plugin.getBalloon();
         if(a){
             // there is already a balloon(a) open
@@ -112,14 +113,21 @@ lingcod.kmlTree = (function(){
                 // not trying to re-open the same balloon
                 plugin.setBalloon(null);
                 // try this function again in 50ms
-                setTimeout(openBalloon, 50, kmlObject, plugin);
+                setTimeout(openBalloon, 50, kmlObject, plugin, whitelisted);
             }
         }else{
             // if balloon A closed or never existed, create & open balloon B
             kmlObject.setVisibility(true);
-            var b = plugin.createFeatureBalloon('');
-            b.setFeature(kmlObject);
-            plugin.setBalloon(b);
+            if(whitelisted && kmlObject.getDescription()){
+                var b = plugin.createHtmlStringBalloon('');
+                b.setFeature(kmlObject); // optional
+                b.setContentString(kmlObject.getDescription());
+                plugin.setBalloon(b);
+            }else{
+                var b = plugin.createFeatureBalloon('');
+                b.setFeature(kmlObject);
+                plugin.setBalloon(b);                
+            }
         }
     };
     
@@ -275,6 +283,7 @@ lingcod.kmlTree = (function(){
             }
             
             if(that.previousState && that.previousState.children.length){
+                console.log(that.previousState);
                 // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
                 restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
             }else{
@@ -443,9 +452,10 @@ lingcod.kmlTree = (function(){
             }
             clearLookups();
             clearKmlObjects();
-            opts.element.find('li > span.name').die();
-            opts.element.find('li').die();
-            opts.element.find('li > span.expander').die();
+            var id = opts.element.attr('id');
+            $('#'+id+' li > span.name').die();
+            $('#'+id+' li').die();
+            $('#'+id+' li > span.expander').die();
             opts.element.html('');
             $(that).unbind();
         };
@@ -750,9 +760,10 @@ lingcod.kmlTree = (function(){
         };
         
         that.walk = walk;
+        var id = opts.element.attr('id');
         
         
-        opts.element.find('li > span.name').live('click', function(){
+        $('#'+id+' li > span.name').live('click', function(){
             var node = $(this).parent();
             var kmlObject = lookup(node);
             if(node.hasClass('select')){
@@ -761,7 +772,7 @@ lingcod.kmlTree = (function(){
                 clearSelection();
                 if(node.hasClass('hasDescription')){
                     toggleVisibility(node, true);
-                    openBalloon(kmlObject, ge);
+                    openBalloon(kmlObject, ge, opts.whiteListed);
                 }                
             }
             if(node.hasClass('fireEvents')){
@@ -769,7 +780,7 @@ lingcod.kmlTree = (function(){
             }
         });
             
-        opts.element.find('li.fireEvents > span.name').live('contextmenu', function(){
+        $('#'+id+' li.fireEvents > span.name').live('contextmenu', function(){
             var parent = $(this).parent();
             var kmlObject = lookup(parent);
             if(parent.hasClass('fireEvents')){
@@ -778,9 +789,7 @@ lingcod.kmlTree = (function(){
         });
         
         // Events to handle clearing selection
-        
-        var id = opts.element.attr('id');
-        
+                
         opts.element.click(function(e){
             if(e.target === this){
                 clearSelection();
