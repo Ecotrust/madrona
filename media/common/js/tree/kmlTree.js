@@ -196,7 +196,7 @@ lingcod.kmlTree = (function(){
         that.selectById = selectById;
         
         var clearSelection = function(keepBalloons){
-            var prev = opts.element.find('.selected').removeClass('selected');
+            var prev = $('#'+opts.element.attr('id')).find('.selected').removeClass('selected');
             if(prev.length){
                 prev.each(function(){
                     setModified($(this), 'selected', false);

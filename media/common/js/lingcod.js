@@ -164,7 +164,7 @@ var lingcod = (function(){
         $('#sidebar, #meta-navigation').click(function(e){
             if(e.target === this || e.target === $('#MyShapes')[0]){
                 for(var i=0;i<editors.length;i++){
-                    editors[0].clearSelection();
+                    editors[i].clearSelection();
                 }
             }
         });
