@@ -300,9 +300,13 @@ lingcod.kmlTree = (function(){
         var queueOpenNetworkLinks = function(queue, topNode){
             // $(that).trigger('kmlLoaded', kmlObject);
             topNode.find('li.KmlNetworkLink.open').each(function(){
-                $(this).removeClass('open');
-                queue.add($(this), function(loadedNode){
-                    loadedNode.add($(this), function(nn){
+                var node = $(this);
+                setModified(node, 'open', node.hasClass('open'));
+                node.removeClass('open');
+                queue.add(node, function(loadedNode){
+                    setModified(loadedNode, 'open', node.hasClass('open'));
+                    loadedNode.removeClass('open');
+                    queue.add(loadedNode, function(nn){
                         queueOpenNetworkLinks(queue, nn);
                     });
                 });
