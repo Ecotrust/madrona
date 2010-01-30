@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Folder>
+	<name>TwoNetworkLinks at Root</name>
+	<open>1</open>
+	<NetworkLink>
+		<name>A</name>
+		<Link>
+			<href>http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/earthLayers.kml</href>
+		</Link>
+	</NetworkLink>
+	<NetworkLink>
+		<name>B</name>
+		<Link>
+			<href>http://marinemap.googlecode.com/svn-history/r869/trunk/media/projects/nc_mlpa/layers/uploaded-kml/ecotrustDataLayers.kml</href>
+		</Link>
+	</NetworkLink>
+</Folder>
+</kml>
