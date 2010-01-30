@@ -131,12 +131,12 @@ class LoadSetup(models.Model):
         
     def save(self):
         super(LoadSetup,self).save()
-        self.origin_field_choices = self.origin_data_layer.latest_shapefile.field_info_str().replace('\n',',  ')
+        self.origin_field_choices = self.origin_data_layer.active_shapefile.field_info_str().replace('\n',',  ')
         self.target_field_choices = ', '.join( [ ptf.name for ptf in self.target_model.potentialtargetfield_set.all() ] )
         super(LoadSetup,self).save()
     
     def run_load_setup(self):
-        self.origin_data_layer.latest_shapefile.load_to_model(self.target_model.the_model, self.geometry_only, self.origin_field, self.target_field)
+        self.origin_data_layer.active_shapefile.load_to_model(self.target_model.the_model, self.geometry_only, self.origin_field, self.target_field)
         
     # class TargetField(models.Model):
     #     name = models.CharField(max_length=255)

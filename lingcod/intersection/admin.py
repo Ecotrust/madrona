@@ -57,13 +57,21 @@ admin.site.register(TestPolygon, TestPolygonAdmin)
 
 class IntersectionFeatureAdmin(admin.ModelAdmin):
     list_display = ('id','name','feature_model','date_created','date_modified')
+    fieldsets = [
+        (None,  {'fields': (('name','description'),('study_region_total','output_units','native_units'),('multi_shapefile','shapefile','feature_model'),)}),
+    ]
+    formfield_overrides = {
+            models.CharField: {'widget': TextInput(attrs={'size':'15'})},
+            models.TextField: {'widget': Textarea(attrs={'rows':6, 'cols':60})},
+        }
+    readonly_fields = ('study_region_total',)
     actions = [create_organization_scheme]
 admin.site.register(IntersectionFeature, IntersectionFeatureAdmin)
 
 class ShapefileFieldInline(admin.TabularInline):
     model = ShapefileField
     fields = ['name','distinct_values']
-    readonly_fields = ['name','distinct_values']
+#    readonly_fields = ('name','distinct_values',)
 #    sort = sort
     extra = 0
 
@@ -89,7 +97,7 @@ class MultiFeatureShapefileAdmin(admin.ModelAdmin):
         (None,               {'fields': ('name','shapefile')}),
         ('Descriptive information', {'fields': ('description','metadata')}),
     ]
-    inlines = [ShapefileFieldInline]
+    #inlines = [ShapefileFieldInline]
     
     def get_urls(self):
         from lingcod.intersection.views import split_to_single_shapefiles as splitview
@@ -105,7 +113,7 @@ class SingleFeatureShapefileAdmin(admin.ModelAdmin):
     list_display = ('name','date_created','date_modified')
     actions = [load_to_features]
     fieldsets = [
-        (None,               {'fields': (('name','parent_shapefile'),'shapefile')}),
+        (None,               {'fields': (('name','parent_shapefile'),('shapefile','clip_to_study_region'))}),
         ('Descriptive information', {'fields': ('description','metadata')}),
     ]
     

@@ -3,13 +3,16 @@ from lingcod.data_manager.models import *
 from django.forms import TextInput, Textarea
 
 class ShapefileInline(admin.TabularInline):
-    template = 'admin/edit_inline/modified_tabular.html'
+    #template = 'admin/edit_inline/modified_tabular.html'
     formfield_overrides = {
-            models.TextField: {'widget': Textarea(attrs={'rows':10, 'cols':40})},
+            models.TextField: {'widget': Textarea(attrs={'rows':10, 'cols':30})},
         }
-    readonly_fields = ('field_description',)
+    fieldsets = (
+        (None,      {'fields': ('active','comment', ('update_display_layer','display_updated'),('update_analysis_layer','analysis_updated'),'shapefile')}),
+    )
+    # readonly_fields = ('field_description',)
     model = Shapefile
-#    sort = sort
+    sort = '-date_modified'
     #max_num = 2
     extra = 1
 
@@ -21,6 +24,10 @@ class ShapefileFieldInline(admin.TabularInline):
 class GeneralFileInline(admin.TabularInline):
     model = GeneralFile
     extra = 1
+    formfield_overrides = {
+            models.CharField: {'widget': TextInput(attrs={'size':'15'})},
+            models.TextField: {'widget': Textarea(attrs={'rows':10, 'cols':40})},
+        }
 
 class DataLayerAdmin(admin.ModelAdmin):
     list_display = ('name','date_modified')
@@ -32,7 +39,7 @@ class DataLayerAdmin(admin.ModelAdmin):
 admin.site.register(DataLayer, DataLayerAdmin)
 
 class ShapefileAdmin(admin.ModelAdmin):
-    list_display = ('truncated_comment', 'data_layer', 'date_modified', 'update_display_layer', 'display_updated', 'update_analysis_layer', 'analysis_updated')
+    list_display = ('truncated_comment', 'data_layer', 'date_modified', 'date_created', 'update_display_layer', 'display_updated', 'update_analysis_layer', 'analysis_updated')
     list_filter = ('data_layer','update_display_layer','update_analysis_layer')
     search_fields = ('comment', )
     ordering = ['-date_modified']

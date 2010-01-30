@@ -2,7 +2,9 @@ from django.contrib.gis.db import models
 from django.contrib.gis.gdal import *
 from django.contrib.gis import geos
 from django.contrib.gis.measure import *
+from django.core.exceptions import MultipleObjectsReturned
 from django.template.defaultfilters import slugify
+from django.db import transaction
 from django.conf import settings
 from osgeo import ogr
 #from django.contrib.gis.utils import LayerMapping
@@ -24,11 +26,13 @@ def zip_check(ext, zip_file):
     return True
     
 def validate_zipped_shp(file_path):
-    """Just check to see if it's a valid zip and that it has the four necessary parts.
-    We're not checking to make sure it can be read as a shapefile  probably should somewhere.
-    We should also probably verify that the projection is what we expect.
-    I got a lot of this code from Dane Sprinmeyer's django-shapes app"""
-    if not zipfile.is_zipfile(file_path):
+    # Just check to see if it's a valid zip and that it has the four necessary parts.
+    # We're not checking to make sure it can be read as a shapefile  probably should somewhere.
+    # We should also probably verify that the projection is what we expect.
+    # I got a lot of this code from Dane Sprinmeyer's django-shapes app
+    if not os.path.exists(file_path):
+        return False, 'This file does not exist: %s' % file_path
+    elif not zipfile.is_zipfile(file_path):
         return False, 'That file is not a valid Zip Archive'
     else:
         zfile = zipfile.ZipFile(file_path)
@@ -103,9 +107,26 @@ class DataLayer(models.Model):
         return self.name
         
     @property
-    def latest_shapefile(self):
-        """return the most recently modified shapefile."""
-        return self.shapefile_set.latest('date_modified')
+    def active_shapefile(self):
+        """Return the active shapefile (or None if there aren't any). Raise a stink if there is more than one shapefile marked as active."""
+        try:
+            return self.shapefile_set.get(active=True)
+        except MultipleObjectsReturned:
+            raise Exception("The %s data layer has more than one shapefile marked as active.  That is bad.  There can be only one!" % self.name)
+        except Shapefile.DoesNotExist:
+            return None
+            
+    @property 
+    def has_active_shapefile(self):
+        """Returns true if there's an active shapefile associated with this data layer.  Returns False otherwise.  I just realize this is kind of useless
+        because you can just call active shapfile and see if it's Null or has something.  Oh well."""
+        try:
+            self.shapefile_set.get(active=True)
+            return True
+        except MultipleObjectsReturned:
+            raise Exception("The %s data layer has more than one shapefile marked as active.  That is bad.  There can be only one!" % self.name)
+        except Shapefile.DoesNotExist:
+            return False
     
 class GeneralFile(models.Model):
     name = models.CharField(max_length=255)
@@ -119,6 +140,7 @@ class GeneralFile(models.Model):
         return self.name
     
 class Shapefile(models.Model):
+    active = models.BooleanField(default=False,help_text="The shapefile marked as active will be used to represent this data layer.")
     comment = models.TextField()
     data_layer = models.ForeignKey(DataLayer)
     truncated_comment = models.CharField(max_length=255, editable=False) 
@@ -131,6 +153,9 @@ class Shapefile(models.Model):
     shapefile = models.FileField(upload_to='data_manager/shapefiles')
     field_description = models.TextField(null=True, blank=True, help_text='This is list of field names within the shapefile.  It is generated automatically when the shapefile is saved.  There is no need to edit this.')
     
+    class Meta:
+        ordering = ['-date_created']
+    
     def save(self):
         # create a truncated comment to use as a title for the comment in the admin tool
         trunc_com = self.comment[0:25]
@@ -140,6 +165,7 @@ class Shapefile(models.Model):
         # make the file name what we want it to be before saving.
         self.shapefile = self.new_filename_and_path()
         super(Shapefile, self).save()
+        self.data_layer.active_shapefile # this should throw an exception if there is more than one shapefile associated with this data layer marked as active.
         self.link_field_names()
         self.load_field_info()
         super(Shapefile, self).save()
@@ -232,7 +258,8 @@ class Shapefile(models.Model):
     
     def load_field_info(self):
         self.field_description = self.field_info_str()
-        
+     
+    @transaction.commit_on_success  
     def load_to_model(self, feature_model, geometry_only=True, origin_field_name=None, target_field_name=None, verbose=False):
         shpfile = self.unzip_to_temp()
         file_name = os.path.basename(shpfile)
@@ -240,26 +267,43 @@ class Shapefile(models.Model):
         ds = DataSource(shpfile)
         #Data source objects can have different layers of geospatial features; however, 
         #shapefiles are only allowed to have one layer
-        lyr = ds[0] 
-
-        for feat in lyr:
-            if feat.geom.__class__.__name__.startswith('Multi'):
-                if verbose:
-                    print '(',
-                for f in feat.geom: #get the individual geometries
-                    fm = feature_model()
-                    load_single_record(f, fm, geometry_only, feat, origin_field_name, target_field_name)
-                    fm.save()
-                    if verbose:
-                        print '-',
-                if verbose:
-                    print ')',
-            else:
+        lyr = ds[0]
+        
+        # Treat feature models with multigeometry fields different that those without
+        if has_multi_geometry(feature_model):
+            for feat in lyr:
                 fm = feature_model()
                 load_single_record(feat.geom, fm, geometry_only, feat, origin_field_name, target_field_name)
                 fm.save()
-                if verbose:
-                    print '.',
+            
+        else: # Target Feature Model has non-multi geometry (Polygon and so forth)
+            for feat in lyr:
+                if feat.geom.__class__.__name__.startswith('Multi'):
+                    if verbose:
+                        print '(',
+                    for f in feat.geom: #get the individual geometries
+                        fm = feature_model()
+                        load_single_record(f, fm, geometry_only, feat, origin_field_name, target_field_name)
+                        fm.save()
+                        if verbose:
+                            print '-',
+                    if verbose:
+                        print ')',
+                else:
+                    fm = feature_model()
+                    load_single_record(feat.geom, fm, geometry_only, feat, origin_field_name, target_field_name)
+                    fm.save()
+                    if verbose:
+                        print '.',
+
+def has_multi_geometry(feature_model,field_name='geometry'):
+    """Figure out if the model field is a multi or single geometry.  Note that I'm using the private method _field.
+    I tried to find another way but the only other way I could think of involves the private method _meta."""
+    g_type = feature_model.__dict__[field_name]._field.geom_type
+    if g_type.lower().startswith('multi'):
+        return True
+    else:
+        return False
 
 def load_single_record(geom,target_model_instance,geometry_only=True,origin_feature=None,origin_field_name=None,target_field_name=None):
     """docstring for load_single_record"""
@@ -278,6 +322,7 @@ def load_single_geometry(geom, target_model_instance):
     if not geom.srid == settings.GEOMETRY_DB_SRID:
         geom.transform(settings.GEOMETRY_DB_SRID)
     tmi.geometry = geom.geos
+    
     if not tmi.geometry.valid:
         tmi.geometry = clean_geometry(tmi.geometry)
     return tmi
@@ -311,4 +356,4 @@ class ShapefileField(models.Model):
 #        if self.comment.__len__() > 25:
 #            trunc_com += '...'
 #        self.truncated_comment = trunc_com
-#        super(GeneralShapeComment, self).save()
+#        super(GeneralShapeComment, self).save(

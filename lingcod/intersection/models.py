@@ -3,6 +3,8 @@ from django.contrib.gis.gdal import *
 from django.contrib.gis import geos
 from django.contrib.gis.measure import *
 from django.template.defaultfilters import slugify
+from django.db import transaction
+from lingcod.data_manager.models import DataLayer
 from osgeo import ogr
 #from django.contrib.gis.utils import LayerMapping
 import os
@@ -34,7 +36,9 @@ def validate_zipped_shp(file_path):
     # We're not checking to make sure it can be read as a shapefile  probably should somewhere.
     # We should also probably verify that the projection is what we expect.
     # I got a lot of this code from Dane Sprinmeyer's django-shapes app
-    if not zipfile.is_zipfile(file_path):
+    if not os.path.exists(file_path):
+        return False, 'This file does not exist: %s' % file_path
+    elif not zipfile.is_zipfile(file_path):
         return False, 'That file is not a valid Zip Archive'
     else:
         zfile = zipfile.ZipFile(file_path)
@@ -250,6 +254,7 @@ class Shapefile(models.Model):
             result[fname] = distinct_values_count
         return result
     
+    @transaction.commit_on_success
     def load_geometry_to_model(self, feature_model, verbose=False):
         shpfile = self.unzip_to_temp()
         file_name = os.path.basename(shpfile)
@@ -283,9 +288,9 @@ class Shapefile(models.Model):
                     print '.',
         
 class MultiFeatureShapefile(Shapefile):
-    # These shape files may contain geometries that we want to turn into multiple intersection features.
-    # An example would be the ESI shoreline layer.  It contains a line that is classified into many different
-    # habitat types.
+    """These shape files may contain geometries that we want to turn into multiple intersection features.
+    An example would be the ESI shoreline layer.  It contains a line that is classified into many different
+    habitat types."""
     shapefile = models.FileField(upload_to='intersection/shapefiles/multifeature')
     
     def __unicode__(self):
@@ -298,8 +303,8 @@ class MultiFeatureShapefile(Shapefile):
     def link_field_names(self):
         self.shapefilefield_set.all().delete()
         info_dict = self.field_info()
-        for f in info_dict.keys():
-            sf = ShapefileField(name=f,distinct_values=info_dict[f],shapefile=self)
+        for f,dv in info_dict.iteritems():
+            sf = ShapefileField(name=f,distinct_values=dv,shapefile=self)
             sf.save()
             
     def split_to_single_feature_shapefiles(self, field_name):
@@ -409,10 +414,12 @@ class SingleFeatureShapefile(Shapefile):
     # These shape files contain geometries that represent only one intersection feature.
     shapefile = models.FileField(upload_to='intersection/shapefiles/singlefeature')
     parent_shapefile = models.ForeignKey(MultiFeatureShapefile, null=True, blank=True)
+    clip_to_study_region = models.BooleanField(default=True,help_text="Clip to the active study region to ensure accuracy of study region totals.")
     
     def __unicode__(self):
         return self.name
-        
+    
+    @transaction.commit_on_success
     def load_to_features(self, verbose=False):
         """
         This method loads individual features (with polygon, linestring, or point geometry) into
@@ -465,13 +472,25 @@ class SingleFeatureShapefile(Shapefile):
         length = 0.0
         count = 0
         
+        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         for feat in lyr:
-            if feat.geom.__class__.__name__.startswith('Multi'):
+            gc.append(feat.geom.geos)
+            
+        if self.clip_to_study_region:
+            from lingcod.studyregion.models import StudyRegion
+            sr = StudyRegion.objects.current()
+            new_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+            int_result = gc.intersection(sr.geometry)
+            new_gc.append(int_result)
+            gc = new_gc
+            
+        for geom in gc:
+            if geom.__class__.__name__.startswith('Multi'):
                 if verbose:
                     print '(',
-                for f in feat.geom: #get the individual geometries
+                for f in geom: #get the individual geometries
                     fm = feature_model(name=feature_name,feature_type=intersection_feature)
-                    fm.geometry = f.geos
+                    fm.geometry = f
                     if not fm.geometry.valid:
                         fm.geometry = clean_geometry(fm.geometry)
                     #mgeom.append(fm.geometry)
@@ -488,7 +507,7 @@ class SingleFeatureShapefile(Shapefile):
                     print ')',
             else:
                 fm = feature_model(name=feature_name,feature_type=intersection_feature)
-                fm.geometry = feat.geom.geos
+                fm.geometry = geom
                 if not fm.geometry.valid:
                     fm.geometry = clean_geometry(fm.geometry)
                 #mgeom.append(fm.geometry)
@@ -569,11 +588,11 @@ class IntersectionFeature(models.Model):
         # Don't bother to call this on the large polygon features.  It takes far too long.
         individual_features = self.model_with_my_geometries.objects.filter(feature_type=self)
         
-        if model_with_my_geometries==ArealFeature:
+        if self.model_with_my_geometries==ArealFeature:
             mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
-        elif model_with_my_geometries==LinearFeature:
+        elif self.model_with_my_geometries==LinearFeature:
             mgeom = geos.fromstr('MULTILINESTRING EMPTY')
-        elif model_with_my_geometries==PointFeature:
+        elif self.model_with_my_geometries==PointFeature:
             mgeom = geos.fromstr('MULTIPOINT EMPTY')
         else:
             raise 'Could not figure out what geometry type to use.'
@@ -615,6 +634,7 @@ class OrganizationScheme(models.Model):
                 return False
         return True
     
+    @transaction.commit_on_success
     def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
         if geom_or_collection.empty: # If we've been given empty
             geom_or_collection = geos.fromstr('SRID=3310;POLYGON ((386457.8191845841938630 87468.5562629736959934, 386725.8874563252902590 87481.1556781106628478, 386612.4574658756027929 87036.4770780648104846, 386457.8191845841938630 87468.5562629736959934))')
@@ -707,6 +727,14 @@ class FeatureMapping(models.Model):
             total += feature.study_region_total
         return total
     
+    def calculate_study_region_total(self,sr_geom):
+        if self.type == 'linear':
+            return D(m=self.geometry_collection_within(sr_geom).length).mi
+        elif self.type == 'areal':
+            return A(sq_m=self.geometry_collection_within(sr_geom).area).sq_mi
+        else:
+            return self.geometry_collection_within(sr_geom).num_points
+        
     @property
     def units(self):
         if self.validate():
@@ -716,6 +744,17 @@ class FeatureMapping(models.Model):
     def type(self):
         if self.validate():
             return self.feature.all()[0].feature_model.lower().replace('feature','')
+            
+    @property
+    def geometry_collection(self):
+        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        for feature in self.feature.all():
+            gc.append(feature.geometry)
+        return gc
+    
+    @transaction.commit_on_success    
+    def geometry_collection_within(self,geom):
+        return self.geometry_collection.intersection(geom)
     
     def validate(self, quiet=False):
         if self.validate_feature_count(quiet) and self.validate_type(quiet) and self.validate_units(quiet):

@@ -2,19 +2,20 @@ Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d,
 <br><br>
 
 {% regroup results by lop as results_by_lop  %}
-<div id="tabs">
-	<ul>
-	{% for lop in results_by_lop %}
-		<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
-	{% endfor %}
-	</ul>
 
-	{% for lop in results_by_lop %}
-		<div id="{{lop.grouper|cut:" "}}" class="lop">
-	    	{% include "array_replication_single_lop.html" %}
-		</div>
-	{% endfor %}
-</div>
+	<div id="tabs" class="my_tabs">
+		<ul>
+		{% for lop in results_by_lop %}
+			<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
+		{% endfor %}
+		</ul>
+
+		{% for lop in results_by_lop %}
+			<div id="{{lop.grouper|cut:" "}}" class="lop">
+		    	{% include "array_replication_single_lop.html" %}
+			</div>
+		{% endfor %}
+	</div>
 
 {% for lop in results_by_lop %}
 	{% if forloop.first %}

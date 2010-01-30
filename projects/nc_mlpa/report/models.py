@@ -9,6 +9,16 @@ from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 from django.db import transaction
 
+class StudyRegionTotal(models.Model):
+    feature_mapping = models.ForeignKey(int_models.FeatureMapping)
+    org_scheme = models.ForeignKey(int_models.OrganizationScheme)
+    study_region_total = models.FloatField()
+    estuarine_total = models.FloatField() 
+    open_coast_total = models.FloatField()
+    
+    def __unicode__(self):
+        return self.feature_mapping.name
+
 class ClusterManager(models.GeoManager):
     def build_clusters_for_array_by_lop(self,array,lop,with_hab=True):
         # get rid of the old ones

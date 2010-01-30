@@ -3,7 +3,7 @@ from lingcod.replication.models import *
 
 class HabitatThresholdInline(admin.TabularInline):
     model = HabitatThreshold
-    readonly_fields = ['habitat','units']
+    # readonly_fields = ['habitat','units']
     fields = ['habitat','minimum_quantity','units']
     sort = ['habitat__sort']
     extra = 0

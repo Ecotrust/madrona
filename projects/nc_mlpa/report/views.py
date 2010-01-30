@@ -12,6 +12,14 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.utils.simplejson import dumps as json_encode
 
+def load_study_region_totals(org_scheme):
+    """
+    doc string
+    """
+    sr = mlpa.StudyRegion.objects.current()
+    est = mlpa.Estuaries.objects.all()
+    sr_results = org_scheme.transformed_results(sr.geometry)
+    est_results = org_scheme.transformed_results(est.multipolygon_clipped)
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
     mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)
@@ -109,7 +117,7 @@ def array_habitat_representation_summed(request, array_id, format='json', with_g
         est_results = geometries_to_wkt(est_results)
         results = { settings.SAT_OPEN_COAST: oc_results, settings.SAT_ESTUARINE: est_results }
     elif not oc_est_combined and format=='csv':
-        return int_views.build_csv_response([oc_or_est_from_org_scheme(oc_results), oc_or_est_from_org_scheme(est_results)], slugify(array.name) )
+        return int_views.build_array_mpa_csv_response([oc_or_est_from_org_scheme(oc_results), oc_or_est_from_org_scheme(est_results)], slugify(array.name), array.name, 'array' )
         
     if format=='json':
         return HttpResponse(json_encode(results), mimetype='text/json')

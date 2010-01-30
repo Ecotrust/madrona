@@ -55,7 +55,7 @@ def test_drawing_intersect(request):
         form = TestIntersectionForm()
     return render_to_response('polygon_form.html', {'form': form})
 
-def build_csv_response(results, file_name):
+def build_csv_response(results, file_name, leave_out=['feature_map_id','org_scheme_id']):
     response = HttpResponse(mimetype='application/csv')
     response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
     writer = csv.writer(response)
@@ -63,18 +63,61 @@ def build_csv_response(results, file_name):
         results = [results]
     header_row = ['Habitat']
     header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
+    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out] )
     row_matrix = [header_row]
         
     for result in results:
         for hab,sub_dict in result.iteritems():
             new_row = [hab]
-            new_row.extend(sub_dict.values())
+            wanted_values = []
+            for k,v in sub_dict.iteritems():
+                if k not in leave_out:
+                    wanted_values.append(v)
+            new_row.extend(wanted_values)
             row_matrix.append(new_row)
     
     for row in row_matrix:
         writer.writerow(row)
         
     return response
+    
+def build_array_mpa_csv_response(results, file_name, feature_name, feature_type='MPA', leave_out=['feature_map_id','org_scheme_id']):
+    response = HttpResponse(mimetype='application/csv')
+    response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
+    writer = csv.writer(response)
+    if results.__class__.__name__<>'list':
+        results = [results]
+    if feature_type.lower()=='mpa':
+        feature_type = 'MPA'
+    else:
+        feature_type = feature_type.title()
+    header_row = [feature_type,'Habitat']
+    header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
+    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out] )
+    row_matrix = [header_row]
+
+    for result in results:
+        for hab,sub_dict in result.iteritems():
+            new_row = [feature_name,hab]
+            wanted_values = []
+            for k,v in sub_dict.iteritems():
+                if k not in leave_out:
+                    wanted_values.append(v)
+            new_row.extend(wanted_values)
+            row_matrix.append(new_row)
+
+    for row in row_matrix:
+        writer.writerow(row)
+
+    return response
+    
+def remove_elements(the_list,remove_list):
+    for r in remove_list:
+        try:
+            the_list.remove(r)
+        except ValueError:
+            continue
+    return the_list
         
 def test_poly_intersect(request):
     if request.method == 'POST':

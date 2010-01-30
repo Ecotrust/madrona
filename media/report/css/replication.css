@@ -139,8 +139,12 @@ div.hab_description {
     display: none;
     position: absolute;
 }
-div.lop {
-    visibility: visible;
+.my_tabs {
+    width: 490px;
+    padding: 2px;
+}
+.lop {
+    padding: 12px !important;
 }
 #center {
     width:800px;
