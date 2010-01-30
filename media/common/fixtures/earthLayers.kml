@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Folder>
+	<name>Google Earth Layers</name>
+	<open>1</open>
+	<Folder>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open</state>   
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/sport_golf.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+		<name>Grid</name>
+	</Folder>
+	<Folder>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open</state>   
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/house.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>3d Buildings</name>
+	</Folder>
+	<Folder>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open</state>   
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>Grey 3d Buildings</name>
+	</Folder>
+</Folder>
+</kml>
