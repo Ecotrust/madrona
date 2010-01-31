@@ -472,25 +472,25 @@ class SingleFeatureShapefile(Shapefile):
         length = 0.0
         count = 0
         
-        gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        # gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        # for feat in lyr:
+        #     gc.append(feat.geom.geos)
+        #     
+        # if self.clip_to_study_region:
+        #     from lingcod.studyregion.models import StudyRegion
+        #     sr = StudyRegion.objects.current()
+        #     new_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+        #     int_result = gc.intersection(sr.geometry)
+        #     new_gc.append(int_result)
+        #     gc = new_gc
+            
         for feat in lyr:
-            gc.append(feat.geom.geos)
-            
-        if self.clip_to_study_region:
-            from lingcod.studyregion.models import StudyRegion
-            sr = StudyRegion.objects.current()
-            new_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
-            int_result = gc.intersection(sr.geometry)
-            new_gc.append(int_result)
-            gc = new_gc
-            
-        for geom in gc:
-            if geom.__class__.__name__.startswith('Multi'):
+            if feat.geom.__class__.__name__.startswith('Multi'):
                 if verbose:
                     print '(',
                 for f in geom: #get the individual geometries
                     fm = feature_model(name=feature_name,feature_type=intersection_feature)
-                    fm.geometry = f
+                    fm.geometry = f.geos
                     if not fm.geometry.valid:
                         fm.geometry = clean_geometry(fm.geometry)
                     #mgeom.append(fm.geometry)
@@ -507,7 +507,7 @@ class SingleFeatureShapefile(Shapefile):
                     print ')',
             else:
                 fm = feature_model(name=feature_name,feature_type=intersection_feature)
-                fm.geometry = geom
+                fm.geometry = feat.geom.geos
                 if not fm.geometry.valid:
                     fm.geometry = clean_geometry(fm.geometry)
                 #mgeom.append(fm.geometry)
