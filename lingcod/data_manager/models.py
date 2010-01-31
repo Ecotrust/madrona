@@ -304,6 +304,12 @@ def has_multi_geometry(feature_model,field_name='geometry'):
         return True
     else:
         return False
+        
+def is_multi_geometry(geom):
+    if geom.__class__.__name__.lower().startswith('multi'):
+        return True
+    else:
+        return False
 
 def load_single_record(geom,target_model_instance,geometry_only=True,origin_feature=None,origin_field_name=None,target_field_name=None):
     """docstring for load_single_record"""
@@ -321,7 +327,19 @@ def load_single_geometry(geom, target_model_instance):
     tmi = target_model_instance
     if not geom.srid == settings.GEOMETRY_DB_SRID:
         geom.transform(settings.GEOMETRY_DB_SRID)
-    tmi.geometry = geom.geos
+        
+    tmi_multi = has_multi_geometry(tmi.__class__)
+    geom_multi = is_multi_geometry(geom)
+    
+    if tmi_multi == geom_multi:
+        tmi.geometry = geom.geos
+    elif tmi_multi:
+        g_type = geom.geos.geom_type.upper()
+        mgeom = geos.fromstr('MULTI%s EMPTY' % g_type)
+        mgeom.append(geom.geos)
+        tmi.geometry = mgeom
+    elif geom_multi:
+        pass # uh, actually this shouldn't ever happen because this is load_SINGLE_geometry, right?
     
     if not tmi.geometry.valid:
         tmi.geometry = clean_geometry(tmi.geometry)
