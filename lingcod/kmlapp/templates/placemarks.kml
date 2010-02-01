@@ -12,6 +12,7 @@
     <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
     <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
     <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
+    <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid pk=a.array.pk %}" />
     <Link>
     <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
     </Link>
@@ -25,6 +26,7 @@
             <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
             <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
             <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
+            <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid pk=a.array.pk %}" />
             <visibility>1</visibility>
             {% else %}
             <visibility>0</visibility>

@@ -9,11 +9,14 @@ from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 from lingcod.common.utils import load_session
 from lingcod.sharing.models import get_content_type_id
+from django.contrib.gis.db import models
 
 def get_user_mpa_data(user):
     """
     Organizes user's MPAs into arrays and provides their designations.
     Just basically a data structure manipulation on the queryset.
+    
+    Only returns objects owned by user, not shared
 
     The template expects something like:
      {'array name + id': {'array': array_object, 'mpas': [mpa1, mpa2] } }
@@ -43,14 +46,21 @@ def get_array_mpa_data(user, input_array_id):
     """
     Organizes MPAs belonging to a given array and provides their designations.
     Just basically a data structure manipulation on the queryset.
+    Will return if user owns the array OR if array is shared with user
     """
     Mpa = utils.get_mpa_class()
     MpaArray = utils.get_array_class()
 
     try:
+        # Frst see if user owns it
         the_array = MpaArray.objects.get(id=input_array_id, user=user)
-    except:
-        raise Http404
+    except MpaArray.DoesNotExist:
+        try: 
+            # ... then see if its shared with the user
+            the_array = MpaArray.objects.shared_with_user(user).get(id=input_array_id)
+        except MpaArray.DoesNotExist:
+            raise Http404
+
     mpas = the_array.mpa_set.add_kml()
     array_nameid = "%s_%d" % (the_array.name, the_array.id)
     shapes = {array_nameid: {'array':the_array, 'mpas': []} }
@@ -66,14 +76,19 @@ def get_single_mpa_data(user, input_mpa_id):
     """
     Creates data structure for a single MPA and its designation.
     Just basically a data structure manipulation on the queryset.
+    Will return if user owns the mpa OR if mpa is shared with user
     """
     Mpa = utils.get_mpa_class()
 
     try:
-        mpas = Mpa.objects.filter(id=input_mpa_id, user=user).add_kml()
-        mpa = mpas[0]
-    except:
-        raise Http404
+        # Frst see if user owns it
+        mpa = Mpa.objects.get(id=input_mpa_id, user=user).add_kml()
+    except Mpa.DoesNotExist:
+        try: 
+            # ... then see if its shared with the user
+            mpa = Mpa.objects.shared_with_user(user).get(id=input_mpa_id).add_kml()
+        except Mpa.DoesNotExist:
+            raise Http404
 
     if mpa.array:
         array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
@@ -93,12 +108,16 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     sg = Group.objects.get(pk=sharegroup)
     su = User.objects.get(pk=shareuser)
 
-    # TODO: sharing 
+    # MP TODO ... the contained MPAs don't have a group but we need to make sure they belong here
+    # logic probably belongs in the shareableManager so that 
+    # shared_with_user overrides the shared_groups of the contained objects
     try:
-        mpas = Mpa.objects.shared_with_user(user).filter(sharing_groups=sg, user=su).add_kml()
-    except:
+        #mpas = Mpa.objects.shared_with_user(user).filter(sharing_groups=sg, user=su).add_kml()
+        mpas = Mpa.objects.shared_with_user(user).filter(user=su).add_kml()
+    except Mpa.DoesNotExist:
         raise Http404
 
+    print mpas
     unattached = utils.get_array_class()(name='Marine Protected Areas')
     shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
