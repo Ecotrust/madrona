@@ -390,7 +390,6 @@ lingcod.kmlTree = (function(){
         
         var customIcon = function(kmlObject){
             if(!opts.supportItemIcon){
-                console.log('not supporting', opts);
                 return false;
             }
             var doc = parseKml(kmlObject.getKml());
@@ -889,6 +888,9 @@ lingcod.kmlTree = (function(){
                 return;
             }else{
                 toggleVisibility(node, toggle);
+                if(node.hasClass('fireEvents')){
+                    $(that).trigger('toggleItem', [node, toggle]);
+                }
             }
         });
         

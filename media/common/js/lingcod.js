@@ -102,10 +102,46 @@ var lingcod = (function(){
             trans: options.media_url + 'common/images/transparent.gif',
             title: true,
             restoreState: true,
-            supportItemIcon: true
+            supportItemIcon: true,
+            fireEvents: function(){
+                return true;
+            }
         });
-        googleLayers.load();
         
+        var updateGoogleLayers = function(tree){
+            $('#googlelayers li').each(function(){
+                var item = $(this);
+                var name = item.find('span.name').text();
+                switch(name){
+                    case 'Grid':
+                        ge.getOptions().setGridVisibility(item.hasClass('visible'));
+                        break;
+                    case '3d Buildings':
+                        ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, item.hasClass('visible'));
+                        break;
+                    case 'Grey 3d Buildings':
+                        ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS_LOW_RESOLUTION, item.hasClass('visible'));
+                        break;
+                    case 'Roads':
+                        ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, item.hasClass('visible'));
+                        break;
+                    case 'Borders and Labels':
+                        ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, item.hasClass('visible'));
+                        break;
+                }
+            });
+        }
+        
+        $(googleLayers).bind('kmlLoaded', function(){
+            updateGoogleLayers(tree);
+        });
+        
+        $(googleLayers).bind('toggleItem', function(){
+            updateGoogleLayers(tree);
+        });
+        
+        googleLayers.load();
+
         // var forest = lingcod.kmlForest({
         //     element: $('#datalayerstree'),
         //     ge: ge,
