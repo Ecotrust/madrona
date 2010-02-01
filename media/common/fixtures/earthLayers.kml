@@ -4,6 +4,7 @@
 	<name>Google Earth Layers</name>
 	<open>1</open>
 	<Folder>
+	    <visibility>0</visibility>
 	    <Style>
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
@@ -16,6 +17,7 @@
 		<name>Grid</name>
 	</Folder>
 	<Folder>
+	    <visibility>0</visibility>
 	    <Style>
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
@@ -28,6 +30,7 @@
 	    <name>Roads</name>
 	</Folder>
     <Folder>
+        <visibility>0</visibility>
 	    <Style>
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
@@ -40,6 +43,7 @@
 	    <name>Borders</name>
 	</Folder>
 	<Folder>
+	    <visibility>0</visibility>
 	    <Style>
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
@@ -52,6 +56,7 @@
 	    <name>3d Buildings</name>
 	</Folder>
     <Folder>
+        <visibility>0</visibility>
         <Style>
             <ListStyle>
                 <listItemType>checkHideChildren</listItemType>
