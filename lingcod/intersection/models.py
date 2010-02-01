@@ -533,6 +533,9 @@ class SingleFeatureShapefile(Shapefile):
         intersection_feature.multi_shapefile = self.parent_shapefile
         intersection_feature.feature_model = feature_model.__name__
         intersection_feature.save()
+        if self.clip_to_study_region:
+            intersection_feature.study_region_total = intersection_feature.calculate_study_region_total()
+            intersection_feature.save()
     
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
@@ -607,6 +610,38 @@ class IntersectionFeature(models.Model):
         # Returns a query set of all the ArealFeature, LinearFeature, or PointFeature objects related to this intersection feature.
         return self.model_with_my_geometries.objects.filter(feature_type=self)
     
+    def calculate_study_region_total_old(self):
+        from lingcod.studyregion.models import StudyRegion
+        sr = StudyRegion.objects.current()
+        result = self.geometry.intersection(sr.geometry)
+        if self.feature_model == 'ArealFeature':
+            return A(sq_m=result.area).sq_mi
+        elif self.feature_model == 'LinearFeature':
+            return D(m=result.length).mi
+        else:
+            return result.count
+    
+    def calculate_study_region_total(self):
+        from lingcod.studyregion.models import StudyRegion
+        sr = StudyRegion.objects.current()
+        #result = self.geometry.intersection(sr.geometry)
+        features_within = self.geometries_set.filter(geometry__within=sr.geometry)
+        if self.feature_model == 'ArealFeature':
+            area_within = sum( [ a.geometry.area for a in features_within ] )
+            mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
+            [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__overlaps=sr.geometry) ]
+            area_overlap = mgeom.intersection(sr.geometry).area
+            area_total = area_overlap + area_within
+            return A(sq_m=area_total).sq_mi
+        elif self.feature_model == 'LinearFeature':
+            length_within = sum( [ a.geometry.length for a in features_within ] )
+            mgeom = geos.fromstr('MULTILINESTRING EMPTY')
+            [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__crosses=sr.geometry) ]
+            length_overlap = mgeom.intersection(sr.geometry).length
+            length_total = length_overlap + length_within
+            return D(m=length_total).mi
+        else:
+            return features_within.count
     def expire_cached_results(self):
         self.resultcache_set.all().delete()
 
