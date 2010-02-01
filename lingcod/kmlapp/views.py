@@ -11,6 +11,7 @@ from lingcod.common.utils import load_session
 from lingcod.sharing.models import get_content_type_id
 from django.contrib.gis.db import models
 
+
 def get_user_mpa_data(user):
     """
     Organizes user's MPAs into arrays and provides their designations.
@@ -41,6 +42,22 @@ def get_user_mpa_data(user):
         shapes[array_nameid] = {'array': array, 'mpas':[]}
     designations = MpaDesignation.objects.all()
     return shapes, designations
+
+def get_public_arrays():
+    """
+    Organizes MPAs belonging to a public arrays
+    No login necessary, everyone sees these
+    """
+    MpaArray = utils.get_array_class()
+    public_group = Group.objects.get(name='Share with Public')
+    public_arrays = MpaArray.objects.filter(sharing_groups=public_group)
+    shapes = {}
+    for pa in public_arrays:
+        array_nameid = "%s_%d" % (pa.name, pa.id)
+        shapes[array_nameid] = {'array': pa, 'mpas':pa.mpa_set.add_kml()}
+    designations = MpaDesignation.objects.all()
+    return shapes, designations
+        
 
 def get_array_mpa_data(user, input_array_id):
     """
@@ -117,7 +134,6 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     except Mpa.DoesNotExist:
         raise Http404
 
-    print mpas
     unattached = utils.get_array_class()(name='Marine Protected Areas')
     shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
@@ -239,5 +255,29 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
         
     return response
 
-def public_shared(request):
-    return render_to_response('public.kml', {})
+def public_shared(request, kmz=False, session_key='0'):
+    """ 
+    Shows all publically shared arrays
+    Must be shared with a special group called 'Share with Public'
+    """
+    shapes, designations = get_public_arrays()
+
+    # determine content types for sharing
+    mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
+    array_ctid = get_content_type_id(utils.get_array_class())
+
+    t = get_template('placemarks.kml')
+    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': False, 'request_path': request.path, 
+        'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': True}))
+
+    response = HttpResponse()
+    response['Content-Disposition'] = 'attachment'
+    if kmz:
+        kmz = create_kmz(kml, 'mpa/doc.kml')
+        response['Content-Type'] = mimetypes.KMZ
+        response.write(kmz)
+    else:
+        response['Content-Type'] = mimetypes.KML
+        response.write(kml)
+        
+    return response

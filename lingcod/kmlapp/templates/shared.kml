@@ -1,6 +1,15 @@
-{% extends "public.kml" %}
+{% extends "base.kml" %}
 {% load absurl %}
-{% block shared_stuff %}
+{% block folders_and_placemarks %}
+
+    <NetworkLink>
+    <name>Public Proposals</name>
+    <open>0</open>
+    <visibility>0</visibility>
+    <Link>
+    <href>{% absurl kmlapp-publicshared-kmz %}</href>
+    </Link>
+    </NetworkLink>
 
 {% for key, group_user in groups_users.items %}
  <Folder>

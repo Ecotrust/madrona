@@ -51,7 +51,6 @@ def share_form(request, pk, object_type):
         if not groups:
             return HttpResponse("There are no groups to which you can share your content at this time.", status=404)
 
-        #return HttpResponse("User %s is sharing object type %s with pk %s <br/> %s" % (user, object_type, pk, groups ) )
         return render_to_response('share_form.html', {'groups': groups, 'already_shared_groups': already_shared_groups, 'obj': obj, 
                                                       'obj_type_verbose': obj_type_verbose,  'user':user}) 
 

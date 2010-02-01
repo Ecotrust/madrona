@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 999999, 
+        "model": "auth.group", 
+        "fields": {
+            "name": "Share with Public", 
+            "permissions": [125]
+        }
+    } 
+]

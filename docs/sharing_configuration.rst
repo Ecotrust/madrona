@@ -47,3 +47,9 @@ Once the models have been configured for sharing, the application or project mus
     * The get_content_type_id() function which is just a conveinience shortcut for determining the content_type of a given model class. 
 
 You can look at the kmlapp.views.get_mpas_shared_by and kmlapp.views.create_shared_kml for an example of how sharing code can be used by another application.
+
+Share with Public
+******************
+The sharing app provides a special group fixture named "Share with Public". In order to activate this feature, go into admin and ensure that this group has can_share permissions on the appropriate content. By default it *should* have the can_share_arrays permission but it should be confirmed on every installation as I just don't trust the primary keys in fixtures. 
+
+Once this group can_share_arrays, Assign users to the group. Use good judgement here as these users will be able to share any array they own with the world. Then just use the standard array sharing form to share with this group. In the case of the MarineMap project, the kmlapp will leverage this special group name to display MPAs to every user regardless of if they are signed in or not.
