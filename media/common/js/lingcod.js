@@ -58,7 +58,7 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
-        $('#datalayerstree').append('<div id="study_region"></div><div id="public_data"></div><div id="ecotrust_data"></div>');
+        $('#datalayerstree').append('<div id="study_region"></div><div id="public_data"></div><div id="googlelayers"></div><div id="ecotrust_data"></div>');
 
         var studyRegion = lingcod.kmlTree({
             url: window.studyregion,
@@ -90,6 +90,20 @@ var lingcod = (function(){
             restoreState: true
         });
         publicData.load();
+        window.tree = publicData;
+
+        var googleLayers = lingcod.kmlTree({
+            url: options.media_url + 'common/fixtures/earthLayers.kml',
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map'), 
+            element: $('#googlelayers'),
+            trans: options.media_url + 'common/images/transparent.gif',
+            title: true,
+            restoreState: true
+        });
+        googleLayers.load();
         
         // var forest = lingcod.kmlForest({
         //     element: $('#datalayerstree'),

@@ -19,24 +19,31 @@ lingcod.kmlTree = (function(){
         }else{
             for(var i=0;i<this.queue.length;i++){
                 var item = this.queue[i];
+                item.node.data('queueItem', item);
                 if(!item.loaded && !item.loading){
                     var self = this;
-                    $(item.node).bind('loaded', function(){
-                        $(item.node).unbind('loaded');
-                        item.callback(item.node);
-                        self.finish(item);
-                    });
+                    $(item.node).bind('loaded', function(e, node, kmlObject){self.nodeLoadedCallback(e, node, kmlObject)});
                     this.opts['my'].openNetworkLink(item.node);
-                    item.loading = true;                    
+                    item.loading = true;
                 }
             }
             // start up opening networklinks
         }
     };
     
-    NetworkLinkQueue.prototype.finish = function(item){
+    NetworkLinkQueue.prototype.nodeLoadedCallback = function(e, node, kmlObject){
+        var item = node.data('queueItem');
+        if(item.loaded === true){
+            throw('event listener fired twice for '+node.find('>span.name').text());
+        }
         item.loaded = true;
         item.loading = false;
+        $(node).unbind('loaded');
+        item.callback(node);
+        this.finish(item);
+    }
+    
+    NetworkLinkQueue.prototype.finish = function(item){
         var done = true;
         var noerrors = true;
         for(var i=0;i<this.queue.length;i++){
@@ -239,7 +246,9 @@ lingcod.kmlTree = (function(){
                     for(var i=0; i<state.children.length; i++){
                         var child = state.children[i];
                         var n = node.find('>ul>li>span.name:contains('+child.name+')').parent();
-                        restoreState(n, child, queue);
+                        if(n.length){
+                            restoreState(n, child, queue);
+                        }
                     }                    
                 }
             }else{
@@ -299,19 +308,18 @@ lingcod.kmlTree = (function(){
         
         var queueOpenNetworkLinks = function(queue, topNode){
             // $(that).trigger('kmlLoaded', kmlObject);
-            topNode.find('li.KmlNetworkLink.open').each(function(){
+            var links = topNode.find('li.KmlNetworkLink.open');
+            links.each(function(){
                 var node = $(this);
                 setModified(node, 'open', node.hasClass('open'));
                 node.removeClass('open');
                 queue.add(node, function(loadedNode){
                     setModified(loadedNode, 'open', node.hasClass('open'));
                     loadedNode.removeClass('open');
-                    queue.add(loadedNode, function(nn){
-                        queueOpenNetworkLinks(queue, nn);
-                    });
+                    queueOpenNetworkLinks(queue, loadedNode);
+                    queue.execute();
                 });
             });
-            queue.execute();
         };
         
         var buildOptions = function(kmlObject){
@@ -627,9 +635,9 @@ lingcod.kmlTree = (function(){
             if(node.hasClass('visible') === toggling){
                 return;
             }
+            setModified(node, 'visibility', toggling);
             lookup(node).setVisibility(toggling);
             node.toggleClass('visible', toggling);
-            setModified(node, 'visibility', toggling);
             if(node.hasClass('KmlNetworkLink') && node.hasClass('loaded')){
                 var doc = lookupNlDoc(node);
                 doc.setVisibility(toggling);
@@ -638,30 +646,21 @@ lingcod.kmlTree = (function(){
         
         var setModified = function(node, key, value){
             var data = node.data('modified');
-            if(!data || !data[key]){
-                if(!data){
-                    var data = {};
-                }
-                data[key] = {current: value, original: !value};
-                node.data('modified', data);
-                return;
-            }else{
-                if(data[key].original !== value){
-                    data[key].current = value;
-                    node.data('modified', data);
+            if(!data){
+                data = {};
+            }
+            if(!data[key]){
+                data[key] = {};
+                if(key === 'open'){
+                    data[key].original = lookup(node).getOpen();
+                }else if(key === 'visibility'){
+                    data[key].original = lookup(node).getVisibility();
                 }else{
-                    delete data[key];
-                    var nokeys = true;
-                    for(var key in data){
-                        nokeys = false;
-                    }
-                    if(nokeys){
-                        node.removeData('modified');
-                    }else{
-                        node.data('modified', data);
-                    }
+                    data[key].original = !value;
                 }
             }
+            data[key].current = value;
+            node.data('modified', data);
         };
         
         var getState = function(){
@@ -670,8 +669,16 @@ lingcod.kmlTree = (function(){
             walk(function(node, context){
                 var me = {name: node.find('>span.name').text(), remove: true, children: [], parent: context};
                 var modified = node.data('modified');
-                if(modified){
-                    me.modified = modified;
+                var new_modified = {};
+                var anykey = false;
+                for(var key in modified){
+                    if(modified[key].current !== modified[key].original){
+                        new_modified[key] = modified[key];
+                        anykey = key;
+                    }
+                }
+                if(anykey){
+                    me.modified = new_modified;
                     me.remove = false;
                     var other_context = context;
                     while(other_context.parent){

@@ -9,7 +9,9 @@ module('kmlTree');
     var NLHistory = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory.kmz';
     var NLHistory2 = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory2.kmz';
     var openNL = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/openNL.kmz';
-
+    var earthLayers = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/earthLayers.kml';
+    var twoNLatRoot = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/2NLAtRoot.kml';
+    
     earthTest('create instance', 2, function(ge, gex){    
         $(document.body).append('<div id="kmltreetest"></div>');
         var errors = false;
@@ -116,6 +118,7 @@ module('kmlTree');
             bustCache: false
         });
         $(tree).bind('kmlLoaded', function(e, kmlObject){
+            tree2.load(true);
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             equals(e.target, tree);
             $('#kmltreetest').find('span.name:contains(Placemark without description)')
@@ -142,7 +145,6 @@ module('kmlTree');
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
-        tree2.load(true);
     });
 
     earthAsyncTest('dblclick events', function(ge, gex){
@@ -750,11 +752,31 @@ module('kmlTree');
         tree.load(true);
     });
 
-    earthAsyncTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: ItemIcon', function(ge, gex){
-        $(document.body).append('<div id="kmltreetest"></div>');
-        $('#kmltreetest').remove();
-        start();
-    });
+    // earthAsyncTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: ItemIcon', function(ge, gex){
+    //     $(document.body).append('<div id="kmltreetest"></div>');
+    //     var tree = lingcod.kmlTree({
+    //         url: earthLayers,
+    //         ge: ge, 
+    //         gex: gex, 
+    //         animate: false, 
+    //         map_div: $('#map3d'), 
+    //         element: $('#kmltreetest'),
+    //         trans: trans,
+    //         title: true,
+    //         bustCache: false
+    //     });
+    //     $(tree).bind('kmlLoaded', function(e, kmlObject){
+    //         ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
+    //         // var folder = $('#kmltreetest').find('span.name:contains(folder with contents hidden)').parent();
+    //         // ok(folder.find('> span.toggler:visible').length === 0, 'Toggle icon should not be visible');
+    //         // ok(folder.find('> ul > li').length === 0, 'Shouldnt add children');
+    //         tree.destroy();
+    //         $('#kmltreetest').remove();
+    //         start();
+    //     });
+    //     ok(tree !== false, 'Tree initialized');
+    //     tree.load(true);
+    // });
 
     earthAsyncTest('click on elements with descriptions opens balloon.', function(ge, gex){
         var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
@@ -1017,41 +1039,7 @@ module('kmlTree');
                     start();                    
                 }, 400);
             });
-            nlink.find('.expander').click();
-        });
-        ok(tree !== false, 'Tree initialized');
-        tree.load(true);
-    });
-    
-    earthAsyncTest('Networklinks that start out with visibility=0 should not be visible just because they have been loaded.', function(ge, gex){
-        var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();
-        $(document.body).append('<div id="kmltreetest"></div>');
-        var tree = lingcod.kmlTree({
-            url: kmlTreeUrl2,
-            ge: ge, 
-            gex: gex, 
-            animate: false, 
-            map_div: $('#map3d'), 
-            element: $('#kmltreetest'),
-            trans: trans,
-            fireEvents: function(){return true;},
-            bustCache: false
-        });
-        $(tree).bind('kmlLoaded', function(e, kmlObject){
-            ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
-            $(tree).unbind('kmlLoaded');
-            var nlink = $('#kmltreetest').find('span.name:contains(networklink off)').parent();
-            equals(nlink.length, 1);
-            var nlinkobject = tree.lookup(nlink);
-            $(tree).bind('networklinkload', function(e, node, kmlObject){
-                equals(kmlObject.getName(), 'linka.kmz');
-                equals($('#kmltreetest').find('span.name:contains(NetworkLink Content)').length, 1, 'NetworkLink contents displayed.');
-                equals(nlinkobject.getVisibility(), kmlObject.getVisibility());
-                tree.destroy();
-                $('#kmltreetest').remove();
-                start();                    
-            });
-            nlink.find('.expander').click();
+            nlink.find('>.expander').click();
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
@@ -1075,7 +1063,7 @@ module('kmlTree');
             ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
             $(tree).unbind('kmlLoaded');
             var nlink = $('#kmltreetest').find('span.name:contains(networklink checkHideChildren)').parent();
-            equals(nlink.find('.expander:visible').length, 0);
+            equals(nlink.find('>.expander:visible').length, 0);
             tree.destroy();
             $('#kmltreetest').remove();
             start();
@@ -1543,7 +1531,7 @@ module('kmlTree');
                     $('#kmltreetest').remove();
                     start();
                 });
-                tree.refresh();                
+                tree.refresh();
             });
             tree.refresh();
         });
@@ -1707,6 +1695,51 @@ module('kmlTree');
             });
             L.find('>span.expander').click();
         });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
+    
+    earthAsyncTest('refreshing with 2 networklinks at root', function(ge, gex){
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: twoNLatRoot,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            fireEvents: function(){return true;},
+            bustCache: false
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            $(tree).unbind('kmlLoaded');
+            ok(kmlObject.getType() === 'KmlFolder', 'KmlDocument loaded correctly');
+            $('#kmltreetest').find('span.name:contains(E)').parent().find('>span.toggler').click();
+            var A = $('#kmltreetest').find('span.name:contains(A)').parent();
+            var B = $('#kmltreetest').find('span.name:contains(B)').parent();
+            $(tree).bind('networklinkload', function(){
+                $(tree).unbind('networklinkload');
+                $(tree).bind('networklinkload', function(){
+                    $(tree).unbind('networklinkload');
+                    $(tree).bind('kmlLoaded', function(e, kmlObject){
+                        $(tree).unbind('kmlLoaded');
+                        ok(true, 'kml refreshed');
+                        var A = $('#kmltreetest').find('span.name:contains(A)').parent();
+                        ok(A.hasClass('loaded'), 'History remembered in tree widget');
+                        var B = $('#kmltreetest').find('span.name:contains(B)').parent();
+                        ok(B.hasClass('loaded'), 'History remembered in tree widget');
+                        tree.destroy();
+                        $('#kmltreetest').remove();
+                        start();
+                    });
+                    tree.refresh();
+                });
+                B.find('>span.expander').click();
+            });
+            A.find('>span.expander').click();
+        });
+        window.tree = tree;
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
     });
