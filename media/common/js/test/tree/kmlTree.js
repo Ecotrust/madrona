@@ -9,7 +9,7 @@ module('kmlTree');
     var NLHistory = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory.kmz';
     var NLHistory2 = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/NLHistory2.kmz';
     var openNL = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/openNL.kmz';
-    var earthLayers = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/earthLayers.kml';
+    var earthLayers = 'http://marinemap.googlecode.com/svn-history/r969/trunk/media/common/fixtures/earthLayers.kml';
     var twoNLatRoot = 'http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/2NLAtRoot.kml';
     
     earthTest('create instance', 2, function(ge, gex){    
@@ -752,31 +752,32 @@ module('kmlTree');
         tree.load(true);
     });
 
-    // earthAsyncTest('<a href="http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle">ListStyle</a> support: ItemIcon', function(ge, gex){
-    //     $(document.body).append('<div id="kmltreetest"></div>');
-    //     var tree = lingcod.kmlTree({
-    //         url: earthLayers,
-    //         ge: ge, 
-    //         gex: gex, 
-    //         animate: false, 
-    //         map_div: $('#map3d'), 
-    //         element: $('#kmltreetest'),
-    //         trans: trans,
-    //         title: true,
-    //         bustCache: false
-    //     });
-    //     $(tree).bind('kmlLoaded', function(e, kmlObject){
-    //         ok(kmlObject.getType() === 'KmlDocument', 'KmlDocument loaded correctly');
-    //         // var folder = $('#kmltreetest').find('span.name:contains(folder with contents hidden)').parent();
-    //         // ok(folder.find('> span.toggler:visible').length === 0, 'Toggle icon should not be visible');
-    //         // ok(folder.find('> ul > li').length === 0, 'Shouldnt add children');
-    //         tree.destroy();
-    //         $('#kmltreetest').remove();
-    //         start();
-    //     });
-    //     ok(tree !== false, 'Tree initialized');
-    //     tree.load(true);
-    // });
+    earthAsyncTest('ItemIcon if option specified', function(ge, gex){
+        $(document.body).append('<div id="kmltreetest"></div>');
+        var tree = lingcod.kmlTree({
+            url: earthLayers,
+            ge: ge, 
+            gex: gex, 
+            animate: false, 
+            map_div: $('#map3d'), 
+            element: $('#kmltreetest'),
+            trans: trans,
+            title: true,
+            bustCache: false,
+            supportItemIcon: true
+        });
+        $(tree).bind('kmlLoaded', function(e, kmlObject){
+            ok(kmlObject.getType() === 'KmlFolder', 'KmlDocument loaded correctly');            
+            var grid = $('#kmltreetest').find('span.name:contains(Grid)').parent();
+            var icon = grid.find('>span.icon').css('background-image');
+            equals(icon, "url(http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/sport_golf.png)");
+            tree.destroy();
+            $('#kmltreetest').remove();
+            start();
+        });
+        ok(tree !== false, 'Tree initialized');
+        tree.load(true);
+    });
 
     earthAsyncTest('click on elements with descriptions opens balloon.', function(ge, gex){
         var firstLat = ge.getView().copyAsCamera(ge.ALTITUDE_ABSOLUTE).getLatitude();

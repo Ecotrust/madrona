@@ -101,7 +101,8 @@ var lingcod = (function(){
             element: $('#googlelayers'),
             trans: options.media_url + 'common/images/transparent.gif',
             title: true,
-            restoreState: true
+            restoreState: true,
+            supportItemIcon: true
         });
         googleLayers.load();
         
@@ -186,6 +187,9 @@ var lingcod = (function(){
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);
+        });
+        $(window).unload(function(){
+            setCameraToLocalStorage();
         });
     };
     
@@ -285,10 +289,6 @@ var lingcod = (function(){
         }
         return false;
     };
-    
-    $(window).unload(function(){
-        setCameraToLocalStorage();
-    });
 
     return that;
 })();

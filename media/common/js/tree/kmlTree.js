@@ -68,6 +68,20 @@ lingcod.kmlTree = (function(){
         }
         this.queue = [];
     };
+    
+    // Returns a jquery object representing a kml file
+    var parseKml = function(kml){
+        if( window.ActiveXObject && window.GetObject ) { 
+            var dom = new ActiveXObject( 'Microsoft.XMLDOM' ); 
+            dom.loadXML(kml); 
+            return jQuery(dom); 
+        } 
+        if( window.DOMParser ) {
+            var parser = new DOMParser().parseFromString( kml, 'text/xml' );
+            return jQuery(parser); 
+        }
+        throw new Error( 'No XML parser available' );
+    }
 
     var template = tmpl([
         '<li class="',
@@ -86,7 +100,11 @@ lingcod.kmlTree = (function(){
             '<span class="nlDocId"></span>',
             '<span class="expander"><img width="16" height="16" src="<%= trans %>" /></span>',
             '<span class="toggler"><img width="16" height="16" src="<%= trans %>" /></span>',
-            '<span class="icon"><img width="16" height="16" src="<%= trans %>" /></span>',
+            '<span ',
+            '<% if(customIcon){ %>',
+                'style="background:url(<%= customIcon %>);"',
+            '<% } %>',
+            ,'class="icon"><img width="16" height="16" src="<%= trans %>" /></span>',
             '<span class="name"><%= name %></span>',
             '<% if(snippet){ %>',
                 '<p class="snippet"><%= snippet %></p>',
@@ -105,7 +123,8 @@ lingcod.kmlTree = (function(){
         showTitle: true,
         bustCache: false,
         restoreState: false,
-        whiteListed: false
+        whiteListed: false,
+        supportItemIcon: false
     };
         
     // For some reason GEAPI can't switch between features when opening new
@@ -350,7 +369,7 @@ lingcod.kmlTree = (function(){
                             select: opts.enableSelection(this),
                             fireEvents: opts.fireEvents(this),
                             listItemType: getListItemType(this),
-                            customIcon: false,
+                            customIcon: customIcon(this),
                             children: [],
                             kmlId: lookupId,
                             trans: opts.trans
@@ -368,6 +387,21 @@ lingcod.kmlTree = (function(){
             });
             return options;
         };
+        
+        var customIcon = function(kmlObject){
+            if(!opts.supportItemIcon){
+                console.log('not supporting', opts);
+                return false;
+            }
+            var doc = parseKml(kmlObject.getKml());
+            var root = doc.find('kml>Folder, kml>KmlDocument, kml>Placemark');
+            var href = root.find('>Style>ListStyle>ItemIcon>href').text();
+            if(href){
+                return href;
+            }else{
+                return false;
+            }
+        }
         
         // See http://code.google.com/apis/kml/documentation/kmlreference.html#listItemType
         var getListItemType = function(kmlObject){
