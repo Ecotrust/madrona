@@ -8,7 +8,6 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
-                <state>open</state>   
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/sport_golf.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -20,7 +19,30 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
-                <state>open</state>   
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/arrow_branch.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>Roads</name>
+	</Folder>
+	<Folder>
+    <Folder>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/flag_blue.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>Borders</name>
+	</Folder>
+	<Folder>
+	<Folder>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/house.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -32,7 +54,6 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
-                <state>open</state>   
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
               </ItemIcon>
             </ListStyle>	       
