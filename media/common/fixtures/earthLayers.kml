@@ -8,6 +8,7 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
+                <state>open closed</state>
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/sport_golf.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -19,6 +20,7 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
+                <state>open closed</state>
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/arrow_branch.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -31,6 +33,7 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
+                <state>open closed</state>                
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/flag_blue.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -43,6 +46,7 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
+                <state>open closed</state>  
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/house.png</href>
               </ItemIcon>
             </ListStyle>	       
@@ -54,6 +58,7 @@
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
+                <state>open closed</state>  
                 <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
               </ItemIcon>
             </ListStyle>	       
