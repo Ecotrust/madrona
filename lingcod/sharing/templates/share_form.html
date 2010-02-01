@@ -1,20 +1,41 @@
 <!-- User :: {{ user.name }} -->
+<style>
+.group_list { font-size: 9px; display:none; }
+.group_text { font-size: 9px; }
+.show { display:block; }
+</style>
+
+<script>
+$("#group_button").click(function() { 
+   $("ul.group_list").toggleClass('show'); 
+});
+</script>
+
 <br/>
+
 {% if groups %}
     <p> Share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong> with the following groups</p>
-    <form action="" method="POST">
 
+    <div>
+        <a href="#" id="group_button" class="button" onclick='this.blur(); return false;'>
+            <span id="group_text">Toggle group members</span>
+        </a>
+    </div>
+    <br/>
+    <br/>
+
+    <form action="" method="POST">
         <p>
         {% for group in groups %} 
-        <label class="shareform"> <input type="checkbox" class="shareform" name="sharing_groups" {% if group in already_shared_groups %}checked="checked"{% endif %} value="{{group.id}}" id="group_{{group.id}}"/> {{group.name}} </label>
-        <div style="font-size:60%">
-            Group Members:
-            <ul>
+        <label class="shareform"> <input type="checkbox" class="shareform" name="sharing_groups" {% if group in already_shared_groups %}checked="checked"{% endif %} value="{{group.id}}" id="group_{{group.id}}"/> {{group.name}} 
+
+            <ul class="group_list">
               {% for user in group.user_set.all %}
               <li> {{user.username}} </li>
               {% endfor %}
             </ul>
-        </div>
+
+        </label>
         {% endfor %}
         </p>
         
