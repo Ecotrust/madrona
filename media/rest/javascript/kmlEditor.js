@@ -61,21 +61,24 @@ lingcod.rest.kmlEditor = function(options){
     
     var tbar = new goog.ui.Toolbar();
     var create_menu = new goog.ui.Menu();
-    var create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
-    tbar.addChild(create_button, true);
-    goog.events.listen(create_menu, 'action', function(e) {
-        tree.clearSelection();
-        options.client.create(e.target.mm_data, {
-            success: function(location){
-                refresh(function(){
-                    tree.selectById(location);
-                });
-            },
-            error: function(){
-                alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
-            }
+
+    if (!options.shared) {
+        var create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
+        tbar.addChild(create_button, true);
+        goog.events.listen(create_menu, 'action', function(e) {
+            tree.clearSelection();
+            options.client.create(e.target.mm_data, {
+                success: function(location){
+                    refresh(function(){
+                        tree.selectById(location);
+                    });
+                },
+                error: function(){
+                    alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
+                }
+            });
         });
-    });
+    }
     
     // For testing purposes only, will be removed on launch
     var ref = new goog.ui.ToolbarButton('Refresh');
@@ -96,55 +99,59 @@ lingcod.rest.kmlEditor = function(options){
     });
     tbar.addChild(attr, true);
     
-    var edit = new goog.ui.ToolbarButton('Edit');
-    edit.setEnabled(false);
-    goog.events.listen(edit, 'action', function(e) {
-        tbar.setEnabled(false);
-        options.ge.setBalloon(null);
-        var kmlObject = tree.lookup(that.selected);
-        kmlObject.setVisibility(false);
-        options.client.update(kmlObject, {
-            success: function(location){
-                tbar.setEnabled(true);
-                refresh(function(){
-                    tree.selectById(location);
-                });
-            },
-            cancel: function(){
-                tbar.setEnabled(true);
-                kmlObject.setVisibility(true);
-                tree.selectById(kmlObject.getId());
-            },
-            error: function(){
-                tbar.setEnabled(true);
-                alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
-                kmlObject.setVisibility(true);
-                tree.selectById(kmlObject.getId());
-            }
+    if (!options.shared) {
+        var edit = new goog.ui.ToolbarButton('Edit');
+        edit.setEnabled(false);
+        goog.events.listen(edit, 'action', function(e) {
+            tbar.setEnabled(false);
+            options.ge.setBalloon(null);
+            var kmlObject = tree.lookup(that.selected);
+            kmlObject.setVisibility(false);
+            options.client.update(kmlObject, {
+                success: function(location){
+                    tbar.setEnabled(true);
+                    refresh(function(){
+                        tree.selectById(location);
+                    });
+                },
+                cancel: function(){
+                    tbar.setEnabled(true);
+                    kmlObject.setVisibility(true);
+                    tree.selectById(kmlObject.getId());
+                },
+                error: function(){
+                    tbar.setEnabled(true);
+                    alert('An error occured while saving your data. If the problem persists, please contact an administrator at help@marinemap.org.');
+                    kmlObject.setVisibility(true);
+                    tree.selectById(kmlObject.getId());
+                }
+            });
         });
-    });
-    tbar.addChild(edit, true);
+        tbar.addChild(edit, true);
+    }
 
-    var del = new goog.ui.ToolbarButton('Delete');
-    del.setEnabled(false);
-    goog.events.listen(del, 'action', function(e) {
-        tbar.setEnabled(false);
-        var kmlObject = tree.lookup(that.selected);
-        options.client.destroy(kmlObject, {
-            success: function(location){
-                tbar.setEnabled(true);
-                refresh();
-            },
-            error: function(){
-                tbar.setEnabled(true);
-                alert('An error occured while trying to delete this feature.');
-            },
-            cancel: function(){
-                tbar.setEnabled(true);
-            }
+    if (!options.shared) {
+        var del = new goog.ui.ToolbarButton('Delete');
+        del.setEnabled(false);
+        goog.events.listen(del, 'action', function(e) {
+            tbar.setEnabled(false);
+            var kmlObject = tree.lookup(that.selected);
+            options.client.destroy(kmlObject, {
+                success: function(location){
+                    tbar.setEnabled(true);
+                    refresh();
+                },
+                error: function(){
+                    tbar.setEnabled(true);
+                    alert('An error occured while trying to delete this feature.');
+                },
+                cancel: function(){
+                    tbar.setEnabled(true);
+                }
+            });
         });
-    });
-    tbar.addChild(del, true);
+        tbar.addChild(del, true);
+    }
 
 
         
@@ -159,16 +166,22 @@ lingcod.rest.kmlEditor = function(options){
     copy.setEnabled(false);
     tbar.addChild(copy, true);
     
-    // TODO
-    var share = new goog.ui.ToolbarButton('Share');
-    share.setEnabled(false);
-    share.setTooltip("Share the selected feature");
-    goog.events.listen(share, 'action', function(e) {
-        options.client.share(tree.lookup(that.selected));
-    });
-    tbar.addChild(share, true);
+    if (!options.shared) {
+        var share = new goog.ui.ToolbarButton('Share');
+        share.setEnabled(false);
+        share.setTooltip("Share the selected feature");
+        goog.events.listen(share, 'action', function(e) {
+            options.client.share(tree.lookup(that.selected));
+        });
+        tbar.addChild(share, true);
+    }
     
-    var enableWhenSelected = [attr, edit, del, export_button, copy, share];
+    if (options.shared) {
+        var enableWhenSelected = [attr, export_button, copy];
+    } else {
+        var enableWhenSelected = [attr, edit, del, export_button, copy, share];
+    }
+
     
     tbar.render(that.el.find('.toolbar')[0]);
 

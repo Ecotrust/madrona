@@ -193,7 +193,8 @@ var lingcod = (function(){
                     appendTo: '#myshapestree',
                     div: '#map',
                     url: options.myshapes[i],
-                    client: that.client
+                    client: that.client,
+                    shared: false
                 }));
             }            
         }
@@ -206,7 +207,8 @@ var lingcod = (function(){
                     appendTo: '#sharedshapestree',
                     div: '#map',
                     url: options.sharedshapes[i],
-                    client: that.client
+                    client: that.client,
+                    shared: true
                 }));
             }            
         }
