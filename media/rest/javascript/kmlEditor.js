@@ -190,7 +190,8 @@ lingcod.rest.kmlEditor = function(options){
         fireEvents: testFunction,
         enableSelection: testFunction,
         bustCache: true,
-        restoreState: true
+        restoreState: true,
+        supportItemIcon: true
     });
     that.tree = tree;
     

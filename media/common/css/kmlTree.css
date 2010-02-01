@@ -161,12 +161,18 @@ li.KmlTour > span.icon {
     background: transparent url(../images/kmlTreeSprites.png) no-repeat -48px -1px;    
 }
 
+
 li.KmlPhotoOverlay > span.icon, li.KmlGroundOverlay > span.icon {
     margin-right:3px;
     display:block;
     background: transparent url(../images/kmlTreeSprites.png) no-repeat -64px 0px;    
 }
 
+li.customIcon > span.icon {
+    margin-right:3px;
+    display:block;
+    background: transparent no-repeat;    
+}
 
 li.marinemap-kmltree-item p.snippet {
     text-indent: 0px;

@@ -94,6 +94,7 @@ lingcod.kmlTree = (function(){
         '<%= (open ? "open " : "") %>',
         '<%= (description ? "hasDescription " : "") %>',
         '<%= (snippet ? "hasSnippet " : "") %>',
+        '<%= (customIcon ? "customIcon " : "") %>',
         'marinemap-kmltree-id-<%= id %> marinemap-kmltree-item',
         '">',
             '<span class="kmlId"><%= kmlId %></span>',
@@ -393,7 +394,7 @@ lingcod.kmlTree = (function(){
                 return false;
             }
             var doc = parseKml(kmlObject.getKml());
-            var root = doc.find('kml>Folder, kml>KmlDocument, kml>Placemark');
+            var root = doc.find('kml>Folder, kml>Document, kml>Placemark, kml>NetworkLink');
             var href = root.find('>Style>ListStyle>ItemIcon>href').text();
             if(href){
                 return href;

@@ -137,76 +137,24 @@
             {# Distance: <span id="distance">N/A</span></p> #}
             {# Area: <span id="area">N/A</span></p> #}
         </div>
+        <hr />
+        <div id="earthOptions">
+            <h3>Display Options</h3>
+            <p>Toggle the various options below and your choices will be remembered the next time you use the tool.</p>
+            <ul>
+                <li id="overview"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>Overview Map</li>
+                <li id="scale"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>Scale Legend</li>
+                <li class="visible" id="nav"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>Navigation Controls</li>
+                <li id="terrain"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>3d Terrain and Ocean Surface</li>
+                <li class="visible" id="atm"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>Atmosphere</li>
+            </ul>
+        </div>
     </div>
     <div id="DataLayers">
         <h1>Data Layers</h1>
         <div id="datalayerstree"></div>
     </div>
     <div style="display:none;" id="panel-holder"></div>
-    {# {% load layout_tags %} #}
-    {# <div id="panelManager"> #}
-    {#     {% tabpanel "Home" %} #}
-    {#         {% tab "Data Layers" %} #}
-    {#             {% block data_layers_before_tree %}{% endblock %} #}
-    {#             <div style="font-size:1em;" id="datalayerstree"></div> #}
-    {#             {% block data_layers_after_tree %}{% endblock %} #}
-    {#             {% footer %} #}
-    {#                 <h3>Earth Options</h3> #}
-    {#                 <ul> #}
-    {#                     <form id="ge_options"> #}
-    {#                         <li><input type="checkbox" name="setStatusBarVisibility" checked />Status Bar</li> #}
-    {#                         <li><input type="checkbox" name="nav" />Navigation Control</li> #}
-    {#                         <li><input type="checkbox" name="setGridVisibility" />Grid</li> #}
-    {#                         <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li> #}
-    {#                         <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li> #}
-    {#                         <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li> #}
-    {#                         <li><input type="checkbox" name="sun" />Sun</li>       #}
-    {#                     </form> #}
-    {#                 </ul> #}
-    {#                 <h3>Google Layers</h3> #}
-    {#                 <ul> #}
-    {#                     <form id="ge_layers"> #}
-    {#                         <li><input type="checkbox" name="LAYER_BORDERS">Borders</li> #}
-    {#                         <li><input type="checkbox" name="LAYER_ROADS">Roads</li> #}
-    {#                         <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li> #}
-    {#                         <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li> #}
-    {#                         <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                 #}
-    {#                     </form> #}
-    {#                 </ul> #}
-    {#                 {% block data_layers_footer_append %}{% endblock %} #}
-    {#             {% endfooter %} #}
-    {#         {% endtab %} #}
-    {#         {% tab "My Shapes" %} #}
-    {#             {% block my_shapes_prepend %}{% endblock %} #}
-    {#             <p> #}
-    {#                 <div style="font-size:1em;" id="myshapestree"></div> #}
-    {#                 <!-- <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />--> #}
-    {#                 <a href="javascript:alert('create mpa');">create mpa</a> | #}
-    {#                 <a href="javascript:alert('create array');">create array</a> #}
-    {#             </p>                     #}
-    {#             {% block my_shapes_append %}{% endblock %} #}
-    {#         {% endtab %} #}
-    {#         {% tab "Collaborate" %} #}
-    {#             <div id="waveframe" style="height:98%;overflow:hidden;margin:3px;"></div> #}
-    {#         {% endtab %} #}
-    {#         {% tab "Tools" %} #}
-    {#                 {% block tools_prepend %}{% endblock %} #}
-    {#                 <!-- #}
-    {#                 <div style="padding:1em;"> #}
-    {#                     <h4>MPA Draw Tool</h4> #}
-    {#                     <button id="mpa_draw">draw mpa</button> #}
-    {#                     <button id="mpa_clear">clear</button> #}
-    {#                     <p><span id="mpa_draw_results"></span></p> #}
-    {#                     <hr> #}
-    {#                 </div> #}
-    {#                 --> #}
-    {#                 <div style="padding:1em;"><h4>MPA Draw Tool</h4></div> #}
-    {#                 <div id="mpa_draw_panel" style="padding:1em;"></div> #}
-    {#                 <div id="mpa_results_panel" style="padding:1em; overflow: auto"></div> #}
-    {#                 {% block tools_append %}{% endblock %}    #}
-    {#         {% endtab %} #}
-    {#     {% endtabpanel %}         #}
-    {# </div> #}
     <div id="geopanel">
         {% block shapeDefinitionPanel %}
         {#  This text is defined within a block here so that individual #}
@@ -259,12 +207,6 @@
                 <p>There was a server error processing your shape. You can try editing this shape again by pressing the "Edit Shape" button below. If problem may be specific to the region you are drawing within.</p>
                 <p>Please contact an administrator at help@marinemap.org if the problem persists.</p>
             </div>
-            {#  The following section is for debugging purposes only !! #}
-            {# <p style="clear:both; margin-top:150px;"> #}
-            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.new').show(); return false;">show new state</a> #}
-            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.edit').show(); return false;">show edit state</a> #}
-            {#                 <a href="#" onclick="$(this).parent().parent().find('div').hide(); $(this).parent().parent().find('.manipulated').show(); return false;">show manipulated state</a>                 #}
-            {#             </p> #}
         </div>
         {% endblock shapeDefinitionPanel %}
     </div>

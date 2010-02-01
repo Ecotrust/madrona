@@ -232,3 +232,22 @@ p.instructions {
 div.panel div, div.panel p {
     margin:16px 0px;
 }
+
+#tools h3 {
+    padding:0;
+    margin:0;
+    color:#6C7C90;
+    text-shadow:0 1px 0 #FCFAFF;
+}
+
+#earthOptions p {
+    padding:0;
+}
+
+#earthOptions li {
+    font-size:12px;
+    margin:10px 0;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}

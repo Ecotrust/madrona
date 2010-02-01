@@ -29,7 +29,6 @@ var lingcod = (function(){
         ge = pluginInstance;
         ge.getWindow().setVisibility(true); // required
         ge.getOptions().setStatusBarVisibility(true);
-        ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
         gex = new GEarthExtensions(ge);
         
         // that.googleLayers = new lingcod.map.googleLayers(ge, 
@@ -224,8 +223,45 @@ var lingcod = (function(){
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);
         });
+        
+        var setEarthOptions = function(){
+            $('#earthOptions li').each(function(){
+                var li = $(this);
+                switch(li.attr('id')){
+                    case 'nav':
+                        if(li.hasClass('visible')){
+                            ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+                        }else{
+                            ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+                        }
+                        break;
+                    case 'overview':
+                        ge.getOptions().setOverviewMapVisibility(li.hasClass('visible'));
+                        break;
+                    case 'scale':
+                        ge.getOptions().setScaleLegendVisibility(li.hasClass('visible'));
+                        break;
+                    case 'atm':
+                        ge.getOptions().setAtmosphereVisibility(li.hasClass('visible'));
+                        break;
+                    case 'terrain':
+                        ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN, li.hasClass('visible'));
+                        break;
+                }
+            });
+        }
+        
+        $('#earthOptions li').click(function(e){
+            $(this).toggleClass('visible');
+            setEarthOptions();
+        });
+        
+        setEarthOptionsFromLocalStore();
+        setEarthOptions();
+        
         $(window).unload(function(){
             setCameraToLocalStorage();
+            saveEarthOptionsToLocalStore();
         });
     };
     
@@ -235,6 +271,27 @@ var lingcod = (function(){
         if (kmlObject.getAbstractView()){
             ge.getView().setAbstractView(kmlObject.getAbstractView());
         }   
+    };
+    
+    var setEarthOptionsFromLocalStore = function(){
+        if(!!window.localStorage && localStorage.getItem('earthOptions')){
+            var json = JSON.parse(localStorage.getItem('earthOptions'));
+            for(key in json){
+                $('#earthOptions').find('#'+key).toggleClass('visible', json[key]);
+            }
+        }else{
+            return false;
+        }
+    };
+    
+    var saveEarthOptionsToLocalStore = function(){
+        if(!!window.localStorage){
+            var json = {};
+            $('#earthOptions li').each(function(){
+                json[$(this).attr('id')] = $(this).hasClass('visible');
+            });
+            localStorage.setItem('earthOptions', JSON.stringify(json));
+        }
     };
     
     var geFailure = function(errorCode){
