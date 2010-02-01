@@ -27,7 +27,6 @@
 	    </Style>
 	    <name>Roads</name>
 	</Folder>
-	<Folder>
     <Folder>
 	    <Style>
     	    <ListStyle>
@@ -41,7 +40,6 @@
 	    <name>Borders</name>
 	</Folder>
 	<Folder>
-	<Folder>
 	    <Style>
     	    <ListStyle>
               <listItemType>checkHideChildren</listItemType>
@@ -53,17 +51,17 @@
 	    </Style>
 	    <name>3d Buildings</name>
 	</Folder>
-	<Folder>
-	    <Style>
-    	    <ListStyle>
-              <listItemType>checkHideChildren</listItemType>
-              <ItemIcon>
-                <state>open closed</state>  
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
-              </ItemIcon>
-            </ListStyle>	       
-	    </Style>
-	    <name>Grey 3d Buildings</name>
-	</Folder>
+    <Folder>
+        <Style>
+            <ListStyle>
+                <listItemType>checkHideChildren</listItemType>
+                <ItemIcon>
+                    <state>open closed</state>
+                    <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
+                </ItemIcon>
+            </ListStyle>
+        </Style>
+        <name>Grey 3d Buildings</name>
+    </Folder>
 </Folder>
 </kml>
