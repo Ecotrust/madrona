@@ -145,6 +145,8 @@
     position:relative;
 /*    top:0em;*/
 /*    z-index:4;*/
+    background: transparent url(../images/below_tabs.png) no-repeat center bottom;
+    padding-bottom:25px;
 }
 
 .marinemap-panel .ui-tabs-nav {
@@ -163,20 +165,24 @@
 .marinemap-panel .ui-tabs-nav a {
     color:#333;
     background-color:none;
+    padding:3px 10px;
+    font-weight:normal;
 }
 
 .marinemap-panel .ui-tabs-nav .ui-tabs-selected a {
-    background-color:none;
+    background-color:#4982DE;
+    color:white;
     background-image:none;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
 /*    text-decoration:underline;*/
-    border-bottom:2px solid #888;
 }
 
 .marinemap-panel .ui-tabs-nav a {
     width:auto;
     height:auto;
     margin:0 0 0px 0;
-    padding:0;
 }
 
 .marinemap-panel .ui-tabs-nav li {
