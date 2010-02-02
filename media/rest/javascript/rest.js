@@ -189,10 +189,9 @@ lingcod.rest.client = function(gex, panel, manipulators){
         });
         if(options.validation_error){
             tabs.tabs('select', '#PanelAttributes');
-            $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);
         }
         panel.show();
-        $('#PanelAttributes').scrollTop(1).scrollTop(0);
+        $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);
         
         $(that).trigger('form_shown', [panel, config.model]);
     };
