@@ -80,11 +80,11 @@ def multi_generic_manipulator_view(request, manipulators):
                 html_response = html_response + result["html"] 
                 
         except manipClass.InvalidGeometryException, e:
-            return respond_with_template(e.html, None, e.success)
+            return respond_with_template(e.html, submitted, None, e.success)
         except manipClass.InternalException, e:
-            return respond_with_template(e.html, None, e.success)
+            return respond_with_template(e.html, submitted, None, e.success)
         except manipClass.HaltManipulations, e:
-            return respond_with_template(e.html, None, e.success)
+            return respond_with_template(e.html, submitted, None, e.success)
         except Exception, e:
             return respond_with_error(message=e.message)      
     #end manipulator for loop      
