@@ -31,6 +31,8 @@
         options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         {% endblock myshapes %}
         
+        options.news_url = '{% url news-main %}';
+        options.about_url = '{% url news-about %}';
         {% block addToOptions %}
         {% endblock addToOptions %}
         
@@ -52,7 +54,8 @@
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>
             {% endif %}
-            <li><a href="http://marinemap.org">about marinemap</a> | </li>
+            <li><a href="#" id="news">news</a> | </li>
+            <li><a href="#" id="about">about marinemap</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
             <li><a href="help">help</a> | </li>
             {% if user.is_authenticated %}

@@ -221,6 +221,22 @@ var lingcod = (function(){
             }
         });
         
+        $('#news').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading News';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.news_url, opts);
+            e.preventDefault();
+        });
+
+        $('#about').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Intro';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.about_url, opts);
+            e.preventDefault();
+        });
+
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);

@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     (r'^screencasts/', include('lingcod.screencasts.urls')),
     (r'^sharing/', include('lingcod.sharing.urls')),
     (r'^staticmap/', include('lingcod.staticmap.urls')),
+    (r'^news/', include('lingcod.news.urls')),
     (r'^nc_mlpa/layers/', include('nc_mlpa.layers.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
