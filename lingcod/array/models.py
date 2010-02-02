@@ -30,6 +30,7 @@ class MpaArray(models.Model):
     name = models.CharField(verbose_name="Array Name", max_length=255)
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    description = models.TextField(blank=True)
     # Expose sharing functionality
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this array with the following groups")
     

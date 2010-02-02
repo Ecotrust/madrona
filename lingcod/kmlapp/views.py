@@ -10,7 +10,7 @@ from django.http import Http404
 from lingcod.common.utils import load_session
 from lingcod.sharing.models import get_content_type_id
 from django.contrib.gis.db import models
-
+from django.core.exceptions import FieldError
 
 def get_user_mpa_data(user):
     """
@@ -148,6 +148,47 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     designations = MpaDesignation.objects.all()
     return shapes, designations
 
+def get_iteam_proposals(user):
+    """
+    Creates data structure for arrays/mpas shared to the I-Team
+    Just basically a data structure manipulation on the queryset.
+    Only staff users can see this
+    """
+    if not user.is_staff:
+        return None, None
+
+    MpaArray = utils.get_array_class()
+
+    shapes = {}
+    try:
+        iteam_arrays = MpaArray.objects.filter(proposed=True)
+        for ia in iteam_arrays:
+            array_nameid = "%s_%d" % (ia.name, ia.id)
+            shapes[array_nameid] = {'array': ia, 'mpas':ia.mpa_set.add_kml()}
+    except FieldError:
+        pass
+
+    designations = MpaDesignation.objects.all()
+
+    return shapes, designations
+
+def show_iteam(user):
+    """
+    Determines if the current user and set of array instances
+    warrants displaying a kml of iteam submittals
+    """
+    MpaArray = utils.get_array_class()
+
+    iteam = False
+    try:
+        iteam_proposals = MpaArray.objects.filter(proposed=True)
+        if len(iteam_proposals) > 0 and user.is_staff:
+            iteam = True
+    except FieldError:
+        pass
+
+    return iteam
+
 def create_kmz(kml, zippath):
     """
     Given a KML string and a "/" seperated path like "FOLDERNAME/doc.kml",
@@ -181,7 +222,7 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
+def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, iteam=False, session_key='0'):
     """
     Returns a KML/KMZ containing MPAs (organized into folders by array)
     """
@@ -202,6 +243,11 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         shapes, designations = get_single_mpa_data(user, input_mpa_id)
     elif input_shareuser and input_sharegroup:
         shapes, designations = get_mpas_shared_by(input_shareuser, input_sharegroup, user)
+    elif iteam:
+        if user.is_staff:
+            shapes, designations = get_iteam_proposals(user)
+        else:
+            return HttpResponse('Access denied', status=401)
     else:
         raise Http404
 
@@ -237,11 +283,13 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     elif input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
     
+    iteam = show_iteam(user)
+
     from lingcod.sharing.models import groups_users_sharing_with 
     sharing_with = groups_users_sharing_with(user)
 
     t = get_template('shared.kml')
-    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key }))
+    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key, 'iteam': iteam }))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
@@ -255,7 +303,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
         
     return response
 
-def public_shared(request, kmz=False, session_key='0'):
+def shared_public(request, kmz=False, session_key='0'):
     """ 
     Shows all publically shared arrays
     Must be shared with a special group called 'Share with Public'

@@ -63,10 +63,8 @@ class Estuaries(models.Model):
         return self.name
 
 class MpaArray(BaseArray):
-    description = models.TextField(blank=True)
     proposed = models.BooleanField(help_text="Submit as a Proposal to the I-Team", default=False)
-    #public_proposal = models.BooleanField(help_text="Mark this MPA as a public proposal (can be viewed without an account)", default=False)
-    
+
     @property
     def opencoast_mpa_set(self):
         """return a query set that includes the MPAs within the array that are not estuarine."""
