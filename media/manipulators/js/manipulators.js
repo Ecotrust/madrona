@@ -195,6 +195,16 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+    var self = this;
+    this.process(kml, this.manipulators_, function(data){
+        if(data.success === '1'){
+            var kmlObject = self.addNewShape_(data.final_shape_kml);
+            self.gex_.util.flyToObject(kmlObject, {
+                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+        }else{
+            // do nothing
+        }
+    });
 }
 
 lingcod.Manipulator.prototype.isShapeDefined = function(){
@@ -214,7 +224,6 @@ lingcod.Manipulator.prototype.process = function(wkt, url, callback){
             if(status === 'success'){
                 callback(JSON.parse(data));
             }else{
-                alert('there was an error processing your shape.');
                 $(this).trigger('error', "There was an error processing your shape.");
                 callback({success: false, html: $('#manipulators_server_error')});
             }
