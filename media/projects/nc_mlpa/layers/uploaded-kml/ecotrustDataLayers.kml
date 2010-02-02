@@ -1076,44 +1076,6 @@
                             </Link>
                         </NetworkLink>
     				</Folder>
-                    <Folder>
-                        <name>Urchin</name>
-                        <visibility>0</visibility>
-                        <description></description>
-                        <LookAt>
-                            <longitude>-123.768887333</longitude>
-                            <latitude>39.2516018631</latitude>
-                            <altitude>0</altitude>
-                            <range>93919</range>
-                            <tilt>0</tilt>
-                            <altitudeMode>relativeToGround</altitudeMode>
-                        </LookAt>
-    
-                        <NetworkLink id="Urchin Map">
-                            <name>Urchin Map</name>
-                            <visibility>0</visibility>
-                            <Style>
-                                <ListStyle>
-                                    <listItemType>checkHideChildren</listItemType>
-                                </ListStyle>
-                            </Style>
-                            <Link>
-                                <href>tiles/map/com/urchd_ek/</href>
-                            </Link>
-                        </NetworkLink>
-                        <NetworkLink id="Urchin Contours">
-                            <name>Urchin Contours</name>
-                            <visibility>0</visibility>
-                            <Style>
-                                <ListStyle>
-                                    <listItemType>checkHideChildren</listItemType>
-                                </ListStyle>
-                            </Style>
-                            <Link>
-                                <href>tiles/contour/com/urchd_ek_kd_line/</href>
-                            </Link>
-                        </NetworkLink>
-    				</Folder>
 				</Folder>
                 <Folder>
                     <name>Fort Bragg</name>
