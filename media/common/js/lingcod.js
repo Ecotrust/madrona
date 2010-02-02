@@ -237,6 +237,17 @@ var lingcod = (function(){
             e.preventDefault();
         });
 
+        if (options.show_panel){
+            opts = {};
+            opts['showClose'] = true;
+            panel.showUrl(that.options.about_url, opts);
+            if (options.show_panel == 'about') {
+                panel.showUrl(that.options.about_url, opts);
+            } else if (options.show_panel == 'news') {
+                panel.showUrl(that.options.news_url, opts);
+            }
+        }
+
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);

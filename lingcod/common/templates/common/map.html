@@ -33,6 +33,9 @@
         
         options.news_url = '{% url news-main %}';
         options.about_url = '{% url news-about %}';
+        {% if show_panel %}
+        options.show_panel = '{{ show_panel }}';
+        {% endif %}
         {% block addToOptions %}
         {% endblock addToOptions %}
         
