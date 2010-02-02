@@ -135,9 +135,6 @@ li {
     margin:5px;
 }
 
-ul.errorlist li {
-    background-color:#FF676A;
-}
 
 #sidebar-mask {
     margin:0;
@@ -250,4 +247,10 @@ div.panel div, div.panel p {
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
+}
+
+ul.errorlist li {
+    background-color:#FF676A;
+    padding:5px;
+    padding-left:10px !important;
 }
