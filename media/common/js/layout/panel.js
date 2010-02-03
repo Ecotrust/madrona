@@ -62,11 +62,13 @@ lingcod.panel = function(options){
     
     that.show = function(){
         $(el[0]).show();
+        $(el[0]).scrollTop(0);
         that.shown = true;
         $(that).trigger('panelshow', that);       
     }
     
     that.close = function(){
+        $(el[0]).scrollTop(1).scrollTop(0);
         if(options.showCloseButton === false){
             el.find('a.close').hide();
         }
@@ -100,7 +102,7 @@ lingcod.panel = function(options){
                         that.showContent(html, {showClose: options.showClose});
                         var tabs = html.find('.tabs');
                         if(tabs.length){
-                            tabs = tabs.tabs();
+                            tabs = tabs.tabs({'spinner': 'loading...'});
                             // tabs.tabs('select', '#Habitat');
                         }
                         if(options && options.success){
@@ -149,6 +151,7 @@ lingcod.panel = function(options){
     }
     
     that.hide = function(){
+        $(el[0]).scrollTop(0);
         el.hide();
         that.shown = false;
         $(that).trigger('panelhide', that);

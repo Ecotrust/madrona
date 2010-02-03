@@ -1,0 +1,82 @@
+table.allowed_uses {
+    width:100%;
+    border:none;
+    text-align:center;
+    margin:5px 0;
+}
+
+
+table.allowed_uses th {
+    color:#344e63;
+    text-shadow:0 1px 0 #FCFAFF;
+    font-weight:bold;
+}
+
+table.allowed_uses th.title {
+    font-size:14px;
+    color:#47556C;
+}
+
+table.allowed_uses {
+    border:solid 1px #ccc;
+    clear:both;
+}
+
+table.allowed_uses th hr {
+    padding:0;
+    margin:0;
+}
+
+div.designation {
+    padding:10px;
+}
+
+div.designation div, div.designation img {
+    float:left;
+}
+
+div.designation div {
+    margin-left:5px;
+}
+
+div.designation h3 {
+    padding:0;
+    margin:0;
+}
+
+div.designation a {
+    padding:0;
+    margin:0;
+    font-size:12px;
+}
+
+ul.goal_objectives {
+    margin:0;
+    padding:10px;
+    padding-bottom:0px;
+}
+
+ul.goal_objectives h4 {
+    margin:0;
+    padding:0;
+    font-size:14px;
+    font-weight:normal;
+    text-decoration:underline;
+}
+
+ul.goal_objectives li {
+    margin:0;
+    padding:0;
+    font-size:12px;
+    font-weight:normal;
+}
+
+ul.goal_objectives li ul {
+    padding:10px 5px;
+    margin:0;
+}
+
+ul.goal_objectives li p {
+    padding:5px;
+    margin:0;
+}

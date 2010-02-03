@@ -26,8 +26,21 @@ h1, h2, h3, h4, h5, h6 {
 
 h2 {
     font-size:16px;
+    color:#47556C;
+    margin-bottom:5px;
+    margin-top:20px;
 }
 
 h3 {
     font-size: 14px;
+    color:#47556C;
+    font-weight:normal;
+    margin-bottom:0px;
+}
+
+.marinemap-panel p {
+    padding:0;
+    margin:10px;
+    font-size:12px;
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
 }

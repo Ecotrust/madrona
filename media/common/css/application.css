@@ -226,10 +226,10 @@ p.instructions {
     margin-left:10px;
 }
 
-div.panel div, div.panel p {
+/*div.panel div, div.panel p {
     margin:16px 0px;
 }
-
+*/
 #tools h3 {
     padding:0;
     margin:0;
@@ -266,13 +266,24 @@ ul.errorlist li {
 
 .marinemap-panel ul.metadata li {
     float:right;
+    clear:right;
 }
 
 .marinemap-panel ul.metadata li.creator {
     float:left;
+    clear:none;
 }
-
+/*
 div#Attributes {
     margin:0;
     padding:0;
+}
+*/
+div.field {
+    margin-bottom:15px;
+}
+
+div.field textarea {
+    margin:10px;
+    width:440px;
 }

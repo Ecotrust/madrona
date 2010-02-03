@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.template import loader
+from django.conf import settings
 
 def get_object_for_editing(request, klass, pk):
     """
@@ -101,6 +102,7 @@ def create(request, form_class=None, action=None, title=None,
                 'title': title,
                 'action': action,
                 'is_ajax': request.is_ajax(),
+                'MEDIA_URL': settings.MEDIA_URL,
             })
             extra_context = decorate_with_manipulators(extra_context, form_class)
             c = RequestContext(request, extra_context)
@@ -129,6 +131,7 @@ def create_form(request, form_class=None, action=None, extra_context={},
             'title': title,
             'action': action,
             'is_ajax': request.is_ajax(),
+            'MEDIA_URL': settings.MEDIA_URL,
         })
         extra_context = decorate_with_manipulators(extra_context, form_class)
         return render_to_response(template, extra_context)
@@ -162,6 +165,7 @@ def update_form(request, form_class=None, pk=None, extra_context={},
             'title': "Edit '%s'" % (instance.name, ),
             'action': instance.get_absolute_url(),
             'is_ajax': request.is_ajax(),
+            'MEDIA_URL': settings.MEDIA_URL,
         })
         extra_context = decorate_with_manipulators(extra_context, form_class)
         return render_to_response(template, extra_context)
@@ -213,6 +217,7 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
                 'title': "Edit '%s'" % (instance.name, ),
                 'action': instance.get_absolute_url(),
                 'is_ajax': request.is_ajax(),
+                'MEDIA_URL': settings.MEDIA_URL,
             })
             extra_context = decorate_with_manipulators(extra_context, form_class)
             c = RequestContext(request, extra_context)
@@ -255,6 +260,7 @@ def resource(request, form_class=None, pk=None, get_func=None,
         else:
             extra_context.update({
                 'instance': instance,
+                'MEDIA_URL': settings.MEDIA_URL,
                 'is_ajax': request.is_ajax(),
             })
             return render_to_response(template, extra_context)

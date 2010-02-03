@@ -27,7 +27,7 @@ mlpa.prepareForm = function(panel){
     });
     
     select.render(native_select.parent()[0]);
-    native_select.parent().append('<p class="help_text designation_allowed_uses_note"></p>')    
+    native_select.parent().find('.help_text').after('<p class="help_text designation_allowed_uses_note"></p>');
     uses.setUsesAllowedText(designation_set);
 
     // Fired whenever the selected value of the goog widget is changed.

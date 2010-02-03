@@ -14,11 +14,148 @@
                 <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
                 <br class="clear" />
             </ul>
-            {% if instance.is_estuary %}
-                Is an estuary
+            <h2>Total Area as Related to SAT Guidelines</h2>
+            <p class="heading_subtext">The Science Advisory Team (SAT), has set guidelines for the size of MPA candidates. If this MPA does not meet those guidelines it may still be considered (especially if it is part of a larger cluster of MPAs)</p>
+            {# {% if instance.is_estuary %} #}
+            {#     Is an estuary #}
+            {# {% else %} #}
+            {#     not an estuary #}
+            {# {% endif %} #}
+            <h2>Level of Protection</h2>
+            {% if instance.lop %}
+                <p>This MPA has been assigned a level of protection of <strong>{{instance.lop.name}}</strong> based on its designation and allowed uses.</p>
             {% else %}
-                not an estuary
+                {% if not instance.designation %}
+                    <p>This MPA <strong>has not been assigned a level of protection</strong> because you have not specified a designation.</p>
+                {% else %}
+                    {% if instance.other_allowed_uses %}
+                        <p>This MPA <strong>has not been assigned a level of protection</strong> because you have specified allowed uses that have not yet been evaluated by the SAT.</p>
+                    {% else %}
+                        <p>This MPA <strong>has not been assigned a level of protection</strong>.</p>
+                    {% endif %}
+                {% endif %}
             {% endif %}
+            {% if instance.sat_explanation %}
+                <p>{{instance.sat_explanation}}</p>
+            {% endif %}
+            <h2>Regulations</h2>
+            {% if instance.designation %}
+            <div class="designation">
+                <img style="background-color:{{instance.css_color}};" src="{{MEDIA_URL}}common/images/transparent.gif" width="18" height="33" />
+                <div>
+                    <h3>{{instance.designation.acronym}}, {{instance.designation.name}}</h3>
+                    <a href="{{instance.designation.url}}">read more</a>                    
+                </div>
+                <br class="clear" />
+            </div>
+            {% else %}
+                <p><strong>Designation not yet specified.</strong></p>
+            {% endif %}
+            <table class="allowed_uses">
+                <thead>
+                    <tr>
+                        <th class="title" colspan="3">Allowed Uses</tr>
+                    </tr>
+                    <tr class="headings">
+                        <th scope="col">Target</th>
+                        <th scope="col">Method</th>
+                        <th scope="col">Use Type</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3"><hr /></th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% if instance.allowed_uses.all %}
+                {% for use in instance.allowed_uses.all %}
+                    <tr>
+                        <td class="pk" style="display:none;">
+                            {{use.pk}}
+                        </td>
+                        <td class="target">
+                            {{use.target.name}}
+                        </td>
+                        <td class="method">
+                            {{use.method.name}}
+                        </td>
+                        <td class="purpose">
+                            {{use.purpose.name}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr class="none">
+                    <td class="none" colspan="4">No allowed uses have been specified</td>
+                </tr>
+            {% endif %}
+                </tbody>
+            </table>
+            {% if instance.other_allowed_uses %}
+                <h3>Other Allowed Uses</h3>
+                <p>{{instance.other_allowed_uses}}</p>
+            {% endif %}
+            {% if instance.other_regulated_activities %}
+                <h3>Other Regulated Activities</h3>
+                <p>{{instance.other_regulated_activities}}</p>
+            {% endif %}
+            <h2>Goals</h2>
+            {% if instance.specific_objective or instance.design_considerations or instance.goal_objectives.all  %}
+                {% if instance.specific_objective %}
+                    <h3>MPA Rationale</h3>
+                    <p>{{instance.specific_objective}}</p>
+                {% else %}
+                    <h3>MPA Rationale</h3>
+                    <p><em>None specified.</em></p>
+                {% endif %}
+                {% if instance.design_considerations %}
+                    <h3>Design Considerations</h3>
+                    <p>{{instance.design_considerations}}</p>
+                {% endif %}
+                {% if instance.goal_objectives.all %}
+                    <h3>Goals and Regional Objectives</h3>
+                    {% regroup instance.goal_objectives.all by goal_category as objectives_by_category %}
+                    {% if objectives_by_category %}
+                    <ul class="goal_objectives">
+                        {% for dict in objectives_by_category  %}
+                            <li>
+                            {% with dict.grouper as category %}
+                                <h4>{{category.name}}</h4>
+                                {{category.description}}
+                                <ul>
+                                    {% for objective in dict.list %}
+                                        <li><label>{{objective.name}}</label><p>{{objective.description}}</p></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endwith %}
+                            </li>
+                        {% endfor %}        
+                    </ul>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <p><em>None specified</em></p>
+            {% endif %}
+            <h2>Other Information</h2>
+            {% if instance.is_estuary or instance.instance.boundary_description or instance.dfg_feasability_guidance or instance.evolution %}                
+                {% if instance.is_estuary %}
+                    <p>This is an <strong>Estuarine</strong> MPA</p>
+                {% endif %}
+                {% if instance.boundary_description %}
+                    <h3>Boundary Description</h3>
+                    <p>{{instance.boundary_description}}</p>
+                {% endif %}
+                {% if instance.dfg_feasability_guidance %}
+                    <h3>DFG Feasibility Guidance</h3>
+                    <p>{{instance.dfb_feasability_guidance}}</p>
+                {% endif %}
+                {% if instance.evolution %}
+                    <h3>Staff Evolution Notes</h3>
+                    <p>{{instance.evolution}}</p>
+                {% endif %}
+            {% else %}
+                <p><em>None</em></p>
+            {% endif %}
+            
         </div>
         <div id="Habitat">
             blah

@@ -196,3 +196,9 @@ class Mpa(models.Model):
                 self.geometry_final = geo
             else:
                 raise Exception('Could not pre-process geometry')
+    
+    def css_color(self):
+        aabbggrr = '778B1A55'
+        if self.designation:
+            aabbggrr = self.designation.poly_fill_color
+        return '#%s%s%s' % (aabbggrr[6:8], aabbggrr[4:6], aabbggrr[2:4])
