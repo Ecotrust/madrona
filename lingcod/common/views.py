@@ -25,13 +25,15 @@ def map(request, template_name='common/map.html'):
                 last_checked = datetime.datetime.strptime(request.COOKIES['mm_last_checked_news'], timeformat)
                 try:
                     latest_news = Entry.objects.latest('modified_on').modified_on
+                    print latest_news
+                    # if theres new news, show it and reset cookie
+                    if last_checked < latest_news:
+                        set_news_cookie = True
+                        show_panel = "news"
                 except:
-                    latest_news = datetime.datetime.now()
+                    # no news is good news??
+                    pass
 
-                # if theres new news, show it and reset cookie
-                if last_checked < latest_news:
-                    set_news_cookie = True
-                    show_panel = "news"
             except:
                 # Datetime cookie is not valid... someone's been messing with the cookies!
                 set_news_cookie = True
@@ -39,7 +41,11 @@ def map(request, template_name='common/map.html'):
         else:
             # haven't checked the news yet OR cleared the cookie
             set_news_cookie = True
-            show_panel = "news"
+            try:
+                latest_news = Entry.objects.latest('modified_on').modified_on
+                show_panel = "news"
+            except:
+                pass
     else:
         # Haven't ever visited MM or cleared their cookies
         set_viewed_cookie = True
