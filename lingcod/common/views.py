@@ -2,15 +2,18 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from lingcod.common import mimetypes
+from lingcod.news.models import Entry
 import datetime
 
 from django.conf import settings
 
 
 def map(request, template_name='common/map.html'):
-    """Main application window
     """
-    timeformat = "%d-%b-%Y %H:%M:%S GMT"
+    Main application window
+    Sets/Checks Cookies to determine if user needs to see the about or news panels
+    """
+    timeformat = "%d-%b-%Y %H:%M:%S"
 
     set_news_cookie = False
     set_viewed_cookie = False
@@ -20,9 +23,13 @@ def map(request, template_name='common/map.html'):
         if "mm_last_checked_news" in request.COOKIES:
             try:
                 last_checked = datetime.datetime.strptime(request.COOKIES['mm_last_checked_news'], timeformat)
-                #TODO check against news app instead of now
+                try:
+                    latest_news = Entry.objects.latest('modified_on').modified_on
+                except:
+                    latest_news = datetime.datetime.now()
+
                 # if theres new news, show it and reset cookie
-                if last_checked < datetime.datetime.utcnow():
+                if last_checked < latest_news:
                     set_news_cookie = True
                     show_panel = "news"
             except:
@@ -46,7 +53,7 @@ def map(request, template_name='common/map.html'):
         }))
     
     if set_news_cookie:
-        now = datetime.datetime.strftime(datetime.datetime.utcnow(), timeformat)
+        now = datetime.datetime.strftime(datetime.datetime.now(), timeformat)
         response.set_cookie("mm_last_checked_news", now)
 
     if set_viewed_cookie:
