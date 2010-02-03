@@ -1,0 +1,12 @@
+{% extends "news/base_blog.html" %}
+
+{% block content %}
+
+{% for entry in object %}
+  {% if not entry.is_draft %}
+    <h2><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a> / {{ entry.published_on|date:"F j, Y" }}</h2>
+    <p>{{ entry.summary }}</p>
+  {% endif %}
+{% endfor %}
+
+{% endblock %}
