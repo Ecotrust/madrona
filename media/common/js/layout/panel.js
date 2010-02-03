@@ -95,7 +95,13 @@ lingcod.panel = function(options){
             complete: function(response, status){
                 switch(response.status){
                     case 200:
-                        that.showContent(response.responseText, {showClose: options.showClose});
+                        var html = $(response.responseText);
+                        that.showContent(html, {showClose: options.showClose});
+                        var tabs = html.find('.tabs');
+                        if(tabs.length){
+                            tabs = tabs.tabs();
+                            // tabs.tabs('select', '#Habitat');
+                        }
                         if(options && options.success){
                             options.success(response, status);
                         }

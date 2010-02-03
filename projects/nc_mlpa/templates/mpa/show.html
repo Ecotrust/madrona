@@ -2,9 +2,26 @@
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
     <h1>{{instance.name}}</h1>
-    {% if instance.is_estuary %}
-        Is an estuary
-    {% else %}
-        not an estuary
-    {% endif %}
+    <div class="tabs">
+        <ul>
+            <li><a href="#Attributes"><span>Information</span></a></li>
+            <li><a href="#Habitat"><span>Habitat Representation</span></a></li>
+        </ul>
+        <div id="Attributes">
+            <ul class="metadata">
+                <li class="creator">Created By {{instance.user.username}}</li>
+                <li class="created">Created {{instance.date_created|date:"d M, Y P"}}</li>
+                <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
+                <br class="clear" />
+            </ul>
+            {% if instance.is_estuary %}
+                Is an estuary
+            {% else %}
+                not an estuary
+            {% endif %}
+        </div>
+        <div id="Habitat">
+            blah
+        </div>
+    </div>
 {% endblock panel %}

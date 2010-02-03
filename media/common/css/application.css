@@ -254,3 +254,25 @@ ul.errorlist li {
     padding:5px;
     padding-left:10px !important;
 }
+
+.marinemap-panel ul.metadata {
+    margin:0;
+    margin-top:-10px;
+    color:#666;
+    padding:0;
+    list-style:none;
+    font-size:12px;
+}
+
+.marinemap-panel ul.metadata li {
+    float:right;
+}
+
+.marinemap-panel ul.metadata li.creator {
+    float:left;
+}
+
+div#Attributes {
+    margin:0;
+    padding:0;
+}
