@@ -70,7 +70,9 @@ lingcod.rest.kmlEditor = function(options){
             options.client.create(e.target.mm_data, {
                 success: function(location){
                     refresh(function(){
-                        tree.selectById(location);
+                        var node = tree.getNodesById(location);
+                        tree.selectNode(node, tree.lookup(node));
+                        options.client.show(tree.lookup(node));
                     });
                 },
                 error: function(){
@@ -111,7 +113,9 @@ lingcod.rest.kmlEditor = function(options){
                 success: function(location){
                     tbar.setEnabled(true);
                     refresh(function(){
-                        tree.selectById(location);
+                        var node = tree.getNodesById(location);
+                        tree.selectNode(node, tree.lookup(node));
+                        options.client.show(tree.lookup(node));
                     });
                 },
                 cancel: function(){
@@ -211,6 +215,12 @@ lingcod.rest.kmlEditor = function(options){
     that.clearSelection = tree.clearSelection;
     
     $(tree).bind('select', function(e, node, kmlObject){
+        if(options.client.inShowState){
+            var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
+            options.client.show(kmlObject, {success: function(){
+                options.client.panel.getEl().find('.ui-tabs li:contains('+selectedTab+') a').click();
+            }});
+        }
         that.selected = node;
         setSelectionMenuItemEnabled(!!node);
         // clear export menu

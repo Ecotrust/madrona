@@ -2,6 +2,9 @@
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
     <h1>{{instance.name}}</h1>
+    {% if instance.array %}
+        <p>part of the <a href="">{{instance.array.name}}</a> Array.</p>
+    {% endif %}
     <div class="tabs">
         <ul>
             <li><a href="#Attributes"><span>Information</span></a></li>

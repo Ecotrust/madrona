@@ -158,6 +158,7 @@ lingcod.panel = function(options){
         if(options.showCloseButton === false){
             el.find('a.close').hide();
         }
+        $(that).trigger('panelhide');
     }
                 
     return that;

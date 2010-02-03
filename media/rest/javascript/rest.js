@@ -13,6 +13,16 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     that = {};
     
+    that.inShowState = false;
+    that.panel = panel;
+    
+    var onpanelclose = function(){
+        that.inShowState = false;
+    }
+    
+    $(panel).bind('panelhide', onpanelclose);
+    $(panel).bind('panelclose', onpanelclose);
+    
     var processLocation = function(location){
         var mydomain=window.location.href.match(/:\/\/(.[^/]+)/)[1];
         if(location.search(mydomain) !== -1){
@@ -328,6 +338,20 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var config = getConfig(configOrFeature);
         options['load_msg'] = 'Loading '+config['title'];
         options['showClose'] = true;
+        var oldError = options.error;
+        var oldSuccess = options.success;
+        options.error = function(response, status){
+            that.inShowState = false;
+            if(oldError){
+                oldError(response, status);
+            }
+        }
+        options.success = function(response, status){
+            that.inShowState = true;
+            if(oldSuccess){
+                oldSuccess(response, status);
+            }
+        }
         panel.showUrl(config['location'], options);
     };
     

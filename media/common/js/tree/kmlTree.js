@@ -222,13 +222,15 @@ lingcod.kmlTree = (function(){
         
         that.selectById = selectById;
         
-        var clearSelection = function(keepBalloons){
+        var clearSelection = function(keepBalloons, dontTriggerEvent){
             var prev = $('#'+opts.element.attr('id')).find('.selected').removeClass('selected');
             if(prev.length){
                 prev.each(function(){
                     setModified($(this), 'selected', false);
                 });
-                $(that).trigger('select', [null, null]);                
+                if(!dontTriggerEvent){
+                    $(that).trigger('select', [null, null]);
+                }
             }
             var balloon = ge.getBalloon();
             if(balloon && !keepBalloons){
@@ -572,7 +574,7 @@ lingcod.kmlTree = (function(){
                 
         var selectNode = function(node, kmlObject){
             node = $(node);
-            clearSelection(true);
+            clearSelection(true, true);
             node.addClass('selected');
             toggleVisibility(node, true);
             node.addClass('selected');
