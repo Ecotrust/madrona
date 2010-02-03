@@ -23,6 +23,7 @@
      <Link>
       <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
      </Link>
+	<atom:link rel="alt" href="{% url array_habitat_spreadsheet a.array.pk %}" title="Habitat Spreadsheet" type="application/ms-excel" />
     </NetworkLink>
 {% else %}
     {% if use_array_folders %}

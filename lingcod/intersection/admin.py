@@ -49,6 +49,15 @@ def create_organization_scheme(modeladmin,request,queryset):
     ret_path = '../organizationscheme/%s/' % str(osc.pk)
     return HttpResponseRedirect(ret_path)
 create_organization_scheme.short_description = 'Create Organization Scheme From Selected Features'
+
+def copy_organization_scheme(modeladmin,request,queryset):
+    pks = []
+    for orgsc in queryset:
+        new = orgsc.copy()
+        pks.append(new.pk)
+    ret_path = '../organizationscheme/'
+    return HttpResponseRedirect(ret_path)
+copy_organization_scheme.short_description = 'Copy Organization Scheme'
         
 class TestPolygonAdmin(admin.GeoModelAdmin):
     pass
@@ -86,7 +95,7 @@ class FeatureMappingInline(admin.TabularInline):
     extra = 1
     
 class OrganizationSchemeAdmin(admin.ModelAdmin):
-    actions = [validate_feature_mapping]
+    actions = [validate_feature_mapping, copy_organization_scheme]
     inlines = [FeatureMappingInline]
 
 admin.site.register(OrganizationScheme, OrganizationSchemeAdmin)

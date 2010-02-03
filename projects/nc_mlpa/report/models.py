@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 from django.db import transaction
+from django.db.models.signals import post_save
 
 class StudyRegionTotal(models.Model):
     feature_mapping = models.ForeignKey(int_models.FeatureMapping)
@@ -152,3 +153,24 @@ class ClusterHabitatInfo(models.Model):
         self.result = hab_result['result']
         self.units = hab_result['units']
         self.save()
+
+def feature_mappings_containing_feature(feature):
+    """
+    For a given lingcod.intersection.models.IntersectionFeature object, return a queryset
+    of FeatureMapping objects that include that feature.
+    """
+    pks = []
+    for feat_map in int_models.FeatureMapping.objects.all():
+        if feature in feat_map.feature.all():
+            pks.append(feat_map.pk)
+    return int_models.FeatureMapping.objects.filter(pk__in=pks)
+     
+def expire_results(sender, instance, **kwargs):
+    """
+    When a lingcod.intersection.models.IntersectionFeature object is saved, expire the 
+    ClusterHabitatInfo objects that relate to that feature through a feature mapping object.
+    """
+    chis = feature_mappings_containing_feature(instance.name)
+    chis.delete()
+        
+post_save.connect(expire_results, sender=int_models.IntersectionFeature)

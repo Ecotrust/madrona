@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.conf import settings
+from django.contrib.gis.measure import A, D
 from lingcod.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
 
@@ -12,6 +13,7 @@ class StudyRegionManager(models.GeoManager):
         return self.get(active=True)
         #or should the above line now be changed to:
         #return self.current()
+        
 
 class StudyRegion(models.Model):
     """Model used for representing study regions
@@ -78,6 +80,14 @@ class StudyRegion(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('lingcod.studyregion.views.show', [self.pk])
+        
+    @property    
+    def area_sq_mi(self):
+        """
+        WARNING:  This method assumes that the native units of the geometry are meters.  
+        Returns the area of the study region in sq_mi
+        """
+        return A(sq_m=self.geometry.area).sq_mi
             
     def kml(self, style_domain):
         """

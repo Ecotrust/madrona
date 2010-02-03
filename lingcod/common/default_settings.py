@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'lingcod.bioregions',
     'lingcod.data_manager',
     'lingcod.data_distributor',
+    'lingcod.depth_range',
 )
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'

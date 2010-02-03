@@ -102,6 +102,17 @@ def zip_from_shp(shp_path):
     
     return filename, File( open(zfile_path) )
 
+def use_sort_as_key(results):
+    """
+    we want the results sorted by the sort value, not by the habitat name.
+    """
+    sort_results = {}
+    for hab,sub_dict in results.iteritems():
+        sub_dict.update( {'name':hab} )
+        sort_results.update( {results[hab]['sort']:sub_dict} )
+    
+    return sort_results
+
 def sum_results(results):
     """
     Take a list of dictionaries and sum them appropriately into a single dictionary.
@@ -488,7 +499,7 @@ class SingleFeatureShapefile(Shapefile):
             if feat.geom.__class__.__name__.startswith('Multi'):
                 if verbose:
                     print '(',
-                for f in geom: #get the individual geometries
+                for f in feat.geom: #get the individual geometries
                     fm = feature_model(name=feature_name,feature_type=intersection_feature)
                     fm.geometry = f.geos
                     if not fm.geometry.valid:
@@ -533,9 +544,12 @@ class SingleFeatureShapefile(Shapefile):
         intersection_feature.multi_shapefile = self.parent_shapefile
         intersection_feature.feature_model = feature_model.__name__
         intersection_feature.save()
-        if self.clip_to_study_region:
-            intersection_feature.study_region_total = intersection_feature.calculate_study_region_total()
-            intersection_feature.save()
+        
+        # This is super slow.  I'm giving up on it for now and just declaring that hab data needs to be clipped
+        # to the study region before it's loaded into the tool.  I'll look into making this work later.
+        # if self.clip_to_study_region:
+        #     intersection_feature.study_region_total = intersection_feature.calculate_study_region_total()
+        #     intersection_feature.save()
     
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
@@ -651,7 +665,15 @@ class OrganizationScheme(models.Model):
     
     def __unicode__(self):
         return self.name
-    
+        
+    def copy(self):
+        new_name = '%s_copy' % self.name
+        new = OrganizationScheme(name=new_name)
+        new.save()
+        for fm in self.featuremapping_set.all():
+            fm.copy_to_org_scheme(new)
+        return new
+        
     @property
     def info(self):
         subdict = {}
@@ -660,7 +682,7 @@ class OrganizationScheme(models.Model):
         subdict['num_features'] = self.featuremapping_set.all().count()
         subdict['feature_info'] = {}
         for f in self.featuremapping_set.all().order_by('sort'):
-            subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort} } )
+            subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
         return subdict
     
     def validate(self):
@@ -705,12 +727,23 @@ class FeatureMapping(models.Model):
     name = models.CharField(max_length=255)
     sort = models.FloatField()
     description = models.TextField(null=True,blank=True)
+    date_modified = models.DateTimeField(auto_now=True)
     
     class Meta:
         ordering = ('sort','name')
     
     def __unicode__(self):
-        return self.name  
+        return self.name
+        
+    def copy_to_org_scheme(self, org_scheme):
+        new = FeatureMapping(organization_scheme=org_scheme)
+        new.name = self.name
+        new.sort = self.sort
+        new.description = self.description
+        new.save()
+        for f in self.feature.all():
+            new.feature.add(f)
+        new.save()
     
     def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
         if geom_or_collection.geom_type.lower().endswith('polygon'):

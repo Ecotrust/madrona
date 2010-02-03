@@ -7,11 +7,12 @@ from lingcod.array.models import MpaArray as BaseArray
 from lingcod.studyregion.models import StudyRegion
 import lingcod.intersection.models as int_models
 import lingcod.replication.models as rep_models
+from lingcod.depth_range.models import depth_range as depth_range_calc
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 from django.db import transaction
 
-#THE FOLLOWING ESTUARIES RELATED CLASSES ARE INCOMPLETE AND HAVE BEEN ADDED HERE FOR TESTING PURPOSES!!!
+
 class EstuariesManager(models.GeoManager):
     def current(self):
         return self.all()
@@ -133,10 +134,16 @@ class MpaArray(BaseArray):
             qs = Cluster.objects.build_clusters_for_array(self,with_hab=True)
         else:  # check if habitat calculations are up to date
             habinfo = ClusterHabitatInfo.objects.filter(cluster__in=qs)
-            if not habinfo:
+            rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST_REPLICATION)
+            print "habinfo: ",
+            print habinfo.count()
+            print "blah: ",
+            print rs.habitatthreshold_set.count() * qs.count()
+            if habinfo.count() != (rs.habitatthreshold_set.count() * qs.count()):
+                habinfo.delete()
                 for cl in qs:
                     cl.calculate_habitat_info()
-            elif True in [ self.date_modified > h.date_modified for h in habinfo ]:
+            elif True in [ self.date_modified > h.date_modified for h in habinfo ]: # see if array was modified more recently than hab results
                 for cl in qs:
                     cl.calculate_habitat_info()
         return qs
@@ -414,11 +421,20 @@ class MlpaMpa(Mpa):
         return Bioregion.objects.which_bioregion(self.geometry_final)
         
     @property
+    def depth_range(self):
+        min_depth, max_depth = depth_range_calc(self.geometry_final)
+        return {'min':min_depth,'max':max_depth}
+        
+    @property
     def sort_num(self):
         if self.geo_sort:
             return self.geo_sort.number
         else:
             return 0
+            
+    @property
+    def area_sq_mi(self):
+        return A(sq_m=self.geometry_final.area).sq_mi
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()

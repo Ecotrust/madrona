@@ -1,12 +1,15 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
+from django.db.models import Max,Min
 from lingcod.common import mimetypes
 from lingcod.common.utils import KmlWrap, LargestPolyFromMulti
 import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
+import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
 from django.template.defaultfilters import slugify
+import xlwt
 #import django.contrib.gis.geos
 
 from django.conf import settings
@@ -14,12 +17,153 @@ from django.utils.simplejson import dumps as json_encode
 
 def load_study_region_totals(org_scheme):
     """
-    doc string
+    This is unfinished.  Don't call it.  You'll be dissapointed.
     """
     sr = mlpa.StudyRegion.objects.current()
     est = mlpa.Estuaries.objects.all()
     sr_results = org_scheme.transformed_results(sr.geometry)
     est_results = org_scheme.transformed_results(est.multipolygon_clipped)
+
+def max_str_length_in_list(list):
+    max_len = 0
+    for item in list:
+        if item.__class__.__name__!='str':
+            item = str(item)
+        if len(item) > max_len:
+            max_len = len(item)
+    return max_len
+
+def array_habitat_excel_worksheet(array,ws):
+    osc = int_models.OrganizationScheme.objects.get(name='excelhabitat')
+    habinfo = osc.info['feature_info']
+    heading_column_style = xlwt.easyxf('font: bold true;')
+    heading_row_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true;')
+    data_style = xlwt.easyxf('alignment: horizontal center;',num_format_str='#,##0.00')
+    mpa_id_style = xlwt.easyxf('alignment: horizontal center;',num_format_str='0')
+    column_width = 256 * 16 # 256 is the width of the '0' character so this is essentially 16 zeros wide    
+    ws.panes_frozen = True
+    ws.horz_split_pos = 1
+    ws.vert_split_pos = 3
+    # 0,0 is blank.  first column will start at 0,1.  second column will start at 1,1 so we don't overwrite the heading
+    first_column = ['MPA ID','MPA Designation','Level of Protection','SAT Evaluation Bioregion','Area','Alongshore Span','Min Depth','Max Depth','Estuary']
+    second_column = ['','','','','sq miles','miles','feet','feet','sq miles']
+    # find the longest string in the first column so we can set the width
+    whole_first_column = first_column + [ sub['name'] for sub in habinfo.values() ]
+    max_len = max_str_length_in_list(whole_first_column) # I'll use this to figure out the width of the first column
+        
+    # header row will start at 0,0 (blank) and go across
+    header_row = ['','How Measured','Total Available Habitat']
+    # write first column static stuff (headings)
+    first_column_row = 1
+    for item in first_column:
+        ws.col(0).width = 256 * max_len # set the width wide enough to accomodate the longest heading
+        ws.write(first_column_row,0,item,heading_column_style)
+        first_column_row += 1
+    # write second column static values
+    second_column_row = 1 # start at 1 so we don't overwrite the heading
+    for item in second_column:
+        ws.col(1).width = 256 * 10
+        ws.write(second_column_row,1,item,data_style)
+        second_column_row += 1
+    # at this point we should be at the same row with the first and second column.  If we're not, something is wrong.
+    assert (first_column_row==second_column_row), "There was a problem writing the static portion of the array habitat excel worksheet.  Please report this problem.  Sorry about that."
+    # calculate values for the study region totals for Area, Min Depth, Max Depth, and Estuary
+    sr_area = mlpa.StudyRegion.objects.current().area_sq_mi
+    along_shore_span = 'NA'
+    min_depth = 0
+    max_depth = depth_range.DepthSounding.objects.aggregate(Max('depth_ft'))['depth_ft__max']
+    estuary_area = mlpa.Estuaries.objects.total_area_sq_mi
+    available_hab_results = [sr_area,along_shore_span,min_depth,max_depth,estuary_area]
+    start_at_row = 5
+    # put this in a dict to make the next loop easier
+    available_hab_dict = {}
+    for item in available_hab_results:
+        available_hab_dict.update( {start_at_row:item} ) 
+        start_at_row += 1
+        
+    # write this stuff in the right cells
+    for row_num, value in available_hab_dict.iteritems():        
+        ws.write(row_num,2,value,data_style)
+    
+    # write first column habitat names and write the units and study region totals while we're at it
+    for sub_dict in habinfo.values():
+        ws.write(first_column_row,0,sub_dict['name'],heading_column_style)
+        ws.write(first_column_row,1,sub_dict['units'],data_style)
+        ws.col(2).width = column_width
+        ws.write(first_column_row,2,sub_dict['study_region_total'],data_style)
+        first_column_row += 1
+    # write header row static stuff
+    col_num = 0
+    for item in header_row:
+        if item=='':
+            ws.row(0).write(col_num,item,xlwt.easyxf('font: height 700;'))
+        else:
+            ws.row(0).write(col_num,item,heading_row_style)
+        col_num += 1
+    # write full columns for each MPA in the array
+    for mpa in array.mpa_set.all():
+        # start with the stuff that does not come from the intersection results
+        d_range = mpa.depth_range
+        if mpa.is_estuary:
+            est_area = mpa.area_sq_mi
+        else:
+            est_area = 0.0
+        mpa_data = []
+        mpa_data.append(mpa.name)                      # mpa name
+        mpa_data.append(mpa.pk)                        # mpa id
+        mpa_data.append(mpa.designation.acronym)       # mpa designation
+        mpa_data.append(mpa.lop.name.title())          # level of protection
+        mpa_data.append(mpa.bioregion.name.title())    # sat evaluation bioregion
+        mpa_data.append(mpa.area_sq_mi)                # area
+        mpa_data.append('')                            # alongshore span (to be entered by hand ...for no apparent reason)
+        mpa_data.append(d_range['min'])                # min depth
+        mpa_data.append(d_range['max'])                # max depth
+        mpa_data.append(est_area)                      # estuary
+        
+        # get the hab results
+        hab_results = int_models.use_sort_as_key(osc.transformed_results(mpa.geometry_final))
+        for result in hab_results.values():
+            mpa_data.append(result['result'])
+        
+        # set column width
+        ws.col(col_num).width = 256 * max_str_length_in_list(mpa_data)
+            
+        # write this crap to a column:
+        for i,md in enumerate(mpa_data):
+            if i == 0:
+                ws.write(i,col_num,md,heading_row_style)
+            elif i == 1:
+                ws.write(i,col_num,md,mpa_id_style)
+            else:
+                ws.write(i,col_num,md,data_style)
+        col_num += 1
+            
+    
+    return ws
+    
+def array_habitat_excel(request, array_id):
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet(slugify(array.name[0:30]))
+    ws = array_habitat_excel_worksheet(array,ws)
+    response = int_views.build_excel_response(slugify(array.name[0:10]),wb)
+    return response
+    
+def array_list_habitat_excel(request, array_id_list_str):
+    print array_id_list_str
+    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    wb = xlwt.Workbook(encoding='utf-8')
+    if array_set.count()==1:
+        wb_name = array_set[0].name[:10]
+    else:
+        wb_name = 'MLPA_Arrays'
+    for array in array_set:
+        ws = wb.add_sheet(slugify(array.name[0:30]))
+        ws = array_habitat_excel_worksheet(array,ws)
+        
+    response = int_views.build_excel_response(slugify(wb_name),wb)
+    return response
+
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
     mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)
@@ -75,9 +219,9 @@ def geometries_to_wkt(results,srid=None, simplify=None):
         if v.__class__.__name__ in geometry_classes:
             new_geom = v
             if simplify:
-                print str(v.num_points) + ': ',
+                #print str(v.num_points) + ': ',
                 v = v.simplify(simplify,True)
-                print str(v.num_points)
+                #print str(v.num_points)
             if srid:
                 v.set_srid(settings.GEOMETRY_DB_SRID)
                 v.transform(srid)
@@ -86,9 +230,9 @@ def geometries_to_wkt(results,srid=None, simplify=None):
             v.update(geometries_to_wkt(v,srid,simplify))
     return results
     
-def array_habitat_replication(request, array_id, format='json'):
+def array_habitat_replication(request, array_id, format='html'):
     array = mlpa.MpaArray.objects.get(pk=array_id)
-    if format=='json':
+    if format=='html':
         template = 'array_replication_page.html'
     elif format=='print':
         template = 'array_replication_page_print.html'

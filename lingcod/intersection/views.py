@@ -5,6 +5,7 @@ from django.template import RequestContext
 from lingcod.intersection.models import *
 from lingcod.intersection.forms import *
 from django.utils.simplejson import dumps as json_encode
+import xlwt
 import csv
 
 def split_to_single_shapefiles(request, mfshp_pk):
@@ -79,6 +80,16 @@ def build_csv_response(results, file_name, leave_out=['feature_map_id','org_sche
     for row in row_matrix:
         writer.writerow(row)
         
+    return response
+    
+def build_excel_response(file_name, workbook):
+    """
+    This method assumes you've built an excel workbook elsewhere and just want to build a response object from it.
+    """
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachement; filename=%s.xls' % ( file_name )
+    workbook.save(response)
+
     return response
     
 def build_array_mpa_csv_response(results, file_name, feature_name, feature_type='MPA', leave_out=['feature_map_id','org_scheme_id']):
