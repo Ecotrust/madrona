@@ -240,7 +240,6 @@ var lingcod = (function(){
         if (options.show_panel){
             opts = {};
             opts['showClose'] = true;
-            panel.showUrl(that.options.about_url, opts);
             if (options.show_panel == 'about') {
                 panel.showUrl(that.options.about_url, opts);
             } else if (options.show_panel == 'news') {

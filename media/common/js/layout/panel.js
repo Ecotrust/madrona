@@ -96,6 +96,14 @@ lingcod.panel = function(options){
                 switch(response.status){
                     case 200:
                         var html = $(response.responseText);
+
+                        // Any link with a 'panel_link' class is overridden 
+                        // to open within the panel
+                        html.find('a.panel_link').click( function(e) {
+                            that.showUrl( $(this).attr('href') ,options);
+                            e.preventDefault();
+                        });
+
                         that.showContent(html, {showClose: options.showClose});
                         var tabs = html.find('.tabs');
                         if(tabs.length){
