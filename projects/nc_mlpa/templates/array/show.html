@@ -1,0 +1,25 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Attributes"><span>Information</span></a></li>
+            <li><a href="{% url array_replication instance.pk, 'html' %}"><span>Habitat Replication</span></a></li>
+        </ul>
+        <div id="Attributes">
+            <ul class="metadata">
+                <li class="creator">Created By {{instance.user.username}}</li>
+                <li class="created">Created {{instance.date_created|date:"d M, Y P"}}</li>
+                <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
+                <br class="clear" />
+            </ul>
+        </div>
+        <h2>Description</h2>
+        {% if instance.description %}
+        <p>{{instance.description}}</p>
+        {% else %}
+        <p><em>None specified.</em></p>
+        {% endif %}
+    </div>
+{% endblock panel %}
