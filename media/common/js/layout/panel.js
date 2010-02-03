@@ -97,13 +97,6 @@ lingcod.panel = function(options){
                     case 200:
                         var html = $(response.responseText);
 
-                        // Any link with a 'panel_link' class is overridden 
-                        // to open within the panel
-                        html.find('a.panel_link').click( function(e) {
-                            that.showUrl( $(this).attr('href') ,options);
-                            e.preventDefault();
-                        });
-
                         that.showContent(html, {showClose: options.showClose});
                         var tabs = html.find('.tabs');
                         if(tabs.length){
@@ -113,6 +106,16 @@ lingcod.panel = function(options){
                         if(options && options.success){
                             options.success(response, status);
                         }
+
+                        // Any link with a 'panel_link' class is overridden to open within the panel
+                        // WARNING: the link needs to be in a block-level container (p, div, span, etc)
+                        // Also, since it uses ajax calls, the host must be the same
+                        var panel_links = html.find('a.panel_link');
+                        panel_links.click( function(e) {
+                            that.showUrl( $(this).attr('href') ,options);
+                            e.preventDefault();
+                        });
+
                         // get content
                         // that.showContent
                         break;

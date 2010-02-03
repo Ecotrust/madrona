@@ -1,31 +1,20 @@
 {% extends "news/base_blog.html" %}
 
 {% block content %}
+<p><a href="{% url news-main %}" class="panel_link" title="main">Back to main news list</a></p>
+
 <h2>{{ object.title }}</h2> 
 <h4> {{object.summary}} </h4>
 
 <p> {{ object.body }} </p>
 
-<br/>
-
 <div class="article_menu">	
-
-    <em>
-    {% ifequal object.published_on object.modified_on  %}
-        published by <strong>{{ object.author.username }}</strong> on {{ object.published_on|date:"F j, Y" }}
-    {% else %
-        revised by <strong>{{ object.author.username}}</strong> on {{ object.modified_on|date:"F j, Y" }}
-    {% endifequal %}
-    </em>
-
-    <div class="taglist">
-        Tags :: 
+    <p> published by {{ object.author.username }} on {{ object.modified_on|date:"F j, Y" }}</p>
+    <p> Tags :: 
     {% for tag in object.tags.all %}
         {{ tag.name }}{% if not forloop.last %}, {% endif %}
     {% endfor %}
-    </div>
+    </p>
 </div>
-<br/>
 	
-<a href="{% url news-main %}" class="panel_link">&lt;&lt; Back to main news list</a>
 {% endblock %}
