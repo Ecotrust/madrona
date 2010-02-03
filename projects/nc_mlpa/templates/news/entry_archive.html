@@ -1,0 +1,16 @@
+{% extends "news/base_blog.html" %}
+
+{% block content %}
+
+{% for object in latest %}
+{% url news-detail object.published_on.year,object.published_on.month,object.published_on.day,object.slug as the_url %}
+
+<div>
+    <h2><a href="{{the_url}}" class="panel_link" title="{{ object.summary }}">{{ object.title }}</a></h2>
+    <p>{{ object.summary }} <a href="{{the_url}}" class="panel_link">read more...</a> </p>
+    <p>Published by {{object.author.username}} on {{ object.published_on|date:"F j, Y" }}</p>
+</div>
+
+{% endfor %}
+
+{% endblock %}

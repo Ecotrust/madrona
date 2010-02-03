@@ -1,0 +1,20 @@
+{% extends "news/base_blog.html" %}
+
+{% block content %}
+<p><a href="{% url news-main %}" class="panel_link" title="main">Back to main news list</a></p>
+
+<h2>{{ object.title }}</h2> 
+<h4> {{object.summary}} </h4>
+
+<p> {{ object.body }} </p>
+
+<div class="article_menu">	
+    <p> published by {{ object.author.username }} on {{ object.modified_on|date:"F j, Y" }}</p>
+    <p> Tags :: 
+    {% for tag in object.tags.all %}
+        {{ tag.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    </p>
+</div>
+	
+{% endblock %}
