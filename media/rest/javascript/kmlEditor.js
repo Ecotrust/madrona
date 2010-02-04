@@ -174,7 +174,10 @@ lingcod.rest.kmlEditor = function(options){
         options.client.copy(kmlObject, {
             success: function(location){
                 tbar.setEnabled(true);
+                // MP TODO : If we're in the shared shapes panel,
+                // switch to myshapes and refresh on that kml-tree
                 refresh(function(){
+                    tree.clearSelection();
                     var node = tree.getNodesById(location);
                     tree.selectNode(node, tree.lookup(node));
                     options.client.show(tree.lookup(node));

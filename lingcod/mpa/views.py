@@ -158,27 +158,36 @@ def copy(request, pk):
             return HttpResponse(txt, status=401)
     
     # Go ahead and make a copy (this is going to be ugly)
-    # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
-#    from django.db.models import AutoField  
-#    initial = {}
-#    for f in the_mpa._meta.fields:
-#        if isinstance(f, AutoField):
-#            print f.name + " is an Autofield so wont be added <hr/>"
-#        elif f in the_mpa._meta.parents.values():
-#            print f.name + " is in the parents values <hr/>"
-#        else:
-#            #initial[f.name] = getattr(the_mpa, f.name)
-#            print f.name + " is a copyable field of type " + f.__class__.__name__ + "<hr/>"
-#        # new_mpa = the_mpa.__class__(**initial)
 
-    # The cheating way, still misses GenericFK and M2M 
+    # Make an inventory of all many-to-many fields in the original mpa
+    m2m = {}
+    for f in the_mpa._meta.many_to_many:
+        m2m[f.name] = the_mpa.__getattribute__(f.name).all()
+
+    # The black magic voodoo way, 
+    # makes a copy but relies on this strange implementation detail of setting the pk & id to null 
+    # An alternate, more explicit way, can be seen at:
+    # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
     the_mpa.pk = None
     the_mpa.id = None
     the_mpa.save()
+
+    the_mpa.name = the_mpa.name + " (copy)"
+
+    # Restore the many-to-many fields
+    for fname in m2m.keys():
+        for obj in m2m[fname]:
+            the_mpa.__getattribute__(fname).add(obj)
+ 
     # Reassign User
     the_mpa.user = user
+
     # Clear the array association
     the_mpa.remove_from_array()
+
+    # Make sure we are not sharing it with anyone
+    the_mpa.sharing_groups.clear()
+
     # Save one last time just to be safe?
     the_mpa.save()
 
@@ -186,6 +195,3 @@ def copy(request, pk):
     res = HttpResponse("A copy of MPA %s was made; see %s" % (pk, Location), status=201)
     res['Location'] = Location
     return res
-    
-
-     
