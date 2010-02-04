@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404
 from models import *
 
-def get_viewable_object_or_respond(model_class, pk):
+def get_viewable_object_or_respond(model_class, pk, user):
     """
     Gets a single instance of model_class
     if it doesnt exist or user can't access it,
@@ -16,11 +16,11 @@ def get_viewable_object_or_respond(model_class, pk):
     obj = None
     try:
         # Next see if user owns it
-        obj = model_class.objects.get(id=input_mpa_id, user=user).add_kml()
+        obj = model_class.objects.get(pk=pk, user=user)
     except model_class.DoesNotExist:
         try: 
             # ... finally see if its shared with the user
-            obj = model_class.objects.shared_with_user(user).get(id=input_mpa_id).add_kml()
+            obj = model_class.objects.shared_with_user(user).get(pk=pk)
         except Mpa.DoesNotExist:
             return HttpResponse("Access denied", status=403)
 
