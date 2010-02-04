@@ -432,24 +432,24 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // Copy a feature
     var copy = function(configOrFeature, options){
         var config = getConfig(configOrFeature);
-        options = options || {};
-        options['load_msg'] = 'Loading '+config['title'];
-        options['showClose'] = true;
-        var action = config['copy_href'];
-        $.ajax({
-            url: action,
-            type: 'POST',
-            complete: function(req, status){
-                if (req.status == 201) {
-                    // new object created, get location header
-                    if(options && options.success){ 
-                        options.success( processLocation(req.getResponseHeader('Location'))); 
+        if (config['copy_href']) {
+            $.ajax({
+                url: config['copy_href'],
+                type: 'POST',
+                complete: function(req, status){
+                    if (req.status == 201) {
+                        // new object created, get location header
+                        if(options && options.success){ 
+                            options.success( processLocation(req.getResponseHeader('Location'))); 
+                        }
+                    } else {
+                        alert('There was a problem posting your data to the server. Status=' + req.status);
                     }
-                } else {
-                    alert('There was a problem posting your data to the server. Status=' + req.status);
                 }
-            }
-        });
+            });
+        } else {
+            alert('This object does not appear to be copyable');
+        }
     };
     that.copy = copy;
 
