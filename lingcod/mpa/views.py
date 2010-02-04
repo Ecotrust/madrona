@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
 
 from django.conf import settings
 from django.utils import simplejson
@@ -132,3 +133,59 @@ def mpa(request, pk):
         pass
     elif request.method == 'POST':
         update(request, get_mpa_class.Options.form_class, pk)
+
+def copy(request, pk):
+    """
+    Creates a copy of the given MPA 
+    On success, Return status 201 with Location set to new MPA
+    Permissions: Need to either own or have shared with you to make copy
+    """
+    # Authenticate
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse(txt + 'You must be logged in', status=401)
+
+    Mpa = get_mpa_class()
+    try:
+        # Frst see if user owns it
+        the_mpa = Mpa.objects.get(id=int(pk), user=user)
+    except Mpa.DoesNotExist:
+        try: 
+            # ... then see if its shared with the user
+            the_mpa = Mpa.objects.shared_with_user(user).get(id=int(pk))
+        except Mpa.DoesNotExist:
+            txt = "You dont own it and nobdy shared it with you so you can't make a copy."
+            return HttpResponse(txt, status=401)
+    
+    # Go ahead and make a copy (this is going to be ugly)
+    # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
+#    from django.db.models import AutoField  
+#    initial = {}
+#    for f in the_mpa._meta.fields:
+#        if isinstance(f, AutoField):
+#            print f.name + " is an Autofield so wont be added <hr/>"
+#        elif f in the_mpa._meta.parents.values():
+#            print f.name + " is in the parents values <hr/>"
+#        else:
+#            #initial[f.name] = getattr(the_mpa, f.name)
+#            print f.name + " is a copyable field of type " + f.__class__.__name__ + "<hr/>"
+#        # new_mpa = the_mpa.__class__(**initial)
+
+    # The cheating way, still misses GenericFK and M2M 
+    the_mpa.pk = None
+    the_mpa.id = None
+    the_mpa.save()
+    # Reassign User
+    the_mpa.user = user
+    # Clear the array association
+    the_mpa.remove_from_array()
+    # Save one last time just to be safe?
+    the_mpa.save()
+
+    Location = the_mpa.get_absolute_url()
+    res = HttpResponse("A copy of MPA %s was made; see %s" % (pk, Location), status=201)
+    res['Location'] = Location
+    return res
+    
+
+     

@@ -55,6 +55,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var self = $(kml).find('atom\\:link[rel=self]');
         var form = $(kml).find('atom\\:link[rel=marinemap.update_form]');
         var share_form = $(kml).find('atom\\:link[rel=marinemap.share_form]');
+        var copy_conf = $(kml).find('atom\\:link[rel=marinemap.copy]');
         if(self.length === 1 && form.length === 1){
             var resource = {
                 title: self.attr('title'),
@@ -68,6 +69,10 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 resource['share_href'] = share_form.attr('href');
                 resource['share_title'] = share_form.attr('title');
                 resource['share_model'] = share_form.attr('mm:model');
+            }
+            if (copy_conf.length === 1) {
+                resource['copy_href'] = copy_conf.attr('href');
+                resource['copy_model'] = copy_conf.attr('mm:model');
             }
             return resource;
         }else{
@@ -357,7 +362,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     that.show = show;
     
-    // TODO client.share
+    // client.share
     // ===========
     // Show a feature's sharing UI in the panel.
     //
@@ -421,6 +426,32 @@ lingcod.rest.client = function(gex, panel, manipulators){
     };
     
     that.share = share;
+
+    // client.copy
+    // ===========
+    // Copy a feature
+    var copy = function(configOrFeature, options){
+        var config = getConfig(configOrFeature);
+        options = options || {};
+        options['load_msg'] = 'Loading '+config['title'];
+        options['showClose'] = true;
+        var action = config['copy_href'];
+        $.ajax({
+            url: action,
+            type: 'POST',
+            complete: function(req, status){
+                if (req.status == 201) {
+                    // new object created, get location header
+                    if(options && options.success){ 
+                        options.success( processLocation(req.getResponseHeader('Location'))); 
+                    }
+                } else {
+                    alert('There was a problem posting your data to the server. Status=' + req.status);
+                }
+            }
+        });
+    };
+    that.copy = copy;
 
     // Private methods
  

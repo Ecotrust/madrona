@@ -168,6 +168,26 @@ lingcod.rest.kmlEditor = function(options){
     
     var copy = new goog.ui.ToolbarButton('Copy');
     copy.setEnabled(false);
+    copy.setTooltip("Copy the selected feature");
+    goog.events.listen(copy, 'action', function(e) {
+        kmlObject = tree.lookup(that.selected);
+        options.client.copy(kmlObject, {
+            success: function(location){
+                tbar.setEnabled(true);
+                refresh(function(){
+                    var node = tree.getNodesById(location);
+                    tree.selectNode(node, tree.lookup(node));
+                    options.client.show(tree.lookup(node));
+                });
+            },
+            error: function(){
+                tbar.setEnabled(true);
+                alert('An error occured while copying. If the problem persists, please contact an administrator at help@marinemap.org.');
+                kmlObject.setVisibility(true);
+                tree.selectById(kmlObject.getId());
+            }
+        });
+    });
     tbar.addChild(copy, true);
     
     if (!options.shared) {
