@@ -13,12 +13,11 @@
         </Icon>
     </IconStyle>
     <BalloonStyle>
+        <bgColor>ffeeeeee</bgColor>
         <text> <![CDATA[
-           <div>
-            <p><strong>$[name]</strong></p>
-            <p><em>$[designation]</em></p>
-            <p>Created by $[user] on $[modified]</p>
-           </div>
+            <font color="#1A3752"><strong>$[name]</strong></font><br />
+            <font size=1>$[designation]</font><br />
+            <font size=1>Created by $[user] on $[modified]</font>
         ]]> </text>
     </BalloonStyle>
     <LabelStyle>
@@ -43,12 +42,11 @@
         <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
     </IconStyle>
     <BalloonStyle>
+        <bgColor>ffeeeeee</bgColor>
         <text> <![CDATA[
-           <div>
-            <p><strong>$[name]</strong></p>
-            <p><em>No designation</em></p>
-            <p>Created by $[user] on $[modified]</p>
-           </div>
+            <font color="#1A3752"><strong>$[name]</strong></font><br />
+            <font size=1>no designation</font><br />
+            <font size=1>Created by $[user] on $[modified]</font>
         ]]> </text>
     </BalloonStyle>
     <LabelStyle>
