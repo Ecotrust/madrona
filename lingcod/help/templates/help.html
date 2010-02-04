@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+{% load analytics %}
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>{% block title %}MarineMap Decision Support Tool{% endblock %}</title>
+    {% block head %}
+    <link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+    {% endblock %}
+</head>
+<body>
+{% analytics %}
+{% block body %}
+<h1> Help </h1>
+
+<!--------------------- SCREENCASTS -------------------->
+<h4 style="margin:14px;">Movie Tutorials</h4>
+<div>
+{% for screencast in screencast_list %}
+<p class="screencast-link">
+	<a href="{{screencast.urlname}}" target="_blank">
+        <img src="{{screencast.image.url}}" align="left" />
+			<span>{{screencast.title}}</span>
+			<br />
+			{{screencast.description}}
+	</a>
+</p>
+{% endfor %}
+</div>
+
+<!---------------------FAQS -------------------->
+<h4 style="margin:14px;">Frequently Asked Questions</h4>
+<br/>
+<div style='width:600px; border: 1px dotted #BBBBBB; padding: 5px'>
+{% for group in faqs_by_group %}
+<h3><a href='#group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
+    <ul>
+    {% for faq in group.group_faqs %}
+        <li><a href='#faq_{{ faq.id }}'>{{ faq.question }}</a></li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+</div>
+<br/>
+<div style='width: 600px;'>
+{% for group in faqs_by_group %}
+<h3><a name='group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
+    <div style='padding-left: 25px'>
+    {% for faq in group.group_faqs %}
+        <h4><a name='faq_{{ faq.id }}'>Q. {{ faq.question }}</a></h4>
+        <p>A. {{ faq.answer|safe }} </p>
+    {% endfor %}
+    </div>
+{% endfor %}
+</div>    
+
+{% endblock %}
+
+</body>
+</html>
+

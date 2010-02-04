@@ -7,6 +7,7 @@ class Screencast(models.Model):
     title = models.CharField(max_length=100)
     urlname = models.CharField(max_length=100)
     description = models.CharField(max_length=350)
+    selected_for_help = models.BooleanField(default=False, help_text="Display this screencast on the main help page?")
     
     class Meta:
         db_table = 'mm_screencast'

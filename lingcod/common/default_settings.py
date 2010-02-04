@@ -67,6 +67,7 @@ INSTALLED_APPS = (
     'lingcod.layers',
     'lingcod.studyregion',
     'lingcod.simplefaq',
+    'lingcod.help',
     'lingcod.staticmap',
     'lingcod.news',
     'lingcod.manipulators',

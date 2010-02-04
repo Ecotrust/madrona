@@ -60,7 +60,7 @@
             <li><a href="#" id="news">news</a> | </li>
             <li><a href="#" id="about">about marinemap</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
-            <li><a href="help">help</a> | </li>
+            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="{% url logout %}">sign out</a></li>
             {% else %}
