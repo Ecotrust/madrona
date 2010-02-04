@@ -11,12 +11,12 @@
 			<td>Percent of SR Total</td>
 			<td>Units</td>
 		</tr>
-		{% for item in result|dictsort:'sort' %}
-		<tr>	
-			<td>{{ item.feature_name }}</td>
-			<td>{{ item.result }}</td>
-			<td>{{ item.percent_of_total }}</td>
-			<td>{{ item.units }}</td>
+		{% for sort_num,sub_dict in result.items %}
+		<tr>
+			<td>{{ sub_dict.name }}</td>
+			<td>{{ sub_dict.result }}</td>
+			<td>{{ sub_dict.percent_of_total }}</td>
+			<td>{{ sub_dict.units }}</td>
 		</tr>
 		{% endfor %}
 	</table>

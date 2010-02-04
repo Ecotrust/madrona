@@ -38,7 +38,7 @@ def test_drawing_intersect(request):
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
                 if format=='html':
-                    return render_to_response('generic_results.html', {'result': result})
+                    return render_to_response('generic_results.html', {'result': use_sort_as_key(result)})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
                 elif format=='json':
@@ -47,7 +47,7 @@ def test_drawing_intersect(request):
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
                 if format=='html':
-                    return render_to_response('transformed_results.html', {'result': result})
+                    return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
                 elif format=='json':
@@ -150,7 +150,7 @@ def test_poly_intersect(request):
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
                 if format=='html':
-                    return render_to_response('transformed_results.html', {'result': result})
+                    return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
                 elif format=='json':
@@ -174,7 +174,7 @@ def organized_intersection(request, org_scheme, format, geom_wkt):
     osc = OrganizationScheme.objects.get(pk=int(org_scheme) )
     result = osc.transformed_results(geom)
     if format=='html':
-        return render_to_response('transformed_results.html', {'result': result})
+        return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
     elif format=='csv':
         return build_csv_response(result, str(hash(geom)) )
     elif format=='json':

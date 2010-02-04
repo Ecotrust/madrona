@@ -8,7 +8,7 @@
     <div class="tabs">
         <ul>
             <li><a href="#Attributes"><span>Information</span></a></li>
-            <li><a href="#Habitat"><span>Habitat Representation</span></a></li>
+            <li><a href="{% url mpa_habitat_representation instance.pk 'html' %}"><span>Habitat Representation</span></a></li>
         </ul>
         <div id="Attributes">
             <ul class="metadata">
@@ -160,8 +160,6 @@
             {% endif %}
             
         </div>
-        <div id="Habitat">
-            blah
-        </div>
+        
     </div>
 {% endblock panel %}

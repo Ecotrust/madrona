@@ -100,6 +100,7 @@ COMPRESS_CSS['application']['source_filenames'] += (
     'projects/nc_mlpa/css/closure_fixes.css',
     'projects/nc_mlpa/css/mlpa_forms.css',
     'projects/nc_mlpa/css/mlpa_attributes.css',
+    'projects/nc_mlpa/css/replication.css',
 )
 
 # Location where Ecotrust Fishing Data layers can be found

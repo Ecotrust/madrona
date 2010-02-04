@@ -150,7 +150,6 @@ def array_habitat_excel(request, array_id):
     return response
     
 def array_list_habitat_excel(request, array_id_list_str):
-    print array_id_list_str
     array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
     wb = xlwt.Workbook(encoding='utf-8')
     if array_set.count()==1:
@@ -180,6 +179,9 @@ def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=F
         return int_views.build_csv_response(result, slugify(mpa.name) )
     elif format=='json':
         return HttpResponse(json_encode(result), mimetype='text/json')
+    elif format=='html':
+        template = 'mpa_representation_panel.html'
+        return render_to_response(template, {'result': int_models.use_sort_as_key(result)}, context_instance=RequestContext(request) )
     # I was going to try and make this interface with the intersection app through urls so that
     # the intersection app could be on a different server but that's not working out and I'm in 
     # a hurry.
@@ -233,7 +235,7 @@ def geometries_to_wkt(results,srid=None, simplify=None):
 def array_habitat_replication(request, array_id, format='html'):
     array = mlpa.MpaArray.objects.get(pk=array_id)
     if format=='html':
-        template = 'array_replication_page.html'
+        template = 'array_replication_panel.html'
     elif format=='print':
         template = 'array_replication_page_print.html'
     return render_to_response(template, {'results': array.clusters_with_habitat, 'array': array}, context_instance=RequestContext(request) )
