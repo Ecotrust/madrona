@@ -140,58 +140,30 @@ def copy(request, pk):
     On success, Return status 201 with Location set to new MPA
     Permissions: Need to either own or have shared with you to make copy
     """
-    # Authenticate
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse(txt + 'You must be logged in', status=401)
+    if request.method == 'POST' or request.method == 'GET': # MP TODO POST only
+        # Authenticate
+        user = request.user
+        if user.is_anonymous() or not user.is_authenticated():
+            return HttpResponse(txt + 'You must be logged in', status=401)
 
-    Mpa = get_mpa_class()
-    try:
-        # Frst see if user owns it
-        the_mpa = Mpa.objects.get(id=int(pk), user=user)
-    except Mpa.DoesNotExist:
-        try: 
-            # ... then see if its shared with the user
-            the_mpa = Mpa.objects.shared_with_user(user).get(id=int(pk))
+        Mpa = get_mpa_class()
+        try:
+            # Frst see if user owns it
+            the_mpa = Mpa.objects.get(id=int(pk), user=user)
         except Mpa.DoesNotExist:
-            txt = "You dont own it and nobdy shared it with you so you can't make a copy."
-            return HttpResponse(txt, status=401)
-    
-    # Go ahead and make a copy (this is going to be ugly)
+            try: 
+                # ... then see if its shared with the user
+                the_mpa = Mpa.objects.shared_with_user(user).get(id=int(pk))
+            except Mpa.DoesNotExist:
+                txt = "You dont own it and nobdy shared it with you so you can't make a copy."
+                return HttpResponse(txt, status=401)
+        
+        # Go ahead and make a copy
+        new_mpa = the_mpa.copy(user)
 
-    # Make an inventory of all many-to-many fields in the original mpa
-    m2m = {}
-    for f in the_mpa._meta.many_to_many:
-        m2m[f.name] = the_mpa.__getattribute__(f.name).all()
-
-    # The black magic voodoo way, 
-    # makes a copy but relies on this strange implementation detail of setting the pk & id to null 
-    # An alternate, more explicit way, can be seen at:
-    # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
-    the_mpa.pk = None
-    the_mpa.id = None
-    the_mpa.save()
-
-    the_mpa.name = the_mpa.name + " (copy)"
-
-    # Restore the many-to-many fields
-    for fname in m2m.keys():
-        for obj in m2m[fname]:
-            the_mpa.__getattribute__(fname).add(obj)
- 
-    # Reassign User
-    the_mpa.user = user
-
-    # Clear the array association
-    the_mpa.remove_from_array()
-
-    # Make sure we are not sharing it with anyone
-    the_mpa.sharing_groups.clear()
-
-    # Save one last time just to be safe?
-    the_mpa.save()
-
-    Location = the_mpa.get_absolute_url()
-    res = HttpResponse("A copy of MPA %s was made; see %s" % (pk, Location), status=201)
-    res['Location'] = Location
-    return res
+        Location = new_mpa.get_absolute_url()
+        res = HttpResponse("A copy of MPA %s was made; see %s" % (pk, Location), status=201)
+        res['Location'] = Location
+        return res
+    else:
+        return HttpResponse( "MPA copy service received unexpected " + request.method + " request.", status=400 )

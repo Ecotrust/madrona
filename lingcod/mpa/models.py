@@ -202,3 +202,44 @@ class Mpa(models.Model):
         if self.designation:
             aabbggrr = self.designation.poly_fill_color
         return '#%s%s%s' % (aabbggrr[6:8], aabbggrr[4:6], aabbggrr[2:4])
+
+    def copy(self,user):
+        """
+        Creates a copy of itself, 
+        retains many-to-many fields and regular fields 
+        but drops sharing, arrays and reassigns the owner
+        """
+        the_mpa = self
+
+        # Make an inventory of all many-to-many fields in the original mpa
+        m2m = {}
+        for f in the_mpa._meta.many_to_many:
+            m2m[f.name] = the_mpa.__getattribute__(f.name).all()
+
+        # The black magic voodoo way, 
+        # makes a copy but relies on this strange implementation detail of setting the pk & id to null 
+        # An alternate, more explicit way, can be seen at:
+        # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
+        the_mpa.pk = None
+        the_mpa.id = None
+        the_mpa.save()
+
+        the_mpa.name = the_mpa.name + " (copy)"
+
+        # Restore the many-to-many fields
+        for fname in m2m.keys():
+            for obj in m2m[fname]:
+                the_mpa.__getattribute__(fname).add(obj)
+    
+        # Reassign User
+        the_mpa.user = user
+
+        # Clear the array association from the copy
+        the_mpa.remove_from_array()
+
+        # Make sure we are not sharing the copy with anyone
+        the_mpa.sharing_groups.clear()
+
+        # Save one last time just to be safe?
+        the_mpa.save()
+        return the_mpa

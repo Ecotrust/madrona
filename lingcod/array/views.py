@@ -83,3 +83,37 @@ def remove_mpa(request, pk):
         return HttpResponse("Removed MPA %s from array %s" % (mpa_id, pk))
     else:
         return HttpResponse( "Array-MPA service received unexpected " + request.method + " request.", status=400 )
+
+
+def copy(request, pk):
+    """
+    Creates a copy of the given array 
+    On success, Return status 201 with Location set to new MPA
+    Permissions: Need to either own or have shared with you to make copy
+    """
+    if request.method == 'POST' or request.method == 'GET': # MP TODO POST only
+        # Authenticate
+        user = request.user
+        if user.is_anonymous() or not user.is_authenticated():
+            return HttpResponse(txt + 'You must be logged in', status=401)
+
+        try:
+            # Frst see if user owns it
+            the_array = MpaArray.objects.get(id=int(pk), user=user)
+        except MpaArray.DoesNotExist:
+            try: 
+                # ... then see if its shared with the user
+                the_array = MpaArray.objects.shared_with_user(user).get(id=int(pk))
+            except MpaArray.DoesNotExist:
+                txt = "You dont own it and nobdy shared it with you so you can't make a copy."
+                return HttpResponse(txt, status=401)
+        
+        # Go ahead and make a copy
+        new_array = the_array.copy(user)
+
+        Location = new_array.get_absolute_url()
+        res = HttpResponse("A copy of Array %s was made; see %s" % (pk, Location), status=201)
+        res['Location'] = Location
+        return res
+    else:
+        return HttpResponse( "Array copy service received unexpected " + request.method + " request.", status=400 )

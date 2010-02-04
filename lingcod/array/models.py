@@ -74,3 +74,49 @@ class MpaArray(models.Model):
             'pk': self.pk
         })
     objects = ArrayManager()
+
+    def copy(self, user):
+        """
+        Creates a copy of itself, 
+        retains many-to-many fields and regular fields but drops sharing reassigns the owner
+        Also makes a copy of every mpa in the set and assigns them to this new array
+        """
+        the_array = self
+
+        # Make an inventory of all mpas belonging to this array
+        mpas = the_array.mpa_set
+
+        # Make an inventory of all many-to-many fields in the original mpa
+        m2m = {}
+        for f in the_array._meta.many_to_many:
+            m2m[f.name] = the_array.__getattribute__(f.name).all()
+
+        # The black magic voodoo way, 
+        # makes a copy but relies on this strange implementation detail of setting the pk & id to null 
+        # An alternate, more explicit way, can be seen at:
+        # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
+        the_array.pk = None
+        the_array.id = None
+        the_array.save()
+
+        the_array.name = the_array.name + " (copy)"
+
+        # Restore the many-to-many fields
+        for fname in m2m.keys():
+            for obj in m2m[fname]:
+                the_array.__getattribute__(fname).add(obj)
+    
+        # Reassign User
+        the_array.user = user
+
+        # Copy the individual MPAs and associate them with this new array
+        for mpa in mpas:
+            new_mpa = mpa.copy(user)
+            new_mpa.add_to_array(the_array)
+
+        # Make sure we are not sharing it with anyone
+        the_array.sharing_groups.clear()
+
+        # Save one last time just to be safe?
+        the_array.save()
+        return the_array
