@@ -21,7 +21,7 @@ def get_viewable_object_or_respond(model_class, pk, user):
         try: 
             # ... finally see if its shared with the user
             obj = model_class.objects.shared_with_user(user).get(pk=pk)
-        except Mpa.DoesNotExist:
+        except model_class.DoesNotExist:
             return HttpResponse("Access denied", status=403)
 
     return obj
