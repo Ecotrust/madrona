@@ -25,7 +25,6 @@ $("#group_button").click(function() {
     <br/>
 
     <form action="" method="POST">
-        <p>
         {% for group in groups %} 
         <label class="shareform"> <input type="checkbox" class="shareform" name="sharing_groups" {% if group in already_shared_groups %}checked="checked"{% endif %} value="{{group.id}}" id="group_{{group.id}}"/> {{group.name}} 
 
@@ -37,7 +36,6 @@ $("#group_button").click(function() {
 
         </label>
         {% endfor %}
-        </p>
         
     </form>
 {% else %}
