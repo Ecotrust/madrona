@@ -2,7 +2,6 @@ from django.contrib.gis.db import models
 from models import get_shareables, ShareableContent
 from django.contrib.auth.models import User, Group, Permission
 
-# TODO DOCUMENT!
 class ShareableGeoManager(models.GeoManager):
     def shared_with_user(self, user):
         """
@@ -30,7 +29,7 @@ class ShareableGeoManager(models.GeoManager):
             contained_ids = []
             for sc in shared_containers:
                 contained = sc.__getattribute__(shared_content_type.container_set_property)
-                # TODO this doesn't work as it write to the db, need to dynamically set sharing_groups on contained objects
+                # MP TODO this doesn't work as it write to the db, need to dynamically set sharing_groups on contained objects
                 #for x in contained:
                 #    for sg in sc.sharing_groups.all():
                 #        x.sharing_groups.add(sg)
