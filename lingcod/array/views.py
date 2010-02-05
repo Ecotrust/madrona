@@ -29,7 +29,7 @@ def add_mpa(request, pk):
 
         # If MPA already has an array, return an error
         if the_mpa.array:
-            return HttpResponse( "MPA " + mpa_id + " is already associated with another array.", status=500 )
+            the_mpa.remove_from_array()
 
         # Get array object
         try:

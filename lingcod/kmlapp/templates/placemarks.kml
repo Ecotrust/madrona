@@ -4,7 +4,7 @@
 {% block folders_and_placemarks %}
 {% for array_nameid, a in shapes.items %}
 {% if a.array.id and use_network_links %}
-    <NetworkLink>
+    <NetworkLink id="{{a.array.get_absolute_url}}">
     <Style>
 	    <ListStyle>
           <ItemIcon>
@@ -19,7 +19,7 @@
      <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
      <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid pk=a.array.pk %}" />
      <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array-copy pk=a.array.pk %}" />
-     <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
+     <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" mm:pk="{{ a.array.pk }}" href="{{ a.array.get_absolute_url }}" />
      <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
      <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
      <Link>
@@ -33,7 +33,7 @@
             <name>{{ a.array.name }}</name>
             {% if a.array.id %}
             <atom:link rel="marinemap.update_form" title="Edit {{a.array.name}}" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array_update_form pk=a.array.id %}" />
-            <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" href="{{ a.array.get_absolute_url }}" />
+            <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" mm:pk="{{ a.array.pk }}" href="{{ a.array.get_absolute_url }}" />
             <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
             <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
             <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid pk=a.array.pk %}" />
@@ -64,7 +64,7 @@
         <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa_update_form pk=mpa.pk %}" />
         <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url sharing-object-form object_type=mpa_ctid pk=mpa.pk %}" />
         <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa-copy pk=mpa.pk %}" />
-        <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" href="{{mpa.get_absolute_url}}" />
+        <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" mm:pk="{{ mpa.pk }}" href="{{mpa.get_absolute_url}}" />
         <atom:link rel="alt" href="{% url kmlapp-mpa-kmz input_mpa_id=mpa.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
         <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
         <visibility>0</visibility>

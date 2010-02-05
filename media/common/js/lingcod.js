@@ -9,17 +9,21 @@ var lingcod = (function(){
         
         $('#sidebar').tabs();
         resize();
-        google.earth.createInstance(
-            "map", 
-            function(i){
-                geInit(i);
-            },
-            function(code){
-                geFailure(code);
-            });
-        setupListeners();
-        lingcod.menu_items.init($('.menu_items'));
-        // makes button clicking a lot more reliable!!
+        if(window.google){
+            google.earth.createInstance(
+                "map", 
+                function(i){
+                    geInit(i);
+                },
+                function(code){
+                    geFailure(code);
+                });
+            setupListeners();
+            lingcod.menu_items.init($('.menu_items'));
+            // makes button clicking a lot more reliable!!
+        }else{
+            geFailure();
+        }
         $(document).find('a.button').live('dragstart', function(){
             return false;
         });
@@ -89,7 +93,6 @@ var lingcod = (function(){
             restoreState: true
         });
         publicData.load();
-        window.tree = publicData;
 
         var googleLayers = lingcod.kmlTree({
             url: options.media_url + 'common/fixtures/earthLayers.kml',
@@ -140,24 +143,6 @@ var lingcod = (function(){
         });
         
         googleLayers.load();
-
-        // var forest = lingcod.kmlForest({
-        //     element: $('#datalayerstree'),
-        //     ge: ge,
-        //     gex: gex,
-        //     div: $('#map')
-        // });
-        // 
-        // forest.add(window.studyregion, {
-        //     cachebust: true,
-        //     callback: function(kmlObject, topNode){
-        //         topNode.find('> ul > li > a').trigger('dblclick');            
-        //     }
-        // });
-        // 
-        // forest.add(window.public_data_layers, {
-        //     cachebust: true
-        // });
         
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
@@ -187,16 +172,24 @@ var lingcod = (function(){
         
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
-                editors.push(lingcod.rest.kmlEditor({
+                var url = options.myshapes[i].url;
+                var callback = options.myshapes[i]['callback'];
+                var editor = lingcod.rest.kmlEditor({
                     ge: ge,
                     gex: gex,
                     appendTo: '#myshapestree',
                     div: '#map',
-                    url: options.myshapes[i],
+                    url: options.myshapes[i].url,
                     client: that.client,
                     shared: false
-                }));
-            }            
+                });
+                if(callback){
+                    $(editor.tree).bind('kmlLoaded', function(kmlObject){
+                        callback(editor, editor.el, kmlObject)
+                    });
+                }
+                editors.push(editor);
+            }
         }
 
         if(options.sharedshapes){
@@ -287,10 +280,13 @@ var lingcod = (function(){
         setEarthOptionsFromLocalStore();
         setEarthOptions();
         
-        $(window).unload(function(){
+        var unload = function(){
             setCameraToLocalStorage();
             saveEarthOptionsToLocalStore();
-        });
+            $(window).die('beforunload', unload);
+        }
+        
+        $(window).bind('beforeunload', unload);
     };
     
     var studyRegionLoaded = function(kmlObject, node){
@@ -323,7 +319,7 @@ var lingcod = (function(){
     };
     
     var geFailure = function(errorCode){
-        alert("Failure loading the Google Earth Plugin: " + errorCode);
+        // alert("Failure loading the Google Earth Plugin: " + errorCode);
     }
     
     var setupListeners = function(){
@@ -335,7 +331,7 @@ var lingcod = (function(){
         });
         $('#sidebar').bind('mouseup', function(e){
             lingcod.menu_items.closeAll();
-            return false;
+            // return false;
         });
         $('#sidebar-mask').click(function(){
             lingcod.menu_items.closeAll();
@@ -390,9 +386,7 @@ var lingcod = (function(){
                 count++;
             }
         }
-        if(count > 0){
-            // console.log('another panel still shown');
-        }else{
+        if(count <= 0){
             that.unmaskSidebar();
         }
     };

@@ -23,7 +23,7 @@ lingcod.kmlTree = (function(){
                 if(!item.loaded && !item.loading){
                     var self = this;
                     $(item.node).bind('loaded', function(e, node, kmlObject){self.nodeLoadedCallback(e, node, kmlObject)});
-                    this.opts['my'].openNetworkLink(item.node);
+                    this.opts['tree'].openNetworkLink(item.node);
                     item.loading = true;
                 }
             }
@@ -87,6 +87,7 @@ lingcod.kmlTree = (function(){
         '<li class="',
         '<%= listItemType %> ',
         '<%= type %> ',
+        '<%= customClass %> ',
         '<%= (visible ? "visible " : "") %>',
         '<%= (customIcon ? "hasIcon " : "") %>',
         '<%= (fireEvents ? "fireEvents " : "") %>',
@@ -119,6 +120,7 @@ lingcod.kmlTree = (function(){
     var constructor_defaults = {
         enableSelection: function(){return false;},
         fireEvents: function(){return false;},
+        visitFunction: function(kmlObject, config){return config},
         openNetworkLinks: true,
         restoreStateOnRefresh: true,
         showTitle: true,
@@ -164,7 +166,7 @@ lingcod.kmlTree = (function(){
         that.kmlObject = null;
         var docs = {};
         var my = {};
-        
+        that.parseKml = parseKml;
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
         
@@ -373,10 +375,12 @@ lingcod.kmlTree = (function(){
                             fireEvents: opts.fireEvents(this),
                             listItemType: getListItemType(this),
                             customIcon: customIcon(this),
+                            customClass: '',
                             children: [],
                             kmlId: lookupId,
                             trans: opts.trans
                         }
+                        child = opts.visitFunction(this, child);
                         parent.children.push(child);
                         if(child.listItemType !== 'checkHideChildren'){
                             context.child = child;
@@ -800,7 +804,7 @@ lingcod.kmlTree = (function(){
             }
         };
         
-        my.openNetworkLink = openNetworkLink;
+        that.openNetworkLink = openNetworkLink;
         
         // Depth-first traversal of all nodes in the tree
         // Will start out with all the children of the root KmlDocument, but
@@ -826,8 +830,7 @@ lingcod.kmlTree = (function(){
         
         that.walk = walk;
         var id = opts.element.attr('id');
-        
-        
+                
         $('#'+id+' li > span.name').live('click', function(){
             var node = $(this).parent();
             var kmlObject = lookup(node);
@@ -843,6 +846,7 @@ lingcod.kmlTree = (function(){
             if(node.hasClass('fireEvents')){
                 $(that).trigger('click', [node[0], kmlObject]);
             }
+            // node.trigger('mouseup');
         });
             
         $('#'+id+' li.fireEvents > span.name').live('contextmenu', function(){
@@ -914,10 +918,17 @@ lingcod.kmlTree = (function(){
                 if(opts.map_div){
                     var aspectRatio = $(opts.map_div).width() / $(opts.map_div).height();
                 }
-                opts.gex.util.flyToObject(kmlObject, {
-                    boundsFallback: true,
-                    aspectRatio: aspectRatio
-                });
+                if(kmlObject.getType() === 'KmlNetworkLink' && node.hasClass('loaded')){
+                    opts.gex.util.flyToObject(lookupNlDoc(node), {
+                        boundsFallback: true,
+                        aspectRatio: aspectRatio
+                    });                    
+                }else{
+                    opts.gex.util.flyToObject(kmlObject, {
+                        boundsFallback: true,
+                        aspectRatio: aspectRatio
+                    });
+                }
             }
             if(node.hasClass('fireEvents')){
                 $(that).trigger('dblclick', [node, kmlObject]);

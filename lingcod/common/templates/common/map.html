@@ -14,28 +14,35 @@
         var options = {};
 
         {% block sharedshapes %}
-        {% if user.is_authenticated %}
-            options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
-        {% else %}
-            options.sharedshapes = ["{% url kmlapp-publicshared-kmz %}"];
-        {% endif %}
+            {% if user.is_authenticated %}
+                options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
+            {% else %}
+                options.sharedshapes = ["{% url kmlapp-publicshared-kmz %}"];
+            {% endif %}
         {% endblock sharedshapes %}
 
         {% block myshapes %}
-        {% if user.is_authenticated %}
-            options.myshapes = ["{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"];
-            {% if perms.layers.view_ecotrustlayerlist %}
-                options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
+            {% if user.is_authenticated %}
+                options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"}];
             {% endif %}
-        {% endif %}
-        options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         {% endblock myshapes %}
         
+        {% block aftermyshapes %}
+            {% if user.is_authenticated %}
+                {% if perms.layers.view_ecotrustlayerlist %}
+                    options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
+                {% endif %}
+            {% endif %}
+        {% endblock aftermyshapes %}
+        
+        options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         options.news_url = '{% url news-main %}';
         options.about_url = '{% url news-about %}';
+        
         {% if show_panel %}
-        options.show_panel = '{{ show_panel }}';
+            options.show_panel = '{{ show_panel }}';
         {% endif %}
+        
         {% block addToOptions %}
         {% endblock addToOptions %}
         

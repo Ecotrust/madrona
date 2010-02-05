@@ -53,6 +53,8 @@ lingcod.rest.kmlEditor = function(options){
         setSelectionMenuItemEnabled(false);
     }
     
+    that.refresh = refresh;
+    
     var setSelectionMenuItemEnabled = function(enabled){
         for(var i=0;i<enableWhenSelected.length;i++){
             enableWhenSelected[i].setEnabled(enabled);
@@ -214,8 +216,14 @@ lingcod.rest.kmlEditor = function(options){
 
     $(options.appendTo).append(that.el);
     
-    var testFunction = function(kmlObject){
-        return $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self]').length === 1;
+    var visitFunction = function(kmlObject, config){
+        var self = $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self]');
+        if(self.length === 1){
+            config.fireEvents = true;
+            config.select = true;
+            config['customClass'] = self.attr('mm:model') || '';
+        }
+        return config;
     };
     
     var tree = lingcod.kmlTree({
@@ -227,8 +235,7 @@ lingcod.rest.kmlEditor = function(options){
         element: that.kmlEl,
         trans: lingcod.options.media_url + 'common/images/transparent.gif',
         title: false,
-        fireEvents: testFunction,
-        enableSelection: testFunction,
+        visitFunction: visitFunction,
         bustCache: true,
         restoreState: true,
         supportItemIcon: true

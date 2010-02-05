@@ -146,7 +146,7 @@ li.KmlFolder > span.icon, li.KmlNetworkLink > span.icon {
 li.KmlNetworkLink.loading > span.icon {
     margin-right:3px;
     display:block;
-    background: transparent url(../images/kml-throbber.gif) no-repeat;
+    background: transparent url(../images/kml-throbber.gif) no-repeat !important;
 }
 
 li.KmlNetworkLink.error > span.icon {
