@@ -58,7 +58,7 @@ mlpa.prepareForm = function(panel){
     
     $(panel).bind('panelclose', cleanup);
     $(panel).bind('panelhide', cleanup);
-}
+};
 
 mlpa.uses = function(options){
     var that = {};
@@ -80,7 +80,7 @@ mlpa.uses = function(options){
         forEachMenu(function(menu){
             menu.setEnabled(false);
         });
-    }
+    };
         
     var getChoices = function(){
         var choices = {};
@@ -94,7 +94,7 @@ mlpa.uses = function(options){
             }
         }
         return choices;
-    }
+    };
     
     that.getChoices = getChoices;
     
@@ -117,7 +117,7 @@ mlpa.uses = function(options){
             }
             return notvalid;
         }
-    }
+    };
     
     that.getIncompatibleWithDesignation = getIncompatibleWithDesignation;
     
@@ -131,7 +131,7 @@ mlpa.uses = function(options){
         if(that.designation_id){
             setAllowedPurposes(getAllowedPurposes(that.designation_id));
         }
-    }
+    };
 
     that.clearMenus = clearMenus;
     
@@ -150,7 +150,7 @@ mlpa.uses = function(options){
             }
         }
         return found;
-    }
+    };
     
     that.find = find;
     
@@ -178,7 +178,7 @@ mlpa.uses = function(options){
             setAllowedPurposes(allowed);
             setUsesAllowedText(that.designation_id);            
         }
-    }
+    };
     
     var setUsesAllowedText = function(designation_id){
         if(designation_id){
@@ -196,11 +196,11 @@ mlpa.uses = function(options){
         }else{
             $('.designation_allowed_uses_note').html('');            
         }
-    }
+    };
     
     that.setUsesAllowedText = setUsesAllowedText;
     
-    that.setDesignation = setDesignation
+    that.setDesignation = setDesignation;
     
     // PRIVATE METHODS
     
@@ -221,7 +221,7 @@ mlpa.uses = function(options){
         select.setScrollOnOverflow(true);
         select.render(container);
         return select;
-    }
+    };
     
     // Given a menu, it will disable any menu options that aren't compatible
     // with choices specified in each other menu.
@@ -240,7 +240,7 @@ mlpa.uses = function(options){
                 );
             }            
         });
-    }
+    };
     
     // given a list of valid uses, return whether the option value is in 
     // those uses.
@@ -251,7 +251,7 @@ mlpa.uses = function(options){
             }
         }
         return false;
-    }
+    };
     
     var onSelectChange = function(e){
         var choices = getChoices();
@@ -262,7 +262,7 @@ mlpa.uses = function(options){
                 updateDisabledOptions(select_menus[i], choices);
             }
         }
-    }
+    };
     
     var setAllowedPurposes = function(allowed_purposes){
         var allPurposes = getAllPurposes();
@@ -307,23 +307,23 @@ mlpa.uses = function(options){
             enableAllOptions(purpose_select);
             selectIndexAndTrigger(purpose_select, 0);            
         }
-    }
+    };
     
     var selectIndexAndTrigger = function(menu, index){
         menu.setSelectedIndex(index);
         onSelectChange({target: menu});
-    }
+    };
     
     var selectItemAndTrigger = function(menu, item){
         menu.setSelectedItem(item);
         onSelectChange({target: menu});
-    }
+    };
     
     var enableAllOptions = function(menu){
         forEachOption(menu, function(option){
             option.setEnabled(true);
         });
-    }
+    };
     
     var getAllPurposes = function(){
         var purposes = [];
@@ -331,26 +331,26 @@ mlpa.uses = function(options){
             purposes.push(data['purposes'][key]);
         }
         return purposes;
-    }
+    };
     
     var forEachMenu = function(callback){
         for(var i=0; i<select_menus.length;i++){
             callback(select_menus[i]);
         }
-    }
+    };
     
     var forEachOption = function(menu, callback){
         var count = menu.getItemCount();
         for(var i=0;i<count;i++){
             callback(menu.getItemAt(i));
         }
-    }
+    };
     
     var enableMenus = function(){
         forEachMenu(function(menu){
             menu.setEnabled(true);
         });
-    }
+    };
     
     var getDisallowedPurposes = function(designation_id){
         var all = getAllPurposes();
@@ -369,7 +369,7 @@ mlpa.uses = function(options){
             }
         }
         return disallowed;
-    }
+    };
     
     var getAllowedPurposes = function(designation_id){
         var keys = data['designations-purposes'][designation_id];
@@ -380,14 +380,14 @@ mlpa.uses = function(options){
             }            
         }
         return purposes;
-    }
+    };
             
     // select the use in the native form field
     var select = function(id){
         var option = native_select.find('option[value='+id+']');
         option.attr('selected', 'selected');
         addSelectedRow(id);
-    }
+    };
     
     // add to ui
     var addSelectedRow = function(id){
@@ -409,14 +409,14 @@ mlpa.uses = function(options){
         table.find('tbody').append(row);
         row.fadeIn(500);
         row.find('.remove a').click(onRemoveClick);
-    }
+    };
     
     // deselect the use in the native form field
     var deselect = function(id){
         var option = native_select.find('option[value='+id+']');
         option.attr('selected', false);
         removeSelectedRow(id);
-    }
+    };
     
     // remove from ui
     var removeSelectedRow = function(id){
@@ -427,7 +427,7 @@ mlpa.uses = function(options){
         if(table.find('.use').length === 0){
             table.find('.none').show();
         }
-    }
+    };
     
     var deselectAll = function(){
         var selected = getSelected();
@@ -435,7 +435,7 @@ mlpa.uses = function(options){
             var use = selected[i];
             deselect(use.pk);
         }
-    }
+    };
     
     var match = function(item, attributes){
         for(var key in attributes){
@@ -444,13 +444,13 @@ mlpa.uses = function(options){
             }
         }
         return item;
-    }
+    };
     
     var onRemoveClick = function(){
         var id = $(this).parent().parent().data('use_id');
         deselect(id);
         return false;         
-    }
+    };
 
     var data = JSON.parse($('#allowed_uses_json').text());
 
@@ -495,4 +495,4 @@ mlpa.uses = function(options){
     });
     
     return that;
-}
+};

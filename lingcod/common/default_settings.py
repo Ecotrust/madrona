@@ -21,7 +21,7 @@ from lingcod.common import assets
 COMPRESS_CSS = {
     'application': {
         'source_filenames': assets.get_css_files(),
-        'output_filename': 'marinemap.r?.css',
+        'output_filename': 'common/css/marinemap.r?.css',
         'extra_context': {
             'media': 'all'
         }

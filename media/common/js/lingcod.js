@@ -135,11 +135,11 @@ var lingcod = (function(){
         }
         
         $(googleLayers).bind('kmlLoaded', function(){
-            updateGoogleLayers(tree);
+            updateGoogleLayers(googleLayers);
         });
         
         $(googleLayers).bind('toggleItem', function(){
-            updateGoogleLayers(tree);
+            updateGoogleLayers(googleLayers);
         });
         
         googleLayers.load();

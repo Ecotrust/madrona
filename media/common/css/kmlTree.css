@@ -135,6 +135,7 @@ div.marinemap-kmltree li.checkHideChildren span.expander {
 
 div.marinemap-kmltree span.icon {
     display:none;
+    padding:0px;
 }
 
 li.KmlFolder > span.icon, li.KmlNetworkLink > span.icon {
