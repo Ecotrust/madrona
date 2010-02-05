@@ -33,3 +33,27 @@ class SessionsTest(TestCase):
         self.assertEquals(request.session, None)
         load_session(request, md5('blah').hexdigest())
         self.assertEquals(request.session.__class__.__name__, 'SessionStore')
+
+class BrowserUserAgentTest(TestCase):
+    def setUp(self):
+        self.supported_uastring_examples = [
+            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7',
+            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10',
+        ]
+
+        self.unsupported_uastring_examples = [
+            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.49 Safari/532.5',
+        ]
+
+    def test_supported_browsers(self):
+        from lingcod.common.utils import valid_browser 
+        for ua in self.supported_uastring_examples:
+            self.assertEquals(valid_browser(ua),True)
+
+    def test_unsupported_browsers(self):
+        from lingcod.common.utils import valid_browser 
+        for ua in self.unsupported_uastring_examples:
+            self.assertEquals(valid_browser(ua),False)
+
+
+

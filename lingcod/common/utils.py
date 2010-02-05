@@ -1,3 +1,4 @@
+import os
 from django.contrib.gis.geos import Point
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
@@ -156,3 +157,31 @@ def load_session(request, session_key):
     if session_key and session_key != '0':
         engine = import_module(settings.SESSION_ENGINE)
         request.session = engine.SessionStore(session_key)
+
+
+def valid_browser(ua):
+    """
+    Returns boolean depending on whether we support their browser
+    based on their HTTP_USER_AGENT
+
+    Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7
+    Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
+    """
+    supported_browsers = [
+            ('Firefox', 3, 5, 'Mac'),
+            ('Safari', 3, 1, 'Mac'),
+            ('Firefox', 3, 5, 'Windows'),
+            ('Chrome', 1, 0, 'Windows'),
+    ]
+
+    from lingcod.common import uaparser
+
+    bp = uaparser.browser_platform(ua)
+
+    for sb in supported_browsers:
+        if bp.family == sb[0] and \
+           ((bp.v1 == sb[1] and bp.v2 >= sb[2]) or bp.v1 > sb[1]) and \
+           bp.platform == sb[3]:
+               return True
+
+    return False

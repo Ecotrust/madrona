@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>{% block title %}MarineMap Decision Support Tool{% endblock %}</title>
+    {% load compressed %}
+    {% compressed_css 'application' %}
+</head>
+<body style="padding:10px;">
+    <h1> Your current browser is not supported by MarineMap. </h1>
+    <h2> There are a number of freely available web browsers that provide optimal performance </h2>
+
+    <div>
+        <h4>Apple Mac OSX 10.4+</h4>
+        <h3>Supported Browsers</h3>
+        <ul>
+            <li> <a href="http://www.apple.com/safari/">Safari 3.1+</a></li>
+            <li> <a href="http://www.mozilla.com/firefox/">Firefox 3.5+</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>Windows (2000, XP, Vista)</h4>
+        <h3>Supported Browsers</h3>
+        <ul>
+            <li> <a href="http://www.google.com/chrome">Google Chrome 1.0+</a></li>
+            <li> <a href="http://www.mozilla.com/firefox/">Firefox 3.5+</a></li>
+        </ul>
+    </div>
+
+    <p><em>We can not support Microsoft Internet Explorer Browsers or the Linux Operating System at this time.</em></p> 
+
+    <div>
+        <h4>Additional System Requirements</h4>
+        <p> In addition to installing one the supported browsers, you must also have:</p>
+        <ul>
+            <li> <a href="http://earth.google.com/intl/en/plugin/">Google Earth Plugin</a> </li>
+            <li> 256 MB RAM (512+ strong recommended) </li>
+            <li> 3D Graphics Card with 16MB VRAM </li>
+            <li> Screen resolution of 1024x768 (recommended 1280x1024), "32-bit True Color" </li>
+        </ul>
+    </div>
+
+    <p>We see that you are using {{browser_platform}}; you can <a href="/?supported=false">try MarineMap</a> with the understanding that it is not officially supported.</>
+    </body>
+</html>
+
+
+
