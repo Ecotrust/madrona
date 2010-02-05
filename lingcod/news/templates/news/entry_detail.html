@@ -6,7 +6,7 @@
 <h2>{{ object.title }}</h2> 
 <h4> {{object.summary}} </h4>
 
-<p> {{ object.body }} </p>
+<p> {{ object.body|safe }} </p>
 
 <div class="article_menu">	
     <p> published by {{ object.author.username }} on {{ object.modified_on|date:"F j, Y" }}</p>

@@ -7,7 +7,12 @@
 
 <div>
     <h2><a href="{{the_url}}" class="panel_link" title="{{ object.summary }}">{{ object.title }}</a></h2>
+
+{% if object.summary %}
     <p>{{ object.summary }} <a href="{{the_url}}" class="panel_link">read more...</a> </p>
+{% else %}
+    <p>{{ object.body|safe }}</p>
+{% endif %}
     <p>Published by {{object.author.username}} on {{ object.published_on|date:"F j, Y" }}</p>
 </div>
 

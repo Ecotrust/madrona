@@ -18,7 +18,7 @@ class Tag(models.Model):
 class Entry(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(editable=False)
-    summary = models.CharField(max_length=200, help_text="One sentence.")
+    summary = models.CharField(max_length=200,blank=True,null=True,help_text="One sentence. If not supplied, whole body text will show up in archive view.")
     body = models.TextField(help_text="Use HTML.")
     tags = models.ManyToManyField(Tag)
     author = models.ForeignKey(User)
