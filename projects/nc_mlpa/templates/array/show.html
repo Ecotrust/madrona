@@ -21,5 +21,13 @@
         {% else %}
         <p><em>None specified.</em></p>
         {% endif %}
+		<h2>Summary of MPAs by Designation</h2>
+		{% with instance.summary_by_designation as desig_dict %}
+			{% include "array_summary_designation.html" %}
+		{% endwith %}
+		<h2>Summary of MPAs by Level of Protection</h2>
+		{% with instance.summary_by_lop as lop_list %}
+			{% include "array_summary_lop.html" %}
+		{% endwith %}
     </div>
 {% endblock panel %}

@@ -7,6 +7,7 @@ from lingcod.manipulators.manipulators import *
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.gis.db.models.query import GeoQuerySet
+from django.contrib.gis.measure import A, D
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
@@ -27,6 +28,10 @@ class MpaDesignation(models.Model):
     poly_outline_color = models.CharField(max_length=8, default="ffffffff", verbose_name="Hex Color for rendering outline/border")
     poly_fill_color = models.CharField(max_length=8, default="ff0000ff", verbose_name="Hex Color for rendering polygon area")
     url = models.URLField(verify_exists=False,verbose_name="URL to more info on this MPA Designation")
+    sort = models.IntegerField(blank=True, null=True, help_text="Some reporting features need the designations displayed in a particular order.")
+
+    class Meta:
+        ordering = ['sort']
 
     def __unicode__(self):
         return "(%s) %s" % (self.acronym, self.name)
@@ -37,6 +42,8 @@ class GeoQuerySetManager(ShareableGeoManager):
     """
     def get_query_set(self):
         return self.model.QuerySet(self.model)
+        
+    
 
 class Mpa(models.Model):
     """Model used for representing marine protected areas or MPAs
@@ -97,6 +104,15 @@ class Mpa(models.Model):
             """
             return self.extra(select={'kml':'replace(AsKML(ST_Reverse(ST_ForceRHR(ST_Translate(ST_Force_3d(simplify("%s"."geometry_final", %f)), 0, 0, %f)))), \'<Polygon>\', \'<Polygon><altitudeMode>absolute</altitudeMode><extrude>1</extrude>\')' % (str(self.model._meta.db_table), settings.KML_SIMPLIFY_TOLERANCE, settings.KML_EXTRUDE_HEIGHT)})
     
+        @property
+        def summed_area_sq_mi(self):
+            """
+            WARNING: This method assumes that the native units of the mpas is meters.  This depends on the projection.
+            Return the summed area of the mpas in the query set in square miles.
+            """
+            raw_area = sum( [m.geometry_final.area for m in self.all() ] )
+            return A(sq_m=raw_area).sq_mi
+            
     class Meta:
         permissions = (("can_share_mpas", "Can share MPAs"),)
         abstract=True

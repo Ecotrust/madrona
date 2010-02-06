@@ -1,4 +1,4 @@
-div.panel > table.hab_repr_container {
+table.hab_repr_container {
     font-size: small;
     width: 455px;
     background: #ffffff;
@@ -10,26 +10,26 @@ div.panel > table.hab_repr_container {
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
 }
-div.panel > table.hab_repr_container td, th {
+table.hab_repr_container td, th {
     text-align: center;
     border-width: 0px;
     border-style: solid;
     border-color: gray;
     padding: 2px;
 }
-div.panel > table.hab_repr_container td.hab_result:hover {
+table.hab_repr_container td.hab_result:hover {
     padding: 0;
 }
-div.panel > table.hab_repr_container td.habitat_name {
+table.hab_repr_container td.habitat_name {
     padding-left: 1em;
     text-align: left;
 }
-div.panel > table.hab_repr_container th {
+table.hab_repr_container th {
     text-align: center;
     font-weight: bold;
     background: #FAFAFA url(http://closure-library.googlecode.com/svn/trunk/closure/goog/demos/css/../images/toolbar-bg.png) repeat-x scroll left bottom;
 }
-div.panel > table.hab_repr_container tr.grey {
+table.hab_repr_container tr.grey {
     background: #ececec;
 }
 td.mpa_hab_result > span.rounded {

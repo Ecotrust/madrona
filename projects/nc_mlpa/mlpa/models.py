@@ -11,6 +11,7 @@ from lingcod.depth_range.models import depth_range as depth_range_calc
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 from django.db import transaction
+from django.template.defaultfilters import dictsort
 
 
 class EstuariesManager(models.GeoManager):
@@ -148,6 +149,82 @@ class MpaArray(BaseArray):
                     cl.calculate_habitat_info()
         return qs
         
+    @property
+    def summary_by_designation(self):
+        sr_area = StudyRegion.objects.current().area_sq_mi
+        by_desig = {}
+        desig_list = list(MpaDesignation.objects.all())
+        if self.mpa_set.filter(designation=None):
+            desig_list.append(None)
+        for desig in desig_list:
+            if desig:
+                acronym = desig.acronym
+                sort_num = desig.sort
+            else:
+                acronym = None
+                sort_num = 250
+            mpas = self.mpa_set.filter(designation=desig)
+            by_desig[sort_num] = {
+                'designation': acronym,
+                'count': mpas.count(),
+                'area': mpas.summed_area_sq_mi,
+                'percent_of_sr': 100 * ( mpas.summed_area_sq_mi / sr_area )
+            }
+        # add in totals for all designations
+        by_desig[255] = {
+            'designation': 'All MPAs',
+            'count': self.mpa_set.count(),
+            'area': self.mpa_set.summed_area_sq_mi,
+            'percent_of_sr': 100 * ( self.mpa_set.summed_area_sq_mi / sr_area )
+        }
+        return by_desig
+        
+    @property
+    def summary_by_lop(self):
+        sr_area = StudyRegion.objects.current().area_sq_mi
+        by_lop = []
+        lop_list = list( Lop.objects.filter(value__gt=2) )
+        if None in [ m.lop for m in self.mpa_set ]:
+            lop_list.append(None)
+        for lop in lop_list:
+            if lop:
+                disp_name = lop.name
+                key_num = lop.value * -1
+            else:
+                disp_name = 'N/A'
+                key_num = -1
+            mpas = self.mpa_set.filter(lop_table__lop=lop)
+            # use the additive inverse of the lop value so the dict will be sorted correctly in the template
+            sub_dict = {
+                'sort': key_num,
+                'lop': disp_name,
+                'count': mpas.count(),
+                'area': mpas.summed_area_sq_mi,
+                'percent_of_sr': 100 * ( mpas.summed_area_sq_mi / sr_area )
+            }
+            by_lop.append(sub_dict)
+        # for some PITA reason we have to bin together lops with a value of 2 or less
+        low_mpas = self.mpa_set.filter(lop_table__lop__value__lte=2)
+        sub_dict = {
+            'sort': -2,
+            'lop': 'Moderate-low or Low',
+            'count': low_mpas.count(),
+            'area': low_mpas.summed_area_sq_mi,
+            'percent_of_sr': 100 * ( low_mpas.summed_area_sq_mi / sr_area )
+        }
+        by_lop.append(sub_dict)
+        # add in totals for all lops
+        mpas = self.mpa_set.all()
+        sub_dict = {
+            'sort': 0,
+            'lop': 'All Mpas',
+            'count': mpas.count(),
+            'area': mpas.summed_area_sq_mi,
+            'percent_of_sr': 100 * ( mpas.summed_area_sq_mi / sr_area )
+        }
+        by_lop.append(sub_dict)
+        return dictsort(by_lop,'sort')
+        
     # @property
     # def replication_report(self):
     #     lops = Lop.objects.filter(run=True)
@@ -181,6 +258,9 @@ class Lop(models.Model):
     name = models.CharField(max_length=255, verbose_name='level of protection')
     value = models.IntegerField()
     run = models.BooleanField()
+        
+    class Meta:
+        ordering = ['-value']
         
     def __unicode__(self):
         return self.name
@@ -487,15 +567,87 @@ class MlpaMpa(Mpa):
         else:
             lop_value = 8
         return Lop.objects.get(value=lop_value)
+    
+    def short_g_o_str(self, really_short=False):
+        gostr = ''
+        qset = self.goal_objectives.get_query_set()
+        qset_goal_ids = [q['goal_category_id'] for q in qset.values('goal_category_id')]
+        gids_unique = []
+        for q in qset_goal_ids:
+            if q not in gids_unique:
+                gids_unique.append(q)
+                cat = GoalCategory.objects.get(pk=q)
+                gostr = gostr + cat.name + ": ("
+                qset_f = qset.filter(goal_category=cat).values('name')
+                for q in qset_f:
+                    gostr = gostr + str( q['name'] )
+                    #if not the last one
+                    if q != qset_f[qset_f.count() - 1]:
+                        gostr = gostr + ","
+                        if not really_short:
+                            gostr = gostr + ' '
+                gostr = gostr + ") "
+        if really_short:
+            gostr = gostr.replace('oal ','')
+            gostr = gostr.replace('bjective ','-')
+        return gostr
+        
+    def get_allowed_uses_text(self):
+        if self.designation == MpaDesignation.objects.get(acronym='SMR'):
+            return 'Take of all living marine resources is prohibited.'
+        else:
+            a = ''
+            qset = self.allowed_uses.get_query_set()
+            comm = qset.filter(purpose__name='commercial')
+            rec = qset.filter(purpose__name='recreational')
+            if not qset: # no allowed uses specified
+                return 'No allowed uses were specified in MarineMap drop down menu.'
+            elif (comm and not rec) or (rec and not comm): # only commercial uses or only recreational uses
+                if comm:
+                    take_type = 'commercial'
+                    qs = comm
+                elif rec:
+                    take_type = 'recreational'
+                    qs = rec
+                a = 'The take of all living marine resources is prohibited except the %s take of ' % take_type
+                cnt = qs.count()
+                for q in qs:
+                    a += q.target.name + ' by ' + q.method.name
+                    cnt -= 1
+                    if cnt > 1:
+                        a += '; '
+                    elif cnt:
+                        a += '; and '
+                    else:
+                        a += '.'
+                return a
+            else: # There are both commercial and recreational allowed uses
+                a = 'The take of all living marine resources is prohibited except:\n'
+                i = 1
+                for qs in [rec,comm]:
+                    a += '%i. The %s take of ' % (i, qs[0].purpose.name)
+                    i += 1
+                    cnt = qs.count()
+                    for q in qs:
+                        a += q.target.name + ' by ' + q.method.name
+                        cnt -= 1
+                        if cnt > 1:
+                            a += '; '
+                        elif cnt:
+                            a += '; and '
+                        else:
+                            a += '.\n'
+                return a
 
 class MpaLop(models.Model):
     """(MpaLop description)"""
-    mpa = models.ForeignKey(MlpaMpa)
+    mpa = models.OneToOneField(MlpaMpa, related_name="lop_table")
+    #mpa = models.ForeignKey(MlpaMpa)
     lop = models.ForeignKey(Lop,blank=True,null=True)
     reason = models.TextField(blank=True)
 
     class Meta:
-        ordering = []
+        ordering = ['-lop__value']
         verbose_name, verbose_name_plural = "", "s"
 
     def __unicode__(self):

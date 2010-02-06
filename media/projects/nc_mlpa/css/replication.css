@@ -1,12 +1,12 @@
 
-table {
+/*table {
     border-width: thin;
     border-spacing: 0px;
     border-style: solid;
     border-color: gray;
     border-collapse: separate;
     margin: 0px;
-}
+}*/
 table.cluster_container {
     background: white;
     margin-bottom: 4px;

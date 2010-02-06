@@ -13,7 +13,7 @@
 		</tr>
 		{% for sort_num,sub_dict in result.items %}
 		<tr class="{% cycle '' 'grey' %}">
-			<td class="habitat_name">{{ sub_dict.name }}</td>
+			<td class="habitat_name">{{ sub_dict.name|title }}</td>
 			<td class="mpa_hab_result">
 				<span class="rounded">{{ sub_dict.result|floatformat:'2' }}</span>
 				<span class="unrounded">{{ sub_dict.result|floatformat:'-6' }}</span>

@@ -2,6 +2,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpRes
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db.models import Max,Min
+from django.utils.dateformat import format
 from lingcod.common import mimetypes
 from lingcod.common.utils import KmlWrap, LargestPolyFromMulti
 import lingcod.intersection.models as int_models
@@ -33,6 +34,108 @@ def max_str_length_in_list(list):
             max_len = len(item)
     return max_len
 
+def array_summary_excel_worksheet(array,ws):
+    by_desig = array.summary_by_designation
+    title_style = xlwt.easyxf('font: bold true;')
+    heading_row_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left hair, right hair, top hair, bottom medium;')
+    area_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='#,##0.00')
+    percent_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='0.0%')
+    count_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='0')
+    style_dict = {'count': count_style, 'area': area_style, 'percent_of_sr': percent_style, 'designation': count_style, 'lop': count_style }
+    # create a title row
+    current_row = 0
+    page_title = 'Summary for %s as of %s' % (array.name,format(array.date_modified,"M d, Y"))
+    ws.write_merge(current_row,current_row,0,3,page_title,title_style)
+    current_row += 2
+    ws.write_merge(current_row,current_row,0,3,'Summary of MPAs by Designation',title_style)
+    current_row += 1
+    desig_header_list = ['Designation Type', '# of MPAs','Area','Percent of Study Region']
+    for i,header in enumerate(desig_header_list):
+        ws.col(i).width = 256 * (len(header) + 4)
+        ws.row(current_row).write(i,header,heading_row_style)
+    current_row += 1
+    # write the data for this table
+    for key,sub_dict in by_desig.iteritems():
+        # god damned Excel automatically multiplies by 100 when you format something as a percentage
+        sub_dict['percent_of_sr'] = sub_dict['percent_of_sr'] / 100
+        for col,v in dict(zip(range(0,4),['designation','count','area','percent_of_sr'])).iteritems():
+            if not sub_dict[v]:
+                out_value = 'Undesignated'
+            else:
+                out_value = sub_dict[v]
+            ws.row(current_row).write(col,out_value,style_dict[v])
+        current_row += 1
+    # make a bit of space
+    current_row += 2
+    
+    # create a title row
+    ws.write_merge(current_row,current_row,0,3,'Summary of MPAs by Level of Protection',title_style)
+    current_row += 1
+    # make second header row
+    lop_header_list = ['LOP', '# of MPAs','Area','Percent of Study Region']
+    for i,header in enumerate(lop_header_list):
+        ws.row(current_row).write(i,header,heading_row_style)
+    current_row += 1
+    by_lop = array.summary_by_lop
+    for sub_dict in by_lop:
+        # god damned Excel automatically multiplies by 100 when you format something as a percentage
+        sub_dict['percent_of_sr'] = sub_dict['percent_of_sr'] / 100
+        for col,v in dict( zip( range(0,4), ['lop','count','area','percent_of_sr'] )).iteritems():
+            if sub_dict[v].__class__.__name__ == 'str':
+                out_value = sub_dict[v].title()
+            else:
+                out_value = sub_dict[v]
+            ws.row(current_row).write(col,out_value,style_dict[v])
+        current_row += 1
+    return ws
+    
+def array_attributes_excel_worksheet(array,ws):
+    headings = ['MPA Name','MPA ID','Bioregion','MPA Boundaries (Exact or Approximate)','Designation','Level of Protection','Proposed Take Regulations',
+    'Other Proposed Regulations','Regional Goals/Objectives','Site Specific Rationale','Other Considerations']
+    heading_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left hair, right hair, top hair, bottom hair')
+    title_style = xlwt.easyxf('font: bold true;')
+    cen = xlwt.easyxf('alignment: horizontal center, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
+    lef = xlwt.easyxf('alignment: horizontal left, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
+    data_style_list = [cen,cen,cen,lef,cen,cen,lef,lef,lef,lef,lef]
+    wide = 256 * 30
+    narrow = 256 * 16
+    width_list = [wide,narrow,narrow,wide,narrow,narrow,wide,wide,wide,wide,wide]
+    heading_dict = dict( zip( headings, width_list ))
+    current_row = 0
+    page_title = 'MPA Attributes for %s as of %s' % (array.name,format(array.date_modified,"M d, Y"))
+    ws.write_merge(current_row,current_row,0,3,page_title,title_style)
+    current_row += 2
+    current_col = 0
+    for heading in headings:
+        ws.col(current_col).width = heading_dict[heading]
+        ws.row(current_row).write(current_col,heading,heading_style)
+        current_col += 1
+    current_row += 1
+    for mpa in array.mpa_set.all():
+        mpa_lop = mpa.lop
+        if mpa_lop:
+            lop_name = mpa_lop.name
+        else:
+            lop_name = 'N/A'
+        mdl = [mpa.name]
+        mdl.append(mpa.pk)
+        mdl.append(mpa.bioregion.name)
+        mdl.append(mpa.boundary_description)
+        if mpa.designation:
+            mdl.append(mpa.designation.acronym)
+        else:
+            mdl.append('Undesignated')
+        mdl.append(lop_name)
+        mdl.append(mpa.get_allowed_uses_text()) #'Proposed Take Regulations',
+        mdl.append('Allowed Uses: ' + mpa.other_allowed_uses + '\n' + 'Regulated Activities: ' + mpa.other_regulated_activities) #'Other Proposed Regulations',
+        mdl.append(mpa.short_g_o_str(really_short=True))    #'Regional Goals/Objectives',
+        mdl.append(mpa.specific_objective)    #'Site Specific Rationale',
+        mdl.append('')              #'Other Considerations'
+        for i,thing in enumerate(mdl):
+            ws.row(current_row).write(i,str(thing),data_style_list[i])
+        current_row += 1
+    return ws
+        
 def array_habitat_excel_worksheet(array,ws):
     osc = int_models.OrganizationScheme.objects.get(name='excelhabitat')
     habinfo = osc.info['feature_info']
@@ -231,7 +334,32 @@ def geometries_to_wkt(results,srid=None, simplify=None):
         elif v.__class__.__name__=='dict':
             v.update(geometries_to_wkt(v,srid,simplify))
     return results
+
+def array_summary_excel(request, array_id_list_str):
+    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    wb = xlwt.Workbook(encoding='utf-8')
+    if array_set.count()==1:
+        wb_name = array_set[0].name[:10]
+    else:
+        wb_name = 'MLPA_Array_Summaries'
+    for array in array_set:
+        ws = wb.add_sheet(slugify(array.name[0:26] + '_att'))
+        ws = array_attributes_excel_worksheet(array,ws)
+        ws = wb.add_sheet(slugify(array.name[0:26] + '_sum'))
+        ws = array_summary_excel_worksheet(array,ws)
+
+    response = int_views.build_excel_response(slugify(wb_name),wb)
+    return response
+
+def array_summary(request, array_id, format='excel'):
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    by_desig = array.summary_by_designation
     
+    if format=='html':
+        template = 'array_summary_panel.html'
+        return render_to_response(template, {'array': array, 'desig_dict': by_desig }, context_instance=RequestContext(request) )
+        
+
 def array_habitat_replication(request, array_id, format='html'):
     array = mlpa.MpaArray.objects.get(pk=array_id)
     if format=='html':

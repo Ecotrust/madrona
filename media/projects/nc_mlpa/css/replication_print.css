@@ -1,4 +1,4 @@
-body {
+/*body {
     overflow: visible;
     width: 6.5in;
     font-family: sans-serif;
@@ -12,7 +12,7 @@ table {
     border-collapse: separate;
     margin: 0px;
     float: none;
-}
+}*/
 table.print {
     border-width: 0;
     width: 6.5in;

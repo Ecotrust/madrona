@@ -1,0 +1,16 @@
+<table class="hab_repr_container">
+	<tr>
+		<th>Designation Type</th>
+		<th># of MPAs</th>
+		<th>Area (mi<sup>2</sup>)</th>
+		<th>Percent of Study Region</th>
+	</tr>
+	{% for sort,desig in desig_dict.items  %}
+	<tr class="{% cycle '' 'grey' %}">
+		<td>{{desig.designation|default:"Undesignated"}}</td>
+		<td>{{desig.count}}</td>
+		<td>{{desig.area|floatformat:"-2"}}</td>
+		<td>{{desig.percent_of_sr|floatformat:"-2"}}%</td>
+	</tr>
+	{% endfor %}
+</table>
