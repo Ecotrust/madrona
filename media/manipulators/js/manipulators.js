@@ -124,6 +124,7 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
             self.setGeometryFields_(data.user_shape, data.submitted, data.final_shape, data.final_shape_kml);
             self.enterManipulatedState_(data.html, true);            
         }else{
+			console.log('error!!!');
             self.setGeometryFields_('', data.submitted, '', '');
             self.addNewShape_(data.submitted);
             self.gex_.util.flyToObject(self.shape_, {
@@ -216,6 +217,7 @@ lingcod.Manipulator.prototype.isDefiningShape = function(){
 }
 
 lingcod.Manipulator.prototype.process = function(wkt, url, callback){
+	var self = this;
     $.ajax({
         url: url,
         type: 'POST',
@@ -224,12 +226,12 @@ lingcod.Manipulator.prototype.process = function(wkt, url, callback){
             if(status === 'success'){
                 callback(JSON.parse(data));
             }else{
-                $(this).trigger('error', "There was an error processing your shape.");
+                $(self).trigger('error', "There was an error processing your shape.");
                 callback({success: false, html: $('#manipulators_server_error')});
             }
         },
         error: function(data, status){
-            $(this).trigger('error', 'There was an error processing your shape.');
+            $(self).trigger('error', 'There was an error processing your shape.');
             callback({success: false, html: $('#manipulators_server_error').html()});
         }
     });
