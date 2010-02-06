@@ -59,7 +59,7 @@ def array_summary_excel_worksheet(array,ws):
         # god damned Excel automatically multiplies by 100 when you format something as a percentage
         sub_dict['percent_of_sr'] = sub_dict['percent_of_sr'] / 100
         for col,v in dict(zip(range(0,4),['designation','count','area','percent_of_sr'])).iteritems():
-            if not sub_dict[v]:
+            if v=='designation' and not sub_dict[v]:
                 out_value = 'Undesignated'
             else:
                 out_value = sub_dict[v]
@@ -81,7 +81,7 @@ def array_summary_excel_worksheet(array,ws):
         # god damned Excel automatically multiplies by 100 when you format something as a percentage
         sub_dict['percent_of_sr'] = sub_dict['percent_of_sr'] / 100
         for col,v in dict( zip( range(0,4), ['lop','count','area','percent_of_sr'] )).iteritems():
-            if sub_dict[v].__class__.__name__ == 'str':
+            if col == 0:
                 out_value = sub_dict[v].title()
             else:
                 out_value = sub_dict[v]
@@ -90,16 +90,25 @@ def array_summary_excel_worksheet(array,ws):
     return ws
     
 def array_attributes_excel_worksheet(array,ws):
+    """
+    MPA ID, Name, Bioregion, Boundary Text, Designation, LOP, Allowed 
+    Uses, Other Allowed Uses, Other Regulated Activities, Goals/Objectives, Site-Specific Rationale, 
+    Design Considerations, MPA Evaluation Notes
+    """
+    ws.panes_frozen = True
+    ws.horz_split_pos = 3
+    ws.vert_split_pos = 1
     headings = ['MPA Name','MPA ID','Bioregion','MPA Boundaries (Exact or Approximate)','Designation','Level of Protection','Proposed Take Regulations',
-    'Other Proposed Regulations','Regional Goals/Objectives','Site Specific Rationale','Other Considerations']
+    'Other Allowed Uses','Other Proposed Regulations','Regional Goals/Objectives','Site Specific Rationale','Other Considerations',
+    'Staff Evolution Notes']
     heading_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left hair, right hair, top hair, bottom hair')
     title_style = xlwt.easyxf('font: bold true;')
     cen = xlwt.easyxf('alignment: horizontal center, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
     lef = xlwt.easyxf('alignment: horizontal left, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
-    data_style_list = [cen,cen,cen,lef,cen,cen,lef,lef,lef,lef,lef]
+    data_style_list = [cen,cen,cen,lef,cen,cen,lef,lef,lef,lef,lef,lef,lef]
     wide = 256 * 30
     narrow = 256 * 16
-    width_list = [wide,narrow,narrow,wide,narrow,narrow,wide,wide,wide,wide,wide]
+    width_list = [wide,narrow,narrow,wide,narrow,narrow,wide,wide,wide,wide,wide,wide,wide]
     heading_dict = dict( zip( headings, width_list ))
     current_row = 0
     page_title = 'MPA Attributes for %s as of %s' % (array.name,format(array.date_modified,"M d, Y"))
@@ -114,7 +123,7 @@ def array_attributes_excel_worksheet(array,ws):
     for mpa in array.mpa_set.all():
         mpa_lop = mpa.lop
         if mpa_lop:
-            lop_name = mpa_lop.name
+            lop_name = mpa_lop.name.title()
         else:
             lop_name = 'N/A'
         mdl = [mpa.name]
@@ -127,10 +136,12 @@ def array_attributes_excel_worksheet(array,ws):
             mdl.append('Undesignated')
         mdl.append(lop_name)
         mdl.append(mpa.get_allowed_uses_text()) #'Proposed Take Regulations',
-        mdl.append('Allowed Uses: ' + mpa.other_allowed_uses + '\n' + 'Regulated Activities: ' + mpa.other_regulated_activities) #'Other Proposed Regulations',
+        mdl.append(mpa.other_allowed_uses) # 'Other Allowed Uses'
+        mdl.append(mpa.other_regulated_activities) #'Other Proposed Regulations',
         mdl.append(mpa.short_g_o_str(really_short=True))    #'Regional Goals/Objectives',
         mdl.append(mpa.specific_objective)    #'Site Specific Rationale',
-        mdl.append('')              #'Other Considerations'
+        mdl.append(mpa.design_considerations)      #'Other Considerations'
+        mdl.append(mpa.evolution)          # 'Staff Evolution Notes'
         for i,thing in enumerate(mdl):
             ws.row(current_row).write(i,str(thing),data_style_list[i])
         current_row += 1
@@ -215,7 +226,10 @@ def array_habitat_excel_worksheet(array,ws):
         mpa_data.append(mpa.name)                      # mpa name
         mpa_data.append(mpa.pk)                        # mpa id
         mpa_data.append(mpa.designation.acronym)       # mpa designation
-        mpa_data.append(mpa.lop.name.title())          # level of protection
+        if mpa.lop:
+            mpa_data.append(mpa.lop.name.title())          # level of protection
+        else:
+            mpa_data.append('N/A')
         mpa_data.append(mpa.bioregion.name.title())    # sat evaluation bioregion
         mpa_data.append(mpa.area_sq_mi)                # area
         mpa_data.append('')                            # alongshore span (to be entered by hand ...for no apparent reason)
@@ -347,6 +361,8 @@ def array_summary_excel(request, array_id_list_str):
         ws = array_attributes_excel_worksheet(array,ws)
         ws = wb.add_sheet(slugify(array.name[0:26] + '_sum'))
         ws = array_summary_excel_worksheet(array,ws)
+        ws = wb.add_sheet(slugify(array.name[0:26] + '_hab'))
+        ws = array_habitat_excel_worksheet(array,ws)
 
     response = int_views.build_excel_response(slugify(wb_name),wb)
     return response
