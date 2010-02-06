@@ -607,7 +607,7 @@ lingcod.kmlTree = (function(){
                             var children = node.find('>ul>li');
                             if(children.length){
                                 toggleItem($(children[0]), true);
-                                toggleDown($(children[0]));
+                                toggleDown($(children[0]), true);
                             }else{
                                 return;
                             }
@@ -629,7 +629,7 @@ lingcod.kmlTree = (function(){
             }
         };
         
-        var toggleUp = function(node, toggling){
+        var toggleUp = function(node, toggling, from){
             var parent = node.parent().parent();
             if(!parent.hasClass('marinemap-kmltree')){
                 if(toggling){
@@ -637,9 +637,12 @@ lingcod.kmlTree = (function(){
                     if(herParent.hasClass('radioFolder')){
                         // toggle off any siblings and toggle them down
                         herParent.find('>ul>li.visible').each(function(){
-                            var sib = $(this);
-                            toggleItem(sib, false);
-                            toggleDown(sib, false);
+                            if(this !== parent[0]){
+                                var sib = $(this);
+                                toggleItem(sib, false);
+                                toggleDown(sib, false);                               
+                            }else{
+                            }
                         });
                     }
                     if(!parent.hasClass('visible')){
@@ -663,6 +666,7 @@ lingcod.kmlTree = (function(){
             if(parent.hasClass('radioFolder')){
                 parent.find('>ul>li.visible').each(function(){
                     toggleItem($(this), false);
+                    toggleDown($(this), false);
                 });
             }
             toggleItem(node, toggle);
