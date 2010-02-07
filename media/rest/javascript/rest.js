@@ -216,11 +216,13 @@ lingcod.rest.client = function(gex, panel, manipulators){
     var create = function(config, options){
         var self = this;
         options = options || {};
+        panel.spin('Retrieving form');
         $.ajax({
             cache: false,
             url: config.href,
             type: 'GET',
             success: function(data, status){
+                panel.stopSpinning();
                 if(status === 'success'){
                     setupForm(data, options, config);
                 }else{
@@ -231,6 +233,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 }
             },
             error: function(e, b){
+                panel.stopSpinning();
                 alert('Could not retrieve form. Your computer was unable to contact the server.');
                 if(options.error){
                     options.error();
@@ -253,11 +256,13 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var config = getConfig(configOrFeature);
         var options = options || {};
         options.location = config.location;
+        panel.spin('Retrieving form');
         $.ajax({
             cache: false,
             url: config.form_link,
             type: 'GET',
             success: function(data, status){
+                panel.stopSpinning();
                 if(status === 'success'){
                     setupForm(data, options, config);
                 }else{
@@ -268,6 +273,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 }
             },
             error: function(e, b){
+                panel.stopSpinning();
                 if(options && options.error){
                     alert('Could not retrieve form. Your computer was unable to contact the server.');
                     options.error();

@@ -71,3 +71,12 @@
     left:10px;
     z-index:20;
 }
+
+.menu_items.disabled {
+    opacity:.4;
+}
+
+.menu_items.disabled li a:hover {
+    cursor: default;
+    background-position: 0px 0px !important;
+}

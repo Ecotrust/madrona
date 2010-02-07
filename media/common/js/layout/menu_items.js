@@ -15,9 +15,11 @@ lingcod.menu_items = (function(){
             self.append(els)
             menuLink = self.find('span a');
             menuLink.click(function(){
-                closeAll();
-                var parent = $(this).parent().parent()[0];
-                openItem(parent);
+                if(!that.el.hasClass('disabled')){
+                    closeAll();
+                    var parent = $(this).parent().parent()[0];
+                    openItem(parent);                    
+                }
                 return false;
             });
             var href = menuLink.attr('href');
@@ -72,6 +74,18 @@ lingcod.menu_items = (function(){
     }
     
     that.openItem = openItem;
+    
+    var disable = function(){
+        that.el.addClass('disabled');
+    };
+    
+    that.disable = disable;
+    
+    var enable = function(){
+        that.el.removeClass('disabled');
+    };
+    
+    that.enable = enable;
     
     return that;
 })();

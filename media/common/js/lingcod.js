@@ -7,8 +7,16 @@ var lingcod = (function(){
         options = opts;
         that.options = opts;
         
-        $('#sidebar').tabs();
+        $('#sidebar').tabs({
+            select: function(event, ui){
+                if($(this).hasClass('masked')){
+                    event.preventDefault();
+                }
+            }
+        });
+        
         resize();
+        
         if(window.google){
             google.earth.createInstance(
                 "map", 
@@ -143,9 +151,7 @@ var lingcod = (function(){
         });
         
         googleLayers.load();
-        
-        window.googleLayers = googleLayers;
-        
+                
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
             
@@ -338,6 +344,11 @@ var lingcod = (function(){
         $('#sidebar-mask').click(function(){
             lingcod.menu_items.closeAll();
         });
+        $('#panel-holder').click(function(e){
+            if(e.originalTarget === this){
+                lingcod.menu_items.closeAll();
+            }
+        });
     };
     
     var resize = function(){
@@ -359,6 +370,21 @@ var lingcod = (function(){
         $('#panel-holder').hide();
         $('#sidebar').removeClass('masked');
     };
+    
+    that.showLoadingMask = function(msg){
+        var msg = msg || 'Loading';
+        var lmsg = $('#sidebar-mask').find('span.loadingMsg');
+        lmsg.text(msg);
+        lmsg.show();
+        lingcod.menu_items.disable();
+        $('#sidebar').addClass('masked');
+    };
+    
+    that.hideLoadingMask = function(){
+        $('#sidebar-mask').find('span.loadingMsg').hide();
+        lingcod.menu_items.enable();
+        that.unmaskSidebar();
+    }
     
     var panels = [];
     

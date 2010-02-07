@@ -118,8 +118,9 @@ li {
     overflow-y:auto;
     z-index:10;
     background-color:#f4f8fb;
-    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);   
+    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);   
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);   
 }
 
 .marinemap-panel-noscroll {
@@ -141,15 +142,34 @@ li {
 #sidebar-mask {
     margin:0;
     padding:0;
-    opacity:.5;
-    filter: alpha(opacity=50);
+/*    opacity:.53;*/
+/*    filter: alpha(opacity=53);*/
     position:absolute;
     top:40px;
     left:0;
-    width:500px;
+    width:480px;
     height:100%;
-    background-color:gray;
+    background:transparent url(../images/loading-mask-bg.png) repeat;
     display:none;
+    z-index:1;
+    text-align:center;
+}
+
+#sidebar-mask span.loadingMsg {
+    display:none;
+    padding-top:150px;
+    width:100%;
+    text-align:center;
+    position:absolute;
+    top:0px;
+    left:0px;
+    opacity:1;
+    font-size:16px;
+    font-weight:bold;
+    height:40px;
+    padding-bottom:15px;
+    background: transparent url(../images/ajax-loader-dark.gif) no-repeat center bottom;
+    color:white;
 }
 
 .masked #sidebar-mask {

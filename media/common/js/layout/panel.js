@@ -81,8 +81,12 @@ lingcod.panel = function(options){
     }
     
     that.spin = function(message){
-        el.show();
-    }
+        lingcod.showLoadingMask(message);
+    };
+    
+    that.stopSpinning = function(){
+        lingcod.hideLoadingMask();
+    };
     
     that.showError = function(title, message){
         
@@ -95,6 +99,7 @@ lingcod.panel = function(options){
             url: url,
             method: 'GET',
             complete: function(response, status){
+                that.stopSpinning();
                 switch(response.status){
                     case 200:
                         var html = $(response.responseText);
