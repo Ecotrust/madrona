@@ -24,6 +24,13 @@
 
 }
 
+.ui-tabs-nav span {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 
 .ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
     display: block;

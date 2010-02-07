@@ -3,12 +3,14 @@ div.marinemap-kmltree {
     font-size:12px;
     -moz-user-select: none;
     -khtml-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
 div.marinemap-kmltree p.error {
     -moz-user-select: text;
     -khtml-user-select: text;
+    -webkit-user-select: none;
     user-select: text;
 }
 
