@@ -292,8 +292,11 @@ lingcod.kmlTree = (function(){
             }
         }
         
-        var showLoading = function(){
-            var h = $('<div class="marinemap-kmltree-loading"><span>'+opts.loadingMsg+'</span></div>');
+        var showLoading = function(msg){
+            hideLoading();
+            var msg = msg || opts.loadingMsg;
+            var h = $('<div class="marinemap-kmltree-loading"><span>' + 
+                msg + '</span></div>');
             var height = opts.element.height();
             if(height !== 0){
                 h.height(h);

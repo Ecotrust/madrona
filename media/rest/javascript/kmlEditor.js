@@ -283,6 +283,15 @@ lingcod.rest.kmlEditor = function(options){
         options.client.show(kmlObject);
     });
     
+    $(options.client).bind('saving', function(e, msg){
+        tree.showLoading(msg);
+    });
+    
+    $(options.client).bind('doneSaving', function(e, msg){
+        tree.hideLoading();
+    });
+    
+    
     tbar.setEnabled(false);
     $(tree).bind('kmlLoaded', kmlLoaded);
     tree.load(true);

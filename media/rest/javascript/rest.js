@@ -85,11 +85,13 @@ lingcod.rest.client = function(gex, panel, manipulators){
     var onsubmit = function(e, form, options, config){
         var action = $(form).attr('action');
         panel.close();
+        $(that).trigger('saving', ["Saving changes"]);
         $.ajax({
             url: action,
             type: 'POST',
             data: $(form).serialize(),
             complete: function(req, status){
+                $(that).trigger('doneSaving');
                 switch(req.status){
                     case 201:
                         // new object created, get location header
@@ -287,10 +289,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
             answer = true;
         }
         if(answer){
+            $(that).trigger('saving', ["Deleting"]);
             $.ajax({
                 url: config.location,
                 type: 'DELETE',
                 complete: function(response, status){
+                    $(that).trigger('doneSaving');
                     if(status === 'success'){
                         if(options.success){
                             options.success(processLocation(config.location));
@@ -395,14 +399,17 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 form.after(button_html);
                 form.submit( function(e) {
                     var formdata = form.serialize();
+                    $(that).trigger('saving', ["Saving changes"]);
                     $.ajax({
                         url: action,
                         type: 'POST',
                         data: formdata,
                         success: function(data,textStatus){
+                            $(that).trigger('doneSaving');
                             panel.showContent(data, options);
                         },
                         error: function(xhr, textStatus, errorThrown){
+                            $(that).trigger('doneSaving');
                             alert('There was a problem posting your data to the server.');
                         }
                     });
@@ -433,10 +440,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
     var copy = function(configOrFeature, options){
         var config = getConfig(configOrFeature);
         if (config['copy_href']) {
+            $(that).trigger('saving', ["Copying"]);
             $.ajax({
                 url: config['copy_href'],
                 type: 'POST',
                 complete: function(req, status){
+                    $(that).trigger('doneSaving');
                     if (req.status == 201) {
                         // new object created, get location header
                         if(options && options.success){ 
