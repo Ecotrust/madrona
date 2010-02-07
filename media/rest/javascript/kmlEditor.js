@@ -185,7 +185,7 @@ lingcod.rest.kmlEditor = function(options){
                     tree.clearSelection();
                     var node = tree.getNodesById(location);
                     tree.selectNode(node, tree.lookup(node));
-                    options.client.show(tree.lookup(node));
+                    // options.client.show(tree.lookup(node));
                 });
             },
             error: function(){
