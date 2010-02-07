@@ -144,6 +144,8 @@ var lingcod = (function(){
         
         googleLayers.load();
         
+        window.googleLayers = googleLayers;
+        
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
             

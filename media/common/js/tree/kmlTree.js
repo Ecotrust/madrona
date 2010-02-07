@@ -127,7 +127,8 @@ lingcod.kmlTree = (function(){
         bustCache: false,
         restoreState: false,
         whiteListed: false,
-        supportItemIcon: false
+        supportItemIcon: false,
+        loadingMsg: 'Loading data'
     };
         
     // For some reason GEAPI can't switch between features when opening new
@@ -169,7 +170,7 @@ lingcod.kmlTree = (function(){
         that.parseKml = parseKml;
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
-        
+                
         if(!opts.url || !opts.gex || !opts.element || !opts.trans){
             throw('kmlTree must be called with options url, gex, trans & element');
             return false;
@@ -185,15 +186,20 @@ lingcod.kmlTree = (function(){
             });
         }
         
+        $(opts.element).css({position: 'relative'});
+        
+        
         var load = function(cachebust){
             if(that.kmlObject){
                 throw('KML already loaded');
             }
+            showLoading();
             var url = opts.url;
             // can be removed when the following ticket is resolved:
             // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
             if(!url.match('http')){
-                url = window.location.protocol + "//" + window.location.host + "/" + url;
+                url = window.location.protocol + "//" + window.location.host +
+                    "/" + url;
                 url = url.replace(/(\w)\/\//g, '$1/');
             }
             if(cachebust || opts.bustCache){
@@ -270,8 +276,14 @@ lingcod.kmlTree = (function(){
                     for(var i=0; i<state.children.length; i++){
                         var child = state.children[i];
                         var n = node.find('>ul>li>span.name:contains('+child.name+')').parent();
-                        if(n.length){
+                        if(n.length === 1){
                             restoreState(n, child, queue);
+                        }else if(n.length > 1){
+                            n.each(function(){
+                                if($(this).find('>span.name').text() === child.name){
+                                    restoreState($(this), child, queue);
+                                }
+                            });
                         }
                     }                    
                 }
@@ -279,6 +291,25 @@ lingcod.kmlTree = (function(){
                 throw('called with invalid arguments');
             }
         }
+        
+        var showLoading = function(){
+            var h = $('<div class="marinemap-kmltree-loading"><span>'+opts.loadingMsg+'</span></div>');
+            var height = opts.element.height();
+            if(height !== 0){
+                h.height(h);
+            }else{
+                // h.height(200);
+            }
+            opts.element.append(h);
+        };
+        
+        that.showLoading = showLoading;
+        
+        var hideLoading = function(){
+            opts.element.find('.marinemap-kmltree-loading').remove();
+        };
+        
+        that.hideLoading = hideLoading;
         
         var processKmlObject = function(kmlObject, url){
             if (!kmlObject) {
@@ -303,13 +334,16 @@ lingcod.kmlTree = (function(){
             if(opts.title){
                 content += '<h4 class="marinemap-kmltree-title">'+options.children[0].name+'</h4>';
             }
-            opts.element.html(content + '<ul class="marinemap-kmltree">' + rendered +'</ul></div>');
+            opts.element.find('div.marinemap-kmltree').remove();
+            opts.element.find('.marinemap-kmltree-loading').before(content + '<ul class="marinemap-kmltree">' + rendered +'</ul></div>');
             ge.getFeatures().appendChild(kmlObject);
             var queue = new NetworkLinkQueue({
                 success: function(links){
+                    hideLoading();
                     $(that).trigger('kmlLoaded', kmlObject);
                 },
                 error: function(links){
+                    hideLoading();
                     $(that).trigger('kmlLoaded', kmlObject);
                 },
                 tree: that,
@@ -471,7 +505,7 @@ lingcod.kmlTree = (function(){
             clearLookups();
             clearKmlObjects();
             clearNetworkLinks();
-            opts.element.html('');
+            // opts.element.html('');
             ge.setBalloon(null);
             load(true);
         };
@@ -838,6 +872,9 @@ lingcod.kmlTree = (function(){
         $('#'+id+' li > span.name').live('click', function(){
             var node = $(this).parent();
             var kmlObject = lookup(node);
+            if(node.hasClass('error') && node.hasClass('KmlNetworkLink')){
+                alert('There was an error loading this NetworkLink. '+kmlObject.getLink().getHref());
+            }
             if(node.hasClass('select')){
                 selectNode(node, kmlObject);
             }else{

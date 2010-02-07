@@ -5,6 +5,7 @@ lingcod.rest.kmlEditor = function(options){
     }
                     
     var kmlLoaded = function(e, kml){
+        tbar.setEnabled(true);
         $(tree).unbind('kmlLoaded', kmlLoaded);
         var configs = options.client.parseDocument(kml.getKml());
         while(create_menu.getItemCount() > 0){
@@ -44,7 +45,9 @@ lingcod.rest.kmlEditor = function(options){
     // }
     
     var refresh = function(callback){
+        tbar.setEnabled(false);
         var cback = function(e, kmlObject){
+            tbar.setEnabled(true);
             $(tree).unbind('kmlLoaded', cback);
             callback(e, kmlObject);
         }
@@ -280,6 +283,7 @@ lingcod.rest.kmlEditor = function(options){
         options.client.show(kmlObject);
     });
     
+    tbar.setEnabled(false);
     $(tree).bind('kmlLoaded', kmlLoaded);
     tree.load(true);
     
