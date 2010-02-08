@@ -52,10 +52,10 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     var parseResource = function(kmlFeatureObject){
         var kml = lingcod.parseKml(kmlFeatureObject.getKml());
-        var self = kml.findLinks({rel: 'self'});
-        var form = kml.findLinks({rel: 'marinemap.update_form'});
-        var share_form = kml.findLinks({rel: 'marinemap.share_form'});
-        var copy_conf = kml.findLinks({rel: 'marinemap.copy'});
+        var self = kml.find('kml>Folder>[nodeName=atom:link][rel=self], kml>NetworkLink>[nodeName=atom:link][rel=self], kml>Placemark>[nodeName=atom:link][rel=self]')
+        var form = kml.find('kml>Folder>[nodeName=atom:link][rel=marinemap.update_form], kml>NetworkLink>[nodeName=atom:link][rel=marinemap.update_form], kml>Placemark>[nodeName=atom:link][rel=marinemap.update_form]')
+        var share_form = kml.find('kml>Folder>[nodeName=atom:link][rel=marinemap.share_form], kml>NetworkLink>[nodeName=atom:link][rel=marinemap.share_form], kml>Placemark>[nodeName=atom:link][rel=marinemap.share_form]')
+        var copy_conf = kml.find('kml>Folder>[nodeName=atom:link][rel=marinemap.copy], kml>NetworkLink>[nodeName=atom:link][rel=marinemap.copy], kml>Placemark>[nodeName=atom:link][rel=marinemap.copy]')
         if(self.length === 1 && form.length === 1){
             var resource = {
                 title: self.attr('title'),
