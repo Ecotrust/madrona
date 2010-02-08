@@ -70,19 +70,7 @@ lingcod.kmlTree = (function(){
     };
     
     // Returns a jquery object representing a kml file
-    var parseKml = function(kml){
-        if( window.ActiveXObject && window.GetObject ) { 
-            var dom = new ActiveXObject( 'Microsoft.XMLDOM' ); 
-            dom.loadXML(kml); 
-            return jQuery(dom); 
-        } 
-        if( window.DOMParser ) {
-            var parser = new DOMParser().parseFromString( kml, 'text/xml' );
-            return jQuery(parser); 
-        }
-        throw new Error( 'No XML parser available' );
-    }
-
+    
     var template = tmpl([
         '<li class="',
         '<%= listItemType %> ',
@@ -167,7 +155,7 @@ lingcod.kmlTree = (function(){
         that.kmlObject = null;
         var docs = {};
         var my = {};
-        that.parseKml = parseKml;
+        that.parseKml = lingcod.parseKml;
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
                 
@@ -436,7 +424,7 @@ lingcod.kmlTree = (function(){
             if(!opts.supportItemIcon){
                 return false;
             }
-            var doc = parseKml(kmlObject.getKml());
+            var doc = lingcod.parseKml(kmlObject.getKml());
             var root = doc.find('kml>Folder, kml>Document, kml>Placemark, kml>NetworkLink');
             var href = root.find('>Style>ListStyle>ItemIcon>href').text();
             if(href){

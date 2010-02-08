@@ -432,6 +432,6 @@ var lingcod = (function(){
         }
         return false;
     };
-
+    
     return that;
 })();

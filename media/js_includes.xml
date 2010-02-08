@@ -43,4 +43,6 @@
     <file path="rest/javascript/rest.js" />
     <file path="rest/javascript/kmlEditor.js" />
     <test path="rest/javascript/test.js" />
+    <file path="common/js/parseKml.js" />
+	<test path="common/js/test/parseKml.js" />
 </javascripts>

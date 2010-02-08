@@ -220,7 +220,8 @@ lingcod.rest.kmlEditor = function(options){
     $(options.appendTo).append(that.el);
     
     var visitFunction = function(kmlObject, config){
-        var self = $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self], >Folder>atom\\:link[rel=self]');
+        var kml = lingcod.parseKml(kmlObject.getKml());
+        var self = kml.find('kml>Placemark>[nodeName=atom:link][rel=self], kml>NetworkLink>[nodeName=atom:link][rel=self], kml>Folder>[nodeName=atom:link][rel=self]');
         if(self.length === 1){
             config.fireEvents = true;
             config.select = true;
@@ -268,7 +269,7 @@ lingcod.rest.kmlEditor = function(options){
     });
     
     var addExportItems = function(menu, kmlObject){
-        $(kmlObject.getKml()).find('atom\\:link[rel=alt]').each(function(){
+        lingcod.parseKml(kmlObject.getKml()).findLinks({rel: 'alt'}).each(function(){
             var title = $(this).attr('title');
             var href = $(this).attr('href');
             var item = new goog.ui.MenuItem(title);

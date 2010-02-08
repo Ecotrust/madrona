@@ -34,9 +34,9 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // Reads a kml document (from a string) and returns an array of objects 
     // that can be used as input to client.create().
     var parseDocument = function(kml){
-        var xml = $(kml);
+        var kml = lingcod.parseKml(kml);
         var return_values = {};
-        xml.find("atom\\:link[rel='marinemap.create_form']").each(function(){
+        kml.findLinks({rel: 'marinemap.create_form'}).each(function(){
             $link = $(this);
             return_values[$link.attr('mm:model')] = {
                 model: $link.attr('mm:model'),
@@ -51,11 +51,11 @@ lingcod.rest.client = function(gex, panel, manipulators){
     that.parseDocument = parseDocument;
     
     var parseResource = function(kmlFeatureObject){
-        var kml = kmlFeatureObject.getKml();
-        var self = $(kml).find('atom\\:link[rel=self]');
-        var form = $(kml).find('atom\\:link[rel=marinemap.update_form]');
-        var share_form = $(kml).find('atom\\:link[rel=marinemap.share_form]');
-        var copy_conf = $(kml).find('atom\\:link[rel=marinemap.copy]');
+        var kml = lingcod.parseKml(kmlFeatureObject.getKml());
+        var self = kml.findLinks({rel: 'self'});
+        var form = kml.findLinks({rel: 'marinemap.update_form'});
+        var share_form = kml.findLinks({rel: 'marinemap.share_form'});
+        var copy_conf = kml.findLinks({rel: 'marinemap.copy'});
         if(self.length === 1 && form.length === 1){
             var resource = {
                 title: self.attr('title'),
@@ -488,10 +488,11 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // Finds Kml Feature within a text file that contains a Feature with 
     // matching location.
     var findResourceInString = function(location, text){
+        var kml = lingcod.parseKml(text);
         var path = getPath(location);
-        var link = $(text).find('atom\\:link[href='+path+']');
+        var link = kml.findLinks({href: path});
         if(link.length === 0){
-            var link = $(text).find('atom\\:link[href='+location+']');            
+            var link = kml.findLinks({href: location});
         }
         if(link.length){
            return link.parent();
