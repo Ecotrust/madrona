@@ -171,32 +171,34 @@ lingcod.rest.kmlEditor = function(options){
     export_button.setEnabled(false);
     tbar.addChild(export_button, true);
     
-    var copy = new goog.ui.ToolbarButton('Copy');
-    copy.setEnabled(false);
-    copy.setTooltip("Copy the selected feature");
-    goog.events.listen(copy, 'action', function(e) {
-        kmlObject = tree.lookup(that.selected);
-        options.client.copy(kmlObject, {
-            success: function(location){
-                tbar.setEnabled(true);
-                // MP TODO : If we're in the shared shapes panel,
-                // switch to myshapes and refresh on that kml-tree
-                refresh(function(){
-                    tree.clearSelection();
-                    var node = tree.getNodesById(location);
-                    tree.selectNode(node, tree.lookup(node));
-                    // options.client.show(tree.lookup(node));
-                });
-            },
-            error: function(){
-                tbar.setEnabled(true);
-                alert('An error occured while copying. If the problem persists, please contact an administrator at help@marinemap.org.');
-                kmlObject.setVisibility(true);
-                tree.selectById(kmlObject.getId());
-            }
+    if (options.allow_copy) {
+        var copy = new goog.ui.ToolbarButton('Copy');
+        copy.setEnabled(false);
+        copy.setTooltip("Copy the selected feature");
+        goog.events.listen(copy, 'action', function(e) {
+            kmlObject = tree.lookup(that.selected);
+            options.client.copy(kmlObject, {
+                success: function(location){
+                    tbar.setEnabled(true);
+                    // MP TODO : If we're in the shared shapes panel,
+                    // switch to myshapes and refresh on that kml-tree
+                    refresh(function(){
+                        tree.clearSelection();
+                        var node = tree.getNodesById(location);
+                        tree.selectNode(node, tree.lookup(node));
+                        // options.client.show(tree.lookup(node));
+                    });
+                },
+                error: function(){
+                    tbar.setEnabled(true);
+                    alert('An error occured while copying. If the problem persists, please contact an administrator at help@marinemap.org.');
+                    kmlObject.setVisibility(true);
+                    tree.selectById(kmlObject.getId());
+                }
+            });
         });
-    });
-    tbar.addChild(copy, true);
+        tbar.addChild(copy, true);
+    }
     
     if (!options.shared) {
         var share = new goog.ui.ToolbarButton('Share');
@@ -208,8 +210,10 @@ lingcod.rest.kmlEditor = function(options){
         tbar.addChild(share, true);
     }
     
-    if (options.shared) {
+    if (options.shared && options.allow_copy) {
         var enableWhenSelected = [attr, export_button, copy];
+    } else if (options.shared && !options.allow_copy) {
+        var enableWhenSelected = [attr, export_button];
     } else {
         var enableWhenSelected = [attr, edit, del, export_button, copy, share];
     }
