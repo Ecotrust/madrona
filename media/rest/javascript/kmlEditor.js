@@ -205,7 +205,12 @@ lingcod.rest.kmlEditor = function(options){
         share.setEnabled(false);
         share.setTooltip("Share the selected feature");
         goog.events.listen(share, 'action', function(e) {
-            options.client.share(tree.lookup(that.selected));
+            options.client.share(tree.lookup(that.selected), {
+                success: function(){
+                    tbar.setEnabled(true);
+                    refresh();
+                }
+            });
         });
         tbar.addChild(share, true);
     }

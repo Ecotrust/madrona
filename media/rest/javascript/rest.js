@@ -406,13 +406,16 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 form.submit( function(e) {
                     var formdata = form.serialize();
                     $(that).trigger('saving', ["Saving changes"]);
+                    panel.close();
                     $.ajax({
                         url: action,
                         type: 'POST',
                         data: formdata,
                         success: function(data,textStatus){
                             $(that).trigger('doneSaving');
-                            panel.showContent(data, options);
+                            if(options.success){
+                                options.success();
+                            }
                         },
                         error: function(xhr, textStatus, errorThrown){
                             $(that).trigger('doneSaving');
