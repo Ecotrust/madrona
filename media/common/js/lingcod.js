@@ -189,7 +189,8 @@ var lingcod = (function(){
                     div: '#map',
                     url: options.myshapes[i].url,
                     client: that.client,
-                    shared: false
+                    shared: false,
+                    allow_copy: options.allow_copy
                 });
                 if(callback){
                     $(editor.tree).bind('kmlLoaded', function(kmlObject){
@@ -209,7 +210,8 @@ var lingcod = (function(){
                     div: '#map',
                     url: options.sharedshapes[i],
                     client: that.client,
-                    shared: true
+                    shared: true,
+                    allow_copy: options.allow_copy
                 }));
             }            
         }
