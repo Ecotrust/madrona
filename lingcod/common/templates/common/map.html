@@ -99,7 +99,7 @@
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
-            <li><a href="#SharedShapes"><span>Shared Shapes</span></a></li>
+            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared Shapes{% else %}Public Proposals{% endif %}</span></a></li>
         </ul>
         {% if user.is_authenticated %}
         <div id="MyShapes">
