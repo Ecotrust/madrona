@@ -269,7 +269,7 @@ lingcod.rest.kmlEditor = function(options){
     });
     
     var addExportItems = function(menu, kmlObject){
-        lingcod.parseKml(kmlObject.getKml()).findLinks({rel: 'alt'}).each(function(){
+        lingcod.parseKml(kmlObject.getKml()).find('kml>Folder>[nodeName=atom:link][rel=alt], kml>NetworkLink>[nodeName=atom:link][rel=alt], kml>Placemark>[nodeName=atom:link][rel=alt],').each(function(){
             var title = $(this).attr('title');
             var href = $(this).attr('href');
             var item = new goog.ui.MenuItem(title);
