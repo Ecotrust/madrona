@@ -100,12 +100,18 @@ def get_single_mpa_data(user, input_mpa_id):
     try:
         # Frst see if user owns it
         mpas = Mpa.objects.filter(id=input_mpa_id, user=user).add_kml()
-        mpa = mpas[0]
+        if len(mpas)==0:
+            raise Mpa.DoesNotExist
+        else:
+            mpa = mpas[0]
     except Mpa.DoesNotExist:
         try: 
             # ... then see if its shared with the user
             mpas = Mpa.objects.shared_with_user(user).filter(id=input_mpa_id).add_kml()
-            mpa = mpas[0]
+            if len(mpas)==0:
+                raise Mpa.DoesNotExist
+            else:
+                mpa = mpas[0]
         except Mpa.DoesNotExist:
             raise Http404
 
