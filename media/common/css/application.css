@@ -123,11 +123,22 @@ li {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);   
 }
 
+.marinemap-panel.marinemap-menu-items {
+    height:92%;
+}
+
 .marinemap-panel-noscroll {
     overflow-y:hidden;
     max-height:95%;
     height:auto;
 }
+
+.marinemap-panel.marinemap-menu-items.marinemap-panel-noscroll {
+    overflow-y:hidden;
+    max-height:95%;
+    height:auto;
+}
+
 
 .marinemap-panel .content {
     padding: 0 12px;
@@ -170,6 +181,20 @@ li {
     padding-bottom:15px;
     background: transparent url(../images/ajax-loader-dark.gif) no-repeat center bottom;
     color:white;
+}
+
+.panelMask {
+    margin:0;
+    padding:0;    
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    background:transparent url(../images/loading-mask-bg.png) repeat;
+    display:none;
+    z-index:5;
+    text-align:center;
 }
 
 .masked #sidebar-mask {

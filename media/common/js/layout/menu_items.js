@@ -33,6 +33,7 @@ lingcod.menu_items = (function(){
                     appendTo: $('#panel-holder')
                 });
                 panel.getEl().css('z-index', '11');
+                panel.getEl().addClass('marinemap-menu-items');
                 $.data(self[0], 'panel', that.panels.length)
                 that.panels.push(panel);
             }
@@ -44,6 +45,9 @@ lingcod.menu_items = (function(){
     var closeAll = function(){
         var open = that.el.find('li.item.toggled');
         if(open.length === 1){
+            $('.marinemap-panel:visible').each(function(){
+                $(this).find('.panelMask').hide();
+            });
             open.removeClass('toggled')
             open.find('a.close').hide();
             open.each(function(){
@@ -66,6 +70,9 @@ lingcod.menu_items = (function(){
         item.addClass('toggled');
         item.find('a.close').show();
         if(item.data('panel') || item.data('panel') === 0){
+            $('.marinemap-panel:visible').each(function(){
+                $(this).find('.panelMask').show();
+            });
             var panel = that.panels[item.data('panel')];
             panel.show();
         }else{

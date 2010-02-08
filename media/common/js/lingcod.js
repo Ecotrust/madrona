@@ -23,6 +23,12 @@ var lingcod = (function(){
         
         resize();
         
+        $('.marinemap-panel').live('click', function(){
+            if(!$(this).hasClass('marinemap-menu-items')){
+                lingcod.menu_items.closeAll();
+            }
+        });
+        
         if(window.google){
             google.earth.createInstance(
                 "map", 
