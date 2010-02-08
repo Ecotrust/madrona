@@ -209,3 +209,17 @@
 .marinemap-panel .ui-tabs-hide {
     display:none;
 }
+/*
+li.ui-state-processing a {
+    background-color:#B3C6D4;
+    color:white;
+    background-image:none;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+*/
+li.ui-state-processing span img {
+    margin-bottom:-3px;
+    margin-right:5px;
+}
