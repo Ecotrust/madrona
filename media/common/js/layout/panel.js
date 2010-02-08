@@ -107,8 +107,15 @@ lingcod.panel = function(options){
                         that.showContent(html, {showClose: options.showClose});
                         var tabs = html.find('.tabs');
                         if(tabs.length){
-                            tabs = tabs.tabs({'spinner': 'loading...'});
-                            // tabs.tabs('select', '#Habitat');
+                            tabs = tabs.tabs({
+                                'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
+                                ajaxOptions: {
+                                    error: function(){
+                                        $('#loadingTab').parent().parent().remove();
+                                        alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
+                                    }
+                                }
+                            });
                         }
                         if(options && options.success){
                             options.success(response, status);
