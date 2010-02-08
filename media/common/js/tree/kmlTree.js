@@ -1003,6 +1003,34 @@ lingcod.kmlTree = (function(){
             }
         });
         
+        var doubleClicking = false;
+        
+        google.earth.addEventListener(ge.getGlobe(), 'dblclick', function(e, d){
+            if(e.getButton() === -1){
+                // related to scrolling, ignore
+                return;
+            }
+            var target = e.getTarget();
+            if(target.getType() === 'GEGlobe'){
+                // do nothing
+            }else if(target.getType() === 'KmlPlacemark'){
+                var id = target.getId();
+                var nodes = getNodesById(id);
+                if(nodes.length === 1){
+                    // e.preventDefault();
+                    if(!doubleClicking){
+                        doubleClicking = true;
+                        setTimeout(function(){
+                            doubleClicking = false;
+                            $(that).trigger('dblclick', [nodes, target]);
+                        }, 200);
+                    }
+                }else{
+                    // do nothin
+                }
+            }
+        });
+        
         return that;
     };
 })();

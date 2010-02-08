@@ -14,6 +14,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
     that = {};
     
     that.inShowState = false;
+    that.showingUrl = false;
     that.panel = panel;
     
     var onpanelclose = function(){
@@ -351,6 +352,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
     var show = function(configOrFeature, options){
         options = options || {};
         var config = getConfig(configOrFeature);
+        if(that.inShowState && that.showingUrl === config['location']){
+            if(options.success){
+                options.success();
+            }
+            return false;
+        }
         options['load_msg'] = 'Loading '+config['title'];
         options['showClose'] = true;
         var oldError = options.error;
@@ -358,12 +365,14 @@ lingcod.rest.client = function(gex, panel, manipulators){
         options.error = function(response, status){
             alert('Error communicating with the server. Please contact help@marinemap.org if the problem persists.');
             that.inShowState = false;
+            that.showingUrl = false;
             if(oldError){
                 oldError(response, status);
             }
         }
         options.success = function(response, status){
             that.inShowState = true;
+            that.showingUrl = config['location'];
             if(oldSuccess){
                 oldSuccess(response, status);
             }
