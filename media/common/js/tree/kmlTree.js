@@ -507,7 +507,10 @@ lingcod.kmlTree = (function(){
         // dom. Prepares for refresh or tree destruction.
         var clearNetworkLinks = function(){
             for(var key in docs){
-                opts.gex.dom.removeObject(docs[key]);
+                var nl = docs[key];
+                if(nl && nl.getParentNode()){
+                    opts.gex.dom.removeObject(nl);
+                }
                 // docs[key].release();
             }
             docs = {};
