@@ -10,6 +10,29 @@ from django.contrib.gis.measure import A, D
 from django.db import transaction
 from django.db.models.signals import post_save
 
+class MpaShapefile(models.Model):
+    """
+    This model will provide the correct fields for the export of shapefiles using the django-shapes app.
+    """
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
+    name = models.CharField(max_length=255)
+    name_short = models.CharField(blank=True, max_length=255,null=True)
+    designation = models.CharField(blank=True, max_length=80, null=True)
+    lop = models.CharField(blank=True, max_length=80, null=True)
+    lop_numeric = models.IntegerField(blank=True, null=True)
+    mpa = models.OneToOneField(MlpaMpa, related_name="mpa")
+    array = models.ForeignKey(MpaArray, null=True, blank=True)
+    array_name = models.CharField(blank=True, max_length=255, null=True)
+    allowed_uses = models.TextField(blank=True, null=True)
+    other_allowed_uses = models.TextField(blank=True, null=True)
+    other_regulated_activities = models.TextField(blank=True, null=True)
+    author = models.CharField(blank=True, max_length=255,null=True)
+    area_sq_mi = models.FloatField(blank=True,null=True)
+    mpa_modification_date = models.DateTimeField(blank=True, null=True)
+    date_modified = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    objects = models.GeoManager()
+    
+
 class StudyRegionTotal(models.Model):
     feature_mapping = models.ForeignKey(int_models.FeatureMapping)
     org_scheme = models.ForeignKey(int_models.OrganizationScheme)

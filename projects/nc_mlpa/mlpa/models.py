@@ -225,6 +225,14 @@ class MpaArray(BaseArray):
         by_lop.append(sub_dict)
         return dictsort(by_lop,'sort')
         
+    @property
+    def shapefile_export_query_set(self):
+        from report.models import MpaShapefile
+        for mpa in self.mpa_set.all():
+            mpa.export_version # update these records
+        qs = MpaShapefile.objects.filter(array=self)
+        return qs
+        
     # @property
     # def replication_report(self):
     #     lops = Lop.objects.filter(run=True)
@@ -515,6 +523,55 @@ class MlpaMpa(Mpa):
     @property
     def area_sq_mi(self):
         return A(sq_m=self.geometry_final.area).sq_mi
+        
+    @property
+    def export_version(self):
+        """
+        Port the MPAs attributes over to the MpaShapefile model so we can export the shapefile.
+        geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
+        name = models.CharField(max_length=255)
+        name_short = models.CharField(blank=True, max_length=255,null=True)
+        designation = models.CharField(blank=True, max_length=80, null=True)
+        lop = models.CharField(blank=True, max_length=80, null=True)
+        lop_numeric = models.IntegerField(blank=True, null=True)
+        mpa = models.OneToOneField(MlpaMpa, related_name="mpa")
+        array = models.ForeignKey(MpaArray, null=True, blank=True)
+        array_name = models.CharField(blank=True, max_length=255, null=True)
+        allowed_uses = models.TextField(blank=True, null=True)
+        other_allowed_uses = models.TextField(blank=True, null=True)
+        other_regulated_activities = models.TextField(blank=True, null=True)
+        author = models.CharField(blank=True, max_length=255,null=True)
+        area_sq_mi = models.FloatField(blank=True,null=True)
+        mpa_modification_date = models.DateTimeField(blank=True, null=True)
+        date_modified = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+        """
+        from report.models import MpaShapefile
+        msf, created = MpaShapefile.objects.get_or_create(mpa=self,name=self.name)
+        if created or msf.date_modified < self.date_modified:
+            msf.geometry = self.geometry_final
+            desig_list = [ des.acronym for des in MpaDesignation.objects.all() ]
+            short_name = self.name
+            for acr in desig_list:
+                shorter_name = short_name.replace(acr,'')
+                if len(shorter_name) < len(shorter_name):
+                    short_name = shorter_name
+            msf.name_short = short_name
+            if self.designation:
+                msf.designation = self.designation.name
+            if self.lop:
+                msf.lop = self.lop.name
+                msf.lop_numeric = self.lop.value
+            if self.array:
+                msf.array = self.array
+                msf.array_name = self.array.name
+            msf.allowed_uses = self.get_allowed_uses_text()
+            msf.other_allowed_uses = self.other_allowed_uses
+            msf.other_regulated_activities = self.other_regulated_activities
+            msf.author = self.user.username
+            msf.area_sq_mi = self.area_sq_mi
+            msf.mpa_modification_date = self.date_modified
+            msf.save()
+        return msf
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()

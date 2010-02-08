@@ -9,6 +9,7 @@ import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
 import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
+from shapes.views import ShpResponder
 from django.template.defaultfilters import slugify
 import xlwt
 #import django.contrib.gis.geos
@@ -225,7 +226,10 @@ def array_habitat_excel_worksheet(array,ws):
         mpa_data = []
         mpa_data.append(mpa.name)                      # mpa name
         mpa_data.append(mpa.pk)                        # mpa id
-        mpa_data.append(mpa.designation.acronym)       # mpa designation
+        if mpa.designation:
+            mpa_data.append(mpa.designation.acronym)       # mpa designation
+        else:
+            mpa_data.append('Undesignated')
         if mpa.lop:
             mpa_data.append(mpa.lop.name.title())          # level of protection
         else:
@@ -280,6 +284,12 @@ def array_list_habitat_excel(request, array_id_list_str):
     response = int_views.build_excel_response(slugify(wb_name),wb)
     return response
 
+def array_shapefile(request, array_id_list_str):
+    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    array = array_set[0]
+    shp_response = ShpResponder(array.shapefile_export_query_set)
+    shp_response.file_name = slugify(array.name[0:10])
+    return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
     mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)
