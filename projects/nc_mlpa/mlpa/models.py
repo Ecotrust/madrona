@@ -614,16 +614,33 @@ class MlpaMpa(Mpa):
                             lowest_lop = rule_lop
                 return lowest_lop, reasons[3]
                         
-    def lop_rule_1(self):
-        """If there is more than 0.2 sq miles in the 0 - 50m depth range, LOP = 6.  Else, LOP = 8"""
+    def shallow_area(self):
         osc = int_models.OrganizationScheme.objects.get(name='lessthan50m')
         results = osc.transformed_results(self.geometry_final)
-        shallow_area = results[results.keys()[0]]['result']
-        if shallow_area > 0.2:
-            lop_value = 6
+        return results[results.keys()[0]]['result']
+        
+    def lop_rule_1(self):
+        """If there is more than 0.2 sq miles in the 0 - 50m depth range, LOP = 4.  Else, LOP = 8"""
+        if self.shallow_area() > 0.2:
+            lop_value = 4
         else:
             lop_value = 8
         return Lop.objects.get(value=lop_value)
+        
+    def lop_rule_2(self):
+        if self.in_estuary():
+            lop = Lop.objects.get(value=6)
+        else:
+            lop = Lop.objects.get(value=2)
+        return lop
+        
+    def lop_rule_3(self):
+        """If there is more than 0.2 sq miles in the 0 - 50m depth range, LOP = 6.  Else, LOP = 8"""
+        if self.shallow_area() > 0.2:
+            lop = Lop.objects.get(value=6)
+        else:
+            lop = Lop.objects.get(value=8)
+        return lop
     
     def short_g_o_str(self, really_short=False):
         gostr = ''
