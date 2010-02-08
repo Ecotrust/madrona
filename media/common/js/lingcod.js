@@ -212,6 +212,24 @@ var lingcod = (function(){
                 editors.push(editor);
             }
         }
+        
+        $('a.myshapes-link').live('click', function(e){
+            e.preventDefault();
+            $('.marinemap-panel:visible a.close').click();
+            var href = $(this).attr('href');
+            for(var i=0;i<editors.length;i++){
+                var editor = editors[0];
+                var nodes = editor.tree.getNodesById(href);
+                if(nodes.length === 1){
+                    editor.tree.selectNode(nodes);
+                    nodes.trigger('dblclick');
+                    return false;
+                }
+            }
+            return false;
+        });
+        
+        that.editors = editors;
 
         if(options.sharedshapes){
             for(var i=0;i<options.sharedshapes.length; i++){

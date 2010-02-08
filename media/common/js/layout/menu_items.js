@@ -76,7 +76,7 @@ lingcod.menu_items = (function(){
             var panel = that.panels[item.data('panel')];
             panel.show();
         }else{
-            // console.log('couldnt get index');
+            // couldn't get index
         }
     }
     

@@ -606,6 +606,9 @@ lingcod.kmlTree = (function(){
         };
                 
         var selectNode = function(node, kmlObject){
+            if(!kmlObject){
+                kmlObject = lookup(node);
+            }
             node = $(node);
             clearSelection(true, true);
             node.addClass('selected');
