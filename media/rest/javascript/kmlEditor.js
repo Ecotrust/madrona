@@ -6,6 +6,7 @@ lingcod.rest.kmlEditor = function(options){
                     
     var kmlLoaded = function(e, kml){
         tbar.setEnabled(true);
+        create_button.setEnabled(true);
         $(tree).unbind('kmlLoaded', kmlLoaded);
         var configs = options.client.parseDocument(kml.getKml());
         while(create_menu.getItemCount() > 0){
@@ -48,6 +49,7 @@ lingcod.rest.kmlEditor = function(options){
         tbar.setEnabled(false);
         var cback = function(e, kmlObject){
             tbar.setEnabled(true);
+            create_button.setEnabled(true);
             $(tree).unbind('kmlLoaded', cback);
             callback(e, kmlObject);
         }
@@ -254,6 +256,11 @@ lingcod.rest.kmlEditor = function(options){
         supportItemIcon: true
     });
     that.tree = tree;
+    
+    $(tree).bind('kmlLoadError', function(){
+        tbar.setEnabled(true);
+        create_button.setEnabled(false);
+    });
     
     that.clearSelection = tree.clearSelection;
     

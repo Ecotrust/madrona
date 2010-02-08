@@ -356,6 +356,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
         var oldError = options.error;
         var oldSuccess = options.success;
         options.error = function(response, status){
+            alert('Error communicating with the server. Please contact help@marinemap.org if the problem persists.');
             that.inShowState = false;
             if(oldError){
                 oldError(response, status);

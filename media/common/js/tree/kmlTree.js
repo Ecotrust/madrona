@@ -311,6 +311,7 @@ lingcod.kmlTree = (function(){
                         content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
                     }
                     opts.element.html(content + '<p class="error">could not load kml file with url '+url+'</p></div>');
+                    $(that).trigger('kmlLoadError', kmlObject);
                 },
                 0);
                 return;
@@ -335,7 +336,7 @@ lingcod.kmlTree = (function(){
                 },
                 error: function(links){
                     hideLoading();
-                    $(that).trigger('kmlLoaded', kmlObject);
+                    $(that).trigger('kmlLoadError', kmlObject);
                 },
                 tree: that,
                 my: my
@@ -816,6 +817,7 @@ lingcod.kmlTree = (function(){
                         // alert('Error loading ' + link);
                         node.addClass('error');
                         node.addClass('checkHideChildren');
+                        $(that).trigger('kmlLoadError', kmlObject);
                         return;
                     }
                     ge.getFeatures().appendChild(kmlObject);
