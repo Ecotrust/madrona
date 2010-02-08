@@ -15,6 +15,11 @@ var lingcod = (function(){
             }
         });
         
+        var selectedTab = getStore('selectedTab');
+        if(selectedTab){
+            $('#sidebar').tabs('select', selectedTab);
+        };
+        
         resize();
         
         if(window.google){
@@ -293,6 +298,7 @@ var lingcod = (function(){
         var unload = function(){
             setCameraToLocalStorage();
             saveEarthOptionsToLocalStore();
+            setStore('selectedTab', $('#sidebar > ul > .ui-tabs-selected a').attr('href'));
             $(window).die('beforunload', unload);
         }
         
@@ -306,6 +312,20 @@ var lingcod = (function(){
             ge.getView().setAbstractView(kmlObject.getAbstractView());
         }   
     };
+    
+    var setStore = function(key, value){
+        if(!!window.localStorage){
+            localStorage.setItem(key, value);
+        }
+    };
+    
+    var getStore = function(key){
+        if(!!window.localStorage){
+            return localStorage.getItem(key);
+        }else{
+            return false;
+        }
+    }
     
     var setEarthOptionsFromLocalStore = function(){
         if(!!window.localStorage && localStorage.getItem('earthOptions')){
