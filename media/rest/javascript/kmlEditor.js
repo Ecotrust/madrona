@@ -220,7 +220,7 @@ lingcod.rest.kmlEditor = function(options){
     $(options.appendTo).append(that.el);
     
     var visitFunction = function(kmlObject, config){
-        var self = $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self]');
+        var self = $(kmlObject.getKml()).find('>Placemark>atom\\:link[rel=self], >NetworkLink>atom\\:link[rel=self], >Folder>atom\\:link[rel=self]');
         if(self.length === 1){
             config.fireEvents = true;
             config.select = true;
