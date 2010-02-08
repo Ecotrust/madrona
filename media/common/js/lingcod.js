@@ -20,6 +20,7 @@ var lingcod = (function(){
             $('#sidebar').tabs('select', selectedTab);
         };
         
+        
         resize();
         
         if(window.google){
