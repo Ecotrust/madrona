@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.conf import settings
 
 class ShareableGeoManager(models.GeoManager):
-    def shared_with_user(self, user):
+    def shared_with_user(self, user, filter_groups=None):
         """
         Returns a queryset containing any objects that have been 
         shared with a group the user belongs to.
@@ -50,16 +50,26 @@ class ShareableGeoManager(models.GeoManager):
                             )
                         ).distinct().exclude(name__in=settings.SHARING_TO_STAFF_GROUPS)
 
+        if filter_groups and len(filter_groups)>0:
+            groups = groups.filter(pk__in=[x.pk for x in filter_groups])
+        else:
+            filter_groups = None
+
         # Check for a Container 
         shared_content_type = permission.content_type.shared_content_type.all()[0] 
         if shared_content_type.container_content_type and shared_content_type.container_set_property:
             # Get container objects shared with user
-            shared_containers = shared_content_type.container_content_type.model_class().objects.shared_with_user(user)
+            if filter_groups:
+                shared_containers = shared_content_type.container_content_type.model_class().objects.shared_with_user(user,filter_groups=filter_groups)
+            else:
+                shared_containers = shared_content_type.container_content_type.model_class().objects.shared_with_user(user)
+
             # Create list of contained object ids
             contained_ids = []
             for sc in shared_containers:
                 contained = sc.__getattribute__(shared_content_type.container_set_property)
-                # MP TODO this doesn't work as it write to the db, need to dynamically set sharing_groups on contained objects
+                # MP TODO this doesn't work as it write to the db, 
+                # would be ideal to dynamically set sharing_groups on contained objects
                 #for x in contained:
                 #    for sg in sc.sharing_groups.all():
                 #        x.sharing_groups.add(sg)

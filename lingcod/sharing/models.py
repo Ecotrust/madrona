@@ -152,7 +152,11 @@ def groups_users_sharing_with(user, include_public=False):
         permission = shareables[s][1]
         shared_objects = model_class.objects.shared_with_user(user)
         for group in user.groups.all():
+            # Unless overridden, public shares don't show up here
             if group.name in settings.SHARING_TO_PUBLIC_GROUPS and not include_public:
+                continue
+            # User has to be staff to see these
+            if group.name in settings.SHARING_TO_STAFF_GROUPS and not user.is_staff:
                 continue
             group_objects = shared_objects.filter(sharing_groups=group)
             user_list = []
@@ -160,7 +164,12 @@ def groups_users_sharing_with(user, include_public=False):
                 if gobj.user not in user_list and gobj.user != user:
                     user_list.append(gobj.user)
             if len(user_list) > 0:
-                groups_sharing[group.name]={'group':group, 'users': user_list}
+                if group.name in groups_sharing.keys():
+                    groups_sharing[group.name]['users'].extend(user_list)
+                else:
+                    groups_sharing[group.name]={'group':group, 'users': user_list}
+            print group, user_list
+    print groups_sharing
     if len(groups_sharing.keys()) > 0:
         return groups_sharing
     else:

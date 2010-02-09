@@ -138,26 +138,31 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     sg = Group.objects.get(pk=sharegroup)
     su = User.objects.get(pk=shareuser)
 
-    # MP TODO ... the contained MPAs don't have a group but we need to make sure they belong here
-    # logic probably belongs in the shareableManager so that 
-    # shared_with_user overrides the shared_groups of the contained objects
-    try:
-        #mpas = Mpa.objects.shared_with_user(user).filter(sharing_groups=sg, user=su).add_kml()
-        mpas = Mpa.objects.shared_with_user(user).filter(user=su).add_kml()
+    try: 
+        # The "right" way but array is a generic FK so this doesn't work
+        #mpas = Mpa.objects.shared_with_user(user).filter(
+        #        models.Q(sharing_groups=sg) |
+        #        models.Q(array__sharing_groups=sg)
+        #        )
+        mpas = Mpa.objects.shared_with_user(user,filter_groups=[sg]).filter(user=su).add_kml()
     except Mpa.DoesNotExist:
         raise Http404
 
     unattached = utils.get_array_class()(name='Marine Protected Areas')
     shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
-        if not mpa.array:
-            shapes['Unattached']['mpas'].append(mpa)
-        else:
+        # Does it belong to an array that is shared?
+        if mpa.array and sg in mpa.array.sharing_groups.all():
             array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
             if array_nameid in shapes.keys():
                 shapes[array_nameid]['mpas'].append(mpa)
             else:
                 shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
+        # Or is it a lone MPA?
+        else:
+            shapes['Unattached']['mpas'].append(mpa)
+    if len(shapes['Unattached']['mpas']) == 0:
+        del shapes['Unattached']
     designations = MpaDesignation.objects.all()
     return shapes, designations
 
