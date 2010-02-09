@@ -62,7 +62,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.gis',
     'compress',
-    'shapes',
+    'lingcod.shapes',
     'lingcod.google-analytics', 
     'lingcod.common',
     'lingcod.layers',

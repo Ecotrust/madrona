@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Upload Complete" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Thanks" %}</h1>
+<p>{% trans "Your upload was successful" %}</p>
+{% endblock %}
+{% block login %}
+<a href="/"> {% trans "Return to homepage." %}</a>
+{% endblock %}

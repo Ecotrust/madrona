@@ -9,7 +9,7 @@ import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
 import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
-from shapes.views import ShpResponder
+from lingcod.shapes.views import ShpResponder
 from django.template.defaultfilters import slugify
 import xlwt
 #import django.contrib.gis.geos
@@ -289,7 +289,9 @@ def array_shapefile(request, array_id_list_str):
     array = array_set[0]
     shp_response = ShpResponder(array.shapefile_export_query_set)
     shp_response.file_name = slugify(array.name[0:10])
-    return shp_response()
+    print 'try to return shape next'
+    print shp_response()
+    #return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
     mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)

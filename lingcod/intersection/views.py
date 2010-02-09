@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from lingcod.intersection.models import *
 from lingcod.intersection.forms import *
+from lingcod.shapes.views import ShpResponder
 from django.utils.simplejson import dumps as json_encode
 import xlwt
 import csv
@@ -129,7 +130,13 @@ def remove_elements(the_list,remove_list):
         except ValueError:
             continue
     return the_list
-        
+
+def test_poly_shapefile(request, tp_id):
+    test_poly_qs = TestPolygon.objects.filter(pk=tp_id)
+    shp_response = ShpResponder(test_poly_qs)
+    shp_response.file_name = 'test_poly'
+    return shp_response()
+
 def test_poly_intersect(request):
     if request.method == 'POST':
         form = TestPolygonIntersectionForm(request.POST)
