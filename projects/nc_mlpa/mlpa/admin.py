@@ -22,6 +22,13 @@ admin.site.register(LopRule)
 admin.site.register(DesignationsPurposes)
 #admin.site.register(DomainHabitat)
 admin.site.register(Lop)
+
+class LopOverrideAdmin(admin.ModelAdmin):
+    list_display = ('mpa','pk','lop')
+    list_filter = ('lop',)
+    search_fields = ('mpa__name','mpa__user__username','mpa__user__first_name','mpa__user__last_name')
+    
+admin.site.register(LopOverride,LopOverrideAdmin)
 # admin.site.register(HabitatsLinear, HabitatsLinearAdmin)
 # admin.site.register(HabitatsAreal, HabitatsArealAdmin)
 # class SatHabitatAdmin (admin.ModelAdmin):

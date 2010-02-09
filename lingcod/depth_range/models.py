@@ -28,9 +28,13 @@ def depth_range(geom):
     ds_min = ds.aggregate(Min('depth_ft'))['depth_ft__min']
     ds_max = ds.aggregate(Max('depth_ft'))['depth_ft__max']
     # Account for the fact that soundings may be negative or positive
-    shallowest_positive = min([abs(ds_min),abs(ds_max)])
-    deepest_positive = max([abs(ds_min),abs(ds_max)])
-    if shallowest_positive < 10:
+    if ds_min and ds_max: 
+        shallowest_positive = min([abs(ds_min),abs(ds_max)])
+        deepest_positive = max([abs(ds_min),abs(ds_max)])
+    else:
+        shallowest_positive = None
+        deepest_positive = None
+    if shallowest_positive and shallowest_positive < 10:
         shallowest_positive = 0
     return shallowest_positive, deepest_positive
     

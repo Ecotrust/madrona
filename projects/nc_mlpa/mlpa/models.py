@@ -584,8 +584,16 @@ class MlpaMpa(Mpa):
             2: 'SMRs are always assigned a very high LOP',
             3: 'derived from allowed uses',
             4: 'text in other allowed uses field',
-            5: 'there are no LOPs entered in the system'
+            5: 'there are no LOPs entered in the system',
+            6: 'LOP taken from LopOverride table'
         }
+        # Look for an entry in the LopOverride table.  If there's a value there it trumps all other considerations
+        try:
+            lop = LopOverride.objects.get(mpa=self).lop
+            return lop, reasons[6]
+        except LopOverride.DoesNotExist:
+            pass
+        
         # set this variable to the highest value LOP to initialize it and then track the lowest encountered
         try:
             lowest_lop = Lop.objects.all().order_by('-value')[0]
@@ -728,7 +736,41 @@ class MpaLop(models.Model):
         else:
             lop_name = 'undetermined'
         return '%s - %s' % (self.mpa.name,lop_name)
+        
+class LopOverride(models.Model):
+    """
+    This model is here so that we can manually specify lops for analysis purposes when they can't be automatically
+    assigned becuse the allowed uses have not yet been evaluated by the SAT.  If there is an entry in this model for
+    a given mpa, the lop will be taken from this table.  In all other cases it will be evaluated according to the 
+    allowed uses assigned or left Null if other_allowed_uses are specified.
+    
+    NOTE: LopOverrides are NOT deleted automatically.  Once entered, they persist until they are manually deleted so you
+    should be careful with them.  def them.  They should only be used on MPAs that are not going to change anymore because
+    once there is an override, changes to the MPA's allowed uses will NOT cause a change in assigned LOP.
+    """
+    mpa = models.OneToOneField(MlpaMpa, primary_key=True)
+    lop = models.ForeignKey(Lop, null=True, blank=True, verbose_name="Level of Protection")
+    
+    def __unicode__(self):
+        return '%s (id=%i): %s' % (self.mpa.name,self.mpa.pk,self.lop.name)
+        
+    def save(self, *args, **kwargs):
+        super(LopOverride,self).save(*args, **kwargs)
+        self.mpa.delete_cached_lop()
+        self.lop # will cause the lop to be recalculated using the new override
 
+def load_LopOverride_from_file(file_path, recalculate=True):
+    fileReader = csv.reader(open(file_path), delimiter=',')
+    for row in fileReader:
+        print 'getting mpa: %i' % int(row[0])
+        mpa = Mpas.objects.get(pk=int(row[0]))
+        lop = Lop.objects.get(value=int(row[1]))
+        lop_o, created = LopOverride.objects.get_or_create(mpa=mpa)
+        lop_o.lop = lop
+        lop_o.save()
+        if recalculate:
+            mpa.save()
+            
 class MpaGeoSort(models.Model):
     """The MLPA North Coast study region is a pretty simple shape so we're just going to use the y coordinate to sort the geometries"""
     mpa = models.OneToOneField(MlpaMpa, related_name="geo_sort")

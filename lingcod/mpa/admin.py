@@ -5,6 +5,6 @@ class MpaAdmin(admin.GeoModelAdmin):
     pass
 
 class MpaDesignationAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('acronym','name','sort')
 
 admin.site.register(MpaDesignation, MpaDesignationAdmin)
