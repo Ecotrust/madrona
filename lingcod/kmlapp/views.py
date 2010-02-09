@@ -47,10 +47,12 @@ def get_public_arrays():
     """
     Organizes MPAs belonging to a public arrays
     No login necessary, everyone sees these
+    Public groups defined in settings.SHARING_TO_PUBLIC_GROUPS
     """
+    from django.conf import settings
     MpaArray = utils.get_array_class()
-    public_group = Group.objects.get(name='Share with Public')
-    public_arrays = MpaArray.objects.filter(sharing_groups=public_group)
+    public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
+    public_arrays = MpaArray.objects.filter(sharing_groups__in=public_groups)
     shapes = {}
     for pa in public_arrays:
         array_nameid = "%s_%d" % (pa.name, pa.id)
@@ -70,7 +72,10 @@ def get_array_mpa_data(user, input_array_id):
 
     try:
         # Frst see if user owns it
-        the_array = MpaArray.objects.get(id=input_array_id, user=user)
+        if user.is_anonymous() or not user.is_authenticated():
+            raise MpaArray.DoesNotExist
+        else:
+            the_array = MpaArray.objects.get(id=input_array_id, user=user)
     except MpaArray.DoesNotExist:
         try: 
             # ... then see if its shared with the user
@@ -99,7 +104,7 @@ def get_single_mpa_data(user, input_mpa_id):
 
     try:
         # Frst see if user owns it
-        mpas = Mpa.objects.filter(id=input_mpa_id, user=user).add_kml()
+        mpas = list(Mpa.objects.filter(id=input_mpa_id, user=user).add_kml())
         if len(mpas)==0:
             raise Mpa.DoesNotExist
         else:
@@ -107,7 +112,7 @@ def get_single_mpa_data(user, input_mpa_id):
     except Mpa.DoesNotExist:
         try: 
             # ... then see if its shared with the user
-            mpas = Mpa.objects.shared_with_user(user).filter(id=input_mpa_id).add_kml()
+            mpas = list(Mpa.objects.shared_with_user(user).filter(id=input_mpa_id).add_kml())
             if len(mpas)==0:
                 raise Mpa.DoesNotExist
             else:
@@ -156,47 +161,6 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     designations = MpaDesignation.objects.all()
     return shapes, designations
 
-def get_iteam_proposals(user):
-    """
-    Creates data structure for arrays/mpas shared to the I-Team
-    Just basically a data structure manipulation on the queryset.
-    Only staff users can see this
-    """
-    if not user.is_staff:
-        return None, None
-
-    MpaArray = utils.get_array_class()
-
-    shapes = {}
-    try:
-        iteam_arrays = MpaArray.objects.filter(proposed=True)
-        for ia in iteam_arrays:
-            array_nameid = "%s_%d" % (ia.name, ia.id)
-            shapes[array_nameid] = {'array': ia, 'mpas':ia.mpa_set.add_kml()}
-    except FieldError:
-        pass
-
-    designations = MpaDesignation.objects.all()
-
-    return shapes, designations
-
-def show_iteam(user):
-    """
-    Determines if the current user and set of array instances
-    warrants displaying a kml of iteam submittals
-    """
-    MpaArray = utils.get_array_class()
-
-    iteam = False
-    try:
-        iteam_proposals = MpaArray.objects.filter(proposed=True)
-        if len(iteam_proposals) > 0 and user.is_staff:
-            iteam = True
-    except FieldError:
-        pass
-
-    return iteam
-
 def create_kmz(kml, zippath):
     """
     Given a KML string and a "/" seperated path like "FOLDERNAME/doc.kml",
@@ -230,15 +194,13 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, iteam=False, session_key='0'):
+def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
     """
     Returns a KML/KMZ containing MPAs (organized into folders by array)
     """
     load_session(request, session_key)
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
+    if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
 
     organize_in_array_folders = True
@@ -251,11 +213,6 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         shapes, designations = get_single_mpa_data(user, input_mpa_id)
     elif input_shareuser and input_sharegroup:
         shapes, designations = get_mpas_shared_by(input_shareuser, input_sharegroup, user)
-    elif iteam:
-        if user.is_staff:
-            shapes, designations = get_iteam_proposals(user)
-        else:
-            return HttpResponse('Access denied', status=401)
     else:
         raise Http404
 
@@ -286,18 +243,14 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     """
     load_session(request, session_key)
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
+    if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
     
-    iteam = show_iteam(user)
-
     from lingcod.sharing.models import groups_users_sharing_with 
     sharing_with = groups_users_sharing_with(user)
 
     t = get_template('shared.kml')
-    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key, 'iteam': iteam }))
+    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
@@ -314,7 +267,8 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
 def shared_public(request, kmz=False, session_key='0'):
     """ 
     Shows all publically shared arrays
-    Must be shared with a special group called 'Share with Public'
+    Must be shared with a special set of public groups
+    defined in settings.SHARING_TO_PUBLIC_GROUPS
     """
     shapes, designations = get_public_arrays()
 

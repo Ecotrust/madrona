@@ -98,6 +98,10 @@ LOGIN_REDIRECT_URL = '/'
 KML_SIMPLIFY_TOLERANCE = 20
 KML_EXTRUDE_HEIGHT = 100
 
+# SHARING SETTINGS
+SHARING_TO_PUBLIC_GROUPS = ['Share with Public']
+SHARING_TO_STAFF_GROUPS = ['Share with I-Team']
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
     "django.core.context_processors.debug",

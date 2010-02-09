@@ -48,8 +48,15 @@ Once the models have been configured for sharing, the application or project mus
 
 You can look at the kmlapp.views.get_mpas_shared_by and kmlapp.views.create_shared_kml for an example of how sharing code can be used by another application.
 
-Share with Public
+Special Cases
 ******************
-The sharing app provides a special group fixture named "Share with Public". In order to activate this feature, go into admin and ensure that this group has can_share permissions on the appropriate content. By default it *should* have the can_share_arrays permission but it should be confirmed on every installation as I just don't trust the primary keys in fixtures. 
 
-Once this group can_share_arrays, Assign users to the group. Use good judgement here as these users will be able to share any array they own with the world. Then just use the standard array sharing form to share with this group. In the case of the MarineMap project, the kmlapp will leverage this special group name to display MPAs to every user regardless of if they are signed in or not.
+The sharing app provides two special types of one-way sharing:
+    * Share with Public : Allows selected staff members the ability to make an object available to the public. This means everyone, including non-authenicated users, can view it but only the short list of staff members can actually make it available. 
+    * Share with Staff : Allows selected users the ability to share objects with staff. Only staff can view the shared objects but any user in this type of group can submit something.
+
+The groups which belong to these cases are defined by a list of group names in the settings by:
+    * settings.SHARING_TO_PUBLIC_GROUPS
+    * settings.SHARING_TO_STAFF_GROUPS
+
+Just like any other sharing group, these groups must exist and have the appropriate permissions. The only difference with normal bi-directional sharing is that the viewing of shared object is more tightly controlled (in the case of sharing to staff) or the viewing is made available to anyone (in the case of sharing to public). Other than that, they are shared to the specified groups in the exact same way.

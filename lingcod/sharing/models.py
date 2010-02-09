@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 
 
 class ShareableContent(models.Model):
@@ -139,7 +140,7 @@ def share_object_with_groups(the_object, the_group_ids):
 
     the_object.save()
 
-def groups_users_sharing_with(user):
+def groups_users_sharing_with(user, include_public=False):
     """
     Get a dict of groups and users that are currently sharing items with a given user
     returns something like {'our_group': {'group': <Group our_group>, 'users': [<user1>, <user2>,...]}, ... }
@@ -151,6 +152,8 @@ def groups_users_sharing_with(user):
         permission = shareables[s][1]
         shared_objects = model_class.objects.shared_with_user(user)
         for group in user.groups.all():
+            if group.name in settings.SHARING_TO_PUBLIC_GROUPS and not include_public:
+                continue
             group_objects = shared_objects.filter(sharing_groups=group)
             user_list = []
             for gobj in group_objects:

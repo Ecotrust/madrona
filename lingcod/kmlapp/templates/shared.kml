@@ -31,15 +31,5 @@
  </Folder>
 {% endfor %}
 
-{% if iteam %}
-    <NetworkLink>
-    <name>Proposals Submitted to I-Team</name>
-    <open>0</open>
-    <visibility>0</visibility>
-    <Link>
-    <href>{% absurl kmlapp-iteam-kmz session_key=session_key %}</href>
-    </Link>
-    </NetworkLink>
-{% endif %}
 
 {% endblock %}
