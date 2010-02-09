@@ -54,18 +54,13 @@
             {% else %}
                 <p><strong>Designation not yet specified.</strong></p>
             {% endif %}
-            <table class="allowed_uses">
+            <h3>Allowed Uses</h3>
+            <table class="marinemap-table marinemap-table-zebra">
                 <thead>
                     <tr>
-                        <th class="title" colspan="3">Allowed Uses</tr>
-                    </tr>
-                    <tr class="headings">
                         <th scope="col">Target</th>
                         <th scope="col">Method</th>
                         <th scope="col">Use Type</th>
-                    </tr>
-                    <tr>
-                        <th colspan="3"><hr /></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,13 +71,13 @@
                             {{use.pk}}
                         </td>
                         <td class="target">
-                            {{use.target.name}}
+                            <span>{{use.target.name}}</span>
                         </td>
                         <td class="method">
-                            {{use.method.name}}
+                            <span>{{use.method.name}}</span>
                         </td>
                         <td class="purpose">
-                            {{use.purpose.name}}
+                            <span>{{use.purpose.name}}</span>
                         </td>
                     </tr>
                 {% endfor %}

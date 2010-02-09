@@ -100,7 +100,7 @@ class AllowedUsesWidget(forms.SelectMultiple):
         <p class="help_text">
             If you would like to propose an allowed use not listed above, please contact: <a href="mailto:help@lists.marinemap.org">help@lists.marinemap.org</a>
         </p>
-        <table class="allowed_uses">
+        <table class="allowed_uses marinemap-table">
             <thead>
                 <tr class="headers">
                     <th>Target</th>
@@ -115,12 +115,6 @@ class AllowedUsesWidget(forms.SelectMultiple):
                 </tr>
             </thead>
             <tbody>
-                <tr class="chosen">
-                    <td colspan="4">chosen allowed uses</td>
-                </tr>
-                <tr class="none">
-                    <td colspan="4">none</td>
-                </tr>
             </tbody>
         </table>
         <br />

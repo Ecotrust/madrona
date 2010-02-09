@@ -62,6 +62,9 @@ lingcod.panel = function(options){
     
     that.show = function(animate){
         $(el[0]).show();
+        $(el[0]).find('.marinemap-table').each(function(){
+            lingcod.ui.table(this);
+        });
         $(el[0]).scrollTop(0);
         that.shown = true;
         $(that).trigger('panelshow', that);       

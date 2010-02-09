@@ -1,0 +1,41 @@
+.marinemap-table {
+    font-size:12px;
+    width:100%;
+    border:solid 1px #ccc;
+    margin:5px;
+}
+
+.marinemap-table th {
+    color:#344E63;
+    font-weight:bold;
+    text-shadow:0 1px 0 #FCFAFF;
+}
+
+.marinemap-table thead tr {
+    background:#FAFAFA url(../images/toolbar-bg.png) repeat-x scroll left bottom;
+    text-align:center;
+}
+
+.marinemap-table tbody {
+    background-color:white;
+}
+
+.marinemap-table tr.zebra {
+    background-color:#eee;
+}
+
+.marinemap-table span.hover {
+    display:none;
+}
+
+.marinemap-table-hover tbody tr:hover {
+    background-color:#C9E9FF;
+}
+
+.marinemap-table-hover tbody tr:hover span {
+    display:none;
+}
+
+.marinemap-table-hover tbody tr:hover span.hover {
+    display:block;
+}

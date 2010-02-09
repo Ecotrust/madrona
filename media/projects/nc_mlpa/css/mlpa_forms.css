@@ -1,4 +1,4 @@
-div.panel form table {
+/*div.panel form table {
     width:100%;
     padding:0;
     margin:0;
@@ -29,21 +29,21 @@ div.panel tr.headers {
     border-bottom:thin solid #aaa;
 }
 
-tr.none, tr.chosen {
-    text-align:center;
-    color:#5E5C64;
-}
-
-tr.none {
-    font-style:italic;
-}
-
 div.panel tbody td {
     text-align:center;
     color:#333;
 }
-
+*/
 p.designation_allowed_uses_note {
     margin-top:5px !important;
+    font-style:italic;
+}
+
+tr.none, tr.chosen {
+    text-align:center !important;
+    color:#5E5C64;
+}
+
+tr.none {
     font-style:italic;
 }

@@ -391,10 +391,6 @@ mlpa.uses = function(options){
     
     // add to ui
     var addSelectedRow = function(id){
-        var non_showing = table.find('.none:visible');
-        if(non_showing){
-            non_showing.hide();
-        }
         var use = data.allowed_uses[id];
         var row = $('<tr style="display:none;" class="use use_'+id+'"><td>'+
             data.targets[use.target].name+'</td><td>'+
@@ -424,9 +420,6 @@ mlpa.uses = function(options){
         row.fadeOut(500, function(){
             $(this).remove();
         });
-        if(table.find('.use').length === 0){
-            table.find('.none').show();
-        }
     };
     
     var deselectAll = function(){

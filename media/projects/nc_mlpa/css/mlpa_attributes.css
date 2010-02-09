@@ -1,31 +1,3 @@
-table.allowed_uses {
-    width:100%;
-    border:none;
-    text-align:center;
-    margin:5px 0;
-}
-
-
-table.allowed_uses th {
-    color:#344e63;
-    text-shadow:0 1px 0 #FCFAFF;
-    font-weight:bold;
-}
-
-table.allowed_uses th.title {
-    font-size:14px;
-    color:#47556C;
-}
-
-table.allowed_uses {
-    border:solid 1px #ccc;
-    clear:both;
-}
-
-table.allowed_uses th hr {
-    padding:0;
-    margin:0;
-}
 
 div.designation {
     padding:10px;
