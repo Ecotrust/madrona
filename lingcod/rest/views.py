@@ -93,6 +93,7 @@ def create(request, form_class=None, action=None, title=None,
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
+            m.save()
             response = HttpResponse('created', status=201)
             response['Location'] = m.get_absolute_url()
             return response
@@ -210,6 +211,7 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
+            m.save()
             return HttpResponse('updated' + m.name, status=200)
         else:
             extra_context.update({
