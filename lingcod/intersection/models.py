@@ -938,7 +938,12 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
             if not int_feature.feature_model=='PointFeature':
                 geom_set = int_feature.geometries_set.filter(geometry__intersects=geom)
                 for g in geom_set:
-                    intersect_geom = geom.intersection(g.geometry)
+                    from django.contrib.gis.geos.error import GEOSException
+                    try:
+                        intersect_geom = geom.intersection(g.geometry)
+                    except GEOSException:
+                        print 'Intersection threw a GEOSException that we are going to ignore.  If you see this every once in a while, no problem.  If you see it a lot, Jared is fired'
+                        continue
                     #geom_area = geom.area
                     try:
                         f_gc.append(intersect_geom)
