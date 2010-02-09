@@ -168,8 +168,6 @@ def groups_users_sharing_with(user, include_public=False):
                     groups_sharing[group.name]['users'].extend(user_list)
                 else:
                     groups_sharing[group.name]={'group':group, 'users': user_list}
-            print group, user_list
-    print groups_sharing
     if len(groups_sharing.keys()) > 0:
         return groups_sharing
     else:
