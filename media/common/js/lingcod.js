@@ -209,6 +209,16 @@ var lingcod = (function(){
                         callback(editor, editor.el, kmlObject)
                     });
                 }
+                $(editor.tree).bind('copyDone', function(e,location) {
+                    this.refresh();
+                    this.clearSelection();
+                    var node = this.getNodesById(location);
+                    if(node.length === 1) {
+                        this.selectNode(node, this.lookup(node)); 
+                    } else {
+                        alert("No node found with Id " + location);
+                    }
+                });
                 editors.push(editor);
             }
         }
@@ -233,7 +243,7 @@ var lingcod = (function(){
 
         if(options.sharedshapes){
             for(var i=0;i<options.sharedshapes.length; i++){
-                editors.push(lingcod.rest.kmlEditor({
+                var editor = lingcod.rest.kmlEditor({
                     ge: ge,
                     gex: gex,
                     appendTo: '#sharedshapestree',
@@ -242,7 +252,21 @@ var lingcod = (function(){
                     client: that.client,
                     shared: true,
                     allow_copy: options.allow_copy
-                }));
+                });
+                $(editor.tree).bind('copyDone', function(e, location) {
+                    var myshapesEditor = that.editors[0];
+                    myshapesEditor.tree.refresh();
+                    myshapesEditor.tree.clearSelection();
+                    var node = myshapesEditor.tree.getNodesById(location);
+                    if(node.length === 1) {
+                        myshapesEditor.tree.selectNode(node); //, this.lookup(node));
+                    } else {
+                        alert("No node found with Id " + location);
+                    }
+
+                    // MP TODO switch to myshapes panel
+                });
+                editors.push(editor);
             }            
         }
         
