@@ -1,4 +1,5 @@
 from django.test import TestCase
+import os
 
 class AssetsTest(TestCase):
     def test_get_js_files(self):
@@ -36,24 +37,22 @@ class SessionsTest(TestCase):
 
 class BrowserUserAgentTest(TestCase):
     def setUp(self):
-        self.supported_uastring_examples = [
-            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7',
-            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10',
-            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6',
-        ]
-
-        self.unsupported_uastring_examples = [
-            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.49 Safari/532.5',
-        ]
+        exdir = os.path.dirname(os.path.abspath(__file__))
+        self.supported_uastring_examples = [x.strip() for x in open(exdir + '/supported_user_agent_examples.txt').readlines()]
+        self.unsupported_uastring_examples = [x.strip() for x in open(exdir + '/unsupported_user_agent_examples.txt').readlines()]
 
     def test_supported_browsers(self):
         from lingcod.common.utils import valid_browser 
         for ua in self.supported_uastring_examples:
+            if not valid_browser(ua):
+                print "UAPARSER SAYS NOT SUPPORTED ....." , ua
             self.assertEquals(valid_browser(ua),True)
 
     def test_unsupported_browsers(self):
         from lingcod.common.utils import valid_browser 
         for ua in self.unsupported_uastring_examples:
+            if valid_browser(ua):
+                print "UAPARSER SAYS SUPPORTED ....." , ua
             self.assertEquals(valid_browser(ua),False)
 
 

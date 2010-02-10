@@ -4,7 +4,7 @@ import clientos
 def int_or_zero(x):
     try:
         return int(x)
-    except TypeError:
+    except:
         return 0
 
 class browser_platform():
