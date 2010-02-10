@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 from mlpa.models import AllowedUse, AllowedPurpose, AllowedMethod, AllowedTarget, Lop, LopRule
-import json
+#import json
+from django.utils import simplejson as json
 from django.db import transaction
 
 
@@ -34,7 +35,7 @@ class Command(BaseCommand):
             for item in data:
                 f = item['fields']
                 if item['model'] == 'mmapp.domainloprule':
-                    lop.append( LopRule(pk=item['pk'], name=f['name'], description=f['description']) )
+                    rules.append( LopRule(pk=item['pk'], name=f['name'], description=f['description']) )
                 if item['model'] == 'mmapp.lop':
                     lop.append( Lop(pk=item['pk'], name=f['name'], value=f['value'], run=f['run']) )
                 if item['model'] == 'mmapp.domainalloweduse':
@@ -45,19 +46,21 @@ class Command(BaseCommand):
                     targets.append( AllowedTarget(pk=item['pk'], name=f['name'], description=f['description']) )
                 if item['model'] == 'mmapp.domainallowedmethod':
                     methods.append( AllowedMethod(pk=item['pk'], name=f['name'], description=f['description']) )
-        
+            
+            #Q: would the following fail if 'uses' were listed first? (uses is dependent on many of the previously listed tables)
+            #A: db operations failed when 'uses' was placed first in the list
             for l in targets, purposes, methods, lop, rules, uses:
                 for item in l:
                     item.save()
             transaction.commit()
-        except:
-            print "There was an exception. No database operations were committed."
+            print "Found %s allowed uses." % (len(uses), )
+            print "Found %s lop rules." % (len(rules), )
+            print "Found %s levels of protection." % (len(lop), )
+            print "Found %s allowed methods." % (len(methods), )
+            print "Found %s allowed purposes." % (len(purposes), )
+            print "Found %s allowed targets." % (len(targets), )
+        except Exception, e:
+            print "There was an exception: %s. No database operations were committed." % e.message
             transaction.rollback()
-
-        print "Found %s allowed uses." % (len(uses), )
-        print "Found %s lop rules." % (len(rules), )
-        print "Found %s levels of protection." % (len(lop), )
-        print "Found %s allowed methods." % (len(methods), )
-        print "Found %s allowed purposes." % (len(purposes), )
-        print "Found %s allowed targets." % (len(targets), )
+        
         transaction.leave_transaction_management()
