@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+### I'm porting this over to use osgeo ogr instead of the libgdal version 'cause I can't get that to work
+### I'm going to use ### to comment out the lines that I'm changing.  The replacement will be below.
 import os
 import zipfile
 import tempfile
@@ -8,8 +9,9 @@ import cStringIO
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.contrib.gis.db.models.fields import GeometryField
-from django.contrib.gis.gdal.libgdal import lgdal as ogr
-from django.contrib.gis.gdal import Driver, OGRGeometry, OGRGeomType, SpatialReference, check_err, CoordTransform
+###from django.contrib.gis.gdal.libgdal import lgdal as ogr
+from osgeo import ogr,osr
+from django.contrib.gis.gdal import check_err, OGRGeomType # Driver, OGRGeometry, OGRGeomType, SpatialReference, check_err, CoordTransform
 
 class ShpResponder(object):
     def __init__(self, queryset, readme=None, geo_field=None, proj_transform=None, mimetype='application/zip',file_name='shp_download'):
@@ -45,7 +47,8 @@ class ShpResponder(object):
             raise ValueError('No geodjango geometry fields found in this model queryset')
         
         # Get the shapefile driver
-        dr = Driver('ESRI Shapefile')
+        ###dr = Driver('ESRI Shapefile')
+        dr = ogr.GetDriverByName('ESRI Shapefile')
         
         # create a temporary file to write the shapefile to
         # since we are ultimately going to zip it up
@@ -54,44 +57,62 @@ class ShpResponder(object):
         tmp.close()
         
         # Creating the datasource
-        ds = ogr.OGR_Dr_CreateDataSource(dr._ptr, tmp.name, None)
+        ###ds = ogr.OGR_Dr_CreateDataSource(dr._ptr, tmp.name, None)
+        ds = dr.CreateDataSource(tmp.name)
+        if ds is None:
+            raise Exception('Could not create file!')
         
         # Get the right geometry type number for ogr
         if hasattr(geo_field,'geom_type'):
+            ###ogr_type = OGRGeomType(geo_field.geom_type).num
             ogr_type = OGRGeomType(geo_field.geom_type).num
         else:
+            ###ogr_type = OGRGeomType(geo_field._geom).num
             ogr_type = OGRGeomType(geo_field._geom).num
 
-        # Set up the native spatial reference of the geometry field using the srid
+        # Set up the native spatial reference of the geometry field using the srid    
+        native_srs = osr.SpatialReference()
         if hasattr(geo_field,'srid'):
-            native_srs = SpatialReference(geo_field.srid)
+            ###native_srs = SpatialReference(geo_field.srid)
+            native_srs.ImportFromEPSG(geo_field.srid)
         else:
-            native_srs = SpatialReference(geo_field._srid)
+            ###native_srs = SpatialReference(geo_field._srid)
+            native_srs.ImportFromEPSG(geo_field._srid)
         
-        if self.proj_transform:
-            output_srs = SpatialReference(self.proj_transform)
-            ct = CoordTransform(native_srs, output_srs)
-        else:
-            output_srs = native_srs
+        ###if self.proj_transform:
+        ###    output_srs = SpatialReference(self.proj_transform)
+        ###    ct = CoordTransform(native_srs, output_srs)
+        ###else:
+        ###    output_srs = native_srs
+            
+        output_srs = native_srs
         
         # create the layer
         # print 'about to try to create data layer'
         # print 'ds: %s, path: %s' % (ds, tmp.name)
-        layer = ogr.OGR_DS_CreateLayer(ds, tmp.name, output_srs._ptr, ogr_type, None)
+        ###layer = ogr.OGR_DS_CreateLayer(ds, tmp.name, output_srs._ptr, ogr_type, None)
+        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr.wkbPolygon)
         
         # Create the fields
         # Todo: control field order as param
         for field in attributes:
-            fld = ogr.OGR_Fld_Create(str(field.name), 4)
-            added = ogr.OGR_L_CreateField(layer, fld, 0)
-            check_err(added) 
+            ###fld = ogr.OGR_Fld_Create(str(field.name), 4)
+            ###added = ogr.OGR_L_CreateField(layer, fld, 0)
+            ###check_err(added) 
+            
+            field_defn = ogr.FieldDefn(str(field.name),ogr.OFTString)
+            field_defn.SetWidth( 255 )
+            if layer.CreateField(field_defn) != 0:
+                raise Exception('Faild to create field')
         
         # Getting the Layer feature definition.
-        feature_def = ogr.OGR_L_GetLayerDefn(layer) 
+        ###feature_def = ogr.OGR_L_GetLayerDefn(layer) 
+        feature_def = layer.GetLayerDefn()
         
         # Loop through queryset creating features
         for item in self.queryset:
-            feat = ogr.OGR_F_Create(feature_def)
+            ###feat = ogr.OGR_F_Create(feature_def)
+            feat = ogr.Feature( feature_def )
             
             # For now, set all fields as strings
             # TODO: catch model types and convert to ogr fields
@@ -121,7 +142,8 @@ class ShpResponder(object):
                     # pass for now....
                     # http://trac.osgeo.org/gdal/ticket/882
                     string_value = ''
-                ogr.OGR_F_SetFieldString(feat, idx, string_value)
+                ###ogr.OGR_F_SetFieldString(feat, idx, string_value)
+                feat.SetField(str(field.name),string_value)
                 idx += 1
               
             # Transforming & setting the geometry
@@ -130,11 +152,13 @@ class ShpResponder(object):
             # if requested we transform the input geometry
             # to match the shapefiles projection 'to-be'            
             if geom:
-                ogr_geom = OGRGeometry(geom.wkt,output_srs)
-                if self.proj_transform:
-                    ogr_geom.transform(ct)
+                ###ogr_geom = OGRGeometry(geom.wkt,output_srs)
+                ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
+                ###if self.proj_transform:
+                ###    ogr_geom.transform(ct)
                 # create the geometry
-                check_err(ogr.OGR_F_SetGeometry(feat, ogr_geom._ptr))
+                ###check_err(ogr.OGR_F_SetGeometry(feat, ogr_geom._ptr))
+                check_err(feat.SetGeometry(ogr_geom))
             else:
                 # Case where geometry object is not found because of null value for field
                 # effectively looses whole record in shapefile if geometry does not exist
@@ -142,12 +166,14 @@ class ShpResponder(object):
             
             
             # creat the feature in the layer.
-            check_err(ogr.OGR_L_SetFeature(layer, feat))
+            ###check_err(ogr.OGR_L_SetFeature(layer, feat))
+            check_err(layer.CreateFeature(feat))
         
         # Cleaning up
-        check_err(ogr.OGR_L_SyncToDisk(layer))
-        ogr.OGR_DS_Destroy(ds)
-        ogr.OGRCleanupAll()
+        ###check_err(ogr.OGR_L_SyncToDisk(layer))
+        ###ogr.OGR_DS_Destroy(ds)
+        ###ogr.OGRCleanupAll()
+        ds.Destroy()
         
         # Read resulting shapefile into a zipfile buffer
         buffer = cStringIO.StringIO()

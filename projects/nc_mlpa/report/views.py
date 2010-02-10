@@ -289,9 +289,7 @@ def array_shapefile(request, array_id_list_str):
     array = array_set[0]
     shp_response = ShpResponder(array.shapefile_export_query_set)
     shp_response.file_name = slugify(array.name[0:10])
-    print 'try to return shape next'
-    print shp_response()
-    #return shp_response()
+    return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
     mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)

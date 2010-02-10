@@ -17,7 +17,8 @@ class MpaShapefile(models.Model):
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
     name = models.CharField(max_length=255)
     name_short = models.CharField(blank=True, max_length=255,null=True)
-    designation = models.CharField(blank=True, max_length=80, null=True)
+    desig_name = models.CharField(blank=True, max_length=80, null=True)
+    desig_acro = models.CharField(blank=True, max_length=80, null=True)
     lop = models.CharField(blank=True, max_length=80, null=True)
     lop_numeric = models.IntegerField(blank=True, null=True)
     mpa = models.OneToOneField(MlpaMpa, related_name="mpa")
@@ -48,7 +49,7 @@ class ClusterManager(models.GeoManager):
         # get rid of the old ones
         self.filter(array=array,lop=lop).delete()
         
-        mpas = array.clusterable_mpa_set.filter(mpalop__lop__value__gte=lop.value)
+        mpas = array.clusterable_mpa_set.filter(lop_table__lop__value__gte=lop.value)
         clustered = []
         
         for mpa in mpas:

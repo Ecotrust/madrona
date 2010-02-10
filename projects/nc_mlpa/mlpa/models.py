@@ -529,7 +529,8 @@ class MlpaMpa(Mpa):
         geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
         name = models.CharField(max_length=255)
         name_short = models.CharField(blank=True, max_length=255,null=True)
-        designation = models.CharField(blank=True, max_length=80, null=True)
+        desig_name = models.CharField(blank=True, max_length=80, null=True)
+        desig_acro = models.CharField(blank=True, max_length=80, null=True)
         lop = models.CharField(blank=True, max_length=80, null=True)
         lop_numeric = models.IntegerField(blank=True, null=True)
         mpa = models.OneToOneField(MlpaMpa, related_name="mpa")
@@ -555,7 +556,8 @@ class MlpaMpa(Mpa):
                     short_name = shorter_name
             msf.name_short = short_name
             if self.designation:
-                msf.designation = self.designation.name
+                msf.desig_name = self.designation.name
+                msf.desig_acro = self.designation.acronym
             if self.lop:
                 msf.lop = self.lop.name
                 msf.lop_numeric = self.lop.value
