@@ -165,7 +165,9 @@ def groups_users_sharing_with(user, include_public=False):
                     user_list.append(gobj.user)
             if len(user_list) > 0:
                 if group.name in groups_sharing.keys():
-                    groups_sharing[group.name]['users'].extend(user_list)
+                    for user in user_list:
+                        if user not in groups_sharing[group.name]['users']:
+                            groups_sharing[group.name]['users'].append(user)
                 else:
                     groups_sharing[group.name]={'group':group, 'users': user_list}
     if len(groups_sharing.keys()) > 0:
