@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>example</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../common/js/lib/raphael-js/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/geographicReport.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../css/geographic_report.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script type="text/javascript" charset="utf-8">
+		var report;
+		$(document).ready(function(){
+			var el = $('#reportDiv');
+			console.time('render');
+			report = lingcod.geographicReport({
+				element: el, 
+				maxScale: 120,
+				annotations: [
+					{
+						label: 'Below Minimum',
+						min: 0,
+						max: 9,
+						color: '#E4E4E4'
+					},
+					{
+						label: 'Above Minimum',
+						min: 9,
+						max: 18,
+						color: '#C1DCEE'
+					},
+					{
+						label: 'Preferred Size Range',
+						min: 18,
+						max: 36,
+						color: '#92CEEE'
+					}
+				]
+			});
+			report.updateValue(9.5, true);
+			console.timeEnd('render');
+		});
+	</script>
+</head>
+<body>
+	<div id="reportDiv" style="width:455px;height:160px; border:#eee solid 1px;">
+		
+	</div>
+
+</body>
+</html>

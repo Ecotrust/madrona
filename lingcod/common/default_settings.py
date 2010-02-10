@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'lingcod.data_manager',
     'lingcod.data_distributor',
     'lingcod.depth_range',
+    'lingcod.geographic_report',
 )
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'
