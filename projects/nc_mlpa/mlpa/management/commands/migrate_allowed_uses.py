@@ -13,7 +13,7 @@ class Command(BaseCommand):
     )
     help = """Migrate new and modified allowed uses from marinemap v1
 
-    Use the following command on the northcoast tool to get the json file:
+    Use the following command on the mm1 server to get the json file:
     
         python manage.py dumpdata mmapp.DomainAllowedMethod mmapp.DomainAllowedTarget mmapp.DomainAllowedUse mmapp.DomainAllowedPurpose mmapp.Lop mmapp.DomainLopRule > allowed_uses.json
     
@@ -60,7 +60,8 @@ class Command(BaseCommand):
             print "Found %s allowed purposes." % (len(purposes), )
             print "Found %s allowed targets." % (len(targets), )
         except Exception, e:
-            print "There was an exception: %s. No database operations were committed." % e.message
+            print "There was an exception in the migrate_allowed_uses script: %s" % e.message
+            print "No Allowed Uses were committed to MM2." 
             transaction.rollback()
         
         transaction.leave_transaction_management()

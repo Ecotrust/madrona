@@ -11,13 +11,11 @@ from django.db import transaction
 class Command(BaseCommand):
     option_list = AppCommand.option_list + (
         make_option('--json', action='store', dest='json_path', default=False,
-            help="Path to a json file containing User information from marinemap v1."),
-        make_option('--verb', action='store', dest='verbose', default=False,
-            help="If activated then "),
+            help="Path to a json file containing Mpa information from marinemap v1."),
     )
-    help = """Migrate new and modified allowed uses from marinemap v1
+    help = """Migrate new and modified Mpas from marinemap v1
 
-    Use the following command on the northcoast tool to get the json file:
+    Use the following command on the mm1 server to get the json file:
     NOTE:   the following command would not run on my personal machine, even after I updated my code from the repository and restored my db from a recent (2 day old) production level backup
             it threw the following Error: Unable to serialize database: column x_mpas_allowed_uses.domainalloweduse_id does not exist
             the command does however run on the production server, which I guess is all that really counts in the end anyway
@@ -36,6 +34,9 @@ class Command(BaseCommand):
         data = json.load(f)
         num_mpas = 0
         for item in data:
+            absent_designations = list()
+            absent_uses = list()
+            absent_groups = list()
             try:
                 f = item['fields']
                 if item['model'] == 'mmapp.mpas':
@@ -56,24 +57,21 @@ class Command(BaseCommand):
                     if len(designation) != 0:
                         mpa.designation = designation[0]
                     elif f['designation'] is not None:
-                        print 'Designation: %s was not found.' % f['designation']
-                        print 'Mpa %s will have to be manually adjusted to include this designation.' % mpa.id
+                        absent_designations.append( f['designation'] )
                     #add Allowed Uses
                     for use_id in f['allowed_uses']:
                         use = AllowedUse.objects.filter(id=use_id)
                         if len(use) != 0: 
                             mpa.allowed_uses.add( use[0] )
                         else:
-                            print 'Allowed Use: %s was not found.' % use_id
-                            print 'Mpa %s will have to be manually adjusted to include this use.' % mpa.id
+                            absent_uses.append( use_id )
                     #add Sharing Groups
                     for group_id in f['sharing_groups']:
                         group = Group.objects.filter(id=group_id)
                         if len(group) != 0:
                             mpa.sharing_groups.add( group[0] )
                         else:
-                            print 'Sharing Group: %s was not found.' % group_id
-                            print 'Mpa %s will have to be manually adjusted to include this group.' % mpa.id
+                            absent_groups.append( group_id )
                     #check to see if this mpa already exists in the mm2 db
                     mm2_mpa = None
                     mm2_lookUp = MlpaMpa.objects.filter(id=mpa.pk)
@@ -85,8 +83,17 @@ class Command(BaseCommand):
                     #or if the last_modified timestamp is more recent in mm1 than mm2
                     if mm2_mpa is None or mm1_date_modified > mm2_mpa.date_modified: 
                         try:
+                            for designation in absent_designations:
+                                print 'Designation: %s was not found in mm2.' % designation 
+                                print 'Mpa %s will have to be manually adjusted to include this designation.' % mpa.id
+                            for use in absent_uses:
+                                print 'Allowed Use: %s was not found in mm2.' % use 
+                                print 'Mpa %s will have to be manually adjusted to include this use.' % mpa.id
+                            for group in absent_groups:
+                                print 'Sharing Group: %s was not found in mm2.' % group 
+                                print 'Mpa %s will have to be manually adjusted to include this group.' % mpa.id
                             if options['verbosity'] == '2':
-                                print 'adding %s to db' % mpa.id
+                                print 'Adding Mpa %s to MM2' % mpa.id
                             mpa.save()
                             transaction.commit()
                             num_mpas += 1
@@ -96,7 +103,8 @@ class Command(BaseCommand):
                             transaction.rollback()
                             raise
             except:
-                print "There was an exception. Mpa %s was not added to the db." % mpa.id
+                print "There was an exception in the migrate_mpas script. Mpa %s was not added to MM2." % mpa.id
                 continue
+                
         print "Found %s new or modified mpas." % (num_mpas, )
         transaction.leave_transaction_management()

@@ -11,16 +11,16 @@ class Command(BaseCommand):
         make_option('--json', action='store', dest='json_path', default=False,
             help="Path to a json file containing User information from marinemap v1."),
     )
-    help = """Migrate new and modified allowed uses from marinemap v1
+    help = """Migrate new and modified Users from marinemap v1
 
-    Use the following command on the northcoast tool to get the json file:
+    Use the following command on the mm1 server to get the json file:
     
         python manage.py dumpdata auth.user > users.json
         
     NOTE:  This command will not update users that have a more recent last_login timestamp in mm2 than in mm1
     
     """
-    args = '[json, verbose]'
+    args = '[json]'
     
     def handle(self, json_path, **options):
         mm1_permissions_mapping = { 1364: 'add_group', 1436: 'can_share_arrays', 1447: 'can_share_mpas', 1601: 'view_ecotrustlayerlist' }
@@ -31,6 +31,7 @@ class Command(BaseCommand):
         users = list()
         try:
             for item in data:
+                absent_permissions = list()
                 f = item['fields']
                 if item['model'] == 'auth.user':
                     #create User object
@@ -46,9 +47,7 @@ class Command(BaseCommand):
                             if len(permission) != 0:
                                 mm1_user.user_permissions.add( permission[0] )
                         else:
-                            print 'This migrating script is not prepared to handle permission %s (this id is from mm1, not mm2)' % mm1_permission_id
-                            print 'User %s will not be given permission %s' % (mm1_user.id, mm1_permission_id)
-                            print 'That permission will have to be added to the user manually'
+                            absent_permissions.append( mm1_permission_id )
                     #check to see if this user already exists in the mm2 db
                     mm2_user = None
                     mm2_lookUp = User.objects.filter(id=mm1_user.pk)
@@ -64,6 +63,10 @@ class Command(BaseCommand):
                     #only update user if they are not already in the database
                     #or if they have logged in more recently to mm1 than to mm2
                     if mm2_user is None or mm1_last_login > mm2_user.last_login: 
+                        for permission in absent_permissions:
+                            print 'This migrating script is not prepared to handle permission %s (this id is from mm1, not mm2)' % permission
+                            print 'User %s will not be given permission %s' % (mm1_user.id, permission)
+                            print 'You will likely want to add that permission to the user manually (via the admin).'
                         users.append( mm1_user )
                     
             for item in users:
@@ -71,7 +74,8 @@ class Command(BaseCommand):
             transaction.commit()
             print "Found %s new or modified users." % (len(users), )
         except Exception, e:
-            print "There was an exception: %s. No database operations were committed." % e.message
+            print "There was an exception in the migrate_users script: %s" % e.message
+            print "No Users were committed to MM2."
             transaction.rollback()
         
         transaction.leave_transaction_management()

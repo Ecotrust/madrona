@@ -11,9 +11,9 @@ class Command(BaseCommand):
         make_option('--json', action='store', dest='json_path', default=False,
             help="Path to a json file containing Group information from marinemap v1."),
     )
-    help = """Migrate new and modified allowed uses from marinemap v1
+    help = """Migrate new and modified groups from marinemap v1
 
-    Use the following command on the northcoast tool to get the json file:
+    Use the following command on the mm1 server to get the json file:
     
         python manage.py dumpdata auth.group > groups.json
            
@@ -58,7 +58,8 @@ class Command(BaseCommand):
             transaction.commit()
             print "Found %s groups." % (len(groups), )
         except Exception, e:
-            print "There was an exception: %s. No database operations were committed." % e.message
+            print "There was an exception in the migrate_groups script: %s" % e.message
+            print "No Groups were committed to MM2."
             transaction.rollback()
         
         transaction.leave_transaction_management()

@@ -10,18 +10,15 @@ from django.db import transaction
 class Command(BaseCommand):
     option_list = AppCommand.option_list + (
         make_option('--json', action='store', dest='json_path', default=False,
-            help="Path to a json file containing User information from marinemap v1."),
+            help="Path to a json file containing Array information from marinemap v1."),
     )
-    help = """Migrate new and modified allowed uses from marinemap v1
+    help = """Migrate new and modified Arrays from marinemap v1
 
-    Use the following command on the northcoast tool to get the json file:
-    NOTE:   the following command would not run on my personal machine, even after I updated my code from the repository and restored my db from a recent (2 day old) production level backup
-            it threw the following Error: Unable to serialize database: column x_mpas_allowed_uses.domainalloweduse_id does not exist
-            the command does however run on the production server, which I guess is all that really counts in the end anyway
+    Use the following command on the mm1 server to get the json file:
         
         python manage.py dumpdata mmapp.Arrays > arrays.json
         
-    NOTE:  This command will not update mpas that have a more recent date_modified timestamp in mm2 than in mm1
+    NOTE:  This command will not update arrays that have a more recent date_modified timestamp in mm2 than in mm1
     
     """
     args = '[json]'
@@ -34,6 +31,7 @@ class Command(BaseCommand):
         arrays = list()
         try:
             for item in data:
+                absent_groups = list()
                 f = item['fields']
                 if item['model'] == 'mmapp.arrays':
                     #create Array object
@@ -44,7 +42,7 @@ class Command(BaseCommand):
                         array.user = user[0]
                     else:
                         print 'User: %s was not found.' % f['user']
-                        print 'array %s will not be migrated to mm2!' % array.id
+                        print 'Array %s will not be migrated to mm2!' % array.id
                         continue
                     #add Sharing Groups
                     for group_id in f['sharing_groups']:
@@ -52,8 +50,7 @@ class Command(BaseCommand):
                         if len(group) != 0:
                             array.sharing_groups.add( group[0] )
                         else:
-                            print 'Sharing Group: %s was not found.' % group_id
-                            print 'Array %s will have to be manually adjusted to include this group.' % array.id
+                            absent_groups.append( group_id )
                     #add Public Group when Public Proposal is True
                     if f['public_proposal'] == True:
                         group = Group.objects.get( id=999999 )
@@ -68,15 +65,20 @@ class Command(BaseCommand):
                     #only update array if it is not already in the database
                     #or if the last_modified timestamp is more recent in mm1 than mm2
                     if mm2_array is None or mm1_date_modified > mm2_array.date_modified: 
+                        for group in absent_groups:
+                            print 'Sharing Group: %s was not found in mm2.' % group 
+                            print 'Array %s will have to be manually adjusted to include this group.' % array.id
                         arrays.append( array )
                     
             for item in arrays:
-                print "saving array %s to db" % item.id
+                if options['verbosity'] == '2':
+                    print "Adding Array %s to MM2" % item.id
                 item.save()
             transaction.commit()
             print "Found %s new or modified arrays." % (len(arrays), )
         except Exception, e:
-            print "There was an exception: %s. No database operations were committed." % e.message
+            print "There was an exception in the migrate_mpas script: %s" % e.message 
+            print "No Arrays were committed to MM2."
             transaction.rollback()
         
         transaction.leave_transaction_management()
