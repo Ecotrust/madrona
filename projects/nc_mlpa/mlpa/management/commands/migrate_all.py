@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
-import os
+import os, sys
 from os.path import join
 #import json
 from django.utils import simplejson as json
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     )
     help = """Migrate data from fixtures to marinemap v2 
 
-    Use the following command on the northcoast tool to generate the json fixtures:
+    Use the following command on the mm1 server to generate the json fixtures:
     
         python manage.py create_mm1_migration_fixtures --dest <path where json fixtures should be stored>
     
@@ -23,32 +23,51 @@ class Command(BaseCommand):
     args = '[json]'
     
     def handle(self, json_path, **options):
+        from DataMigration import Migrator
+        migrator = Migrator()
+        
         try:
             uses_path = os.path.join( json_path, 'allowed_uses.json' )
-            uses_command = "python manage.py migrate_allowed_uses --json %s" % uses_path
             print 'Migrating data from Allowed Uses fixture: %s' % uses_path
-            os.system( uses_command )
-            
+            migrator.migrate_allowed_uses(uses_path)
+        except:
+            print("An exception was raised during the migrate_allowed_uses script.")
+            print("Data Migration has halted.")
+            sys.exit()
+             
+        try:
             groups_path = os.path.join( json_path, 'groups.json' )
-            groups_command = "python manage.py migrate_groups --json %s" % groups_path
             print 'Migrating data from Groups fixture: %s' % groups_path
-            os.system( groups_command )
+            migrator.migrate_groups(groups_path)
+        except:
+            print("An exception was raised during the migrate_groups script.")
+            print("Data Migration has halted.")
+            sys.exit()
             
+        try:
             users_path = os.path.join( json_path, 'users.json' )
-            users_command = "python manage.py migrate_users --json %s" % users_path
             print 'Migrating data from Users fixture: %s' % users_path
-            os.system( users_command )
+            migrator.migrate_users(users_path)
+        except:
+            print("An exception was raised during the migrate_users script.")
+            print("Data Migration has halted.")
+            sys.exit()
             
+        try:
             mpas_path = os.path.join( json_path, 'mpas.json' )
-            mpas_command = "python manage.py migrate_mpas --json %s" % mpas_path
             print 'Migrating data from Mpas fixture: %s' % mpas_path
-            os.system( mpas_command )
+            migrator.migrate_mpas(mpas_path, options['verbosity'])
+        except:
+            print("An exception was raised during the migrate_mpas script.")
+            print("Data Migration has halted.")
+            sys.exit()
             
+        try:
             arrays_path = os.path.join( json_path, 'arrays.json' )
-            arrays_command = "python manage.py migrate_arrays --json %s" % arrays_path
             print 'Migrating data from Arrays fixture: %s' % arrays_path
-            os.system( arrays_command )
-            
-        except Exception, e:
-            print "There was an exception: %s. Some fixtures were not generated." % e.message
+            migrator.migrate_arrays(arrays_path, options['verbosity'])
+        except:
+            print("An exception was raised during the migrate_arrays script.")
+            print("Data Migration has halted.")
+            sys.exit()
         

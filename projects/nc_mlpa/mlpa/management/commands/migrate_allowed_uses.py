@@ -21,47 +21,9 @@ class Command(BaseCommand):
     args = '[json]'
     
     def handle(self, json_path, **options):
-        transaction.enter_transaction_management()
-        transaction.managed(True)
-        f = open(json_path)
-        data = json.load(f)
-        uses = list()
-        targets = list()
-        purposes = list()
-        methods = list()
-        lop = list()
-        rules = list()
+        from DataMigration import Migrator
+        migrator = Migrator()
         try:
-            for item in data:
-                f = item['fields']
-                if item['model'] == 'mmapp.domainloprule':
-                    rules.append( LopRule(pk=item['pk'], name=f['name'], description=f['description']) )
-                if item['model'] == 'mmapp.lop':
-                    lop.append( Lop(pk=item['pk'], name=f['name'], value=f['value'], run=f['run']) )
-                if item['model'] == 'mmapp.domainalloweduse':
-                    uses.append(AllowedUse(pk=item['pk'], target_id=f['target'], method_id=f['method'], purpose_id=f['purpose'], lop_id=f['lop'], rule_id=f['rule']))
-                if item['model'] == 'mmapp.domainallowedpurpose':
-                    purposes.append( AllowedPurpose(pk=item['pk'], name=f['name'], description=f['description']) )
-                if item['model'] == 'mmapp.domainallowedtarget':
-                    targets.append( AllowedTarget(pk=item['pk'], name=f['name'], description=f['description']) )
-                if item['model'] == 'mmapp.domainallowedmethod':
-                    methods.append( AllowedMethod(pk=item['pk'], name=f['name'], description=f['description']) )
-            
-            #Q: would the following fail if 'uses' were listed first? (uses is dependent on many of the previously listed tables)
-            #A: db operations failed when 'uses' was placed first in the list
-            for l in targets, purposes, methods, lop, rules, uses:
-                for item in l:
-                    item.save()
-            transaction.commit()
-            print "Found %s allowed uses." % (len(uses), )
-            print "Found %s lop rules." % (len(rules), )
-            print "Found %s levels of protection." % (len(lop), )
-            print "Found %s allowed methods." % (len(methods), )
-            print "Found %s allowed purposes." % (len(purposes), )
-            print "Found %s allowed targets." % (len(targets), )
-        except Exception, e:
-            print "There was an exception in the migrate_allowed_uses script: %s" % e.message
-            print "No Allowed Uses were committed to MM2." 
-            transaction.rollback()
-        
-        transaction.leave_transaction_management()
+            migrator.migrate_allowed_uses(json_path)
+        except:
+            print 'The migrate_allowed_uses command has terminated.'

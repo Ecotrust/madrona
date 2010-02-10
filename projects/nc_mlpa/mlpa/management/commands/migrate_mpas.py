@@ -28,83 +28,9 @@ class Command(BaseCommand):
     args = '[json]'
     
     def handle(self, json_path, **options):
-        transaction.enter_transaction_management()
-        transaction.managed(True)
-        f = open(json_path)
-        data = json.load(f)
-        num_mpas = 0
-        for item in data:
-            absent_designations = list()
-            absent_uses = list()
-            absent_groups = list()
-            try:
-                f = item['fields']
-                if item['model'] == 'mmapp.mpas':
-                    #the following use lop rules (had allowed uses in [582, 583, 587, 588]):  [73163, 73165, 73167, 73178, 73179, 73180, 73182, 73183, 73184, 73185, 73186, 73203, 73207, 73217, 73222, 73223, 73225, 73226, 73252, 73261, 73266, 73267, 73269, 73277, 73279, 73301, 73305, 73441, 73524, 73525, 73545, 73575, 73577, 73579, 73582, 73583, 73586, 73599, 73600, 73605, 73613, 73683, 73711, 73844, 73865, 73899, 73900, 73901, 73902, 73903, 73904, 73905, 73910, 73912, 73938, 73980]:
-                    #not sure why the following had issues [73925, 73928]:
-                    #create Mpa object
-                    mpa = MlpaMpa(pk=item['pk'], name=f['name'], date_created=f['date_created'], date_modified=f['date_modified'], is_estuary=f['is_estuary'], cluster_id=f['cluster_id'], boundary_description=f['boundary_description'], specific_objective=f['specific_objective'], design_considerations=f['design_considerations'], comments=f['comments'], group_before_edits=f['group_before_edits'], evolution=f['evolution'], dfg_feasability_guidance=f['dfg_feasability_guidance'], sat_explanation=f['sat_explanation'], other_regulated_activities=f['other_regulated_activities'], other_allowed_uses=f['other_allowed_uses'], geometry_orig=f['geometry'], geometry_final=f['geometry_clipped'])
-                    #add User
-                    user = User.objects.filter(id=f['user']) 
-                    if len(user) != 0:
-                        mpa.user = user[0]
-                    else:
-                        print 'User: %s was not found.' % f['user']
-                        print 'Mpa %s will not be migrated to mm2!' % mpa.id
-                        continue
-                    #add Designation
-                    designation = MpaDesignation.objects.filter(id=f['designation']) 
-                    if len(designation) != 0:
-                        mpa.designation = designation[0]
-                    elif f['designation'] is not None:
-                        absent_designations.append( f['designation'] )
-                    #add Allowed Uses
-                    for use_id in f['allowed_uses']:
-                        use = AllowedUse.objects.filter(id=use_id)
-                        if len(use) != 0: 
-                            mpa.allowed_uses.add( use[0] )
-                        else:
-                            absent_uses.append( use_id )
-                    #add Sharing Groups
-                    for group_id in f['sharing_groups']:
-                        group = Group.objects.filter(id=group_id)
-                        if len(group) != 0:
-                            mpa.sharing_groups.add( group[0] )
-                        else:
-                            absent_groups.append( group_id )
-                    #check to see if this mpa already exists in the mm2 db
-                    mm2_mpa = None
-                    mm2_lookUp = MlpaMpa.objects.filter(id=mpa.pk)
-                    if len(mm2_lookUp) != 0: #there is already an mpa with this id in the mm2 db
-                        mm2_mpa = mm2_lookUp[0]
-                        from datetime import datetime
-                        mm1_date_modified = datetime.strptime(mpa.date_modified, "%Y-%m-%d %H:%M:%S")
-                    #only update mpa if it is not already in the database
-                    #or if the last_modified timestamp is more recent in mm1 than mm2
-                    if mm2_mpa is None or mm1_date_modified > mm2_mpa.date_modified: 
-                        try:
-                            for designation in absent_designations:
-                                print 'Designation: %s was not found in mm2.' % designation 
-                                print 'Mpa %s will have to be manually adjusted to include this designation.' % mpa.id
-                            for use in absent_uses:
-                                print 'Allowed Use: %s was not found in mm2.' % use 
-                                print 'Mpa %s will have to be manually adjusted to include this use.' % mpa.id
-                            for group in absent_groups:
-                                print 'Sharing Group: %s was not found in mm2.' % group 
-                                print 'Mpa %s will have to be manually adjusted to include this group.' % mpa.id
-                            if options['verbosity'] == '2':
-                                print 'Adding Mpa %s to MM2' % mpa.id
-                            mpa.save()
-                            transaction.commit()
-                            num_mpas += 1
-                        except Exception, e:
-                            print "There was an exception while saving Mpa %s to the database:" %s
-                            print e.message
-                            transaction.rollback()
-                            raise
-            except:
-                print "There was an exception in the migrate_mpas script. Mpa %s was not added to MM2." % mpa.id
-                continue
-                
-        print "Found %s new or modified mpas." % (num_mpas, )
-        transaction.leave_transaction_management()
+        from DataMigration import Migrator
+        migrator = Migrator()
+        try:
+            migrator.migrate_mpas(json_path, options['verbosity'])
+        except:
+            print 'The migrate_mpas command has terminated.'
