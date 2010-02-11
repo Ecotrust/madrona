@@ -57,15 +57,6 @@ class Command(BaseCommand):
             sys.exit()
             
         try:
-            mpas_path = os.path.join( json_path, 'mpas.json' )
-            print 'Migrating data from Mpas fixture: %s' % mpas_path
-            migrator.migrate_mpas(mpas_path, options['verbosity'])
-        except:
-            print("An exception was raised during the migrate_mpas script.")
-            print("Data Migration has halted.")
-            sys.exit()
-            
-        try:
             arrays_path = os.path.join( json_path, 'arrays.json' )
             print 'Migrating data from Arrays fixture: %s' % arrays_path
             migrator.migrate_arrays(arrays_path, options['verbosity'])
@@ -73,4 +64,14 @@ class Command(BaseCommand):
             print("An exception was raised during the migrate_arrays script.")
             print("Data Migration has halted.")
             sys.exit()
+            
+        try:
+            mpas_path = os.path.join( json_path, 'mpas.json' )
+            print 'Migrating data from Mpas fixture: %s' % mpas_path
+            migrator.migrate_mpas(mpas_path, options['verbosity'])
+        except:
+            print("An exception was raised during the migrate_mpas script.")
+            print("Data Migration has halted.")
+            sys.exit()
+        
         

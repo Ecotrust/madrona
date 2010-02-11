@@ -218,6 +218,12 @@ class Migrator:
                     #not sure why the following had issues [73925, 73928]:
                     #create Mpa object
                     mpa = MlpaMpa(pk=item['pk'], name=f['name'], date_created=f['date_created'], date_modified=f['date_modified'], is_estuary=f['is_estuary'], cluster_id=f['cluster_id'], boundary_description=f['boundary_description'], specific_objective=f['specific_objective'], design_considerations=f['design_considerations'], comments=f['comments'], group_before_edits=f['group_before_edits'], evolution=f['evolution'], dfg_feasability_guidance=f['dfg_feasability_guidance'], sat_explanation=f['sat_explanation'], other_regulated_activities=f['other_regulated_activities'], other_allowed_uses=f['other_allowed_uses'], geometry_orig=f['geometry'], geometry_final=f['geometry_clipped'])
+                    #associate with Array 
+                    if f['array']:
+                        from django.contrib.contenttypes.models import ContentType
+                        ct = ContentType.objects.get(model='mpaarray')
+                        mpa.content_type_id = ct.id
+                        mpa.object_id = f['array']
                     #add User
                     user = User.objects.filter(id=f['user']) 
                     if len(user) != 0:
