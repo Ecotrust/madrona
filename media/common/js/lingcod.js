@@ -504,16 +504,76 @@ var lingcod = (function(){
         return false;
     };
     
-    var whenLoaded = function(selector, callback){
+    var whenLoaded = function(selector, callback, count){
+        if(!count){
+            count = 1;
+        }else{
+            count = count + 1;
+            if(count > 20){
+                return;
+            }
+        }
         var el = $(selector+':visible');
         if(el.length){
             callback(el);
         }else{
-            setTimeout(whenLoaded, 100, selector, callback);
+            setTimeout(whenLoaded, 100, selector, callback, count);
         }
     };
     
-    that.whenLoaded = whenLoaded;
+    // Use this function within content that goes into panels in order to
+    // specify javascript to be executed when the panel is shown, closed, 
+    // and/or hidden.
+    // 
+    // For example, this content could be rendered in a django view:
+    // 
+    // <div id="foo"></div>
+    // <script type="text/javascript" charset="utf-8">
+    //     lingcod.panelEvents({
+    //         show: function(){
+    //             // I'll execute when the panel is shown
+    //             $('#foo').html('panel shown and callback executed.');
+    //         },
+    //         hide: function(){
+    //             $('#foo').html("I'm just temporarily hidden.");
+    //         },
+    //         close: function(){
+    //             alert('you closed the panel!');
+    //         }
+    //     });
+    // </script>
+    // 
+    // This is particularly useful for content shown via panel.showUrl()
+    // 
+    // Note that any javascript not specified using panelEvents() will be 
+    // executed immediately, likely with unexpected consequences.
+    var panelEvents = function(opts){
+        whenLoaded('.marinemap-panel', function(el){
+            if(opts.show){
+                opts.show(el);
+            }
+            if(opts.close){
+                var panel = el.data('panelComponent');
+                var cback = function(){
+                    $(this).unbind('panelclose', cback);
+                    opts.close(el);
+                };
+                $(panel).bind('panelclose', cback);
+            }
+            if(opts.hide){
+                var panel = el.data('panelComponent');
+                var cback = function(){
+                    $(this).unbind('panelhide', cback);
+                    opts.hide(el);
+                };
+                $(panel).bind('panelhide', cback);                
+            }
+        });
+    };
+    
+    that.panelEvents = panelEvents;
+        
+    that.persistentReports = {};
     
     return that;
 })();

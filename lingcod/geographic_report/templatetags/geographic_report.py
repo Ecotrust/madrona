@@ -13,17 +13,21 @@ def do_geographic_report(parser, token):
     the REST Framework.
     """
     tokens = token.split_contents()
-    if len(tokens) == 3:
+    persist = ''
+    if len(tokens) >= 3:
         name = tokens[1]
         area = tokens[2]
+        if len(tokens) == 4:
+            persist = tokens[3]
     else:
         raise template.TemplateSyntaxError, "%r tag accepts a report name and an area value (in square meters)." % token.contents.split()[0]
-    return GeographicReportNode(name, area)
+    return GeographicReportNode(name, area, persist)
 
 class GeographicReportNode(template.Node):
-    def __init__(self, name, area):
+    def __init__(self, name, area, persist):
         self.name = name[1:(len(name)-1)]
         self.area = area
+        self.persist = persist
     
     def render(self, context):
         report = GeographicReport.objects.get(name=self.name)
@@ -45,9 +49,23 @@ class GeographicReportNode(template.Node):
         return """
             <div id="%s" class="geographic_report" />
             <script type="text/javascript" charset="utf-8">
-                lingcod.whenLoaded('#%s', function(el){
-        			window.report = lingcod.geographicReport(%s);
-        			report.updateValue(%s, true);                
+                lingcod.panelEvents({
+                    show: function(el){
+                    var persist_id = '%s';
+                        if(persist_id){
+                            var report = lingcod.persistentReports[persist_id];
+                            if(report){
+                                $('#%s').append(report.paper.canvas);
+                            }else{
+                                report = lingcod.geographicReport(%s);
+                                lingcod.persistentReports[persist_id] = report;
+                            }
+                            report.updateValue(%s, true);
+                        }
+                    },
+                    close: function(el){
+                        
+                    }
                 });
             </script>
-        """ % (random_id, random_id, json, area.sq_mi)
+        """ % (random_id, self.persist, random_id, json, area.sq_mi)

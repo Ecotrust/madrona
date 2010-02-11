@@ -27,8 +27,8 @@ lingcod.panel = function(options){
     close = '<a style="'+s+'" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     
     var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
-    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'"><div class="panelMask"></div>'+close+'<div class="content container_12"></div></div>');
-    
+    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'"><div class="loadingMask"><span>Loading</span></div><div class="panelMask"></div>'+close+'<div class="content container_12"></div></div>');
+    el.data('panelComponent', that);
     var anotherel = el;
         
     el.find('a.close').click(function(){
@@ -84,11 +84,16 @@ lingcod.panel = function(options){
     }
     
     that.spin = function(message){
-        lingcod.showLoadingMask(message);
+        if(el.is(':visible')){
+            el.find('.loadingMask').show();
+        }else{
+            lingcod.showLoadingMask(message);
+        }
     };
     
     that.stopSpinning = function(){
         lingcod.hideLoadingMask();
+        el.find('.loadingMask').hide();
     };
     
     that.showError = function(title, message){

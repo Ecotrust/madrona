@@ -160,6 +160,7 @@ lingcod.geographicReport = (function(){
         annotationHover.push(background);
         annotationHover.push(annotationText);
         annotationHover.hide();
+        annotationHover.toFront();
         
         var addAnnotation = function(opts){
             var w = widthFromValue(opts.max - opts.min);
@@ -190,20 +191,12 @@ lingcod.geographicReport = (function(){
             anno.push(text);
             anno.push(subtext);
             anno.hover(function(e){
-                if(obj.textHidden === true){
-                    annotationHover.toFront();
-                    a.attr({opacity: 0.9, fill: '#FBEFAF'});
-                    annotationHover.attr({opacity: 0});
-                    annotationHover.show();
-                    annotationHover.attr({'x': e.clientX, y: e.clientY});
-                    annotationText.attr({text: text.attr('text'), x: e.clientX + 55, y: e.clientY + 11});
-                    annotationHover.animate({opacity: 1}, 100);                    
-                }
+                a.attr({opacity: 0.85});
             });
+            anno.attr({title: opts.label});
             anno.mouseout(function(){
                 a.attr({opacity: 1});
                 a.attr({fill: opts.color})
-                annotationHover.animate({opacity: 0}, 100);
                 // annotationHover.hide();
             });
         };
