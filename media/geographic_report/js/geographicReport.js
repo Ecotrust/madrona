@@ -152,10 +152,19 @@ lingcod.geographicReport = (function(){
         var widthFromValue = function(value){
             return Math.round((value / that.currentScale) * dataWidth);
         };
-                
+        
+        var annotationHover = paper.set();
+        var background = paper.rect(0, 0, 110, 20);
+        background.attr({'fill': '#F6EDC8', 'stroke': '#8F8F8F', 'stroke-width': '1'});
+        var annotationText = paper.text(55, 11, "");
+        annotationHover.push(background);
+        annotationHover.push(annotationText);
+        annotationHover.hide();
+        
         var addAnnotation = function(opts){
             var w = widthFromValue(opts.max - opts.min);
             var x = (opts.min / that.currentScale) * dataWidth + leftMargin;
+            var anno = paper.set();
             var a = paper.rect(x, 0, w, 120);
             var opacity;
             a.attr({'fill': opts.color, 'stroke-width': 1, 'stroke': opts.color});
@@ -164,13 +173,39 @@ lingcod.geographicReport = (function(){
             var text = paper.text(text_x, 100, opts.label);
             var subtext = paper.text(text_x, 110, opts.min + ' to '+opts.max + ' sq miles');
             if(w < 100){
-                text.attr({opacity: 0});
-                subtext.attr({opacity: 0});
+                a.textHidden = true;
+                text.hide();
+                subtext.hide();
+            }else{
+                a.textHidden = false;
+                text.show();
+                subtext.show();
             }
-            annotations.push({rect: a, text: text, subtext: subtext, opts: opts});
+            var obj = {rect: a, text: text, subtext: subtext, opts: opts};
+            annotations.push(obj);
             if(!max_annotation_value || opts.max > max_annotation_value){
                 max_annotation_value = opts.max;
             }
+            anno.push(a);
+            anno.push(text);
+            anno.push(subtext);
+            anno.hover(function(e){
+                if(obj.textHidden === true){
+                    annotationHover.toFront();
+                    a.attr({opacity: 0.9, fill: '#FBEFAF'});
+                    annotationHover.attr({opacity: 0});
+                    annotationHover.show();
+                    annotationHover.attr({'x': e.clientX, y: e.clientY});
+                    annotationText.attr({text: text.attr('text'), x: e.clientX + 55, y: e.clientY + 11});
+                    annotationHover.animate({opacity: 1}, 100);                    
+                }
+            });
+            anno.mouseout(function(){
+                a.attr({opacity: 1});
+                a.attr({fill: opts.color})
+                annotationHover.animate({opacity: 0}, 100);
+                // annotationHover.hide();
+            });
         };
 
 
@@ -207,7 +242,6 @@ lingcod.geographicReport = (function(){
         that.paper = paper;
         
         var updateValue = function(value, animate, animationTarget){
-            console.log('updateValue', value, animate, max_annotation_value, options.maxScale, that.currentScale);
             if(max_annotation_value && value > max_annotation_value){
                 var scale;
                 if(value + (value * 0.1) > options.maxScale){
@@ -233,6 +267,7 @@ lingcod.geographicReport = (function(){
         
         var updateValueCallback = function(value, animate, animationTarget, callback){
             var prevValue = that.value || 1;
+            var value = value || 0;
             that.value = value;
             var w = widthFromValue(value);
             if(animate){
@@ -243,6 +278,9 @@ lingcod.geographicReport = (function(){
                 }
             }else{
                 valueRect.attr('width', w);
+                if(callback){
+                    callback(value, animate);
+                }
             }
             if(annotations.length){
                 for(var i=0;i<annotations.length;i++){
@@ -270,27 +308,45 @@ lingcod.geographicReport = (function(){
         var updateScale = function(value, animate, callback){
             var target = scaleBar.update(value, animate);
             that.currentScale = value;
-            scaleAnnotations(target);
+            scaleAnnotations(target, false);
             updateValueCallback(that.value, animate, target, callback);
         };
         
         that.updateScale = updateScale;
         
         
-        var scaleAnnotations = function(animationTarget){
+        var scaleAnnotations = function(animationTarget, animate){
             for(var i=0;i<annotations.length;i++){
                 var a = annotations[i];
                 var w = widthFromValue(a.opts.max - a.opts.min);
                 var x = (a.opts.min / that.currentScale) * dataWidth + leftMargin;
                 var text_x = Math.round(x + w / 2);
-                if(animationTarget){
+                if(!animate){
+                    a.rect.attr({x: x, width: w});
+                    if(w < 100){
+                        a.text.attr({x: text_x});
+                        a.text.hide();
+                        a.textHidden = true;
+                        a.subtext.attr({x: text_x});
+                        a.subtext.hide();
+                    }else{
+                        a.textHidden = false;
+                        a.text.attr({x: text_x});
+                        a.subtext.attr({x: text_x});    
+                        a.text.show();
+                        a.subtext.show();
+                        a.subtext.show();                    
+                    }
+                }else if(animationTarget){
                     a.rect.animateWith(animationTarget, {x: x, width: w}, options.animationDuration, options.animationEasing);
                     if(w < 100){
-                        a.text.animateWith(animationTarget, {x: text_x, opacity:0}, options.animationDuration, options.animationEasing);
-                        a.subtext.animateWith(animationTarget, {x: text_x, opacity:0}, options.animationDuration, options.animationEasing);
+                        a.textHidden = true;
+                        a.text.hide();
+                        a.subtext.hide();
                     }else{
-                        a.text.animateWith(animationTarget, {x: text_x, opacity:1}, options.animationDuration, options.animationEasing);
-                        a.subtext.animateWith(animationTarget, {x: text_x, opacity:1}, options.animationDuration, options.animationEasing);                        
+                        a.textHidden = false;
+                        a.text.show();
+                        a.subtext.show();
                     }
                 }else{
                     a.animate({x: x, width: w}, options.animationDuration, options.animationEasing);

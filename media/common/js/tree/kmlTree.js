@@ -835,9 +835,7 @@ lingcod.kmlTree = (function(){
                     node.removeClass('loading');
                     node.addClass('loaded');
                     node.find('.nlDocId').text(getDocId(kmlObject));
-                    console.log('firing loaded');
                     $(node).trigger('loaded', [node, kmlObject]);
-                    console.log('firing networklinkload');
                     $(that).trigger('networklinkload', [node, kmlObject]);
                 });
             }

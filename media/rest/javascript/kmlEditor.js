@@ -304,6 +304,9 @@ lingcod.rest.kmlEditor = function(options){
     
     tbar.setEnabled(false);
     $(tree).bind('kmlLoaded', kmlLoaded);
+    $(tree).bind('kmlLoaded', function(event, kmlObject){
+        $(that).trigger('kmlLoaded', [event, kmlObject]);
+    });
     tree.load(true);
     
     return that;

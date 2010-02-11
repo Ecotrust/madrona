@@ -205,7 +205,8 @@ var lingcod = (function(){
                     allow_copy: options.allow_copy
                 });
                 if(callback){
-                    $(editor).bind('kmlLoaded', function(event, orginal_event, kmlObject){
+                    $(editor).bind('kmlLoaded', function(event, original_event, kmlObject){
+                        console.log(this, this.el, kmlObject);
                         callback(this, this.el, kmlObject)
                     });
                 }
