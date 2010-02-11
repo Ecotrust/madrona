@@ -820,12 +820,14 @@ class FeatureMapping(models.Model):
             gc.append(feature.geometry)
         return gc
     
-    @transaction.commit_on_success    
+    ##transaction.commit_on_success    
     def geometry_collection_within(self,geom):
         return self.geometry_collection.intersection(geom)
     
     def validate(self, quiet=False):
-        if self.validate_feature_count(quiet) and self.validate_type(quiet) and self.validate_units(quiet):
+        if not self.pk:
+            return True # I'm gonna punt if there's no pk yet
+        elif self.validate_feature_count(quiet) and self.validate_type(quiet) and self.validate_units(quiet):
             return True
         else:
             return False
