@@ -44,7 +44,7 @@ var lingcod = (function(){
         }else{
             geFailure();
         }
-        $(document).find('a.button').live('dragstart', function(){
+        $(document).find('#meta-navigation a, a.button, a.close, .menu_items span, .ui-tabs-nav a').live('dragstart', function(){
             return false;
         });
     };
