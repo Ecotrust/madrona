@@ -259,3 +259,7 @@ class Mpa(models.Model):
         # Save one last time just to be safe?
         the_mpa.save()
         return the_mpa
+        
+    def area(self):
+        from django.contrib.gis.measure import Area        
+        return Area(sq_m=self.geometry_final.area)
