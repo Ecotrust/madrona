@@ -1,9 +1,5 @@
 from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
-from django.contrib.auth.models import User, Group, Permission
-#import json
-from django.utils import simplejson as json
-from django.db import transaction
 
 
 class Command(BaseCommand):
@@ -11,7 +7,7 @@ class Command(BaseCommand):
         make_option('--json', action='store', dest='json_path', default=False,
             help="Path to a json file containing User information from marinemap v1."),
     )
-    help = """Migrate new and modified Users from marinemap v1
+    help = """Migrate new and modified Users from MarineMap v1
 
     Use the following command on the mm1 server to get the json file:
     

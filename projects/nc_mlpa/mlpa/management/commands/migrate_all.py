@@ -2,8 +2,6 @@ from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 import os, sys
 from os.path import join
-#import json
-from django.utils import simplejson as json
 
 
 class Command(BaseCommand):
@@ -11,12 +9,17 @@ class Command(BaseCommand):
         make_option('--json', action='store', dest='json_path', default=False,
             help="Path to json files containing Allowed Uses, Group, User, Mpa, and Array data from marinemap v1."),
     )
-    help = """Migrate data from fixtures to marinemap v2 
+    help = """Migrate data from MarineMap v1 fixtures to MarineMap v2 Database
 
     Use the following command on the mm1 server to generate the json fixtures:
     
         python manage.py create_mm1_migration_fixtures --dest <path where json fixtures should be stored>
     
+    Move the resulting fixtures over to the mm2 server and then execute this command via the following:
+        
+        python manage.py migrate_all --json <path to fixtures>/
+        
+        the -v 2 option/argument can also be appended to the above command to get more output from the mpa and array migrations
     """
     help = """Migrate fixture data to marinemap v2 database tables"""
     

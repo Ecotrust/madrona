@@ -8,6 +8,43 @@ from django.db import transaction
 
 class Migrator:
 
+    """
+        This class was created for the following commands:
+        
+            migrate_allowed_uses
+            migrate_groups
+            migrate_users
+            migrate_mpas
+            migrate_arrays
+            migrate_all
+        
+        In each of the methods below, the argument json_path represents a path-including-file-name 
+        That json file should contain the fixture containing the data from mm1 that will be migrated to mm2
+        These fixtures can be created individually by running the following commands from the mm1 server:
+        
+            python manage.py dumpdata mmapp.DomainAllowedMethod mmapp.DomainAllowedTarget mmapp.DomainAllowedUse mmapp.DomainAllowedPurpose mmapp.Lop mmapp.DomainLopRule > allowed_uses.json
+            python manage.py dumpdata auth.group > groups.json
+            python manage.py dumpdata auth.user > users.json
+            python manage.py dumpdata mmapp.Mpas > mpas.json
+            python manage.py dumpdata mmapp.Arrays > arrays.json
+            
+        Or they can be created en masse by running the following command from the mm1 server:
+        
+            python manage.py create_mm1_migration_fixtures --dest <path where json fixtures should be stored>
+            
+        Once these fixtures are in place on the mm2 server, the commands mentioned earlier can be called individually (from the mm2 server):
+        
+            python manage.py migrate_allowed_uses --json <path>/allowed_uses.json
+            python manage.py migrate_groups --json <path>/groups.json
+            python manage.py migrate_users --json <path>/users.json
+            python manage.py migrate_mpas --json <path>/mpas.json
+            python manage.py migrate_arrays --json <path>/arrays.json
+            
+        Or they can be run consecutively by the following single command (likewise, on the mm2 server):
+        
+            python manage.py migrate_all --json <path>/
+    """
+
     def migrate_allowed_uses(self, json_path):
         transaction.enter_transaction_management()
         transaction.managed(True)
@@ -66,6 +103,7 @@ class Migrator:
         data = json.load(f)
         groups = list()
         try:
+            #for each entry in the fixture
             for item in data:
                 f = item['fields']
                 if item['model'] == 'auth.group':
@@ -87,7 +125,7 @@ class Migrator:
                                 print 'You will likely want to add that permission to the group manually (via the admin).'
                     #add group to the list
                     groups.append( group )
-                    
+            #save each group to the db        
             for item in groups:
                 item.save()
             transaction.commit()
@@ -108,6 +146,7 @@ class Migrator:
         data = json.load(f)
         users = list()
         try:
+            #for each entry in the fixture
             for item in data:
                 absent_permissions = list()
                 f = item['fields']
@@ -126,9 +165,6 @@ class Migrator:
                                 mm1_user.user_permissions.add( permission[0] )
                         else:
                             absent_permissions.append( mm1_permission_id )
-                            #print 'This migrating script is not prepared to handle permission %s (this id is from mm1, not mm2)' % mm1_permission_id
-                            #print 'User %s will not be given permission %s' % (mm1_user.id, mm1_permission_id)
-                            #print 'That permission will have to be added to the user manually'
                     #check to see if this user already exists in the mm2 db
                     mm2_user = None
                     mm2_lookUp = User.objects.filter(id=mm1_user.pk)
@@ -149,7 +185,7 @@ class Migrator:
                             print 'User %s will not be given permission %s' % (mm1_user.id, permission)
                             print 'You will likely want to add that permission to the user manually (via the admin).'
                         users.append( mm1_user )
-                    
+            #save each user to the db        
             for item in users:
                 item.save()
             transaction.commit()
@@ -163,11 +199,14 @@ class Migrator:
         transaction.leave_transaction_management()
         
     def migrate_mpas(self, json_path, verbosity):
+        #this method is structured slightly different than the others to account for the case in which some mpas, 
+        #those that use lops rules, need to be added to the db one at a time (one save per transaction)
         transaction.enter_transaction_management()
         transaction.managed(True)
         f = open(json_path)
         data = json.load(f)
         num_mpas = 0
+        #for each entry in the fixture
         for item in data:
             absent_designations = list()
             absent_uses = list()
@@ -202,8 +241,6 @@ class Migrator:
                             mpa.allowed_uses.add( use[0] )
                         else:
                             absent_uses.append( use_id )
-                            #print 'Allowed Use: %s was not found.' % use_id
-                            #print 'Mpa %s will have to be manually adjusted to include this use.' % mpa.id
                     #add Sharing Groups
                     for group_id in f['sharing_groups']:
                         group = Group.objects.filter(id=group_id)
@@ -211,8 +248,6 @@ class Migrator:
                             mpa.sharing_groups.add( group[0] )
                         else:
                             absent_groups.append( group_id )
-                            #print 'Sharing Group: %s was not found.' % group_id
-                            #print 'Mpa %s will have to be manually adjusted to include this group.' % mpa.id
                     #check to see if this mpa already exists in the mm2 db
                     mm2_mpa = None
                     mm2_lookUp = MlpaMpa.objects.filter(id=mpa.pk)
@@ -235,6 +270,7 @@ class Migrator:
                                 print 'Mpa %s will have to be manually adjusted to include this group.' % mpa.id
                             if verbosity == '2':
                                 print 'Adding Mpa %s to MM2' % mpa.id
+                            #save the mpa to the db
                             mpa.save()
                             transaction.commit()
                             num_mpas += 1
@@ -257,6 +293,7 @@ class Migrator:
         data = json.load(f)
         arrays = list()
         try:
+            #for each entry in the fixture
             for item in data:
                 absent_groups = list()
                 f = item['fields']
@@ -298,7 +335,7 @@ class Migrator:
                             print 'Sharing Group: %s was not found in mm2.' % group 
                             print 'Array %s will have to be manually adjusted to include this group.' % array.id
                         arrays.append( array )
-                    
+            #save each array to the db        
             for item in arrays:
                 if verbosity == '2':
                     print "Adding Array %s to MM2" % item.id
