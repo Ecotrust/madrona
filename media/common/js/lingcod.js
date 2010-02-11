@@ -209,17 +209,18 @@ var lingcod = (function(){
                         callback(this, this.el, kmlObject)
                     });
                 }
-                $(editor.tree).bind('copyDone', function(e,location) {
-                    this.refresh();
-                    this.clearSelection();
-                    var node = this.getNodesById(location);
-                    if(node.length === 1) {
-                        this.selectNode(node, this.lookup(node)); 
-                    } else {
-                        alert("No node found with Id " + location);
-                    }
-                });
                 editors.push(editor);
+                $(editor.tree).bind('copyDone', function(e,location) {
+                    var myshapesEditor = editors[0];
+                    //console.log('FROM MYSHAPES', myshapesEditor);
+                    myshapesEditor.tree.clearSelection();
+                    myshapesEditor.refresh( function() {
+                        var node = myshapesEditor.tree.getNodesById(location);
+                        if(node.length === 1) {
+                            myshapesEditor.tree.selectNode(node); 
+                        }
+                    });
+                });
             }
         }
         
@@ -254,17 +255,16 @@ var lingcod = (function(){
                     allow_copy: options.allow_copy
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
+                    $('#sidebar').tabs('select', "#MyShapes");
                     var myshapesEditor = that.editors[0];
-                    myshapesEditor.tree.refresh();
+                    //console.log('FROM SHAREDSHAPES ', myshapesEditor);
                     myshapesEditor.tree.clearSelection();
-                    var node = myshapesEditor.tree.getNodesById(location);
-                    if(node.length === 1) {
-                        myshapesEditor.tree.selectNode(node); //, this.lookup(node));
-                    } else {
-                        alert("No node found with Id " + location);
-                    }
-
-                    // MP TODO switch to myshapes panel
+                    myshapesEditor.refresh( function() {
+                        var node = myshapesEditor.tree.getNodesById(location);
+                        if(node.length === 1) {
+                            myshapesEditor.tree.selectNode(node); 
+                        }
+                    });
                 });
                 editors.push(editor);
             }            
