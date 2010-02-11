@@ -206,7 +206,6 @@ var lingcod = (function(){
                 });
                 if(callback){
                     $(editor).bind('kmlLoaded', function(event, original_event, kmlObject){
-                        console.log(this, this.el, kmlObject);
                         callback(this, this.el, kmlObject)
                     });
                 }
