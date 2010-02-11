@@ -144,7 +144,7 @@ def array_attributes_excel_worksheet(array,ws):
         mdl.append(mpa.design_considerations)      #'Other Considerations'
         mdl.append(mpa.evolution)          # 'Staff Evolution Notes'
         for i,thing in enumerate(mdl):
-            ws.row(current_row).write(i,str(thing),data_style_list[i])
+            ws.row(current_row).write(i,unicode(thing),data_style_list[i])
         current_row += 1
     return ws
         
