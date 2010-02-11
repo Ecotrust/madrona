@@ -205,8 +205,8 @@ var lingcod = (function(){
                     allow_copy: options.allow_copy
                 });
                 if(callback){
-                    $(editor.tree).bind('kmlLoaded', function(kmlObject){
-                        callback(editor, editor.el, kmlObject)
+                    $(editor).bind('kmlLoaded', function(event, orginal_event, kmlObject){
+                        callback(this, this.el, kmlObject)
                     });
                 }
                 $(editor.tree).bind('copyDone', function(e,location) {
@@ -503,6 +503,17 @@ var lingcod = (function(){
         }
         return false;
     };
+    
+    var whenLoaded = function(selector, callback){
+        var el = $(selector+':visible');
+        if(el.length){
+            callback(el);
+        }else{
+            setTimeout(whenLoaded, 100, selector, callback);
+        }
+    };
+    
+    that.whenLoaded = whenLoaded;
     
     return that;
 })();
