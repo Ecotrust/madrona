@@ -187,8 +187,8 @@ def array_habitat_excel_worksheet(array,ws):
     along_shore_span = 'NA'
     min_depth, max_depth = depth_range.total_depth_range()
     # Check for nulls and replace with N/A.  This'll happen if the MPA is in an area with no depth soundings, like an estuary.
-    min_depth = min_depth if min_depth else 'N/A'
-    max_depth = max_depth if max_depth else 'N/A'
+    min_depth = min_depth if min_depth is not None else 'N/A'
+    max_depth = max_depth if max_depth is not None else 'N/A'
     estuary_area = mlpa.Estuaries.objects.total_area_sq_mi
     available_hab_results = [sr_area,along_shore_span,min_depth,max_depth,estuary_area]
     start_at_row = 5
@@ -221,6 +221,9 @@ def array_habitat_excel_worksheet(array,ws):
     for mpa in array.mpa_set.all():
         # start with the stuff that does not come from the intersection results
         d_range = mpa.depth_range
+        for k,v in d_range.iteritems():
+            v = v if v is not None else 'N/A'
+            d_range[k] = v
         if mpa.is_estuary:
             est_area = mpa.area_sq_mi
         else:
