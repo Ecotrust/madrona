@@ -1,5 +1,5 @@
 import os
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 
@@ -23,6 +23,22 @@ def LargestPolyFromMulti(geom):
     else:
         largest_geom = geom
     return largest_geom  
+    
+def clean_geometry(geom):
+    """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
+    from django.db import connection
+    cursor = connection.cursor()
+    query = "select cleangeometry(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
+    cursor.execute(query)
+    row = cursor.fetchone()
+    newgeom = fromstr(row[0])
+    # sometimes, clean returns a multipolygon
+    geometry = LargestPolyFromMulti(newgeom)
+
+    if not geometry.valid or geometry.num_coords < 2:
+        raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
+    else:
+        return geometry
    
 def ComputeLookAt( geometry ):
 
