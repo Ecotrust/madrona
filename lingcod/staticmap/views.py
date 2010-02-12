@@ -114,11 +114,6 @@ def show(request, map_name='default'):
     s.rules.append(r)
 
     m.append_style('mpa_style',s)
-
-    fh = open('/Users/perry/Desktop/test.txt','w')
-    fh.write(mapnik.save_map_to_string(m))
-    fh.close()
-
      
     # Grab the bounding coordinates and set them if specified
     try:
