@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from shapes.forms import UploadForm
+from lingcod.shapes.forms import UploadForm
 
 
 # TODO convert this to using ModelForm with a custom Django FileField

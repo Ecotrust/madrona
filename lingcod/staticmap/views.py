@@ -91,6 +91,8 @@ def show(request, map_name='default'):
         connection_string += "<Parameter name='persist_connection'>false</Parameter>"
 
     xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
+
+
     mapnik.load_map_from_string(m,xmltext)
 
     # Override the mpa_style according to MPA designations
@@ -104,8 +106,20 @@ def show(request, map_name='default'):
         r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (outl[0],outl[1],outl[2])),0.8))
         r.filter = mapnik.Filter("[designation_id] = %d and (%s)" % (d.id, mpa_filter_string)) 
         s.rules.append(r)
+    # And for null designations
+    r = mapnik.Rule()
+    r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (fill[0],fill[1],fill[2]))))
+    r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (outl[0],outl[1],outl[2])),0.8))
+    r.filter = mapnik.Filter("[designation_id] = '' and (%s)" % mpa_filter_string)
+    s.rules.append(r)
+
     m.append_style('mpa_style',s)
 
+    fh = open('/Users/perry/Desktop/test.txt','w')
+    fh.write(mapnik.save_map_to_string(m))
+    fh.close()
+
+     
     # Grab the bounding coordinates and set them if specified
     try:
         x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
