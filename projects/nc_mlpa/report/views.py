@@ -185,8 +185,7 @@ def array_habitat_excel_worksheet(array,ws):
     # calculate values for the study region totals for Area, Min Depth, Max Depth, and Estuary
     sr_area = mlpa.StudyRegion.objects.current().area_sq_mi
     along_shore_span = 'NA'
-    min_depth = 0
-    max_depth = depth_range.DepthSounding.objects.aggregate(Max('depth_ft'))['depth_ft__max']
+    min_depth, max_depth = depth_range.total_depth_range()
     estuary_area = mlpa.Estuaries.objects.total_area_sq_mi
     available_hab_results = [sr_area,along_shore_span,min_depth,max_depth,estuary_area]
     start_at_row = 5
@@ -244,6 +243,8 @@ def array_habitat_excel_worksheet(array,ws):
         # get the hab results
         hab_results = int_models.use_sort_as_key(osc.transformed_results(mpa.geometry_final))
         for key,result in sorted( hab_results.iteritems() ):
+            # can use this commented line below to make sure habitat types are lining up with labels
+            # mpa_data.append(result['name'] + ': ' + str(result['result']))
             mpa_data.append(result['result'])
         
         # set column width
