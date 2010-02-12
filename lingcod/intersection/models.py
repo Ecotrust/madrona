@@ -915,6 +915,10 @@ class ResultCache(models.Model):
     geometry = models.GeometryCollectionField()
     objects = models.GeoManager()
     
+def delete_cached_results(geom):
+    results = ResultCache.objects.filter(wkt_hash=str(geom.wkt.__hash__()))
+    results.delete()
+    
 def intersect_the_features(geom, feature_list=None, with_geometries=False, with_kml=False):
     # if no feature list is specified, get all the features
     if not feature_list:

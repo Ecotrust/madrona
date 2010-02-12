@@ -38,10 +38,10 @@ def max_str_length_in_list(list):
 def array_summary_excel_worksheet(array,ws):
     by_desig = array.summary_by_designation
     title_style = xlwt.easyxf('font: bold true;')
-    heading_row_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left hair, right hair, top hair, bottom medium;')
-    area_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='#,##0.00')
-    percent_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='0.0%')
-    count_style = xlwt.easyxf('alignment: horizontal center; borders: left hair, right hair, bottom hair, top hair;',num_format_str='0')
+    heading_row_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left thin, right thin, top thin, bottom medium;')
+    area_style = xlwt.easyxf('alignment: horizontal center; borders: left thin, right thin, bottom thin, top thin;',num_format_str='#,##0.00')
+    percent_style = xlwt.easyxf('alignment: horizontal center; borders: left thin, right thin, bottom thin, top thin;',num_format_str='0.0%')
+    count_style = xlwt.easyxf('alignment: horizontal center; borders: left thin, right thin, bottom thin, top thin;',num_format_str='0')
     style_dict = {'count': count_style, 'area': area_style, 'percent_of_sr': percent_style, 'designation': count_style, 'lop': count_style }
     # create a title row
     current_row = 0
@@ -102,10 +102,10 @@ def array_attributes_excel_worksheet(array,ws):
     headings = ['MPA Name','MPA ID','Bioregion','MPA Boundaries (Exact or Approximate)','Designation','Level of Protection','Proposed Take Regulations',
     'Other Allowed Uses','Other Proposed Regulations','Regional Goals/Objectives','Site Specific Rationale','Other Considerations',
     'Staff Evolution Notes']
-    heading_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left hair, right hair, top hair, bottom hair')
+    heading_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left thin, right thin, top thin, bottom thin')
     title_style = xlwt.easyxf('font: bold true;')
-    cen = xlwt.easyxf('alignment: horizontal center, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
-    lef = xlwt.easyxf('alignment: horizontal left, vertical top, wrap true; borders: left hair, right hair, top hair, bottom hair', num_format_str='0')
+    cen = xlwt.easyxf('alignment: horizontal center, vertical top, wrap true; borders: left thin, right thin, top thin, bottom thin', num_format_str='0')
+    lef = xlwt.easyxf('alignment: horizontal left, vertical top, wrap true; borders: left thin, right thin, top thin, bottom thin', num_format_str='0')
     data_style_list = [cen,cen,cen,lef,cen,cen,lef,lef,lef,lef,lef,lef,lef]
     wide = 256 * 30
     narrow = 256 * 16
@@ -201,7 +201,7 @@ def array_habitat_excel_worksheet(array,ws):
         ws.write(row_num,2,value,data_style)
     
     # write first column habitat names and write the units and study region totals while we're at it
-    for sub_dict in habinfo.values():
+    for key,sub_dict in sorted( habinfo.iteritems() ):
         ws.write(first_column_row,0,sub_dict['name'],heading_column_style)
         ws.write(first_column_row,1,sub_dict['units'],data_style)
         ws.col(2).width = column_width
@@ -243,7 +243,7 @@ def array_habitat_excel_worksheet(array,ws):
         
         # get the hab results
         hab_results = int_models.use_sort_as_key(osc.transformed_results(mpa.geometry_final))
-        for result in hab_results.values():
+        for key,result in sorted( hab_results.iteritems() ):
             mpa_data.append(result['result'])
         
         # set column width
