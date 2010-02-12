@@ -87,18 +87,24 @@ lingcod.geographicReport = (function(){
         var new_path = 'M'+ x + ' ' + path[0][2] + 'L' + x + ' ' + path[1][2];
         if(!animate){
             this.path.attr('path', new_path);
-        }else if(animationTarget){
-            this.path.animateWith(animationTarget, {path: new_path}, animationDuration, animationEasing);
         }else{
-            this.path.animate({path: new_path}, animationDuration, animationEasing);
+            this.path.anim({
+                attrs: {path: new_path},
+                ms: animationDuration,
+                easing: animationEasing,
+                target: animationTarget
+            });
         }
         if(this.t){
             if(!animate){
                 this.t.attr('x', x);
-            }else if(animationTarget){
-                this.t.animateWith(animationTarget, {x: x}, animationDuration, animationEasing);
             }else{
-                this.t.animate({x: x}, animationDuration, animationEasing);
+                this.t.anim({
+                    attrs: {x: x},
+                    ms: animationDuration,
+                    easing: animationEasing,
+                    target: animationTarget
+                });
             }
         }
     };

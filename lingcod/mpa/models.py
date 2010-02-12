@@ -205,9 +205,7 @@ class Mpa(models.Model):
                 target_shape = result['clipped_shape'].wkt
             geo = result['clipped_shape']
             geo.transform(settings.GEOMETRY_DB_SRID)
-            geo.transform(settings.GEOMETRY_CLIENT_SRID)
-            geo = clean_geometry(geo)
-            geo.transform(settings.GEOMETRY_DB_SRID)
+            ensure_clean(geo, settings.GEOMETRY_DB_SRID)
             if geo:
                 self.geometry_final = geo
             else:

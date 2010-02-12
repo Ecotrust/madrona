@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 manipulatorsDict = {}
 from elementtree.ElementTree import fromstring
 from django.contrib.gis.geos import LinearRing, Polygon
+from lingcod.common.utils import clean_geometry, ensure_clean
+
 
 def simplify(geom):
     if geom.srid != settings.GEOMETRY_DB_SRID:
@@ -101,7 +103,7 @@ class BaseManipulator(object):
         context = {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': internal_message}
         context.update(extra_context)
         return render_to_string(self.Options.html_templates[key], context)
-  
+
     def target_to_valid_geom(self, shape):
         try:
             if iskml(shape):
@@ -117,6 +119,8 @@ class BaseManipulator(object):
         return target
   
     def result(self, clipped_shape, html="", success="1"):
+        clipped_shape = ensure_clean(clipped_shape, settings.GEOMETRY_CLIENT_SRID)
+        clipped_shape = ensure_clean(clipped_shape, settings.GEOMETRY_DB_SRID)
         return {"clipped_shape": clipped_shape, "html": html, "success": success}
     
     class Form:

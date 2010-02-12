@@ -39,6 +39,50 @@ def clean_geometry(geom):
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
     else:
         return geometry
+
+def remove_spikes(geom):
+    """Calls the spikeremover stored procedure with a 0.01 argument.
+    This is an optional method. Need to install this function for it to work:
+    http://trac.osgeo.org/postgis/wiki/UsersWikiExamplesSpikeRemover
+    """
+    from django.db import connection
+    cursor = connection.cursor()
+    query = "select * from information_schema.routines where routine_name = 'spikeremover'";
+    cursor.execute(query)
+    row = cursor.fetchone()
+    if row:        
+        cursor = connection.cursor()
+        query = "select spikeremover(st_geomfromewkt(\'%s\'), 0.01) as geometry" % geom.ewkt
+        cursor.execute(query)
+        row = cursor.fetchone()
+        newgeom = fromstr(row[0])
+        # sometimes, clean returns a multipolygon
+        geometry = LargestPolyFromMulti(newgeom)
+        if geometry.num_coords < 2:
+            raise Exception("Spikeremover produced an invalid geometry.")
+        else:
+            return geometry
+    else:
+        return geom
+        
+# transforms the geometry to the given srid, checks it's validity and 
+# cleans it if necessary, transforms it back into the original srid and
+# cleans again if needed before returning 
+# Note, it does not scrub the geometry before transforming, so if needed
+# call check_validity(geo, geo.srid) first.
+def ensure_clean(geo, srid):
+    old_srid = geo.srid
+    if geo.srid is not srid:
+        geo.transform(srid)
+    geo = remove_spikes(clean_geometry(geo))
+    if not geo.valid:
+        raise Exception("ensure_clean could not produce a valid geometry.")
+    if geo.srid is not old_srid:
+        geo.transform(old_srid)
+        geo = remove_spikes(clean_geometry(geo))
+        if not geo.valid:
+            raise Exception("ensure_clean could not produce a valid geometry.")
+    return geo
    
 def ComputeLookAt( geometry ):
 
