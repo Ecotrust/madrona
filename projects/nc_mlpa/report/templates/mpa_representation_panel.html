@@ -4,25 +4,42 @@
 {% endblock head %}
 {% block title %}{{mpa.name}} Representation Report{% endblock title %}
 {% block panel %}
-	<table class='hab_repr_container'>
-		<tr>
-			<th>Habitat</th>
-			<th>Quantity</th>
-			<th>Units</th>
-			<th>Percent of SR Total</th>
-		</tr>
-		{% for sort_num,sub_dict in result.items %}
-		<tr class="{% cycle '' 'grey' %}">
-			<td class="habitat_name">{{ sub_dict.name|title }}</td>
-			<td class="mpa_hab_result">
-				<span class="rounded">{{ sub_dict.result|floatformat:'2' }}</span>
-				<span class="unrounded">{{ sub_dict.result|floatformat:'-6' }}</span>
-			</td>
-			<td>{{ sub_dict.units }}</td>
-			<td class="numeric">{{ sub_dict.percent_of_total|floatformat:'-2' }}%</td>
-		</tr>
-		{% endfor %}
-	</table>
-
-
+    <div class="tabs">
+        <ul>
+            <li><a href="#RepresentationChart"><span>Chart</span></a></li>
+            <li><a href="#RepresentationDataTable"><span>Data Table</span></a></li>
+        </ul>
+        <div id="RepresentationChart">
+        
+            <script type="text/javascript" charset="utf-8">
+                var hab_data = JSON.parse('{{json|safe}}');
+                lingcod.panelEvents({
+                    show: function(el){
+                        // console.log(hab_data);
+                    }
+                });
+            </script>
+        </div>
+        <div id="RepresentationDataTable">
+        	<table class='hab_repr_container'>
+        		<tr>
+        			<th>Habitat</th>
+        			<th>Quantity</th>
+        			<th>Units</th>
+        			<th>Percent of SR Total</th>
+        		</tr>
+        		{% for sort_num,sub_dict in result.items %}
+        		<tr class="{% cycle '' 'grey' %}">
+        			<td class="habitat_name">{{ sub_dict.name|title }}</td>
+        			<td class="mpa_hab_result">
+        				<span class="rounded">{{ sub_dict.result|floatformat:'2' }}</span>
+        				<span class="unrounded">{{ sub_dict.result|floatformat:'-6' }}</span>
+        			</td>
+        			<td>{{ sub_dict.units }}</td>
+        			<td class="numeric">{{ sub_dict.percent_of_total|floatformat:'-2' }}%</td>
+        		</tr>
+        		{% endfor %}
+        	</table>            
+        </div>
+    </div>
 {% endblock panel %}

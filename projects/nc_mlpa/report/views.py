@@ -308,7 +308,7 @@ def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=F
         return HttpResponse(json_encode(result), mimetype='text/json')
     elif format=='html':
         template = 'mpa_representation_panel.html'
-        return render_to_response(template, {'result': int_models.use_sort_as_key(result)}, context_instance=RequestContext(request) )
+        return render_to_response(template, {'json': json_encode(result), 'result': int_models.use_sort_as_key(result)}, context_instance=RequestContext(request) )
     # I was going to try and make this interface with the intersection app through urls so that
     # the intersection app could be on a different server but that's not working out and I'm in 
     # a hurry.

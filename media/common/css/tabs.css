@@ -223,3 +223,30 @@ li.ui-state-processing span img {
     margin-bottom:-3px;
     margin-right:5px;
 }
+
+.marinemap-panel .ui-tabs .ui-tabs .ui-tabs-nav a {
+    color: #333;
+    padding:3px 10px;
+}
+
+.marinemap-panel .ui-tabs .ui-tabs .ui-tabs-nav a span {
+    font-size:11px;
+}
+
+.marinemap-panel .ui-tabs .ui-tabs .ui-tabs-nav .ui-tabs-selected a {
+    background-color:#716F79;
+    color:white;
+}
+
+.marinemap-panel .ui-tabs .ui-tabs {
+    margin-top:-25px;
+    margin-left:10px;
+}
+
+.marinemap-panel .ui-tabs .ui-tabs .ui-tabs-nav {
+    padding-bottom:5px;
+}
+
+.marinemap-panel .ui-tabs .ui-tabs .ui-tabs-nav {
+    background-image:none;
+}

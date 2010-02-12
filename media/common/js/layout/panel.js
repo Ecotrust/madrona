@@ -122,7 +122,12 @@ lingcod.panel = function(options){
                                         $('#loadingTab').parent().parent().remove();
                                         alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
                                     }
-                                }
+                                },
+                                load: function(event, ui){
+                                    var tabs = $(ui.panel).find('.tabs');
+                                    tabs.tabs();
+                                },
+                                cache: true
                             });
                         }
                         if(options && options.success){

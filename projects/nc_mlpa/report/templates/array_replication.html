@@ -3,7 +3,7 @@ Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d,
 
 {% regroup results by lop as results_by_lop  %}
 
-	<div id="tabs" class="my_tabs">
+	<div id="tabs" class="my_tabs tabs">
 		<ul>
 		{% for lop in results_by_lop %}
 			<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
