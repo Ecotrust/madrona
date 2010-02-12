@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
@@ -13,6 +13,7 @@ def show(request, map_name='default'):
     """Display a map with the study region geometry.  """
     maps = get_object_or_404(MapConfig,mapname=map_name)
     mapfile = str(maps.mapfile.path)
+    mpa_class = utils.get_mpa_class()
      
     # Grab the image dimensions
     try:
@@ -52,6 +53,30 @@ def show(request, map_name='default'):
     except:
         pass
 
+    # Now that we have a list of requested mpas, lets make sure 
+    # that the user actually has permissions to view them all
+    # if any one fails, 403 or 404 will be raised
+    user = request.user
+    from lingcod.sharing.utils import get_viewable_object_or_respond 
+    for pk in mpaids:
+        # Does it even exist?
+        try:
+            obj = mpa_class.objects.get(pk=pk)
+        except:
+            raise Http404
+
+        obj = None
+        try:
+            # Next see if user owns it
+            obj = mpa_class.objects.get(pk=pk, user=user)
+        except:
+            try: 
+                # ... finally see if its shared with the user
+                obj = mpa_class.objects.shared_with_user(user).get(pk=pk)
+            except mpa_class.DoesNotExist:
+                return HttpResponse("Access denied", status=403)
+
+
     # construct filter and replace the MPA_FILTER tag
     mpa_queries = ['[id] = %d' % x for x in mpas] 
     mpa_filter_string = " or ".join(mpa_queries)
@@ -62,7 +87,6 @@ def show(request, map_name='default'):
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
 
     # Replace table names for mpas and mpaarrays
-    mpa_class = utils.get_mpa_class()
     xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
     # Deal with deprecated connection settings 
