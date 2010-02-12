@@ -189,7 +189,6 @@ def array_habitat_excel_worksheet(array,ws):
     # Check for nulls and replace with N/A.  This'll happen if the MPA is in an area with no depth soundings, like an estuary.
     min_depth = min_depth if min_depth else 'N/A'
     max_depth = max_depth if max_depth else 'N/A'
-    if min_depth is None:
     estuary_area = mlpa.Estuaries.objects.total_area_sq_mi
     available_hab_results = [sr_area,along_shore_span,min_depth,max_depth,estuary_area]
     start_at_row = 5
