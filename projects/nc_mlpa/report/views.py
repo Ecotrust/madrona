@@ -293,9 +293,16 @@ def array_list_habitat_excel(request, array_id_list_str):
 
 def array_shapefile(request, array_id_list_str):
     array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
-    array = array_set[0]
+    array = array_set[0] # for now we're only expecting to get one
     shp_response = ShpResponder(array.shapefile_export_query_set)
     shp_response.file_name = slugify(array.name[0:10])
+    return shp_response()
+    
+def mpa_shapefile(request, mpa_id_list_str):
+    mpa_set = mlpa.MlpaMpa.objects.filter(pk__in=mpa_id_list_str.split(',') )
+    mpa = mpa_set[0] # only expecting one for now
+    shp_response = ShpResponder(mpa.export_query_set)
+    shp_response.file_name = slugify(mpa.name[0:10])
     return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):

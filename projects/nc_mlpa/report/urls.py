@@ -3,6 +3,7 @@ from views import *
   
 urlpatterns = patterns('',
     url(r'shapefile/array/(?P<array_id_list_str>(\d+,?)+)/$', array_shapefile,name='array_shapefile'),
+    url(r'shapefile/mpa/(?P<mpa_id_list_str>(\d+,?)+)/$', mpa_shapefile,name='mpa_shapefile'),
     url(r'habitatrepresentation/mpa/(\d+)/(\w+)/$',mpa_habitat_representation, name='mpa_habitat_representation'),
     (r'habitatrepresentation/array/(\d+)/(\w+)/$',array_habitat_representation_summed),
     url(r'habitatreplication/array/(\d+)/(\w+)/$',array_habitat_replication, name='array_replication'),

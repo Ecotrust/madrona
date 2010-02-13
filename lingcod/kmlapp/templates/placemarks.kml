@@ -88,7 +88,7 @@
         <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa-copy pk=mpa.pk %}" />
         <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" mm:pk="{{ mpa.pk }}" href="{{mpa.get_absolute_url}}" />
         <atom:link rel="alt" href="{% url kmlapp-mpa-kmz input_mpa_id=mpa.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
-        <atom:link rel="alt" href="" title="as shapefile" type="application/shapefile" />
+        <atom:link rel="alt" href="{% url mpa_shapefile mpa.id %}" title="as shapefile" type="application/shapefile" />
         <atom:link rel="alt" href="{% url staticmap-show "default" %}?mpas={{mpa.id}}" title="as image (PNG)" type="application/shapefile" />
         <visibility>0</visibility>
         <ExtendedData>

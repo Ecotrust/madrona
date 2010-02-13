@@ -545,15 +545,15 @@ class MlpaMpa(Mpa):
         date_modified = models.DateTimeField(blank=True, null=True, auto_now_add=True)
         """
         from report.models import MpaShapefile
-        msf, created = MpaShapefile.objects.get_or_create(mpa=self,name=self.name)
+        msf, created = MpaShapefile.objects.get_or_create(mpa=self)
         if created or msf.date_modified < self.date_modified:
+            msf.name = self.name
             msf.geometry = self.geometry_final
             desig_list = [ des.acronym for des in MpaDesignation.objects.all() ]
+            desig_list.extend( [ d.lower() for d in desig_list ]) # add in lower case versions just in case
             short_name = self.name
             for acr in desig_list:
-                shorter_name = short_name.replace(acr,'')
-                if len(shorter_name) < len(shorter_name):
-                    short_name = shorter_name
+                short_name = short_name.replace(acr,'').strip()
             msf.name_short = short_name
             if self.designation:
                 msf.desig_name = self.designation.name
@@ -572,6 +572,12 @@ class MlpaMpa(Mpa):
             msf.mpa_modification_date = self.date_modified
             msf.save()
         return msf
+        
+    @property
+    def export_query_set(self):
+        from report.models import MpaShapefile
+        # This is a round about way of gettting a queryset with just this one MPA
+        return MpaShapefile.objects.filter(pk=self.export_version.pk)
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()
