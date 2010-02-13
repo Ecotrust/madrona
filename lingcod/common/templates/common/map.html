@@ -75,6 +75,7 @@
             {% block meta_navigation_list_insert %}{% endblock %}
             <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
+            <li><a href="{% url django.contrib.auth.views.password_change %}">change password</a> | </li>
             <li><a href="{% url logout %}">sign out</a></li>
             {% else %}
             <li><a href="{% url login %}">sign in</a></li>
