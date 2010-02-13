@@ -46,6 +46,7 @@
     <file path="rest/javascript/kmlEditor.js" />
     <test path="rest/javascript/test.js" />
     <file path="common/js/parseKml.js" />
+    <file path="common/js/graphics.js" />
     <file path="common/js/ui/table.js" />
 	<test path="common/js/test/parseKml.js" />
 	<file path="geographic_report/js/geographicReport.js" />

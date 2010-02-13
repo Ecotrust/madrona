@@ -13,13 +13,14 @@
             <div style="width:450px;" class="habitat_representation" id="HabitatRepresentation"></div>
             <script type="text/javascript" charset="utf-8">
                 var hab_data = JSON.parse('{{json|safe}}');
-                // lingcod.panelEvents({
-                //     show: function(el){
-                //         var report = mlpa.representationReport($('#HabitatRepresentation'), hab_data, true);
-                //         window.report = report;
-                //         console.log(JSON.stringify(hab_data));
-                //     }
-                // });
+                lingcod.panelEvents({
+                    show: function(el){
+                        var report = mlpa.representationReport($('#HabitatRepresentation'), hab_data, true);
+                        window.report = report;
+                        window.json = hab_data;
+                        // console.log(JSON.stringify(hab_data));
+                    }
+                });
             </script>
         </div>
         <div id="RepresentationDataTable">

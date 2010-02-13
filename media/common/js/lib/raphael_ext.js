@@ -13,3 +13,5 @@ Raphael.el.anim = function(opts){
         }        
     }
 };
+
+Raphael.fn.anim = Raphael.el.anim;
