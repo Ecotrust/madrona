@@ -61,6 +61,7 @@ lingcod.rest.kmlEditor = function(options){
     that.refresh = refresh;
     
     var setSelectionMenuItemEnabled = function(enabled){
+        tbar.setEnabled(true);
         for(var i=0;i<enableWhenSelected.length;i++){
             enableWhenSelected[i].setEnabled(enabled);
         }
@@ -276,7 +277,7 @@ lingcod.rest.kmlEditor = function(options){
             addExportItems(export_menu, kmlObject);
         }
     });
-    
+        
     var addExportItems = function(menu, kmlObject){
         lingcod.parseKml(kmlObject.getKml()).find('kml>Folder>[nodeName=atom:link][rel=alt], kml>NetworkLink>[nodeName=atom:link][rel=alt], kml>Placemark>[nodeName=atom:link][rel=alt],').each(function(){
             var title = $(this).attr('title');
