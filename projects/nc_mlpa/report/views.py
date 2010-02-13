@@ -45,7 +45,7 @@ def array_summary_excel_worksheet(array,ws):
     style_dict = {'count': count_style, 'area': area_style, 'percent_of_sr': percent_style, 'designation': count_style, 'lop': count_style }
     # create a title row
     current_row = 0
-    page_title = 'Summary for %s as of %s' % (array.name,format(array.date_modified,"M d, Y"))
+    page_title = 'Summary for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
     ws.write_merge(current_row,current_row,0,3,page_title,title_style)
     current_row += 2
     ws.write_merge(current_row,current_row,0,3,'Summary of MPAs by Designation',title_style)
@@ -112,7 +112,7 @@ def array_attributes_excel_worksheet(array,ws):
     width_list = [wide,narrow,narrow,wide,narrow,narrow,wide,wide,wide,wide,wide,wide,wide]
     heading_dict = dict( zip( headings, width_list ))
     current_row = 0
-    page_title = 'MPA Attributes for %s as of %s' % (array.name,format(array.date_modified,"M d, Y"))
+    page_title = 'MPA Attributes for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
     ws.write_merge(current_row,current_row,0,3,page_title,title_style)
     current_row += 2
     current_col = 0
