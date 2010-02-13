@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 INSTALLED_APPS = (
+    'lingcod.common',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
@@ -64,7 +65,6 @@ INSTALLED_APPS = (
     'compress',
     'lingcod.shapes',
     'lingcod.google-analytics', 
-    'lingcod.common',
     'lingcod.layers',
     'lingcod.studyregion',
     'lingcod.simplefaq',
