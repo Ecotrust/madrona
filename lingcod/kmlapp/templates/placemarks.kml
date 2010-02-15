@@ -90,7 +90,7 @@
         <atom:link rel="alt" href="{% url kmlapp-mpa-kmz input_mpa_id=mpa.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
         <atom:link rel="alt" href="{% url mpa_shapefile mpa.id %}" title="as shapefile" type="application/shapefile" />
         <atom:link rel="alt" href="{% url staticmap-show "default" %}?mpas={{mpa.id}}" title="as image (PNG)" type="application/shapefile" />
-        <visibility>0</visibility>
+        <visibility>1</visibility>
         <ExtendedData>
             <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
             <Data name="name"><value>{{ mpa.name }}</value></Data>

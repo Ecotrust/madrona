@@ -282,8 +282,8 @@ def shared_public(request, kmz=False, session_key='0'):
     array_ctid = get_content_type_id(utils.get_array_class())
 
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': False, 'request_path': request.path, 
-        'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': True}))
+    kml = t.render(Context({'shapes': shapes, 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
+        'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': False}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
