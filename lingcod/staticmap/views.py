@@ -57,25 +57,11 @@ def show(request, map_name='default'):
     # that the user actually has permissions to view them all
     # if any one fails, 403 or 404 will be raised
     user = request.user
-    from lingcod.sharing.utils import get_viewable_object_or_respond 
+    from lingcod.sharing.utils import can_user_view
     for pk in mpas:
-        # Does it even exist?
-        try:
-            obj = mpa_class.objects.get(pk=pk)
-        except:
-            raise Http404
-
-        obj = None
-        try:
-            # Next see if user owns it
-            obj = mpa_class.objects.get(pk=pk, user=user)
-        except:
-            try: 
-                # ... finally see if its shared with the user
-                obj = mpa_class.objects.shared_with_user(user).get(pk=pk)
-            except mpa_class.DoesNotExist:
-                return HttpResponse("Access denied", status=403)
-
+        viewable, response = can_user_view(mpa_class, pk, user)
+        if not viewable:
+            return response
 
     # construct filter and replace the MPA_FILTER tag
     mpa_queries = ['[id] = %d' % x for x in mpas] 
