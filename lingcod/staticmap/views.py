@@ -58,7 +58,7 @@ def show(request, map_name='default'):
     # if any one fails, 403 or 404 will be raised
     user = request.user
     from lingcod.sharing.utils import get_viewable_object_or_respond 
-    for pk in mpaids:
+    for pk in mpas:
         # Does it even exist?
         try:
             obj = mpa_class.objects.get(pk=pk)
