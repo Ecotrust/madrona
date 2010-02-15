@@ -38,7 +38,6 @@ def can_user_view(model_class, pk, user):
     except:
         return False, HttpResponse("Object does not exist", status=404)
 
-    obj = None
     try:
         # Next see if user owns it
         obj = model_class.objects.get(pk=pk, user=user)
