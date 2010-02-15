@@ -10,7 +10,11 @@
         <visibility>0</visibility>
         <description>
             <font size="2">
-            <a href="http://www.ecotrust.org" target="_blank">Ecotrust</a> has generated these maps through a series of interviews with commercial and recreational fishermen throughout the North Coast region of California.  More information, more information, more information.
+            <table border="0" width="300">
+            <tr><td> </td></tr>
+            <tr><td><a href="http://www.ecotrust.org" target="_blank">Ecotrust</a> has generated these maps through a series of interviews with commercial and recreational fishermen throughout the North Coast region of California.  </td></tr>
+            <tr><td>More information, more information, more information.</td></tr>
+            </table>
             </font>
         </description>
         <Style>
@@ -35,7 +39,7 @@
             <visibility>0</visibility>
             <Style>
                 <ListStyle>
-                    <listItemType>radioFolder</listItemType>
+                    <listItemType>checkOffOnly</listItemType>
                 </ListStyle>
             </Style>
     
@@ -179,7 +183,7 @@
                             <longitude>-124.220677652</longitude>
                             <latitude>41.6890389985</latitude>
                             <altitude>0</altitude>
-                            <range>25118</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -379,7 +383,7 @@
                             <longitude>-124.190331638</longitude>
                             <latitude>41.7436660241</latitude>
                             <altitude>0</altitude>
-                            <range>1818</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -493,7 +497,7 @@
                             <longitude>-124.228563662</longitude>
                             <latitude>41.7073299363</latitude>
                             <altitude>0</altitude>
-                            <range>10329</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -741,7 +745,7 @@
                             <longitude>-124.178036123</longitude>
                             <latitude>40.8042595973</latitude>
                             <altitude>0</altitude>
-                            <range>13962</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -817,7 +821,7 @@
                             <longitude>-124.162424567</longitude>
                             <latitude>40.8070850085</latitude>
                             <altitude>0</altitude>
-                            <range>13615</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -931,7 +935,7 @@
                             <longitude>-124.174338847</longitude>
                             <latitude>40.8034117237</latitude>
                             <altitude>0</altitude>
-                            <range>12586</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1093,7 +1097,7 @@
                             <longitude>-124.03060472</longitude>
                             <latitude>39.9625716605</latitude>
                             <altitude>0</altitude>
-                            <range>31864</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1514,7 +1518,7 @@
                             <longitude>-124.177459092</longitude>
                             <latitude>41.6955059806</latitude>
                             <altitude>0</altitude>
-                            <range>8465</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1590,7 +1594,7 @@
                             <longitude>-124.296694525</longitude>
                             <latitude>41.7544571642</latitude>
                             <altitude>0</altitude>
-                            <range>26678</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1638,7 +1642,7 @@
                             <longitude>-124.157856802</longitude>
                             <latitude>40.8036344105</latitude>
                             <altitude>0</altitude>
-                            <range>23045</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1676,7 +1680,7 @@
                             <longitude>-124.141262124</longitude>
                             <latitude>41.0377719024</latitude>
                             <altitude>0</altitude>
-                            <range>5582</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1714,7 +1718,7 @@
                             <longitude>-124.27763685</longitude>
                             <latitude>41.0749504497</latitude>
                             <altitude>0</altitude>
-                            <range>31795</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1752,7 +1756,7 @@
                             <longitude>-124.178949292</longitude>
                             <latitude>41.097731471</latitude>
                             <altitude>0</altitude>
-                            <range>19568</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1838,7 +1842,7 @@
                             <longitude>-124.144615509</longitude>
                             <latitude>40.8285238063</latitude>
                             <altitude>0</altitude>
-                            <range>7817</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1876,7 +1880,7 @@
                             <longitude>-124.266894558</longitude>
                             <latitude>40.7342511449</latitude>
                             <altitude>0</altitude>
-                            <range>28877</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1952,7 +1956,7 @@
                             <longitude>-124.449894998</longitude>
                             <latitude>40.461954437</latitude>
                             <altitude>0</altitude>
-                            <range>24902</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2038,7 +2042,7 @@
                             <longitude>-124.393888565</longitude>
                             <latitude>40.2684839166</latitude>
                             <altitude>0</altitude>
-                            <range>10794</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2162,7 +2166,7 @@
                             <longitude>-123.802420374</longitude>
                             <latitude>39.5269249009</latitude>
                             <altitude>0</altitude>
-                            <range>14518</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2296,7 +2300,7 @@
                             <longitude>-124.227551191</longitude>
                             <latitude>41.7617136657</latitude>
                             <altitude>0</altitude>
-                            <range>9008</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2334,7 +2338,7 @@
                             <longitude>-124.220191924</longitude>
                             <latitude>41.7533174414</latitude>
                             <altitude>0</altitude>
-                            <range>13555</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2420,7 +2424,7 @@
                             <longitude>-124.16089482</longitude>
                             <latitude>41.0920565248</latitude>
                             <altitude>0</altitude>
-                            <range>15208</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2506,7 +2510,7 @@
                             <longitude>-124.413312309</longitude>
                             <latitude>40.3947117605</latitude>
                             <altitude>0</altitude>
-                            <range>26476</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2554,7 +2558,7 @@
                             <longitude>-124.047089192</longitude>
                             <latitude>40.0061283135</latitude>
                             <altitude>0</altitude>
-                            <range>11096</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2592,7 +2596,7 @@
                             <longitude>-124.051475322</longitude>
                             <latitude>39.9860643213</latitude>
                             <altitude>0</altitude>
-                            <range>14889</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2678,7 +2682,7 @@
                             <longitude>-123.805803802</longitude>
                             <latitude>39.2993950348</latitude>
                             <altitude>0</altitude>
-                            <range>4371</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2774,7 +2778,7 @@
                             <longitude>-124.144327433</longitude>
                             <latitude>41.0556343062</latitude>
                             <altitude>0</altitude>
-                            <range>8593</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -2918,7 +2922,7 @@
                             <longitude>-124.268971142</longitude>
                             <latitude>41.7690180198</latitude>
                             <altitude>0</altitude>
-                            <range>27340</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -3118,7 +3122,7 @@
                             <longitude>-124.135580624</longitude>
                             <latitude>40.8351798463</latitude>
                             <altitude>0</altitude>
-                            <range>9966</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -3318,7 +3322,7 @@
                             <longitude>-124.146319278</longitude>
                             <latitude>40.8199165334</latitude>
                             <altitude>0</altitude>
-                            <range>14544</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -3356,7 +3360,7 @@
                             <longitude>-124.297333094</longitude>
                             <latitude>40.7600607855</latitude>
                             <altitude>0</altitude>
-                            <range>33943</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -3518,7 +3522,7 @@
                             <longitude>-124.047734771</longitude>
                             <latitude>40.0220597491</latitude>
                             <altitude>0</altitude>
-                            <range>27959</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -3556,7 +3560,7 @@
                             <longitude>-124.057360876</longitude>
                             <latitude>40.0210071266</latitude>
                             <altitude>0</altitude>
-                            <range>27803</range>
+                            <range>40000</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
