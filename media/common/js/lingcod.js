@@ -229,7 +229,7 @@ var lingcod = (function(){
             $('.marinemap-panel:visible a.close').click();
             var href = $(this).attr('href');
             for(var i=0;i<editors.length;i++){
-                var editor = editors[0];
+                var editor = editors[i];
                 var nodes = editor.tree.getNodesById(href);
                 if(nodes.length === 1){
                     editor.tree.selectNode(nodes);
