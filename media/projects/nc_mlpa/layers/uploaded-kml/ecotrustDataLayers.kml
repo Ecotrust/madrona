@@ -39,7 +39,7 @@
             <visibility>0</visibility>
             <Style>
                 <ListStyle>
-                    <listItemType>checkOffOnly</listItemType>
+                    <listItemType>radioFolder</listItemType>
                 </ListStyle>
             </Style>
     
