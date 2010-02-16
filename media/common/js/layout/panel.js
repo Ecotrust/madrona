@@ -164,11 +164,11 @@ lingcod.panel = function(options){
             getActiveTabs(el, activeTabs);
         }
         // Set a global var to point to this panel so callbacks can be assigned
-        if(!lingcod.loadingPanel){
+        // if(!lingcod.loadingPanel){
             lingcod.loadingPanel = el;            
-        }else{
-            throw('ERROR: lingcod.loadingPanel already set!');
-        }
+        // }else{
+            // throw('ERROR: lingcod.loadingPanel already set!');
+        // }
         $.ajax({
             url: url,
             method: 'GET',
