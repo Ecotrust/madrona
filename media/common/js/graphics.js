@@ -66,7 +66,7 @@ lingcod.graphics = (function(){
         }
         this.maxValue = maxValue;
         // returns an animation target for additional animateWith calls
-        return ticZero;
+        return ticZero.path;
     };
     
     ScaleBar.prototype.changeY = function(y, target, easing, duration){

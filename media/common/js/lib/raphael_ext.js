@@ -1,9 +1,9 @@
 Raphael.el.anim = function(opts){
-    if(opts['with']){
+    if(opts['target']){
         if(opts['easing']){
-            this.animateWith(opts['with'], opts['attrs'], opts['ms'], opts['callback']);
+            this.animateWith(opts['target'], opts['attrs'], opts['ms'], opts['callback']);
         }else{
-            this.animateWith(opts['with'], opts['attrs'], opts['ms'], opts['easing'], opts['callback']);
+            this.animateWith(opts['target'], opts['attrs'], opts['ms'], opts['easing'], opts['callback']);
         }
     }else{
         if(opts['easing']){

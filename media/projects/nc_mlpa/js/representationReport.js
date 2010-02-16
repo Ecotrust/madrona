@@ -44,14 +44,14 @@ mlpa.representationReport = (function(){
                 attrs: {y: Math.round(row_text_y + this.offset), x: 125},
                 ms: animationDuration,
                 easing: animationEasing,
-                target: target,
+                target: target || null,
                 callback: callback
             });
             this.rect.anim({
                 attrs: {y: Math.round(row_rect_y + this.offset), x: 135},
                 ms: animationDuration,
                 easing: animationEasing,
-                target: target                
+                target: target || null        
             });
         }else{
             this.text.attr({y: row_text_y + this.offset});
@@ -212,7 +212,7 @@ mlpa.representationReport = (function(){
                 return a.json.sort - b.json.sort;
             });
             if(animate){
-                animate = row_array[0];
+                animate = row_array[0].rect;
             }
             var totalOffset = 0;
             var animate = false;
@@ -223,7 +223,7 @@ mlpa.representationReport = (function(){
                         row_array[i].setOffset(totalOffset, animate);
                     }else{
                         row_array[i].setOffset(totalOffset, animate, callback);
-                        var animate = row_array[i];
+                        var animate = row_array[i].rect;
                     }                    
                 }
             }
