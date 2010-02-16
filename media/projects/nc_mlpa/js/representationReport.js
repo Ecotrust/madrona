@@ -113,7 +113,6 @@ mlpa.representationReport = (function(){
                     updateScale(newScale, animate, function(){
                         setTimeout(showValues, 100);
                         setTimeout(function(){
-                            $(that.paper.canvas).parent().height(that.height);
                         }, 500);
                     });
                 });
@@ -241,6 +240,7 @@ mlpa.representationReport = (function(){
             }
             scaleOffset = old;
             that.height = (row_array.length * offset) + 70;
+            $(that.paper.canvas).parent().height(that.height);
         }
         
         var currentScale = minScale;
