@@ -48,7 +48,7 @@ class GeographicReportNode(template.Node):
                 
         json = simplejson.dumps(json)
         return """
-            <div id="%s" class="geographic_report" />
+            <div id="%s" class="geographic_report"></div>
             <script type="text/javascript" charset="utf-8">
                 lingcod.onTabShow('%s', function(ui){
                     var persist_id = '%s';

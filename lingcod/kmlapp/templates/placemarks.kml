@@ -76,9 +76,9 @@
               <ItemIcon>
                 <state>open closed</state>                
                 {% if mpa.sharing_groups.all %}
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/shape_shared.gif</href>
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/mpa-shared_16px.png</href>
                 {% else %}
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/shape_square.png</href>
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/mpa_16px.png</href>
                 {% endif %}
               </ItemIcon>
             </ListStyle>	       

@@ -209,7 +209,9 @@ lingcod.panel = function(options){
     var showUrlCallback = function(response, status, tabs, options){
         switch(response.status){
             case 200:
-                var html = $(response.responseText);
+                var html = $('<div></div>');
+                html[0].innerHTML = response.responseText;
+                var html = html.children();                
                 // Any link with a 'panel_link' class is overridden to open within the panel
                 // WARNING: the link needs to be in a block-level container (p, div, span, etc)
                 // Also, since it uses ajax calls, the host must be the same

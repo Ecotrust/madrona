@@ -231,6 +231,7 @@ lingcod.rest.kmlEditor = function(options){
             config.fireEvents = true;
             config.select = true;
             config['customClass'] = self.attr('mm:model') || '';
+            config['alwaysRenderNodes'] = true;
         }
         return config;
     };
@@ -259,6 +260,7 @@ lingcod.rest.kmlEditor = function(options){
     that.clearSelection = tree.clearSelection;
     
     $(tree).bind('select', function(e, node, kmlObject){
+        $(that).trigger('select', [e, node, kmlObject]);
         if(options.client.inShowState){
             // var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
             options.client.show(kmlObject, {syncTabs: true});

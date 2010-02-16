@@ -268,6 +268,23 @@ var lingcod = (function(){
             }            
         }
         
+        var onEditorSelect = function(e, originalEvent, node, kmlObject){
+            // console.log('editorSelect', this, e, originalEvent, node, kmlObject);
+            if(node){
+                var id = node.find('.kmlId').text();
+                if($('#MyShapes :contains('+id+')').length !== 0){
+                    $('#sidebar').tabs('select', '#MyShapes');
+                }else{
+                    $('#sidebar').tabs('select', '#SharedShapes');
+                }
+            }
+        };
+        
+        for(var i=0;i<editors.length;i++){
+            // console.log('setting listener on', editors[i]);
+            $(editors[i]).bind('select', onEditorSelect);
+        };
+        
         $('#sidebar, #meta-navigation').click(function(e){
             if(e.target === this || e.target === $('#MyShapes')[0]){
                 for(var i=0;i<editors.length;i++){

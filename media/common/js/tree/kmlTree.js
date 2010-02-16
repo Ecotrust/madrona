@@ -1,3 +1,39 @@
+// For some reason GEAPI can't switch between features when opening new
+// balloons accurately. Have to clear the old popup and add a timeout to
+// make sure the balloon A is closed before balloon b is opened.
+lingcod.openBalloon = function(kmlObject, plugin, whitelisted){
+    var a = plugin.getBalloon();
+    if(a){
+        // there is already a balloon(a) open
+        var f = a.getFeature();
+        if(f !== kmlObject){
+            // not trying to re-open the same balloon
+            plugin.setBalloon(null);
+            // try this function again in 50ms
+            setTimeout(function(){
+                lingcod.openBalloon(kmlObject, plugin, whitelisted);
+            }, 10);
+            // setTimeout(lingcod.openBalloon, 10, [kmlObject, plugin, whitelisted]);
+        }
+    }else{
+        // if balloon A closed or never existed, create & open balloon B
+        kmlObject.setVisibility(true);
+        if(whitelisted && kmlObject.getDescription()){
+            var b = plugin.createHtmlStringBalloon('');
+            b.setFeature(kmlObject); // optional
+            b.setContentString(kmlObject.getDescription());
+            plugin.setBalloon(b);
+        }else{
+            var b = plugin.createFeatureBalloon('');
+            b.setFeature(kmlObject);
+            setTimeout(function(){
+                plugin.setBalloon(b);
+            }, 10);
+        }
+    }
+};
+
+
 lingcod.kmlTree = (function(){
 
     var NetworkLinkQueue = function(opts){
@@ -79,6 +115,7 @@ lingcod.kmlTree = (function(){
         '<%= (visible ? "visible " : "") %>',
         '<%= (customIcon ? "hasIcon " : "") %>',
         '<%= (fireEvents ? "fireEvents " : "") %>',
+        '<%= (alwaysRenderNodes ? "alwaysRenderNodes " : "") %>',
         '<%= (select ? "select " : "") %>',
         '<%= (open ? "open " : "") %>',
         '<%= (description ? "hasDescription " : "") %>',
@@ -119,35 +156,8 @@ lingcod.kmlTree = (function(){
         loadingMsg: 'Loading data'
     };
         
-    // For some reason GEAPI can't switch between features when opening new
-    // balloons accurately. Have to clear the old popup and add a timeout to
-    // make sure the balloon A is closed before balloon b is opened.
-    var openBalloon = function(kmlObject, plugin, whitelisted){
-        var a = plugin.getBalloon();
-        if(a){
-            // there is already a balloon(a) open
-            var f = a.getFeature();
-            if(f !== kmlObject){
-                // not trying to re-open the same balloon
-                plugin.setBalloon(null);
-                // try this function again in 50ms
-                setTimeout(openBalloon, 50, kmlObject, plugin, whitelisted);
-            }
-        }else{
-            // if balloon A closed or never existed, create & open balloon B
-            kmlObject.setVisibility(true);
-            if(whitelisted && kmlObject.getDescription()){
-                var b = plugin.createHtmlStringBalloon('');
-                b.setFeature(kmlObject); // optional
-                b.setContentString(kmlObject.getDescription());
-                plugin.setBalloon(b);
-            }else{
-                var b = plugin.createFeatureBalloon('');
-                b.setFeature(kmlObject);
-                plugin.setBalloon(b);                
-            }
-        }
-    };
+    
+    openBalloon = lingcod.openBalloon;
     
     return function(opts){
         var that = {};
@@ -404,7 +414,8 @@ lingcod.kmlTree = (function(){
                             customClass: '',
                             children: [],
                             kmlId: lookupId,
-                            trans: opts.trans
+                            trans: opts.trans,
+                            alwaysRenderNodes: false
                         }
                         child = opts.visitFunction(this, child);
                         parent.children.push(child);
@@ -714,6 +725,7 @@ lingcod.kmlTree = (function(){
             setModified(node, 'visibility', toggling);
             lookup(node).setVisibility(toggling);
             node.toggleClass('visible', toggling);
+            
             if(node.hasClass('KmlNetworkLink') && node.hasClass('loaded')){
                 var doc = lookupNlDoc(node);
                 doc.setVisibility(toggling);
@@ -934,7 +946,15 @@ lingcod.kmlTree = (function(){
                 // http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle
                 return;
             }else{
-                toggleVisibility(node, toggle);
+                if(node.hasClass('KmlNetworkLink') && node.hasClass('alwaysRenderNodes') && !node.hasClass('open') && !node.hasClass('loading') && !node.hasClass('loaded')){
+                    openNetworkLink(node);
+                    $(node).bind('loaded', function(e, node, kmlObject){
+                        toggleVisibility(node, true);
+                        node.removeClass('open');
+                    });
+                }else{
+                    toggleVisibility(node, toggle);                    
+                }
                 if(node.hasClass('fireEvents')){
                     $(that).trigger('toggleItem', [node, toggle]);
                 }
@@ -994,10 +1014,11 @@ lingcod.kmlTree = (function(){
             }else if(target.getType() === 'KmlPlacemark'){
                 var id = target.getId();
                 var nodes = getNodesById(id);
-                if(nodes.length === 1){
-                    e.preventDefault();
+                if(nodes.length >= 1){
+                    // e.preventDefault();
                     selectNode(nodes[0], lookup(nodes[0]));
                 }else{
+                    clearSelection();
                     // there should be an optimal way to handle this.
                 }
             }
@@ -1016,13 +1037,13 @@ lingcod.kmlTree = (function(){
             }else if(target.getType() === 'KmlPlacemark'){
                 var id = target.getId();
                 var nodes = getNodesById(id);
-                if(nodes.length === 1){
+                if(nodes.length >= 1){
                     // e.preventDefault();
                     if(!doubleClicking){
                         doubleClicking = true;
                         setTimeout(function(){
                             doubleClicking = false;
-                            $(that).trigger('dblclick', [nodes, target]);
+                            $(that).trigger('dblclick', [$(nodes[0]), target]);
                         }, 200);
                     }
                 }else{
