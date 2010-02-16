@@ -87,12 +87,17 @@ lingcod.graphics = (function(){
     }
     
     var Tic = function(value, initial_position, paper, ticHeight, origin, color, showValue){
+        this.y1 = (origin);
+        this.y2 = ((origin-ticHeight));
+        this.x = initial_position;
         this.path = paper.path(
-            "M"+initial_position+' '+origin+'L'+initial_position+' '+(origin-ticHeight)
+            "M"+this.x+' '+this.y1+'L'+this.x+' '+this.y2
         );
         this.path.attr({'stroke': color});
         if(showValue){
-            this.t = paper.text(initial_position, origin + 10, String(value));
+            this.tx = initial_position;
+            this.ty = origin + 10;
+            this.t = paper.text(this.tx, this.ty, String(value));
             this.t.attr({'fill': color});
         }
         this.initial_position = initial_position;
@@ -101,8 +106,8 @@ lingcod.graphics = (function(){
     };
     
     Tic.prototype.changePosition = function(x, animate, animationEasing, animationDuration, animationTarget){
-        var path = this.path.attr('path');
-        var new_path = 'M'+ x + ' ' + path[0][2] + 'L' + x + ' ' + path[1][2];
+        this.x = x;
+        var new_path = 'M'+ this.x + ' ' + this.y1 + 'L' + this.x + ' ' + this.y2;
         if(!animate){
             this.path.attr('path', new_path);
         }else{
@@ -114,11 +119,12 @@ lingcod.graphics = (function(){
             });
         }
         if(this.t){
+            this.tx = x;
             if(!animate){
-                this.t.attr('x', x);
+                this.t.attr('x', this.tx);
             }else{
                 this.t.anim({
-                    attrs: {x: x},
+                    attrs: {x: this.tx, y: this.ty},
                     ms: animationDuration,
                     easing: animationEasing,
                     target: animationTarget
@@ -128,8 +134,9 @@ lingcod.graphics = (function(){
     };
     
     Tic.prototype.changeY = function(y, easing, duration, target){
-        var path = this.path.attr('path');
-        var new_path = 'M'+ path[0][1] + ' ' + (path[0][2] + y)  + 'L' + path[1][1] + ' ' + (path[1][2] + y);
+        this.y1 = this.y1 + y;
+        this.y2 = this.y2 + y;
+        var new_path = 'M'+ this.x + ' ' + this.y1  + 'L' + this.x + ' ' + this.y2;
         this.path.anim({
             attrs: {path: new_path},
             ms: duration,
@@ -140,8 +147,9 @@ lingcod.graphics = (function(){
             target = this.path;
         }
         if(this.t){
+            this.ty = this.ty + y;
             this.t.anim({
-                attrs: {y: this.t.attr('y') + y},
+                attrs: {y: this.ty},
                 ms: duration,
                 easing: easing,
                 target: target           

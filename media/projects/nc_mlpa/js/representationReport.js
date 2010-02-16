@@ -13,7 +13,7 @@ mlpa.representationReport = (function(){
         this.set = paper.set();
         this.text = this.paper.text(125, row_text_y, this.label);
         this.text.attr({'text-anchor': 'end', 'font-size': 12, 'opacity': 1});
-        this.rect = paper.rect(135, row_rect_y, 1, 25);
+        this.rect = paper.rect(135, row_rect_y, 5, 25);
         // var self = this;
         // this.rect.attr({fill: "90-#5394AD-#62ABCD", 'stroke-width': 1, 'stroke': '#3D75AA'});
         this.rect.attr({'fill': '#ccc', 'stroke': '#aaa'});
@@ -34,33 +34,36 @@ mlpa.representationReport = (function(){
     
     Row.prototype.setOffset = function(offset, animate, callback){
         this.offset = offset;
+        // animate = false;
         if(animate){
             var target = false;
             if(animate !== true){
                 target = animate;
             }
             this.text.anim({
-                attrs: {y: row_text_y + offset},
+                attrs: {y: Math.round(row_text_y + this.offset), x: 125},
                 ms: animationDuration,
                 easing: animationEasing,
                 target: target,
                 callback: callback
             });
             this.rect.anim({
-                attrs: {y: row_rect_y + offset},
+                attrs: {y: Math.round(row_rect_y + this.offset), x: 135},
                 ms: animationDuration,
                 easing: animationEasing,
                 target: target                
             });
         }else{
-            this.text.attr({y: row_text_y + offset});
-            this.rect.attr({y: row_rect_y + offset});
-            callback();
+            this.text.attr({y: row_text_y + this.offset});
+            this.rect.attr({y: row_rect_y + this.offset});
+            if(callback){
+                callback();                
+            }
         }
     };
     
     Row.prototype.getOffset = function(){
-        return this.offset;
+        return this.offset || 0;
     };
     
     Row.prototype.showValue = function(animate, scale, target){
@@ -69,7 +72,7 @@ mlpa.representationReport = (function(){
             this.rect.anim({
                 attrs: {'width': w},
                 ms: animationDuration,
-                easing: animationEasing,
+                easing: '>',
                 target: target
             });
         }else{
@@ -107,8 +110,11 @@ mlpa.representationReport = (function(){
             }
             hideInvalidRows(json, function(){
                 sortAndPositionRows(animate, function(){
-                    updateScale(newScale, true, function(){
+                    updateScale(newScale, animate, function(){
                         setTimeout(showValues, 100);
+                        setTimeout(function(){
+                            $(that.paper.canvas).parent().height(that.height);
+                        }, 500);
                     });
                 });
             });
@@ -116,7 +122,7 @@ mlpa.representationReport = (function(){
         
         that.update = update;
         
-        var showValues = function(target){
+        var showValues = function(target, animate){
             for(var key in rows){
                 var row = rows[key];
                 if(row.rect.attr('opacity') !== 0){
@@ -216,8 +222,8 @@ mlpa.representationReport = (function(){
                     if(animate){
                         row_array[i].setOffset(totalOffset, animate);
                     }else{
-                        var animate = row_array[i];
                         row_array[i].setOffset(totalOffset, animate, callback);
+                        var animate = row_array[i];
                     }                    
                 }
             }
@@ -235,7 +241,6 @@ mlpa.representationReport = (function(){
             }
             scaleOffset = old;
             that.height = (row_array.length * offset) + 70;
-            $(that.paper.canvas).parent().height(that.height);
         }
         
         var currentScale = minScale;
@@ -274,7 +279,7 @@ mlpa.representationReport = (function(){
         });
         
         
-        update(json, true);
+        update(json, false);
         
         return that;
     };
