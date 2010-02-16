@@ -124,7 +124,6 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
             self.setGeometryFields_(data.user_shape, data.submitted, data.final_shape, data.final_shape_kml);
             self.enterManipulatedState_(data.html, true);            
         }else{
-			console.log('error!!!');
             self.setGeometryFields_('', data.submitted, '', '');
             self.addNewShape_(data.submitted);
             self.gex_.util.flyToObject(self.shape_, {
