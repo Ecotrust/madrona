@@ -70,16 +70,17 @@ def remove_spikes(geom):
 # cleans again if needed before returning 
 # Note, it does not scrub the geometry before transforming, so if needed
 # call check_validity(geo, geo.srid) first.
+# NO LONGER USES SPIKE REMOVER BECAUSE IT WAS REMOVING ISLANDS
 def ensure_clean(geo, srid):
     old_srid = geo.srid
     if geo.srid is not srid:
         geo.transform(srid)
-    geo = remove_spikes(clean_geometry(geo))
+    geo = clean_geometry(geo)
     if not geo.valid:
         raise Exception("ensure_clean could not produce a valid geometry.")
     if geo.srid is not old_srid:
         geo.transform(old_srid)
-        geo = remove_spikes(clean_geometry(geo))
+        geo = clean_geometry(geo)
         if not geo.valid:
             raise Exception("ensure_clean could not produce a valid geometry.")
     return geo

@@ -119,7 +119,6 @@ class BaseManipulator(object):
         return target
   
     def result(self, clipped_shape, html="", success="1"):
-        clipped_shape = ensure_clean(clipped_shape, settings.GEOMETRY_CLIENT_SRID)
         clipped_shape = ensure_clean(clipped_shape, settings.GEOMETRY_DB_SRID)
         return {"clipped_shape": clipped_shape, "html": html, "success": success}
     
