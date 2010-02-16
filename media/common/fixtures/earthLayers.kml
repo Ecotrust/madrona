@@ -49,7 +49,7 @@
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
                 <state>open closed</state>  
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/house.png</href>
+                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/3d_buildings_16px.png</href>
               </ItemIcon>
             </ListStyle>	       
 	    </Style>
