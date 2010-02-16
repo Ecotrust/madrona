@@ -171,6 +171,7 @@ def groups_users_sharing_with(user, include_public=False):
                 else:
                     groups_sharing[group.name]={'group':group, 'users': user_list}
     if len(groups_sharing.keys()) > 0:
+        # MP TODO sort groups_sharing[*]['users'] by username
         return groups_sharing
     else:
         return None

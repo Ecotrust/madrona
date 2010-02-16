@@ -108,6 +108,17 @@ def get_designation_style(mpas):
     s.rules.append(r)
     return s
 
+def draw_to_response(m, draw, request):
+    mapnik.render(m, draw)
+    img = draw.tostring('png')
+    response = HttpResponse()
+    response['Content-length'] = len(img)
+    response['Content-Type'] = 'image/png' 
+    if 'attachment' in request.REQUEST and request.REQUEST['attachment'].lower() == 'true':
+        response['Content-Disposition'] = 'attachment; filename=marinemap.png'
+    response.write(img)
+    return response
+
 def show(request, map_name='default'):
     """Display a map with the study region geometry.  """
     maps = get_object_or_404(MapConfig,mapname=map_name)
@@ -157,14 +168,7 @@ def show(request, map_name='default'):
     m.zoom_to_box(bbox)
 
     # Render image and send out the response
-    mapnik.render(m, draw)
-    img = draw.tostring('png')
-    response = HttpResponse()
-    response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
-    if 'attachment' in request.REQUEST and request.REQUEST['attachment'].lower() == 'true':
-        response['Content-Disposition'] = 'attachment; filename=marinemap.png'
-    response.write(img)
+    response = draw_to_response(m, draw, request)
 
     # if testing via django unit tests, close out the connection
     conn = connection.settings_dict

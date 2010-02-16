@@ -140,7 +140,7 @@ def copy(request, pk):
     On success, Return status 201 with Location set to new MPA
     Permissions: Need to either own or have shared with you to make copy
     """
-    if request.method == 'POST' or request.method == 'GET': # MP TODO POST only
+    if request.method == 'POST':
         # Authenticate
         user = request.user
         if user.is_anonymous() or not user.is_authenticated():
