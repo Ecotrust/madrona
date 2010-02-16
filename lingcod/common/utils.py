@@ -179,13 +179,15 @@ def kml_errors(kmlstring):
     # KML ExtendedData element 
     # or our custom 'mm' namespance 
     # or our custom atom link relation
+    # or space-delimited Icon states
     # so we ignore all related events
     events = [x for x in events if not (
                 (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.update_form') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.create_form') or
                 (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://www.google.com/kml/ext/2.2')
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://www.google.com/kml/ext/2.2') or
+                (isinstance(x,feedvalidator.logging.InvalidItemIconState) and x.params['element']==u'state' and ' ' in x.params['value']) 
                 )]
 
     from feedvalidator.formatter.text_plain import Formatter
