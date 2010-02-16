@@ -44,9 +44,27 @@ class GroupMembersInline(admin.TabularInline):
     verbose_name_plural = 'Group members'
     extra = 3
 
+def allow_share_to_staff(modeladmin, request, queryset):
+    from django.conf import settings
+    sg = settings.SHARING_TO_STAFF_GROUPS
+    if hasattr(sg,'__iter__') and len(sg)>0:
+        for g in sg:
+            group_obj = Group.objects.get(name=g)
+            for user in queryset:
+                user.groups.add(group_obj)
+                user.save()
+allow_share_to_staff.short_description = "Allow selected users to share to staff for review"
+
+def remove_users_from_all_groups(modeladmin, request, queryset):
+    for user in queryset:
+        user.groups.clear()
+        user.save()
+remove_users_from_all_groups.short_description = "Remove all group associations from selected users"
+
 class UserAdmin(UserAdmin):
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_active', staff, adm, roles, last]
     list_filter = ['groups', 'is_staff', 'is_superuser', 'is_active']
+    actions = [allow_share_to_staff, remove_users_from_all_groups]
 
 class GroupAdmin(GroupAdmin):
     list_display = ['name', persons]
