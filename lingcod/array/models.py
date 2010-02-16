@@ -117,12 +117,6 @@ class MpaArray(models.Model):
         # Make sure we are not sharing it with anyone
         the_array.sharing_groups.clear()
         
-        # The copy of a I-Team proposal doesn't necessarily become a proposal too
-        try:
-            the_array.proposed = False
-        except:
-            pass # no proposed field in the inherited array model
-
         # Save one last time just to be safe?
         the_array.save()
         return the_array
