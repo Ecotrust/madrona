@@ -3,7 +3,7 @@ mlpa.representationReport = (function(){
     var row_text_y = 23;
     var row_rect_y = 10;
     var data_rect_max_width = 300;
-    var minScale = 7;
+    var minScale = 8;
     var maxValue = 30;
     
     var Row = function(label, json, paper){
@@ -14,8 +14,18 @@ mlpa.representationReport = (function(){
         this.text = this.paper.text(125, row_text_y, this.label);
         this.text.attr({'text-anchor': 'end', 'font-size': 12, 'opacity': 1});
         this.rect = paper.rect(135, row_rect_y, 1, 25);
+        // var self = this;
+        // this.rect.attr({fill: "90-#5394AD-#62ABCD", 'stroke-width': 1, 'stroke': '#3D75AA'});
         this.rect.attr({'fill': '#ccc', 'stroke': '#aaa'});
         this.set.push(this.text, this.rect);
+        var self = this;
+        this.set.mouseover(function(e){
+            var tt = $('<div id="repTooltip" style="position:absolute;top:'+(e.clientY + 15)+'px;left:'+(e.clientX + 15)+'px;"><strong>'+self.label+'</strong><br />'+Math.round(self.json.result * 1000) / 1000+' '+self.json.units+'<br />'+Math.round(self.json.percent_of_total * 1000) / 1000+' % of study region</div>');
+            $(document.body).append(tt);
+        });
+        this.set.mouseout(function(e){
+            $('#repTooltip').remove();
+        });
     };
     
     Row.prototype.update = function(json){
@@ -49,6 +59,10 @@ mlpa.representationReport = (function(){
         }
     };
     
+    Row.prototype.getOffset = function(){
+        return this.offset;
+    };
+    
     Row.prototype.showValue = function(animate, scale, target){
         var w = this.json.percent_of_total * (data_rect_max_width / scale);
         if(animate){
@@ -69,8 +83,7 @@ mlpa.representationReport = (function(){
     return function(el, json, animate){
         var that = {};
         
-        var paper = new Raphael(el[0], el.width(), 650);
-        
+        var paper = new Raphael(el[0], 450, 850);
         that.paper = paper;
         that.element = el;
         var currentScale = false;
@@ -93,7 +106,6 @@ mlpa.representationReport = (function(){
                 }
             }
             hideInvalidRows(json, function(){
-                console.log('callback');
                 sortAndPositionRows(animate, function(){
                     updateScale(newScale, true, function(){
                         setTimeout(showValues, 100);
@@ -104,8 +116,7 @@ mlpa.representationReport = (function(){
         
         that.update = update;
         
-        var showValues = function(){
-            var target = false;
+        var showValues = function(target){
             for(var key in rows){
                 var row = rows[key];
                 if(row.rect.attr('opacity') !== 0){
@@ -130,26 +141,30 @@ mlpa.representationReport = (function(){
                     }
                 }
                 if(missing){
-                    row.text.anim({
-                        attrs: {'opacity': 0},
-                        ms: animationDuration,
-                        easing: animationEasing,
-                        target: hideTarget,
-                        callback: callback
-                    });
-                    if(!hideTarget){
-                        hideTarget = row.set;
-                        callback = false;
+                    row.hidden = true;
+                    if(row.text.attr('opacity') > 0.05){
+                        row.text.anim({
+                            attrs: {'opacity': 0},
+                            ms: animationDuration,
+                            easing: animationEasing,
+                            target: hideTarget,
+                            callback: callback
+                        });
+                        if(!hideTarget){
+                            hideTarget = row.set;
+                            callback = false;
+                        }
+                        row.rect.anim({
+                            attrs: {'opacity': 0},
+                            ms: animationDuration,
+                            easing: animationEasing,
+                            target: hideTarget,
+                            callback: callback
+                        });                        
                     }
-                    row.rect.anim({
-                        attrs: {'opacity': 0},
-                        ms: animationDuration,
-                        easing: animationEasing,
-                        target: hideTarget,
-                        callback: callback
-                    });
                 }else{
-                    if(row.text.attr('opacity') === 0){
+                    row.hidden = false;
+                    if(row.text.attr('opacity') < 0.95){
                         row.text.anim({
                             attrs: {'opacity': 1},
                             ms: animationDuration,
@@ -173,6 +188,7 @@ mlpa.representationReport = (function(){
             }
             if(callback){
                 callback();
+            }else{
             }
         };
         
@@ -182,7 +198,7 @@ mlpa.representationReport = (function(){
         var sortAndPositionRows = function(animate, callback){
             var row_array = [];
             for(var key in rows){
-                if(rows[key].text.attr('opacity') !== 0){
+                if(rows[key].hidden === false){
                     row_array.push(rows[key]);
                 }
             }
@@ -192,34 +208,52 @@ mlpa.representationReport = (function(){
             if(animate){
                 animate = row_array[0];
             }
-            row_array[0].setOffset(0 * offset, animate, callback);
             var totalOffset = 0;
-            for(var i=1; i<row_array.length;i++){
+            var animate = false;
+            for(var i=0; i<row_array.length;i++){
                 totalOffset = i * offset;
-                row_array[i].setOffset(totalOffset, animate);
+                if(totalOffset !== row_array[i].getOffset()){
+                    if(animate){
+                        row_array[i].setOffset(totalOffset, animate);
+                    }else{
+                        var animate = row_array[i];
+                        row_array[i].setOffset(totalOffset, animate, callback);
+                    }                    
+                }
             }
             var old = totalOffset;
-            totalOffset = totalOffset - scaleOffset;
-            console.log(totalOffset);
-            scaleBar.changeY(totalOffset, animate, animationEasing, animationDuration);
+            
+            if(old === scaleOffset){
+                if(!animate){
+                    callback();
+                }else{
+                }
+            }else{
+                setTimeout(callback, animationDuration);
+                totalOffset = totalOffset - scaleOffset;
+                scaleBar.changeY(totalOffset, animate, animationEasing, animationDuration);                
+            }
             scaleOffset = old;
+            that.height = (row_array.length * offset) + 70;
+            $(that.paper.canvas).parent().height(that.height);
         }
         
         var currentScale = minScale;
 
         var updateScale = function(max, animate, callback){
-            console.log('updatescale', max, animate, callback);
             if(max < minScale){
                 max = minScale;
-            }else if(max > maxScale){
-                max = maxScale;
+            }else if(max > maxValue){
+                max = maxValue;
             }
-            if(currentScale === minScale){
+            if(currentScale === max){
                 // do nothing
                 callback();
             }else{
                 currentScale = max;
-                callback();
+                var target = scaleBar.update(max, true, callback);
+                showValues(target);
+                // callback();
             }
         }
         
@@ -235,7 +269,8 @@ mlpa.representationReport = (function(){
             majorInterval: 2,
             animationEasing: animationEasing,
             animationDuration: animationDuration,
-            initialMaxValue: minScale
+            initialMaxValue: minScale,
+            label: 'Percent of Habitat Captured  % '
         });
         
         

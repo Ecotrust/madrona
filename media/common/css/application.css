@@ -363,6 +363,7 @@ div.field textarea {
 }
 
 .marinemap-panel .loadingMask {
+    z-index:5;
     display:none;
     position:absolute;
     left:0px;
@@ -377,7 +378,7 @@ div.field textarea {
 .marinemap-panel .loadingMask span {
     position:absolute;
     padding-top:20px;
-    top:0px;
+    top:120px;
     left:0px;
     width:100%;
     opacity:1;
@@ -386,4 +387,12 @@ div.field textarea {
     height:40px;
     padding-bottom:15px;
     background: transparent url(../images/ajax-loader.gif) no-repeat center bottom;
+}
+
+.marinemap-panel-staging {
+    width:499px;
+    position:absolute;
+    left:-1000px;
+    top:40px;
+    z-index:100;
 }

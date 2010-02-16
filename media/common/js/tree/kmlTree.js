@@ -552,7 +552,7 @@ lingcod.kmlTree = (function(){
             $('#'+id+' li').die();
             $('#'+id+' li > span.expander').die();
             opts.element.html('');
-            $(that).unbind();
+            // $(that).unbind();
         };
         
         that.destroy = destroy;

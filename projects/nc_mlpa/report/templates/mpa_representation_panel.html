@@ -10,18 +10,21 @@
             <li><a href="#RepresentationDataTable"><span>Data Table</span></a></li>
         </ul>
         <div id="RepresentationChart">
-            <div style="width:450px;" class="habitat_representation" id="HabitatRepresentation"></div>
+            <div style="width:450px; overflow:hidden; height:500px;" class="habitat_representation" id="MPAHabitatRepresentation"></div>
             <script type="text/javascript" charset="utf-8">
                 var hab_data = JSON.parse('{{json|safe}}');
-                lingcod.panelEvents({
-                    show: function(el){
-                        var report = mlpa.representationReport($('#HabitatRepresentation'), hab_data, true);
-                        window.report = report;
-                        window.json = hab_data;
-                        // console.log(JSON.stringify(hab_data));
-                    }
-                });
+				lingcod.onTabShow('#RepresentationChart', function(ui){
+					var el = $('#MPAHabitatRepresentation');
+					var report = lingcod.persistentReports['MPAHabitatReplication'];
+					if(report){
+						$('#MPAHabitatRepresentation').append(report.paper.canvas);
+						report.update(hab_data, true);
+					}else{
+						lingcod.persistentReports['MPAHabitatReplication'] = mlpa.representationReport($('#MPAHabitatRepresentation'), hab_data, true);
+					}					
+				});
             </script>
+			<p>This histogram shows how much habitat your MPA has captured. Use the data layers to visualize how you can make changes in your MPA geometry that affect these numbers.</p>
         </div>
         <div id="RepresentationDataTable">
         	<table class='hab_repr_container'>

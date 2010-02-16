@@ -20,7 +20,7 @@
             <h2>Total Area as Related to SAT Guidelines</h2>
             <p class="heading_subtext">The Science Advisory Team (SAT), has set guidelines for the size of MPA candidates. If this MPA does not meet those guidelines it may still be considered (especially if it is part of a larger cluster of MPAs). You're MPA is has an area of <strong>{{ instance.area.sq_mi|floatformat:3 }} square miles</strong>.</p>
             {% load geographic_report %}
-            {% geographic_report "MLPA" instance.geometry_final.area persist_mpa_geographic %}
+            {% geographic_report MLPA instance.geometry_final.area persist_mpa_geographic #Attributes %}
             <h2>Level of Protection</h2>
             {% if instance.lop %}
                 <p>This MPA has been assigned a level of protection of <strong>{{instance.lop.name}}</strong> based on its designation and allowed uses.</p>

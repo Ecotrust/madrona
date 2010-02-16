@@ -14,20 +14,21 @@ def do_geographic_report(parser, token):
     """
     tokens = token.split_contents()
     persist = ''
-    if len(tokens) >= 3:
+    if len(tokens) == 5:
         name = tokens[1]
         area = tokens[2]
-        if len(tokens) == 4:
-            persist = tokens[3]
+        persist = tokens[3]
+        tab_id = tokens[4]
     else:
         raise template.TemplateSyntaxError, "%r tag accepts a report name and an area value (in square meters)." % token.contents.split()[0]
-    return GeographicReportNode(name, area, persist)
+    return GeographicReportNode(name, area, persist, tab_id)
 
 class GeographicReportNode(template.Node):
-    def __init__(self, name, area, persist):
-        self.name = name[1:(len(name)-1)]
+    def __init__(self, name, area, persist, tab_id):
+        self.name = name
         self.area = area
         self.persist = persist
+        self.tab_id = tab_id
     
     def render(self, context):
         report = GeographicReport.objects.get(name=self.name)
@@ -49,23 +50,16 @@ class GeographicReportNode(template.Node):
         return """
             <div id="%s" class="geographic_report" />
             <script type="text/javascript" charset="utf-8">
-                lingcod.panelEvents({
-                    show: function(el){
+                lingcod.onTabShow('%s', function(ui){
                     var persist_id = '%s';
-                        if(persist_id){
-                            var report = lingcod.persistentReports[persist_id];
-                            if(report){
-                                $('#%s').append(report.paper.canvas);
-                            }else{
-                                report = lingcod.geographicReport(%s);
-                                lingcod.persistentReports[persist_id] = report;
-                            }
-                            report.updateValue(%s, true);
-                        }
-                    },
-                    close: function(el){
-                        
+                    var report = lingcod.persistentReports[persist_id];
+                    if(report){
+                        $('#%s').append(report.paper.canvas);
+                    }else{
+                        report = lingcod.geographicReport(%s);
+                        lingcod.persistentReports[persist_id] = report;
                     }
+                    report.updateValue(%s, true);
                 });
             </script>
-        """ % (random_id, self.persist, random_id, json, area.sq_mi)
+        """ % (random_id, self.tab_id, self.persist, random_id, json, area.sq_mi)

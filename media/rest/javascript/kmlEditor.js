@@ -260,10 +260,8 @@ lingcod.rest.kmlEditor = function(options){
     
     $(tree).bind('select', function(e, node, kmlObject){
         if(options.client.inShowState){
-            var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
-            options.client.show(kmlObject, {success: function(){
-                options.client.panel.getEl().find('.ui-tabs li:contains('+selectedTab+') a').click();
-            }});
+            // var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
+            options.client.show(kmlObject, {syncTabs: true});
         }
         that.selected = node;
         setSelectionMenuItemEnabled(!!node);

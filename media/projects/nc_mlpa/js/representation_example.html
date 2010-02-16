@@ -18,7 +18,7 @@
 		var report;
 		
 		var json = JSON.parse('{"Unknown (0 - 30m)":{"sort":12,"result":11.0953071707,"units":"sq miles","percent_of_total":4.865781391380997,"feature_map_id":73,"org_scheme_id":9},"Soft (0 - 30m)":{"sort":9,"result":0.309942573767,"units":"sq miles","percent_of_total":0.14684610438206944,"feature_map_id":70,"org_scheme_id":9},"Unknown (> 30m)":{"sort":13,"result":5.3685617405,"units":"sq miles","percent_of_total":3.419625180879155,"feature_map_id":74,"org_scheme_id":9},"Soft All Depths":{"sort":8.5,"result":0.31243310154105003,"units":"sq miles","percent_of_total":0.0534079293233048,"feature_map_id":77,"org_scheme_id":9},"Hard (30 - 100m)":{"sort":7,"result":0,"units":"sq miles","percent_of_total":0,"feature_map_id":68,"org_scheme_id":9},"Hard (0 - 30m)":{"sort":6,"result":0,"units":"sq miles","percent_of_total":0,"feature_map_id":67,"org_scheme_id":9},"Coastal Marsh":{"sort":5,"result":0,"units":"miles","percent_of_total":0,"feature_map_id":66,"org_scheme_id":9},"Hardened Shores":{"sort":3,"result":1.03405168822,"units":"miles","percent_of_total":4.882270846630482,"feature_map_id":64,"org_scheme_id":9},"Hard (100 - 200m)":{"sort":8,"result":0,"units":"sq miles","percent_of_total":0,"feature_map_id":69,"org_scheme_id":9},"Rocky Shores":{"sort":2,"result":0,"units":"miles","percent_of_total":0,"feature_map_id":63,"org_scheme_id":9},"Tidal Flats":{"sort":4,"result":0,"units":"miles","percent_of_total":0,"feature_map_id":65,"org_scheme_id":9},"Soft (100 - 200m)":{"sort":11,"result":0,"units":"sq miles","percent_of_total":0,"feature_map_id":72,"org_scheme_id":9},"Beaches":{"sort":1,"result":4.85983036254,"units":"miles","percent_of_total":2.8250615493836806,"feature_map_id":62,"org_scheme_id":9},"Soft (30 - 100m)":{"sort":10,"result":0.00249052777405,"units":"sq miles","percent_of_total":0.0007634606106862671,"feature_map_id":71,"org_scheme_id":9}}');
-		
+		var json2 = JSON.parse('{"Coastal Marsh (area)":{"sort":7,"result":0.0427710725247,"units":"sq miles","percent_of_total":1.2178522588738843,"feature_map_id":107,"org_scheme_id":11},"Coastal Marsh":{"sort":6,"result":1.89534655717,"units":"miles","percent_of_total":2.2249784769325403,"feature_map_id":96,"org_scheme_id":11},"Hardened Shores":{"sort":3,"result":0,"units":"miles","percent_of_total":0,"feature_map_id":94,"org_scheme_id":11},"Rocky Shores":{"sort":2,"result":0.276813329315,"units":"miles","percent_of_total":0.19447824622576823,"feature_map_id":93,"org_scheme_id":11},"Tidal Flats":{"sort":4,"result":0.983948412528,"units":"miles","percent_of_total":1.3908147432260967,"feature_map_id":95,"org_scheme_id":11},"Beaches":{"sort":1,"result":0,"units":"miles","percent_of_total":0,"feature_map_id":92,"org_scheme_id":11}}');
 		$(document).ready(function(){
 			var el = $('#reportDiv');
 			console.time('render');
@@ -32,6 +32,9 @@
 	<div id="reportDiv" style="width:455px; border:#eee solid 1px;">
 		
 	</div>
+	<a href="javascript:report.update(json, true);">load json</a>
+	<a href="javascript:report.update(json2, true);">load json2</a>
+	<br />
 
 </body>
 </html>

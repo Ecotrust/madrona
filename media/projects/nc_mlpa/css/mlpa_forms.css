@@ -47,3 +47,15 @@ tr.none, tr.chosen {
 tr.none {
     font-style:italic;
 }
+
+#repTooltip {
+    z-index:100;
+    background-color:#FAF2E2;
+    border:solid #C1BDA8 1px;
+    font-size:10px;
+    padding:10px;
+    max-width:200px;
+    -webkit-box-shadow: 2px 2px 3px #757575;
+    box-shadow: 2px 2px 3px #757575;
+    -moz-box-shadow: 2px 2px 3px #757575;
+}

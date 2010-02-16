@@ -3,6 +3,7 @@
 .ui-tabs-hide {
     position:absolute;
     left:-10000px;
+    top:-10000px;
     top:0px;
 }
 /*}*/
@@ -207,7 +208,12 @@
 }
 
 .marinemap-panel .ui-tabs-hide {
-    display:none;
+/*    display:none;*/
+    
+    position:absolute;
+    left:-10000px;
+    top:-10000px;
+    
 }
 /*
 li.ui-state-processing a {

@@ -38,6 +38,9 @@ lingcod.graphics = (function(){
         if(opts.initialMaxValue){
             this.update(opts.initialMaxValue, false);
         }
+        if(opts.label){
+            this.label = opts.paper.text(opts.origin[0] + (opts.width / 2), opts.origin[1] + 15, opts.label);
+        }
     };
     
     ScaleBar.prototype.calculateXPosition = function(value, width, maxValue, originX){
@@ -72,6 +75,14 @@ lingcod.graphics = (function(){
             if(!target){
                 target = el;
             }
+        }
+        if(this.label){
+            this.label.anim({
+                attrs: {y: this.label.attr('y') + y},
+                easing: easing,
+                ms: duration,
+                target: target
+            });
         }
     }
     

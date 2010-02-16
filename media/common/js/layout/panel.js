@@ -98,67 +98,198 @@ lingcod.panel = function(options){
     
     that.showError = function(title, message){
         
-    }
+    };
+    
+    var getActiveTabs = function(element, list){
+        var selected = element.find('.ui-tabs:first .ui-tabs-selected:first > a');
+        var href = selected.attr('href');
+        var name = selected.text()
+        list.push(name);
+        var panel = $(href);
+        if(panel.find('.ui-tabs').length){
+            getActiveTabs(panel, list);
+        }
+        return list;
+    };
+    
+    var tabOptions = {
+        'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
+        ajaxOptions: {
+            error: function(){
+                $('#loadingTab').parent().parent().remove();
+                alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
+            },
+            beforeSend: function(){
+                if(!lingcod.loadingPanel){
+                    lingcod.loadingPanel = el;                    
+                }
+            }
+        },
+        cache: true
+    };
+    
+    var enableTabs = function(htmlEl, options){
+        var options = options || tabOptions
+        var tabs = htmlEl.find('.tabs');
+        if(tabs.length){
+            // tabOptions['idPrefix'] = String((new Date()).getTime());
+            tabs = tabs.tabs(options);
+            return tabs;
+        }else{
+            return false;
+        }
+    };
+    
+    var enableTabsWithListeners = function(htmlEl){
+        var options = $.extend({}, tabOptions, {
+            load: onTabsLoad,
+            show: onTabsShow
+        });
+        enableTabs(htmlEl, options)
+    };
+    
+    var addTabsListeners = function(tabs){
+        tabs.each(function(){
+            $(this).bind('tabsshow', onTabsShow);
+            $(this).bind('tabsload', onTabsLoad);
+        });
+    };
     
     that.showUrl = function(url, options){
         var new_url = url;
         that.spin(options.load_msg || "Loading");
+        $(that).trigger('panelloading');
+        var activeTabs = [];
+        if(options.syncTabs){
+            getActiveTabs(el, activeTabs);
+        }
+        // Set a global var to point to this panel so callbacks can be assigned
+        if(!lingcod.loadingPanel){
+            lingcod.loadingPanel = el;            
+        }else{
+            throw('ERROR: lingcod.loadingPanel already set!');
+        }
         $.ajax({
             url: url,
             method: 'GET',
             complete: function(response, status){
-                that.stopSpinning();
-                switch(response.status){
-                    case 200:
-                        var html = $(response.responseText);
-
-                        that.showContent(html, {showClose: options.showClose});
-                        var tabs = html.find('.tabs');
-                        if(tabs.length){
-                            tabs = tabs.tabs({
-                                'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
-                                ajaxOptions: {
-                                    error: function(){
-                                        $('#loadingTab').parent().parent().remove();
-                                        alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
-                                    }
-                                },
-                                load: function(event, ui){
-                                    var tabs = $(ui.panel).find('.tabs');
-                                    tabs.tabs();
-                                },
-                                cache: true
-                            });
-                        }
-                        if(options && options.success){
-                            options.success(response, status);
-                        }
-
-                        // Any link with a 'panel_link' class is overridden to open within the panel
-                        // WARNING: the link needs to be in a block-level container (p, div, span, etc)
-                        // Also, since it uses ajax calls, the host must be the same
-                        var panel_links = html.find('a.panel_link');
-                        panel_links.click( function(e) {
-                            that.showUrl( $(this).attr('href') ,options);
-                            e.preventDefault();
-                        });
-
-                        // get content
-                        // that.showContent
-                        break;
-                        
-                    default:
-                        that.showError('A Server Error Occured.', 
-                            'Please try again.');
-                            
-                        if(options && options.error){
-                            options.error(response, status);
-                        }
-                        $(that).trigger('error', response, status);
-                }
+                showUrlCallback(response, status, activeTabs, options);
             }
         });
-    }
+    };
+    
+    var onTabsLoad = function(event, ui){
+        lingcod.loadingPanel = el;
+        enableTabsWithListeners($(this));
+
+        // in affect an afterLoad event
+        setTimeout(function(){
+            lingcod.loadingPanel = false;
+        }, 10);
+    };
+    
+    
+    var onTabsShow = function(event, ui){
+        var callback = $(ui.tab).data('mm:ontabshow');
+        if(callback){
+            callback(ui);
+            $(ui.tab).data('mm:ontabshow', false);
+        }
+    };
+    
+    
+    // var attachTabListeners = function(tabs){
+    //     tabs.each(function(){
+    //         $(this).bind('tabsload', function(){
+    //             
+    //         });
+    //     });
+    // };
+    
+    var showUrlCallback = function(response, status, tabs, options){
+        switch(response.status){
+            case 200:
+                var html = $(response.responseText);
+                // Any link with a 'panel_link' class is overridden to open within the panel
+                // WARNING: the link needs to be in a block-level container (p, div, span, etc)
+                // Also, since it uses ajax calls, the host must be the same
+                var panel_links = html.find('a.panel_link');
+                panel_links.click( function(e) {
+                    that.showUrl( $(this).attr('href') ,options);
+                    e.preventDefault();
+                });
+                if(tabs.length > 0){
+                    var staging = $('<div class="marinemap-panel-staging"></div>');
+                    lingcod.loadingPanel = staging;
+                    $(document.body).prepend(staging);
+                    staging.html(html);
+                    enableTabs(staging);
+                    followTabs(staging, tabs, options);
+                }else{
+                    that.stopSpinning();
+                    that.showContent(html, {showClose: options.showClose});
+                    var tabs_present = enableTabsWithListeners(html);
+                    lingcod.loadingPanel = false;
+                    if(options && options.success){
+                        options.success(response, status);
+                    }
+                }
+                break;
+                
+            default:
+                lingcod.loadingPanel = false;
+                that.stopSpinning();
+                that.showError('A Server Error Occured.', 
+                    'Please try again.');
+                    
+                if(options && options.error){
+                    options.error(response, status);
+                }
+                $(that).trigger('error', response, status);
+        }
+    };
+    
+    var followTabs = function(element, tabs_to_select, options){
+        if(tabs_to_select.length > 0){
+            var link = element.find('li a:contains('+tabs_to_select.shift()+')');
+            var tabs = link.parent().parent().parent();
+            enableTabs(tabs.parent());
+            var cback = function(){
+                followTabs(element, tabs_to_select, options);
+            }
+            if(link.parent().hasClass('ui-tabs-selected')){
+                cback();
+            }else{
+                $(tabs).bind('tabsshow', function(event, ui){
+                    $(tabs).unbind('tabsshow');
+                    cback();
+                });
+                // tabsshow fires before content is added to the document, so
+                // this sloppy settimeout function is necessary.
+                setTimeout(function(){
+                    link.click();
+                }, 5);
+            }
+        }else{
+            lingcod.loadingPanel = false;
+            var p = element.find('.panel')[0];
+            $(el.find('.panel')[0]).replaceWith(p);
+            element.remove();
+            that.stopSpinning();
+            addTabsListeners(el.find('.tabs'));
+            // enableTabsWithListeners(el.find('.tabs'));
+            el.find('.ui-tabs-selected a').each(function(){
+                onTabsShow({}, {
+                    tab: $(this), 
+                    panel: el.find($(this).attr('href') + '.ui-tabs-panel')
+                });
+            });
+            if(options && options.success){
+                options.success();
+            }
+            // finished following
+        }
+    };
     
     // Methods needed for test management        
     that.destroy = function(){
@@ -187,4 +318,20 @@ lingcod.panel = function(options){
     }
                 
     return that;
+};
+
+lingcod.onPanelShow = function(callback){
+    // not implemented
+};
+
+lingcod.onTabShow = function(id, callback){
+    if(!lingcod.loadingPanel){
+        throw('attempting to set lingcod.onTabShow callback without loadingPanel set.');
+    }
+    var link = $(lingcod.loadingPanel).find('a[href='+id+']');
+    if(link.length === 1){
+        link.data('mm:ontabshow', callback);
+    }else{
+        throw('Could not find tab to assign callback: '+id);
+    }
 };

@@ -212,7 +212,6 @@ var lingcod = (function(){
                 editors.push(editor);
                 $(editor.tree).bind('copyDone', function(e,location) {
                     var myshapesEditor = editors[0];
-                    //console.log('FROM MYSHAPES', myshapesEditor);
                     myshapesEditor.tree.clearSelection();
                     myshapesEditor.refresh( function() {
                         var node = myshapesEditor.tree.getNodesById(location);
@@ -257,7 +256,6 @@ var lingcod = (function(){
                 $(editor.tree).bind('copyDone', function(e, location) {
                     $('#sidebar').tabs('select', "#MyShapes");
                     var myshapesEditor = that.editors[0];
-                    //console.log('FROM SHAREDSHAPES ', myshapesEditor);
                     myshapesEditor.tree.clearSelection();
                     myshapesEditor.refresh( function() {
                         var node = myshapesEditor.tree.getNodesById(location);
@@ -348,7 +346,7 @@ var lingcod = (function(){
             setCameraToLocalStorage();
             saveEarthOptionsToLocalStore();
             setStore('selectedTab', $('#sidebar > ul > .ui-tabs-selected a').attr('href'));
-            $(window).die('beforunload', unload);
+            // $(window).die('beforunload', unload);
         }
         
         $(window).bind('beforeunload', unload);
@@ -438,8 +436,10 @@ var lingcod = (function(){
     };
     
     that.unmaskSidebar = function(){
-        $('#panel-holder').hide();
-        $('#sidebar').removeClass('masked');
+        if($('#panel-holder').find('.marinemap-panel:visible').length === 0){
+            $('#panel-holder').hide();
+            $('#sidebar').removeClass('masked');
+        }
     };
     
     that.showLoadingMask = function(msg){
