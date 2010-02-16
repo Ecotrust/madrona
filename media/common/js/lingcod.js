@@ -141,7 +141,7 @@ var lingcod = (function(){
                     case '3d Buildings':
                         ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, item.hasClass('visible'));
                         break;
-                    case 'Grey 3d Buildings':
+                    case 'Low Resolution 3d Buildings':
                         ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS_LOW_RESOLUTION, item.hasClass('visible'));
                         break;
                     case 'Roads':
