@@ -177,10 +177,26 @@ def create_kmz(kml, zippath):
     import zipfile
 
     # write out the kml to tempfile
-    kmlfile = tempfile.NamedTemporaryFile()
+    #The Problem:  for Windows, we need to close the file before we can access it again below (via zipout.write)
+    #   this caused a Permissions Error when running from the local dev server (on Windows)
+    #   as Windows considered the unclosed file to already be in use (and therefore unaccessible) 
+    #The Solution: adding 'delete=False' to tempfile.NamedTemporaryFiles for developing environments using Python 2.6(sf 2-16-10)
+    #   this will only happen if the user is using Python 2.6, previous versions of Python will treat the code as it was
+    #   (this delete parameter isn't available until python 2.6)
+    #if the development environment is using 2.5 or earlier, then the temp file will still be closed via kmlfile.close()
+    #if the development environment is using 2.6 then the temporary file is deleted manually via os.unlink(kmlfile.name) (see below)
+    #This was reported (and perhaps more fully explained) in Issue 263
+    python26 = True
+    try:
+        kmlfile = tempfile.NamedTemporaryFile(delete=False)
+    except:
+        kmlfile = tempfile.NamedTemporaryFile()
+        python26 = False
     kmlfile.write(kml.encode('utf-8'))
     kmlfile.flush()
-
+    if python26:
+        kmlfile.close() 
+    
     # zip it up into a kmz
     kmzbuffer = StringIO()
     zipout = zipfile.ZipFile(kmzbuffer,'w',zipfile.ZIP_DEFLATED)
@@ -188,7 +204,11 @@ def create_kmz(kml, zippath):
     zipout.close()
 
     # close out the tempfile
-    kmlfile.close()
+    if python26:
+        import os 
+        os.unlink(kmlfile.name) 
+    else:
+        kmlfile.close()
     # grab the content of the stringIO buffer
     kmz = kmzbuffer.getvalue()
     # close out the stringIO buffer
