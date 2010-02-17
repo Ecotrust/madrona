@@ -2795,18 +2795,6 @@
                                 <href>tiles/map/kyk/rckf_td/</href>
                             </Link>
                         </NetworkLink>
-                        <NetworkLink id="Rockfish (post RCA) Contours">
-                            <name>Rockfish (post RCA) Contours</name>
-                            <visibility>0</visibility>
-                            <Style>
-                                <ListStyle>
-                                    <listItemType>checkHideChildren</listItemType>
-                                </ListStyle>
-                            </Style>
-                            <Link>
-                                <href>tiles/contour/kyk/rckf_td_kd_line/</href>
-                            </Link>
-                        </NetworkLink>
     				</Folder>
 				</Folder>
                 <Folder>
