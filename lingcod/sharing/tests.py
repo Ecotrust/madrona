@@ -3,6 +3,7 @@ from lingcod.array.models import MpaArray
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.common import utils 
 from lingcod.sharing.models import * 
+from lingcod.sharing.utils import can_user_view
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -106,6 +107,24 @@ class SharingTestCase(TestCase):
         shared_mpas = SharingTestMpa.objects.shared_with_user(self.user3)
         self.assertEquals(len(shared_mpas),0)
 
+    def test_share_mpa_shortcut(self):
+        """
+        Make sure the basic sharing of mpas works using the can_user_view shortcut
+        """
+        # User2 shares their MPA2 with Group1
+        mpa2 = SharingTestMpa.objects.get(id=self.mpa2_id)
+        group1 = Group.objects.get(id=self.group1_id)
+        share_object_with_group(mpa2, group1) 
+        # User 2 should be able to view it since they own it
+        viewable, response = can_user_view(SharingTestMpa, self.mpa2_id, self.user2)
+        self.assertEquals( viewable, True )
+        # User1 should see it (since they're part of Group1)
+        viewable, response = can_user_view(SharingTestMpa, self.mpa2_id, self.user1)
+        self.assertEquals( viewable, True )
+        # User3 should not see it since they're not part of Group1
+        viewable, response = can_user_view(SharingTestMpa, self.mpa2_id, self.user3)
+        self.assertEquals( viewable, False )
+
     def test_share_with_bad_group(self):
         """
         Make sure we can't share with a group which does not have permissions
@@ -166,6 +185,25 @@ class SharingTestCase(TestCase):
         shared_mpas = SharingTestMpa.objects.shared_with_user(self.user3)
         self.assertEquals(len(shared_mpas),0)
 
+    def test_share_container_shortcut(self):
+        """
+        Arrays are containers of MPAs so their child objects should also appear to be shared
+        Uses the can_user_view shortcut
+        """
+        # User1 shares their array1 (which contains MPA1) with Group1
+        array1 = SharingTestArray.objects.get(id=self.array1_id)
+        group1 = Group.objects.get(id=self.group1_id)
+        share_object_with_group(array1, group1) 
+        # User 1 should see it since they own it
+        viewable, response = can_user_view(SharingTestMpa, self.mpa1_id, self.user1)
+        self.assertEquals( viewable, True )
+        # User2 should see the mpa contained in array1 (since they're part of Group1)
+        viewable, response = can_user_view(SharingTestMpa, self.mpa1_id, self.user2)
+        self.assertEquals( viewable, True )
+        # User3 should not see it (since they're not part of Group1)
+        viewable, response = can_user_view(SharingTestMpa, self.mpa1_id, self.user3)
+        self.assertEquals( viewable, False )
+
     def test_share_unshareable(self):
         """
         Test how the app will react to sharing arbitrary unsharable objects
@@ -194,7 +232,8 @@ class SharingTestCase(TestCase):
         self.assertEquals(sw,None)
         # User2 should see group1:user1 as a sharer
         sw = groups_users_sharing_with(self.user2)
-        self.assertEquals(sw['Test Group 1'], ['user1'])
+        usernames = [x.username for x in sw['Test Group 1']['users']]
+        self.assertEquals(usernames, ['user1'])
         # User3 should see nothing
         sw = groups_users_sharing_with(self.user3)
         self.assertEquals(sw, None)

@@ -74,7 +74,6 @@ class StaticMapTest(TestCase):
         test default staticmap image response
         """
         response = self.client.get('/staticmap/default/', {})
-        print response
         self.assertEquals(response.status_code, 200)
    
     def testMpaFilter(self):

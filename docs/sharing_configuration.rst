@@ -12,7 +12,19 @@ The lingcod.sharing app is a django application that allows for the sharing of a
     we'll use the example of Marine Protected Areas (MPA) and Arrays as it is the primary use case 
     and is the only one we've really implemented and tested on. 
 
-Setup
+Out-of-the-box Setup
+*********************
+This will be the common situation: You've just installed lingcod and want to get a MarineMap instance running with sharing functionality on MPAs and Arrays. There are a few steps you need to take:
+
+    * Make sure you have settings.SHARING_TO_PUBLIC_GROUPS and settings.SHARING_TO_STAFF_GROUPS defined. These should be lists of group names, by default ['Share with Public'] and ['Share with Staff'] respectively.
+    * Make sure the above groups, and any other groups for which you want to enable sharing, exist.
+    * Make sure you have some users which are members of these groups.
+    * Groups need to have the can_share_arrays and/or can_share_mpas permissions as appropriate
+    * MPAs and Arrays need to be registered as shareable content types ('/admin/sharing/shareablecontent'). Make sure you set Arrays as a container for MPAs with the mpa_set property linking them. 
+
+In MarineMap, authenticated users should now be able to share with all appropriate groups and see shapes shared with them. 
+
+Generic Setup
 **********************
 In order to make content shareable through the lingcod.sharing app, a number of requirements must be met in the django model.
  
