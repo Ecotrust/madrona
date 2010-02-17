@@ -190,7 +190,9 @@ class Mpa(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
+        from lingcod.common.utils import clean_geometry
         self.apply_manipulators()
+        self.geometry_final = clean_geometry(self.geometry_final)
         super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
 
     def apply_manipulators(self, force=False):
