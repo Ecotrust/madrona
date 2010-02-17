@@ -30,14 +30,12 @@ def get_mpas(request):
         mpaids = [x.id for x in the_array.mpa_set]
         for mpaid in mpaids:
             mpas.append(mpaid)
-
-    # At this point we should have some mpas to render
-    if len(mpas) < 1:
-        raise Http404
-
+            
     return mpas
 
 def get_mpa_filter_string(mpas):
+    if len(mpas) < 1:
+        mpas = [0]
     mpa_queries = ['[id] = %d' % x for x in mpas] 
     mpa_filter_string = " or ".join(mpa_queries)
     return mpa_filter_string
@@ -138,7 +136,7 @@ def show(request, map_name='default'):
     m = mapnik.Map(width,height)
 
     mpas = get_mpas(request)
-    
+
     # Now that we have a list of requested mpas, lets make sure 
     # that the user actually has permissions to view them all
     # if any one fails, 403 or 404 will be raised
