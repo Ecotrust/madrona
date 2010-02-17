@@ -269,7 +269,6 @@ var lingcod = (function(){
         }
         
         var onEditorSelect = function(e, originalEvent, node, kmlObject){
-            // console.log('editorSelect', this, e, originalEvent, node, kmlObject);
             if(node){
                 var id = node.find('.kmlId').text();
                 if($('#MyShapes :contains('+id+')').length !== 0){
@@ -281,7 +280,6 @@ var lingcod = (function(){
         };
         
         for(var i=0;i<editors.length;i++){
-            // console.log('setting listener on', editors[i]);
             $(editors[i]).bind('select', onEditorSelect);
         };
         
@@ -422,6 +420,7 @@ var lingcod = (function(){
         });
         $('#meta-navigation').click(function(){
             lingcod.menu_items.closeAll();
+            $('#panel-holder').find('a.close:visible').click();
         });
         $('#sidebar').bind('mouseup', function(e){
             lingcod.menu_items.closeAll();
@@ -430,9 +429,14 @@ var lingcod = (function(){
         $('#sidebar-mask').click(function(){
             lingcod.menu_items.closeAll();
         });
+        $('#sidebar > .ui-tabs-nav li a').click(function(){
+            $('#panel-holder').find('a.close:visible').click();
+        });
+        
         $('#panel-holder').click(function(e){
             if(e.originalTarget === this){
                 lingcod.menu_items.closeAll();
+                $('#panel-holder').find('a.close:visible').click();
             }
         });
     };
