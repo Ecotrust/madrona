@@ -254,6 +254,10 @@ lingcod.panel = function(options){
     var followTabs = function(element, tabs_to_select, options){
         if(tabs_to_select.length > 0){
             var link = element.find('li a:contains('+tabs_to_select.shift()+')');
+            if(link.length === 0){
+                followTabs(element, [], options);
+                return;
+            }
             var tabs = link.parent().parent().parent();
             enableTabs(tabs.parent());
             var cback = function(){
