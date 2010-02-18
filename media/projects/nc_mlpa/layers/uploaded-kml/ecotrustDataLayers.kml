@@ -10,13 +10,73 @@
         <visibility>0</visibility>
         <description>
             <font size="2">
-            <table border="0" width="300">
-            <tr><td> </td></tr>
-            <tr><td><a href="http://www.ecotrust.org" target="_blank">Ecotrust</a> has generated these maps through a series of interviews with commercial and recreational fishermen throughout the North Coast region of California.  </td></tr>
-            <tr><td>More information, more information, more information.</td></tr>
-            </table>
+                <table border="0" width="330">
+                    <tr><td> </td></tr>
+                    <tr><td>
+                        <br/><a href="http://www.ecotrust.org">Ecotrust</a> has generated these maps through 
+                        <br/>a series of interviews with commercial and 
+                        <br/>recreational fisherman throughout the North 
+                        <br/>Coast region of California.  </td></tr>
+                    <tr><td>
+                        <br/>In order to view a given layer you'll want to 
+                        <br/>locate that layer within the Ecotrust Fishing 
+                        <br/>Ground Maps layer tree. That tree can be 
+                        <br/>expanded by clicking the small arrow to the 
+                        <br/>left of Ecotrust Fishing Ground Maps. That 
+                        <br/>tree itself contains the Legend and another 
+                        <br/>layer tree called Groups. After opening the 
+                        <br/>Groups tree, you will see a list of Fishing 
+                        <br/>Group layer trees. Clicking any of these will 
+                        <br/>provide additional lists containing all the 
+                        <br/>Port layer trees associated with the given 
+                        <br/>Fishing Group. Opening any Port tree in turn, 
+                        <br/>provides all the relevant Species associated 
+                        <br/>with that Port. </td></tr>
+                    <tr><td><img src="media/projects/nc_mlpa/layers/images/locate_layer.jpg" alt="Layer View" /></td></tr>
+                    <tr><td>
+                        <br/>Once you've identified the correct Group, 
+                        <br/>Port, and Species that you wish you view 
+                        <br/>you may click the radio button to the left 
+                        <br/>of the species name which will bring up the 
+                        <br/>map associated with that species layer. 
+                        <br/>By double-clicking the species name, the 
+                        <br/>application will automatically fly-to and 
+                        <br/>zoom-in to a tighter view of that fishery. </td></tr>
+                    <tr><td>
+                        <br/>To assist in locating economically important 
+                        <br/>fishing grounds, Ecotrust has developed 
+                        <br/>percent volume contour (PVC) lines. These 
+                        <br/>lines delineate the area(s) that contain 
+                        <br/>the top 25%, 50%, and 75% relative value 
+                        <br/>of each map. A pictorial explanation of 
+                        <br/>these lines can be seen in the Legend 
+                        <br/>(found in the Ecotrust Fishing Ground 
+                        <br/>Maps layer tree). <br/></td></tr>
+                    <tr><td><img src="media/projects/nc_mlpa/layers/images/contours.jpg" alt="Contour Lines" /></td></tr>    
+                    <tr><td>
+                        <br/>The PVCs are useful as it is not always 
+                        <br/>easy to determine from the color
+                        <br/>gradations the areas of importance
+                        <br/>other than the areas of relative high
+                        <br/>value (dark red). PVC lines give the
+                        <br/>eye a definitive marker that delineates
+                        <br/>areas of importance. Some of the fisheries
+                        <br/>do not have PVCs associated with them at
+                        <br/>this time. We are working to develop these
+                        <br/>data for each fishery, however; some 
+                        <br/>fisheries are contained within a relatively 
+                        <br/>small or narrow area and the PVCs do not 
+                        <br/>appropriately display the percentile 
+                        <br/>delineations.</td></tr>
+                    <tr><td>
+                        <br/>To load a different map, you can turn this 
+                        <br/>layer off (radio button) or simply select 
+                        <br/>the next desired fishery from the layer 
+                        <br/>trees. </td></tr>
+                    <tr><td></td></tr>
+                </table>
             </font>
-        </description>
+        </description>        
         <Style>
             <ListStyle>
                 <listItemType>checkOffOnly</listItemType>
