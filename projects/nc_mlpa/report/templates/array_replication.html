@@ -17,31 +17,36 @@
           );
 	});
 </script>
+{% if results|length == 0 %}
+	<p><em>generated {{ array.date_modified|date:"M d, Y" }}</em></p>
+	<p>This array is either empty or has no Marine Protected Area clusters that count towards replication.</p>
+{% else %}
+	{% regroup results by lop as results_by_lop  %}
 
-{% regroup results by lop as results_by_lop  %}
+		<div id="tabs" class="my_tabs tabs">
+			<ul>
+			{% for lop in results_by_lop %}
+				<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
+			{% endfor %}
+			</ul>
+			<p><em>generated {{ array.date_modified|date:"M d, Y" }}</em></p>
 
-	<div id="tabs" class="my_tabs tabs">
-		<ul>
-		{% for lop in results_by_lop %}
-			<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
-		{% endfor %}
-		</ul>
-<p><em>generated {{ array.date_modified|date:"M d, Y" }}</em></p>
-		{% for lop in results_by_lop %}
-			<div id="{{lop.grouper|cut:" "}}" class="lop">
-		    	{% include "array_replication_single_lop.html" %}
-			</div>
-		{% endfor %}
-	</div>
+			{% for lop in results_by_lop %}
+				<div id="{{lop.grouper|cut:" "}}" class="lop">
+			    	{% include "array_replication_single_lop.html" %}
+				</div>
+			{% endfor %}
+		</div>
 
-{% for lop in results_by_lop %}
-	{% if forloop.first %}
-		{% for cluster in lop.list  %}
-			{% if forloop.first %}
-				{% for habinfo in cluster.clusterhabitatinfo_set.all %}
-					<div class="hab_description" id="hab{{habinfo.habitat.pk}}_descript" style="display:none;">{{habinfo.habitat.description}}</div>
-				{% endfor %}
-			{% endif %}
-		{% endfor %}
-	{% endif %}
-{% endfor %}
+	{% for lop in results_by_lop %}
+		{% if forloop.first %}
+			{% for cluster in lop.list  %}
+				{% if forloop.first %}
+					{% for habinfo in cluster.clusterhabitatinfo_set.all %}
+						<div class="hab_description" id="hab{{habinfo.habitat.pk}}_descript" style="display:none;">{{habinfo.habitat.description}}</div>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
