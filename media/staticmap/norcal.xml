@@ -48,12 +48,11 @@
 </Rule>
 </Style>
 
-<Layer name="land" srs="+proj=latlong +datum=WGS84" status="on"> 
-    <!-- <Layer name="land" srs="+init=epsg:3310" status="on"> -->
+<Layer name="land" srs="+proj=latlong +datum=WGS84" status="on">
     <StyleName>land_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">MEDIA_ROOT/staticmap/data/ca_or_stl</Parameter>
+        <Parameter name="file">MEDIA_ROOT/staticmap/data/usa_gshhs</Parameter>
     </Datasource>
 </Layer>
 
