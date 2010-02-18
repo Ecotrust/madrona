@@ -4,24 +4,25 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>{% block title %}MarineMap Decision Support Tool{% endblock %}</title>
+	<title>{% block title %}MarineMap Help{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
     {% endblock %}
 </head>
 <body>
 {% analytics %}
 {% block body %}
-<h1> Help </h1>
+<img src="http://marinemap.org/mm_logo_only.gif"/>
 
 <!--------------------- SCREENCASTS -------------------->
-<h4 style="margin:14px;">Movie Tutorials</h4>
-<div>
+<h2>Movie Tutorials</h2>
+<hr/>
+<div style="margin-bottom:106px;">
 {% for screencast in screencast_list %}
 <p class="screencast-link">
-	<a href="{{screencast.urlname}}" target="_blank">
-        <img src="{{screencast.image.url}}" align="left" />
+	<a href="{{screencast.video.url}}" target="_blank">
+        <img src="{{screencast.image.url}}" height="160" align="left" />
 			<span>{{screencast.title}}</span>
 			<br />
 			{{screencast.description}}
@@ -31,8 +32,8 @@
 </div>
 
 <!---------------------FAQS -------------------->
-<h4 style="margin:14px;">Frequently Asked Questions</h4>
-<br/>
+<h2>Frequently Asked Questions</h2>
+<hr/>
 <div style='width:600px; border: 1px dotted #BBBBBB; padding: 5px'>
 {% for group in faqs_by_group %}
 <h3><a href='#group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
