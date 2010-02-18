@@ -30,7 +30,10 @@
      <Link>
       <href>{% absurl kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}</href>
      </Link>
-	<atom:link rel="alt" href="{% url array_summary_excel a.array.pk %}" title="Array Spreadsheet" type="application/ms-excel" />
+	{% if user.is_staff %}
+		<atom:link rel="alt" href="{% url array_summary_excel a.array.pk %}" title="Array Spreadsheet" type="application/ms-excel" />
+	{% endif %}
+	
     </NetworkLink>
 {% else %}
     {% if use_array_folders %}
@@ -53,6 +56,9 @@
             <atom:link rel="self" title="{{ a.array.name }}" mm:model="{% array_uid %}" mm:pk="{{ a.array.pk }}" href="{{ a.array.get_absolute_url }}" />
             <atom:link rel="alt" href="{% url kmlapp-array-kmz input_array_id=a.array.id session_key=session_key %}" title="as kmz (Google Earth)" type="application/vnd.google-earth.kmz" />
             <atom:link rel="alt" href="{% url array_shapefile a.array.id %}" title="as shapefile" type="application/shapefile" />
+			{% if user.is_staff %}
+				<atom:link rel="alt" href="{% url array_summary_excel a.array.pk %}" title="Array Spreadsheet" type="application/ms-excel" />
+			{% endif %}
             <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid pk=a.array.pk %}" />
             <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array-copy pk=a.array.pk %}" />
             <atom:link rel="alt" href="{% url staticmap-show "default" %}?array={{a.array.id}}&amp;attachment=true" title="as image (PNG)" type="application/shapefile" />

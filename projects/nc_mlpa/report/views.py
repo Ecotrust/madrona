@@ -7,6 +7,7 @@ from lingcod.common import mimetypes
 from lingcod.common.utils import KmlWrap, LargestPolyFromMulti
 import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
+from lingcod.straightline_spacing.views import *
 import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
 from lingcod.shapes.views import ShpResponder
@@ -270,7 +271,6 @@ def array_habitat_excel_worksheet(array,ws):
     return ws
 
 def array_cluster_spacing_excel(request, array_id):
-    from lingcod.straightline_spacing.views import spacing_workbook
     array = mlpa.MpaArray.objects.get(pk=array_id)
     # get the lowest lop that is used to run replication and clustering
     lop = mlpa.Lop.objects.filter(run=True).order_by('value')[0]
@@ -304,6 +304,78 @@ def array_list_habitat_excel(request, array_id_list_str):
         
     response = int_views.build_excel_response(slugify(wb_name),wb)
     return response
+    
+def array_summary_excel(request, array_id_list_str):
+    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    wb = xlwt.Workbook(encoding='utf-8')
+    if array_set.count()==1:
+        wb_name = array_set[0].name[:10]
+    else:
+        wb_name = 'MLPA_Array_Summaries'
+    for array in array_set:
+        ws = wb.add_sheet('Attributes') #slugify(array.name[0:26] + '_att'))
+        ws = array_attributes_excel_worksheet(array,ws)
+        ws = wb.add_sheet('Summary') #slugify(array.name[0:26] + '_sum'))
+        ws = array_summary_excel_worksheet(array,ws)
+        ws = wb.add_sheet('Habitat') #slugify(array.name[0:26] + '_hab'))
+        ws = array_habitat_excel_worksheet(array,ws)
+        ws = wb.add_sheet('Spacing') #slugify(array.name[0:26] + '_spa'))
+        lop = mlpa.Lop.objects.filter(run=True).order_by('value')[0]
+        clusters = array.clusters.filter(lop=lop)
+        point_dict = {}
+        for cl in clusters:
+            point_dict[cl.geometry_collection.centroid] = cl.name
+        ws_title = 'MPA Spacing for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
+        ws = spacing_worksheet(point_dict,ws_title,ws)
+
+    response = int_views.build_excel_response(slugify(wb_name),wb)
+    return response
+
+def array_summary(request, array_id, format='excel'):
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    by_desig = array.summary_by_designation
+
+    if format=='html':
+        template = 'array_summary_panel.html'
+        return render_to_response(template, {'array': array, 'desig_dict': by_desig }, context_instance=RequestContext(request) )
+
+def array_habitat_replication(request, array_id, format='html'):
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    if format=='html':
+        template = 'array_replication_panel.html'
+    elif format=='print':
+        template = 'array_replication_page_print.html'
+    return render_to_response(template, {'results': array.clusters_with_habitat, 'array': array}, context_instance=RequestContext(request) )
+
+def array_habitat_representation_summed(request, array_id, format='json', with_geometries=False, with_kml=False, oc_est_combined=False):
+    if format != 'json':
+        with_geometries = False
+        with_kml = False
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    oc_gc = array.opencoast_geometry_collection
+    est_gc = array.estuarine_geometry_collection
+    oc_org = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST)
+    est_org = int_models.OrganizationScheme.objects.get(name=settings.SAT_ESTUARINE)
+    oc_results = oc_org.transformed_results(oc_gc,with_geometries,with_kml)
+    est_results = est_org.transformed_results(est_gc,with_geometries,with_kml)
+    oc_keys = oc_results.keys()
+    est_keys = est_results.keys()
+    if oc_est_combined:
+        all_results = [oc_results,est_results]
+        results = int_models.sum_results(all_results)
+        results = oc_or_est(results,oc_keys,est_keys)
+        results = geometries_to_wkt(results)
+    elif not oc_est_combined and format=='json':
+        oc_results = geometries_to_wkt(oc_results)
+        est_results = geometries_to_wkt(est_results)
+        results = { settings.SAT_OPEN_COAST: oc_results, settings.SAT_ESTUARINE: est_results }
+    elif not oc_est_combined and format=='csv':
+        return int_views.build_array_mpa_csv_response([oc_or_est_from_org_scheme(oc_results), oc_or_est_from_org_scheme(est_results)], slugify(array.name), array.name, 'array' )
+
+    if format=='json':
+        return HttpResponse(json_encode(results), mimetype='text/json')
+    elif format=='csv':
+        return int_views.build_csv_response(results, slugify(array.name) )
 
 def array_shapefile(request, array_id_list_str):
     array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
@@ -386,69 +458,3 @@ def geometries_to_wkt(results,srid=None, simplify=None):
         elif v.__class__.__name__=='dict':
             v.update(geometries_to_wkt(v,srid,simplify))
     return results
-
-def array_summary_excel(request, array_id_list_str):
-    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
-    wb = xlwt.Workbook(encoding='utf-8')
-    if array_set.count()==1:
-        wb_name = array_set[0].name[:10]
-    else:
-        wb_name = 'MLPA_Array_Summaries'
-    for array in array_set:
-        ws = wb.add_sheet(slugify(array.name[0:26] + '_att'))
-        ws = array_attributes_excel_worksheet(array,ws)
-        ws = wb.add_sheet(slugify(array.name[0:26] + '_sum'))
-        ws = array_summary_excel_worksheet(array,ws)
-        ws = wb.add_sheet(slugify(array.name[0:26] + '_hab'))
-        ws = array_habitat_excel_worksheet(array,ws)
-
-    response = int_views.build_excel_response(slugify(wb_name),wb)
-    return response
-
-def array_summary(request, array_id, format='excel'):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
-    by_desig = array.summary_by_designation
-    
-    if format=='html':
-        template = 'array_summary_panel.html'
-        return render_to_response(template, {'array': array, 'desig_dict': by_desig }, context_instance=RequestContext(request) )
-        
-
-def array_habitat_replication(request, array_id, format='html'):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
-    if format=='html':
-        template = 'array_replication_panel.html'
-    elif format=='print':
-        template = 'array_replication_page_print.html'
-    return render_to_response(template, {'results': array.clusters_with_habitat, 'array': array}, context_instance=RequestContext(request) )
-            
-def array_habitat_representation_summed(request, array_id, format='json', with_geometries=False, with_kml=False, oc_est_combined=False):
-    if format != 'json':
-        with_geometries = False
-        with_kml = False
-    array = mlpa.MpaArray.objects.get(pk=array_id)
-    oc_gc = array.opencoast_geometry_collection
-    est_gc = array.estuarine_geometry_collection
-    oc_org = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST)
-    est_org = int_models.OrganizationScheme.objects.get(name=settings.SAT_ESTUARINE)
-    oc_results = oc_org.transformed_results(oc_gc,with_geometries,with_kml)
-    est_results = est_org.transformed_results(est_gc,with_geometries,with_kml)
-    oc_keys = oc_results.keys()
-    est_keys = est_results.keys()
-    if oc_est_combined:
-        all_results = [oc_results,est_results]
-        results = int_models.sum_results(all_results)
-        results = oc_or_est(results,oc_keys,est_keys)
-        results = geometries_to_wkt(results)
-    elif not oc_est_combined and format=='json':
-        oc_results = geometries_to_wkt(oc_results)
-        est_results = geometries_to_wkt(est_results)
-        results = { settings.SAT_OPEN_COAST: oc_results, settings.SAT_ESTUARINE: est_results }
-    elif not oc_est_combined and format=='csv':
-        return int_views.build_array_mpa_csv_response([oc_or_est_from_org_scheme(oc_results), oc_or_est_from_org_scheme(est_results)], slugify(array.name), array.name, 'array' )
-        
-    if format=='json':
-        return HttpResponse(json_encode(results), mimetype='text/json')
-    elif format=='csv':
-        return int_views.build_csv_response(results, slugify(array.name) )
-    
