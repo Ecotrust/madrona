@@ -13,7 +13,7 @@
                 <table border="0" width="330">
                     <tr><td> </td></tr>
                     <tr><td>
-                        <br/><a href="http://www.ecotrust.org">Ecotrust</a> has generated these maps through 
+                        <br/><a href="http://www.ecotrust.org" target="_blank">Ecotrust</a> has generated these maps through 
                         <br/>a series of interviews with commercial and 
                         <br/>recreational fisherman throughout the North 
                         <br/>Coast region of California.  </td></tr>
@@ -32,7 +32,7 @@
                         <br/>Fishing Group. Opening any Port tree in turn, 
                         <br/>provides all the relevant Species associated 
                         <br/>with that Port. </td></tr>
-                    <tr><td><img src="media/projects/nc_mlpa/layers/images/locate_layer.jpg" alt="Layer View" /></td></tr>
+                    <tr><td><img src="media/projects/nc_mlpa/layers/images/locate_layer.JPG" alt="Layer View" /></td></tr>
                     <tr><td>
                         <br/>Once you've identified the correct Group, 
                         <br/>Port, and Species that you wish you view 
@@ -52,7 +52,7 @@
                         <br/>these lines can be seen in the Legend 
                         <br/>(found in the Ecotrust Fishing Ground 
                         <br/>Maps layer tree). <br/></td></tr>
-                    <tr><td><img src="media/projects/nc_mlpa/layers/images/contours.jpg" alt="Contour Lines" /></td></tr>    
+                    <tr><td><img src="media/projects/nc_mlpa/layers/images/contours.JPG" alt="Contour Lines" /></td></tr>    
                     <tr><td>
                         <br/>The PVCs are useful as it is not always 
                         <br/>easy to determine from the color
