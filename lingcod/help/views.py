@@ -8,7 +8,7 @@ from lingcod.screencasts.models import Screencast
 from lingcod.simplefaq.models import *
 
 def get_faqs():
-    faq_groups = FaqGroup.objects.all()
+    faq_groups = FaqGroup.objects.all().order_by('importance')
     faqs_by_group = []
     #Build an faq list by group, then by faq.  order them by importance
     for group in faq_groups:
