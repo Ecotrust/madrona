@@ -21,7 +21,7 @@ table.cluster_container:hover {
 }
 table.hab_container {
     font-size: small;
-    width: 450px;
+    width: 430px;
     background: #ffffff;
     padding: 0px;
     border-spacing: 0px;
@@ -67,7 +67,7 @@ div.bioregion {
     -webkit-border-radius: 5px;
     background: #f3f3f3;
     border: thin solid lightgrey;
-    width: 455px;
+    width: 435px;
     padding: 5px;
     padding-top: 8px;
 }
@@ -138,11 +138,11 @@ div.hab_description {
     position: absolute;
 }
 .my_tabs {
-    width: 490px;
-    padding: 2px;
+/*    width: 490px;*/
+/*    padding: 2px;*/
 }
 .lop {
-    padding: 12px !important;
+    padding: 12px 0px !important;
 }
 #center {
     width:800px;

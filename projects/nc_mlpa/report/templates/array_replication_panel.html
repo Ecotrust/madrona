@@ -7,23 +7,26 @@
 	<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.tabs.js"></script>
 	
     <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-			$("#tabs").tabs();
-			$("td.hab_name").hoverIntent(
-                function(){
-                    var cell_id = $(this).attr('id');
-                    var div_id = "#" + cell_id + "_descript";
-                    var offset = $(this).offset();
-                    var height = $(this).height();
-                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height).show();
-                },
-                function() {
-                    var cell_id = $(this).attr('id');
-                    var div_id = "#" + cell_id + "_descript";
-                    $(this).removeClass("selected");
-                    $(div_id).hide();
-                }
-            );/*
+			console.log('script bitch!');
+			lingcod.onPanelShow(function(){
+				console.log('onPanelShow');
+				$("td.hab_name").hoverIntent(
+	                function(){
+	                    var cell_id = $(this).attr('id');
+	                    var div_id = "#" + cell_id + "_descript";
+	                    var offset = $(this).offset();
+	                    var height = $(this).height();
+	                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height).show();
+	                },
+	                function() {
+	                    var cell_id = $(this).attr('id');
+	                    var div_id = "#" + cell_id + "_descript";
+	                    $(this).removeClass("selected");
+	                    $(div_id).hide();
+	                }
+	            );
+			});
+/*
 			$("td.hab_result").click(
                 function(){
                     var cell_id = $(this).attr('id');

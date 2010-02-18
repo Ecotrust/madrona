@@ -1,3 +1,7 @@
+// JQuery's $(...) method can't reliably produce a DOM for arbitrary xml. This
+// function creates a DOM using the browser's built-in methods, then creates
+// a jQuery object from that. It also adds a findLinks() function to find atom
+// links within kml.
 lingcod.parseKml = (function(){
 
     function decorate(dom){

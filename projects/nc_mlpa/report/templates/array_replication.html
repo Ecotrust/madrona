@@ -1,5 +1,22 @@
-Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d, Y" }}
-<br><br>
+<script type="text/javascript" charset="utf-8">
+	lingcod.onPanelShow(function(){
+		$("td.hab_name").hoverIntent(
+              function(){
+                  var cell_id = $(this).attr('id');
+                  var div_id = "#" + cell_id + "_descript";
+                  var offset = $(this).offset();
+                  var height = $(this).height();
+                  $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height).show();
+              },
+              function() {
+                  var cell_id = $(this).attr('id');
+                  var div_id = "#" + cell_id + "_descript";
+                  $(this).removeClass("selected");
+                  $(div_id).hide();
+              }
+          );
+	});
+</script>
 
 {% regroup results by lop as results_by_lop  %}
 
@@ -9,7 +26,7 @@ Habitat Replication for {{ array.name }} as of {{ array.date_modified|date:"M d,
 			<li><a href="#{{lop.grouper|cut:" "}}"><span>{{lop.grouper|title}}</span></a></li>
 		{% endfor %}
 		</ul>
-
+<p><em>generated {{ array.date_modified|date:"M d, Y" }}</em></p>
 		{% for lop in results_by_lop %}
 			<div id="{{lop.grouper|cut:" "}}" class="lop">
 		    	{% include "array_replication_single_lop.html" %}

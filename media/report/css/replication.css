@@ -71,7 +71,7 @@ div.bioregion {
     -webkit-border-radius: 5px;
     background: #f3f3f3;
     border: thin solid lightgrey;
-    width: 455px;
+    width: 435px;
     padding: 5px;
     padding-top: 8px;
 }
@@ -144,7 +144,7 @@ div.hab_description {
     padding: 2px;
 }
 .lop {
-    padding: 12px !important;
+    padding: 12px 0px !important;
 }
 #center {
     width:800px;

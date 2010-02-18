@@ -1,4 +1,4 @@
-// Do not create an infinite number of these components or it may result in
+// Do not create an indeterminent number of these components or it may result in
 // memory leaks
 lingcod.panel = function(options){
     
@@ -24,7 +24,7 @@ lingcod.panel = function(options){
         s = 'display:none';
     }
     
-    close = '<a style="'+s+'" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
+    var close = '<a style="'+s+'" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     
     var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
     var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'"><div class="loadingMask"><span>Loading</span></div><div class="panelMask"></div>'+close+'<div class="content container_12"></div></div>');
@@ -119,7 +119,8 @@ lingcod.panel = function(options){
                 $('#loadingTab').parent().parent().remove();
                 alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
             },
-            beforeSend: function(){
+            beforeSend: function(a){
+                lingcod.loadingTabLink = el.find('.ui-tabs-nav >  .ui-state-processing a');
                 if(!lingcod.loadingPanel){
                     lingcod.loadingPanel = el;                    
                 }
@@ -180,11 +181,13 @@ lingcod.panel = function(options){
     
     var onTabsLoad = function(event, ui){
         lingcod.loadingPanel = el;
+        lingcod.loadingTabLink = ui.tab;
         enableTabsWithListeners($(this));
 
         // in affect an afterLoad event
         setTimeout(function(){
             lingcod.loadingPanel = false;
+            
         }, 10);
     };
     
@@ -272,11 +275,13 @@ lingcod.panel = function(options){
                 });
                 // tabsshow fires before content is added to the document, so
                 // this sloppy settimeout function is necessary.
+                lingcod.loadingTabLink = link;
                 setTimeout(function(){
                     link.click();
                 }, 5);
             }
         }else{
+            lingcod.loadingTabLink = false;
             lingcod.loadingPanel = false;
             var p = element.find('.panel')[0];
             $(el.find('.panel')[0]).replaceWith(p);
@@ -326,10 +331,23 @@ lingcod.panel = function(options){
     return that;
 };
 
+// Use within a template to fire a callback when the panel is loaded.
+// Right now, it only supports content that was loaded as part of a tab.
+// TODO: support callback for panels that contain no tabs
 lingcod.onPanelShow = function(callback){
-    // not implemented
+    if(lingcod.loadingTabLink){
+        if(lingcod.loadingTabLink.is('a')){
+            lingcod.loadingTabLink.data('mm:ontabshow', callback);            
+        }else{
+            throw('loadingTabLink is not a link');
+        }
+    }else{
+        throw('loadingTabLink not found')
+    }
 };
 
+// Use within a template to fire a callback when a specific tab within a panel
+// Åis loaded.
 lingcod.onTabShow = function(id, callback){
     if(!lingcod.loadingPanel){
         throw('attempting to set lingcod.onTabShow callback without loadingPanel set.');
