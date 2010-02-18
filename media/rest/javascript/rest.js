@@ -159,6 +159,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
         // so this is how it might work:
         // var manipulations_needed = manipulators.needed(form);
         var manipulator = new lingcod.Manipulator(gex, html.find('form'), $('#PanelGeometry'), $('#map_container'));
+        $(manipulator).bind('processing', function(){
+            panel.spin('Processing your shape');
+        });
+        $(manipulator).bind('doneprocessing', function(){
+            panel.stopSpinning();            
+        });
         if(manipulator && manipulator.needed){
             tabs.tabs('select', '#PanelGeometry');
         }else{

@@ -85,6 +85,7 @@ lingcod.panel = function(options){
     
     that.spin = function(message){
         if(el.is(':visible')){
+            el.find('.loadingMask span').text(message || "Loading")
             el.find('.loadingMask').show();
         }else{
             lingcod.showLoadingMask(message);

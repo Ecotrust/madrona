@@ -191,20 +191,20 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     var kml = jQuery.trim($('#geometry_final_kml').text());
     if(!kml){
         var kml = jQuery.trim($('#geometry_orig_kml').text());
+        this.process(kml, this.manipulators_, function(data){
+            if(data.success === '1'){
+                var kmlObject = self.addNewShape_(data.final_shape_kml);
+                self.gex_.util.flyToObject(kmlObject, {
+                    boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+            }else{
+                // do nothing
+            }
+        });
     }
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
     var self = this;
-    this.process(kml, this.manipulators_, function(data){
-        if(data.success === '1'){
-            var kmlObject = self.addNewShape_(data.final_shape_kml);
-            self.gex_.util.flyToObject(kmlObject, {
-                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
-        }else{
-            // do nothing
-        }
-    });
 }
 
 lingcod.Manipulator.prototype.isShapeDefined = function(){
@@ -216,12 +216,14 @@ lingcod.Manipulator.prototype.isDefiningShape = function(){
 }
 
 lingcod.Manipulator.prototype.process = function(wkt, url, callback){
+    $(this).trigger('processing');
 	var self = this;
     $.ajax({
         url: url,
         type: 'POST',
         data: { target_shape: wkt },
         success: function(data, status){
+            $(self).trigger('doneprocessing');
             if(status === 'success'){
                 callback(JSON.parse(data));
             }else{
@@ -230,6 +232,7 @@ lingcod.Manipulator.prototype.process = function(wkt, url, callback){
             }
         },
         error: function(data, status){
+            $(self).trigger('doneprocessing');
             $(self).trigger('error', 'There was an error processing your shape.');
             callback({success: false, html: $('#manipulators_server_error').html()});
         }
