@@ -17,7 +17,7 @@ def get_viewable_object_or_respond(model_class, pk, user):
     try:
         # Next see if user owns it
         obj = model_class.objects.get(pk=pk, user=user)
-    except model_class.DoesNotExist:
+    except:
         try: 
             # ... finally see if its shared with the user
             obj = model_class.objects.shared_with_user(user).get(pk=pk)
