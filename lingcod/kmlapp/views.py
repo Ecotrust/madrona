@@ -275,7 +275,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     sharing_with = groups_users_sharing_with(user)
 
     t = get_template('shared.kml')
-    kml = t.render(Context({'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
+    kml = t.render(Context({'user': request.user, 'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
@@ -302,7 +302,7 @@ def shared_public(request, kmz=False, session_key='0'):
     array_ctid = get_content_type_id(utils.get_array_class())
 
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'loggedin_user': request.user, 'shapes': shapes, 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
+    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 'shapes': shapes, 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
         'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': False}))
 
     response = HttpResponse()
