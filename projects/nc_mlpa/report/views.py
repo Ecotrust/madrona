@@ -3,10 +3,11 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db.models import Max,Min
 from django.utils.dateformat import format
-from lingcod.common import mimetypes
+from lingcod.common import mimetypes, utils
 from lingcod.common.utils import KmlWrap, LargestPolyFromMulti
 import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
+from lingcod.sharing.utils import *
 from lingcod.straightline_spacing.views import *
 import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
@@ -266,12 +267,12 @@ def array_habitat_excel_worksheet(array,ws):
             else:
                 ws.write(i,col_num,md,data_style)
         col_num += 1
-            
     
     return ws
 
 def array_cluster_spacing_excel(request, array_id):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)  # mlpa.MpaArray.objects.get(pk=array_id)
     # get the lowest lop that is used to run replication and clustering
     lop = mlpa.Lop.objects.filter(run=True).order_by('value')[0]
     clusters = array.clusters.filter(lop=lop)
@@ -284,7 +285,9 @@ def array_cluster_spacing_excel(request, array_id):
     return response
     
 def array_habitat_excel(request, array_id):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    #array = mlpa.MpaArray.objects.get(pk=array_id)
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(slugify(array.name[0:30]))
     ws = array_habitat_excel_worksheet(array,ws)
@@ -292,13 +295,15 @@ def array_habitat_excel(request, array_id):
     return response
     
 def array_list_habitat_excel(request, array_id_list_str):
-    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    array_class = utils.get_array_class()
+    array_id_list = array_id_list_str.split(',')
     wb = xlwt.Workbook(encoding='utf-8')
-    if array_set.count()==1:
+    if array_id_list.__len__()==1:
         wb_name = array_set[0].name[:10]
     else:
         wb_name = 'MLPA_Arrays'
-    for array in array_set:
+    for array_id in array_id_list:
+        array = get_viewable_object_or_respond(array_class,array_id,request.user)
         ws = wb.add_sheet(slugify(array.name[0:30]))
         ws = array_habitat_excel_worksheet(array,ws)
         
@@ -306,13 +311,17 @@ def array_list_habitat_excel(request, array_id_list_str):
     return response
     
 def array_summary_excel(request, array_id_list_str):
-    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    #array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    array_class = utils.get_array_class()
+    array_id_list = array_id_list_str.split(',')
     wb = xlwt.Workbook(encoding='utf-8')
-    if array_set.count()==1:
-        wb_name = array_set[0].name[:10]
-    else:
-        wb_name = 'MLPA_Array_Summaries'
-    for array in array_set:
+    # if array_id_list.__len__()==1:
+    #     wb_name = array_set[0].name[:10]
+    # else:
+    #     wb_name = 'MLPA_Array_Summaries'
+    for array_id in array_id_list:
+        array = get_viewable_object_or_respond(array_class,array_id,request.user)
+        wb_name = array.name[:10]
         ws = wb.add_sheet('Attributes') #slugify(array.name[0:26] + '_att'))
         ws = array_attributes_excel_worksheet(array,ws)
         ws = wb.add_sheet('Summary') #slugify(array.name[0:26] + '_sum'))
@@ -332,7 +341,9 @@ def array_summary_excel(request, array_id_list_str):
     return response
 
 def array_summary(request, array_id, format='excel'):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    #array = mlpa.MpaArray.objects.get(pk=array_id)
     by_desig = array.summary_by_designation
 
     if format=='html':
@@ -340,7 +351,9 @@ def array_summary(request, array_id, format='excel'):
         return render_to_response(template, {'array': array, 'desig_dict': by_desig }, context_instance=RequestContext(request) )
 
 def array_habitat_replication(request, array_id, format='html'):
-    array = mlpa.MpaArray.objects.get(pk=array_id)
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    #array = mlpa.MpaArray.objects.get(pk=array_id)
     if format=='html':
         template = 'array_replication_panel.html'
     elif format=='print':
@@ -351,7 +364,9 @@ def array_habitat_representation_summed(request, array_id, format='json', with_g
     if format != 'json':
         with_geometries = False
         with_kml = False
-    array = mlpa.MpaArray.objects.get(pk=array_id)
+    #array = mlpa.MpaArray.objects.get(pk=array_id)
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
     oc_gc = array.opencoast_geometry_collection
     est_gc = array.estuarine_geometry_collection
     oc_org = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST)
@@ -378,21 +393,28 @@ def array_habitat_representation_summed(request, array_id, format='json', with_g
         return int_views.build_csv_response(results, slugify(array.name) )
 
 def array_shapefile(request, array_id_list_str):
-    array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
-    array = array_set[0] # for now we're only expecting to get one
+    array_class = utils.get_array_class()
+    array_id_list = array_id_list_str.split(',')
+    #array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
+    array_id = array_id_list[0] # for now we're only expecting to get one
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
     shp_response = ShpResponder(array.shapefile_export_query_set)
     shp_response.file_name = slugify(array.name[0:10])
     return shp_response()
     
 def mpa_shapefile(request, mpa_id_list_str):
-    mpa_set = mlpa.MlpaMpa.objects.filter(pk__in=mpa_id_list_str.split(',') )
-    mpa = mpa_set[0] # only expecting one for now
+    mpa_class = utils.get_mpa_class()
+    mpa_id_list = mpa_id_list_str.split(',')
+    mpa_id = mpa_id_list[0] # only expecting one for now
+    mpa = get_viewable_object_or_respond(mpa_class,mpa_id,request.user)
     shp_response = ShpResponder(mpa.export_query_set)
     shp_response.file_name = slugify(mpa.name[0:10])
     return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
-    mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)
+    mpa_class = utils.get_mpa_class()
+    mpa = get_viewable_object_or_respond(mpa_class,mpa_id,request.user)
+    #mpa = mlpa.MlpaMpa.objects.get(pk=mpa_id)
     geom = mpa.geometry_final
     if mpa.is_estuary is None:
         org_sch = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST)
