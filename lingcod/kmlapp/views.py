@@ -295,6 +295,8 @@ def shared_public(request, kmz=False, session_key='0'):
     Must be shared with a special set of public groups
     defined in settings.SHARING_TO_PUBLIC_GROUPS
     """
+    load_session(request, session_key)
+    user = request.user
     shapes, designations = get_public_arrays()
 
     # determine content types for sharing

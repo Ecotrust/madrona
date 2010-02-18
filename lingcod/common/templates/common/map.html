@@ -18,7 +18,7 @@
                 options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
                 options.allow_copy = true;
             {% else %}
-                options.sharedshapes = ["{% url kmlapp-publicshared-kmz %}"];
+                options.sharedshapes = ["{% url kmlapp-publicshared-kmz 0 %}"];
                 options.allow_copy = false;
             {% endif %}
         {% endblock sharedshapes %}

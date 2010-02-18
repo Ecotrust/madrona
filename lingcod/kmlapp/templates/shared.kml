@@ -7,7 +7,7 @@
     <open>0</open>
     <visibility>0</visibility>
     <Link>
-    <href>{% absurl kmlapp-publicshared-kmz %}</href>
+    <href>{% absurl kmlapp-publicshared-kmz session_key %}</href>
     </Link>
     </NetworkLink>
 
