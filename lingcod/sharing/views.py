@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.contenttypes.models import ContentType
 from models import get_shareables, share_object_with_groups
+from django.conf import settings
 
 def get_shared_content_instance(ctid, pk, user):
     """
@@ -52,7 +53,7 @@ def share_form(request, pk, object_type):
             return HttpResponse("There are no groups to which you can share your content at this time.", status=404)
 
         return render_to_response('share_form.html', {'groups': groups, 'already_shared_groups': already_shared_groups, 'obj': obj, 
-                                                      'obj_type_verbose': obj_type_verbose,  'user':user}) 
+                                                      'obj_type_verbose': obj_type_verbose,  'user':user, 'MEDIA_URL': settings.MEDIA_URL}) 
 
     elif request.method == 'POST':
         group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]
