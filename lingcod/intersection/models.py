@@ -915,6 +915,9 @@ class ResultCache(models.Model):
     geometry = models.GeometryCollectionField()
     objects = models.GeoManager()
     
+    class Meta:
+        unique_together = ('wkt_hash','intersection_feature',)
+    
 def delete_cached_results(geom):
     results = ResultCache.objects.filter(wkt_hash=str(geom.wkt.__hash__()))
     results.delete()

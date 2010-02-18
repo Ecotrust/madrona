@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from views import *
   
 urlpatterns = patterns('',
+    url(r'spacing/array/(\d+)/$', array_cluster_spacing_excel, name='array_cluster_spacing_excel'),
     url(r'shapefile/array/(?P<array_id_list_str>(\d+,?)+)/$', array_shapefile,name='array_shapefile'),
     url(r'shapefile/mpa/(?P<mpa_id_list_str>(\d+,?)+)/$', mpa_shapefile,name='mpa_shapefile'),
     url(r'habitatrepresentation/mpa/(\d+)/(\w+)/$',mpa_habitat_representation, name='mpa_habitat_representation'),

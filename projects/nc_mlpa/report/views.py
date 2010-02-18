@@ -268,6 +268,20 @@ def array_habitat_excel_worksheet(array,ws):
             
     
     return ws
+
+def array_cluster_spacing_excel(request, array_id):
+    from lingcod.straightline_spacing.views import spacing_workbook
+    array = mlpa.MpaArray.objects.get(pk=array_id)
+    # get the lowest lop that is used to run replication and clustering
+    lop = mlpa.Lop.objects.filter(run=True).order_by('value')[0]
+    clusters = array.clusters.filter(lop=lop)
+    point_dict = {}
+    for cl in clusters:
+        point_dict[cl.geometry_collection.centroid] = cl.name
+    ws_title = 'MPA Spacing for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
+    wb = spacing_workbook(point_dict, ws_title)
+    response = int_views.build_excel_response(slugify(array.name[0:10]),wb)
+    return response
     
 def array_habitat_excel(request, array_id):
     array = mlpa.MpaArray.objects.get(pk=array_id)

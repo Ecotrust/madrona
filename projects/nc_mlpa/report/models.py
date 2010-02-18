@@ -119,6 +119,11 @@ class Cluster(models.Model):
     def geo_sort(self):
         return self.geometry_collection.centroid.y
         
+    @property
+    def name(self):
+        name = ''
+        return ', '.join( [m.name for m in self.mpa_set.all() ] )
+        
     def calculate_habitat_info(self):
         rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST_REPLICATION)
         results = rs.analyze_single_item(self.geometry_collection)
