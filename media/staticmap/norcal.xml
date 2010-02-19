@@ -3,16 +3,28 @@
 
 <Style name="land_style">
 <Rule>
-    <PolygonSymbolizer>
+    <!-- <PolygonSymbolizer>
         <CssParameter name="fill">rgb(244,238,203)</CssParameter>
-    </PolygonSymbolizer>
+    </PolygonSymbolizer> -->
     <LineSymbolizer>
         <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
-        <CssParameter name="stroke-width">0.1</CssParameter>
+        <CssParameter name="stroke-width">2.1</CssParameter>
     </LineSymbolizer>
 </Rule>
 </Style>
 
+<Style name="raster">
+    <Rule>
+        <RasterSymbolizer/>
+    </Rule>
+</Style>
+
+<Style name="statename_style">
+<Rule>
+    <TextSymbolizer name="STATE_ABBR" face_name="DejaVu Sans Bold" size="20" 
+        fill="black" halo_fill= "#DFDBE3" halo_radius="1" />
+</Rule>
+</Style>
 <!-- NOTE that mpa_style is overridden in staticmap
 <Style name="mpa_style">
 <Rule>
@@ -50,9 +62,10 @@
 
 <Layer name="land" srs="+proj=latlong +datum=WGS84" status="on">
     <StyleName>land_style</StyleName>
+    <StyleName>statename_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">MEDIA_ROOT/staticmap/data/usa_gshhs</Parameter>
+        <Parameter name="file">MEDIA_ROOT/staticmap/data/ca_or_stl</Parameter>
     </Datasource>
 </Layer>
 
@@ -85,6 +98,13 @@
     </Datasource>
 </Layer>
 
+<Layer name="test" status="on" srs="+init=epsg:3310">
+        <StyleName>raster</StyleName>
+        <Datasource>
+                <Parameter name="type">gdal</Parameter>
+                <Parameter name="file">/Users/perry/Desktop/data/srtm/srtm_merged_3310_shade.tif</Parameter>
+        </Datasource>
+</Layer>
 
 
 </Map>

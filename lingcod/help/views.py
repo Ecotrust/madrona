@@ -17,7 +17,8 @@ def get_faqs():
     return faqs_by_group
 
 def get_vids():
-    return Screencast.objects.filter(selected_for_help=True)
+    return Screencast.objects.filter(selected_for_help=True).order_by('importance')
+
 
 def help(request):
     vids = get_vids()
