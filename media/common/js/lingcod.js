@@ -81,7 +81,7 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
-        $('#datalayerstree').append('<div id="study_region"></div><div id="public_data"></div><div id="googlelayers"></div><div id="ecotrust_data"></div>');
+        $('#datalayerstree').append('<div id="study_region"></div><div id="ecotrust_data"></div><div id="public_data"></div><div id="googlelayers"></div>');
 
         var studyRegion = lingcod.kmlTree({
             url: window.studyregion,
