@@ -13,7 +13,7 @@
                 <table border="0" width="330">
                     <tr><td> </td></tr>
                     <tr><td>
-                        <br/><a href="http://www.ecotrust.org" target="_blank">Ecotrust</a> has generated these maps through 
+                        <br/>Ecotrust has generated these maps through 
                         <br/>a series of interviews with commercial and 
                         <br/>recreational fisherman throughout the North 
                         <br/>Coast region of California.  </td></tr>
@@ -86,6 +86,11 @@
         <ScreenOverlay>
             <name>Legend</name>
             <visibility>0</visibility>
+            <Style>
+                <ListStyle>
+                    <listItemType>checkHideChildren</listItemType>
+                </ListStyle>
+            </Style>
             <Icon>
                 <href>other/images/socioecon-legend.png</href>
             </Icon>
