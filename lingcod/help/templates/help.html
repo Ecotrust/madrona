@@ -20,7 +20,8 @@
 <hr/>
 <div style="margin-bottom:106px;">
 {% for screencast in screencast_list %}
-<p class="screencast-link">
+
+<p class="screencast-link" style="margin-bottom:85px;">
 <a href="{% url screencasts-show-video screencast.pk %}" target="_blank">
         <img src="{{screencast.image.url}}" height="160" align="left" />
 			<span>{{screencast.title}}</span>
