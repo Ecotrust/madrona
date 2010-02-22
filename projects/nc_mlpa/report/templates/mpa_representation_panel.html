@@ -34,7 +34,7 @@
         			<th>Units</th>
         			<th>Percent of SR Total</th>
         		</tr>
-        		{% for sort_num,sub_dict in result.items %}
+        		{% for sub_dict in result.values|dictsort:'sort' %}
         		<tr class="{% cycle '' 'grey' %}">
         			<td class="habitat_name">{{ sub_dict.name|title }}</td>
         			<td class="mpa_hab_result">
