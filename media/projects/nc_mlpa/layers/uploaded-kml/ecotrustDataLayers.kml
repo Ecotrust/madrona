@@ -94,8 +94,8 @@
             <Icon>
                 <href>other/images/socioecon-legend.png</href>
             </Icon>
-            <overlayXY x="1" y="1" xunits="fraction" yunits="fraction"/>
-            <screenXY x="85" y="10" xunits="insetPixels" yunits="insetPixels"/>
+            <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+            <screenXY x="10" y="10" xunits="pixels" yunits="insetPixels"/>
             <size x="120" y="399" xunits="pixels" yunits="pixels"/>
         </ScreenOverlay>
     
