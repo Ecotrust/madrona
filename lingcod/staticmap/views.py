@@ -9,6 +9,8 @@ import mapnik
 import settings
 from lingcod.staticmap.models import *
 
+mpa_class = utils.get_mpa_class()
+
 def get_mpas(request):
     # get a list of the MPA ids to display
     mpas = []
@@ -33,6 +35,17 @@ def get_mpas(request):
             
     return mpas
 
+def auto_extent(mpa_ids,srid=4326):
+    if not srid:
+        srid = 4326 # Assume latlong if none
+    # would be nice to just do a transform().extent() but this doesnt work - geodjango bug
+    ugeom = mpa_class.objects.filter(pk__in=mpa_ids).unionagg().transform(srid,clone=True)
+    bbox = ugeom.extent
+    width = bbox[2]-bbox[0]
+    height = bbox[3]-bbox[1]
+    buffer = 0.15
+    return bbox[0]-width*buffer, bbox[1]-height*buffer, bbox[2]+width*buffer, bbox[3]+height*buffer
+
 def get_mpa_filter_string(mpas):
     if len(mpas) < 1:
         mpas = [0]
@@ -54,7 +67,6 @@ def process_mapfile_text(mapfile, mpas):
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
 
     # Replace table names for mpas and mpaarrays
-    mpa_class = utils.get_mpa_class()
     xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
     # Deal with deprecated connection settings 
@@ -121,7 +133,6 @@ def show(request, map_name='default'):
     """Display a map with the study region geometry.  """
     maps = get_object_or_404(MapConfig,mapname=map_name)
     mapfile = str(maps.mapfile.path)
-    mpa_class = utils.get_mpa_class()
      
     # Grab the image dimensions
     try:
@@ -155,12 +166,17 @@ def show(request, map_name='default'):
     m.append_style('mpa_style',s)
      
     # Grab the bounding coordinates and set them if specified
-    try:
-        x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
-    except:
-        # fall back on default image extent
-        x1, y1 = maps.default_x1, maps.default_y1
-        x2, y2 = maps.default_x2, maps.default_y2
+    # first, assume default image extent
+    x1, y1 = maps.default_x1, maps.default_y1
+    x2, y2 = maps.default_x2, maps.default_y2
+    if "autozoom" in request.REQUEST:
+        if request.REQUEST['autozoom'].lower() == 'true' and mpas and len(mpas)>0:
+            x1, y1, x2, y2 = auto_extent(mpas, maps.default_srid)
+    elif "bbox" in request.REQUEST:
+        try:
+            x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
+        except:
+            pass
 
     bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
     m.zoom_to_box(bbox)

@@ -10,7 +10,8 @@
       "default_x2": -122.92,
       "default_y2": 42.0874,
       "default_height": 800,
-      "default_width": 616
+      "default_width": 616,
+      "default_srid": 4326
     }
   }
 ]

@@ -46,3 +46,4 @@ class MapConfig(models.Model):
             help_text="Upper-right Y coordinate of default map extent. Units and spatial reference system are defined in the mapnik xml.")
     default_width = models.IntegerField(help_text="Default map image width in pixels")
     default_height = models.IntegerField(help_text="Default map image height in pixels")
+    default_srid = models.IntegerField(help_text="Spatial Reference ID of the output map", default=4326)
