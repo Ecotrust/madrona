@@ -31,6 +31,9 @@ class MpaArray(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     description = models.TextField(blank=True)
+    supportfile1 = models.FileField(upload_to='array',blank=True,verbose_name="Support File", 
+                   help_text="e.g. Narrative Summary or other document associated with this array")
+    supportfile2 = models.FileField(upload_to='array',blank=True,verbose_name="Additional Support File")
     # Expose sharing functionality
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this array with the following groups")
     

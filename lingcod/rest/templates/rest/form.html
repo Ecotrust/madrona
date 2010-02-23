@@ -3,7 +3,11 @@
 
 {% block panel %}
   <h1>{{title}}</h1>
-  <form action="{{action}}" method="post">
+  {% if form.is_multipart %}
+  <form enctype="multipart/form-data" action="{{action}}" method="post">
+  {% else %}
+  <form action="{{action}}" method="post"> 
+  {% endif %}
     {% if json %}
         <div style="display:none;" class="json">{{json}}</div>
     {% endif %}
