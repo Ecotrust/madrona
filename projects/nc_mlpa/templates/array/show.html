@@ -9,7 +9,11 @@
         </ul>
         <div id="Attributes">
             <ul class="metadata">
+              {% if instance.user.first_name and instance.user.last_name %} 
+                <li class="creator">Created By {{instance.user.first_name}} {{instance.user.last_name}}</li>
+              {% else %}
                 <li class="creator">Created By {{instance.user.username}}</li>
+              {% endif %}
                 <li class="created">Created {{instance.date_created|date:"d M, Y P"}}</li>
                 <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
                 <br class="clear" />

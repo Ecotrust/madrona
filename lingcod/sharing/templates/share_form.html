@@ -33,7 +33,11 @@ $("a.show_members").click(function() {
 						<span>{{group.name}}<a class="show_members" href="#"><img src="{{MEDIA_URL}}common/images/silk/group_add.png" width="16" height="16" /><span>show members</span></a>
 						<ul class="member_list">
               {% for user in group.user_set.all|order_by:"username" %}
-              <li> {{user.username}} </li>
+              {% if user.first_name and user.last_name %} 
+              <li>{{user.first_name}} {{user.last_name}}</li>
+              {% else %}
+              <li>{{user.username}}</li>
+              {% endif %}
               {% endfor %}							
 						</ul>
 					</li>

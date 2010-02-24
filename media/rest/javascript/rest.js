@@ -91,6 +91,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
             url: action,
             type: 'POST',
             data: $(form).serialize(),
+            // MP TODO contentType: 'multipart/form-data',
             complete: function(req, status){
                 $(that).trigger('doneSaving');
                 switch(req.status){

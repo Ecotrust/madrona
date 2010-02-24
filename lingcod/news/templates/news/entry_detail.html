@@ -4,12 +4,18 @@
 <p><a href="{% url news-main %}" class="panel_link" title="main">Back to main news list</a></p>
 
 <h2>{{ object.title }}</h2> 
+{% if object.summary %}
 <h4> {{object.summary}} </h4>
+{% endif %}
 
 <p> {{ object.body|safe }} </p>
 
 <div class="article_menu">	
-    <p> published by {{ object.author.username }} on {{ object.modified_on|date:"F j, Y" }}</p>
+   {% if object.author.first_name and object.author.last_name %}
+    <p>Published by {{object.author.first_name}} {{object.author.last_name}} on {{ object.modified_on|date:"F j, Y" }}</p>
+   {% else %}
+    <p>Published by {{object.author.username}} on {{ object.modified_on|date:"F j, Y" }}</p>
+   {% endif %}
     <p> Tags :: 
     {% for tag in object.tags.all %}
         {{ tag.name }}{% if not forloop.last %}, {% endif %}

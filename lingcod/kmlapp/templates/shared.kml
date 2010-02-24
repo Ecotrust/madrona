@@ -19,7 +19,11 @@
 
   {% for user in group_user.users %}
       <NetworkLink>
+       {% if user.first_name and user.last_name %}
+        <name>{{user.first_name}} {{user.last_name}}</name>
+       {% else %}
         <name>{{user.username}}</name>
+       {% endif %}
         <open>0</open>
         <visibility>0</visibility>
         <Link>

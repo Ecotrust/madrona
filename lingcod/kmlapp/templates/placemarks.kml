@@ -100,7 +100,11 @@
         <ExtendedData>
             <Data name="mpaid"><value>{{ mpa.id }}</value></Data>
             <Data name="name"><value>{{ mpa.name }}</value></Data>
-            <Data name="user"><value>{{ mpa.user }}</value></Data>
+              {% if mpa.user.first_name and mpa.user.last_name %} 
+            <Data name="user"><value>{{ mpa.user.first_name }} {{ mpa.user.last_name }}</value></Data>
+              {% else %}
+            <Data name="user"><value>{{ mpa.user.username }}</value></Data>
+              {% endif %}
             <Data name="created"><value>{{ mpa.date_created }}</value></Data>
             <Data name="modified"><value>{{ mpa.date_modified|date:"M d,Y" }}</value></Data>
             <Data name="area"><value>{{ mpa.geometry_final.area }}</value></Data>
