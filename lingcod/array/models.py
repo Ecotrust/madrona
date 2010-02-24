@@ -4,6 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from lingcod.common.utils import get_mpa_class, get_array_class
 from lingcod.array.managers import ArrayManager
+from django.template.defaultfilters import slugify
+import os
+
+def get_supportfile_name(instance, filename):
+    """ Determine the filepath to store uploaded files - relative to MEDIA_ROOT """
+    return os.path.join('array', slugify(instance.name), slugify(instance.user.username), filename)
 
 class MpaArray(models.Model):
     """
@@ -31,9 +37,8 @@ class MpaArray(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     description = models.TextField(blank=True)
-    supportfile1 = models.FileField(upload_to='array',blank=True,verbose_name="Support File", 
-                   help_text="e.g. Narrative Summary or other document associated with this array")
-    supportfile2 = models.FileField(upload_to='array',blank=True,verbose_name="Additional Support File")
+    supportfile1 = models.FileField(upload_to=get_supportfile_name,null=True,blank=True)
+    supportfile2 = models.FileField(upload_to=get_supportfile_name,null=True,blank=True)
     # Expose sharing functionality
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this array with the following groups")
     
@@ -123,3 +128,4 @@ class MpaArray(models.Model):
         # Save one last time just to be safe?
         the_array.save()
         return the_array
+

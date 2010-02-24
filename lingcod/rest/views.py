@@ -88,10 +88,11 @@ def create(request, form_class=None, action=None, title=None,
         title = 'New %s' % (classname.capitalize())
     if request.method == 'POST':
         values = request.POST.copy()
-        if request.FILES:
-            values.update(request.FILES)
         values.__setitem__('user', request.user.pk)
-        form = form_class(values, label_suffix='')
+        if request.FILES:
+            form = form_class(values, request.FILES, label_suffix='')
+        else:
+            form = form_class(values, label_suffix='')
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
@@ -208,15 +209,16 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
         
     if request.method == 'POST':
         values = request.POST.copy()
-        if request.FILES:
-            values.update(request.FILES)
         values.__setitem__('user', request.user.pk)
-        form = form_class(values, instance=instance, label_suffix='')
+        if request.FILES:
+            form = form_class(values, request.FILES, instance=instance, label_suffix='')
+        else:
+            form = form_class(values, instance=instance, label_suffix='')
         # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
             m.save()
-            return HttpResponse('updated' + m.name, status=200)
+            return HttpResponse('updated ' + m.name, status=200)
         else:
             extra_context.update({
                 'form': form,

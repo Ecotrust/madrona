@@ -32,6 +32,14 @@
             {% with instance.summary_by_lop as lop_list %}
             	{% include "array_summary_lop.html" %}
             {% endwith %}
+
+            {% if instance.supportfile1 or instance.supportfile2 %}
+                <h2>Supporting Files</h2>
+                <ul>
+                    {% if instance.supportfile1 %} <li><p><a href="{{instance.supportfile1.url}}">{{instance.supportfile1.name}}</a></p></li> {% endif %}
+                    {% if instance.supportfile2 %} <li><p><a href="{{instance.supportfile2.url}}">{{instance.supportfile2.name}}</a></p></li> {% endif %}
+                </ul>
+            {% endif %}
 		</div>
     </div>
 {% endblock panel %}
