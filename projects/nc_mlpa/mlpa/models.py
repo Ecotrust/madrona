@@ -134,10 +134,10 @@ class MpaArray(BaseArray):
         else:  # check if habitat calculations are up to date
             habinfo = ClusterHabitatInfo.objects.filter(cluster__in=qs)
             rs = rep_models.ReplicationSetup.objects.get(org_scheme__name=settings.SAT_OPEN_COAST_REPLICATION)
-            print "habinfo: ",
-            print habinfo.count()
-            print "blah: ",
-            print rs.habitatthreshold_set.count() * qs.count()
+            #print "habinfo: ",
+            #print habinfo.count()
+            #print "blah: ",
+            #print rs.habitatthreshold_set.count() * qs.count()
             if habinfo.count() != (rs.habitatthreshold_set.count() * qs.count()):
                 habinfo.delete()
                 for cl in qs:
@@ -145,7 +145,7 @@ class MpaArray(BaseArray):
             elif True in [ self.date_modified > h.date_modified for h in habinfo ]: # see if array was modified more recently than hab results
                 for cl in qs:
                     cl.calculate_habitat_info()
-        return qs
+        return qs.order_by('lop__value')
         
     @property
     def summary_by_designation(self):

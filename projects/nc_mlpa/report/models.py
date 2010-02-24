@@ -94,6 +94,9 @@ class Cluster(models.Model):
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     objects = ClusterManager()
     
+    class Meta:
+        ordering = ['lop__value']
+    
     def __unicode__(self):
         return '%s LOP Cluster from %s containing %i MPAs' % (self.lop.name,self.array.name,self.mpa_set.count())
     
