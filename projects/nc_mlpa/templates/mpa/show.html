@@ -135,6 +135,7 @@
                 <p><em>None specified</em></p>
             {% endif %}
             <h2>Other Information</h2>
+            <p><strong>MPA ID:</strong> {{instance.pk}}</p>
             {% if instance.is_estuary or instance.instance.boundary_description or instance.dfg_feasability_guidance or instance.evolution %}                
                 {% if instance.is_estuary %}
                     <p>This is an <strong>Estuarine</strong> MPA</p>

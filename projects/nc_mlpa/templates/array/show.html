@@ -24,6 +24,7 @@
             {% else %}
             <p><em>None specified.</em></p>
             {% endif %}
+            <p><strong>Array ID:</strong> {{instance.pk}}</p>
             <h2>Summary of MPAs by Designation</h2>
             {% with instance.summary_by_designation as desig_dict %}
             	{% include "array_summary_designation.html" %}
