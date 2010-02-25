@@ -5,6 +5,7 @@
   <h1>{{title}}</h1>
   {% if form.is_multipart %}
   <form enctype="multipart/form-data" action="{{action}}" method="post">
+  <input type='hidden' name='MAX_FILE_SIZE' value="10485760" /> <!-- 10 MB upload limit -->
   {% else %}
   <form action="{{action}}" method="post"> 
   {% endif %}

@@ -83,61 +83,6 @@ lingcod.rest.client = function(gex, panel, manipulators){
     
     that.parseResource = parseResource;
     
-    var onsubmit = function(e, form, options, config){
-        var action = $(form).attr('action');
-        panel.close();
-        $(that).trigger('saving', ["Saving changes"]);
-        $.ajax({
-            url: action,
-            type: 'POST',
-            data: $(form).serialize(),
-            // MP TODO contentType: 'multipart/form-data',
-            complete: function(req, status){
-                $(that).trigger('doneSaving');
-                switch(req.status){
-                    case 201:
-                        // new object created, get location header
-                        if(options && options.success){
-                            options.success(
-                                processLocation(req.getResponseHeader('Location')));
-                        }else{
-                            if(options.error){
-                                options.error();
-                            }
-                        }
-                        break;
-                    
-                    case 200:
-                        // object edited successfully
-                        if(options.success){
-                            options.success(processLocation(options.location));
-                        }else{
-                            if(options.error){
-                                options.error();
-                            }                            
-                        }                        
-                        break;
-
-                    case 400:
-                        // validation error
-                        options['validation_error'] = true;
-                        setupForm(req.responseText, options, config);
-                        break;
-                    
-                    default:
-                        if(options.error){
-                            options.error();
-                        }
-                }
-            }
-        });
-        // on error
-        // panel.showError('title', 'msg');
-        // if(options && options['error']){
-        //     error(title, msg);
-        // }
-    };
-    
     var setupForm = function(text, options, config){
         var content = $('<div><div class="tabs"><ul><li><a href="#PanelGeometry"><span>Geometry</span></a></li><li><a href="#PanelAttributes"><span>Attributes</span></a></li></ul><div id="PanelGeometry"></div><div id="PanelAttributes"></div><br class="clear" /></br><div class="form_controls"><a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a><a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a><br class="clear" /></div></div>');
         var html = $(text);
@@ -174,32 +119,69 @@ lingcod.rest.client = function(gex, panel, manipulators){
             tabs.tabs('disable', 0);
             tabs.find('> .ui-tabs-nav').hide();            
         }
-        el.find('form').submit(function(e){
-            if(manipulator){
-                var errMsg = false;
-                if(manipulator.isDefiningShape()){
-                    if(manipulator.isInvalidGeometry()){
-                        errMsg = 'The shape you defined is invalid. Please correct any mistakes using the Geometry form.';
-                    }else if(manipulator.isDefiningNewShape()){
-                        errMsg = 'You must finish defining your shape before creating this feature. Double-Click on the last vertex to finish drawing your shape.';
-                    }else{
-                        errMsg = 'You must finish defining your shape before creating this feature. Click "Done Editing", when you are finished';
+
+        options = {
+            beforeSubmit: function(a,b,c) { 
+                if(manipulator){
+                    var errMsg = false;
+                    if(manipulator.isDefiningShape()){
+                        if(manipulator.isInvalidGeometry()){
+                            errMsg = 'The shape you defined is invalid. Please correct any mistakes using the Geometry form.';
+                        }else if(manipulator.isDefiningNewShape()){
+                            errMsg = 'You must finish defining your shape before creating this feature. Double-Click on the last vertex to finish drawing your shape.';
+                        }else{
+                            errMsg = 'You must finish defining your shape before creating this feature. Click "Done Editing", when you are finished';
+                        }
+                    }else if(manipulator.isShapeDefined() === false){
+                        errMsg = 'You must create a geometry for this feature before continuing. Click on "Draw Shape" to begin.';
                     }
-                }else if(manipulator.isShapeDefined() === false){
-                    errMsg = 'You must create a geometry for this feature before continuing. Click on "Draw Shape" to begin.';
+                    if(errMsg){
+                        tabs.tabs('select', '#PanelGeometry');
+                        alert(errMsg);
+                        return false;
+                    }else{
+                        // can proceed with form submission
+                        manipulator.destroy();
+                    }
                 }
-                if(errMsg){
-                    tabs.tabs('select', '#PanelGeometry');
-                    alert(errMsg);
-                    return false;
-                }else{
-                    // can proceed with form submission
-                    manipulator.destroy();
-                }
-            }
-            onsubmit(e, form, options, config);
-            return false;
-        });
+                panel.spin('Saving changes');
+                $(that).trigger('saving', ["Saving changes"]);
+                return true;
+            },
+            complete: function(req, status){
+                panel.close()
+                panel.stopSpinning();
+                $(that).trigger('doneSaving');
+                switch(req.status){
+                    case 201:
+                        // new object created, get location header
+                        if(options && options.success){
+                            options.success(
+                                processLocation(req.getResponseHeader('Location')));
+                        }else{
+                            if(options.error){ options.error(); }
+                        }
+                        break;
+                    case 200:
+                        // object edited successfully
+                        if(options.success){
+                            options.success(processLocation(options.location));
+                        }else{
+                            if(options.error){ options.error(); }                            
+                        }                        
+                        break;
+                    case 400:
+                        // validation error
+                        options['validation_error'] = true;
+                        setupForm(req.responseText, options, config);
+                        break;
+                    default:
+                        if(options.error){ options.error(); }
+                } 
+            } // */
+        };
+        $(form).ajaxForm(options);
+
         el.find('.submit_button').click(function(){
             form.trigger('submit');
         });
