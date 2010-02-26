@@ -86,13 +86,17 @@ INSTALLED_APPS = (
     'lingcod.depth_range',
     'lingcod.geographic_report',
     'lingcod.straightline_spacing',
+    'registration',
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
+REGISTRATION_OPEN = True # Can users register themselves or not?
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'
 
 MEDIA_URL = '/media/'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/'
 

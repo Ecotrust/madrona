@@ -25,6 +25,7 @@ MarineMap.
     * `feedvalidator <http://www.feedvalidator.org/docs/howto/install_and_run.html>`_ for testing KML
     * `beautiful soup 3.0 <http://www.crummy.com/software/BeautifulSoup/>`_ is necessary for running tests. Be sure you have version >= 3.0
     * `xlwt <http://pypi.python.org/pypi/xlwt/>`_ for handling Excel spreadsheets
+    * `django-registration <http://pypi.python.org/pypi/django-registration>`_ provides the user account managment and registration (Version 0.8+ is required - v0.7 wont work so don't use easy_install! Use `0.8alpha1 <http://bitbucket.org/ubernostrum/django-registration/downloads/django-registration-0.8-alpha-1.tar.gz>`_ instead.)
     
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 

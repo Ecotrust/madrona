@@ -1,0 +1,14 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}Register to Use MarineMap{% endblock %}
+
+{% block content %}
+
+<p> By registering, you can create and analyze your own proposed Marine Protected Areas and Arrays, share information and collaborate with others.</p>
+<form action="{% url registration_register %}" method="post">
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
+

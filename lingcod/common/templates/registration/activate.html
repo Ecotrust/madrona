@@ -1,0 +1,7 @@
+{% extends "registration/reg_base.html" %}
+
+{% block title %}We don't recognize that account registration code ({{activation_key}}) {% endblock %}
+
+{% block content %}
+Account activation failed. Please check you registration email and confirm that your URL contains the proper activation key. 
+{% endblock %}
