@@ -1,0 +1,31 @@
+{% extends "registration/reg_base.html" %}
+{% load order_by %}
+
+{% block title %}Request MarineMap group membership{% endblock %}
+
+{% block content %}
+<style>
+.group {padding:0;margin:0;text-indent:none;font-size:12px;}
+.groups {padding:0;margin:0;text-indent:none;}
+</style>
+
+
+{% if groups %}
+    <p> Request membership with one or more of the following groups.  </p>
+    <form action="" method="POST">
+				<ul class="groups">
+        {% for group in groups %}
+                  <li class="group">
+                    <input type="checkbox" class="shareform" name="sharing_groups" {% if group in current_groups %}checked="checked" DISABLED {% endif %}value="{{group.id}}" id="group_{{group.id}}"/> 
+                    <span> {{group.name}}</span>
+                  </li>
+        {% endfor %}        
+				</ul>
+                <input type="submit" value="Submit"/>
+    </form>
+    <p style="font-size:75%">Though we will make every effort to expedite the process, the group membership process takes up to 7 days - you may still use MarineMap during this time but sharing and collaborating with these groups may be delayed pending approval.</p> 
+{% else %}
+    <p> There are no eligible groups at this time.  </p>
+{% endif %}
+
+{% endblock %}

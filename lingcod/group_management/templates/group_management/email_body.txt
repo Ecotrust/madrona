@@ -1,0 +1,14 @@
+User '{{user.username}}' is requesting membership with the following groups:
+
+{% for group in groups %} * {{group.name}} 
+{% endfor %}
+
+User details
+=============
+first name: {{user.first_name}}
+last name: {{user.last_name}}
+email: {{user.email}}
+last login: {{user.last_login}}
+date joined: {{user.date_joined}}
+
+Please go to /admin/group_management/grouprequest/ to review all group requests. 

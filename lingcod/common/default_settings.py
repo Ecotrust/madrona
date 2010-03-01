@@ -86,11 +86,13 @@ INSTALLED_APPS = (
     'lingcod.depth_range',
     'lingcod.geographic_report',
     'lingcod.straightline_spacing',
+    'lingcod.group_management',
     'registration',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?
+GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent) 
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'
 

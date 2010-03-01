@@ -3,5 +3,9 @@
 {% block title %}Congratulations - Your account with MarineMap is activated.{% endblock %}
 
 {% block content %}
-<p>Your account is now ready to use; Please <a href="{% url auth_login %}">login</a></p>
+<p>Your account is now ready to use.</p>
+
+<p>If you're ready to begin, please <a href="{% url auth_login %}">login</a>.</p>
+
+<p>You can also request to be added to a group. Group membership allows sharing and collaboration between group members through MarineMap but requires an approval process. <a href="{% url group_management-request %}">Request group membership.</a>.
 {% endblock %}
