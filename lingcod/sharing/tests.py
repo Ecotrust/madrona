@@ -18,11 +18,13 @@ class SharingTestMpa(Mpa):
 class SharingTestArray(MpaArray):
     extra_attr = models.CharField(max_length=255, blank=True)
 
-settings.MPA_CLASS = 'lingcod.sharing.tests.SharingTestMpa'
-settings.ARRAY_CLASS = 'lingcod.sharing.tests.SharingTestArray'
+#settings.MPA_CLASS = 'lingcod.sharing.tests.SharingTestMpa'
+#settings.ARRAY_CLASS = 'lingcod.sharing.tests.SharingTestArray'
 
 class SharingTestCase(TestCase):
     def setUp(self):
+        self.settings_manager.set(MPA_CLASS = 'lingcod.sharing.tests.SharingTestMpa')
+        self.settings_manager.set(ARRAY_CLASS = 'lingcod.sharing.tests.SharingTestArray')
         self.client = Client()
 
         # First register the mpas and arrays as shareable content types

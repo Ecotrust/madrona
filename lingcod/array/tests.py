@@ -38,6 +38,9 @@ geom_final = "POLYGON ((-43400.4080995302720112 -441971.8250028975307941, -48197
 
 class ArrayTest(TestCase):
     
+    def setUp(self):
+        self.settings_manager.set(ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray')
+
     def test_create_array(self):
         """
         Simple array creation
