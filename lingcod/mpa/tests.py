@@ -24,8 +24,7 @@ class MpaTest(TestCase):
         setting.
         """
         from lingcod.common.utils import get_mpa_class        
-        self.settings_manager.set(MPA_CLASS = 'lingcod.mpa.models.Mpa')
-        self.assertEquals(Mpa, get_mpa_class())
+        self.assertEquals(TestMpa, get_mpa_class())
         
     def test_get_mpa_form(self):
         """

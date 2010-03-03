@@ -57,8 +57,7 @@ class ArrayTest(TestCase):
         setting.
         """
         from lingcod.common.utils import get_array_class
-        self.settings_manager.set(ARRAY_CLASS='lingcod.array.models.MpaArray')
-        self.assertEquals(MpaArray, get_array_class())
+        self.assertEquals(ArrayTestArray, get_array_class())
 
 
     def test_add_mpa(self):
