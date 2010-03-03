@@ -39,7 +39,10 @@ def multi_generic_manipulator_view(request, manipulators):
     kwargs = {}
     for key,val in request.POST.items():
         kwargs[str(key)] = str(val)
-    submitted = kwargs['target_shape']            
+    try:
+        submitted = kwargs['target_shape']            
+    except:
+        return HttpResponse( "Target shape not provided", status=500 )
     # parse out which manipulators are requested
     manipulator_list = manipulators.split(',')
     
@@ -108,6 +111,7 @@ def respond_with_template(status_html, submitted, final_shape, success="1"):
     user_shape = parsekmlpoly(submitted)
     user_shape.srid = settings.GEOMETRY_CLIENT_SRID
     user_shape.transform(settings.GEOMETRY_DB_SRID)
+
     return HttpResponse(simplejson.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))   
 
 def respond_with_error(key='unexpected', message=''):

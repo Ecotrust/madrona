@@ -136,7 +136,7 @@ class BaseManipulator(object):
     
     class InternalException(Exception):
         def __init__(self, message="", status_html=None, success="0"):
-            self.message = message
+            self._message = message
             if status_html == None:
                 self.template = BaseManipulator.do_template(BaseManipulator(), 'internal', message)
                 self.html = self.template
@@ -144,11 +144,11 @@ class BaseManipulator(object):
                 self.html = status_html
             self.success = success
         def __str__(self):
-            return repr(self.message)
+            return repr(self._message)
     
     class InvalidGeometryException(Exception):
         def __init__(self, message="", status_html=None, success="0"):
-            self.message = message
+            self._message = message
             if status_html == None:
                 self.template = BaseManipulator.do_template(BaseManipulator(), 'invalid_geom', message)
                 self.html = self.template
@@ -156,15 +156,15 @@ class BaseManipulator(object):
                 self.html = status_html
             self.success = success
         def __str__(self):
-            return repr(self.message)   
+            return repr(self._message)   
     
     class HaltManipulations(Exception):
         def __init__(self, message="", status_html="", success="0"):
-            self.message = message
+            self._message = message
             self.html = status_html
             self.success = success
         def __str__(self):
-            return repr(self.message)
+            return repr(self._message)
            
 class ClipToShapeManipulator(BaseManipulator):
     '''

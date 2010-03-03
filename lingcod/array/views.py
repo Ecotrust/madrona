@@ -27,7 +27,7 @@ def add_mpa(request, pk):
         except:
             return HttpResponse( user.username + " does not own an MPA with ID " + mpa_id, status=404 )
 
-        # If MPA already has an array, return an error
+        # If MPA already has an array, remove it then proceed
         if the_mpa.array:
             the_mpa.remove_from_array()
 

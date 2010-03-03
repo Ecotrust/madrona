@@ -2,7 +2,8 @@
 Unit tests for staticmap rendering via mapnik
 """
 
-from django.test import TestCase, Client
+from django.test import Client
+from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from django.conf.urls.defaults import *
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import GEOSGeometry 
@@ -20,11 +21,11 @@ class StaticmapTestMpa(Mpa):
 class StaticmapTestArray(MpaArray):
     extra_attr = models.CharField(max_length=255, blank=True)
 
-settings.MPA_CLASS = 'lingcod.staticmap.tests.StaticmapTestMpa'
-settings.ARRAY_CLASS = 'lingcod.staticmap.tests.StaticmapTestArray'
-
 class StaticMapTest(TestCase):
     def setUp(self):
+        self.settings_manager.set(MPA_CLASS = 'lingcod.staticmap.tests.StaticmapTestMpa')
+        self.settings_manager.set(ARRAY_CLASS = 'lingcod.staticmap.tests.StaticmapTestArray')
+
         self.client = Client()
 
         # Create 3 users
@@ -61,7 +62,7 @@ class StaticMapTest(TestCase):
         array1 = StaticmapTestArray.objects.create( name='Test_Array_1', user=self.user)
         array1.save()
         mpa1.add_to_array(array1)
-        self.array_id = array1.id
+        self.array_id = array1.pk
 
     def testMapConfigPresent(self):
         """
@@ -88,5 +89,6 @@ class StaticMapTest(TestCase):
         """
         See if mapnik filter can render all mpas in a given array
         """
-        response = self.client.get('/staticmap/default/?array=%s' % self.array_id, {})
+        url = '/staticmap/default/?array=%s' % self.array_id
+        response = self.client.get(url, {})
         self.assertEquals(response.status_code, 200)

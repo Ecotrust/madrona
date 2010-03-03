@@ -44,12 +44,13 @@ class StudyRegionTest(TestCase):
         response = self.client.get('/studyregion/lookAtKml/', {})
         self.assertEquals(response.status_code, 200)
         
-    def testKmlChunkView(self):
-        """
-        test views.kml_chunk
-        """
-        response = self.client.get('/studyregion/kml_chunk/34.473517/32.530798/-117.093325/-120.580374/', {})
-        self.assertEquals(response.status_code, 200)
+# This test is not really necessary and takes forever to run so lets just comment it out for now
+#    def testKmlChunkView(self):
+#        """
+#        test views.kml_chunk
+#        """
+#        response = self.client.get('/studyregion/kml_chunk/34.473517/32.530798/-117.093325/-120.580374/', {})
+#        self.assertEquals(response.status_code, 200)
         
     def testKmlView(self):
         """

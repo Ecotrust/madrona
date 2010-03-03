@@ -152,7 +152,8 @@ class ArrayManagerTest(TestCase):
 
 class ArrayResourcesTestCase(TestCase):
 
-    urls = 'lingcod.array.test_urls'
+    #Uncomment to override the ROOT_URLCONF 
+    #urls = 'lingcod.array.test_urls'
 
     def test_array_resources(self):
         from lingcod.rest.tests import assertImplementsRestInterface
@@ -215,18 +216,6 @@ class MpaArrayServiceTestCase(TestCase):
         url += "?mpa_id=%d" % self.test_mpa_id
         response = self.client.post(url)
         self.assertEquals(response.status_code, 200)
-
-    def test_add_mpa_again(self):
-        """
-        Make sure MPA cannot be added to an array if its already associated with one
-        """
-        self.client.login(username=self.user.username, password=self.password)
-        url = reverse('array-add-mpa', kwargs={'pk': int(self.test_array_id)})
-        url += "?mpa_id=%d" % self.test_mpa_id
-        response = self.client.post(url)
-        # The second request should fail
-        response = self.client.post(url)
-        self.assertEquals(response.status_code, 500)
 
     def test_remove_mpa(self):
         """

@@ -24,7 +24,7 @@ class AssetsTest(TestCase):
 class TestRequest:
     session = None
 
-from md5 import md5
+from django.utils.hashcompat import md5_constructor as md5
 
 class SessionsTest(TestCase):
     def test_load_session(self):
