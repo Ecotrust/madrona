@@ -8,8 +8,8 @@
     }
 {% endblock addToOptions %}
 {% block myshapes %}
-    var add_to_array = "{% url array-add-mpa 9999999999999999 %}";
-    var remove_mpa = "{% url array-remove-mpa 9999999999999999 %}"
+    var add_to_array = "{% url array-add-mpa 999999999999999 %}";
+    var remove_mpa = "{% url array-remove-mpa 999999999999999 %}"
     var getId = function(node, editor){
         var self = $(editor.tree.lookup(node).getKml()).find('atom\\:link[rel=self]');
         return self.attr('mm:pk');
@@ -70,7 +70,7 @@
             editor.el.find('li.mlpa_mpaarray').droppable('destroy');
             $.ajax({
                 type: 'POST',
-                url: add_to_array.replace(9999999999999999, array_pk),
+                url: add_to_array.replace('999999999999999', array_pk),
                 data: {mpa_id: mpa_pk},
                 success: function(){
                     dragDropCallback(array_location, mpa_location, editor);
@@ -97,7 +97,7 @@
             $(this).droppable('destroy');
             $.ajax({
                 type: 'POST',
-                url: remove_mpa.replace(9999999999999999, array_pk),
+                url: remove_mpa.replace('999999999999999', array_pk),
                 data: {mpa_id: mpa_pk},
                 success: function(){
                     dragDropCallback(null, mpa_location, editor);
