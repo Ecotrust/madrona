@@ -76,6 +76,10 @@ class ClusterManager(models.GeoManager):
         return self.filter(array=array,lop=lop)
                 
     def build_clusters_for_array(self,array,with_hab=True):
+        """
+        This is the method to call to generate the clusters that are needed for replication analysis.
+        Only the LOPs with run set to True are calculated for.
+        """
         lops = Lop.objects.filter(run=True)
         for lop in lops:
             self.build_clusters_for_array_by_lop(array,lop,with_hab)

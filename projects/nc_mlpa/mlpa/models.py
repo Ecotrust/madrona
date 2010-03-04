@@ -103,6 +103,7 @@ class MpaArray(BaseArray):
     @transaction.commit_on_success
     def clusters(self):
         """
+        Use this method to get clusters used in replication analysis (those with an LOP set to run).
         If clusters exist and they have a newer date modified than the array, retrieve them.
         If they do exist but are older, regenerate them.
         If they don't exist, generate them.
@@ -110,9 +111,20 @@ class MpaArray(BaseArray):
         if those reports have already been generated, they'll be there otherwise, they won't)
         """
         from report.models import Cluster
-        qs = self.cluster_set.filter(date_modified__gt=self.date_modified)
+        lops = Lop.objects.filter(run=True)
+        qs = self.cluster_set.filter(date_modified__gt=self.date_modified,lop__in=lops)
         if not qs:
             qs = Cluster.objects.build_clusters_for_array(self,with_hab=False)
+        return qs
+        
+    @property
+    @transaction.commit_on_success
+    def clusters_at_lowest_lop(self):
+        from report.models import Cluster
+        lop = Lop.objects.all().order_by('value')[0]
+        qs = self.cluster_set.filter(date_modified__gt=self.date_modified,lop=lop)
+        if not qs:
+            qs = Cluster.objects.build_clusters_for_array_by_lop(self,lop,with_hab=False)
         return qs
         
     @property
@@ -495,12 +507,16 @@ class MlpaMpa(Mpa):
         if self.is_estuary:
             return False
         else:
-            run_lops = Lop.objects.filter(run=True)
-            if self.lop in run_lops:
-                return True
-            else:
-                return False
-                
+            return True
+            
+            ## LOP filtering occurs elsewhere so it's redundant to do it here
+            ## plus we need to cluster at lower LOPs for array level geographic reporting
+            # run_lops = Lop.objects.filter(run=True)
+            #             if self.lop in run_lops:
+            #                 return True
+            #             else:
+            #                 return False
+            
     @property
     def bioregion(self):
         from lingcod.bioregions.models import Bioregion
