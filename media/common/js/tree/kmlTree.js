@@ -297,7 +297,7 @@ lingcod.kmlTree = (function(){
                 msg + '</span></div>');
             var height = opts.element.height();
             if(height !== 0){
-                h.height(h);
+                h.height(height);
             }else{
                 // h.height(200);
             }
