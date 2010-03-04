@@ -2,10 +2,11 @@ from registration.backends.default import DefaultBackend
 from django.db import transaction
 from django import forms
 from django.contrib.sites.models import Site, RequestSite
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from registration.models import RegistrationManager, RegistrationProfile
 from registration.forms import RegistrationForm
 from registration import signals
+from django.conf import settings
 
 class CustomRegistrationForm(RegistrationForm):
     first_name = forms.CharField(label="First Name")
@@ -32,6 +33,8 @@ class LingcodBackend(DefaultBackend):
         new_user.first_name = first
         new_user.last_name = last
         new_user.is_active = False
+        webreg_group = Group.objects.get(name=settings.GROUP_REGISTERED_BY_WEB)
+        new_user.groups.add(webreg_group)
         new_user.save()
         signals.user_registered.send(sender=self.__class__, user=new_user, request=request)
         return new_user

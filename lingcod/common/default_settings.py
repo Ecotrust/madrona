@@ -92,6 +92,7 @@ INSTALLED_APPS = (
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?
 GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent) 
+GROUP_REGISTERED_BY_WEB = 'registered_by_web'  #Group name assigned to users who register using the web interface
 
 MEDIA_ROOT = os.path.dirname(os.path.abspath(__file__)) + '/../../media/'
 
