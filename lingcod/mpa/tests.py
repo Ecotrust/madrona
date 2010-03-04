@@ -2,6 +2,8 @@ from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from django.contrib.auth.models import *
+from django.test.client import Client
+from django.core.urlresolvers import reverse
 # from lingcod.array.tests import ArrayTestArray as TestArray
 
 class TestMpa(Mpa):
@@ -96,3 +98,54 @@ class MpaResourcesTestCase(TestCase):
         final = fromstr(geom_final)
         assertImplementsRestInterface(self, user, password, url, 
             rest_uid(TestMpa), {'name': 'myname', 'geometry_orig': final.wkt, 'geometry_final': final.wkt})
+
+class MpaEditingTestCase(TestCase):
+    def setUp(self):
+        self.settings_manager.set(MPA_FORM = 'lingcod.mpa.tests.MpaTestForm', MPA_CLASS = 'lingcod.mpa.tests.TestMpa')
+
+        self.password = 'pword'
+        self.user = User.objects.create_user('user1', 'user1@marinemap.org', password=self.password)
+        self.superuser = User.objects.create_user('user2', 'user2@marinemap.org', password=self.password)
+        self.superuser.is_superuser = True
+        self.superuser.is_staff = True
+        self.superuser.save()
+
+        self.mpa = TestMpa.objects.create(
+            name='Test MPA',
+            user=self.user,
+            designation=MpaDesignation.objects.create(name="Test",acronym="T"),
+            geometry_final=geom_final
+        )
+
+        self.client = Client()
+
+    def test_mpa_form(self):
+        self.assertEquals(settings.MPA_FORM, 'lingcod.mpa.tests.MpaTestForm')
+
+    def test_superuser_status(self):
+        self.assertTrue(self.superuser.is_staff)
+        self.assertTrue(self.superuser.is_superuser)
+
+    def test_steal_mpa(self):
+        self.client.login(username=self.superuser.username, password=self.password)
+        url = reverse('mpa_update_form', kwargs={'pk': self.mpa.pk})
+        response = self.client.get(url)
+        self.assertContains(response, 'form', status_code=200)
+
+        # get action
+        from BeautifulSoup import BeautifulSoup
+        soup = BeautifulSoup(response.content)
+        action = soup.find('form')['action']
+        self.assertTrue(action != None)
+
+        # make sure submission by superuser works
+        final = fromstr(geom_final)
+        valid_form_data = {'name': 'new_name', 'geometry_orig': final.wkt, 'geometry_final': final.wkt}
+        response = self.client.post(action, valid_form_data)
+        self.assertEqual(response.status_code, 200)
+ 
+        # though edited by superuser, mpa should still be owned by user
+        mpa = TestMpa.objects.get(pk=self.mpa.pk)
+        self.assertEquals(mpa.user, self.user)
+
+        

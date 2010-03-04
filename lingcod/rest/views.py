@@ -209,7 +209,9 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
         
     if request.method == 'POST':
         values = request.POST.copy()
-        values.__setitem__('user', request.user.pk)
+        # Even if request.user is different (ie request.user is staff)
+        # user is still set to the original owner to prevent staff from 'stealing' 
+        values.__setitem__('user', instance.user.pk)
         if request.FILES:
             form = form_class(values, request.FILES, instance=instance, label_suffix='')
         else:
