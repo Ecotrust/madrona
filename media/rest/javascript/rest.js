@@ -235,7 +235,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
     that.create = create;
     
     var getConfig = function(configOrFeature){
-        if((typeof configOrFeature === 'object' || typeof configOrFeature === 'function') && configOrFeature.getType){
+        var type = 'config';
+        try{
+            type = configOrFeature.getType();
+        }catch(e){
+        }
+        if(type !== 'config'){
             return parseResource(configOrFeature);
         }else{
             return configOrFeature;
