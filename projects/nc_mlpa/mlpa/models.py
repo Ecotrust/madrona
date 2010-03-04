@@ -564,6 +564,7 @@ class MlpaMpa(Mpa):
         msf, created = MpaShapefile.objects.get_or_create(mpa=self)
         if created or msf.date_modified < self.date_modified:
             msf.name = self.name
+            msf.mpa_id_num = self.pk
             msf.geometry = self.geometry_final
             desig_list = [ des.acronym for des in MpaDesignation.objects.all() ]
             desig_list.extend( [ d.lower() for d in desig_list ]) # add in lower case versions just in case

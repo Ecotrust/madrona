@@ -16,6 +16,7 @@ class MpaShapefile(models.Model):
     """
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
     name = models.CharField(max_length=255)
+    mpa_id_num = models.IntegerField(blank=True, null=True)
     name_short = models.CharField(blank=True, max_length=255,null=True)
     desig_name = models.CharField(blank=True, max_length=80, null=True)
     desig_acro = models.CharField(blank=True, max_length=80, null=True)
