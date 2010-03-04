@@ -7,5 +7,7 @@
 
 <p>If you're ready to begin, please <a href="{% url auth_login %}">login</a>.</p>
 
-<p>You can also request to be added to a group. Group membership allows sharing and collaboration between group members through MarineMap but requires an approval process. <a href="{% url group_management-request as requrl %}{{requrl}}">Request group membership.</a>.
+{% if group_request_email %}
+<p>You may also request to be added to a group. Group membership allows sharing and collaboration between group members through MarineMap but requires an approval process. Please send an email to <a href="mailto:{{group_request_email}}">{{group_request_email}}</a> with your username and group requests.
+{% endif %}
 {% endblock %}

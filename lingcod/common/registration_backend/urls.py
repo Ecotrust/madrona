@@ -6,11 +6,14 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 from registration.views import activate
 from registration.views import register
+from django.conf import settings
 
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
                            direct_to_template,
-                           { 'template': 'registration/activation_complete.html' },
+                           { 'template': 'registration/activation_complete.html' ,
+                             'extra_context': {'group_request_email': settings.GROUP_REQUEST_EMAIL}
+                           },
                            name='registration_activation_complete'),
                        # Activation keys get matched by \w+ instead of the more specific
                        # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
@@ -26,7 +29,7 @@ urlpatterns = patterns('',
                            name='registration_register'),
                        url(r'^register/complete/$',
                            direct_to_template,
-                           { 'template': 'registration/registration_complete.html' },
+                           { 'template': 'registration/registration_complete.html'},
                            name='registration_complete'),
                        url(r'^register/closed/$',
                            direct_to_template,

@@ -86,7 +86,6 @@ INSTALLED_APPS = (
     'lingcod.depth_range',
     'lingcod.geographic_report',
     'lingcod.straightline_spacing',
-    'lingcod.group_management',
     'registration',
 )
 

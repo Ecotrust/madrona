@@ -110,4 +110,6 @@ COMPRESS_CSS['application']['source_filenames'] += (
 # This variable should actually be set in settings_local.py, just placed here to ensure correct compile
 GIS_DATA_ROOT = ''
 
+GROUP_REQUEST_EMAIL = 'northcoast-groups@marinemap.org'
+
 from settings_local import *
