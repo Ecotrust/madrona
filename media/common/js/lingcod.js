@@ -270,8 +270,7 @@ var lingcod = (function(){
         
         var onEditorSelect = function(e, originalEvent, node, kmlObject){
             if(node){
-                var id = node.find('> .kmlId').text();
-                if($('#MyShapes :contains('+id+')').length !== 0){
+                if(node.parents('#MyShapes').length !== 0){
                     $('#sidebar').tabs('select', '#MyShapes');
                 }else{
                     $('#sidebar').tabs('select', '#SharedShapes');
