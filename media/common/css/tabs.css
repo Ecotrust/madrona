@@ -131,7 +131,7 @@
 }
 .ui-tabs-disabled {
     opacity: .4;
-    filter: alpha(opacity=40);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
 }
 .ui-tabs-loading em {
     padding: 0 0 0 20px;

@@ -63,7 +63,7 @@ a.button:active span {
 
 a.disabled {
     opacity:.50;
-    filter: alpha(opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
 
 a.disabled:hover, a.disabled {

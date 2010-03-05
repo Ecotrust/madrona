@@ -74,6 +74,7 @@
 
 .menu_items.disabled {
     opacity:.4;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
 }
 
 .menu_items.disabled li a:hover {

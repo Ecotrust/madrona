@@ -152,8 +152,6 @@ li {
 #sidebar-mask {
     margin:0;
     padding:0;
-/*    opacity:.53;*/
-/*    filter: alpha(opacity=53);*/
     position:absolute;
     top:40px;
     left:0;
@@ -173,7 +171,7 @@ li {
     position:absolute;
     top:0px;
     left:0px;
-    opacity:1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     font-size:16px;
     font-weight:bold;
     height:40px;
@@ -372,6 +370,7 @@ div.field textarea {
     height:100%;
     background-color:#f4f8fb;
     opacity:.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
     text-align:center;
 }
 
@@ -382,6 +381,7 @@ div.field textarea {
     left:0px;
     width:100%;
     opacity:1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     font-size:12px;
     font-weight:bold;
     height:40px;
