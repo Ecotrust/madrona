@@ -22,6 +22,7 @@ class KMLAppTest(TestCase):
         self.other_client = Client()
         self.password = 'iluvge'
         self.user = User.objects.create_user('kmltest', 'kmltest@marinemap.org', password=self.password)
+        self.user2 = User.objects.create_user('kmltest2', 'kmltest2@marinemap.org', password=self.password)
 
         g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g2 = GEOSGeometry('SRID=4326;POLYGON ((-121.42 34.37, -120.64 34.32, -120.63 34.12, -121.44 34.15, -121.42 34.37))')
@@ -47,6 +48,37 @@ class KMLAppTest(TestCase):
         self.test_array_id = array1.id
         array1.add_mpa(mpa1)
         array1.add_mpa(mpa2)
+
+        # Register the mpas and arrays as shareable content types
+        from lingcod.sharing.models import ShareableContent, get_content_type, get_shareables
+        mpa_ct = get_content_type(Mpa)
+        array_ct = get_content_type(MpaArray)
+        share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
+                                                    container_content_type=array_ct,
+                                                    container_set_property='mpa_set')
+        share_array = ShareableContent.objects.create(shared_content_type=array_ct)
+
+        # Then make the group with permissions
+        from django.contrib.auth.models import Group
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        shareables = get_shareables()
+        for modelname in shareables.iterkeys():
+            self.group1.permissions.add(shareables[modelname][1])
+
+        # Add users to group
+        self.user.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+
+        # Share with common group
+        from lingcod.sharing.models import share_object_with_groups
+        share_object_with_groups(array1, [self.group1.pk])
+
+        # Share with public
+        public_group = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)[0]
+        for modelname in shareables.iterkeys():
+            public_group.permissions.add(shareables[modelname][1])
+        share_object_with_groups(array1, [public_group.pk])
 
     def test_nonauth_user_kml(self):
         """ 
@@ -84,8 +116,7 @@ class KMLAppTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
-        if errors:
-            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
             
         # test for session key url
         url = reverse('kmlapp-user-kml', kwargs={'session_key': self.client.session.session_key, 'input_username': self.user.username})
@@ -101,8 +132,8 @@ class KMLAppTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
-        if errors:
-            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
         # test session_key in url method
         url = reverse('kmlapp-array-kml', kwargs={'session_key': self.client.session.session_key, 'input_array_id': self.test_array_id})
         response = self.other_client.get(url)
@@ -117,8 +148,8 @@ class KMLAppTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
-        if errors:
-            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
         # test session_key in url method
         url = reverse('kmlapp-mpa-kml', kwargs={'session_key': self.client.session.session_key, 'input_mpa_id': self.test_mpa_id})
         response = self.other_client.get(url)
@@ -135,14 +166,57 @@ class KMLAppTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
-        if errors:
-            raise Exception("Invalid KML\n%s" % str(errors))
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
 
         url = reverse('kmlapp-userlinks-kml', kwargs={'session_key': self.client.session.session_key, 'input_username': self.user.username})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
             
-            
+    def test_public_kml_auth(self):
+        """
+        Tests that user can retrieve valid KML file for public shared mpas and arrays
+        """
+        # As authenticated user
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('kmlapp-publicshared-kml', kwargs={'session_key':self.client.session.session_key})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200, response)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
+    def test_public_kml_unauth(self):
+        """
+        Tests that ANY user can retrieve valid KML file for public shared mpas and arrays
+        """
+        # As anonymous user
+        url = reverse('kmlapp-publicshared-kml', kwargs={'session_key': '0'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
+    def test_shared_kml(self):
+        """ 
+        Tests that another user can view the shared_kml (with network links the the sharedby-kmls)
+        """
+        self.client.login(username=self.user2.username, password=self.password)
+        url = reverse('kmlapp-sharedlinks-kml', kwargs={'session_key':self.client.session.session_key, 'input_username':self.user2.username})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200, response)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
+    def test_sharedby_kml(self):
+        """
+        Tests that user can view the sharedby_kml (mpas shared by a given group)
+        """
+        self.client.login(username=self.user2.username, password=self.password)
+        url = reverse('kmlapp-sharedby-kml', kwargs={'session_key':self.client.session.session_key, 'input_shareuser': self.user.pk, 'input_sharegroup':self.group1.pk })
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200, response)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
 
     def test_kmz_view(self):
         """ 
@@ -161,3 +235,14 @@ class KMLAppTest(TestCase):
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 401)
         
+    def test_nonexistant_mpa(self):
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('kmlapp-mpa-kmz', kwargs={'session_key': self.client.session.session_key, 'input_mpa_id': '12345678910'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_nonexistant_array(self):
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('kmlapp-array-kmz', kwargs={'session_key': self.client.session.session_key, 'input_array_id': '12345678910'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)

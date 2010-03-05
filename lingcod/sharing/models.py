@@ -98,6 +98,14 @@ def get_content_type_id(model_class):
     except:
         raise SharingError("Cannot get content type for %s " % model_class)
 
+def get_content_type(model_class):
+    """
+    Returns the content type object for a given model class
+    """
+    try:
+        return ContentType.objects.get(app_label=model_class._meta.app_label, model=model_class.__name__.lower())
+    except:
+        raise SharingError("Cannot get content type for %s " % model_class)
 
 def share_object_with_groups(the_object, the_group_ids):
     """
