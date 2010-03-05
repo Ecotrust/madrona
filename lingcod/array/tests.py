@@ -4,6 +4,7 @@ from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.mpa.tests import TestMpa, MpaTestForm
 from lingcod.common import utils 
 from django.contrib.auth.models import *
+from lingcod.sharing.models import * 
 from django.conf import settings
 from django.test.client import Client
 from django.contrib.gis.geos import GEOSGeometry 
@@ -176,6 +177,109 @@ class ArrayResourcesTestCase(TestCase):
             rest_uid(ArrayTestArray), {'name': 'myname'})
 
 
+class ArrayCopyTestCase(TestCase):
+    def setUp(self):
+        self.settings_manager.set(
+            ARRAY_FORM = 'lingcod.array.tests.ArrayTestForm', 
+            ARRAY_CLASS = 'lingcod.array.tests.ArrayTestArray', 
+            MPA_CLASS='lingcod.mpa.tests.TestMpa', 
+            MPA_FORM='lingcod.mpa.tests.MpaTestForm',
+        )
+        self.client = Client()
+        self.password = 'iluvmpas'
+        self.user = User.objects.create_user('mpaarraytest', 'test@marinemap.org', password=self.password)
+        self.user2 = User.objects.create_user('mpaarraytest2', 'test2@marinemap.org', password=self.password)
+
+        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+
+        smr = MpaDesignation.objects.create(name="Reserve of some sort", acronym="R")
+        smr.save()
+
+        self.mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation=smr, user=self.user, geometry_final=g1)
+        self.mpa1.save()
+        self.mpa1_name = self.mpa1.name
+
+        array1 = ArrayTestArray.objects.create( name='Test_Array_1', user=self.user)
+        array1.save()
+        array1.add_mpa(self.mpa1)
+        self.array1_name = array1.name
+        self.array1_pk = array1.pk
+        self.url = reverse('array-copy', kwargs={'pk': self.array1_pk })
+
+        # Register the mpas and arrays as shareable content types
+        mpa_ct = ContentType.objects.get(app_label='mpa',model='testmpa')
+        array_ct = ContentType.objects.get(app_label='array',model='arraytestarray')
+
+        share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
+                                                    container_content_type=array_ct,
+                                                    container_set_property='mpa_set')
+        share_array = ShareableContent.objects.create(shared_content_type=array_ct)
+
+        # Then make the group with permissions
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        shareables = get_shareables()
+        for modelname in shareables.iterkeys():
+            self.group1.permissions.add(shareables[modelname][1])
+
+    def test_array_copy(self):
+        """ Test that array's copy method works """
+        array1 = ArrayTestArray.objects.get(pk=self.array1_pk)
+        array2 = array1.copy(self.user)
+
+        self.assertEquals(array2.name, self.array1_name + " (copy)")
+
+        # Make sure MPA got copied over
+        self.assertEquals(len(array2.mpa_set), len(array1.mpa_set))
+        self.assertEquals(array2.mpa_set[0].name, self.mpa1_name + " (copy)")
+
+        # Make sure the new objects are not shared
+        self.assertEquals(len(array2.sharing_groups.all()), 0)
+        self.assertEquals(len(array2.mpa_set[0].sharing_groups.all()), 0)
+
+    def test_array_copy_by_get(self):
+        """ Array copy web service should not accept GET requests"""
+        self.client.login(username=self.user.username, password=self.password)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code,400)
+
+    def test_array_copy_by_post(self):
+        """Tests a standard copy using the web service"""
+        self.client.login(username=self.user.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,201)
+        self.assertTrue(response['Location'])
+
+    def test_array_copy_404(self):
+        """Tests copy request for a non-existent array """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('array-copy', kwargs={'pk': 12345678910 })
+        response = self.client.post(url)
+        self.assertEquals(response.status_code,404)
+
+    def test_array_copy_shared(self):
+        """Tests if another user with proper permissions can make a copy """
+        # add both users to group
+        self.user.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+
+        # share the array
+        the_array = ArrayTestArray.objects.get(pk=self.array1_pk)
+        from lingcod.sharing.models import share_object_with_groups
+        share_object_with_groups(the_array, [self.group1.pk])
+
+        # Test it
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,201)
+        self.assertTrue(response['Location'])
+
+    def test_array_copy_403(self):
+        """Tests if a user without proper permissions can make a copy """
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,403)
 
 class MpaArrayServiceTestCase(TestCase):
     def setUp(self):

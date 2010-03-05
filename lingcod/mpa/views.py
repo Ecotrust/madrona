@@ -147,17 +147,14 @@ def copy(request, pk):
             return HttpResponse(txt + 'You must be logged in', status=401)
 
         Mpa = get_mpa_class()
-        try:
-            # Frst see if user owns it
-            the_mpa = Mpa.objects.get(id=int(pk), user=user)
-        except Mpa.DoesNotExist:
-            try: 
-                # ... then see if its shared with the user
-                the_mpa = Mpa.objects.shared_with_user(user).get(id=int(pk))
-            except Mpa.DoesNotExist:
-                txt = "You dont own it and nobdy shared it with you so you can't make a copy."
-                return HttpResponse(txt, status=401)
         
+        from lingcod.sharing.utils import can_user_view
+        viewable, response = can_user_view(Mpa, pk, user) 
+        if not viewable:
+            return response
+        else:
+            the_mpa = Mpa.objects.get(pk=pk)
+
         # Go ahead and make a copy
         new_mpa = the_mpa.copy(user)
 

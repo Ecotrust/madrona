@@ -4,6 +4,8 @@ from lingcod.array.models import MpaArray
 from django.contrib.auth.models import *
 from django.test.client import Client
 from django.core.urlresolvers import reverse
+from django.contrib.gis.geos import GEOSGeometry 
+from lingcod.sharing.models import ShareableContent, get_shareables
 # from lingcod.array.tests import ArrayTestArray as TestArray
 
 class TestMpa(Mpa):
@@ -149,3 +151,85 @@ class MpaEditingTestCase(TestCase):
         self.assertEquals(mpa.user, self.user)
 
         
+class MpaCopyTestCase(TestCase):
+    def setUp(self):
+        self.settings_manager.set(MPA_FORM = 'lingcod.mpa.tests.MpaTestForm', MPA_CLASS = 'lingcod.mpa.tests.TestMpa')
+        self.client = Client()
+        self.password = 'iluvmpas'
+        self.user = User.objects.create_user('mpaarraytest', 'test@marinemap.org', password=self.password)
+        self.user2 = User.objects.create_user('mpaarraytest2', 'test2@marinemap.org', password=self.password)
+
+        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+
+        smr = MpaDesignation.objects.create(name="Reserve of some sort", acronym="R")
+        smr.save()
+
+        self.mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation=smr, user=self.user, geometry_final=g1)
+        self.mpa1.save()
+        self.mpa1_name = self.mpa1.name
+        self.mpa1_pk = self.mpa1.pk
+        self.url = reverse('mpa-copy', kwargs={'pk': self.mpa1_pk })
+
+        # Register the mpas and arrays as shareable content types
+        mpa_ct = ContentType.objects.get(app_label='mpa',model='testmpa')
+        share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct)
+
+        # Then make the group with permissions
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        shareables = get_shareables()
+        for modelname in shareables.iterkeys():
+            self.group1.permissions.add(shareables[modelname][1])
+
+    def test_mpa_copy(self):
+        """ Test that mpa's copy method works """
+        mpa1 = TestMpa.objects.get(pk=self.mpa1_pk)
+        mpa2 = mpa1.copy(self.user)
+
+        self.assertEquals(mpa2.name, self.mpa1_name + " (copy)")
+        self.assertEquals(len(mpa2.sharing_groups.all()), 0)
+
+    def test_mpa_copy_by_get(self):
+        """ MPA copy web service should not accept GET requests"""
+        self.client.login(username=self.user.username, password=self.password)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code,400)
+
+    def test_mpa_copy_by_post(self):
+        """Tests a standard mpa copy using the web service"""
+        self.client.login(username=self.user.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,201)
+        self.assertTrue(response['Location'])
+
+    def test_mpa_copy_404(self):
+        """Tests copy request for a non-existent mpa """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('mpa-copy', kwargs={'pk': 12345678910 })
+        response = self.client.post(url)
+        self.assertEquals(response.status_code,404)
+
+    def test_mpa_copy_shared(self):
+        """Tests if another user with proper permissions can make a copy """
+        # add both users to group
+        self.user.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+
+        # share the mpa
+        the_mpa = TestMpa.objects.get(pk=self.mpa1_pk)
+        from lingcod.sharing.models import share_object_with_groups
+        share_object_with_groups(the_mpa, [self.group1.pk])
+
+        # Test it
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,201)
+        self.assertTrue(response['Location'])
+
+    def test_mpa_copy_403(self):
+        """Tests if a user without proper permissions can make a copy """
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.post(self.url)
+        self.assertEquals(response.status_code,403)
+

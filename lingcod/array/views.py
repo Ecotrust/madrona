@@ -97,16 +97,12 @@ def copy(request, pk):
         if user.is_anonymous() or not user.is_authenticated():
             return HttpResponse(txt + 'You must be logged in', status=401)
 
-        try:
-            # Frst see if user owns it
-            the_array = MpaArray.objects.get(id=int(pk), user=user)
-        except MpaArray.DoesNotExist:
-            try: 
-                # ... then see if its shared with the user
-                the_array = MpaArray.objects.shared_with_user(user).get(id=int(pk))
-            except MpaArray.DoesNotExist:
-                txt = "You dont own it and nobdy shared it with you so you can't make a copy."
-                return HttpResponse(txt, status=401)
+        from lingcod.sharing.utils import can_user_view
+        viewable, response = can_user_view(MpaArray, pk, user) 
+        if not viewable:
+            return response
+        else:
+            the_array = MpaArray.objects.get(pk=pk)
         
         # Go ahead and make a copy
         new_array = the_array.copy(user)
