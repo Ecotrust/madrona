@@ -135,8 +135,10 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
 
 lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, original_kml, final_wkt, final_kml){
     this.form_.find('#id_geometry_orig').val(original_wkt);
-    $('#geometry_final_kml').text(final_kml);
-    $('#geometry_orig_kml').text(original_kml);
+    // Replacing the entire script tag rather than just changing the contents
+    // for the benefit of IE8 (damn IE 8 !!)
+    $('#geometry_final_kml').replaceWith('<script id="geometry_final_kml" type="application/vnd.google-earth.kml+xml">'+final_kml+'</script>');
+    $('#geometry_orig_kml').replaceWith('<script id="geometry_orig_kml" type="application/vnd.google-earth.kml+xml">'+original_kml+'</script>');
 }
 
 lingcod.Manipulator.prototype.hideStates_ = function(){
@@ -188,9 +190,9 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     this.is_defining_shape = false;
     this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
     this.render_target_.find('div.edit').show();
-    var kml = jQuery.trim($('#geometry_final_kml').text());
+    var kml = jQuery.trim($('#geometry_final_kml').html());
     if(!kml){
-        var kml = jQuery.trim($('#geometry_orig_kml').text());
+        var kml = jQuery.trim($('#geometry_orig_kml').html());
         this.process(kml, this.manipulators_, function(data){
             if(data.success === '1'){
                 var kmlObject = self.addNewShape_(data.final_shape_kml);
@@ -240,7 +242,7 @@ lingcod.Manipulator.prototype.process = function(wkt, url, callback){
 }
 
 lingcod.Manipulator.prototype.editExistingShape_ = function(){
-    var kml = jQuery.trim($('#geometry_orig_kml').text());
+    var kml = jQuery.trim($('#geometry_orig_kml').html());
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
