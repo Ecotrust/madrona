@@ -73,6 +73,7 @@ INSTALLED_APPS += (
     'nc_mlpa.mlpa',
     'nc_mlpa.report',
     'nc_mlpa.layers',
+    'nc_mlpa.econ_analysis',
 )
 
 # lingcod.intersection configuration
