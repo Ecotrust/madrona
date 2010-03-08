@@ -217,7 +217,6 @@ class KMLAppTest(TestCase):
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
 
-
     def test_kmz_view(self):
         """ 
         Tests that we can retrieve a zipped KML file (ie KMZ)
@@ -246,3 +245,16 @@ class KMLAppTest(TestCase):
         url = reverse('kmlapp-array-kmz', kwargs={'session_key': self.client.session.session_key, 'input_array_id': '12345678910'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
+
+    def test_invalid_kml(self):
+        """ 
+        Tests that invalid KML gets noticed
+        """
+        self.client.login(username=self.user.username, password=self.password)
+        url = reverse('kmlapp-user-kml', kwargs={'session_key': 0, 'input_username': self.user.username})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+        bad = str(response.content).replace("<Document>","<foobar /><Document>")
+        errors = kml_errors(bad)
+        self.assertEquals(errors[0][1]['element'],u'foobar')
