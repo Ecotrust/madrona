@@ -65,6 +65,8 @@ class Estuaries(models.Model):
         return self.name
 
 class MpaArray(BaseArray):
+    short_name = models.CharField(blank=True, null=True, max_length=8, help_text='This name will be used as the file name for exported items like shapefiles, spreadsheets, etc. Eight characters, max.')
+    
     @property
     def opencoast_mpa_set(self):
         """return a query set that includes the MPAs within the array that are not estuarine."""

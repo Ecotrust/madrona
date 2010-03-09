@@ -343,7 +343,10 @@ def array_summary_excel(request, array_id_list_str):
     #     wb_name = 'MLPA_Array_Summaries'
     for array_id in array_id_list:
         array = get_viewable_object_or_respond(array_class,array_id,request.user)
-        wb_name = array.name[:10]
+        if array.short_name:
+            wb_name = array.short_name
+        else:
+            wb_name = array.name[:10]
         ws = wb.add_sheet('Attributes') #slugify(array.name[0:26] + '_att'))
         ws = array_attributes_excel_worksheet(array,ws)
         ws = wb.add_sheet('Summary') #slugify(array.name[0:26] + '_sum'))
@@ -422,8 +425,12 @@ def array_shapefile(request, array_id_list_str):
     #array_set = mlpa.MpaArray.objects.filter(pk__in=array_id_list_str.split(',') )
     array_id = array_id_list[0] # for now we're only expecting to get one
     array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    if array.short_name:
+        file_name = array.short_name
+    else:
+        file_name = array.name[0:8]
     shp_response = ShpResponder(array.shapefile_export_query_set)
-    shp_response.file_name = slugify(array.name[0:10])
+    shp_response.file_name = slugify(file_name)
     return shp_response()
     
 def mpa_shapefile(request, mpa_id_list_str):
@@ -432,7 +439,7 @@ def mpa_shapefile(request, mpa_id_list_str):
     mpa_id = mpa_id_list[0] # only expecting one for now
     mpa = get_viewable_object_or_respond(mpa_class,mpa_id,request.user)
     shp_response = ShpResponder(mpa.export_query_set)
-    shp_response.file_name = slugify(mpa.name[0:10])
+    shp_response.file_name = slugify(mpa.name[0:8])
     return shp_response()
 
 def mpa_habitat_representation(request, mpa_id, format='json', with_geometries=False, with_kml=False):
