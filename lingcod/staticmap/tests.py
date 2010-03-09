@@ -8,7 +8,7 @@ from django.conf.urls.defaults import *
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import GEOSGeometry 
 from django.contrib.contenttypes.models import ContentType
-from lingcod.staticmap.models import *
+from lingcod.staticmap.models import MapConfig
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from lingcod.sharing.models import * 

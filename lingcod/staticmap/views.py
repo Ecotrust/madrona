@@ -7,7 +7,7 @@ from lingcod.mpa.models import MpaDesignation
 from lingcod.sharing.utils import can_user_view
 import mapnik
 import settings
-from lingcod.staticmap.models import *
+from lingcod.staticmap.models import MapConfig
 
 mpa_class = utils.get_mpa_class()
 
