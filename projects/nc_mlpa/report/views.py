@@ -37,6 +37,28 @@ def max_str_length_in_list(list):
             max_len = len(item)
     return max_len
 
+def array_size_by_lop_worksheet(array,ws):    
+    title_style = xlwt.easyxf('font: bold true;')
+    heading_row_style = xlwt.easyxf('font: bold true; alignment: horizontal center, wrap true; borders: left thin, right thin, top thin, bottom medium;')
+    area_style = xlwt.easyxf('alignment: horizontal center; borders: left thin, right thin, bottom thin, top thin;',num_format_str='#,##0.00')
+    all_clusters = array.clusters | array.clusters_at_lowest_lop
+    lops = mlpa.Lop.objects.filter(run=True) | mlpa.Lop.objects.filter(value=0)
+    current_row = 0
+    # Write out the page title
+    page_title = 'Cluster Size (Sq Miles) by LOP for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
+    ws.write_merge(current_row,current_row,0,4,page_title,title_style)
+    current_row += 2
+    # Write out the header row containing the LOP names
+    for i,lop in enumerate(lops):
+        ws.col(i).width = 256 * ( len(lop.name) + 4 )
+        ws.row(current_row).write(i,lop.name.title(),heading_row_style)
+    current_row += 1
+    # Write out the areas for clusters at each LOP
+    for i,lop in enumerate(lops):
+        for x,cl in enumerate(all_clusters.filter(lop=lop)):
+            ws.row(current_row + x).write(i,cl.area_sq_mi,area_style)
+    return ws
+
 def array_summary_excel_worksheet(array,ws):
     by_desig = array.summary_by_designation
     title_style = xlwt.easyxf('font: bold true;')
@@ -336,6 +358,8 @@ def array_summary_excel(request, array_id_list_str):
             point_dict[cl.geometry_collection.centroid] = cl.name
         ws_title = 'MPA Spacing for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
         ws = spacing_worksheet(point_dict,ws_title,ws)
+        ws = wb.add_sheet('Cluster Size') 
+        ws = array_size_by_lop_worksheet(array,ws)
 
     response = int_views.build_excel_response(slugify(wb_name),wb)
     return response
