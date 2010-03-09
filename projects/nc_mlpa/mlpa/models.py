@@ -371,6 +371,11 @@ class GoalObjective(models.Model):
     def flat_attr(self):
         return self.goal_category.name + ':' + self.name
 
+default_boundary_description = """North Boundary:  [please describe, e.g. "north latitude 36 21.0 to the extent of state waters"]
+West Boundary:  [please describe, e.g. "the state water boundary"]
+South Boundary: [please describe, e.g. "line due west of the northern tip of Sammy's Rock: at ~33 21.029"]
+East Boundary:   [please describe, e.g. "mean high tide line"]"""
+
 class MlpaMpa(Mpa):
     """Model used for representing marine protected areas as part of the MLPA initiative
 
@@ -447,7 +452,8 @@ class MlpaMpa(Mpa):
     allowed_uses = models.ManyToManyField(AllowedUse,null=True, blank=True, verbose_name="Allowed Uses", help_text="useful help text.")
     is_estuary = models.BooleanField(verbose_name="Is Estuary?")
     cluster_id = models.IntegerField(null=True, blank=True)
-    boundary_description = models.TextField(null=True, blank=True, verbose_name="Boundary Description", help_text="Written description of the MPA boundaries.")
+    boundary_description = models.TextField(null=True, blank=True, default = default_boundary_description,
+            verbose_name="Boundary Description", help_text="Written description of the MPA boundaries.")
     specific_objective = models.TextField(verbose_name='Site Specific Rationale', null=True, blank=True, help_text="""In one or two sentences, please describe how this MPA contributes to meeting the goals of your planning process. This section should describe the main reason that an MPA is proposed in this location.""")
     design_considerations = models.TextField(null=True, blank=True, verbose_name="Other considerations for MPA design", help_text="""Please list below any additional considerations that have been taken into account in the design of this MPA. Potential information to describe here might include socioeconomic or feasibility considerations.""")
     comments = models.TextField(null=True, blank=True)
