@@ -75,7 +75,7 @@
             {% block meta_navigation_list_insert %}{% endblock %}
             <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
-            <li><a href="{% url auth_password_change %}">change password</a> | </li>
+            <li><a href="{% url user_profile-form user.username %}">my profile</a> | </li>
             <li><a href="{% url auth_logout %}">sign out</a></li>
             {% else %}
             <li><a href="{% url registration_register %}">register</a> | </li>

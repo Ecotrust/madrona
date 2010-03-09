@@ -1,0 +1,42 @@
+{% extends "registration/reg_base.html" %}
+{% load order_by %}
+
+{% block title %}MarineMap User Profile{% endblock %}
+
+{% block content %}
+<style>
+.group {padding:0;margin:0;text-indent:none;font-size:12px;}
+.groups {padding:0;margin:0;text-indent:none;}
+</style>
+
+
+<h2> Personal Info </h2>
+<form action="{% url user_profile-form profile.user.username%}" method="post">
+    <p><label>Username:</label> <input type="text" readonly value="{{ profile.user.username }}" /> </p>
+    {{ uform.as_p }}
+    {{ pform.as_p }}
+    <p><label>Password:</label> <a href="{% url auth_password_change %}">Change password</a></p>
+    <input type="submit" value="Submit Changes" />
+</form>
+
+<hr/>
+
+<h2> Groups </h2>
+<div>
+{% if profile.user.groups %}
+    <p> Your are currently a member of the following groups.  </p>
+    <ul class="groups">
+    {% for group in profile.user.groups.all %}
+        <li class="group"> <span> {{group.name}}</span> </li>
+    {% endfor %}        
+    </ul>
+    {% if group_request_email %}
+    <p> To request membership with another group or groups, please send an email to 
+    <a href="mailto:{{group_request_email}}">{{group_request_email}}</a> with your username and group requests.</p>
+    {% endif %}
+{% endif %}
+</div>
+
+
+
+{% endblock %}
