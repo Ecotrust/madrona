@@ -26,16 +26,15 @@ def get_object_for_editing(request, klass, pk):
     return instance
 
 def get_object_for_viewing(request, klass, pk):
-    instance = get_object_or_404(klass, pk=pk)
     if not request.user.is_authenticated:
         return HttpResponse('You must be logged in.', status=401)
-    # This isn't implemented properly yet. Should check lingcod.sharing to see
-    # if user has permission to view
-    # something like:
-    # 
-    # lingcod.sharing.utils.can_user_view(user, instance)
-    # 
-    return instance
+
+    from lingcod.sharing.utils import can_user_view
+    viewable, response = can_user_view(klass, pk, request.user) 
+    if viewable:
+        return get_object_or_404(klass, pk=pk)
+    else:
+        return response
 
 # RESTful Generic Views
 
@@ -265,6 +264,10 @@ def resource(request, form_class=None, pk=None, get_func=None,
         return delete(request, form_class.Meta.model, pk)
     elif request.method == 'GET':
         instance = get_object_for_viewing(request, form_class.Meta.model, pk)
+        if isinstance(instance, HttpResponse):
+            # Object is not viewable so we return httpresponse
+            # should contain the appropriate error code
+            return instance
         if get_func is not None:
             return get_func(request, instance)
         else:
