@@ -49,5 +49,7 @@ def can_user_view(model_class, pk, user):
             return True, HttpResponse("Object shared with user",status=202)
         except model_class.DoesNotExist:
             return False, HttpResponse("Access denied",status=403)
+        except:
+            return False, HttpResponse("Object permissions cannot be determined using can_user_view.", status=500) 
 
     return False, HttpResponse("Server Error in can_user_view", status=500) 

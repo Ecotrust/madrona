@@ -127,6 +127,16 @@ class SharingTestCase(TestCase):
         viewable, response = can_user_view(SharingTestMpa, self.mpa2_id, self.user3)
         self.assertEquals( viewable, False )
 
+    def test_unshareable_shortcut(self):
+        """ 
+        If we try the can_user_view shortcut on an unshareable object, fail gracefully
+        should return False, Http 500 reponse
+        """
+        # Group objects are not shareable
+        viewable, response = can_user_view(Group, self.group1_id, self.user3)
+        self.assertEquals( viewable, False )
+        self.assertEquals( response.status_code, 500 )
+
     def test_share_with_bad_group(self):
         """
         Make sure we can't share with a group which does not have permissions
