@@ -98,8 +98,8 @@
     
     var DEFAULT_USERNAME = 'integration_tester';
     var DEFAULT_PASSWORD = 'password';
-    var LOGIN = '/login/';
-    var LOGOUT = '/logout/';
+    var LOGIN = '/accounts/login/';
+    var LOGOUT = '/accounts/logout/';
         
     function login(username, password, callback){
         $.post(LOGIN, {username: username, password: password}, function(data, textStatus){
