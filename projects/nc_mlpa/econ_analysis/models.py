@@ -12,6 +12,7 @@ class FishingImpactAnalysisMap(models.Model):
     species_name = models.TextField(verbose_name='Species Name')
     species_abbr = models.TextField(verbose_name='Species Abbreviation')
     cell_size = models.IntegerField()
+    #should this really be 'allowed_'targets??  
     allowed_targets = models.ManyToManyField(AllowedTarget, null=True, blank=True, verbose_name="Fishing Impact Analysis Map Allowed Targets")
     allowed_uses = models.ManyToManyField(AllowedUse, null=True, blank=True, verbose_name="Fishing Impact Analysis Map Allowed Uses")
 

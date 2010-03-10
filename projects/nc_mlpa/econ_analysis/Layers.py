@@ -48,7 +48,7 @@ class Layers:
                     species_abbr =  species
                     layer = Layer(group_name, group_abbr, cell_size, fishing_type, take_methods, port_name, port_abbr, species_display_name, species_abbr, target_names)
                     layers.append(layer)
-                    #print 'Layer(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)' %(group_name, group_abbr, cell_size, fishing_type, take_methods, port_name, port_abbr, species_name, species_display_name, species_abbr)                    
+                    #print 'Layer(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)' %(group_name, group_abbr, cell_size, fishing_type, take_methods, port_name, port_abbr, target_names, species_display_name, species_abbr)                    
                     
         return layers
         

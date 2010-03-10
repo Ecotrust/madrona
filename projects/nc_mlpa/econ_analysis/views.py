@@ -79,9 +79,9 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         perc_area_mpa = float(result.mpaPercOverallArea)
         x_perc_area_mpa.append(perc_area_mpa)
         perc_area_sr = float(result.srPercOverallArea)
-        x_perc_area_sr.append(perc_area_sr - perc_area_mpa)   
+        x_perc_area_sr.append(perc_area_sr - perc_area_mpa)  
         y_labels.insert(0, result.species)           
-
+    
     xLabels = ['0','-','10','-','20','-','30','-','40','-','50','-','60','-','70','-','80','-','90','-','100']
     lowColor = 'E8492D'
     highColor = 'FF9648'

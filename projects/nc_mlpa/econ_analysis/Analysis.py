@@ -271,7 +271,9 @@ class Analysis:
         self.grass.v_in_ogr(shapepath, mpaVectorName)
         #Convert mpa vector map to raster map
         #import time
+        #######################################################################################
         #time.sleep(5)
+        #######################################################################################
         #pausing here for 5 seconds with time.sleep(5), seems to produce correct results on a consistent basis
         #could it be that v_in_ogr is not finishing otherwise?
         #spend some time trying to get grass.py runCmd to remove and redirect output from grass commands, 
@@ -285,6 +287,18 @@ class Analysis:
             return -1
         else:
             stats = stats[0]                            
+        
+        #Perhaps here we can check to see if we want to intersect or not
+        #If there is an allowed use for this fishery, then no intersect is needed and resulting percentages should be 0.0
+        setPercsToZero = False
+        #Get list of targets from map
+        targets = map.allowed_targets.all()
+        for target in targets:
+            if len(mpa.allowed_uses.filter(target__name=target)) != 0:
+                setPercsToZero = True
+        #The above is still somewhat instable as it shouldn't just check for a single existing allowed target, 
+        #shouldn't it check to see if all targets reflected in this map are allowed within the mpa???
+            
         #Intersect mpa raster with fishing map
         self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)               
         #Calculate percent area       
@@ -303,7 +317,15 @@ class Analysis:
         mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)
         mpaPercSrValue = mmutil.percentage(mpaValue,stats.srValue)
         srPercOverallValue = mmutil.percentage(stats.srValue,stats.totalValue)        
-
+   
+        if setPercsToZero:
+            mpaPercOverallArea = 0.0
+            mpaPercSrArea = 0.0
+            srPercOverallArea = 0.0
+            mpaPercOverallValue = 0.0
+            mpaPercSrValue = 0.0
+            srPercOverallValue = 0.0
+            
         #Generate analysis result
         analResult = AnalysisResult(
             mpa.id,
