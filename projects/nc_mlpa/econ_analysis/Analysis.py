@@ -9,7 +9,7 @@ import utilities as mmutil
 from models import *
 from nc_mlpa.mlpa.models import *
 #from Layers import *
-from Layer import Layers
+from Layers import Layers
 import GChartWrapper as gchart
 
 '''
@@ -111,7 +111,6 @@ class Analysis:
             map.species_name = layer.species_name
             map.species_abbr = layer.species_abbr
             map.cell_size = layer.cell_size
-            #delay save till after allowed uses are prescribed 
             map.save()  
         #Otherwise create a new record                 
         else:
@@ -124,32 +123,27 @@ class Analysis:
                 species_abbr=layer.species_abbr,
                 cell_size=layer.cell_size 
             )
-            #WAIT ON SAVE UNTIL AFTER THE ALLOWED USES HAVE BEEN ADDED
             map.save()   
             
+        #Add Allowed Targets to AnalysisMap
+        targets = layer.target_names
+        for target in targets:
+            allowed_target = AllowedTarget.objects.filter(name=target)
+            if len(allowed_target) > 0:
+                map.allowed_targets.add(allowed_target[0])
+        map.save()
+        
         #Map the new AnalysisMap to one or more allowed uses
         #Filter by fishing type
         allowed_uses = AllowedUse.objects.filter(
             purpose__name=layer.fishing_type
         )
         
-        #mm_groups = None
         #Get methods for current species
-        #methods = layer.take_methods.get(layer.species_abbr)
         methods = layer.take_methods
-        #Get marinemap groups for current species
-        #for species in species_list:
-        #    if species.get('name') == layer.species_name:
-        #        mm_groups = species.get('mm_groups')
         species_name = layer.species_name
-        
-        #if not methods or not mm_groups:
-        #    #No allowed uses to map to, just return now
-        #    return map
-        
-        #for method_name in methods:
-        #    for group_name in mm_groups:
-                #Filter again by mm method and mm species group
+                
+        #Add Allowed Uses to AnalysisMap
         for method_name in methods:
             uses = allowed_uses.filter(method__name=method_name, target__name=species_name)
             
@@ -158,24 +152,8 @@ class Analysis:
                 for allowed_use in uses:
                     map.allowed_uses.add(allowed_use)
             
-            map.save()    
-            '''
-            map_uses = AnalysisMapAllowedUse.objects.filter(
-                map=map,
-                allowed_use=allowed_use
-            )
-            #Update if it already exists
-            if len(map_uses) > 0:
-                map_use = map_uses[0]
-                map_use.map = map
-                map_use.allowed_use = allowed_use
-                map_use.save()
-            #Else create a new one
-            else:                            
-                map_use = AnalysisMapAllowedUse(map=map,
-                                                allowed_use=allowed_use)
-                map_use.save()
-            '''
+            map.save() 
+            
         return map       
 
     '''
@@ -185,7 +163,7 @@ class Analysis:
         #Output study region to shapefile 
         srPath = self.__srToShapefile()
         #Convert shapefile to grass vector map            
-        self.grass.v_in_ogr(srPath,self.srMapName)
+        self.grass.v_in_ogr(srPath, self.srMapName)
         #Convert study vector map to raster map
         self.grass.v_to_r(self.srMapName, self.srMapName, 1)          
 

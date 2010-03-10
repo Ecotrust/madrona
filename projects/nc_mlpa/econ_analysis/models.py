@@ -1,5 +1,5 @@
 from django.db import models
-from mlpa.models import AllowedUse
+from mlpa.models import AllowedUse, AllowedTarget
 from econ_analysis.managers import *
 
 class FishingImpactAnalysisMap(models.Model):  
@@ -12,14 +12,15 @@ class FishingImpactAnalysisMap(models.Model):
     species_name = models.TextField(verbose_name='Species Name')
     species_abbr = models.TextField(verbose_name='Species Abbreviation')
     cell_size = models.IntegerField()
+    allowed_targets = models.ManyToManyField(AllowedTarget, null=True, blank=True, verbose_name="Fishing Impact Analysis Map Allowed Targets")
     allowed_uses = models.ManyToManyField(AllowedUse, null=True, blank=True, verbose_name="Fishing Impact Analysis Map Allowed Uses")
 
     objects = FishingImpactAnalysisMapManager()
-
+    
     def __unicode__(self):
         #return unicode("%s : %s : %s" % (self.group_name, self.port_name, self.species_name))
-        return self.name #': '.join([self.group_name, self.port_name, self.species_name])
-        
+        return ': '.join([self.group_name, self.port_name, self.species_name])
+       
     def getGridName(self):
         return self.species_abbr+'_'+self.port_abbr
     

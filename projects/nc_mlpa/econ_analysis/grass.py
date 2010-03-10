@@ -186,9 +186,9 @@ class Grass:
     '''
     Input a vector ogr datasource (input) and save as a grass vector map (output) 
     '''
-    def v_in_ogr(self, input, output):
+    def v_in_ogr(self, input, output, verbose=False):
         command = 'v.in.ogr -o dsn=%s output=%s --overwrite' % (input, output)
-        self.runCmd(command)
+        self.runCmd(command, showOutput=verbose)
 
     '''
     Input a raster ogr datasource (input) and save as a grass raster map (output) 
