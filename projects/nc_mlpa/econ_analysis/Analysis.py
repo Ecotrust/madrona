@@ -144,14 +144,14 @@ class Analysis:
         species_name = layer.species_name
                 
         #Add Allowed Uses to AnalysisMap
+        #print 'For map: %s' %map
+        #print 'Adding the following allowed uses: '
         for method_name in methods:
             uses = allowed_uses.filter(method__name=method_name, target__name=species_name)
-            
             #Map analysis map to allowed use
-            if len(allowed_uses) > 0:                         
-                for allowed_use in uses:
-                    map.allowed_uses.add(allowed_use)
-            
+            for use in uses:
+                map.allowed_uses.add(use)
+                #print use
             map.save() 
             
         return map       
@@ -292,9 +292,16 @@ class Analysis:
         #If there is an allowed use for this fishery, then no intersect is needed and resulting percentages should be 0.0
         setPercsToZero = False
         #Get list of targets from map
-        targets = map.allowed_targets.all()
-        for target in targets:
-            if len(mpa.allowed_uses.filter(target__name=target)) != 0:
+        #allowed_uses = AllowedUse.objects.filter(purpose__name=layer.fishing_type)
+        map_targets = map.allowed_targets.all()
+        #QUICK FIX...
+        map_group = map.group_name
+        if map_group in ['Commercial', 'Edible Seaweed']:
+            map_purpose='commercial'
+        else:
+            map_purpose='recreational'
+        for map_target in map_targets:
+            if len(mpa.allowed_uses.filter(target__name=map_target, purpose__name=map_purpose)) != 0:
                 setPercsToZero = True
         #The above is still somewhat instable as it shouldn't just check for a single existing allowed target, 
         #shouldn't it check to see if all targets reflected in this map are allowed within the mpa???
