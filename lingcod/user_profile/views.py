@@ -26,17 +26,11 @@ def profile_form(request,username):
                 'group_request_email': settings.GROUP_REQUEST_EMAIL, 'MEDIA_URL':settings.MEDIA_URL}) 
 
     elif request.method == 'POST':
-        uform = UserForm(data=request.POST)
-        pform = UserProfileForm(data=request.POST)
+        uform = UserForm(data=request.POST, instance=user)
+        pform = UserProfileForm(data=request.POST, instance=user_profile)
         if uform.is_valid():
-            d = uform.cleaned_data
-            user.first_name = d['first_name']
-            user.last_name = d['last_name']
-            user.email = d['email']
             user.save()
         if pform.is_valid():
-            d = pform.cleaned_data
-            user_profile.about = d['about']
             user_profile.save()
 
         #return HttpResponseRedirect(reverse('user_profile-form', args=[username]))
