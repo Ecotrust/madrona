@@ -20,6 +20,9 @@ class ShareableContent(models.Model):
 
     ======================  ==============================================
     """ 
+    def __unicode__(self):
+        return u'%s' % self.shared_content_type
+
     shared_content_type = models.ForeignKey(ContentType,related_name="shared_content_type")
     container_content_type = models.ForeignKey(ContentType,blank=True,null=True,verbose_name="Content type of objects to serve as a 'container' for this type")
     container_set_property = models.CharField(max_length=40,blank=True,null=True,verbose_name="Property on the container object which returns a queryset of this type")
