@@ -108,4 +108,4 @@ class UploadForm(forms.Form):
             else:
                 return False, "Sorry, we've experienced a problem on our server. Please try again later."
         else:
-            return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again' 
+            return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again'

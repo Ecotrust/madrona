@@ -119,3 +119,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request'
 )
+
+RELEASE = '1.1' # The next milestone
