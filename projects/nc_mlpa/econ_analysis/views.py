@@ -61,9 +61,13 @@ def MpaEconAnalysis(request, feature_id, format='json'):
     if maps is '':
         return HttpResponseBadRequest('User group or port does not exist')
     
+    #run the analysis
     anal_results = analysis.run(mpa, maps)
     if anal_results < 0:
         return HttpResponseBadRequest('Error running analysis')
+    
+    #sort results alphabetically by species name
+    anal_results.sort(key=lambda obj: obj.species)
 
     x_perc_value_mpa = []
     x_perc_value_sr = []    

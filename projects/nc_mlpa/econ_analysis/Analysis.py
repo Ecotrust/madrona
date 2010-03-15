@@ -270,11 +270,11 @@ class Analysis:
         mpaVectorName = self.mpaVectorMapName+str(mpa.id)
         self.grass.v_in_ogr(shapepath, mpaVectorName)
         #Convert mpa vector map to raster map
-        #import time
         #######################################################################################
+        #import time
         #time.sleep(5)
         #######################################################################################
-        #pausing here for 5 seconds with time.sleep(5), seems to produce correct results on a consistent basis
+        #pausing here for 5 seconds with time.sleep(5), seems to produce correct results on a consistent basis (on my windows machine)
         #could it be that v_in_ogr is not finishing otherwise?
         #spend some time trying to get grass.py runCmd to remove and redirect output from grass commands, 
         #while producing accurate statistical results, and eventually gave up, hoping this works as is on aws servers...
@@ -328,10 +328,10 @@ class Analysis:
         if setPercsToZero:
             mpaPercOverallArea = 0.0
             mpaPercSrArea = 0.0
-            srPercOverallArea = 0.0
+            #srPercOverallArea = 0.0
             mpaPercOverallValue = 0.0
             mpaPercSrValue = 0.0
-            srPercOverallValue = 0.0
+            #srPercOverallValue = 0.0
             
         #Generate analysis result
         analResult = AnalysisResult(

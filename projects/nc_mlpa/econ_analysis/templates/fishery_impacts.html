@@ -18,7 +18,7 @@
 
 <tr>
 <td></td>
-<td colspan=2 align=center><b>Impacts</b></td>
+<td colspan=2 align=center><b>Impacts by Area</b></td>
 <td></td>
 <td></td>
 </tr>
@@ -33,7 +33,7 @@
 
 {% for result in results %}
   <tr>
-  <td >{{ result.species }}</td>
+  <td style="width: 100px;">{{ result.species }}</td>
   <td align=center style='color:#E0051D'>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
   <td align=center>{{ result.mpaPercSrArea }}&nbsp;<small>%</small></td>
   <td align=center></td>
@@ -54,7 +54,7 @@
 
 <tr>
 <td></td>
-<td colspan=2 align=center><b>Impacts</b></td>
+<td colspan=2 align=center><b>Impacts by Value</b></td>
 <td></td>
 <td></td>
 </tr>
@@ -69,7 +69,7 @@
 
 {% for result in results %}
   <tr>
-  <td>{{ result.species }}</td>  
+  <td style="width: 100px;">{{ result.species }}</td>  
   <td align=center style='color:#2B4BFA'>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
   <td align=center>{{ result.mpaPercSrValue }}&nbsp;<small>%</small></td>
   <td></td>

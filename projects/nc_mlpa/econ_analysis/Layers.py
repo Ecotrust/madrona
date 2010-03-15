@@ -11,13 +11,18 @@ class Layers:
         groups = {'com': 'Commercial', 'cpfv': 'Commercial Passenger Fishing Vessel', 'div': 'Recreational Dive', 'kyk': 'Recreational Kayak', 'pvt': 'Recreational Private Vessel', 'swd': 'Edible Seaweed'}
         fishing_types = {'com': 'commercial', 'cpfv': 'recreational', 'div': 'recreational', 'kyk': 'recreational', 'pvt': 'recreational', 'swd': 'commercial'}
         ports = {'all': 'Entire Study Region', 'ab': 'Albion', 'cc': 'Crescent City', 'ek': 'Eureka', 'el': 'Elk', 'fb': 'Fort Bragg', 'sc': 'Shelter Cove', 'td': 'Trinidad'}
-        species_display = {'abal': 'Abalone', 'achv': 'Anchovies', 'chal': 'California Halibut', 'dcrab': 'Dungeness crab', 'dcrabt': 'Dungeness crab', 'eswd': 'All Edible Seaweed Species', 'herg': 'Pacific Herring', 'phal': 'Pacific Halibut', 'rckf': 'Rockfish', 'rckpo': 'Rockfish', 'rklc': 'Rockfish', 'sal': 'Salmon', 'salt': 'Salmon', 'sard': 'Sardines', 'shrmpt': 'Shrimp', 'smtb': 'Smelt', 'sphkl': 'Surf Perch', 'urchd': 'Urchin'} 
+        species_display = {'abal': 'Abalone', 'achv': 'Anchovies', 'chal': 'California Halibut', 'dcrab': 'Dungeness Crab', 'dcrabt': 'Dungeness Crab', 'eswd': 'All Edible Seaweed Species', 'herg': 'Pacific Herring', 'phal': 'Pacific Halibut', 'rckf': 'Rockfish', 'rckpo': 'Rockfish', 'rklc': 'Rockfish', 'sal': 'Salmon', 'salt': 'Salmon', 'sard': 'Sardines', 'shrmpt': 'Shrimp', 'smtb': 'Smelt', 'sphkl': 'Surf Perch', 'urchd': 'Urchin'} 
         targets = {'abal': ['red abalone'], 'achv': ['coastal pelagic finfish'], 'chal': ['California halibut'], 'dcrab': ['Dungeness crab'], 'dcrabt': ['Dungeness crab'], 'eswd': ['bull kelp', 'sea palm', 'canopy-forming algae'], 'herg': ['coastal pelagic finfish'], 'phal': ['Pacific halibut'], 'rckf': ['rockfishes'], 'rckpo': ['rockfishes'], 'rklc': ['rockfishes'], 'sal': ['salmon'], 'salt': ['salmon'], 'sard': ['coastal pelagic finfish'], 'shrmpt': ['coonstripe shrimp and spot prawn'], 'smtb': ['smelts'], 'sphkl': ['redtail surfperch'], 'urchd': ['urchin']} 
         #should commercial surf perch (sphkl) be 'hook and line' or 'hook and line from shore'???
         #using 'hook and line from shore' in original getAllLayers and results generated were not in agreement with SAT
         #maybe start with 'hook and line' here, and change later if that doens't line up
         #might want to bring this to someone's attention though if 'hook and line' works but 'hook and line from shore does not'
-        #answer might lie in which instance do the stats line up 
+        #answer might lie in which instance of the stats line up 
+        #surf perch update....
+        #stats are way off on my local machine where it appears I've used 'hook and line'
+        #stats look good on the server though and it doesn't seem as though the server used anything different...
+        #if things at some point go wrong with surf perch, try changing commercial_methods value to 'hook and line from shore'
+        #new theory, after turning on the 5 second timer in Analysis on my current machine, surf perch is 
         commercial_methods = {'achv': ['round-haul net'], 'dcrabt': ['trap'], 'eswd': ['intertidal hand harvest'], 'herg': ['gillnet'], 'rklc': ['trap', 'hook and line'], 'salt': ['troll'], 'sard': ['round-haul net'], 'shrmpt': ['trap'], 'smtb': ['dip net'], 'sphkl': ['hook and line'], 'urchd': ['diving']}
         rec_cpfv_methods = {'chal': ['hook and line'], 'dcrab': ['trap'], 'phal': ['hook and line'], 'rckpo': ['hook and line'], 'sal': ['hook and line']}
         rec_div_methods = {'abal': ['free dive'], 'dcrab': ['dive'], 'rckf': ['spearfish']}
