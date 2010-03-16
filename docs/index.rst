@@ -19,7 +19,7 @@ MarineMap Decision Support Tool Documentation
    arrays
    manipulators
    reports
-   ui
+   sidebar
    templatetags
    asset_packaging
    maintenance_mode

@@ -32,8 +32,15 @@ for test fixtures.
       
 How to add files to the build
 *****************************
+There are two ways to incorporate your javascript and css asset in the build.
+
+incorporating javascript and css stylesheets into lingcod
+---------------------------------------------------------
+
 To include your files in the main javascript and css packages, you'll need to
 add them to ``js_includes.xml`` and ``css_includes.xml``.
+
+.. note:: *Do not* include project-specific javascript and css files using this method.
 
 ``media/css_includes.xml``
 
@@ -73,25 +80,33 @@ Note that this diverges significantly from the standard way one configures
 this is that static html files can then parse these xml files and run tests
 on the client code without a server running.
 
-*Do not* include project-specific javascript and css files using this method.
-For implementations of MarineMap for specific geographies, keep these files in 
-a media folder in the project file tree. The `standard instructions <http://code.google.com/p/django-compress/wiki/Configuration>`_
-for configuring django-compress can then be used for packaging up those files::
+.. _project_assets:
 
-    COMPRESS_JS = {
-        'application': {
-            'source_filenames': assets.get_js_files(),
-            'output_filename': 'marinemap.r?.js'
-        },
-        'tests': {
-            'source_filenames': assets.get_js_test_files(),
-            'output_filename': 'marinemap_tests.r?.js'
-        },
-        'mlpa-project-javascript': {
-            'source_filenames': ('media/mlpa/js/foo.js', 'media/mlpa/js/bar.js'),
-            'output_filename': 'mlpa_js.r?.js'
-        }
-    }
+project-specific javascript and css files
+-----------------------------------------
+
+For implementations of MarineMap for specific geographies, keep these files in 
+the media folder in a project file tree. Within the project's settings.py 
+file, modify the ``COMPRESS_JS`` and ``COMPRESS_CSS`` dictionaries like so:
+
+.. code-block:: python
+
+    COMPRESS_JS['application']['source_filenames'] += (
+        'projects/nc_mlpa/js/mlpa.js',
+        'projects/nc_mlpa/js/mpa_form.js',
+        'report/js/jquery.hoverIntent.minified.js',
+        'projects/nc_mlpa/js/representationReport.js',
+    )
+
+
+    COMPRESS_CSS['application']['source_filenames'] += (
+        'projects/nc_mlpa/css/closure_fixes.css',
+        'projects/nc_mlpa/css/mlpa_forms.css',
+        'projects/nc_mlpa/css/mlpa_attributes.css',
+        'projects/nc_mlpa/css/replication.css',
+        'projects/nc_mlpa/css/mpa_hab_representation.css',
+    )
+
 
 Including assets in your pages
 ------------------------------
