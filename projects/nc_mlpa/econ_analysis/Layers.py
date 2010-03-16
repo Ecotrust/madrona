@@ -37,6 +37,7 @@ class Layers:
             specs = vars()['self.rec_'+group+'_methods'].keys()
         elif group in ['com', 'Commercial']:
             specs = self.commercial_methods.keys()
+            specs.remove('eswd')
         elif group in ['swd', 'Edible Seaweed']:
             specs = ['eswd']
         else:
