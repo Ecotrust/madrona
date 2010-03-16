@@ -83,8 +83,8 @@ class Analysis:
         height = 60+28*len(yLabels)
         G.size(620,height)
         G.axes.type('xyr')   
-        G.axes.label(*xLabels)
-        G.axes.label(*yLabels)
+        G.axes.label(0,*xLabels)
+        G.axes.label(1,*yLabels)
         G.axes.label(None)
         G.legend(*legendLabels)
         G.legend_pos('bv')
@@ -294,7 +294,7 @@ class Analysis:
         #Get list of targets from map
         #allowed_uses = AllowedUse.objects.filter(purpose__name=layer.fishing_type)
         map_targets = map.allowed_targets.all()
-        #QUICK FIX...
+        #QUICK FIX...REMEMBER TO CHANGE THIS LATER!!!
         map_group = map.group_name
         if map_group in ['Commercial', 'Edible Seaweed']:
             map_purpose='commercial'
@@ -382,6 +382,7 @@ class Analysis:
     def __srToShapefile(self):
         shp_filename = 'study_region.shp' 
         shapepath = os.path.join(tempfile.gettempdir(),shp_filename)
+        #the following query is specific on the server to id=2 as there are currently two Active study regions in the server-side db
         shp_query = 'select * from mm_study_region where active=TRUE'
         command = settings.PGSQL2SHP+" -u "+settings.DATABASE_USER+" -P '"+settings.DATABASE_PASSWORD+"' -f "+shapepath+" "+settings.DATABASE_NAME+' "'+shp_query+'"'
         os.system(command)
@@ -399,6 +400,14 @@ class Analysis:
                 os.remove(filePath)            
         return True         
 
+class EmptyAnalysisResult:
+    def __init__(self, group_name, port_name, species_name):
+        self.user_grp = group_name
+        self.port = port_name
+        self.species = species_name
+        self.mpaPercOverallArea = '---'
+        self.mpaPercOverallValue = '---'
+        
 '''
 An AnalysisResult represents the result of running the impact analysis
 on a single Layer

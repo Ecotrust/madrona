@@ -5,94 +5,55 @@
 <div class="freetext">
 <h4>Report Summary</h4>
 <table class='allowed_uses'>
-<tr><td width=100>User Group:</td><td>{{ report.user_grp }}</td></tr>
-<tr><td width=100>Port:</td><td>{{ report.port }}</td></tr>
+<tr><td width=100>User Group:</td><td>{{ all_results.0.0.user_grp }}</td></tr>
 <tr><td width=100>MPA:</td><td>{{ mpa.name }}</td></tr>
 <tr><td width=100>MPA ID:</td><td>{{ mpa.id }}</td></tr>
+<tr><td width=100>Array:</td><td>{{ mpa.array.name }}</td></tr>
+<tr><td width=100>Array ID:</td><td>{{ mpa.array.id }}</td></tr>
 </table>
 </div>
 
 <div class='freetext'>
-<h4>Fishing Ground Impacts (Area)</h4>
+<br>
 <table class='allowed_uses'>
 
 <tr>
 <td></td>
-<td colspan=2 align=center><b>Impacts by Area</b></td>
-<td></td>
-<td></td>
+<td align=center style="width: 200px;">A. <b>Percentage Area</b> of fishing grounds affected by MPA</td>
+<td style="width: 40px;"></td>
+<td align=center style="width: 200px;">B. <b>Percentage Value</b> of fishing grounds affected by MPA</td>
 </tr>
 
+{% for results in all_results %}
+<tr><td></td><td></td><td></td><td></td></tr>
 <tr>
+<td><b>{{ results.0.port }}</b></td>
 <td></td>
-<td>A. Percentage area of total fishing grounds affected by proposed MPA</td>
-<td>B. Percentage area of fishing grounds within study area affected by proposed MPA</td>
-<td width=60></td>
-<td>C. Percentage area of total fishing grounds within the study area <br/>(<u><b>Not an impact</b></u>)</td>
+<td></td>
+<td></td>
 </tr>
-
-{% for result in results %}
+<tr><td></td><td></td><td></td><td></td></tr>
+  {% for result in results %}
   <tr>
-  <td style="width: 100px;">{{ result.species }}</td>
-  <td align=center style='color:#E0051D'>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
-  <td align=center>{{ result.mpaPercSrArea }}&nbsp;<small>%</small></td>
-  <td align=center></td>
-  <td align=center style='color:#F26118'>{{ result.srPercOverallArea }}&nbsp;<small>%</small></td>  
+  <td style="width: 120px;">{{ result.species }}</td>
+  {% if result.mpaPercOverallArea == '---' %}
+    <td align=center style='color:#E0051D'>{{ result.mpaPercOverallArea }}</td>
+  {% else %}
+    <td align=center style='color:#E0051D'>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
+  {% endif %}
+  <td style="width: 40px;"></td>
+  {% if result.mpaPercOverallArea == '---' %}
+    <td align=center style='color:#E0051D'>{{ result.mpaPercOverallValue }}</td>
+  {% else %}
+    <td align=center style='color:#2B4BFA'>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
+  {% endif %}
+  </tr>
+  {% endfor %}
+<tr><td></td><td></td><td></td><td></td></tr>
 {% endfor %}
 </table>
 
-<center>{{ areaChart|safe }}</center>
-<p>For each fishery in the chart, the <font color='#E0051D'>dark orange</font> bar represents the percentage area of the total fishing grounds affected by your proposed MPA (table column A).  The <font color='#F26118'>light orange</font> bar represents the percentage area of the total fishing grounds within the study area (table column C).</p>  
-<p>In the table, both column A and column B represent fishery impacts for your proposed MPA.  Table column C, also represented as the <font color='#F26118'>light orange</font> bar, <b><u>does not</u></b>.  It represents the maximum impact possible in terms of area for the given user group, port/county and fishery.   It is just a reference for you.  Your results (<font color='#E0051D'>dark orange</font> bars, table column A, ) will never be larger than this value.</p>
-<p>The interviews conducted by Ecotrust were not limited to the study area so the amount of fishing area that falls within the study area (<font color='#F26118'>light orange</font> bars, table column C) is often going to be less than 100%.  Since your MPA is restricted to state waters, the percentage area of total fishing grounds affected by your proposed MPA (<font color='#E0051D'>dark orange</font> bars, table column A) will always be less than or equal to the percentage of total fishing grounds within the study area (<font color='#F26118'>light orange</font> bars, table column C).</p>
-<p>Marginal differences between the percentage area of the total fishing grounds affected by the proposed MPA (<font color='#E0051D'>dark orange</font> bars, table column A) and the percentage area of fishing grounds within the study area affected by the proposed MPA (table column B), indicate that the fishing grounds in terms of area occurs primarily within the study area.  Conversely, significant differences indicate that the fishing grounds in terms of area occur primarily outside the study area.</p>
 </div>
 
-<div class='freetext'>
-<h4>Fishing Ground Impacts (Value)</h4>
-<table class='allowed_uses'>
 
-<tr>
-<td></td>
-<td colspan=2 align=center><b>Impacts by Value</b></td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td></td>
-<td>A. Percentage value of total fishing grounds affected by proposed MPA</td>
-<td>B. Percentage value of fishing grounds within study area affected by proposed MPA</td>
-<td width=100></td>
-<td>C. Percentage value of total fishing grounds within the study area (<u><b>Not an impact</b></u>)</td>
-</tr>
-
-{% for result in results %}
-  <tr>
-  <td style="width: 100px;">{{ result.species }}</td>  
-  <td align=center style='color:#2B4BFA'>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
-  <td align=center>{{ result.mpaPercSrValue }}&nbsp;<small>%</small></td>
-  <td></td>
-  <td align=center style='color:#5E9CFF'>{{ result.srPercOverallValue }}&nbsp;<small>%</small></td>
-{% endfor %}
-</table>
-
-<center>{{ valueChart|safe }}</center>
-<p>For each fishery in the chart, the <font color='#2B4BFA'>dark blue</font> bar represents the percentage value of the total fishing grounds affected by the proposed MPA (table column A).  The <font color='#5E9CFF'>light blue</font> bar represents the total fishing grounds within the study area (table column C).</p>
-<p>In the table both column A and column B represent fishery impacts for your proposed MPA.  Table column C, also represented as the <font color='#5E9CFF'>light blue</font> bar, <b><u>does not</u></b>.  It represents the maximum impact possible in terms of area for the given user group, port/county and fishery.   It is just a reference for you.  Your results (<font color='#2B4BFA'>dark blue</font> bars, table column A) will never be larger than this value.</p>
-<p>The interviews conducted by Ecotrust were not limited to the study area so the amount of fishing value that falls within the study area (<font color='#5E9CFF'>light blue</font> bars, table column C) is often going to be less than 100%.  Since your MPA is restricted to state waters, the percentage value of total fishing grounds affected by your proposed MPA (<font color='#2B4BFA'>dark blue</font> bars, table column A) will always be less than or equal to the percentage of total fishing grounds within the study area (<font color='#5E9CFF'>light blue</font> bars, table column C).</p>
-<p>Marginal differences between the percentage value of the total fishing grounds affected by the proposed MPA (<font color='#2B4BFA'>dark blue</font> bars, table column A) and the percentage value of fishing grounds within the study area affected by the proposed MPA (table column B), indicate that the fishing grounds in terms of value occurs primarily within the study area.  Conversely, significant differences indicate that the fishing grounds in terms of value occur primarily outside the study area.</p>
-</div>
-
-<div class='freetext' style='padding:10px'>
-<h4>Supplementary Information</h4>
-<br/>
-MPA Allowed Uses
-<p>The results in this report do not take into account allowed uses you might have assigned to this MPA proposal.  In general, if you assign allowed uses for a specific sector (recreational/commercial) and fishery then the impact will be zero for that allowed use.</p>
-Analysis Accuracy
-<p>Marinemap uses its own implementation of the fishery impact evaluation.  It is not the official version used by the MLPA Science Advisory Team.  The results in this report may vary from the official version.  We welcome feedback.</p>
-Impact Accuracy
-<p>Coming Soon</p>
-Analysis Methods
-<p>Coming Soon</p>
-</div>
