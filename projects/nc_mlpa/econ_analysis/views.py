@@ -70,6 +70,9 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         if maps is '':
             return HttpResponseBadRequest('User group, %s, does not exist' % group)
         
+        import pdb
+        pdb.set_trace()
+        
         #run the analysis
         anal_results = analysis.run(mpa, maps)
         if anal_results < 0:
@@ -78,9 +81,9 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         #fill out analysis results with species that are relevant for the given group, but not yet present in the results
         group_species = layers.getSpeciesByGroup(group)
         anal_species = [result.species for result in anal_results]
-        missing_species = [species for species in group_species if species not in anal_species]
-        for species in missing_species:
-            anal_results.append(EmptyAnalysisResult(group, single_port, species))
+        missing_species = [specs for specs in group_species if specs not in anal_species]
+        for specs in missing_species:
+            anal_results.append(EmptyAnalysisResult(group, single_port, specs))
         
         #sort results alphabetically by species name
         anal_results.sort(key=lambda obj: obj.species)
