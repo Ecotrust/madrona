@@ -82,9 +82,6 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         for species in missing_species:
             anal_results.append(EmptyAnalysisResult(group, single_port, species))
         
-        import pdb
-        pdb.set_trace() 
-    
         #sort results alphabetically by species name
         anal_results.sort(key=lambda obj: obj.species)
         all_results.append(anal_results)
