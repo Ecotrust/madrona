@@ -70,9 +70,6 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         if maps is '':
             return HttpResponseBadRequest('User group, %s, does not exist' % group)
         
-        import pdb
-        pdb.set_trace()
-        
         #run the analysis
         anal_results = analysis.run(mpa, maps)
         if anal_results < 0:
