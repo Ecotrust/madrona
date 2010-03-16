@@ -79,11 +79,18 @@ def MpaEconAnalysis(request, feature_id, format='json'):
         group_species = layers.getSpeciesByGroup(group)
         anal_species = [result.species for result in anal_results]
         missing_species = [specs for specs in group_species if specs not in anal_species]
-        for specs in missing_species:
-            anal_results.append(EmptyAnalysisResult(group, single_port, specs))
+        for spec in missing_species:
+            anal_results.append(EmptyAnalysisResult(group, single_port, spec))
         
         #sort results alphabetically by species name
         anal_results.sort(key=lambda obj: obj.species)
+        
+        #adjust recreational Fort Bragg display
+        if group in ['Recreational Dive', 'Recreational Kayak', 'Recreational Private Vessel']:
+            for result in anal_results:
+                if result.port == 'Fort Bragg':
+                    result.port = 'Fort Bragg / Albion'
+        
         all_results.append(anal_results)
     
     

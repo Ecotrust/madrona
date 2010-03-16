@@ -6,6 +6,7 @@ class Layers:
     def __init__(self):
         self.CELL_SIZE = 250
         self.groups = {'com': 'Commercial', 'cpfv': 'Commercial Passenger Fishing Vessel', 'div': 'Recreational Dive', 'kyk': 'Recreational Kayak', 'pvt': 'Recreational Private Vessel', 'swd': 'Edible Seaweed'}
+        #self.group_to_abbr = {'Commercial': 'com', 'Commercial Passenger Fishing Vessel': 'cpfv', 'Recreational Dive': 'div', 'Recreational Kayak': 'kyk', 'Recreational Private Vessel': 'pvt', 'Edible Seaweed': 'swd'}
         self.fishing_types = {'com': 'commercial', 'cpfv': 'recreational', 'div': 'recreational', 'kyk': 'recreational', 'pvt': 'recreational', 'swd': 'commercial'}
         self.ports = {'all': 'Entire Study Region', 'ab': 'Albion', 'cc': 'Crescent City', 'ek': 'Eureka', 'el': 'Elk', 'fb': 'Fort Bragg', 'sc': 'Shelter Cove', 'td': 'Trinidad'}
         self.species_display = {'abal': 'Abalone', 'achv': 'Anchovies', 'chal': 'California Halibut', 'dcrab': 'Dungeness Crab', 'dcrabt': 'Dungeness Crab', 'eswd': 'All Edible Seaweed Species', 'herg': 'Pacific Herring', 'phal': 'Pacific Halibut', 'rckf': 'Rockfish', 'rckpo': 'Rockfish', 'rklc': 'Rockfish', 'sal': 'Salmon', 'salt': 'Salmon', 'sard': 'Sardines', 'shrmpt': 'Shrimp', 'smtb': 'Smelt', 'sphkl': 'Surf Perch', 'urchd': 'Urchin'} 
@@ -18,28 +19,32 @@ class Layers:
         
     def getPortsByGroup(self, group):
         if group in ['com', 'Commercial']:
-            return ['Albion', 'Crescent City', 'Eureka', 'Fort Bragg', 'Shelter Cove', 'Trinidad']
+            return ['Crescent City', 'Trinidad', 'Eureka', 'Shelter Cove', 'Fort Bragg', 'Albion']
         if group in ['cpfv', 'Commercial Passenger Fishing Vessel']:
-            return ['Crescent City', 'Eureka', 'Fort Bragg', 'Shelter Cove', 'Trinidad']
+            return ['Crescent City', 'Trinidad', 'Eureka', 'Shelter Cove', 'Fort Bragg']
         if group in ['div', 'Recreational Dive']:
-            return ['Crescent City', 'Eureka', 'Fort Bragg / Albion', 'Shelter Cove', 'Trinidad']
+            return ['Crescent City', 'Trinidad', 'Eureka', 'Shelter Cove', 'Fort Bragg']
         if group in ['kyk', 'Recreational Kayak']:
-            return ['Fort Bragg / Albion', 'Trinidad']
+            return ['Trinidad', 'Fort Bragg']
         if group in ['pvt', 'Recreational Private Vessel']:
-            return ['Crescent City', 'Eureka', 'Fort Bragg / Albion', 'Shelter Cove', 'Trinidad']
+            return ['Crescent City', 'Trinidad', 'Eureka', 'Shelter Cove', 'Fort Bragg']
         if group in ['swd', 'Edible Seaweed']:
             return ['Crescent City', 'Elk', 'Fort Bragg']
         raise Exception('invalid group sent to Layers.getPortsInGroup')
          
     def getSpeciesByGroup(self, group):
         species = []
-        if group in ['cpfv', 'Commercial Passenger Fishing Vessel', 'div', 'Recreational Dive', 'kyk', 'Recreational Kayak', 'pvt', 'Recreational Private Vessel']:
-            specs = vars()['self.rec_'+group+'_methods'].keys()
-        elif group in ['com', 'Commercial']:
+        if group in ['Commercial']:
             specs = self.commercial_methods.keys()
             specs.remove('eswd')
-        elif group in ['swd', 'Edible Seaweed']:
+        elif group in ['Edible Seaweed']:
             specs = ['eswd']
+        elif group in ['Recreational Dive']:
+            specs = self.rec_div_methods.keys()
+        elif group in ['Recreational Kayak']:
+            specs = self.rec_kyk_methods.keys()
+        elif group in ['Recreational Private Vessel']:
+            specs = self.rec_pvt_methods.keys()
         else:
             raise Exception('invalid group sent to Layers.getSpeciesInGroup')
         for spec in specs:
