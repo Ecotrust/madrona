@@ -1,0 +1,49 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{mpa.name}} Impact Analysis{% endblock title %}
+{% block panel %}
+<div style='font-size: small'><a target='_blank' href='{% url printable_analysis mpa.id %}'>View Printable Report</a></div>
+<div class='freetext'>
+<br>
+<table  class='hab_repr_container'>
+    <thead>
+        <tr>
+            <th></th>
+            <th>A. <b>Percentage Area</b> affected by MPA</th>
+            <th></th>
+            <th>B. <b>Percentage Value</b> affected by MPA</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for results in all_results %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr>
+            <td style="width: 140px;"><b>{{ results.0.port }}</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        {% for result in results %}
+        <tr class="{% cycle '' 'grey' %}">
+            <td>{{ result.species }}</td>
+            {% if result.mpaPercOverallArea == '---' %}
+                <td>{{ result.mpaPercOverallArea }}</td>
+            {% else %}
+                <td>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
+            {% endif %}
+                <td></td>
+            {% if result.mpaPercOverallArea == '---' %}
+                <td>{{ result.mpaPercOverallValue }}</td>
+            {% else %}
+            <td>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+{% endblock panel %}

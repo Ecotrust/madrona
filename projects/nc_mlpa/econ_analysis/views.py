@@ -6,8 +6,23 @@ import os
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 
+def printable_analysis(request, feature_id):
+    mpa = get_object_or_404(MlpaMpa, pk=feature_id)
+    #after caching results in display_analysis, we will need to recreate the data from the db 
+    #and send it to fishery_impacts.html
+    return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'printable':True})) 
 
+def impact_analysis(request, feature_id, group):
+    if group == 'Instructions':
+        return render_to_response('impact_intro.html', RequestContext(request, {}))   
+    from Layers import *
+    layers = Layers()
+    group_name = layers.groups[group]
+    #return render_to_response('impact_analysis.html', RequestContext(request, {'group': group_name}))   
+    return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
+    
 '''
+Primarily used for testing...
 Given a user group 'group' and port/county 'port', runs fishing impact analysis on each 
 of the species fished out of the port/county for the given user group.  Accepts an optional
 species parameter in which case it only analyzes the single species
@@ -18,13 +33,12 @@ species parameter in which case it only analyzes the single species
         404: pk not specified or mpa with pk doesn't exist or missing parameters
         500: must use get
 '''
-def MpaEconAnalysis(request, feature_id, format='json'):    
+def MpaEconAnalysis(request, feature_id):    
     if request.method != 'GET':
         return HttpResponseBadRequest('You must use GET')    
     #if not request.user.is_authenticated():
     #    return HttpResponse('You must be logged in', status=401)    
 
-    #SHOULD BE ABLE TO REMOVE THESE FROM THE ACTUAL URL (AFTER TESTING)
     group = request.GET.get("group")
     if not group:
         return HttpResponseBadRequest('Missing "group" parameter')
@@ -48,6 +62,10 @@ def MpaEconAnalysis(request, feature_id, format='json'):
     else: 
         output = 'html'
     
+    return display_analysis(request, feature_id, group, port, species, output)
+  
+    
+def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html'):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     #if request.user != mpa.user:
     #    return HttpResponseForbidden('You cannot analyze MPA\'s you don\'t own')    
@@ -135,6 +153,7 @@ def MpaEconAnalysis(request, feature_id, format='json'):
                                             y_labels, 
                                             legendLabels)   
     """
+    '''
     if output == 'json':
         #is this import working?????
         import simplejson     
@@ -151,8 +170,10 @@ def MpaEconAnalysis(request, feature_id, format='json'):
             #return render_to_response('impacts_page.html', RequestContext(request, {'mpa':mpa, 'all_results': all_results, 'printable':True}))
         else:
             #return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'results': anal_results, 'report':anal_results[0], 'valueChart': value_chart, 'areaChart': area_chart}))  
-            return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'all_results': all_results}))  
+    '''    
+    return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': all_results}))  
 
+    
 def MpaEconAnalysisTest(request):
     from Analysis import Analysis    
     analysis = Analysis()    
@@ -165,10 +186,11 @@ def MpaEconAnalysisTest(request):
         
     mpa = {'array_id': '', 'name': u'CI - Painted CaveHarris Point', 'id': 3002}
     all_results = [[{'port': u'Santa Barbara', 'array_id': None, 'srPercOverallValue': '93.67', 'mpaArea': '100.02', 'user_grp': u'Commercial', 'totalValue': '100000.00', 'totalArea': '343.46', 'mpa_id': 2949, 'mpaPercSrValue': '41.25', 'mpaPercSrArea': '31.15', 'srPercOverallArea': '93.49', 'mpaPercOverallValue': '38.63', 'mpaPercOverallArea': '29.12', 'mpaCells': 4145.0, 'mpaValue': '38634.29', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '93665.50', 'srArea': '321.12'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 30849, 'srPercOverallValue': '80.38', 'mpaArea': '229.83', 'user_grp': u'Commercial', 'srCells': 10844, 'totalValue': '100000.00', 'totalArea': '744.43', 'mpa_id': 2949, 'mpaPercSrValue': '91.33', 'mpaPercSrArea': '87.83', 'srPercOverallArea': '35.15', 'mpaPercOverallValue': '73.42', 'mpaPercOverallArea': '30.87', 'mpaCells': 9524.0, 'mpaValue': '73415.79', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '80381.20', 'srArea': '261.68'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 19943, 'srPercOverallValue': '97.13', 'mpaArea': '142.59', 'user_grp': u'Commercial', 'srCells': 17870, 'totalValue': '100000.00', 'totalArea': '481.25', 'mpa_id': 2949, 'mpaPercSrValue': '37.60', 'mpaPercSrArea': '33.07', 'srPercOverallArea': '89.61', 'mpaPercOverallValue': '36.52', 'mpaPercOverallArea': '29.63', 'mpaCells': 5909.0, 'mpaValue': '36520.49', 'species': u'Lobster', 'home_type': u'Port', 'srValue': '97134.02', 'srArea': '431.23'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 3991, 'srPercOverallValue': '99.69', 'mpaArea': '30.84', 'user_grp': u'Commercial', 'srCells': 3984, 'totalValue': '100000.00', 'totalArea': '96.31', 'mpa_id': 2949, 'mpaPercSrValue': '23.04', 'mpaPercSrArea': '32.08', 'srPercOverallArea': '99.82', 'mpaPercOverallValue': '22.97', 'mpaPercOverallArea': '32.02', 'mpaCells': 1278.0, 'mpaValue': '22966.37', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99689.65', 'srArea': '96.14'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12979, 'srPercOverallValue': '99.24', 'mpaArea': '44.59', 'user_grp': u'Commercial', 'srCells': 12915, 'totalValue': '100000.00', 'totalArea': '313.20', 'mpa_id': 2949, 'mpaPercSrValue': '6.07', 'mpaPercSrArea': '14.31', 'srPercOverallArea': '99.51', 'mpaPercOverallValue': '6.02', 'mpaPercOverallArea': '14.24', 'mpaCells': 1848.0, 'mpaValue': '6020.58', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99243.44', 'srArea': '311.66'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12978, 'srPercOverallValue': '95.91', 'mpaArea': '133.04', 'user_grp': u'Commercial', 'srCells': 12251, 'totalValue': '100000.00', 'totalArea': '313.18', 'mpa_id': 2949, 'mpaPercSrValue': '51.96', 'mpaPercSrArea': '45.00', 'srPercOverallArea': '94.40', 'mpaPercOverallValue': '49.83', 'mpaPercOverallArea': '42.48', 'mpaCells': 5513.0, 'mpaValue': '49830.35', 'species': u'Rock Crab', 'home_type': u'Port', 'srValue': '95905.80', 'srArea': '295.63'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 8177, 'srPercOverallValue': '99.30', 'mpaArea': '27.17', 'user_grp': u'Commercial', 'srCells': 8131, 'totalValue': '100013.82', 'totalArea': '197.32', 'mpa_id': 2949, 'mpaPercSrValue': '8.10', 'mpaPercSrArea': '13.85', 'srPercOverallArea': '99.44', 'mpaPercOverallValue': '8.04', 'mpaPercOverallArea': '13.77', 'mpaCells': 1126.0, 'mpaValue': '8040.01', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '99316.73', 'srArea': '196.21'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 29015, 'srPercOverallValue': '43.11', 'mpaArea': '200.07', 'user_grp': u'Commercial', 'srCells': 10223, 'totalValue': '100000.00', 'totalArea': '700.17', 'mpa_id': 2949, 'mpaPercSrValue': '90.93', 'mpaPercSrArea': '81.10', 'srPercOverallArea': '35.23', 'mpaPercOverallValue': '39.20', 'mpaPercOverallArea': '28.57', 'mpaCells': 8291.0, 'mpaValue': '39198.96', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '43110.29', 'srArea': '246.70'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 2620, 'srPercOverallValue': '31.84', 'mpaArea': '8.20', 'user_grp': u'Commercial', 'srCells': 673, 'totalValue': '100000.00', 'totalArea': '63.22', 'mpa_id': 2949, 'mpaPercSrValue': '68.40', 'mpaPercSrArea': '50.52', 'srPercOverallArea': '25.69', 'mpaPercOverallValue': '21.78', 'mpaPercOverallArea': '12.98', 'mpaCells': 340.0, 'mpaValue': '21782.13', 'species': u'Spot Prawn', 'home_type': u'Port', 'srValue': '31843.52', 'srArea': '16.24'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 11151, 'srPercOverallValue': '99.56', 'mpaArea': '87.26', 'user_grp': u'Commercial', 'srCells': 11109, 'totalValue': '100000.00', 'totalArea': '269.09', 'mpa_id': 2949, 'mpaPercSrValue': '5.07', 'mpaPercSrArea': '32.55', 'srPercOverallArea': '99.62', 'mpaPercOverallValue': '5.05', 'mpaPercOverallArea': '32.43', 'mpaCells': 3616.0, 'mpaValue': '5049.70', 'species': u'Urchin', 'home_type': u'Port', 'srValue': '99557.05', 'srArea': '268.08'}],[{'port': u'Santa Barbara', 'array_id': None, 'srPercOverallValue': '93.67', 'mpaArea': '100.02', 'user_grp': u'Commercial', 'totalValue': '100000.00', 'totalArea': '343.46', 'mpa_id': 2949, 'mpaPercSrValue': '41.25', 'mpaPercSrArea': '31.15', 'srPercOverallArea': '93.49', 'mpaPercOverallValue': '38.63', 'mpaPercOverallArea': '29.12', 'mpaCells': 4145.0, 'mpaValue': '38634.29', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '93665.50', 'srArea': '321.12'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 30849, 'srPercOverallValue': '80.38', 'mpaArea': '229.83', 'user_grp': u'Commercial', 'srCells': 10844, 'totalValue': '100000.00', 'totalArea': '744.43', 'mpa_id': 2949, 'mpaPercSrValue': '91.33', 'mpaPercSrArea': '87.83', 'srPercOverallArea': '35.15', 'mpaPercOverallValue': '73.42', 'mpaPercOverallArea': '30.87', 'mpaCells': 9524.0, 'mpaValue': '73415.79', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '80381.20', 'srArea': '261.68'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 19943, 'srPercOverallValue': '97.13', 'mpaArea': '142.59', 'user_grp': u'Commercial', 'srCells': 17870, 'totalValue': '100000.00', 'totalArea': '481.25', 'mpa_id': 2949, 'mpaPercSrValue': '37.60', 'mpaPercSrArea': '33.07', 'srPercOverallArea': '89.61', 'mpaPercOverallValue': '36.52', 'mpaPercOverallArea': '29.63', 'mpaCells': 5909.0, 'mpaValue': '36520.49', 'species': u'Lobster', 'home_type': u'Port', 'srValue': '97134.02', 'srArea': '431.23'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 3991, 'srPercOverallValue': '99.69', 'mpaArea': '30.84', 'user_grp': u'Commercial', 'srCells': 3984, 'totalValue': '100000.00', 'totalArea': '96.31', 'mpa_id': 2949, 'mpaPercSrValue': '23.04', 'mpaPercSrArea': '32.08', 'srPercOverallArea': '99.82', 'mpaPercOverallValue': '22.97', 'mpaPercOverallArea': '32.02', 'mpaCells': 1278.0, 'mpaValue': '22966.37', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99689.65', 'srArea': '96.14'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12979, 'srPercOverallValue': '99.24', 'mpaArea': '44.59', 'user_grp': u'Commercial', 'srCells': 12915, 'totalValue': '100000.00', 'totalArea': '313.20', 'mpa_id': 2949, 'mpaPercSrValue': '6.07', 'mpaPercSrArea': '14.31', 'srPercOverallArea': '99.51', 'mpaPercOverallValue': '6.02', 'mpaPercOverallArea': '14.24', 'mpaCells': 1848.0, 'mpaValue': '6020.58', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99243.44', 'srArea': '311.66'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12978, 'srPercOverallValue': '95.91', 'mpaArea': '133.04', 'user_grp': u'Commercial', 'srCells': 12251, 'totalValue': '100000.00', 'totalArea': '313.18', 'mpa_id': 2949, 'mpaPercSrValue': '51.96', 'mpaPercSrArea': '45.00', 'srPercOverallArea': '94.40', 'mpaPercOverallValue': '49.83', 'mpaPercOverallArea': '42.48', 'mpaCells': 5513.0, 'mpaValue': '49830.35', 'species': u'Rock Crab', 'home_type': u'Port', 'srValue': '95905.80', 'srArea': '295.63'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 8177, 'srPercOverallValue': '99.30', 'mpaArea': '27.17', 'user_grp': u'Commercial', 'srCells': 8131, 'totalValue': '100013.82', 'totalArea': '197.32', 'mpa_id': 2949, 'mpaPercSrValue': '8.10', 'mpaPercSrArea': '13.85', 'srPercOverallArea': '99.44', 'mpaPercOverallValue': '8.04', 'mpaPercOverallArea': '13.77', 'mpaCells': 1126.0, 'mpaValue': '8040.01', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '99316.73', 'srArea': '196.21'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 29015, 'srPercOverallValue': '43.11', 'mpaArea': '200.07', 'user_grp': u'Commercial', 'srCells': 10223, 'totalValue': '100000.00', 'totalArea': '700.17', 'mpa_id': 2949, 'mpaPercSrValue': '90.93', 'mpaPercSrArea': '81.10', 'srPercOverallArea': '35.23', 'mpaPercOverallValue': '39.20', 'mpaPercOverallArea': '28.57', 'mpaCells': 8291.0, 'mpaValue': '39198.96', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '43110.29', 'srArea': '246.70'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 2620, 'srPercOverallValue': '31.84', 'mpaArea': '8.20', 'user_grp': u'Commercial', 'srCells': 673, 'totalValue': '100000.00', 'totalArea': '63.22', 'mpa_id': 2949, 'mpaPercSrValue': '68.40', 'mpaPercSrArea': '50.52', 'srPercOverallArea': '25.69', 'mpaPercOverallValue': '21.78', 'mpaPercOverallArea': '12.98', 'mpaCells': 340.0, 'mpaValue': '21782.13', 'species': u'Spot Prawn', 'home_type': u'Port', 'srValue': '31843.52', 'srArea': '16.24'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 11151, 'srPercOverallValue': '99.56', 'mpaArea': '87.26', 'user_grp': u'Commercial', 'srCells': 11109, 'totalValue': '100000.00', 'totalArea': '269.09', 'mpa_id': 2949, 'mpaPercSrValue': '5.07', 'mpaPercSrArea': '32.55', 'srPercOverallArea': '99.62', 'mpaPercOverallValue': '5.05', 'mpaPercOverallArea': '32.43', 'mpaCells': 3616.0, 'mpaValue': '5049.70', 'species': u'Urchin', 'home_type': u'Port', 'srValue': '99557.05', 'srArea': '268.08'}]]
-
+    '''
     if output == 'json':
         import simplejson
         anal_results_json = simplejson.dumps(anal_results, sort_keys=True, indent=4)        
         return HttpResponse(anal_results_json, content_type='text/plain')
     else:
-        return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'all_results': all_results}))
+    '''
+    return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'all_results': all_results}))
