@@ -17,8 +17,6 @@ def impact_group_list(request, feature_id, input_username=None):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
-        return HttpResponse('Access denied', status=401)
     return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id, 'username':input_username})) 
     
 def impact_analysis(request, feature_id, group, input_username=None): 
@@ -81,8 +79,6 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    elif input_username and user.username != input_username:
-        return HttpResponse('Access denied', status=401)
 
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     
