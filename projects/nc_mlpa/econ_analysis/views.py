@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequ
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, Context
 import os
+from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 
@@ -12,13 +13,23 @@ def printable_analysis(request, feature_id):
     #and send it to fishery_impacts.html
     return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'printable':True})) 
 
-def impact_analysis(request, feature_id, group):
-    if group == 'Instructions':
-        return render_to_response('impact_intro.html', RequestContext(request, {}))   
+def impact_group_list(request, feature_id, input_username=None):
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+    return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id, 'username':input_username})) 
+    
+def impact_analysis(request, feature_id, group, input_username=None): 
     from Layers import *
     layers = Layers()
-    group_name = layers.groups[group]
-    #return render_to_response('impact_analysis.html', RequestContext(request, {'group': group_name}))   
+    if group not in layers.groups.keys():
+        return render_to_response('impact_intro.html', RequestContext(request, {}))  
+    group_name = layers.groups[group]  
+    #the following port and species parameters are for testing on my local machine
+    #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon', template='impact_analysis.html', input_username=input_username)
+    #the following call is the more permanent/appropriate one for the server
     return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
     
 '''
@@ -65,10 +76,15 @@ def MpaEconAnalysis(request, feature_id):
     return display_analysis(request, feature_id, group, port, species, output)
   
     
-def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html'):
+def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html', input_username=None):
+    
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
-    #if request.user != mpa.user:
-    #    return HttpResponseForbidden('You cannot analyze MPA\'s you don\'t own')    
     
     from Analysis import Analysis, EmptyAnalysisResult   
     analysis = Analysis()

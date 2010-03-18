@@ -1,0 +1,16 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}} Impact Analysis{% endblock title %}
+{% block panel %}
+<div class="tabs">
+    <ul>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'Instructions' username %}"><span>Instructions</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'com' username %}"><span>Commercial</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'cpfv' username %}"><span>Commercial Private Fishing Vessel</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'div' username %}"><span>Recreational Dive</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'kyk' username %}"><span>Recreational Kayak</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'pvt' username %}"><span>Recreational Vessel</span></a></li>
+        <li><a href="{% url mpa_impact_analysis mpa_id 'swd' username %}"><span>Edible Seaweed (Commercial)</span></a></li>
+    </ul>
+</div>
+        
+{% endblock panel %}
