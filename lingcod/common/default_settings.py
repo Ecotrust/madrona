@@ -4,6 +4,8 @@ import os
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
+RELEASE = '1.1' # The next milestone
+
 GEOMETRY_DB_SRID = 3310
 
 GEOMETRY_CLIENT_SRID = 4326
@@ -103,6 +105,8 @@ LOGIN_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/'
 
+ADMIN_MEDIA_PREFIX = '/media/admin/'
+
 # KML SETTINGS
 KML_SIMPLIFY_TOLERANCE = 20
 KML_EXTRUDE_HEIGHT = 100
@@ -111,6 +115,7 @@ KML_EXTRUDE_HEIGHT = 100
 SHARING_TO_PUBLIC_GROUPS = ['Share with Public']
 SHARING_TO_STAFF_GROUPS = ['Share with Staff']
 
+# TEMPLATE SETTINGS
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
     "django.core.context_processors.debug",
@@ -119,5 +124,29 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     'django.core.context_processors.request'
 )
+TEMPLATE_LOADERS = (
+    'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+)
 
-RELEASE = '1.1' # The next milestone
+#MIDDLEWARE_CLASSES = (
+#    'django.middleware.common.CommonMiddleware',
+#    'django.contrib.sessions.middleware.SessionMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.contrib.auth.middleware.AuthenticationMiddleware',
+#    'django.contrib.messages.middleware.MessageMiddleware',
+#)
+
+ADMINS = (
+    # ('Your Name', 'your_email@domain.com'),
+)
+MANAGERS = ADMINS
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+#Screencast videos, images, and video-player locations
+SCREENCASTS = 'screencasts/'
+SCREENCAST_IMAGES = 'screencasts/images'
+VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
+
