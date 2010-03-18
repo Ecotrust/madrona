@@ -98,7 +98,7 @@ class AllowedUsesWidget(forms.SelectMultiple):
             To add allowed uses, choose a combination of Target, Method, and Use Type. <strong>Please note</strong>, some options may be disabled depending on your choices. For example, if you choose Salmon from the Target menu, you will not be able to select "Hand Harvest" from the Method menu.
         </p>
         <p class="help_text">
-            If you would like to propose an allowed use not listed above, please contact: <a href="mailto:help@lists.marinemap.org">help@lists.marinemap.org</a>
+            If you would like to propose an allowed use not listed above, please contact: <a href="mailto:help@marinemap.org">help@marinemap.org</a>
         </p>
         <table class="allowed_uses marinemap-table">
             <thead>
