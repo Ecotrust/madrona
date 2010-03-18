@@ -37,6 +37,8 @@ class Layers:
         if group in ['Commercial']:
             specs = self.commercial_methods.keys()
             specs.remove('eswd')
+        elif group in ['Commercial Passenger Fishing Vessel']:
+            specs = self.rec_cpfv_methods.keys()
         elif group in ['Edible Seaweed']:
             specs = ['eswd']
         elif group in ['Recreational Dive']:
