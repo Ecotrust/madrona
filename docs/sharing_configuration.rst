@@ -16,11 +16,12 @@ Out-of-the-box Setup
 *********************
 This will be the common situation: You've just installed lingcod and want to get a MarineMap instance running with sharing functionality on MPAs and Arrays. There are a few steps you need to take:
 
-    * Make sure you have settings.SHARING_TO_PUBLIC_GROUPS and settings.SHARING_TO_STAFF_GROUPS defined. These should be lists of group names, by default ['Share with Public'] and ['Share with Staff'] respectively.
-    * Make sure the above groups, and any other groups for which you want to enable sharing, exist.
-    * Make sure you have some users which are members of these groups.
-    * Groups need to have the can_share_arrays and/or can_share_mpas permissions as appropriate
-    * MPAs and Arrays need to be registered as shareable content types ('/admin/sharing/shareablecontent'). Make sure you set Arrays as a container for MPAs with the mpa_set property linking them. 
+    * Make sure you have settings.SHARING_TO_PUBLIC_GROUPS and settings.SHARING_TO_STAFF_GROUPS defined. These should be lists of group names, by default ['Share with Public'] and ['Share with Staff'] respectively. Other groups will need to have the can_share_arrays and/or can_share_mpas permissions added manually as appropriate.
+    * MPAs and Arrays need to be registered as shareable content types. You can do this manually at /admin/sharing/shareablecontent or use the manage.py command below. Make sure you set Arrays as a container for MPAs with the mpa_set property linking them. 
+      
+To simplify these steps for the default case, use the following::
+      
+    python manage.py sharing_setup
 
 In MarineMap, authenticated users should now be able to share with all appropriate groups and see shapes shared with them. 
 
