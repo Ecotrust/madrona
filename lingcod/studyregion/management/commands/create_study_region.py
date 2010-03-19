@@ -12,14 +12,20 @@ class Command(BaseCommand):
     help = "Creates a new study region from a shapefile containing a single multigeometry"
     args = '[shapefile]'
     
-    def handle(self, shapefile, **options):
+    def handle(self, shapefile, *args, **options):
         ds = DataSource(shapefile)
         if len(ds) != 1:
             raise Exception("Data source should only contain a single feature. Aborting.")
-        mapping = {
-            'geometry': 'MULTIPOLYGON',
-            'name': 'name',
-        }
+
+        if options.get('region_name'):
+            mapping = {
+                'geometry': 'MULTIPOLYGON',
+            }
+        else:
+            mapping = {
+                'geometry': 'MULTIPOLYGON',
+                'name': 'name',
+            }
 
         lm = LayerMapping(StudyRegion, shapefile, mapping)
         lm.save()

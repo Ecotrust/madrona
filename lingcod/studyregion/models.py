@@ -69,6 +69,9 @@ class StudyRegion(models.Model):
     
     class Meta:
         db_table = u'mm_study_region'
+
+    def __unicode__(self):
+        return u'%s' % self.name
     
     def save(self, *args, **kwargs):
         super(StudyRegion, self).save(*args, **kwargs)

@@ -3,15 +3,30 @@ from optparse import make_option
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
 from lingcod.studyregion.models import StudyRegion
-from progressbar import Bar, Percentage, RotatingMarker, ProgressBar, ETA
+#from progressbar import Bar, Percentage, RotatingMarker, ProgressBar, ETA
 import time
 
 
 class Command(BaseCommand):
     help = "Switches from one study region to another, reprocessing MPAs and expiring report caches."
     args = '[pk]'
-    
+
     def handle(self, pk, **options):
+        # Turn them all off
+        regions = StudyRegion.objects.all()
+        for region in regions:
+            region.active = False
+            region.save()
+
+        # Now active the single study region
+        new_study_region = StudyRegion.objects.get(pk=pk)
+        new_study_region.active = True
+        new_study_region.save()
+        
+        print "%s is now the active study region" % new_study_region
+    
+    # Eventually we'll implement this 
+    def handle2(self, pk, **options):
         new_study_region = StudyRegion.objects.get(pk=pk)
         old_study_region = StudyRegion.objects.current()
         print """
