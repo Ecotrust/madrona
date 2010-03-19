@@ -29,13 +29,7 @@
             {% endif %}
         {% endblock myshapes %}
         
-        {% block aftermyshapes %}
-            {% if user.is_authenticated %}
-                {% if perms.layers.view_ecotrustlayerlist %}
-                    options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
-                {% endif %}
-            {% endif %}
-        {% endblock aftermyshapes %}
+        {% block aftermyshapes %} {% endblock aftermyshapes %}
         
         options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
         options.news_url = '{% url news-main %}';

@@ -113,3 +113,11 @@
         options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}", callback: setupDragDrop}];
     {% endif %}
 {% endblock myshapes %}
+
+{% block aftermyshapes %}
+    {% if user.is_authenticated %}
+        {% if perms.layers.view_ecotrustlayerlist %}
+            options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
+        {% endif %}
+    {% endif %}
+{% endblock aftermyshapes %}
