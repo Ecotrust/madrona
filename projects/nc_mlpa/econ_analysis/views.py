@@ -10,6 +10,8 @@ from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult
 from Layers import *
 
 def print_report(request, feature_id, user_group):
+    pass
+    '''
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
@@ -38,7 +40,7 @@ def print_report(request, feature_id, user_group):
         
         all_results.append(analysis_results)
     return render_to_response('printable_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group, 'all_results':all_results})) 
-
+    '''
 def impact_group_list(request, feature_id):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
@@ -46,6 +48,11 @@ def impact_group_list(request, feature_id):
     return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id})) 
     
 def impact_analysis(request, feature_id, group): 
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
     layers = Layers()
     if group not in layers.groups.keys():
         return render_to_response('impact_intro.html', RequestContext(request, {}))  
@@ -67,7 +74,10 @@ species parameter in which case it only analyzes the single species
         404: pk not specified or mpa with pk doesn't exist or missing parameters
         500: must use get
 '''
-def MpaEconAnalysis(request, feature_id):    
+def MpaEconAnalysis(request, feature_id):  
+    user = request.user 
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401) 
     if request.method != 'GET':
         return HttpResponseBadRequest('You must use GET')    
     #if not request.user.is_authenticated():
