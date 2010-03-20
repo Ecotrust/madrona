@@ -10,6 +10,11 @@ from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult
 from Layers import *
 
 def print_report(request, feature_id, user_group):
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     layers = Layers()
     ports = layers.getPortsByGroup(user_group)
@@ -48,7 +53,7 @@ def impact_analysis(request, feature_id, group):
     #the following port and species parameters are for testing on my local machine
     #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
     #the following call is the more permanent/appropriate one for the server
-    return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
+    return display_analysis(request, feature_id, group_name)
     
 '''
 Primarily used for testing...
@@ -104,7 +109,6 @@ def flesh_out_results(group, port, results):
     return results
     
 def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='impact_analysis.html'):
-    
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
