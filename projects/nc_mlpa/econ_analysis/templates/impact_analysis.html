@@ -8,9 +8,9 @@
     <thead>
         <tr>
             <th></th>
-            <th>A. <b>Percentage Area</b> affected by MPA</th>
+            <th>A. <b>Percentage Value</b> affected by MPA</th>
             <th></th>
-            <th>B. <b>Percentage Value</b> affected by MPA</th>
+            <th>B. <b>Percentage Area</b> affected by MPA</th>
         </tr>
     </thead>
     <tbody>
@@ -26,16 +26,16 @@
         {% for result in results %}
         <tr class="{% cycle '' 'grey' %}">
             <td>{{ result.species }}</td>
-            {% if result.mpaPercOverallArea == '---' %}
-                <td>{{ result.mpaPercOverallArea }}</td>
+            {% if result.mpaPercOverallValue == '---' %}
+                <td>{{ result.mpaPercOverallValue }}</td>
             {% else %}
-                <td>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
+                <td>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
             {% endif %}
                 <td></td>
             {% if result.mpaPercOverallArea == '---' %}
-                <td>{{ result.mpaPercOverallValue }}</td>
+                <td>{{ result.mpaPercOverallArea }}</td>
             {% else %}
-            <td>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
+            <td>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
             {% endif %}
         </tr>
         {% endfor %}
