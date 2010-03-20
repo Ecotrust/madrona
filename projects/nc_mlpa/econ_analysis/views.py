@@ -7,7 +7,7 @@ from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult   
-from Layers import *
+from Layers import Layers
 
 def print_report(request, feature_id, user_group):
     pass
@@ -174,7 +174,14 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
                 cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.mpaPercOverallValue, perc_area=result.mpaPercOverallArea)
                 cache.save()
             
-        anal_results = flesh_out_results(group, single_port, anal_results)
+        #anal_results = flesh_out_results(group, single_port, anal_results)
+        #fill out analysis results with species that are relevant for the given group, but not yet present in the results
+        layers = Layers()
+        group_species = layers.getSpeciesByGroup(group)
+        result_species = [result.species for result in anal_results]
+        missing_species = [specs for specs in group_species if specs not in result_species]
+        for spec in missing_species:
+            anal_results.append(EmptyAnalysisResult(group, single_port, spec))
         
         #sort results alphabetically by species name
         anal_results.sort(key=lambda obj: obj.species)
