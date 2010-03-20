@@ -97,11 +97,13 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
     for single_port in ports:
         anal_results = []
         #See if we can retreive results from cache
-        cache_available = True
         if species is None:
             cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
         else:
             cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port, species=species)
+        cache_available = False
+        if len(cache) > 0:
+            cache_available = True
         for single_cache in cache:
             if single_cache.date_modified < mpa.date_modified:
                 cache_available = False
