@@ -15,6 +15,7 @@ def print_report(request, feature_id, user_group):
         return HttpResponse('You must have permission to view this information.', status=401)
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     from Layers import Layers
+    from Analysis import AnalysisResult  
     layers = Layers()
     ports = layers.getPortsByGroup(user_group)
     all_results = []
