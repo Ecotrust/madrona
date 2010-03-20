@@ -7,7 +7,6 @@ from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult
-from Layers import *
 
 def print_report(request, feature_id, user_group):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
