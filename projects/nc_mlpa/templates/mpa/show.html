@@ -10,7 +10,7 @@
             <li><a href="#Attributes"><span>Information</span></a></li>
             <li><a href="{% url mpa_habitat_representation instance.pk 'html' %}"><span>Habitat Representation</span></a></li>
             {% if perms.layers.view_ecotrustlayerlist %}
-                <li><a href="{% url impact_group_list instance.pk instance.user.username %}"><span>Impact Analysis</span></a></li>
+                <li><a href="{% url impact_group_list instance.pk %}"><span>Impact Analysis</span></a></li>
             {% endif %}
         </ul>
         <div id="Attributes">

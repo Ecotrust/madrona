@@ -7,28 +7,28 @@ from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 
-def printable_analysis(request, feature_id):
+def print_report(request, feature_id, user_group):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     #after caching results in display_analysis, we will need to recreate the data from the db 
     #and send it to fishery_impacts.html
-    return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'printable':True})) 
+    return render_to_response('printable_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group})) 
 
-def impact_group_list(request, feature_id, input_username=None):
+def impact_group_list(request, feature_id):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id, 'username':input_username})) 
+    return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id})) 
     
-def impact_analysis(request, feature_id, group, input_username=None): 
+def impact_analysis(request, feature_id, group): 
     from Layers import *
     layers = Layers()
     if group not in layers.groups.keys():
         return render_to_response('impact_intro.html', RequestContext(request, {}))  
     group_name = layers.groups[group]  
     #the following port and species parameters are for testing on my local machine
-    #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon', template='impact_analysis.html', input_username=input_username)
+    return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon', template='impact_analysis.html')
     #the following call is the more permanent/appropriate one for the server
-    return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
+    #return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
     
 '''
 Primarily used for testing...
@@ -74,7 +74,7 @@ def MpaEconAnalysis(request, feature_id):
     return display_analysis(request, feature_id, group, port, species, output)
   
     
-def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html', input_username=None):
+def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html'):
     
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
@@ -82,7 +82,7 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
 
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     
-    from Analysis import Analysis, EmptyAnalysisResult   
+    from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult   
     analysis = Analysis()
 
     #Get analysis results for given port or all ports
@@ -95,16 +95,42 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
     
     all_results = []
     for single_port in ports:
-        #Get all maps from the group (and possibly port and species) that we want to analyze
-        maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
-        if maps is '':
-            return HttpResponseBadRequest('User group, %s, does not exist' % group)
+        anal_results = []
+        #See if we can retreive results from cache
+        cache_available = True
+        if species is None:
+            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
+        else:
+            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port, species=species)
+        for single_cache in cache:
+            if single_cache.date_modified < mpa.date_modified:
+                cache_available = False
+                break
         
-        #run the analysis
-        anal_results = analysis.run(mpa, maps)
-        if anal_results < 0:
-            return HttpResponseBadRequest('Error running analysis')
-        
+        if cache_available:
+            results = list(cache)
+            for result in results:
+                anal_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
+        #If not then run the analysis
+        else:
+            #since at least one cache was no current, remove all related entries as they will all be recreated and recached below
+            for single_cache in cache:
+                single_cache.delete()
+            #Get all maps from the group (and possibly port and species) that we want to analyze
+            maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
+            if maps is '':
+                return HttpResponseBadRequest('User group, %s, does not exist' % group)
+            
+            #run the analysis
+            anal_results = analysis.run(mpa, maps)
+            if anal_results < 0:
+                return HttpResponseBadRequest('Error running analysis')
+            
+            #Cache analysis results 
+            for result in anal_results:
+                cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.mpaPercOverallValue, perc_area=result.mpaPercOverallArea)
+                cache.save()
+            
         #fill out analysis results with species that are relevant for the given group, but not yet present in the results
         group_species = layers.getSpeciesByGroup(group)
         anal_species = [result.species for result in anal_results]
