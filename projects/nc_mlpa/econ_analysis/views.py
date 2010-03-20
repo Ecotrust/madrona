@@ -6,6 +6,8 @@ import os
 from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
+#I wonder why the following would cause hudson build to fail?
+#from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult 
 
 def print_report(request, feature_id, user_group):
     user = request.user
@@ -43,6 +45,8 @@ def impact_group_list(request, feature_id):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
     return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id})) 
     
 def impact_analysis(request, feature_id, group): 
@@ -77,6 +81,8 @@ def MpaEconAnalysis(request, feature_id):
     user = request.user 
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401) 
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
     if request.method != 'GET':
         return HttpResponseBadRequest('You must use GET')    
     #if not request.user.is_authenticated():
@@ -123,6 +129,8 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
 
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     
