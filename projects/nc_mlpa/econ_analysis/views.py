@@ -26,9 +26,9 @@ def impact_analysis(request, feature_id, group):
         return render_to_response('impact_intro.html', RequestContext(request, {}))  
     group_name = layers.groups[group]  
     #the following port and species parameters are for testing on my local machine
-    return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon', template='impact_analysis.html')
+    #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon', template='impact_analysis.html')
     #the following call is the more permanent/appropriate one for the server
-    #return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
+    return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
     
 '''
 Primarily used for testing...
