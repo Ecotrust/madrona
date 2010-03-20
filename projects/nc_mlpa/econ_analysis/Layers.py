@@ -17,7 +17,6 @@ class Layers:
         self.rec_kyk_methods = {'sal': ['hook and line'], 'rckf': ['hook and line']}
         self.rec_pvt_methods = {'chal': ['hook and line'], 'dcrab': ['trap'], 'phal': ['hook and line'], 'rckf': ['hook and line'], 'sal': ['hook and line']}
         
-    #this should not be an instance method
     def getPortsByGroup(self, group):
         if group in ['com', 'Commercial']:
             return ['Crescent City', 'Trinidad', 'Eureka', 'Shelter Cove', 'Fort Bragg', 'Albion']
@@ -33,7 +32,6 @@ class Layers:
             return ['Crescent City', 'Elk', 'Fort Bragg']
         raise Exception('invalid group sent to Layers.getPortsInGroup')
          
-    #this should not be an instance method
     def getSpeciesByGroup(self, group):
         species = []
         if group in ['Commercial']:
@@ -92,7 +90,7 @@ class Layers:
                     
         return layers
         
-    #we should be able to remove this now...
+    
     def previousgetAllLayers(self):
         #THE FOLLOWING IS FOR INITIAL TESTING ONLY...
         #WILL EVENTUALLY REPLACE THE FOLLOWING TEST CODE WITH AN ALGORITHM FOR BUILDING all_layers BY WALKING THROUGH 
