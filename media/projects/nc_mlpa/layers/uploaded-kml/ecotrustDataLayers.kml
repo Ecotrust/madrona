@@ -1571,9 +1571,9 @@
                         <description></description>
                         <LookAt>
                             <longitude>-123.746910938</longitude>
-                            <latitude>39.0793625668</latitude>
+                            <latitude>38.965</latitude>
                             <altitude>0</altitude>
-                            <range>43269</range>
+                            <range>53269</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1596,10 +1596,10 @@
                         <visibility>0</visibility>
                         <description></description>
                         <LookAt>
-                            <longitude>-123.789765655</longitude>
-                            <latitude>39.2154531492</latitude>
+                            <longitude>-123.719765655</longitude>
+                            <latitude>38.985</latitude>
                             <altitude>0</altitude>
-                            <range>106772</range>
+                            <range>65236</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1623,9 +1623,9 @@
                         <description></description>
                         <LookAt>
                             <longitude>-123.775100575</longitude>
-                            <latitude>39.3650958773</latitude>
+                            <latitude>38.94</latitude>
                             <altitude>0</altitude>
-                            <range>256073</range>
+                            <range>106772</range>
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
@@ -1649,8 +1649,8 @@
                         <visibility>0</visibility>
                         <description></description>
                         <LookAt>
-                            <longitude>-123.762041069</longitude>
-                            <latitude>39.1816616357</latitude>
+                            <longitude>-123.662041069</longitude>
+                            <latitude>38.91</latitude>
                             <altitude>0</altitude>
                             <range>65236</range>
                             <tilt>0</tilt>
