@@ -1556,6 +1556,122 @@
                         </NetworkLink>
     				</Folder>
 				</Folder>
+                <Folder>
+                    <name>Point Arena</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+    
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-123.746910938</longitude>
+                            <latitude>39.0793625668</latitude>
+                            <altitude>0</altitude>
+                            <range>43269</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+    
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrabt_pak/</href>
+                            </Link>
+                        </NetworkLink>
+    				</Folder>
+                    <Folder>
+                        <name>Rockfish (post RCA)</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-123.789765655</longitude>
+                            <latitude>39.2154531492</latitude>
+                            <altitude>0</altitude>
+                            <range>106772</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+    
+                        <NetworkLink id="Rockfish (post RCA) Map">
+                            <name>Rockfish (post RCA) Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/rklc_pak/</href>
+                            </Link>
+                        </NetworkLink>
+    				</Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-123.775100575</longitude>
+                            <latitude>39.3650958773</latitude>
+                            <altitude>0</altitude>
+                            <range>256073</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+        
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/salt_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+    
+                    <Folder>
+                        <name>Urchin</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-123.762041069</longitude>
+                            <latitude>39.1816616357</latitude>
+                            <altitude>0</altitude>
+                            <range>65236</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+    
+                        <NetworkLink id="Urchin Map">
+                            <name>Urchin Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/urchd_pak/</href>
+                            </Link>
+                        </NetworkLink>
+    				</Folder>
+				</Folder>
+                
 			</Folder>
             <Folder>
                 <name>Commercial Passenger Fishing Vessel</name>
