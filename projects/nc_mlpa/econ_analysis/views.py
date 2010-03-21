@@ -57,8 +57,8 @@ def impact_analysis(request, feature_id, group):
         return HttpResponse('You must have permission to view this information.', status=401)  
     from Layers import Layers
     layers = Layers()
-    if group not in layers.groups.keys():
-        return render_to_response('impact_intro.html', RequestContext(request, {}))  
+    #if group not in layers.groups.keys():
+    #    return render_to_response('impact_intro.html', RequestContext(request, {}))  
     group_name = layers.groups[group]  
     #the following port and species parameters are for testing on my local machine
     #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')

@@ -10,9 +10,25 @@
             <li><a href="#Attributes"><span>Information</span></a></li>
             <li><a href="{% url mpa_habitat_representation instance.pk 'html' %}"><span>Habitat Representation</span></a></li>
             {% if perms.layers.view_ecotrustlayerlist %}
-                <li><a href="{% url impact_group_list instance.pk %}"><span>Impact Analysis</span></a></li>
+                <li><a href="#Groups"><span>Impact Analysis</span></a></li>
             {% endif %}
         </ul>
+        <div id="Groups" class="tabs">
+            <ul>
+                <li><a href="#Instructions"><span>Instructions</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'com' %}"><span>Commercial</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'cpfv' %}"><span>Commercial Private Fishing Vessel</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'div' %}"><span>Recreational Dive</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'kyk' %}"><span>Recreational Kayak</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'pvt' %}"><span>Recreational Vessel</span></a></li>
+                <li><a href="{% url mpa_impact_analysis instance.pk 'swd' %}"><span>Edible Seaweed (Commercial)</span></a></li>
+            </ul>
+            <div id="Instructions">
+                <br>
+                <p>Select a group from the choices above to run the impact analysis on your chosen MPA.</p>
+                <p>Please be aware that this computation may take a full minute or two...</p>
+            </div>
+        </div>
         <div id="Attributes">
             <ul class="metadata">
               {% if instance.user.first_name and instance.user.last_name %} 
