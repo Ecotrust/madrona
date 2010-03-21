@@ -1564,7 +1564,6 @@
                             <listItemType>radioFolder</listItemType>
                         </ListStyle>
                     </Style>
-    
                     <Folder>
                         <name>Dungeness Crab</name>
                         <visibility>0</visibility>
@@ -1577,7 +1576,6 @@
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
-    
                         <NetworkLink id="Dungeness Crab Map">
                             <name>Dungeness Crab Map</name>
                             <visibility>0</visibility>
@@ -1590,7 +1588,7 @@
                                 <href>tiles/map/com/dcrabt_pak/</href>
                             </Link>
                         </NetworkLink>
-    				</Folder>
+                    </Folder>
                     <Folder>
                         <name>Rockfish (post RCA)</name>
                         <visibility>0</visibility>
@@ -1603,7 +1601,6 @@
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
-    
                         <NetworkLink id="Rockfish (post RCA) Map">
                             <name>Rockfish (post RCA) Map</name>
                             <visibility>0</visibility>
@@ -1616,7 +1613,7 @@
                                 <href>tiles/map/com/rklc_pak/</href>
                             </Link>
                         </NetworkLink>
-    				</Folder>
+                    </Folder>
                     <Folder>
                         <name>Salmon</name>
                         <visibility>0</visibility>
@@ -1629,7 +1626,6 @@
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
-        
                         <NetworkLink id="Salmon Map">
                             <name>Salmon Map</name>
                             <visibility>0</visibility>
@@ -1643,7 +1639,6 @@
                             </Link>
                         </NetworkLink>
                     </Folder>
-    
                     <Folder>
                         <name>Urchin</name>
                         <visibility>0</visibility>
@@ -1656,7 +1651,6 @@
                             <tilt>0</tilt>
                             <altitudeMode>relativeToGround</altitudeMode>
                         </LookAt>
-    
                         <NetworkLink id="Urchin Map">
                             <name>Urchin Map</name>
                             <visibility>0</visibility>
@@ -1669,9 +1663,9 @@
                                 <href>tiles/map/com/urchd_pak/</href>
                             </Link>
                         </NetworkLink>
-    				</Folder>
-				</Folder>
-                
+                    </Folder>
+                </Folder>
+    
 			</Folder>
             <Folder>
                 <name>Commercial Passenger Fishing Vessel</name>
