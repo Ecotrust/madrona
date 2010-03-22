@@ -73,10 +73,16 @@ class Layers:
                     group_abbr = group
                     cell_size = self.CELL_SIZE
                     fishing_type = self.fishing_types[group]  
-                    if fishing_type == 'commercial':
+                    if group_abbr == 'com':
                         take_methods = self.commercial_methods[species]
-                    else:
-                        take_methods = vars()['self.rec_'+group+'_methods'][species]
+                    elif group_abbr == 'cpfv':
+                        take_methods = self.rec_cpfv_methods[species]
+                    elif group_abbr == 'div':
+                        take_methods = self.rec_div_methods[species]
+                    elif group_abbr == 'kyk':
+                        take_methods = self.rec_kyk_methods[species]
+                    elif group_abbr == 'pvt':
+                        take_methods = self.rec_pvt_methods[species]
                     port_name = self.ports[port]
                     port_abbr = port
                     target_names = self.targets[species]
