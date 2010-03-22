@@ -160,15 +160,10 @@ class Grass:
     Runs grass command.  
     Example usage: runCmd('r.los in=elevation.dem out=los coord=10,10')
     '''
-    def runCmd(self, cmd, showOutput=False):
+    def runCmd(self, cmd):
         result = None
         try:
-            import os
-            if showOutput:
-                print "Running Grass Command: %s" %cmd
-                os.system(cmd)
-            else:
-                result = os.popen(cmd).read()
+            result = os.popen(cmd).read()
         except Exception,e :
             raise Exception("Could not perform command [%s]: %s" % (cmd,e))
         return result     
@@ -186,9 +181,9 @@ class Grass:
     '''
     Input a vector ogr datasource (input) and save as a grass vector map (output) 
     '''
-    def v_in_ogr(self, input, output, verbose=False):
+    def v_in_ogr(self, input, output):
         command = 'v.in.ogr -o dsn=%s output=%s --overwrite' % (input, output)
-        self.runCmd(command, showOutput=verbose)
+        self.runCmd(command)
 
     '''
     Input a raster ogr datasource (input) and save as a grass raster map (output) 
