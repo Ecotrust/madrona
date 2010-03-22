@@ -36,17 +36,19 @@ class Grass:
         self.tmpMapset = tmpMapset
         self.templateMapset = 'mm_template_mapset'
                 
-        self.locationPath = os.path.join(gisdbase,location)
-        self.srcMapsetPath = os.path.join(self.locationPath,srcMapset)
-        self.templatePath = os.path.join(self.locationPath,self.templateMapset)
-        self.grassRcFile = os.path.join(gisdbase,"mm_grass6rc")  
+        self.locationPath = os.path.join(gisdbase, location) #mlpa_nc
+        self.srcMapsetPath = os.path.join(self.locationPath, srcMapset) #PERMANENT   
+        self.templatePath = os.path.join(self.locationPath, self.templateMapset) #mm_template_mapset
+        #self.grassRcFile = os.path.join(gisdbase, "mm_grass6rc")  
 
         if tmpMapset is None:
             self.curMapset = srcMapset
+            self.grassRcFile = os.path.join(gisdbase, "mm_grass6rc")  
             self.setupSrcGrassEnv()
         else:
             self.curMapset = tmpMapset
-            self.tmpMapsetPath = os.path.join(self.locationPath,tmpMapset)                        
+            self.tmpMapsetPath = os.path.join(self.locationPath, tmpMapset)    
+            self.grassRcFile = os.path.join(self.tmpMapsetPath, "mm_grass6rc")  
             self.setupTmpGrassEnv()                                                             
 
         #Turn on verbose debug output  
