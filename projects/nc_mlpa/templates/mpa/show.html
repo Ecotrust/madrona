@@ -13,6 +13,7 @@
                 <li><a href="#Groups"><span>Impact Analysis</span></a></li>
             {% endif %}
         </ul>
+        {% if perms.layers.view_ecotrustlayerlist %}
         <div id="Groups" class="tabs">
             <ul>
                 <li><a href="#Instructions"><span>Instructions</span></a></li>
@@ -29,6 +30,7 @@
                 <p>Please be aware that this computation may take a full minute or two...</p>
             </div>
         </div>
+        {% endif %}
         <div id="Attributes">
             <ul class="metadata">
               {% if instance.user.first_name and instance.user.last_name %} 
