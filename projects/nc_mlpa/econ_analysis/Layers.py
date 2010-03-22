@@ -16,7 +16,11 @@ class Layers:
         self.rec_div_methods = {'abal': ['free dive'], 'dcrab': ['dive'], 'rckf': ['spearfish']}
         self.rec_kyk_methods = {'sal': ['hook and line'], 'rckf': ['hook and line']}
         self.rec_pvt_methods = {'chal': ['hook and line'], 'dcrab': ['trap'], 'phal': ['hook and line'], 'rckf': ['hook and line'], 'sal': ['hook and line']}
+        self.commercial_species_display = {'Anchovies': 'Anchovy/Sardine (Lampara Net)', 'Dungeness Crab': 'Dungeness Crab (Trap)', 'Pacific Herring': 'Herring (Seine)', 'Rockfish': 'Rockfish (Fixed Gear)', 'Salmon': 'Salmon (Troll)', 'Edible Seaweed': 'Seaweed (Hand Harvest)', 'Shrimp': 'Shrimp (Trap)', 'Smelt': 'Smelt (Brail - Dip Net)', 'Surf Perch': 'Surfperch (Hook and Line)', 'Urchin': 'Urchin (Dive)'}
         
+    def getCommercialSpecies(self):
+        return self.commercial_species_display
+    
     #this should not be an instance method
     def getPortsByGroup(self, group):
         if group in ['com', 'Commercial']:
@@ -39,6 +43,7 @@ class Layers:
         if group in ['Commercial']:
             specs = self.commercial_methods.keys()
             specs.remove('eswd')
+            specs.remove('sard')
         elif group in ['Commercial Passenger Fishing Vessel']:
             specs = self.rec_cpfv_methods.keys()
         elif group in ['Edible Seaweed']:

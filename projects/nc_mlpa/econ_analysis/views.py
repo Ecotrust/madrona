@@ -113,16 +113,29 @@ def MpaEconAnalysis(request, feature_id):
     
     return display_analysis(request, feature_id, group, port, species, output)
   
-def flesh_out_results(group, port, results):
-    #fill out analysis results with species that are relevant for the given group, but not yet present in the results 
+def adjust_commercial_species(results):
     from Layers import Layers
+    layers = Layers()
+    species_dict = layers.getCommercialSpecies()
+    for result in results:
+        result.species = species_dict[result.species]
+    return results
+  
+def flesh_out_results(group, port, results):
+    #fill out analysis results with species that are relevant for the given group, but not yet present in the results    from Layers import Layers
     from Analysis import EmptyAnalysisResult   
+    from Layers import Layers
     layers = Layers()
     group_species = layers.getSpeciesByGroup(group)
     result_species = [result.species for result in results]
     missing_species = [specs for specs in group_species if specs not in result_species]
     for spec in missing_species:
         results.append(EmptyAnalysisResult(group, port, spec))
+    if group == 'Commercial':
+        results = adjust_commercial_species(results)
+    if group == 'Edible Seaweed':
+        for result in results:
+            result.species = 'Seaweed (Hand Harvest)'
     return results
     
 def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='impact_analysis.html'):
@@ -167,7 +180,7 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
                 anal_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
         #If not then run the analysis
         else:
-            #since at least one cache was no current, remove all related entries as they will all be recreated and recached below
+            #since at least one cache was not current, remove all related entries as they will all be recreated and recached below
             for single_cache in cache:
                 single_cache.delete()
             #Get all maps from the group (and possibly port and species) that we want to analyze

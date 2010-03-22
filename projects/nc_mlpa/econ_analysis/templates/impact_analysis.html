@@ -1,23 +1,23 @@
 {% extends 'common/panel.html' %}
 {% block title %}{{mpa.name}} Impact Analysis{% endblock title %}
 {% block panel %}
-<!--<div style='font-size: small'><a target='_blank' href='{% url printable_analysis mpa.id all_results.0.0.user_grp %}'>View Printable Report</a></div>-->
+<div style='font-size: small'><a target='_blank' href='{% url printable_analysis mpa.id all_results.0.0.user_grp %}'>View Printable Report</a></div>
 <div class='freetext'>
 <br>
 <table  class='hab_repr_container'>
     <thead>
         <tr>
             <th></th>
-            <th>A. <b>Percentage Value</b> affected by MPA</th>
+            <th><b>Percent of Total Value</b> affected by MPA</th>
             <th></th>
-            <th>B. <b>Percentage Area</b> affected by MPA</th>
+            <th><b>Percent of Total Area</b> affected by MPA</th>
         </tr>
     </thead>
     <tbody>
     {% for results in all_results %}
         <tr><td></td><td></td><td></td><td></td></tr>
         <tr>
-            <td style="width: 140px;"><b>{{ results.0.port }}</b></td>
+            <td style="width: 165px;"><b>{{ results.0.port }}</b></td>
             <td></td>
             <td></td>
             <td></td>

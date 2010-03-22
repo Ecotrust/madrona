@@ -350,11 +350,11 @@ class Analysis:
             mmutil.trueRound(stats.srArea,2),
             mmutil.trueRound(stats.totalArea,2),
             
-            mmutil.trueRound(mpaPercOverallArea,2),
+            mmutil.trueRound(mpaPercOverallArea,1),
             mmutil.trueRound(mpaPercSrArea,2),
             mmutil.trueRound(srPercOverallArea,2),
                                                     
-            mmutil.trueRound(mpaPercOverallValue,2),
+            mmutil.trueRound(mpaPercOverallValue,1),
             mmutil.trueRound(mpaPercSrValue,2),
             mmutil.trueRound(srPercOverallValue,2)
         )
