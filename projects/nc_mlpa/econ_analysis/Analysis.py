@@ -174,7 +174,7 @@ class Analysis:
         #Build path to fishing impact grids
         mapPath = self.FISHING_IMPACT_ANALYSIS_ROOT+map.group_abbr+'/'
         #Get name of current grid
-        mapName = map.getGridName()
+        mapName = map.getFullName()
         #Getpath to grass raster map
         grassRasterPath = os.path.join(self.MM_GRASS_RAST_PATH,mapName)
         #Load fishing impact grid into Grass for later use
@@ -191,7 +191,7 @@ class Analysis:
     Precalculates overall and study region level statistics and stores them in the database.               
     '''
     def __preloadMapStats(self, map):
-        self.fishingMapName = map.getGridName()       # fishing value map            
+        self.fishingMapName = map.getFullName()       # fishing value map            
         
         #Total fishing value.  Sums cell values in fishing map
         totalValue = self.grass.r_sum(self.fishingMapName)
@@ -251,8 +251,8 @@ class Analysis:
     Returns -2 if mpa analysis failed.
     '''
     def __runAnal(self, mpa, map):   
-        #self.fishingMapName = map.getFullName()       # fishing value map                            
-        self.fishingMapName = map.getGridName()
+        self.fishingMapName = map.getFullName()       # fishing value map                            
+        #self.fishingMapName = map.getGridName()
         timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
         temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
         self.tmpMapsetName = temp_id
@@ -308,7 +308,7 @@ class Analysis:
             
         #Intersect mpa raster with fishing map
         self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)               
-        #Calculate percent area       
+        #Calculate percent area   
         (mpaCells, mpaArea) = self.grass.r_area(self.mpaValueMaskMapName, map.cell_size)
         mpaArea = mpaArea * self.SQ_MILES_IN_SQ_METER
         

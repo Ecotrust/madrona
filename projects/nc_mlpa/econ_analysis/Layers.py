@@ -58,10 +58,6 @@ class Layers:
     def getAllLayers(self):
         
         #should commercial surf perch (sphkl) be 'hook and line' or 'hook and line from shore'???
-        #using 'hook and line from shore' in original getAllLayers and results generated were not in agreement with SAT
-        #maybe start with 'hook and line' here, and change later if that doens't line up
-        #might want to bring this to someone's attention though if 'hook and line' works but 'hook and line from shore does not'
-        #answer might lie in which instance of the stats line up 
         #surf perch update....'hook and line' seems to be working on the server
         
         raster_path = os.path.join(settings.GIS_DATA_ROOT, 'analysis')
