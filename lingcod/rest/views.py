@@ -96,7 +96,8 @@ def create(request, form_class=None, action=None, title=None,
         if form.is_valid():
             m = form.save()
             m.save()
-            response = HttpResponse('created', status=201)
+            response = HttpResponse('created: %s' % (m.get_absolute_url(), ), 
+                status=201)
             response['Location'] = m.get_absolute_url()
             return response
         else:
