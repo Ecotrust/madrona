@@ -174,7 +174,6 @@ class Grass:
     Copy a vector map from the base mapset to the temporary mapset
     '''
     def copyMap(self, type, mapName):
-        #command = "g.copy %s='%s@%s',%s" % (type, mapName, self.srcMapset, mapName)
         command = "g.copy %s=%s@%s,%s" % (type, mapName, self.srcMapset, mapName)
         self.runCmd(command)
     
@@ -182,14 +181,14 @@ class Grass:
     Input a vector ogr datasource (input) and save as a grass vector map (output) 
     '''
     def v_in_ogr(self, input, output):
-        command = 'v.in.ogr -o dsn=%s output=%s --overwrite' % (input, output)
+        command = 'v.in.ogr -o dsn=%s output=%s' % (input, output)
         self.runCmd(command)
 
     '''
     Input a raster ogr datasource (input) and save as a grass raster map (output) 
     '''
     def r_in_gdal(self, input, output):
-        command = 'r.in.gdal -o input=%s output=%s --overwrite' % (input, output)
+        command = 'r.in.gdal -o input=%s output=%s' % (input, output)
         self.runCmd(command)
     
     '''
@@ -238,7 +237,7 @@ class Grass:
     are given the value of val
     '''
     def v_to_r(self, vMap, rMap, val):
-        command = 'v.to.rast use=val value=%s in=%s out=%s --overwrite' % (val, vMap, rMap)
+        command = 'v.to.rast use=val value=%s in=%s out=%s' % (val, vMap, rMap)
         self.runCmd(command)        
 
     '''
