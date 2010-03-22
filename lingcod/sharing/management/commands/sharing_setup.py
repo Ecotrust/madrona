@@ -24,10 +24,17 @@ class Command(BaseCommand):
             mpa_ct = ContentType.objects.get_for_model(mpaclass)
             array_ct = ContentType.objects.get_for_model(arrayclass)
 
-            share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
+            if len(ShareableContent.objects.filter(shared_content_type=mpa_ct)) == 0:
+                share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
                                                         container_content_type=array_ct,
                                                         container_set_property='mpa_set')
-            share_array = ShareableContent.objects.create(shared_content_type=array_ct)
+            else:
+                print "MPA already added as SharedContent"
+
+            if len(ShareableContent.objects.filter(shared_content_type=array_ct)) == 0:
+                share_array = ShareableContent.objects.create(shared_content_type=array_ct)
+            else:
+                print "Array already added as SharedContent"
         except:
             print "Could not register your mpa and/or array class as shareable content types"
             return
@@ -40,7 +47,7 @@ class Command(BaseCommand):
             print "Sharing groups defined in settings don't exist"
             return
         
-        # Then set the permissions on the 
+        # Then set the permissions on the default groups
         shareables = get_shareables()
         for to_pub_group in to_public_groups:
             to_pub_group.permissions.add(shareables[array_ct.natural_key()[1]][1])
