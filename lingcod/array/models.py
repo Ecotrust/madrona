@@ -9,7 +9,7 @@ import os
 
 def get_supportfile_name(instance, filename):
     """ Determine the filepath to store uploaded files - relative to MEDIA_ROOT """
-    return os.path.join('array', slugify(instance.name), slugify(instance.user.username), filename)
+    return os.path.join('upload','array', slugify(instance.name), filename)
 
 class MpaArray(models.Model):
     """
@@ -83,6 +83,18 @@ class MpaArray(models.Model):
         })
     objects = ArrayManager()
 
+    @property
+    def supportfile1_shortname(self):
+        if self.supportfile1:
+            import os
+            return os.path.split(self.supportfile1.name)[-1]
+
+    @property
+    def supportfile2_shortname(self):
+        if self.supportfile2:
+            import os
+            return os.path.split(self.supportfile2.name)[-1]
+        
     def copy(self, user):
         """
         Creates a copy of itself, 
