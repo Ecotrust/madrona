@@ -25,7 +25,7 @@
         <tr><td></td><td></td><td></td><td></td></tr>
         {% for result in results %}
         <tr class="{% cycle '' 'grey' %}">
-            <td>{{ result.species }}</td>
+            <td class="habitat_name">{{ result.species }}</td>
             {% if result.mpaPercOverallValue == '---' %}
                 <td>{{ result.mpaPercOverallValue }}</td>
             {% else %}
