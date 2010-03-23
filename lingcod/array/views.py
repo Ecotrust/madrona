@@ -139,14 +139,18 @@ def download_supportfile(request, pk, filenum):
             return HttpResponse('File number does not exist', status=404)
 
         if os.path.exists(fpath):
+            import mimetypes
+            mimetype = mimetypes.guess_type(fpath)[0] or 'application/octet-stream'
+
             f = file(fpath)
             try:
                 content = f.read(os.path.getsize(fpath))
             finally:
                 f.close()
-        
-            response = HttpResponse(content) #,mimetype='application/octet-stream')
+
+            response = HttpResponse(content, mimetype=mimetype)
             response['Content-Disposition']='attachment; filename="%s"'%filename
+            response["Content-Length"] = len(content)
             return response
         else:
             return HttpResponse('File does not exist', status=404)
