@@ -25,9 +25,11 @@
                 <li><a href="{% url mpa_impact_analysis instance.pk 'swd' %}"><span>Edible Seaweed (Commercial)</span></a></li>
             </ul>
             <div id="Instructions">
-                <br>
-                <p>Select a group from the choices above to run the impact analysis on your chosen MPA.</p>
-                <p>Please be aware that this computation may take a full minute or two...</p>
+                <p>This page contains information on potential fishery-specific impacts for any given MPA in each array proposal. Here you will find the summaries of the affected fishing grounds from the individual MPAs compiled into a single table. </p>
+                <p>The data are arranged by port and fishery. Starting in the north the ports are in the following order: Crescent City, Trinidad, Eureka - Arcata, Shelter Cove, Fort Brag, and Albion. </p>
+                <p>The table output is organized into two columns; the percent of the total value and the percent of total area affected for the entire fishing grounds per port. </p>
+                <p>Also you may notice some of the values are listed as "---" instead of a number value. This is an indicator of whether the fishery is reported on in the summary. </p>
+                <p>A "---" means that the fishery either does not exist in that port, or insufficient data was collected in that port for that fishery, or that fewer than four fishermen were interviewed/participate in that fishery and to maintain confidentiality we are not reporting on that fishery.</p>
             </div>
         </div>
         {% endif %}
