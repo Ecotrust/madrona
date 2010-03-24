@@ -58,8 +58,62 @@ MarineMap Settings
     Set to a ModelForm class for editing Arrays. Defaults to 
     ``'lingcod.mpa.forms.ArrayForm'``
 
+.. _RELEASE:
+
+``RELEASE``
+    The next milestone or major revision number (ie ``'1.1'``)
+
+.. _GROUP_REQUEST_EMAIL:
+
+``GROUP_REQUEST_EMAIL``
+    When user requests group membership, send email to this address (``None`` = no email sent) 
+
+.. _GROUP_REGISTERED_BY_WEB:
+
+``GROUP_REGISTERED_BY_WEB`` 
+    Group name assigned to users who register using the web interface. Defaults to 'registered_by_web'
+
+
+.. _KML_SIMPLIFY_TOLERANCE:
+
+``KML_SIMPLIFY_TOLERANCE``
+    Tolerance argument to the postgis simplify command used when generating viewable KMLs. Defaults to ``20``.
+
+.. _KML_EXTRUDE_HEIGHT:
+
+``KML_EXTRUDE_HEIGHT``
+    KML output is extruded to produce 3D shapes; This setting determines the height in meters. Defaults to ``100``.
+
+.. _SHARING_TO_PUBLIC_GROUPS:
+``SHARING_TO_PUBLIC_GROUPS``
+    List of groups which have the ability to make arrays publically viewable. Defaults to ``['Share with Public']``
+
+.. _SHARING_TO_STAFF_GROUPS:
+``SHARING_TO_STAFF_GROUPS``
+    List of groups which have the ability to submit mpas/arrays to staff for approval. Defaults to ``['Share with Staff']``
+
+.. _SCREENCASTS:
+``SCREENCASTS``
+    Directory to store screencast movies
+
+.. _SCREENCAST_IMAGES:
+``SCREENCAST_IMAGES``
+    Directory to store thumbnails and other supporting images for screencasts
+
+.. _VIDEO_PLAYER:
+``VIDEO_PLAYER``
+    Path to .swf flash video player for streaming screencast videos
+
 3rd Party App Settings
 ----------------------
+
+.. _ACCOUNT_ACTIVATION_DAYS:
+``ACCOUNT_ACTIVATION_DAYS``
+    How many days do new users have to activate their account once they've registered. Default is ``7`` days.
+
+.. _REGISTRATION_OPEN:
+``REGISTRATION_OPEN``
+    Boolean. Can users register themselves or not? Default is ``True``.
 
 .. _COMPRESS:
 
@@ -105,7 +159,7 @@ Django Settings
 .. _MEDIA_URL:
 
 ``MEDIA_URL``
-    defaults to /media
+    defaults to /media/
 
 .. _LOGIN_URL:
 
