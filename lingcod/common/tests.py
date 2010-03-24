@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.conf import settings
 import os
 
 class AssetsTest(TestCase):
@@ -55,5 +56,24 @@ class BrowserUserAgentTest(TestCase):
                 print "UAPARSER SAYS SUPPORTED ....." , ua
             self.assertEquals(valid_browser(ua),False)
 
+class AccessTest(TestCase):
+    
+    def test_upload_dir_access(self):
+        """ Ensure that the upload directory is not web accessible """
 
+        url = settings.MEDIA_URL + 'upload/' 
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 403, url)
+
+        url = settings.MEDIA_URL + 'upload/test.txt' 
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 403, url)
+
+        url = settings.MEDIA_URL + '/upload/test.txt' 
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 403, url)
+
+        url = settings.MEDIA_URL + '/./upload/test.txt' 
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 403, url)
 

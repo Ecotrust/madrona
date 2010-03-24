@@ -45,5 +45,6 @@ urlpatterns = patterns('',
 
 # Useful for serving files when using the django dev server
 urlpatterns += patterns('',
+    (r'^media(.*)/upload/', 'lingcod.common.views.forbidden'),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
 )

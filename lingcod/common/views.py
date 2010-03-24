@@ -79,3 +79,6 @@ def map(request, template_name='common/map.html'):
         response.set_cookie("mm_already_viewed","True", expires=expire_stamp)
 
     return response
+
+def forbidden(request, *args, **kwargs):
+    return HttpResponse('Access denied', status=403)
