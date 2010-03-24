@@ -14,11 +14,10 @@ class AdminFileWidget(forms.FileInput):
         super(AdminFileWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        output = []
+        output = ['<p>']
         if value and hasattr(value, "name"):
             filename = split(value.name)[-1]
-            output.append('<p>%s %s</p> <p>%s ' % \
-                ('Currently:', filename, 'Change:'))
+            output.append('%s %s</p> <p>%s ' % ('Currently:', filename, 'Change:'))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         output.append("</p>")
         return mark_safe(u''.join(output))
