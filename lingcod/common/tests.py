@@ -77,3 +77,24 @@ class AccessTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 403, url)
 
+class InstalledAppTest(TestCase):
+
+    def test_dup_app_labels(self):
+        """ Make sure we dont have any apps with duplicate app_labels
+        for the sake of south, contenttypes and any other django piece
+        which relies on app_label """
+
+        labels = [x.split('.')[-1] for x in settings.INSTALLED_APPS]
+        counts = {}
+        for label in labels:
+            if label not in counts.keys():
+                counts[label] = 1
+            else:
+                counts[label] += 1
+
+        for k,v in counts.items():
+            self.assertEquals(v, 1, 'app_label %s refers to %s apps' % (k,v))
+
+
+
+        
