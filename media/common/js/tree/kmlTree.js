@@ -161,6 +161,7 @@ lingcod.kmlTree = (function(){
     
     return function(opts){
         var that = {};
+        var errorCount = 0;
         var lookupTable = {};
         that.kmlObject = null;
         var docs = {};
@@ -314,18 +315,37 @@ lingcod.kmlTree = (function(){
         
         var processKmlObject = function(kmlObject, url){
             if (!kmlObject) {
-                // show error
-                setTimeout(function() {
-                    var content = '<div class="marinemap-kmltree">';
-                    if(opts.title){
-                        content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
-                    }
-                    opts.element.html(content + '<p class="error">could not load kml file with url '+url+'</p></div>');
-                    $(that).trigger('kmlLoadError', kmlObject);
-                },
-                0);
-                return;
+                if(errorCount === 0){
+                    errorCount++;
+                    setTimeout(function(){
+                        // Try to reset the browser cache, then try again
+                        jQuery.ajax({
+                            url: url,
+                            success: function(){
+                                that.load(true);
+                            },
+                            error: function(){
+                                processKmlObject(kmlObject, url);
+                            }
+                        });
+                        // try to load 
+                    }, 100);
+                    return;                    
+                }else{
+                    // show error
+                    setTimeout(function() {
+                        var content = '<div class="marinemap-kmltree">';
+                        if(opts.title){
+                            content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
+                        }
+                        opts.element.html(content + '<p class="error">could not load kml file. Try clicking <a target="_blank" href="'+url+'">this link</a>, then refreshing the application.</p></div>');
+                        $(that).trigger('kmlLoadError', kmlObject);
+                    },
+                    0);
+                    return;                    
+                }
             }
+            errorCount = 0;
             that.kmlObject = kmlObject;
             that.kmlObject.setVisibility(true);
             var options = buildOptions(kmlObject);
