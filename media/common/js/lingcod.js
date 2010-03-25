@@ -201,8 +201,7 @@ var lingcod = (function(){
                 title: true,
                 restoreState: true
             });
-            if (userData) { userData.load(); }
-            //}
+            userData.load(); 
         }
         
         var editors = [];

@@ -50,6 +50,10 @@ class UserLayerList(models.Model):
             # There can be only one!
             #UserLayerList.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
             
+    class Meta:
+        permissions = (
+            ("view_userlayerlist", "Can view user layer list"),
+        )
 
 
 class PublicLayerList(models.Model):

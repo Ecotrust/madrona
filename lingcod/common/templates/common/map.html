@@ -32,7 +32,9 @@
         {% block aftermyshapes %} {% endblock aftermyshapes %}
                 
         {% if user.is_authenticated %}
-            options.user_kml = {url: "{% url user-data-layers input_username=user.username session_key=session_key %}"};
+            {% if perms.layers.view_userlayerlist %}
+                options.user_kml = {url: "{% url user-data-layers input_username=user.username session_key=session_key %}"};
+            {% endif %}
         {% endif %}
                 
         options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
