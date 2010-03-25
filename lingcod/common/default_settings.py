@@ -150,4 +150,5 @@ SCREENCASTS = 'screencasts/'
 SCREENCAST_IMAGES = 'screencasts/images'
 VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
 
-USER_DATA_ROOT = MEDIA_URL + 'layers/uploaded-kml/'
+# This path is used by lingcod.layers.views to handle requests initiated by a UserLayerList 
+USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
