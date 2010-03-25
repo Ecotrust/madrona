@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404
 from models import *
 import os
@@ -47,6 +47,9 @@ def get_map(request, session_key, input_username, group_name, layer_name, z=None
 def get_public_layers(request):
     """Returns uploaded kml from the :class:`PublicLayerList <lingcod.layers.models.PublicLayerList>` object marked ``active``.
     """
-    layer = get_object_or_404(PublicLayerList, active=True)
+    try:
+        layer = PublicLayerList.objects.filter(active=True)[0]
+    except:
+        raise Http404
     return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
  
