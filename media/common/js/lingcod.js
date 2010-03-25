@@ -81,7 +81,7 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
-        $('#datalayerstree').append('<div id="study_region"></div><div id="ecotrust_data"></div><div id="public_data"></div><div id="googlelayers"></div>');
+        $('#datalayerstree').append('<div id="study_region"></div><div id="ecotrust_data"></div><div id="user_data"></div><div id="public_data"></div><div id="googlelayers"></div>');
 
         var studyRegion = lingcod.kmlTree({
             url: window.studyregion,
@@ -186,6 +186,23 @@ var lingcod = (function(){
                 restoreState: true
             });
             ecotrustData.load();
+        }
+        
+        if(options.user_kml){
+            //for(var i=0;i<options.user_kml.length; i++){
+            var userData = lingcod.kmlTree({
+                url: options.user_kml.url,
+                ge: ge, 
+                gex: gex, 
+                animate: false, 
+                map_div: $('#map'), 
+                element: $('#user_data'),
+                trans: options.media_url + 'common/images/transparent.gif',
+                title: true,
+                restoreState: true
+            });
+            if (userData) { userData.load(); }
+            //}
         }
         
         var editors = [];

@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+        
+    <name>North Central Coast Ecotrust Data Layers</name>
+    <description></description>
+    
+    <Folder>
+        <name>North Central Coast Ecotrust Fishing Ground Maps </name>
+        <visibility>0</visibility>
+        <description></description>        
+        <Style>
+            <ListStyle>
+                <listItemType>checkOffOnly</listItemType>
+            </ListStyle>
+        </Style>
+    
+        <ScreenOverlay>
+            <name>Legend</name>
+            <visibility>0</visibility>
+            <Style>
+                <ListStyle>
+                    <listItemType>checkHideChildren</listItemType>
+                </ListStyle>
+            </Style>
+            <Icon>
+                <href>other/images/socioecon-legend.png</href>
+            </Icon>
+            <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+            <screenXY x="10" y="10" xunits="pixels" yunits="insetPixels"/>
+            <size x="120" y="399" xunits="pixels" yunits="pixels"/>
+        </ScreenOverlay>
+    
+        <Folder>
+            <name>Groups</name>
+            <visibility>0</visibility>
+            <Style>
+                <ListStyle>
+                    <listItemType>radioFolder</listItemType>
+                </ListStyle>
+            </Style>
+    
+            <Folder>
+                <name>Commercial</name>
+                <visibility>0</visibility>
+                <Style>
+                    <ListStyle>
+                        <listItemType>radioFolder</listItemType>
+                    </ListStyle>
+                </Style>
+    
+                <Folder>
+                    <name>Point Arena</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.133044732</longitude>
+                            <latitude>40.1444622012</latitude>
+                            <altitude>0</altitude>
+                            <range>478479</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Nearshore Rockfish Map">
+                            <name>Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/nrck_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Red Urchin</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.220677652</longitude>
+                            <latitude>41.6890389985</latitude>
+                            <altitude>0</altitude>
+                            <range>40000</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Red Urchin Map">
+                            <name>Red Urchin Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/rurch_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_pak/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+        
+                <Folder>
+                    <name>Bodega Bay</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    
+                    <Folder>
+                        <name>California Halibut</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="California Halibut Map">
+                            <name>California Halibut Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/chal_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.133044732</longitude>
+                            <latitude>40.1444622012</latitude>
+                            <altitude>0</altitude>
+                            <range>478479</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Nearshore Rockfish Map">
+                            <name>Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/nrck_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Red Urchin</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.220677652</longitude>
+                            <latitude>41.6890389985</latitude>
+                            <altitude>0</altitude>
+                            <range>40000</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Red Urchin Map">
+                            <name>Red Urchin Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/rurch_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_bbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+                
+                <Folder>
+                    <name>Bolinas</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    <Folder>
+                        <name>California Halibut</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+                        <NetworkLink id="California Halibut Map">
+                            <name>California Halibut Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/chal_bok/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_bok/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_bok/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_bok/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+                
+                <Folder>
+                    <name>Half Moon Bay</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    <Folder>
+                        <name>California Halibut</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="California Halibut Map">
+                            <name>California Halibut Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/chal_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Coastal Pelagics</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Coastal Pelagics Map">
+                            <name>Coastal Pelagics Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/cps_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Market Squid</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Market Squid Map">
+                            <name>Market Squid Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/msqd_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.133044732</longitude>
+                            <latitude>40.1444622012</latitude>
+                            <altitude>0</altitude>
+                            <range>478479</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Nearshore Rockfish Map">
+                            <name>Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/nrck_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_mbk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+                <Folder>
+                    <name>San Francisco</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    
+                    <Folder>
+                        <name>California Halibut</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="California Halibut Map">
+                            <name>California Halibut Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/chal_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.133044732</longitude>
+                            <latitude>40.1444622012</latitude>
+                            <altitude>0</altitude>
+                            <range>478479</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Nearshore Rockfish Map">
+                            <name>Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/nrck_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Red Urchin</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.220677652</longitude>
+                            <latitude>41.6890389985</latitude>
+                            <altitude>0</altitude>
+                            <range>40000</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Red Urchin Map">
+                            <name>Red Urchin Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/rurch_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_sfk/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+                <Folder>
+                    <name>Entire Study Region</name>
+                    <visibility>0</visibility>
+                    <Style>
+                        <ListStyle>
+                            <listItemType>radioFolder</listItemType>
+                        </ListStyle>
+                    </Style>
+                    
+                    <Folder>
+                        <name>California Halibut</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="California Halibut Map">
+                            <name>California Halibut Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/chal_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Coastal Pelagics</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Coastal Pelagics Map">
+                            <name>Coastal Pelagics Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/cps_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Dungeness Crab</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.284574453</longitude>
+                            <latitude>41.1930674295</latitude>
+                            <altitude>0</altitude>
+                            <range>266431</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Dungeness Crab Map">
+                            <name>Dungeness Crab Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/dcrab_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Deeper Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Deeper Nearshore Rockfish Map">
+                            <name>Deeper Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/drck_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Market Squid</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.296495769</longitude>
+                            <latitude>41.1442034959</latitude>
+                            <altitude>0</altitude>
+                            <range>287354</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Market Squid Map">
+                            <name>Market Squid Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/msqd_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Nearshore Rockfish</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.133044732</longitude>
+                            <latitude>40.1444622012</latitude>
+                            <altitude>0</altitude>
+                            <range>478479</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Nearshore Rockfish Map">
+                            <name>Nearshore Rockfish Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/nrck_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Red Urchin</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.220677652</longitude>
+                            <latitude>41.6890389985</latitude>
+                            <altitude>0</altitude>
+                            <range>40000</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Red Urchin Map">
+                            <name>Red Urchin Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/rurch_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                    <Folder>
+                        <name>Salmon</name>
+                        <visibility>0</visibility>
+                        <description></description>
+                        <LookAt>
+                            <longitude>-124.087385597</longitude>
+                            <latitude>41.3572887246</latitude>
+                            <altitude>0</altitude>
+                            <range>54274</range>
+                            <tilt>0</tilt>
+                            <altitudeMode>relativeToGround</altitudeMode>
+                        </LookAt>
+
+                        <NetworkLink id="Salmon Map">
+                            <name>Salmon Map</name>
+                            <visibility>0</visibility>
+                            <Style>
+                                <ListStyle>
+                                    <listItemType>checkHideChildren</listItemType>
+                                </ListStyle>
+                            </Style>
+                            <Link>
+                                <href>tiles/map/com/sal_all/</href>
+                            </Link>
+                        </NetworkLink>
+                    </Folder>
+                </Folder>
+            </Folder>
+    	</Folder>
+	</Folder>
+</Document>
+</kml>
