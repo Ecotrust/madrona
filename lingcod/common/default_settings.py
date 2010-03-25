@@ -90,7 +90,6 @@ INSTALLED_APPS = (
     'lingcod.straightline_spacing',
     'lingcod.user_profile',
     'registration',
-    'south',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
