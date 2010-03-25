@@ -6,6 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^marinemap/', 'django.views.generic.simple.redirect_to', {'url': '/'}),
     
     url(r'^$', 'lingcod.common.views.map', {'template_name': 'common/map_ext.html'}, name="map"),
     
