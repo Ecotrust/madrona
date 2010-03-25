@@ -8,7 +8,7 @@ import os
 
  
 def get_ecotrust_layers(request, session_key='0', input_username=None):
-    """Returns uploaded kml from the :class:`EcotrustLayerList <lingcod.layers.models.EcotrustLayerList>` object marked ``active``.
+    """Returns uploaded kml from the :class:`EcotrustLayerList <nc_mlpa_ecotrust_layers.models.EcotrustLayerList>` object marked ``active``.
     """
     load_session(request, session_key)
     user = request.user

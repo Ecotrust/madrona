@@ -72,7 +72,7 @@ INSTALLED_APPS += (
     'lingcod.screencasts',
     'nc_mlpa.mlpa',
     'nc_mlpa.report',
-    'nc_mlpa.layers',
+    'nc_mlpa.ecotrust_layers',
     'nc_mlpa.econ_analysis',
 )
 

@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     (r'^sharing/', include('lingcod.sharing.urls')),
     (r'^staticmap/', include('lingcod.staticmap.urls')),
     (r'^news/', include('lingcod.news.urls')),
-    (r'^nc_mlpa/layers/', include('nc_mlpa.layers.urls')),
+    (r'^nc_mlpa/layers/', include('nc_mlpa.ecotrust_layers.urls')),
     (r'^econ_analysis/', include('econ_analysis.urls')),
     
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

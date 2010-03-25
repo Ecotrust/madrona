@@ -48,3 +48,5 @@ class EcotrustLayerList(models.Model):
         permissions = (
             ("view_ecotrustlayerlist", "Can view ecotrust data layer list"),
         )
+        db_table = 'layers_ecotrustlayerlist'
+        

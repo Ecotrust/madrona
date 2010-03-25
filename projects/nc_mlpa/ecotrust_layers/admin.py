@@ -1,5 +1,5 @@
 from django.contrib import admin
-from nc_mlpa.layers.models import EcotrustLayerList
+from nc_mlpa.ecotrust_layers.models import EcotrustLayerList
 
 
 class EcotrustLayerListAdmin(admin.ModelAdmin):
