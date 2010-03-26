@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'lingcod.straightline_spacing',
     'lingcod.user_profile',
     'registration',
+    'south',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
@@ -152,3 +153,5 @@ VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
 
 # This path is used by lingcod.layers.views to handle requests initiated by a UserLayerList 
 USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
+
+SKIP_SOUTH_TESTS = True
