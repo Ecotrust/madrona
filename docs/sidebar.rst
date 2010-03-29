@@ -395,11 +395,6 @@ You can do more than assign callbacks for when a tab or panel is first shown.
 You can also run javascript whenever content is temporarily hidden, revealed, 
 or right before it is permanently removed from the document.
 
-.. warning::
-    The implementation of this functionality in trunk diverges from the 
-    documentation right now. Expect the API to work as documented here by 
-    milestone 1.1
-
 .. _lingcod.onShow:
 
 lingcod.onShow([target], callback)
