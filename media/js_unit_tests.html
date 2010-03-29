@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <!-- You will need these 4 files included in your test case -->
+        <link rel="stylesheet" href="http://js-ci-tools.appspot.com/qunit/qunit.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="http://js-ci-tools.appspot.com/qunit/qunit.js"></script>
+		<script src="http://js-ci-tools.appspot.com/js/logger.js" type="text/javascript" charset="utf-8"></script>
+		<!-- done with included files -->
+		
+		<!-- 3rd party dependencies -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        <!-- api key works for http://marinemap.googlecode.com/ -->
+        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAbEBR9v0lqBFdTfOcbe5WjRTgJ6kw7UGQ-22JRxMCtNAO7aQMQxTVxiKB_Ir8K8OIgRGxFdlY6TxT6w"></script>
+        <script src="http://geojs.googlecode.com/files/geo-0.1.2.pack.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="common/js/test/qunit_extensions.js" type="text/javascript" charset="utf-8"></script>    	
+        <!-- MarineMap includes and tests -->
+        <script src="common/js/lingcod.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/parseKml.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/parseKml.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/lib/tmpl.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/lib/tmpl.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/lib/ge_utility_lib_patches.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/lib/ge_utility_lib_patches.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/map/map.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/map/geocoder.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/map/geocoder.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/map/googleLayers.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/map/googleLayers.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/layout/layout.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/layout/panel.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/layout/panel.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/tools/formats.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/tools/measure_tool.js" type="text/javascript" charset="utf-8"></script>
+        <script src="common/js/test/tools/measure_tool.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script>
+            google.load("earth", "1");
+            window.skipAuthTests = true;        
+        </script>
+    </head>
+    <body>
+        <h1 id="qunit-header">MarineMap Javascript Unit Test Suite</h1>
+        <h2 id="qunit-banner"></h2>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+    </body>
+</html>

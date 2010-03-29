@@ -67,6 +67,8 @@
     var gex;
 
     function initializePlugin(callback){
+        var map = $(document.body).append('<div id="map3d"></div>');
+        $('#map3d').css({width:'400', height: '200', 'position': 'absolute', 'left': '-400px'});
         google.earth.createInstance('map3d', function(plugin){
             ge = plugin;
             gex = new GEarthExtensions(ge);
@@ -255,125 +257,129 @@
         return options;
     }
     
-    module('Custom Login-Related Test Cases');
-    
-    test('options parsed correctly', function(){
-        var callback = function(){};
-        // with username and password
-        // no expected
-        var options = parseArguments(['mytest', 'myusername', 'mypassword', callback]);
-        equals(options['name'], 'mytest', '`name` correctly set.');
-        equals(options['expected'], 0, '`expected` loaded from defaults');
-        equals(options['username'], 'myusername', '`username` correctly set.');
-        equals(options['pword'], 'mypassword', '`pword` correctly set.');
-        equals(options['callback'], callback, '`callback` correctly set.');
-        equals(options['async'], false, '`async` correctly set.');
-        
-        // with expected
-        var options = parseArguments(['mytest', 8, 'myusername', 'mypassword', callback]);
-        equals(options['name'], 'mytest', '`name` correctly set.');
-        equals(options['expected'], 8, '`expected` correctly set.');
-        equals(options['username'], 'myusername', '`username` correctly set.');
-        equals(options['pword'], 'mypassword', '`pword` correctly set.');
-        equals(options['callback'], callback, '`callback` correctly set.');
-        
-        // without username and password
-        // no expected
-        var options = parseArguments(['mytest', callback]);
-        equals(options['name'], 'mytest', '`name` correctly set.');
-        equals(options['expected'], 0, '`expected` loaded from defaults');
-        equals(options['username'], DEFAULT_USERNAME, '`username` loaded from default.');
-        equals(options['pword'], DEFAULT_PASSWORD, '`pword` loaded from default.');
-        equals(options['callback'], callback, '`callback` correctly set.');
-        equals(options['async'], false, '`async` correctly set.');
+    $(document).ready(function(){
+        if(typeof window.skipAuthTests === 'undefined' || window.skipAuthTests === false){
+            module('Custom Login-Related Test Cases');
 
-        // with expected
-        var options = parseArguments(['mytest', 4, callback]);
-        equals(options['name'], 'mytest', '`name` correctly set.');
-        equals(options['expected'], 4, '`expected` set correctly.');
-        equals(options['username'], DEFAULT_USERNAME, '`username` loaded from default.');
-        equals(options['pword'], DEFAULT_PASSWORD, '`pword` loaded from default.');
-        equals(options['callback'], callback, '`callback` correctly set.');
-        equals(options['async'], false, '`async` correctly set.');
+            test('options parsed correctly', function(){
+                var callback = function(){};
+                // with username and password
+                // no expected
+                var options = parseArguments(['mytest', 'myusername', 'mypassword', callback]);
+                equals(options['name'], 'mytest', '`name` correctly set.');
+                equals(options['expected'], 0, '`expected` loaded from defaults');
+                equals(options['username'], 'myusername', '`username` correctly set.');
+                equals(options['pword'], 'mypassword', '`pword` correctly set.');
+                equals(options['callback'], callback, '`callback` correctly set.');
+                equals(options['async'], false, '`async` correctly set.');
 
-    });
-    
-    testLoggedIn('testLoggedIn - username and password, expected specified', 1, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
-        equals(username, DEFAULT_USERNAME);
-    });
+                // with expected
+                var options = parseArguments(['mytest', 8, 'myusername', 'mypassword', callback]);
+                equals(options['name'], 'mytest', '`name` correctly set.');
+                equals(options['expected'], 8, '`expected` correctly set.');
+                equals(options['username'], 'myusername', '`username` correctly set.');
+                equals(options['pword'], 'mypassword', '`pword` correctly set.');
+                equals(options['callback'], callback, '`callback` correctly set.');
 
-    testLoggedInAsync('testLoggedInAsync - username and password, expected specified', 2, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
-        equals(username, DEFAULT_USERNAME);
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
+                // without username and password
+                // no expected
+                var options = parseArguments(['mytest', callback]);
+                equals(options['name'], 'mytest', '`name` correctly set.');
+                equals(options['expected'], 0, '`expected` loaded from defaults');
+                equals(options['username'], DEFAULT_USERNAME, '`username` loaded from default.');
+                equals(options['pword'], DEFAULT_PASSWORD, '`pword` loaded from default.');
+                equals(options['callback'], callback, '`callback` correctly set.');
+                equals(options['async'], false, '`async` correctly set.');
 
-    testLoggedIn('testLoggedIn - username and password, no expected argument', DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
-        equals(username, DEFAULT_USERNAME);
-    });
+                // with expected
+                var options = parseArguments(['mytest', 4, callback]);
+                equals(options['name'], 'mytest', '`name` correctly set.');
+                equals(options['expected'], 4, '`expected` set correctly.');
+                equals(options['username'], DEFAULT_USERNAME, '`username` loaded from default.');
+                equals(options['pword'], DEFAULT_PASSWORD, '`pword` loaded from default.');
+                equals(options['callback'], callback, '`callback` correctly set.');
+                equals(options['async'], false, '`async` correctly set.');
 
-    testLoggedInAsync('testLoggedInAsync - username and password, no expected argument', DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
-        equals(username, DEFAULT_USERNAME);
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
-    
-    testLoggedIn('testLoggedIn - default user, expected specified', 1, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
-        equals(username, DEFAULT_USERNAME);
-    });
-    
-    testLoggedInAsync('testLoggedInAsync - default user, expected specified', 2, function(username){
-        equals(username, DEFAULT_USERNAME);
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
-    
-    testLoggedIn('testLoggedIn - default user, no expected argument', function(username){
-        equals(username, DEFAULT_USERNAME);
-    });
-    
-    testLoggedInAsync('testLoggedInAsync - default user, no expected argument', function(username){
-        equals(username, DEFAULT_USERNAME);
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
+            });
 
-    testLoggedOut('testLoggedOut - expected argument', 1, function(){
-        ok(true, 'testLoggedOut works with expected argument.');
+            testLoggedIn('testLoggedIn - username and password, expected specified', 1, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
+                equals(username, DEFAULT_USERNAME);
+            });
+
+            testLoggedInAsync('testLoggedInAsync - username and password, expected specified', 2, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
+                equals(username, DEFAULT_USERNAME);
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+
+            testLoggedIn('testLoggedIn - username and password, no expected argument', DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
+                equals(username, DEFAULT_USERNAME);
+            });
+
+            testLoggedInAsync('testLoggedInAsync - username and password, no expected argument', DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
+                equals(username, DEFAULT_USERNAME);
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+
+            testLoggedIn('testLoggedIn - default user, expected specified', 1, DEFAULT_USERNAME, DEFAULT_PASSWORD, function(username){
+                equals(username, DEFAULT_USERNAME);
+            });
+
+            testLoggedInAsync('testLoggedInAsync - default user, expected specified', 2, function(username){
+                equals(username, DEFAULT_USERNAME);
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+
+            testLoggedIn('testLoggedIn - default user, no expected argument', function(username){
+                equals(username, DEFAULT_USERNAME);
+            });
+
+            testLoggedInAsync('testLoggedInAsync - default user, no expected argument', function(username){
+                equals(username, DEFAULT_USERNAME);
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+
+            testLoggedOut('testLoggedOut - expected argument', 1, function(){
+                ok(true, 'testLoggedOut works with expected argument.');
+            });
+
+            testLoggedOutAsync('testLoggedOutAsync - expected argument', 2, function(){
+                ok(true, 'testLoggedOut works with expected argument.');
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+
+            testLoggedOut('testLoggedOut - expected argument', function(){
+                ok(true, 'testLoggedOut works without expected.');
+            });
+
+            testLoggedOutAsync('testLoggedOutAsync - expected argument', function(){
+                ok(true, 'testLoggedOut works without expected.');
+                setTimeout(function(){
+                    ok(true, 'asynchronous testing works.');
+                    start();
+                }, 100);
+            });
+            // testing
+                // with username and password
+                    // no expected
+                    // with expected
+                // without username and password
+                    // with expected
+                    // without expected
+        }
     });
-    
-    testLoggedOutAsync('testLoggedOutAsync - expected argument', 2, function(){
-        ok(true, 'testLoggedOut works with expected argument.');
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
-    
-    testLoggedOut('testLoggedOut - expected argument', function(){
-        ok(true, 'testLoggedOut works without expected.');
-    });
-    
-    testLoggedOutAsync('testLoggedOutAsync - expected argument', function(){
-        ok(true, 'testLoggedOut works without expected.');
-        setTimeout(function(){
-            ok(true, 'asynchronous testing works.');
-            start();
-        }, 100);
-    });
-    // testing
-        // with username and password
-            // no expected
-            // with expected
-        // without username and password
-            // with expected
-            // without expected
 })();
