@@ -90,7 +90,7 @@ INSTALLED_APPS = (
     'lingcod.straightline_spacing',
     'lingcod.user_profile',
     'registration',
-    'south',
+    #'south',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
@@ -155,3 +155,4 @@ VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
 USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 
 SKIP_SOUTH_TESTS = True
+SOUTH_TESTS_MIGRATE = False
