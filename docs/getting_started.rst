@@ -143,7 +143,27 @@ At http://localhost:8000/ the interface should render with sample data.
 
 Next Steps
 **********
-Now that you have installed lingcod and tested it out using the pre-built example project, 
-You'll want to visit :ref:`Creating a New Project<create_new_project>` to find out how to 
-build your own customized MarineMap instance.
 
+MarineMap has fixtures containing test data that is installed on database 
+setup like an example :ref:`Study Region <study_region>` and :ref:`layers`. This makes
+it easy to verify the installation and learn how the tool works. For use in an 
+actual planning session these default datasets will need to be replaced.
+
+See the documentation in the following sections to customize MarineMap as 
+needed:
+
+.. toctree::
+   :maxdepth: 1
+   
+   study_region
+   layers
+   managing_users
+   waves
+   marine_protected_areas
+   static_map_configuration
+   sharing_configuration
+   kml_configuration
+   
+The setup this guide has walked through only specifies how to run the django
+development server. To setup a public facing website using Apache, consult the
+:ref:`deployment` notes.

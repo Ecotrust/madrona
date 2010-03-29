@@ -120,8 +120,8 @@ lingcod.rest.client = function(gex, panel, manipulators){
             tabs.find('> .ui-tabs-nav').hide();            
         }
 
-        opts = {
-            beforeSubmit: function(a,b,c) {
+        options = {
+            beforeSubmit: function(a,b,c) { 
                 if(manipulator){
                     var errMsg = false;
                     if(manipulator.isDefiningShape()){
@@ -152,7 +152,6 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 panel.close()
                 panel.stopSpinning();
                 $(that).trigger('doneSaving');
-                window.req = req;
                 switch(req.status){
                     case 201:
                         // new object created, get location header
@@ -176,45 +175,12 @@ lingcod.rest.client = function(gex, panel, manipulators){
                         options['validation_error'] = true;
                         setupForm(req.responseText, options, config);
                         break;
-                    case 0:
-                        // jQuery form plugin submits uploads as an iframe and
-                        // doesn't give proper status codes... kill me now
-                        var text = jQuery.trim(req.responseText);
-                        if(text.indexOf('created') !== -1){
-                            // created
-                            var location = text.replace('created: ', '');
-                            if(options && options.success){
-                                options.success(processLocation(location));
-                            }else{
-                                if(options.error){ options.error(); }
-                            }
-                            break;
-                        }
-                        if(text.indexOf('updated') !== -1){
-                            // updated
-                            if(options.success){
-                                options.success(processLocation(options.location));
-                            }else{
-                                if(options.error){ options.error(); }                            
-                            }                        
-                            break;                            
-                        }
-                        var content = $(text);
-                        if(!content){
-                            // error
-                            options.error();
-                        }else if(content.find('form')){
-                            // validation error
-                            options['validation_error'] = true;
-                            setupForm(text, options, config);
-                            break;
-                        }
                     default:
                         if(options.error){ options.error(); }
                 } 
             } // */
         };
-        $(form).ajaxForm(opts);
+        $(form).ajaxForm(options);
 
         el.find('.submit_button').click(function(){
             form.trigger('submit');

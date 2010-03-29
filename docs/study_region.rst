@@ -50,9 +50,6 @@ needed. One way to create such a file would be to use a tool like `QGis <http://
 to export the current Study Region in the database to a shapefile and modify
 the boundaries as needed.
 
-It is highly recomended that the study region shapefile be created in the same spatial reference system
-as the application SRID.  
-
 .. note::
 
     Do not modify the Study Region in-place in the database. Modifications to
@@ -70,18 +67,8 @@ the ``create_study_region`` management command.
     Study region created: Sample Study Region - Southern California MLPA, primary key = 18
     To switch to this study region, you will need to run 'python manage.py change_study_region 18'
     
-If the study region shapefile does not contain a field named 'name', you can specify the name on the command
-line using the --name option.
-
-.. code-block:: bash
-
-    $ python manage.py create_study_region --name "new study region" ~/Desktop/study_region2.shp
-
-    Study region created: new study region, primary key = 3
-    To switch to this study region, you will need to run 'python manage.py change_study_region 3'
-
 The Study Region should then be accessible via the admin tool.
-    
+
 Suspend the Application
 -----------------------
 
@@ -91,20 +78,10 @@ shutdown the server or put MarineMap into :ref:`maintenance_mode`.
 Switch to the new Study Region
 ------------------------------
 
-Currently, the change_study_region command simply sets specified region as the current active study region. It does *not* do any re-clipping, re-configuration, etc. If run on a working installation, this will require a lot more manual work. However, it is sufficient to initally set up the study region for a brand new project.  
-
-.. code-block:: bash
-    
-    $ python manage.py change_study_region.py 18
-
-Switch to the new Study Region (Future Plans)
-----------------------------------------------
-
 .. note::
 
     The following steps are not implemented, but this documentation can serve 
     as a specification for the future tools.
-
 
 The ``change_study_region`` command will walk one through the process of 
 changing from one study region to another. The primary key of an existing 

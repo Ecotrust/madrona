@@ -1,0 +1,47 @@
+<div class="panel">
+    <script type="text/javascript" charset="utf-8">
+        
+        lingcod.onShow('#Attributes', function(){
+            window.attributesShown++;
+        });
+        
+        lingcod.onUnhide('#Attributes', function(){
+            window.attributesUnhidden++;
+        });
+        
+        lingcod.onHide('#Attributes', function(){
+            window.attributesHidden++;
+        });
+        
+    </script>
+    <script type="text/javascript" charset="utf-8">
+
+        lingcod.onShow('#Report', function(){
+            window.reportShown++;
+        });
+
+        lingcod.onUnhide('#Report', function(){
+            window.reportUnhidden++;
+        });
+        
+        lingcod.onHide('#Report', function(){
+            window.reportHidden++;
+        });
+        
+    </script>
+    <h1>instance name</h1>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Attributes"><span>Information</span></a></li>
+            <li><a href="#Report"><span>Report</span></a></li>
+        </ul>
+        <div id="Attributes">
+            <p></p>
+        </div>
+        <div id="Report">
+            <img class="chart" href="#" />
+            <p></p>
+        </div>
+    </div>
+    <p>instance description</p>
+</div>

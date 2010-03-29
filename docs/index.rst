@@ -10,7 +10,6 @@ MarineMap Decision Support Tool Documentation
    
    introduction
    getting_started
-   creating_new_project
    deployment
    study_region
    layers

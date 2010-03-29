@@ -1,0 +1,43 @@
+<div class="panel">
+    <script type="text/javascript" charset="utf-8">
+
+        lingcod.onShow(function(){
+            window.reportShown++;
+        });
+
+        lingcod.onUnhide(function(){
+            window.reportUnhidden++;
+            window.onUnhideSelected = $('.blah');
+        });
+
+        lingcod.onHide(function(){
+            window.reportHidden++;
+        });
+
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        lingcod.onShow('#subtab1', function(){
+            window.subtab1Shown++;
+        });
+
+        lingcod.onUnhide('#subtab1', function(){
+            window.subtab1Unhidden++;
+        });
+
+        lingcod.onHide('#subtab1', function(){
+            window.subtab1Hidden++;
+        });
+    </script>
+    <div class="panel">
+        <div class="tabs">
+            <ul>
+                <li><a href="#subtab1"><span>subtab1</span></a></li>
+                <li><a href="../media/common/js/test/layout/jsExample7.2.html"><span>subtab2</span></a></li>
+            </ul>
+            <div id="subtab1">
+                <img class="chart1" href="#" />
+                <p>...</p>       
+            </div>
+        </div>
+    </div>
+</div>

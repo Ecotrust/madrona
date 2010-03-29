@@ -3,67 +3,23 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequ
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, Context
 import os
-from lingcod.common.utils import load_session
 from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
-#I wonder why the following would cause hudson build to fail?
-#from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult 
 
-def print_report(request, feature_id, user_group):
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
+def printable_analysis(request, feature_id):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
-    from Layers import Layers
-    from Analysis import AnalysisResult  
-    layers = Layers()
-    ports = layers.getPortsByGroup(user_group)
-    all_results = []
-    for single_port in ports:
-        cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=user_group, port=single_port)
-        results = list(cache)
-        analysis_results = []
-        for result in results:
-            analysis_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=user_group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
-        analysis_results = flesh_out_results(user_group, single_port, analysis_results)
-        
-        #sort results alphabetically by species name
-        analysis_results.sort(key=lambda obj: obj.species)
-        
-        #adjust recreational Fort Bragg display
-        if user_group in ['Recreational Dive', 'Recreational Kayak', 'Recreational Private Vessel']:
-            for result in analysis_results:
-                if result.port == 'Fort Bragg':
-                    result.port = 'Fort Bragg / Albion'
-        
-        all_results.append(analysis_results)
-    return render_to_response('printable_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group, 'all_results':all_results})) 
+    #after caching results in display_analysis, we will need to recreate the data from the db 
+    #and send it to fishery_impacts.html
+    return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'printable':True})) 
 
-def impact_group_list(request, feature_id):
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
-    return render_to_response('groups_list.html', RequestContext(request, {'mpa_id':feature_id})) 
-    
-def impact_analysis(request, feature_id, group): 
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)  
-    from Layers import Layers
+def impact_analysis(request, feature_id, group):
+    if group == 'Instructions':
+        return render_to_response('impact_intro.html', RequestContext(request, {}))   
+    from Layers import *
     layers = Layers()
-    #if group not in layers.groups.keys():
-    #    return render_to_response('impact_intro.html', RequestContext(request, {}))  
-    group_name = layers.groups[group]  
-    #the following port and species parameters are for testing on my local machine
-    #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
-    #the following call is the more permanent/appropriate one for the server
-    return display_analysis(request, feature_id, group_name)
+    group_name = layers.groups[group]
+    #return render_to_response('impact_analysis.html', RequestContext(request, {'group': group_name}))   
+    return display_analysis(request, feature_id, group_name, template='impact_analysis.html')
     
 '''
 Primarily used for testing...
@@ -77,12 +33,7 @@ species parameter in which case it only analyzes the single species
         404: pk not specified or mpa with pk doesn't exist or missing parameters
         500: must use get
 '''
-def MpaEconAnalysis(request, feature_id):  
-    user = request.user 
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401) 
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
+def MpaEconAnalysis(request, feature_id):    
     if request.method != 'GET':
         return HttpResponseBadRequest('You must use GET')    
     #if not request.user.is_authenticated():
@@ -113,45 +64,17 @@ def MpaEconAnalysis(request, feature_id):
     
     return display_analysis(request, feature_id, group, port, species, output)
   
-def adjust_commercial_species(results):
-    from Layers import Layers
-    layers = Layers()
-    species_dict = layers.getCommercialSpecies()
-    for result in results:
-        result.species = species_dict[result.species]
-    return results
-  
-def flesh_out_results(group, port, results):
-    #fill out analysis results with species that are relevant for the given group, but not yet present in the results    from Layers import Layers
-    from Analysis import EmptyAnalysisResult   
-    from Layers import Layers
-    layers = Layers()
-    group_species = layers.getSpeciesByGroup(group)
-    result_species = [result.species for result in results]
-    missing_species = [specs for specs in group_species if specs not in result_species]
-    for spec in missing_species:
-        results.append(EmptyAnalysisResult(group, port, spec))
-    if group == 'Commercial':
-        results = adjust_commercial_species(results)
-    if group == 'Edible Seaweed':
-        for result in results:
-            result.species = 'Seaweed (Hand Harvest)'
-    return results
     
-def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='impact_analysis.html'):
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
-
+def display_analysis(request, feature_id, group, port=None, species=None, output='json', template='fishery_impacts.html'):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
+    #if request.user != mpa.user:
+    #    return HttpResponseForbidden('You cannot analyze MPA\'s you don\'t own')    
     
-    from Analysis import Analysis, AnalysisResult, EmptyAnalysisResult 
+    from Analysis import Analysis, EmptyAnalysisResult   
     analysis = Analysis()
 
-    #Get analysis results for given port or all ports 
-    from Layers import Layers
+    #Get analysis results for given port or all ports
+    from Layers import *
     layers = Layers()
     if not port:
         ports = layers.getPortsByGroup(group)
@@ -160,46 +83,23 @@ def display_analysis(request, feature_id, group, port=None, species=None, output
     
     all_results = []
     for single_port in ports:
-        anal_results = []
-        #See if we can retreive results from cache
-        if species is None:
-            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
-        else:
-            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port, species=species)
-        cache_available = False
-        if len(cache) > 0:
-            cache_available = True
-        for single_cache in cache:
-            if single_cache.date_modified < mpa.date_modified:
-                cache_available = False
-                break
+        #Get all maps from the group (and possibly port and species) that we want to analyze
+        maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
+        if maps is '':
+            return HttpResponseBadRequest('User group, %s, does not exist' % group)
         
-        if cache_available:
-            results = list(cache)
-            for result in results:
-                anal_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
-        #If not then run the analysis
-        else:
-            #since at least one cache was not current, remove all related entries as they will all be recreated and recached below
-            for single_cache in cache:
-                single_cache.delete()
-            #Get all maps from the group (and possibly port and species) that we want to analyze
-            maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
-            if maps is '':
-                return HttpResponseBadRequest('User group, %s, does not exist' % group)
-            
-            #run the analysis
-            anal_results = analysis.run(mpa, maps)
-            if anal_results < 0:
-                return HttpResponseBadRequest('Error running analysis')
-            
-            #Cache analysis results 
-            for result in anal_results:
-                cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.mpaPercOverallValue, perc_area=result.mpaPercOverallArea)
-                cache.save()
-            
-        anal_results = flesh_out_results(group, single_port, anal_results)
-
+        #run the analysis
+        anal_results = analysis.run(mpa, maps)
+        if anal_results < 0:
+            return HttpResponseBadRequest('Error running analysis')
+        
+        #fill out analysis results with species that are relevant for the given group, but not yet present in the results
+        group_species = layers.getSpeciesByGroup(group)
+        anal_species = [result.species for result in anal_results]
+        missing_species = [specs for specs in group_species if specs not in anal_species]
+        for spec in missing_species:
+            anal_results.append(EmptyAnalysisResult(group, single_port, spec))
+        
         #sort results alphabetically by species name
         anal_results.sort(key=lambda obj: obj.species)
         

@@ -15,7 +15,6 @@
 	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.droppable.js" />
 	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.tabs.js" /> -->
 	<!-- END JQUERY UI Stuff -->
-	<file path="common/js/lib/jquery.form.js" />
     <test path="common/js/test/qunit_extensions.js" />
     <file path="common/js/lingcod.js" />
     <file path="common/js/lib/tmpl.js" />
@@ -27,22 +26,17 @@
     <test path="common/js/test/lib/ge_utility_lib_patches.js" />
     <file path="common/js/tools/measure_tool.js" />
     <test path="common/js/test/tools/measure_tool.js" />
+    <file path="common/js/layout/layout.js" />
     <file path="common/js/layout/panel.js" />
+    <test path="common/js/test/layout/panel.js" />
     <file path="common/js/layout/menu_items.js" />
-    <!-- <test path="common/js/test/layout/panel.js" /> -->
-    <!-- <file path="common/js/layout/panel_manager.js" /> -->
-    <!-- <test path="common/js/test/layout/panel_manager.js" /> -->
     <file path="common/js/map/map.js" />
     <file path="common/js/map/googleLayers.js" />
     <file path="common/js/map/geocoder.js" />
     <test path="common/js/test/map/googleLayers.js" />
     <test path="common/js/test/map/geocoder.js" />
-    <!-- <file path="common/js/tree/tree.js" /> -->
-    <!-- <test path="common/js/test/tree/tree.js" /> -->
     <file path="common/js/tree/kmlTree.js" />
     <test path="common/js/test/tree/kmlTree.js" />
-    <!-- <file path="common/js/tree/kmlForest.js" /> -->
-    <!-- <test path="common/js/test/tree/kmlForest.js" /> -->
     <file path="common/js/lib/json2.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
     <file path="common/js/tools/formats.js" />

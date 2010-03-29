@@ -96,8 +96,7 @@ def create(request, form_class=None, action=None, title=None,
         if form.is_valid():
             m = form.save()
             m.save()
-            response = HttpResponse('created: %s' % (m.get_absolute_url(), ), 
-                status=201)
+            response = HttpResponse('created', status=201)
             response['Location'] = m.get_absolute_url()
             return response
         else:
@@ -277,8 +276,7 @@ def resource(request, form_class=None, pk=None, get_func=None,
                 'MEDIA_URL': settings.MEDIA_URL,
                 'is_ajax': request.is_ajax(),
             })
-            #Adding RequestContext here so that the show.html template has access to 'perms' in order to verify ecotrust permissions
-            return render_to_response(template, RequestContext(request,extra_context))
+            return render_to_response(template, extra_context)
     elif request.method == 'POST':
         return update(request, form_class, pk)
         

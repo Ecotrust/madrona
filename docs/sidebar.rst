@@ -420,11 +420,18 @@ lingcod.onHide([target], callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assigns a callback to be executed whenever content in a tab is hidden from the
-user because another tab or sub-tab has been opened.
+user because another tab or sub-tab has been opened. This callback can only be
+assigned to synchronous or asynchronous tabs.
+
+.. note::
+    This callback could be called 2 or more times as different tabs are being
+    selected before onUnhide is ever called. This is just an implementation
+    quirk, but make sure your script doesn't fail if callbacks are executed in
+    an odd order like: onUnhide -> onHide -> onHide -> onHide -> onUnhide.
 
 If binding the callback to a synchronous tab, give that tab's anchor link as 
-the optional ``target`` argument. Omit it if assigning the callback to the 
-entire panel or an asynchronous tab. 
+the optional ``target`` argument. Omit it if assigning the callback to an 
+asynchronous tab. 
 :ref:`More on this argument <target_or_not>`.
 
 .. _lingcod.onUnhide:
@@ -434,11 +441,12 @@ lingcod.onUnhide([target], callback)
 
 Callback will be executed whenever content is revealed to the user, even after
 hiding. It *will* be executed when content is first shown as well, right after
-any :ref:`onShow <lingcod.onShow>` callbacks.
+any :ref:`onShow <lingcod.onShow>` callbacks. This callback can only be
+assigned to synchronous or asynchronous tabs.
 
 If binding the callback to a synchronous tab, give that tab's anchor link as 
-the optional ``target`` argument. Omit it if assigning the callback to the 
-entire panel or an asynchronous tab. 
+the optional ``target`` argument. Omit it if assigning the callback to an 
+asynchronous tab. 
 :ref:`More on this argument <target_or_not>`.
 
 .. _lingcod.beforeDestroy:

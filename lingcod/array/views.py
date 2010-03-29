@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from lingcod.common import utils 
-from django.conf import settings
 
 Mpa = utils.get_mpa_class()
 MpaArray = utils.get_array_class()
@@ -114,44 +113,3 @@ def copy(request, pk):
         return res
     else:
         return HttpResponse( "Array copy service received unexpected " + request.method + " request.", status=400 )
-
-
-def download_supportfile(request, pk, filenum):
-    if request.method == 'GET':
-        # Authenticate
-        user = request.user
-        from lingcod.sharing.utils import can_user_view
-        viewable, response = can_user_view(MpaArray, pk, user) 
-        if not viewable:
-            return response
-        else:
-            the_array = MpaArray.objects.get(pk=pk)
-
-        import os
-        filenum = int(filenum)
-        if filenum == 1:
-            fpath = os.path.realpath(os.path.join(settings.MEDIA_ROOT, the_array.supportfile1.name))
-            filename = the_array.supportfile1_shortname
-        elif filenum == 2:
-            fpath = os.path.realpath(os.path.join(settings.MEDIA_ROOT, the_array.supportfile2.name))
-            filename = the_array.supportfile2_shortname
-        else:
-            return HttpResponse('File number does not exist', status=404)
-
-        if os.path.exists(fpath):
-            import mimetypes
-            mimetype = mimetypes.guess_type(fpath)[0] or 'application/octet-stream'
-
-            f = file(fpath)
-            try:
-                content = f.read(os.path.getsize(fpath))
-            finally:
-                f.close()
-
-            response = HttpResponse(content, mimetype=mimetype)
-            response['Content-Disposition']='attachment; filename="%s"'%filename
-            response["Content-Length"] = len(content)
-            return response
-        else:
-            return HttpResponse('File does not exist', status=404)
-

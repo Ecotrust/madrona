@@ -1,0 +1,19 @@
+<div class="panel">
+    <script type="text/javascript" charset="utf-8">
+
+        lingcod.onShow(function(){
+            window.reportShown++;
+        });
+
+        lingcod.onUnhide(function(){
+            window.reportUnhidden++;
+            window.onUnhideSelected = $('.blah');
+        });
+
+        lingcod.onHide(function(){
+            window.reportHidden++;
+        });
+
+    </script>
+    <p class="blah">...</p>
+</div>

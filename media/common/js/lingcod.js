@@ -503,10 +503,13 @@ var lingcod = (function(){
     },
     
     that.removePanel = function(panel){
-        panels.remove(panel);
-        $(panel).unbind('panelshow', onPanelShown);
-        $(panel).unbind('panelhide', onPanelHide);
-        $(panel).unbind('panelclose', onPanelHide);
+        // hmmm, I hope removing this doesn't cause any problems
+        // if(panels){
+        //     panels.remove(panel);
+        // }
+        // $(panel).unbind('panelshow', onPanelShown);
+        // $(panel).unbind('panelhide', onPanelHide);
+        // $(panel).unbind('panelclose', onPanelHide);
     };
     
     var onPanelShown = function(e, panel){

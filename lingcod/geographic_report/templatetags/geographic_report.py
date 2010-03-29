@@ -50,7 +50,7 @@ class GeographicReportNode(template.Node):
         return """
             <div id="%s" class="geographic_report"></div>
             <script type="text/javascript" charset="utf-8">
-                lingcod.onTabShow('%s', function(ui){
+                lingcod.onShow('%s', function(){
                     var persist_id = '%s';
                     var report = lingcod.persistentReports[persist_id];
                     if(report){

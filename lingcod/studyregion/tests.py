@@ -21,7 +21,7 @@ class StudyRegionTest(TestCase):
         """
         Check presence of test study region
         """
-        self.assertTrue(StudyRegion.objects.count() >= 1)
+        self.assertTrue(StudyRegion.objects.count() > 1)
         self.assertEquals(StudyRegion.objects.all()[0].id, 1)
         
     def testComputeLookAt(self):

@@ -1,0 +1,25 @@
+<div class="panel">
+    <script type="text/javascript" charset="utf-8">
+
+        lingcod.onShow('#Report', function(){
+            window.callbackFired = true;
+            window.selectedEl = $('#Report img.chart');
+        });
+
+    </script>
+
+    <h1>{{instance.name}}</h1>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Attributes"><span>Information</span></a></li>
+            <li><a href="#Report"><span>Report</span></a></li>
+        </ul>
+        <div id="Attributes">
+            <p>....</p>
+        </div>
+        <div id="Report">
+            <img class="chart" href="..." />
+            <p>....</p>
+        </div>
+    </div>
+</div>
