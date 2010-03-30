@@ -163,10 +163,15 @@ class Grass:
     Example usage: runCmd('r.los in=elevation.dem out=los coord=10,10')
     '''
     def runCmd(self, cmd):
+        #adding 'nice 1' to the front of each command here caused some problems
+        #so i'm only adding it to v.to.rast and r.mapcalc below
+        #cmd = 'nice 1 ' + cmd
         result = None
         try:
             result = os.popen(cmd).read()
         except Exception,e :
+            import pdb
+            pdb.set_trace()
             raise Exception("Could not perform command [%s]: %s" % (cmd,e))
         return result     
          
@@ -212,7 +217,7 @@ class Grass:
     '''
     def r_area(self, input, cell_size):
         #Change all value cells to 1 for counting
-        maskCmd = 'r.mapcalc "maskMap=if(%s, 1)"' % (input)
+        maskCmd = 'nice 1 r.mapcalc "maskMap=if(%s, 1)"' % (input)
         self.runCmd(maskCmd)
         
         #Calculate total fishing area
@@ -239,7 +244,7 @@ class Grass:
     are given the value of val
     '''
     def v_to_r(self, vMap, rMap, val):
-        command = 'v.to.rast use=val value=%s in=%s out=%s' % (val, vMap, rMap)
+        command = 'nice 1 v.to.rast use=val value=%s in=%s out=%s' % (val, vMap, rMap)
         self.runCmd(command)        
 
     '''
