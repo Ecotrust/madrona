@@ -16,6 +16,7 @@
 	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.tabs.js" /> -->
 	<!-- END JQUERY UI Stuff -->
     <test path="common/js/test/qunit_extensions.js" />
+    <file path="common/js/lib/jquery.form.js" />
     <file path="common/js/lingcod.js" />
     <file path="common/js/lib/tmpl.js" />
     <file path="common/js/lib/smartresize.js" />
