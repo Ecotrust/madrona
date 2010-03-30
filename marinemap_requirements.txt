@@ -25,6 +25,7 @@
 #
 # GDAL : just copy the gdal.pth file into your local site packages dir
 # Mapnik : just copy the entire mapnik dir into your local site packages dir
+# PIL : symlink the PIL directory to site-packages dir
 # Postgis : set up according to the marinemap docs
 #
 #############
@@ -40,8 +41,8 @@ BeautifulSoup==3.1.0.1
 Sphinx==0.6.3
 django-compress==1.0.1
 django-maintenancemode==0.9.2
-#django-registration==0.8-alpha-1
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
+-e svn+http://feedvalidator.googlecode.com/svn/trunk/#egg=feedvalidator
 elementtree
 xlwt==0.7.2
 
@@ -56,11 +57,10 @@ numpy==1.3.0
 unittest-xml-reporting==1.0.3
 
 # ------- Problems ----------- #
-## FIXME: could not find svn URL in dependency_links for this package:
-#feedvalidator==0.0.0dev-r0
-
 # Mapnik?
 
 # GDAL ?
 
 # Postgis ? 
+
+# PIL ?
