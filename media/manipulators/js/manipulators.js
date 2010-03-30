@@ -120,14 +120,14 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
         if(data.success === '1'){
             var kmlObject = self.addNewShape_(data.final_shape_kml);
             self.gex_.util.flyToObject(kmlObject, {
-                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+                boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
             self.setGeometryFields_(data.user_shape, data.submitted, data.final_shape, data.final_shape_kml);
             self.enterManipulatedState_(data.html, true);            
         }else{
             self.setGeometryFields_('', data.submitted, '', '');
             self.addNewShape_(data.submitted);
             self.gex_.util.flyToObject(self.shape_, {
-                boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+                boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
             self.enterManipulatedState_(data.html, false);
         }
     });
@@ -186,6 +186,7 @@ lingcod.Manipulator.prototype.enterEditingState_ = function(){
 }
 
 lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
+    var self = this;
     this.hideStates_();
     this.is_defining_shape = false;
     this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
@@ -197,7 +198,7 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
             if(data.success === '1'){
                 var kmlObject = self.addNewShape_(data.final_shape_kml);
                 self.gex_.util.flyToObject(kmlObject, {
-                    boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+                    boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
             }else{
                 // do nothing
             }
