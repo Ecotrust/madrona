@@ -170,8 +170,6 @@ class Grass:
         try:
             result = os.popen(cmd).read()
         except Exception,e :
-            import pdb
-            pdb.set_trace()
             raise Exception("Could not perform command [%s]: %s" % (cmd,e))
         return result     
          
