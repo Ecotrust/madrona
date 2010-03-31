@@ -7,9 +7,7 @@
     a.show_members img {border:none;margin-right:5px;margin-bottom:-3px;}
 </style>
 <script type="text/javascript" charset="utf-8">
-    console.log('EXECUTING JAVASCRIPT');
     lingcod.onPanelShow(function(){
-        console.log('exec callback');
         $("a.show_members").click(function() { 
             var members = $(this).parent().find('ul.member_list');
             if(members.is(':visible')){

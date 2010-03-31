@@ -16,7 +16,6 @@
 		var report;
 		$(document).ready(function(){
 			var el = $('#reportDiv');
-			console.time('render');
 			report = lingcod.geographicReport({
 				element: el, 
 				maxScale: 120,
@@ -42,7 +41,6 @@
 				]
 			});
 			report.updateValue(9.5, true);
-			console.timeEnd('render');
 		});
 	</script>
 </head>
