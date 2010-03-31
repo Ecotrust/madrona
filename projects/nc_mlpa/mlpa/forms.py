@@ -12,10 +12,14 @@ from django.utils.html import escape, conditional_escape
 from mlpa.models import AllowedUse, AllowedMethod, AllowedPurpose, AllowedTarget, DesignationsPurposes
 from django.utils import simplejson as json
 from django.conf import settings
+from lingcod.common.forms import ShortTextarea
 
 class ArrayForm(BaseArrayForm):
     class Meta(BaseArrayForm.Meta):
         model = MpaArray
+        widgets = {
+            'description': ShortTextarea(),
+        }
 
         
 class GoalObjectivesWidget(forms.CheckboxSelectMultiple):
@@ -121,7 +125,7 @@ class AllowedUsesWidget(forms.SelectMultiple):
         <p style="display:none;" id="allowed_uses_json">%s</p>
         """ % (settings.MEDIA_URL, json_string, ))
         
-        
+
 class MpaForm(BaseMpaForm):
     goal_objectives = forms.ModelMultipleChoiceField(GoalObjective.objects, widget=GoalObjectivesWidget, required=False)
     allowed_uses = forms.ModelMultipleChoiceField(AllowedUse.objects, widget=AllowedUsesWidget, required=False)
@@ -133,3 +137,12 @@ class MpaForm(BaseMpaForm):
             'other_regulated_activities', 'specific_objective', 
             'goal_objectives', 'design_considerations', 
             'boundary_description', 'evolution')
+        widgets = {
+            'other_allowed_uses': ShortTextarea(), # limit defaults to 1024 char
+            'other_regulated_activities': ShortTextarea(),
+            'specific_objective': ShortTextarea(limit=400), # about 2-3 sentences
+            'design_considerations': ShortTextarea(),
+            'boundary_description': ShortTextarea(),
+            'evolution': ShortTextarea(),
+        }
+
