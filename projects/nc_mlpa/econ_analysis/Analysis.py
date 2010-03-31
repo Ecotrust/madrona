@@ -10,7 +10,6 @@ from models import *
 from nc_mlpa.mlpa.models import *
 #from Layers import *
 from Layers import Layers
-import GChartWrapper as gchart
 
 '''
 Used to calculate summary statistics of a given mpa's impact on localized fishing
@@ -53,6 +52,7 @@ class Analysis:
             analResult = self.__runAnal(mpa, layer)
             analResults.append(analResult)
         return analResults  
+        
     '''
     Driver for preloading and precalculating grass map layers and 
     overall/study region summary statistics.  This is invoked via
@@ -63,33 +63,12 @@ class Analysis:
         #Setup grass to use the base mapset, we're going to load it        
         self.grass = self.setupGrass()     
         self.__preloadStudyRegion()
-        layers = Layers()
-        layers_list = layers.getAllLayers()
+        layers_list = GetAllLayers()
         for layer in layers_list:
             map = self.__preloadDb(layer)
             self.__preloadGrassMap(map)
             self.__preloadMapStats(map)
 
-        
-    '''
-    Produces a vertical stacked bar chart.  Creates an image request for the Google 
-    Charts API.  Returns an html image tag ready to be rendered in a template.
-    '''
-    def createStackChart(self, x_low_areas, x_high_areas, lowColor, highColor, xLabels, yLabels, legendLabels):
-        G = gchart.HorizontalBarStack([x_low_areas, x_high_areas], encoding='text')
-        G.color(lowColor, highColor)
-        G.fill('bg','s','FFFFFF00') 
-        G.scale(0,100)
-        height = 60+28*len(yLabels)
-        G.size(620,height)
-        G.axes.type('xyr')   
-        G.axes.label(0,*xLabels)
-        G.axes.label(1,*yLabels)
-        G.axes.label(None)
-        G.legend(*legendLabels)
-        G.legend_pos('bv')
-        return G.img(id='chart') 
-        
     '''
     Preload information about fishing impact map into DB
     '''
@@ -144,14 +123,10 @@ class Analysis:
         species_name = layer.species_name
                 
         #Add Allowed Uses to AnalysisMap
-        #print 'For map: %s' %map
-        #print 'Adding the following allowed uses: '
         for method_name in methods:
             uses = allowed_uses.filter(method__name=method_name, target__name=species_name)
-            #Map analysis map to allowed use
             for use in uses:
                 map.allowed_uses.add(use)
-                #print use
             map.save() 
             
         return map       
@@ -178,13 +153,7 @@ class Analysis:
         #Getpath to grass raster map
         grassRasterPath = os.path.join(self.MM_GRASS_RAST_PATH,mapName)
         #Load fishing impact grid into Grass for later use
-        if not os.path.exists(grassRasterPath):
-            #SHOULD BE ABLE TO USE map.getFullName() AS IT'S NOW THE SAME AS map.getGridName() (STILL NEED TO CHANGE MODEL)
-            #OR IT'S QUITE POSSIBLE THAT THE OLD DEFINITION OF getFullName() WOULD BE USEFUL IN __runanal()
-            #IN WHICH CASE WE SHOULD KEEP IT AS IT WAS AND REPLACE ABOVE USE (and __preloadMapStats use) WITH getGridName()
-            
-            #NEW THEORY, WE MAY HAVE WANTED TO LEAVE IT AS getGridName() 
-            #IF WE ARE STORING ALL THE LAYERS IN THE SAME PLACE THEY WILL NEED TO BE DISTINGUISHABLE (WITH GROUP INFO)
+        if not os.path.exists(grassRasterPath):  
             self.grass.r_in_gdal(mapPath+map.getGridName(), mapName)   
 
     '''        
@@ -262,7 +231,7 @@ class Analysis:
         #Copy preloaded fishing map to temp mapset
         self.grass.copyMap('rast', self.fishingMapName)
         #Copy preloaded study region to temp mapset
-        self.grass.copyMap('vect', self.srMapName)
+        #self.grass.copyMap('vect', self.srMapName)
         
         #Output mpa to shapefile
         shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
@@ -303,35 +272,28 @@ class Analysis:
         for map_target in map_targets:
             if len(mpa.allowed_uses.filter(target__name=map_target, purpose__name=map_purpose)) != 0:
                 setPercsToZero = True
-        #The above is still somewhat instable as it shouldn't just check for a single existing allowed target, 
+        #The above is still somewhat unstable as it shouldn't just check for a single existing allowed target, 
         #shouldn't it check to see if all targets reflected in this map are allowed within the mpa???
             
         #Intersect mpa raster with fishing map
-        self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)               
+        self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)   
+        
         #Calculate percent area   
         (mpaCells, mpaArea) = self.grass.r_area(self.mpaValueMaskMapName, map.cell_size)
         mpaArea = mpaArea * self.SQ_MILES_IN_SQ_METER
         
-        mpaPercOverallArea = mmutil.percentage(mpaArea,stats.totalArea)        
-        mpaPercSrArea = mmutil.percentage(mpaArea,stats.srArea)
-        srPercOverallArea = mmutil.percentage(stats.srArea,stats.totalArea)
+        mpaPercOverallArea = mmutil.percentage(mpaArea,stats.totalArea)      
         
         #Calculate percent value
         mpaValue = self.grass.r_sum(self.mpaValueMaskMapName)
         if mpaValue is None:
             return -2                    
         
-        mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)
-        mpaPercSrValue = mmutil.percentage(mpaValue,stats.srValue)
-        srPercOverallValue = mmutil.percentage(stats.srValue,stats.totalValue)        
+        mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)     
    
         if setPercsToZero:
             mpaPercOverallArea = 0.0
-            mpaPercSrArea = 0.0
-            #srPercOverallArea = 0.0
             mpaPercOverallValue = 0.0
-            mpaPercSrValue = 0.0
-            #srPercOverallValue = 0.0
             
         #Generate analysis result
         analResult = AnalysisResult(
@@ -340,23 +302,8 @@ class Analysis:
             map.group_name,
             map.port_name,
             map.species_name,
-            stats.totalCells,
-            stats.srCells,
-            mpaCells,
-            mmutil.trueRound(stats.totalValue,2),  
-            mmutil.trueRound(stats.srValue,2),
-            mmutil.trueRound(mpaValue,2), 
-            mmutil.trueRound(mpaArea,2),
-            mmutil.trueRound(stats.srArea,2),
-            mmutil.trueRound(stats.totalArea,2),
-            
             mmutil.trueRound(mpaPercOverallArea,1),
-            mmutil.trueRound(mpaPercSrArea,2),
-            mmutil.trueRound(srPercOverallArea,2),
-                                                    
-            mmutil.trueRound(mpaPercOverallValue,1),
-            mmutil.trueRound(mpaPercSrValue,2),
-            mmutil.trueRound(srPercOverallValue,2)
+            mmutil.trueRound(mpaPercOverallValue,1)
         )
         
         #Cleanup analysis
@@ -382,7 +329,7 @@ class Analysis:
     def __srToShapefile(self):
         shp_filename = 'study_region.shp' 
         shapepath = os.path.join(tempfile.gettempdir(),shp_filename)
-        #the following query is specific on the server to id=2 as there are currently two Active study regions in the server-side db
+        #the following query is specific on the server to id=4 as there are currently two Active study regions in the server-side db
         shp_query = 'select * from mm_study_region where active=TRUE'
         command = settings.PGSQL2SHP+" -u "+settings.DATABASE_USER+" -P '"+settings.DATABASE_PASSWORD+"' -f "+shapepath+" "+settings.DATABASE_NAME+' "'+shp_query+'"'
         os.system(command)
@@ -419,21 +366,9 @@ class AnalysisResult:
                  user_grp = None, 
                  port = None, 
                  species = None, 
-                 totalCells = None,
-                 srCells = None,
-                 mpaCells = None,
-                 totalValue = None,  
-                 srValue = None,
-                 mpaValue = None,                
-                 mpaArea = None, 
-                 srArea = None, 
-                 totalArea = None,     
-                 mpaPercOverallArea = None,
-                 mpaPercSrArea = None,                 
-                 srPercOverallArea = None,             
-                 mpaPercOverallValue = None, 
-                 mpaPercSrValue = None,
-                 srPercOverallValue = None):
+                 mpaPercOverallArea = None,            
+                 mpaPercOverallValue = None
+                 ):
         self.mpa_id = None
         self.array_id = None
         if id_type == 'mpa':
@@ -444,23 +379,6 @@ class AnalysisResult:
         self.user_grp = user_grp
         self.port = port
         self.species = species
-        #Intermediate steps
-        self.totalCells = totalCells
-        self.srCells = srCells
-        self.mpaCells = mpaCells
-        self.totalValue = totalValue
-        self.srValue = srValue
-        self.mpaValue = mpaValue        
-        #Final area results
-        self.area_units = 'square miles'          #area of fishing value captured by mpa        
-        self.mpaArea = mpaArea        
-        self.srArea = srArea
-        self.totalArea = totalArea        
         self.mpaPercOverallArea = mpaPercOverallArea
-        self.mpaPercSrArea = mpaPercSrArea
-        self.srPercOverallArea = srPercOverallArea
-        #Final value results        
         self.mpaPercOverallValue = mpaPercOverallValue    #% of total fishing value captured by mpa
-        self.mpaPercSrValue = mpaPercSrValue
-        self.srPercOverallValue = srPercOverallValue        
 
