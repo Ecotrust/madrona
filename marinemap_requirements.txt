@@ -42,7 +42,7 @@ Sphinx==0.6.3
 django-compress==1.0.1
 django-maintenancemode==0.9.2
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
--e svn+http://feedvalidator.googlecode.com/svn/trunk/#egg=feedvalidator
+-e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/#egg=feedvalidator
 elementtree
 xlwt==0.7.2
 
