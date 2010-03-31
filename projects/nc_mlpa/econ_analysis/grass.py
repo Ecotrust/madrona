@@ -234,7 +234,7 @@ class Grass:
     Intersect raster map m1 with m2, storing the cell value of m2 in the resulting raster
     '''
     def r_intersect(self, result, m1, m2):
-        intersectCmd = 'r.mapcalc "%s=if(%s,%s)"' % (result, m1, m2)
+        intersectCmd = 'nice -n 1 r.mapcalc "%s=if(%s,%s)"' % (result, m1, m2)
         self.runCmd(intersectCmd)
     
     '''
@@ -242,7 +242,7 @@ class Grass:
     are given the value of val
     '''
     def v_to_r(self, vMap, rMap, val):
-        command = 'nice 1 v.to.rast use=val value=%s in=%s out=%s' % (val, vMap, rMap)
+        command = 'nice -n 1 v.to.rast use=val value=%s in=%s out=%s' % (val, vMap, rMap)
         self.runCmd(command)        
 
     '''
