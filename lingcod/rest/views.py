@@ -276,7 +276,8 @@ def resource(request, form_class=None, pk=None, get_func=None,
                 'MEDIA_URL': settings.MEDIA_URL,
                 'is_ajax': request.is_ajax(),
             })
-            return render_to_response(template, extra_context)
+            #Adding RequestContext here so that the show.html template has access to 'perms' in order to verify ecotrust permissions
+            return render_to_response(template, RequestContext(request, extra_context))
     elif request.method == 'POST':
         return update(request, form_class, pk)
         
