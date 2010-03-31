@@ -163,6 +163,7 @@ lingcod.kmlTree = (function(){
         var that = {};
         var errorCount = 0;
         var lookupTable = {};
+        that.lookupTable = lookupTable;
         that.kmlObject = null;
         var docs = {};
         var my = {};
@@ -339,7 +340,7 @@ lingcod.kmlTree = (function(){
                             content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
                         }
                         opts.element.html(content + '<p class="error">could not load kml file. Try clicking <a target="_blank" href="'+url+'">this link</a>, then refreshing the application.</p></div>');
-                        $(that).trigger('kmlLoadError', kmlObject);
+                        $(that).trigger('kmlLoadError', [kmlObject]);
                     },
                     0);
                     return;                    
@@ -362,11 +363,11 @@ lingcod.kmlTree = (function(){
             var queue = new NetworkLinkQueue({
                 success: function(links){
                     hideLoading();
-                    $(that).trigger('kmlLoaded', kmlObject);
+                    $(that).trigger('kmlLoaded', [kmlObject]);
                 },
                 error: function(links){
                     hideLoading();
-                    $(that).trigger('kmlLoadError', kmlObject);
+                    $(that).trigger('kmlLoadError', [kmlObject]);
                 },
                 tree: that,
                 my: my
@@ -852,7 +853,7 @@ lingcod.kmlTree = (function(){
                         // alert('Error loading ' + link);
                         node.addClass('error');
                         node.addClass('checkHideChildren');
-                        $(that).trigger('kmlLoadError', kmlObject);
+                        $(that).trigger('kmlLoadError', [kmlObject]);
                         return;
                     }
                     ge.getFeatures().appendChild(kmlObject);
