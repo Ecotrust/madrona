@@ -230,23 +230,19 @@ class Analysis:
         self.grass = self.setupGrass(self.tmpMapsetName)  
         #Copy preloaded fishing map to temp mapset
         self.grass.copyMap('rast', self.fishingMapName)
-        #Copy preloaded study region to temp mapset
-        #self.grass.copyMap('vect', self.srMapName)
         
         #Output mpa to shapefile
         shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
         #Convert shapefile to grass vector map
         mpaVectorName = self.mpaVectorMapName+str(mpa.id)
         self.grass.v_in_ogr(shapepath, mpaVectorName)
-        #Convert mpa vector map to raster map
         #######################################################################################
         #import time
         #time.sleep(5)
+        #required for whatever reason in order to produce correct results on my windows machine
+        #NOT NEEDED on aws servers 
         #######################################################################################
-        #pausing here for 5 seconds with time.sleep(5), seems to produce correct results on a consistent basis (on my windows machine)
-        #could it be that v_in_ogr is not finishing otherwise?
-        #spend some time trying to get grass.py runCmd to remove and redirect output from grass commands, 
-        #while producing accurate statistical results, and eventually gave up, hoping this works as is on aws servers...
+        #Convert mpa vector map to raster map
         mpaRasterName = self.mpaRasterMapName+str(mpa.id)
         self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
 
@@ -257,43 +253,36 @@ class Analysis:
         else:
             stats = stats[0]                            
         
-        #Perhaps here we can check to see if we want to intersect or not
         #If there is an allowed use for this fishery, then no intersect is needed and resulting percentages should be 0.0
         setPercsToZero = False
         #Get list of targets from map
         #allowed_uses = AllowedUse.objects.filter(purpose__name=layer.fishing_type)
         map_targets = map.allowed_targets.all()
-        #QUICK FIX...REMEMBER TO CHANGE THIS LATER!!!
-        map_group = map.group_name
-        if map_group in ['Commercial', 'Edible Seaweed']:
-            map_purpose='commercial'
-        else:
-            map_purpose='recreational'
+        map_purpose = Layers.FISHING_TYPES[map.group_abbr]
         for map_target in map_targets:
             if len(mpa.allowed_uses.filter(target__name=map_target, purpose__name=map_purpose)) != 0:
                 setPercsToZero = True
-        #The above is still somewhat unstable as it shouldn't just check for a single existing allowed target, 
-        #shouldn't it check to see if all targets reflected in this map are allowed within the mpa???
-            
-        #Intersect mpa raster with fishing map
-        self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)   
-        
-        #Calculate percent area   
-        (mpaCells, mpaArea) = self.grass.r_area(self.mpaValueMaskMapName, map.cell_size)
-        mpaArea = mpaArea * self.SQ_MILES_IN_SQ_METER
-        
-        mpaPercOverallArea = mmutil.percentage(mpaArea,stats.totalArea)      
-        
-        #Calculate percent value
-        mpaValue = self.grass.r_sum(self.mpaValueMaskMapName)
-        if mpaValue is None:
-            return -2                    
-        
-        mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)     
-   
+
         if setPercsToZero:
             mpaPercOverallArea = 0.0
             mpaPercOverallValue = 0.0
+        else:
+            #Intersect mpa raster with fishing map
+            self.grass.r_intersect(self.mpaValueMaskMapName, mpaRasterName, self.fishingMapName)   
+            
+            #Calculate percent area   
+            (mpaCells, mpaArea) = self.grass.r_area(self.mpaValueMaskMapName, map.cell_size)
+            mpaArea = mpaArea * self.SQ_MILES_IN_SQ_METER
+            
+            mpaPercOverallArea = mmutil.percentage(mpaArea,stats.totalArea)      
+            
+            #Calculate percent value
+            mpaValue = self.grass.r_sum(self.mpaValueMaskMapName)
+            if mpaValue is None:
+                return -2                    
+            
+            mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)     
+   
             
         #Generate analysis result
         analResult = AnalysisResult(
