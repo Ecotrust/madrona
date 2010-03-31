@@ -80,7 +80,6 @@ lingcod.panel = function(options){
     
     that.close = function(){
         if(loader && loader.destroy){
-            console.warn('destroying');
             loader.destroy();
         }
         $(el[0]).scrollTop(1).scrollTop(0);
@@ -124,7 +123,6 @@ lingcod.panel = function(options){
         if(panel.find('.ui-tabs').length){
             getActiveTabs(panel, list);
         }
-        console.log('activeTabs list', list);
         return list;
     };
     
