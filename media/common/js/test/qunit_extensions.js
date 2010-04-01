@@ -81,7 +81,7 @@
     var reference_to_first_google_earth_instance;
 
     earthAsyncTest('earthAsyncTest works', 2, function(ge, gex){
-        ok(typeof ge.parseKml === 'function', 'Google Earth Plugin initialized');
+        ok(typeof ge === 'object', 'Google Earth Plugin initialized');
         reference_to_first_google_earth_instance = ge;
         setTimeout(function(){
             start();

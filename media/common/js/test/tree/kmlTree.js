@@ -1206,6 +1206,7 @@ module('kmlTree');
     });
     
     earthAsyncTest("getState: two elements turned off, affecting parents", function(ge, gex){
+        console.log('two elements');
         $(document.body).append('<div class="kmltreetest"></div>');
         var tree = lingcod.kmlTree({
             url: traversal,
@@ -1219,12 +1220,15 @@ module('kmlTree');
             bustCache: false
         });
         $(tree).one('kmlLoaded', function(e, kmlObject){
+            console.log('loaded');
             ok(kmlObject.getType() === 'KmlFolder', 'Document loaded correctly');
             var E = $('.kmltreetest').find('span.name:contains(E)').parent();
             var C = $('.kmltreetest').find('span.name:contains(C)').parent();
             var A = $('.kmltreetest').find('span.name:contains(A)').parent();
+            console.log('log');
             E.find('>span.toggler').click();
             C.find('>span.toggler').click();
+            console.log('log');
             var state = tree.getState();
             equals(state.name, 'root');
             equals(state.children.length, 1);
@@ -1236,6 +1240,7 @@ module('kmlTree');
             equals(state.children[0].children[0].children[0].children[1].name, 'E');
             ok(state.children[0].children[0].children[0].children[0].modified && state.children[0].children[0].children[0].children[0].modified.visibility.current === false);
             ok(state.children[0].children[0].children[0].children[1].modified && state.children[0].children[0].children[0].children[1].modified.visibility.current === false);
+            console.log('log');
             A.find('>span.toggler').click();
             var state = tree.getState();
             equals(state.name, 'root');
@@ -1249,24 +1254,40 @@ module('kmlTree');
             equals(state.children[0].children[0].children[1].children[1].name, 'E');
             ok(state.children[0].children[0].children[1].children[0].modified && state.children[0].children[0].children[1].children[0].modified.visibility.current === false);
             ok(state.children[0].children[0].children[1].children[1].modified && state.children[0].children[0].children[1].children[1].modified.visibility.current === false);
+            console.log('log');
             A.find('>span.toggler').click();
             // turn back on
             C.find('>span.toggler').click();
+            console.log('log');
             var state = tree.getState();
+            console.log('log', state);
             equals(state.name, 'root');
             equals(state.children.length, 1);
+            console.log('log');
             equals(state.children[0].children[0].name, 'B');
+            console.log('log');
+            
             equals(state.children[0].children[0].children[0].name, 'D');
+            console.log('log');
+            
             equals(state.children[0].children[0].children[0].children.length, 1);
-            equals(state.children[0].children[0].children[0].children[0].name, 'E');
-            ok(state.children[0].children[0].children[0].children[0].modified && state.children[0].children[0].children[0].children[0].modified.visibility.current === false);
+            console.log('log', state.children[0].children[0].children[0].children.length);
+            if(state.children[0].children[0].children[0].children.length){
+                equals(state.children[0].children[0].children[0].children[0].name, 'E');
+                ok(state.children[0].children[0].children[0].children[0].modified && state.children[0].children[0].children[0].children[0].modified.visibility.current === false);
+            }
+            console.log('log');
+            
+            console.log('log');
             // should just come back as not modified
             E.find('>span.toggler').click();
             var state = tree.getState();
+            console.log('log');
             equals(state.children.length, 0);
             tree.destroy();
             $('.kmltreetest').remove();
             start();
+            console.log('log');
         });
         ok(tree !== false, 'Tree initialized');
         tree.load(true);
