@@ -1,7 +1,7 @@
 {% extends 'common/panel.html' %}
 {% block title %}{{array.name}} Impact Analysis{% endblock title %}
 {% block panel %}
-<h3>Impact Analysis {{array_results.0.0.user_grp}} Report</h3>
+<h3>Impact Analysis {{array_results.0.user_grp}} Report</h3>
 <div class='freetext'>
 <br>
 <table  style='width:450px' class='hab_repr_container'>
@@ -14,16 +14,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for results in array_results %}
-        <tr><td></td><td></td><td></td><td></td></tr>
-        <tr>
-            <td style="width: 165px;" class="habitat_name"><b>{{ results.0.port }}</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr><td></td><td></td><td></td><td></td></tr>
-        {% for result in results %}
+    {% for result in array_results %}
         <tr class="{% cycle '' 'grey' %}">
             <td class="habitat_name">{{ result.species }}</td>
             {% if result.mpaPercOverallValue == '---' %}
@@ -38,8 +29,6 @@
             <td>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
             {% endif %}
         </tr>
-        {% endfor %}
-        <tr><td></td><td></td><td></td><td></td></tr>
     {% endfor %}
     </tbody>
 </table>

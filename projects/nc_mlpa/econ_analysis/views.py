@@ -55,14 +55,13 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
     aggregated_results = aggregate_array_results(array_results, group)
     
     analysis_results = []
-    ports = GetPortsByGroup(group)
-    for port in ports:
-        port_results = []
-        for species, results in aggregated_results[port].iteritems():
-            port_results.append(AnalysisResult(id=array.id, id_type='array', user_grp=group, port=port, species=species, mpaPercOverallArea=results['Area'], mpaPercOverallValue=results['Value']))
-        analysis_results.append(port_results)
+    #ports = GetPortsByGroup(group)
+    #for port in ports:
+        #port_results = []
+    for species, results in aggregated_results.iteritems():
+        analysis_results.append(AnalysisResult(id=array.id, id_type='array', user_grp=group, port=port, species=species, mpaPercOverallArea=results['Area'], mpaPercOverallValue=results['Value']))
+    #analysis_results.append(port_results)
         
-    ports = GetPortsByGroup(group)
     return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
     
@@ -74,15 +73,15 @@ def aggregate_array_results(array_results, group):
         for result in mpa_results[0]:
             if result.mpaPercOverallValue == '---':
                 pass
-            elif aggregated_array_results[result.port][result.species]['Value'] == '---':
-                aggregated_array_results[result.port][result.species]['Value'] = float(result.mpaPercOverallValue)
-                aggregated_array_results[result.port][result.species]['Area'] = float(result.mpaPercOverallArea)
+            elif aggregated_array_results[result.species]['Value'] == '---':
+                aggregated_array_results[result.species]['Value'] = float(result.mpaPercOverallValue)
+                aggregated_array_results[result.species]['Area'] = float(result.mpaPercOverallArea)
             else:
                 #thinking back to displaying results with 1 significant digit after decimal...
                 #perhaps that reduction should happen at display time and not before 
                 #that way we won't be losing precision here in the aggregation
-                aggregated_array_results[result.port][result.species]['Value'] += result.mpaPercOverallValue
-                aggregated_array_results[result.port][result.species]['Area'] += result.mpaPercOverallArea
+                aggregated_array_results[result.species]['Value'] += result.mpaPercOverallValue
+                aggregated_array_results[result.species]['Area'] += result.mpaPercOverallArea
     return aggregated_array_results       
 
     
@@ -94,8 +93,9 @@ def get_empty_array_results_dictionary(group):
         species_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
     else:
         species_results = dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)
-    results = dict( (port, species_results) for port in Layers.PORTS.values())
-    return results
+    #results = dict( (port, species_results) for port in Layers.PORTS.values())
+    #change this name to results once we know this works
+    return species_results
   
 '''
 Called from impact_analysis and MpaEconAnalysis
