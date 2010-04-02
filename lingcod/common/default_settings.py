@@ -87,7 +87,7 @@ INSTALLED_APPS = (
     'lingcod.data_distributor',
     'lingcod.depth_range',
     'lingcod.geographic_report',
-    'lingcod.straightline_spacing',
+    'lingcod.spacing',
     'lingcod.user_profile',
     'registration',
     'south',

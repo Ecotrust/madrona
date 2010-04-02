@@ -1,16 +1,31 @@
 from django.contrib.gis.db import models
 from django.contrib.gis import geos
 from django.contrib.gis.measure import *
+from django.core.files import File
 from django.db import connection
+from django.conf import settings
 from exceptions import AttributeError
 import os
+import tempfile
 import pickle
 import networkx as nx
 
-FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'pickled_graph'))
-# Create your models here.
 
-def kml_doc_from_queryset(qs):
+### Display Methods ###
+# These methods are used by the spacing views
+def kml_doc_from_geometry_list(geom_list, template='general.kml'):
+    out_dict = {}
+    placemarks = []
+    for geom in geom_list:
+        placemarks.append( kml_placemark_from_geom(geom) )
+    out_dict['placemarks'] = placemarks
+    from django.template import Context, Template
+    from django.template.loader import get_template
+    t = get_template(template)
+    response = t.render(Context({ 'kml': out_dict }))
+    return response
+    
+def kml_doc_from_queryset(qs, template='general.kml'):
     dict = {}
     placemarks = []
     for item in qs:
@@ -18,9 +33,15 @@ def kml_doc_from_queryset(qs):
     dict['placemarks'] = placemarks
     from django.template import Context, Template
     from django.template.loader import get_template
-    t = get_template('general.kml')
+    t = get_template(template)
     response = t.render(Context({ 'kml': dict }))
     return response
+
+def kml_placemark_from_geom(geom, styleUrl='#default'):
+    geom.transform(settings.GEOMETRY_CLIENT_SRID)
+    style = '<styleUrl>%s</styleUrl>' % styleUrl
+    return_kml = '<Placemark>%s%s</Placemark>' % (style,geom.kml)
+    return return_kml
 
 def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
     geom = qs_item.__getattribute__(geo_field)
@@ -34,27 +55,64 @@ def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
     style = '<styleUrl>%s</styleUrl>' % styleUrl
     return_kml = '<Placemark>%s%s%s</Placemark>' % (name,style,geom.kml)
     return return_kml
+### End Display Methods ###
     
-class Land(models.Model): #may want to simplify geometry before storing in this table
-    name = models.TextField(null=True, blank=True)
+class PickledGraph(models.Model):
+    """
+    This model gives us someplace to put our pickle.  No, really that's 
+    what it does.  There should only be one record in this model at any
+    given time.  This model just stores THE graph.
+    """
+    pickled_graph = models.FileField(upload_to='spacing/pickled_graphs')
+    
+    @property
+    def graph(self):
+        f = open(self.pickled_graph.path,'r')
+        graph = pickle.load(f)
+        return graph
+
+def create_pickled_graph(verbose=False):
+    # get rid of existing
+    PickledGraph.objects.all().delete()
+    tf = tempfile.NamedTemporaryFile()
+    graph = nx.Graph()
+    graph = add_land_to_graph(graph,verbose=verbose)
+    pickle.dump(graph, tf)
+    pg = PickledGraph()
+    pg.pickled_graph = File(tf)
+    pg.save()
+    tf.close()
+    return graph
+    
+class Land(models.Model):
+    """
+    This is where a simplified polygon representation of land gets stored.  The greater the number of verticies, the slower the distance analysis
+    so don't get too fancy.  Land can be made up of multiple polygons but each polygon gets it's own single polygon record.
+    """ 
+    name = models.CharField(max_length=200, null=True, blank=True)
     geometry = models.PolygonField(srid=3310,null=True, blank=True)
     objects = models.GeoManager()
     
     def add_hull_nodes_to_graph(self, graph):
-        #buffer to put points offshore
+        """
+        This is for only adding the nodes of the convex hull to the graph.  I don't think this will be used in most cases but,
+        in some cases, it could be effective at reducing the number of nodes in the graph and speeding things up.
+        """
         poly = self.geometry#.buffer(5).simplify(1)
         
         graph.add_nodes_from([geos.Point(p) for p in poly.convex_hull.shell])
         return graph
     
     def add_nodes_to_graph(self, graph):
-        #buffer to put points offshore
         poly = self.geometry
         
         graph.add_nodes_from([geos.Point(p) for p in poly.shell])
         return graph
     
-    def create_hull(self): #probably don't need this method in the long run because we won't really need to keep the hull
+    def create_hull(self): 
+        """
+        probably don't need this method in the long run because we won't really need to keep the hull
+        """
         hull, created = Hull.objects.get_or_create(land=self)
         hull.geometry = self.geometry.convex_hull
         hull.save()
@@ -75,54 +133,137 @@ class Land(models.Model): #may want to simplify geometry before storing in this 
         self.geometry = self.geometry.simplify(tolerance=tolerance, preserve_topology=True)
         self.geometry = geos.Polygon(self.geometry.exterior_ring)
         self.save()
-        
 
-class OceanPath(models.Model):
-    points = models.ManyToManyField('TestPoint', null=True, blank=True)
-    geometry = models.LineStringField(srid=3310)
+### Spacing matrx models and methods ###
+# This stuff is related to building a spacing matrix for a set of points
+class SpacingPoint(models.Model):
+    """
+    This model is used when generating a spacing matrix.  Points contained here will be added to the array
+    of points that you are creating a spacing matrix for.  In the MLPA process this is used to add the 
+    points at the northern and southern extreme of the study region.
+    """
+    name = models.CharField(max_length=200)
+    geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
-## We probably won't need this model in the long run but I want to be able to see the convex hull in Q-gis
-class Hull(models.Model):
-    land = models.OneToOneField(Land, primary_key=True)
-    geometry = models.PolygonField(srid=3310,null=True, blank=True)
-    objects = models.GeoManager()
-    
-class TestPoint(models.Model):
-    name = models.TextField()
-    geometry = models.PointField(srid=3310)
-    objects = models.GeoManager()
-    
-    def fish_distance_to(self, point):
-        #first check if a straight line can connect the two points without crossing land
-        line = geos.LineString(self.geometry, point.geometry)
+
+    def __unicode__(self):
+        return unicode(self.name)
         
-        if not line_crosses_land(line):
-            distance = D(m=line.length).mi
-            return distance, line
+def all_spacing_points_dict():
+    """
+    Returns a dictionary of the form: { point: 'name' } for all objects in SpacingPoint
+    """
+    return dict( [ (p.geometry,p.name) for p in SpacingPoint.objects.all() ] )
+    
+def add_all_spacing_points(in_dict):
+    """
+    Takes a dictionary of the form: { point: 'name' }, and adds all the objects in SpacingPoint
+    """
+    in_dict.update(all_spacing_points_dict())
+    return in_dict
+
+def distance_row_dict(from_dict, to_dict):
+    """
+    from_dict will be a dict with a point as the key and a label as the value.
+    to_dict will be of the same format with multiple entries.
+    will return a dictionary with points as keys and a dictionary as values.
+    NOTE: This method assumes that the projection units are meters.
+    """
+    from_pnt = from_dict.keys()[0]
+    for s_pnt in SpacingPoint.objects.all():
+        to_dict.update({s_pnt.geometry:s_pnt.name})
+    result = {}
+    for point, pnt_label in to_dict.iteritems():
+        result[point] = {
+            'label': pnt_label,
+            'distance': D(m=point.distance(from_pnt)).mi,
+            'sort': point.y
+        }
+    return result
+    
+def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
+    """
+    NOTE: This method assumes that the projection units are meters.
+    """
+    result = []
+    for point in to_list:
+        point_pair_dict = {}
+        if straight_line:
+            point_pair_dict.update( {'distance': D(m=point.distance(from_pnt)).mi } )
+            if with_geom:
+                line = geos.LineString(point,from_pnt)
         else:
-            G = get_pickled_graph()
-            G.add_node(self.geometry)
-            G = add_ocean_edges_for_node(G,get_node_from_point(G,self.geometry))
-            G.add_node(point.geometry)
-            G = add_ocean_edges_for_node(G,get_node_from_point(G,point.geometry))
-            line = geos.LineString( nx.dijkstra_path(G,get_node_from_point(G,self.geometry),get_node_from_point(G,point.geometry)) )
-            distance = D(m=line.length).mi
-            return distance, line
-
+            distance, line = fish_distance(from_pnt,point)
+            point_pair_dict.update( {'distance': distance} )
+        if with_geom:
+            point_pair_dict.update( {'geometry': line} )
+        result.append(point_pair_dict)
+    return result
+    
+def distance_matrix(point_list, straight_line=False, with_geom=False):
+    result = []
+    for point in point_list:
+        result.append(distance_row_list(point,point_list,straight_line=straight_line,with_geom=with_geom))
+    return result
+    
+def sorted_points_and_labels(in_dict):
+    """
+    in_dict will look like:
+    { point: 'name' }
+    sorted_points, sorted_labels (both lists) will be returned in a dictionary and they'll be 
+    ordered from North to South.
+    """
+    sorted_points = []
+    sorted_labels = []
+    y_dict = {}
+    for point, name in in_dict.iteritems():
+        y_dict.update( { point.y: point } )
+    y_list = y_dict.keys()
+    y_list.sort()
+    for y in reversed(y_list):
+        sorted_points.append(y_dict[y])
+        sorted_labels.append(in_dict[y_dict[y]])
+    return { 'points': sorted_points, 'labels': sorted_labels }
+    
+def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=False,with_geom=False):
+    """
+    in_dict will look like:
+    { point: 'name' }
+    Will return a dictionary with the keys 'labels' and 'matrix'
+    """
+    if add_spacing_points:
+        in_dict = add_all_spacing_points(in_dict)
+    spl_dict = sorted_points_and_labels(in_dict)
+    dist_mat = distance_matrix(spl_dict['points'], straight_line=straight_line, with_geom=with_geom)
+    return { 'labels': spl_dict['labels'], 'matrix': dist_mat }
+    
+### End of spacing matrix methods ###
+    
 def fish_distance(point1,point2):
-    tp1 = TestPoint(name='tp1', geometry=point1)
-    tp2 = TestPoint(name='tp2', geometry=point2)
-    distance, line = tp1.fish_distance_to(tp2)
+    """
+    Returns the shortest distance around land (see the Land model) between the two points.  Returns the distance in miles and
+    the geos linestring that represents the path.
+    
+    NOTE: I'm assuming that the native units of the points and line is meters.  This is true for the MLPA project but may
+    not be true for other processes.
+    """
+    # This is the straight line between the two points
+    line = geos.LineString(point1,point2)
+    
+    # See if the straight line crosses land
+    if line_crosses_land(line): 
+        # The straight line cut across land so we have to do it the hard way.
+        G = PickledGraph.objects.all()[0].graph
+        G.add_nodes_from([point1,point2])
+        G = add_ocean_edges_for_node(G,get_node_from_point(G,point1))
+        G = add_ocean_edges_for_node(G,get_node_from_point(G,point2))
+        # Replace the straight line with the shortest path around land
+        line = geos.LineString( nx.dijkstra_path(G,get_node_from_point(G,point1),get_node_from_point(G,point2)) )
+        line.srid = settings.GEOMETRY_DB_SRID
+    
+    # Figure out the distance of the line (straight or otherwise) in miles
+    distance = D(m=line.length).mi
     return distance, line
-
-def add_test_points(points):
-    cnt = 0
-    for p in points:
-        cnt += 1
-        name = 'point_' + str(cnt)
-        tp, created = TestPoint.objects.get_or_create(name=name,geometry=geos.Point(p))
-        tp.save()
 
 def get_node_from_point(graph, point):
     for node in graph.nodes_iter():
@@ -130,19 +271,15 @@ def get_node_from_point(graph, point):
             return node
 
 def position_dictionary(graph):
-    #can be used by nx.draw to position nodes
+    """
+    can be used by nx.draw to position nodes with matplotlib.  This is not used in the general functioning of 
+    the spacing app but is useful for visual testing.  If you have a networkx graph G, then you can use it like:
+    nx.draw(G,pos=position_dictionary(G)) To see the result, use matplotlib.pyplot.show()
+    """
     pos = {}
     for n in graph.nodes_iter():
         pos[n] = (n.x, n.y)
     return pos
-
-def setup_tests():
-    p1 = TestPoint.objects.get(name='p1')
-    p2 = TestPoint.objects.get(name='p2')
-    p3 = TestPoint.objects.get(name='p3')
-    ocean_line = geos.LineString(p1.geometry, p2.geometry)
-    land_line = geos.LineString(p1.geometry, p3.geometry)
-    G = nx.Graph()
     
 def add_land_to_graph(graph, hull_only=False, verbose=False):
     if verbose:
@@ -154,22 +291,29 @@ def add_land_to_graph(graph, hull_only=False, verbose=False):
             graph = l.add_nodes_to_graph(graph)
     
     graph = add_ocean_edges_complete(graph,verbose=verbose)
-    return graph
+    return graph    
 
-def create_pickled_graph(file=FILE_PATH,verbose=False):
-    # create a pickled graph with all nodes from Land and all edges that do not cross Land
-    f = open(file, 'w')
-    graph = nx.Graph()
-    graph = add_land_to_graph(graph,verbose=verbose)
-    pickle.dump(graph, f)
-    f.close()
-    return graph
-
-def get_pickled_graph(file=FILE_PATH):
-    f = open(file, 'r')
-    graph = pickle.load(f)
-    return graph
-
+def points_from_graph(graph):
+    """
+    Return a list of points from a graph.
+    """
+    g_nodes = graph.nodes()
+    for point in g_nodes:
+        if point.srid == None:
+            point.srid = settings.GEOMETRY_DB_SRID
+    return g_nodes
+    
+def lines_from_graph(graph):
+    """
+    Return a list of lines made from the edges of a graph.
+    """
+    lines = []
+    for g_edge in graph.edges():
+        line = geos.LineString(g_edge[0],g_edge[1])
+        line.srid = settings.GEOMETRY_DB_SRID
+        lines.append(line)
+    return lines        
+    
 def line_crosses_land(line):
     land = Land.objects.all()
     crosses = False
@@ -182,7 +326,7 @@ def add_ocean_edges_for_node(graph, node):
     for n in graph:
         line = geos.LineString(node,n)
         if not line_crosses_land(line):
-            graph.add_edge(node,n,D(m=node.distance(n)).mi)
+            graph.add_edge(node,n,{'weight': D(m=node.distance(n)).mi})
     return graph
 
 def add_ocean_edges_complete(graph, verbose=False):
@@ -202,7 +346,7 @@ def add_ocean_edges_complete(graph, verbose=False):
             if node <> n:
                 line = geos.LineString(node,n)
                 if not line_crosses_land(line):
-                    graph.add_edge(node,n,D(m=node.distance(n)).mi)
+                    graph.add_edge(node,n,{'weight': D(m=node.distance(n)).mi})
     if verbose:
         print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges() )
     return graph

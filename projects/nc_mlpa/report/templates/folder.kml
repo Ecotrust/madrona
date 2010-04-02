@@ -1,0 +1,10 @@
+
+	<Folder>
+		<name>{{ folder.name }}</name>
+		<description>{{ folder.description }}</description>
+		<styleUrl>{{ folder.styleUrl}}</styleUrl>
+		{% for placemark in folder.placemarks %}
+			{% include "placemark.kml" %}
+		{% endfor %}
+	</Folder>	
+

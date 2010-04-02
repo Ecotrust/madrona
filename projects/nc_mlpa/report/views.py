@@ -8,9 +8,11 @@ from lingcod.common.utils import KmlWrap, LargestPolyFromMulti
 import lingcod.intersection.models as int_models
 import lingcod.intersection.views as int_views
 from lingcod.sharing.utils import *
-from lingcod.straightline_spacing.views import *
+from lingcod.spacing.views import *
+from lingcod.spacing.models import Land, SpacingPoint, fish_distance, sorted_points_and_labels
 import lingcod.depth_range.models as depth_range
 import mlpa.models as mlpa
+from report.models import *
 from lingcod.shapes.views import ShpResponder
 from django.template.defaultfilters import slugify
 import xlwt
@@ -36,6 +38,86 @@ def max_str_length_in_list(list):
         if len(item) > max_len:
             max_len = len(item)
     return max_len
+    
+def replication_habitats():
+    """
+    Return a queryset containing organization scheme feature mappings that represent
+    all the habitats that are supposed to have replication analysis performed on them.
+    """
+    org_sch = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST_REPLICATION)
+    return org_sch.featuremapping_set.all()
+    
+def array_spacing_kml(request,array_id,lop_value):
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    lop = mlpa.Lop.objects.get(value=lop_value)
+    clusters = array.clusters_with_habitat.filter(lop=lop)
+    cluster_points = []
+    # Test to make sure cluster centroids don't fall on the land polygon.  I doubt they ever will but 
+    # spacing won't work if they do.
+    for cl in clusters:
+        if True in [ l.geometry.contains(cl.geometry_collection.centroid) for l in Land.objects.all() ]:
+            raise Exception('One of the cluster centroids is on land.  I can not work out the spacing.')
+    habitats = replication_habitats()
+    doc_title = "Spacing for %s" % array.name
+    document = { 'name': doc_title, 'folders': [] }
+    for hab in habitats:
+        # Make a kml folder dictionary to work with the kml template
+        folder_title = "%s Replicates and Gaps" % hab.name.title()
+        folder = { 'name': folder_title, 'placemarks': [] }
+        # Find the cluster habitat info objects for this hab that qualify as replicates
+        chis = ClusterHabitatInfo.objects.filter(cluster__in=clusters,habitat=hab,replicate=True)
+        # Get the clusters attatched to those Habitat Info objects
+        hab_rep_clusters = [ chi.cluster for chi in chis ]
+        # Make a dict to hold the points and names that we need spacing paths for
+        points_and_names = {}
+        # Include the SpacingPoints for north and south ends
+        [ points_and_names.update({ s.geometry: s.name }) for s in SpacingPoint.objects.all() ]
+        # Add in the centroids and names for the clusters
+        [ points_and_names.update({ c.geometry_collection.centroid: c.name }) for c in hab_rep_clusters ]
+        # Make sure all the points have their srid assigned so they can be transformed
+        for p in points_and_names.keys():
+            if p.srid == None:
+                p.srid = settings.GEOMETRY_DB_SRID
+        #print [ "(" + str(p.srid) + "," + str(p.y) + ")" for p in points_and_names.keys() ]
+        # Transform these points to 4326 so google earth can work with them
+        #[ p.transform(settings.GEOMETRY_CLIENT_SRID) for p in points_and_names.keys() ]
+        # Sort those points and names from North to South
+        sorted_dict = sorted_points_and_labels(points_and_names)
+        points = sorted_dict['points']
+        #print [ "(" + str(p.x) + "," + str(p.y) + "), " for p in points ]
+        names = sorted_dict['labels']
+        # Get the fish distance line kmls between these clusters
+        for i in range(0,len(points)-1):
+            distance, line = fish_distance(points[i],points[i+1])
+            line.srid = settings.GEOMETRY_DB_SRID
+            line.transform(settings.GEOMETRY_CLIENT_SRID)
+            line_name = "%.1f mile %s Gap" % (distance, hab.name.title())
+            line_description = "%f miles" % distance
+            if distance >= 62.0:
+                styleurl = '#too_far_map'
+            else:
+                styleurl = '#close_enough_map'
+            geom_collection = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
+            geom_collection.extend([line,line.centroid])
+            pm = { 'name': line_name, 'description': line_description, 'geometry': geom_collection.kml, 'styleurl': styleurl }
+            folder['placemarks'].append(pm)
+        for cl in hab_rep_clusters:
+            cl_description = 'Cluster of %f sq. miles at %s level of protection that counts as a replicate of %s.' % (cl.area_sq_mi,lop.name,hab.name)
+            geom = cl.geometry_collection
+            geom.srid = settings.GEOMETRY_DB_SRID
+            geom.transform(settings.GEOMETRY_CLIENT_SRID)
+            pm = { 'name': cl.name, 'description': cl_description, 'geometry': geom.kml }
+            folder['placemarks'].append(pm)
+        
+        # Add the folder dictionary that we created to the kml document dictionary
+        document['folders'].append(folder)
+        
+    template = 'document.kml'
+    t = get_template(template)
+    response = HttpResponse(t.render(Context({'document':document})), mimetype='application/vnd.google-earth.kml+xml')
+    response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'spacing'
+    return response # render_to_response(template, {'document':document}, context_instance=RequestContext(request), mimetype='application/vnd.google-earth.kml+xml' )
 
 def array_size_by_lop_worksheet(array,ws):    
     title_style = xlwt.easyxf('font: bold true;')
