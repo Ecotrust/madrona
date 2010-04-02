@@ -45,7 +45,7 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
     mpas = array.mpa_set
        
     array_results = []
-    #Sum results for each species, in each port, for each mpa in the array
+    #Sum results for each species, for each mpa in the array
     #What to do if mpa_analysis_results returns a Response object instead of a result?
     for mpa in mpas:
         if mpa.designation_id is not None:
@@ -55,13 +55,12 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
     aggregated_results = aggregate_array_results(array_results, group)
     
     analysis_results = []
-    #ports = GetPortsByGroup(group)
-    #for port in ports:
-        #port_results = []
     for species, results in aggregated_results.iteritems():
         analysis_results.append(AnalysisResult(id=array.id, id_type='array', user_grp=group, port=port, species=species, mpaPercOverallArea=results['Area'], mpaPercOverallValue=results['Value']))
-    #analysis_results.append(port_results)
-        
+    
+    #sort results alphabetically by species name
+    analysis_results.sort(key=lambda obj: obj.species)   
+    
     return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
     
@@ -90,12 +89,11 @@ def get_empty_array_results_dictionary(group):
     initialValue = '---'
     initialArea = '---'
     if group == 'Commercial':
-        species_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
+        empty_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
     else:
-        species_results = dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)
-    #results = dict( (port, species_results) for port in Layers.PORTS.values())
+        empty_results = dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)
     #change this name to results once we know this works
-    return species_results
+    return empty_results
   
 '''
 Called from impact_analysis and MpaEconAnalysis
