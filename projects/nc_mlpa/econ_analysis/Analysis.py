@@ -8,8 +8,8 @@ from grass import Grass
 import utilities as mmutil  
 from models import *
 from nc_mlpa.mlpa.models import *
-#from Layers import *
-from Layers import Layers
+from Layers import *
+#from Layers import Layers
 
 '''
 Used to calculate summary statistics of a given mpa's impact on localized fishing
@@ -222,15 +222,20 @@ class Analysis:
     def __runAnal(self, mpa, map):   
         self.fishingMapName = map.getFullName()       # fishing value map                            
         #self.fishingMapName = map.getGridName()
+        
+        #REFACTOR THE FOLLOWING (might need to pass in tmpMapsetName)
+        #WHY IS tmpMapsetName associated with self??? this seems unecessary...
         timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
         temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
         self.tmpMapsetName = temp_id
         
+        #KEEP THE FOLLOWING (WILL NEED TO PASS IN tmpMapsetName (or refactor out and pass in grass))
         #Initialize grass, creating temporary mapset
         self.grass = self.setupGrass(self.tmpMapsetName)  
         #Copy preloaded fishing map to temp mapset
         self.grass.copyMap('rast', self.fishingMapName)
         
+        #REFACTOR THE FOLLOWING (pass in mpaRasterName)
         #Output mpa to shapefile
         shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
         #Convert shapefile to grass vector map
@@ -295,9 +300,11 @@ class Analysis:
             mmutil.trueRound(mpaPercOverallValue,1)
         )
         
+        #CLEAN AFTER ALL ANALYSIS HAS BEEN DONE?  (after run is finished?)
         #Cleanup analysis
         self.__removeTempShapefile(temp_id)
         self.grass.cleanup()
+        
         return analResult        
     
     '''
@@ -336,6 +343,7 @@ class Analysis:
                 os.remove(filePath)            
         return True         
 
+        
 class EmptyAnalysisResult:
     def __init__(self, group_name, port_name, species_name):
         self.user_grp = group_name
@@ -345,19 +353,10 @@ class EmptyAnalysisResult:
         self.mpaPercOverallValue = '---'
         
 '''
-An AnalysisResult represents the result of running the impact analysis
-on a single Layer
+An AnalysisResult represents the result of running the impact analysis on a single Layer
 '''
 class AnalysisResult:
-    def __init__(self, 
-                 id = None, 
-                 id_type = None, 
-                 user_grp = None, 
-                 port = None, 
-                 species = None, 
-                 mpaPercOverallArea = None,            
-                 mpaPercOverallValue = None
-                 ):
+    def __init__(self, id=None, id_type=None, user_grp=None, port=None, species=None, mpaPercOverallArea=None, mpaPercOverallValue=None):
         self.mpa_id = None
         self.array_id = None
         if id_type == 'mpa':
@@ -370,4 +369,3 @@ class AnalysisResult:
         self.species = species
         self.mpaPercOverallArea = mpaPercOverallArea
         self.mpaPercOverallValue = mpaPercOverallValue    #% of total fishing value captured by mpa
-

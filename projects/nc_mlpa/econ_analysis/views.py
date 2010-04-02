@@ -13,25 +13,95 @@ from Analysis import *
 '''
 Accessed via named url when user selects a group (Commercial, Recreational Dive, etc) to run analysis on 
 '''
-def impact_analysis(request, feature_id, group): 
+def impact_analysis(request, feature_id, group, feature='mpa'): 
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     if not user.has_perm('layers.view_ecotrustlayerlist'):
         return HttpResponse('You must have permission to view this information.', status=401)  
-        
-    group_name = Layers.GROUPS[group]
-    #the following port and species parameters are for testing on my local machine
-    #return display_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
-    #the following call is the more permanent/appropriate one for the server
-    return display_analysis(request, feature_id, group_name)
-  
     
+    group_name = Layers.GROUPS[group]
+    if feature == 'mpa':
+        #the following port and species parameters are for testing on my local machine
+        #return display_mpa_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
+        #the following call is the more permanent/appropriate one for the server
+        return display_mpa_analysis(request, feature_id, group_name)
+    else:
+        #the following port and species parameters are for testing on my local machine
+        #return display_array_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
+        return display_array_analysis(request, feature_id, group_name)
+
+#remember to remove unused templates from repository (and my own directory)
+def display_array_analysis(request, feature_id, group, port=None, species=None, template='array_impact_analysis.html'):
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    if not user.has_perm('layers.view_ecotrustlayerlist'):
+        return HttpResponse('You must have permission to view this information.', status=401)
+    
+    array = get_object_or_404(MpaArray, pk=feature_id)
+    
+    #Get a list of mpas associated with this array
+    mpas = array.mpa_set
+       
+    array_results = []
+    #Sum results for each species, in each port, for each mpa in the array
+    #What to do if mpa_analysis_results returns a Response object instead of a result?
+    for mpa in mpas:
+        if mpa.designation_id is not None:
+            mpa_results = mpa_analysis_results(mpa, group, port, species)
+            array_results.append(mpa_results)
+    
+    aggregated_results = aggregate_array_results(array_results, group)
+    
+    analysis_results = []
+    ports = GetPortsByGroup(group)
+    for port in ports:
+        port_results = []
+        for species, results in aggregated_results[port].iteritems():
+            port_results.append(AnalysisResult(id=array.id, id_type='array', user_grp=group, port=port, species=species, mpaPercOverallArea=results['Area'], mpaPercOverallValue=results['Value']))
+        analysis_results.append(port_results)
+        
+    ports = GetPortsByGroup(group)
+    return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+
+    
+def aggregate_array_results(array_results, group):
+    aggregated_array_results = get_empty_array_results_dictionary(group)
+    for mpa_results in array_results:
+        #why does this have to be index 0?  
+        #is there an unneeded list here?
+        for result in mpa_results[0]:
+            if result.mpaPercOverallValue == '---':
+                pass
+            elif aggregated_array_results[result.port][result.species]['Value'] == '---':
+                aggregated_array_results[result.port][result.species]['Value'] = float(result.mpaPercOverallValue)
+                aggregated_array_results[result.port][result.species]['Area'] = float(result.mpaPercOverallArea)
+            else:
+                #thinking back to displaying results with 1 significant digit after decimal...
+                #perhaps that reduction should happen at display time and not before 
+                #that way we won't be losing precision here in the aggregation
+                aggregated_array_results[result.port][result.species]['Value'] += result.mpaPercOverallValue
+                aggregated_array_results[result.port][result.species]['Area'] += result.mpaPercOverallArea
+    return aggregated_array_results       
+
+    
+def get_empty_array_results_dictionary(group):
+    group_species = GetSpeciesByGroup(group)
+    initialValue = '---'
+    initialArea = '---'
+    if group == 'Commercial':
+        species_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
+    else:
+        species_results = dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)
+    results = dict( (port, species_results) for port in Layers.PORTS.values())
+    return results
+  
 '''
 Called from impact_analysis and MpaEconAnalysis
 Renders template with embedded analysis results
 '''
-def display_analysis(request, feature_id, group, port=None, species=None, template='impact_analysis.html'):
+def display_mpa_analysis(request, feature_id, group, port=None, species=None, template='impact_analysis.html'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
@@ -40,13 +110,28 @@ def display_analysis(request, feature_id, group, port=None, species=None, templa
 
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     
+    mpa_results = mpa_analysis_results(mpa, group, port, species)
+    
+    try:
+        #if mpa_analysis_results threw an error it will return a response object of some sort
+        if mpa_results.status_code:
+            response_object = mpa_results
+            return response_object
+    except:
+        #otherwise it worked 
+        return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': mpa_results}))  
+
+#would be nice to produce some helper methods from within here...
+def mpa_analysis_results(mpa, group, port, species):
+    mpa_results = []
+    
     #Get analysis results for given port or all ports 
     if not port:
         ports = GetPortsByGroup(group)
     else:
         ports = [port]
-    
-    all_results = []
+        
+    #Get results for each port
     for single_port in ports:
         analysis_results = []
         #See if we can retreive results from cache
@@ -95,11 +180,9 @@ def display_analysis(request, feature_id, group, port=None, species=None, templa
         #adjust recreational Fort Bragg display
         analysis_results = adjust_fortbragg_rec_display(analysis_results, group)
         
-        all_results.append(analysis_results)
+        mpa_results.append(analysis_results)
+    return mpa_results
     
-    return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': all_results}))  
-
-
 '''
 Accessed via named url when a user selects the View Printable Report link at the bottom of analysis results display
 '''
@@ -114,6 +197,7 @@ def print_report(request, feature_id, user_group):
     ports = GetPortsByGroup(user_group)
     all_results = []
     for single_port in ports:
+        #should we ensure this only returns a single row?
         cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=user_group, port=single_port)
         results = list(cache)
         analysis_results = []
@@ -146,7 +230,7 @@ def adjust_fortbragg_rec_display(results, group):
     return results
         
 '''
-Called by display_analysis and print_report
+Called by display_mpa_analysis and print_report
 Fills out analysis results with species that are relevant for the given group, but not yet present in the results
 '''
 def flesh_out_results(group, port, results):
@@ -203,7 +287,7 @@ def MpaEconAnalysis(request, feature_id):
     if species:
         species = species.replace('+',' ')
     
-    return display_analysis(request, feature_id, group, port, species)
+    return display_mpa_analysis(request, feature_id, group, port, species)
 
     
 '''

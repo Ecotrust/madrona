@@ -10,11 +10,9 @@
             <li><a href="#Attributes"><span>Information</span></a></li>
             <li><a href="{% url mpa_habitat_representation instance.pk 'html' %}"><span>Habitat Representation</span></a></li>
             {% if perms.layers.view_ecotrustlayerlist %}
-                <li><a href="#Groups"><span>Impact Analysis</span></a></li>
+              <li><a href="#Groups"><span>Impact Analysis</span></a></li>
             {% endif %}
         </ul>
-        {% if perms.layers.view_ecotrustlayerlist %}
-        {% endif %}
         <div id="Attributes">
             <ul class="metadata">
               {% if instance.user.first_name and instance.user.last_name %} 
@@ -160,6 +158,7 @@
             {% endif %}
             
         </div>
+        
         <div id="Groups" class="tabs">
             <ul>
                 <li><a href="#Instructions"><span>Instructions</span></a></li>
