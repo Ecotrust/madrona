@@ -60,7 +60,7 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
     
     #sort results alphabetically by species name
     analysis_results.sort(key=lambda obj: obj.species)   
-    
+    analysis_results = roundPercentageValues(analysis_results, 1)
     return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
     
@@ -117,6 +117,8 @@ def display_mpa_analysis(request, feature_id, group, port=None, species=None, te
             return response_object
     except:
         #otherwise it worked 
+        for port_results in mpa_results:
+            port_results = roundPercentageValues(port_results, 1)
         return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': mpa_results}))  
 
 #would be nice to produce some helper methods from within here...
@@ -180,6 +182,14 @@ def mpa_analysis_results(mpa, group, port, species):
         
         mpa_results.append(analysis_results)
     return mpa_results
+    
+def roundPercentageValues(results, sig_digs):
+    import utilities as mmutil  
+    for result in results:
+        if result.mpaPercOverallValue != '---':
+            result.mpaPercOverallArea = mmutil.trueRound(float(result.mpaPercOverallArea), sig_digs)
+            result.mpaPercOverallValue = mmutil.trueRound(float(result.mpaPercOverallValue), sig_digs)
+    return results
     
 '''
 Accessed via named url when a user selects the View Printable Report link at the bottom of analysis results display

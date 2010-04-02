@@ -301,8 +301,8 @@ class Analysis:
             map.group_name,
             map.port_name,
             map.species_name,
-            mmutil.trueRound(mpaPercOverallArea,1),
-            mmutil.trueRound(mpaPercOverallValue,1)
+            mpaPercOverallArea,
+            mpaPercOverallValue
         )
         
         return analResult        
