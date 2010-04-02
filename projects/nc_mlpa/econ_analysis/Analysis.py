@@ -202,30 +202,46 @@ class Analysis:
                                     srValue=srValue)
             fi.save()                
 
-           
+    def __get_tmpMapsetName(self, mpa):
+        timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+        temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())
+        return temp_id
+     
+    def __generate_mpaRasterMap(self, mpa, tmpMapsetName):
+        shapepath = self.__mpaToTempShapefile(mpa.id, tmpMapsetName)                                           
+        #Convert shapefile to grass vector map
+        mpaVectorName = self.mpaVectorMapName+str(mpa.id)
+        self.grass.v_in_ogr(shapepath, mpaVectorName)
+        #######################################################################################
+        #import time
+        #time.sleep(5)
+        #required for whatever reason in order to produce correct results on my windows machine
+        #NOT NEEDED on aws servers 
+        #######################################################################################
+        #Convert mpa vector map to raster map
+        mpaRasterName = self.mpaRasterMapName+str(mpa.id)
+        self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
+        return mpaRasterName
+     
     '''
     Fishing impact analysis driver.  
     '''
     def run(self, mpa, layers):                        
         analResults = []
+        #create unique mapset(?) name for this mpa
+        tmpMapsetName = self.__get_tmpMapsetName(mpa)
+        #add this mapset to grass
+        self.grass = self.setupGrass(tmpMapsetName)  
+        #Generate mpa raster map
+        mpaRasterName = self.__generate_mpaRasterMap(mpa, tmpMapsetName)
         
-        timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
-        temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
-        self.tmpMapsetName = temp_id
-        self.grass = self.setupGrass(self.tmpMapsetName)  
-        shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
-        #Convert shapefile to grass vector map
-        mpaVectorName = self.mpaVectorMapName+str(mpa.id)
-        self.grass.v_in_ogr(shapepath, mpaVectorName)
-        #Convert mpa vector map to raster map
-        mpaRasterName = self.mpaRasterMapName+str(mpa.id)
-        self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
-        
-        for layer in layers:        
-            analResult = self.__runAnal(mpa, layer, mpaRasterName, temp_id)
+        #run analysis on each layer/map/species
+        for layer in layers:    
+            #how to handle error type return values from __runAnal (-1, -2 values)
+            analResult = self.__runAnal(mpa, layer, mpaRasterName)
             analResults.append(analResult)
         
-        self.__removeTempShapefile(temp_id)
+        self.__removeTempShapefile(tmpMapsetName)
         self.grass.cleanup()
         
         return analResults  
@@ -238,55 +254,26 @@ class Analysis:
     Returns -1 if failed to retrieve precomputed overall and study region statistics
     Returns -2 if mpa analysis failed.
     '''
-    def __runAnal(self, mpa, map, mpaRasterName, temp_id):   
+    def __runAnal(self, mpa, map, mpaRasterName):   
         self.fishingMapName = map.getFullName()       # fishing value map                            
-        #self.fishingMapName = map.getGridName()
-        
-        #REFACTOR THE FOLLOWING (might need to pass in tmpMapsetName)
-        #WHY IS tmpMapsetName associated with self??? this seems unecessary...
-        #timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
-        #temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
-        #self.tmpMapsetName = temp_id
-        
-        #KEEP THE FOLLOWING (WILL NEED TO PASS IN tmpMapsetName (or refactor out and pass in grass))
-        #Initialize grass, creating temporary mapset
-        #self.grass = self.setupGrass(self.tmpMapsetName)  
-        #Copy preloaded fishing map to temp mapset
         self.grass.copyMap('rast', self.fishingMapName)
         
-        #REFACTOR THE FOLLOWING (pass in mpaRasterName)
-        #Output mpa to shapefile
-        #shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
-        #Convert shapefile to grass vector map
-        #mpaVectorName = self.mpaVectorMapName+str(mpa.id)
-        #self.grass.v_in_ogr(shapepath, mpaVectorName)
-        #######################################################################################
-        #import time
-        #time.sleep(5)
-        #required for whatever reason in order to produce correct results on my windows machine
-        #NOT NEEDED on aws servers 
-        #######################################################################################
-        #Convert mpa vector map to raster map
-        #mpaRasterName = self.mpaRasterMapName+str(mpa.id)
-        #self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
-
         #Get precomputed map statistics
         stats = FishingImpactStats.objects.filter(map=map)
         if len(stats) < 1:
             return -1
         else:
             stats = stats[0]                            
-        
-        #If there is an allowed use for this fishery, then no intersect is needed and resulting percentages should be 0.0
+         
         setPercsToZero = False
         #Get list of targets from map
-        #allowed_uses = AllowedUse.objects.filter(purpose__name=layer.fishing_type)
         map_targets = map.allowed_targets.all()
         map_purpose = Layers.FISHING_TYPES[map.group_abbr]
         for map_target in map_targets:
             if len(mpa.allowed_uses.filter(target__name=map_target, purpose__name=map_purpose)) != 0:
                 setPercsToZero = True
-
+        
+        #If there is an allowed use for this fishery, then no intersect is needed and resulting percentages should be 0.0
         if setPercsToZero:
             mpaPercOverallArea = 0.0
             mpaPercOverallValue = 0.0
@@ -306,8 +293,7 @@ class Analysis:
                 return -2                    
             
             mpaPercOverallValue = mmutil.percentage(mpaValue,stats.totalValue)     
-   
-            
+      
         #Generate analysis result
         analResult = AnalysisResult(
             mpa.id,
@@ -318,11 +304,6 @@ class Analysis:
             mmutil.trueRound(mpaPercOverallArea,1),
             mmutil.trueRound(mpaPercOverallValue,1)
         )
-        
-        #CLEAN AFTER ALL ANALYSIS HAS BEEN DONE?  (after run is finished?)
-        #Cleanup analysis
-        #self.__removeTempShapefile(temp_id)
-        #self.grass.cleanup()
         
         return analResult        
     
