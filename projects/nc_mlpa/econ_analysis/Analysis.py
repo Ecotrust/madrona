@@ -43,16 +43,7 @@ class Analysis:
         self.MM_GRASS_RAST_PATH = grass.getRastPath()
         return grass                
     
-    '''
-    Fishing impact analysis driver.  
-    '''
-    def run(self, mpa, layers):                        
-        analResults = []
-        for layer in layers:        
-            analResult = self.__runAnal(mpa, layer)
-            analResults.append(analResult)
-        return analResults  
-        
+       
     '''
     Driver for preloading and precalculating grass map layers and 
     overall/study region summary statistics.  This is invoked via
@@ -211,6 +202,34 @@ class Analysis:
                                     srValue=srValue)
             fi.save()                
 
+           
+    '''
+    Fishing impact analysis driver.  
+    '''
+    def run(self, mpa, layers):                        
+        analResults = []
+        
+        timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+        temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
+        self.tmpMapsetName = temp_id
+        self.grass = self.setupGrass(self.tmpMapsetName)  
+        shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
+        #Convert shapefile to grass vector map
+        mpaVectorName = self.mpaVectorMapName+str(mpa.id)
+        self.grass.v_in_ogr(shapepath, mpaVectorName)
+        #Convert mpa vector map to raster map
+        mpaRasterName = self.mpaRasterMapName+str(mpa.id)
+        self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
+        
+        for layer in layers:        
+            analResult = self.__runAnal(mpa, layer, mpaRasterName, temp_id)
+            analResults.append(analResult)
+        
+        self.__removeTempShapefile(temp_id)
+        self.grass.cleanup()
+        
+        return analResults  
+             
     '''
     Performs a single grass analysis run.  Assumes that the source mapset has been
     preloaded with all of the necessary map layers for analysis.  Don't run this
@@ -219,28 +238,28 @@ class Analysis:
     Returns -1 if failed to retrieve precomputed overall and study region statistics
     Returns -2 if mpa analysis failed.
     '''
-    def __runAnal(self, mpa, map):   
+    def __runAnal(self, mpa, map, mpaRasterName, temp_id):   
         self.fishingMapName = map.getFullName()       # fishing value map                            
         #self.fishingMapName = map.getGridName()
         
         #REFACTOR THE FOLLOWING (might need to pass in tmpMapsetName)
         #WHY IS tmpMapsetName associated with self??? this seems unecessary...
-        timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
-        temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
-        self.tmpMapsetName = temp_id
+        #timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+        #temp_id = 'mpa'+str(mpa.id)+'_user'+str(mpa.user_id)+'_'+timestamp+'_'+str(mmutil.getRandInt())                
+        #self.tmpMapsetName = temp_id
         
         #KEEP THE FOLLOWING (WILL NEED TO PASS IN tmpMapsetName (or refactor out and pass in grass))
         #Initialize grass, creating temporary mapset
-        self.grass = self.setupGrass(self.tmpMapsetName)  
+        #self.grass = self.setupGrass(self.tmpMapsetName)  
         #Copy preloaded fishing map to temp mapset
         self.grass.copyMap('rast', self.fishingMapName)
         
         #REFACTOR THE FOLLOWING (pass in mpaRasterName)
         #Output mpa to shapefile
-        shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
+        #shapepath = self.__mpaToTempShapefile(mpa.id, temp_id)                                           
         #Convert shapefile to grass vector map
-        mpaVectorName = self.mpaVectorMapName+str(mpa.id)
-        self.grass.v_in_ogr(shapepath, mpaVectorName)
+        #mpaVectorName = self.mpaVectorMapName+str(mpa.id)
+        #self.grass.v_in_ogr(shapepath, mpaVectorName)
         #######################################################################################
         #import time
         #time.sleep(5)
@@ -248,8 +267,8 @@ class Analysis:
         #NOT NEEDED on aws servers 
         #######################################################################################
         #Convert mpa vector map to raster map
-        mpaRasterName = self.mpaRasterMapName+str(mpa.id)
-        self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
+        #mpaRasterName = self.mpaRasterMapName+str(mpa.id)
+        #self.grass.v_to_r(mpaVectorName, mpaRasterName, 1)    
 
         #Get precomputed map statistics
         stats = FishingImpactStats.objects.filter(map=map)
@@ -302,8 +321,8 @@ class Analysis:
         
         #CLEAN AFTER ALL ANALYSIS HAS BEEN DONE?  (after run is finished?)
         #Cleanup analysis
-        self.__removeTempShapefile(temp_id)
-        self.grass.cleanup()
+        #self.__removeTempShapefile(temp_id)
+        #self.grass.cleanup()
         
         return analResult        
     
