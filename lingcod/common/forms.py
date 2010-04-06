@@ -16,7 +16,16 @@ class ShortTextarea(Textarea):
 
     def render(self, name, value, attrs=None):
         output = ['<p>']
-        js_snip = 'this.value = this.value.substring(0, %d);' % self.limit
+        chars_used = 0
+        if value:
+            chars_used = len(value)
+
+        if chars_used > self.limit:
+            alert_truncate = "true"
+        else:
+            alert_truncate = "false"
+
+        js_snip = 'limit_to(this, %d, "%s_chars_used", %s);' % (self.limit, name, alert_truncate)
         attrs = { 
             'rows': '%d' % self.rows,
             'cols': '%d' % self.cols,
@@ -27,4 +36,11 @@ class ShortTextarea(Textarea):
         }
         output.append(super(ShortTextarea, self).render(name, value, attrs))
         output.append("</p>")
+        if chars_used > self.limit:
+            output.append("<p style='color:red;font-weight:bold;'>Editing this field will truncate text to %d characters</p>" % self.limit)
+        output.append("<p><span id='%s_chars_used'>%d</span> characters of %d limit entered.</p>" % (name, chars_used, self.limit))
+
         return mark_safe(u''.join(output))
+
+    class Media:
+        js = ('common/js/layout/shortTextArea.js',)

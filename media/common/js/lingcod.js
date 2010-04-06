@@ -59,6 +59,8 @@ var lingcod = (function(){
         //     $('#ge_options'), $('#ge_layers'));
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
+
+        //alert(ge.getPluginVersion().toString());
                 
         $('#measure_distance').click(function(){
             that.measureTool.clear();
