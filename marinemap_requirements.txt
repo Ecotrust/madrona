@@ -45,6 +45,7 @@ django-maintenancemode==0.9.2
 -e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/#egg=feedvalidator
 elementtree
 xlwt==0.7.2
+networkx
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson==1.0.5
