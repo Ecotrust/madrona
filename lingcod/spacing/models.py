@@ -193,7 +193,7 @@ def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
             if with_geom:
                 line = geos.LineString(point,from_pnt)
         else:
-            distance, line = fish_distance(from_pnt,point)
+            distance, line = fish_distance_from_edges(from_pnt,point)
             point_pair_dict.update( {'distance': distance} )
         if with_geom:
             point_pair_dict.update( {'geometry': line} )
@@ -212,12 +212,20 @@ def sorted_points_and_labels(in_dict):
     { point: 'name' }
     sorted_points, sorted_labels (both lists) will be returned in a dictionary and they'll be 
     ordered from North to South.
+    
+    I added in an if statement that makes this method work with other geometry types aside from
+    points.  I should change the name of the method to make for sense but I'm going to put that
+    off until later.
     """
     sorted_points = []
     sorted_labels = []
     y_dict = {}
     for point, name in in_dict.iteritems():
-        y_dict.update( { point.y: point } )
+        # adapt this to work with other geometry types:
+        if point.__class__.__name__.lower() == 'point':
+            y_dict.update( { point.y: point } )
+        else:
+            y_dict.update( { point.centroid.y: point })
     y_list = y_dict.keys()
     y_list.sort()
     for y in reversed(y_list):
@@ -262,6 +270,28 @@ def fish_distance(point1,point2):
         line.srid = settings.GEOMETRY_DB_SRID
     
     # Figure out the distance of the line (straight or otherwise) in miles
+    distance = D(m=line.length).mi
+    return distance, line
+    
+def fish_distance_from_edges(geom1,geom2):
+    """
+    
+    """
+    # Straight line between geoms
+    line = shortest_line(geom1,geom2)
+    
+    # See if the line crosses land
+    if line_crosses_land(line):
+        # Get shortest centroid to centroid fish_distance line
+        c_distance, c_line = fish_distance(geom1.centroid,geom2.centroid)
+        # Replace the first point in the fish path with the point on geom1
+        # that lies closest to the second point on the path.
+        #print c_line[1]
+        c_line[0] = closest_point(geom1, geos.Point( c_line.coords[1] ) ).coords
+        # Do the same for the last point in the path
+        c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point( c_line.coords[c_line.num_points - 2] ) ).coords
+        line = c_line
+    # Adjust the distance
     distance = D(m=line.length).mi
     return distance, line
 
@@ -350,6 +380,27 @@ def add_ocean_edges_complete(graph, verbose=False):
     if verbose:
         print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges() )
     return graph
+    
+def shortest_line(geom1,geom2):
+    """
+    Use the PostGIS function st_shortestline() to find the shortest line between two geometries.  This requires
+    PostGIS 1.5 or newer.  This will return a line geometry that represents the shortest line between the two 
+    given geometries.  Seems to work with any geometry type including geometry collections.
+    """
+    cursor = connection.cursor()
+    query = "select st_astext( st_shortestline('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
+    cursor.execute(query)
+    return geos.fromstr(cursor.fetchone()[0])
+    
+def closest_point(geom1,geom2):
+    """
+    Use the PostGIS function ST_ClosestPoint() to return the 2-dimensional point on geom1 that is closest to geom2.  This requires
+    PostGIS 1.5 or newer.  
+    """
+    cursor = connection.cursor()
+    query = "select st_astext( ST_ClosestPoint('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
+    cursor.execute(query)
+    return geos.fromstr(cursor.fetchone()[0])
 
 def clean_geometry(qs_item):
     cursor = connection.cursor()

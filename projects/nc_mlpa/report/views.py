@@ -47,7 +47,7 @@ def replication_habitats():
     org_sch = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST_REPLICATION)
     return org_sch.featuremapping_set.all()
     
-def array_spacing_kml(request,array_id,lop_value):
+def array_spacing_kml(request,array_id,lop_value,use_centroids=False):
     array_class = utils.get_array_class()
     array = get_viewable_object_or_respond(array_class,array_id,request.user)
     lop = mlpa.Lop.objects.get(value=lop_value)
@@ -73,23 +73,27 @@ def array_spacing_kml(request,array_id,lop_value):
         points_and_names = {}
         # Include the SpacingPoints for north and south ends
         [ points_and_names.update({ s.geometry: s.name }) for s in SpacingPoint.objects.all() ]
-        # Add in the centroids and names for the clusters
-        [ points_and_names.update({ c.geometry_collection.centroid: c.name }) for c in hab_rep_clusters ]
+        if use_centroids:
+            # Add in the centroids and names for the clusters
+            [ points_and_names.update({ c.geometry_collection.centroid: c.name }) for c in hab_rep_clusters ]
+        else:
+            # Add in the actual cluster geom collections
+            [ points_and_names.update({ c.geometry_collection: c.name }) for c in hab_rep_clusters ]
         # Make sure all the points have their srid assigned so they can be transformed
         for p in points_and_names.keys():
             if p.srid == None:
                 p.srid = settings.GEOMETRY_DB_SRID
-        #print [ "(" + str(p.srid) + "," + str(p.y) + ")" for p in points_and_names.keys() ]
-        # Transform these points to 4326 so google earth can work with them
-        #[ p.transform(settings.GEOMETRY_CLIENT_SRID) for p in points_and_names.keys() ]
         # Sort those points and names from North to South
         sorted_dict = sorted_points_and_labels(points_and_names)
         points = sorted_dict['points']
         #print [ "(" + str(p.x) + "," + str(p.y) + "), " for p in points ]
         names = sorted_dict['labels']
         # Get the fish distance line kmls between these clusters
+        # if use_centroids==False, 'points' aren't actually points in this next for loop.
+        # They are whatever type of geometry was passed in.  Anything should work, including
+        # geometry collections.
         for i in range(0,len(points)-1):
-            distance, line = fish_distance(points[i],points[i+1])
+            distance, line = fish_distance_from_edges(points[i],points[i+1])
             line.srid = settings.GEOMETRY_DB_SRID
             line.transform(settings.GEOMETRY_CLIENT_SRID)
             line_name = "%.1f mile %s Gap" % (distance, hab.name.title())
@@ -440,7 +444,7 @@ def array_summary_excel(request, array_id_list_str):
         clusters = array.clusters.filter(lop=lop)
         point_dict = {}
         for cl in clusters:
-            point_dict[cl.geometry_collection.centroid] = cl.name
+            point_dict[cl.geometry_collection] = cl.name
         ws_title = 'MPA Spacing for %s as of %s' % (array.name,format(array.date_modified,settings.DATETIME_FORMAT))
         ws = spacing_worksheet(point_dict,ws_title,ws)
         ws = wb.add_sheet('Cluster Size') 
