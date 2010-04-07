@@ -1,6 +1,11 @@
 from django import template
 import locale
-locale.setlocale(locale.LC_ALL, '')
+try:
+    #this first command is for the aws servers
+    locale.setlocale(locale.LC_ALL, 'en_US')
+except:
+    #this second command is probably what you'll need on your local machine
+    locale.setlocale(locale.LC_ALL, '')
 register = template.Library()
  
 
