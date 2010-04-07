@@ -4,7 +4,7 @@ from django.template.loader import get_template
 from django.shortcuts import get_object_or_404, render_to_response
 from django.conf import settings
 from lingcod.common import mimetypes
-from lingcod.screencasts.models import Screencast
+from lingcod.screencasts.models import YoutubeScreencast
 from lingcod.simplefaq.models import *
 
 def get_faqs():
@@ -17,7 +17,8 @@ def get_faqs():
     return faqs_by_group
 
 def get_vids():
-    return Screencast.objects.filter(selected_for_help=True).order_by('importance')
+    #return Screencast.objects.filter(selected_for_help=True).order_by('importance')
+    return YoutubeScreencast.objects.filter(selected_for_help=True).order_by('importance')
 
 
 def help(request):

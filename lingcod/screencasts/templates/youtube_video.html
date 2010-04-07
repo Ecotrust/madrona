@@ -1,0 +1,14 @@
+{% extends "common/base.html" %}
+
+{% block body %}
+<div align='center'>
+    <h2>Video Demonstration : {{screencast.title}}</h2>
+    <object width="{{screencast.video_width}}" height="{{screencast.video_height}}">
+        <param name="movie" value="http://www.youtube.com/v/{{screencast.youtube_id}}&hl=en_US&fs=1&rel=0{% if screencast.play_hd %}&hd=1{% endif %}"></param>
+        <param name="allowFullScreen" value="true"></param>
+        <param name="allowscriptaccess" value="always"></param>
+        <embed src="http://www.youtube.com/v/{{screencast.youtube_id}}&hl=en_US&fs=1&rel=0{% if screencast.play_hd %}&hd=1{% endif %}" type="application/x-shockwave-flash" 
+        allowscriptaccess="always" allowfullscreen="true" width="{{screencast.video_width}}" height="{{screencast.video_height}}"></embed>
+    </object> 
+</div>
+{% endblock %}
