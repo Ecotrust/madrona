@@ -406,7 +406,7 @@ class AnalysisResult:
         Variable_Costs = GER * (Crew + Fuel) / 100
         NER = GER - Fixed_Costs - Variable_Costs
         NEI = BNER - NER
-        percNEI = NEI / BNER
+        percNEI = NEI / BNER * 100
         
         return percNEI, NEI
         
