@@ -62,22 +62,16 @@ def aggregate_array_results(array, array_results, group, port, species):
         analysis_results = []
         for species, results in aggregated_results.iteritems():
             analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-        #sort results alphabetically by species name
-        analysis_results.sort(key=lambda obj: obj.species)   
+        #sort results by species name (alphabetically)
+        analysis_results = sort_results_by_species(analysis_results)
         analysis_results = roundPercentageValues(analysis_results, 1)
     elif group == 'Commercial Passenger Fishing Vessel':
         aggregated_results = aggregate_cpfv_array_results(array_results)
         analysis_results = []
         for port, results in aggregated_results.iteritems():
             analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-        #sort results by port name
-        ports = GetPortsByGroup(group)
-        count = 0
-        ordering = {}
-        for port in ports:
-            count += 1
-            ordering[port] = count
-        analysis_results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port]))  
+        #sort results by port name (north to south)
+        analysis_results = sort_results_by_port(analysis_results, group) 
         analysis_results = roundPercentageValues(analysis_results, 1) 
     else:
         aggregated_results = aggregate_rec_array_results(array_results, group)
@@ -86,10 +80,12 @@ def aggregate_array_results(array, array_results, group, port, species):
             port_results = []
             for species, results in dict.iteritems():
                 port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-            #sort results alphabetically by species name
-            port_results.sort(key=lambda obj: obj.species)
+            #sort results by species name (alphabetically)
+            port_results = sort_results_by_species(port_results)
             port_results = roundPercentageValues(port_results, 1)  
             analysis_results.append(port_results)
+        #sort results by port name (north to south)
+        analysis_results = sort_results_by_port(analysis_results, group) 
     return analysis_results
 
 def aggregate_com_array_results(array_results):
@@ -151,6 +147,26 @@ def aggregate_rec_array_results(array_results, group):
                 aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
                 aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
+    
+def sort_results_by_species(results):   
+    #sort results alphabetically by species name
+    results.sort(key=lambda obj: obj.species)  
+    return results
+    
+def sort_results_by_port(results, group):
+    #sort results by port name (north to south)
+    ports = GetPortsByGroup(group)
+    count = 0
+    ordering = {}
+    for port in ports:
+        count += 1
+        ordering[port] = count
+    if 'Recreational' in group:
+        results.sort(lambda x, y : cmp (ordering[x[0].port], ordering[y[0].port])) 
+    else: 
+        results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port])) 
+    return results
+    
     
 def get_empty_array_results_dictionary(group):
     group_species = GetSpeciesByGroup(group)
