@@ -215,7 +215,7 @@ class Grass:
     '''
     def r_area(self, input, cell_size):
         #Change all value cells to 1 for counting
-        maskCmd = 'nice 1 r.mapcalc "maskMap=if(%s, 1)"' % (input)
+        maskCmd = 'nice -n 1 r.mapcalc "maskMap=if(%s, 1)"' % (input)
         self.runCmd(maskCmd)
         
         #Calculate total fishing area
