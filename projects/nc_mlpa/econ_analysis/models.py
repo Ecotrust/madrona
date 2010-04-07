@@ -54,6 +54,24 @@ class FishingImpactResults(models.Model):
     perc_value = models.FloatField(verbose_name="Percentage Value affected by MPA")
     perc_area = models.FloatField(verbose_name="Percentage Area affected by MPA", null=True, blank=True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+  
+'''
+The following model is used for storing some of the baseline data relating to the impact analysis 
+'''  
+class FishingImpactBaselineCost(models.Model):
+    species = models.TextField(verbose_name="Species", null=True, blank=True)
+    port = models.TextField(verbose_name="Port Name", null=True, blank=True)
+    gross_revenue = models.FloatField(verbose_name="Baseline Gross Economic Revenue", null=True, blank=True)
+    crew = models.FloatField(verbose_name="Percent of costs related to Crew")
+    fuel = models.FloatField(verbose_name="Percent of costs related to Fuel")
+    fixed = models.FloatField(verbose_name="Percent of costs that are Fixed")
+    percentage_costs = models.FloatField(verbose_name="Total Percentage of Costs", editable=False)
     
-    
+    def save(self):
+        if self.species is None and self.port is None:
+            raise Exception, "You must specify either a Species (for Commercial) or a Port (for CPFV).  Both can not be blank."
+        elif self.species and self.port:
+            raise Exception, "You must specify EITHER a Species (for Commercial) OR a Port (for CPFV) but NOT both."
+        self.percentage_costs = self.crew + self.fuel + self.fixed
+        super(FishingImpactBaselineCost, self).save()
     

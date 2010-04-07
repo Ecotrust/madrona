@@ -1,38 +1,131 @@
 {% extends 'common/panel.html' %}
+{% load currency %}
 {% block title %}{{array.name}} Impact Analysis{% endblock title %}
 {% block panel %}
-<h3>Impact Analysis {{array_results.0.user_grp}} Report</h3>
+<h3>Impact Analysis {{array_results.0.group}} Report</h3>
 <div class='freetext'>
 <br>
+{% if array_results.0.group == 'Commercial' %}
+    <table  style='width:450px' class='hab_repr_container'>
+        <thead>
+            <tr>
+                <th></th>
+                <th><b>Gross Economic Impact</b> (U.S. Dollars)</th>
+                <th></th>
+                <th><b>Gross Economic Impact</b> (Percentage of Baseline Gross)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in array_results %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="habitat_name">{{ result.species }}</td>
+                {% if result.GEI == '---' %}
+                    <td>{{ result.GEI }}</td>
+                {% else %}
+                    <td>{{ result.GEI|currency }}</td>
+                {% endif %}
+                    <td></td>
+                {% if result.percGEI == '---' %}
+                    <td>{{ result.percGEI }}</td>
+                {% else %}
+                <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <table  style='width:450px' class='hab_repr_container'>
+        <thead>
+            <tr>
+                <th></th>
+                <th><b>Net Economic Impact</b> (U.S. Dollars)</th>
+                <th></th>
+                <th><b>Net Economic Impact</b> (Percentage of Baseline Net)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in array_results %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="habitat_name">{{ result.species }}</td>
+                {% if result.NEI == '---' %}
+                    <td>{{ result.NEI }}</td>
+                {% else %}
+                    <td>{{ result.NEI|currency }}</td>
+                {% endif %}
+                    <td></td>
+                {% if result.percNEI == '---' %}
+                    <td>{{ result.percNEI }}</td>
+                {% else %}
+                <td>{{ result.percNEI }}&nbsp;<small>%</small></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}{% if array_results.0.group == 'Commercial Passenger Fishing Vessel' %}
+    <table  style='width:450px' class='hab_repr_container'>
+        <thead>
+            <tr>
+                <th></th>
+                <th><b>Gross Economic Impact</b> </th>
+                <th></th>
+                <th><b>Net Economic Impact</b> </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in array_results %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="habitat_name">{{ result.port }}</td>
+                {% if result.percGEI == '---' %}
+                    <td>{{ result.percGEI }}</td>
+                {% else %}
+                    <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                {% endif %}
+                <td></td>
+                {% if result.percNEI == '---' %}
+                    <td>{{ result.percNEI }}</td>
+                {% else %}
+                    <td>{{ result.percNEI }}&nbsp;<small>%</small></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %} <!--if group is Recreational-->
 <table  style='width:450px' class='hab_repr_container'>
     <thead>
         <tr>
             <th></th>
-            <th><b>Percent of Total Value</b> affected by Array</th>
-            <th></th>
-            <th><b>Percent of Total Area</b> affected by Array</th>
+            <th><b>Gross Economic Impact</b> </th>
         </tr>
     </thead>
     <tbody>
-    {% for result in array_results %}
-        <tr class="{% cycle '' 'grey' %}">
-            <td class="habitat_name">{{ result.species }}</td>
-            {% if result.mpaPercOverallValue == '---' %}
-                <td>{{ result.mpaPercOverallValue }}</td>
-            {% else %}
-                <td>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
-            {% endif %}
-                <td></td>
-            {% if result.mpaPercOverallArea == '---' %}
-                <td>{{ result.mpaPercOverallArea }}</td>
-            {% else %}
-            <td>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
-            {% endif %}
+    {% for results in array_results %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr>
+            <td style="width: 165px;" class="habitat_name"><b>{{ results.0.port }}</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        {% for result in results %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="habitat_name">{{ result.species }}</td>
+                {% if result.percGEI == '---' %}
+                    <td>{{ result.percGEI }}</td>
+                {% else %}
+                    <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr><td></td><td></td><td></td><td></td></tr>
     {% endfor %}
     </tbody>
 </table>
-
+{% endif %}{% endif %}
 </div>
 <br>
 <!--need to add printable array result link here-->

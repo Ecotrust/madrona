@@ -24,7 +24,6 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
     if feature == 'mpa':
         #the following port and species parameters are for testing on my local machine
         #return display_mpa_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
-        #the following call is the more permanent/appropriate one for the server
         return display_mpa_analysis(request, feature_id, group_name)
     else:
         #the following port and species parameters are for testing on my local machine
@@ -48,51 +47,122 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
     #Sum results for each species, for each mpa in the array
     #What to do if mpa_analysis_results returns a Response object instead of a result?
     for mpa in mpas:
-        if mpa.designation_id is not None:
+        if mpa.designation_id is not None: #ignore Stewardship Zones and other mpas that have no LOP
             mpa_results = mpa_analysis_results(mpa, group, port, species)
             array_results.append(mpa_results)
     
-    aggregated_results = aggregate_array_results(array_results, group)
+    analysis_results = aggregate_array_results(array, array_results, group, port, species)
     
-    analysis_results = []
-    for species, results in aggregated_results.iteritems():
-        analysis_results.append(AnalysisResult(id=array.id, id_type='array', user_grp=group, port=port, species=species, mpaPercOverallArea=results['Area'], mpaPercOverallValue=results['Value']))
-    
-    #sort results alphabetically by species name
-    analysis_results.sort(key=lambda obj: obj.species)   
-    analysis_results = roundPercentageValues(analysis_results, 1)
     return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
     
-def aggregate_array_results(array_results, group):
+def aggregate_array_results(array, array_results, group, port, species):
+    if group == 'Commercial':
+        aggregated_results = aggregate_com_array_results(array_results)
+        analysis_results = []
+        for species, results in aggregated_results.iteritems():
+            analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        #sort results alphabetically by species name
+        analysis_results.sort(key=lambda obj: obj.species)   
+        analysis_results = roundPercentageValues(analysis_results, 1)
+    elif group == 'Commercial Passenger Fishing Vessel':
+        aggregated_results = aggregate_cpfv_array_results(array_results)
+        analysis_results = []
+        for port, results in aggregated_results.iteritems():
+            analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        #sort results by port name
+        ports = GetPortsByGroup(group)
+        count = 0
+        ordering = {}
+        for port in ports:
+            count += 1
+            ordering[port] = count
+        analysis_results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port]))  
+        analysis_results = roundPercentageValues(analysis_results, 1) 
+    else:
+        aggregated_results = aggregate_rec_array_results(array_results, group)
+        analysis_results = []
+        for port, dict in aggregated_results.iteritems():
+            port_results = []
+            for species, results in dict.iteritems():
+                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+            #sort results alphabetically by species name
+            port_results.sort(key=lambda obj: obj.species)
+            port_results = roundPercentageValues(port_results, 1)  
+            analysis_results.append(port_results)
+    return analysis_results
+
+def aggregate_com_array_results(array_results):
+    aggregated_array_results = get_empty_array_results_dictionary('Commercial')
+    for mpa_results in array_results:
+        #why does this have to be index 0?  
+        #is there an unneeded list here?
+        for result in mpa_results[0]:
+            if result.percOverallValue == '---':
+                pass
+            elif aggregated_array_results[result.species]['Value'] == '---':
+                aggregated_array_results[result.species]['Value'] = float(result.percOverallValue)
+                aggregated_array_results[result.species]['Area'] = float(result.percOverallArea)
+            else:
+                aggregated_array_results[result.species]['Value'] += result.percOverallValue
+                aggregated_array_results[result.species]['Area'] += result.percOverallArea
+    return aggregated_array_results       
+        
+
+def aggregate_cpfv_array_results(array_results):
+    group = 'Commercial Passenger Fishing Vessel'
+    aggregated_array_results = get_empty_array_results_dictionary(group)
+    #used for determining average gei% among all species for each port
+    group_ports = GetPortsByGroup(group)
+    #sum up the value percentages at each port, keeping track of the number of summations made
+    for mpa_results in array_results:
+        #we put this here so that we only count the number of species per port once (in this case it will be for the last mpa_results)
+        port_counts = dict( (port, 0) for port in group_ports)
+        #why does this have to be index 0?  
+        #is there an unneeded list here?
+        for result in mpa_results[0]:
+            if result.percOverallValue == '---':
+                pass
+            elif aggregated_array_results[result.port]['Value'] == '---':
+                aggregated_array_results[result.port]['Value'] = float(result.percOverallValue)
+                aggregated_array_results[result.port]['Area'] = float(result.percOverallArea)
+                port_counts[result.port] = 1
+            else:
+                aggregated_array_results[result.port]['Value'] += result.percOverallValue
+                aggregated_array_results[result.port]['Area'] += result.percOverallArea
+                port_counts[result.port] += 1
+    for port in group_ports:
+        if aggregated_array_results[port]['Value'] != '---':
+            aggregated_array_results[port]['Value'] /= port_counts[port]
+    return aggregated_array_results       
+    
+def aggregate_rec_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     for mpa_results in array_results:
         #why does this have to be index 0?  
         #is there an unneeded list here?
         for result in mpa_results[0]:
-            if result.mpaPercOverallValue == '---':
+            if result.percOverallValue == '---':
                 pass
-            elif aggregated_array_results[result.species]['Value'] == '---':
-                aggregated_array_results[result.species]['Value'] = float(result.mpaPercOverallValue)
-                aggregated_array_results[result.species]['Area'] = float(result.mpaPercOverallArea)
+            elif aggregated_array_results[result.port][result.species]['Value'] == '---':
+                aggregated_array_results[result.port][result.species]['Value'] = float(result.percOverallValue)
+                aggregated_array_results[result.port][result.species]['Area'] = float(result.percOverallArea)
             else:
-                #thinking back to displaying results with 1 significant digit after decimal...
-                #perhaps that reduction should happen at display time and not before 
-                #that way we won't be losing precision here in the aggregation
-                aggregated_array_results[result.species]['Value'] += result.mpaPercOverallValue
-                aggregated_array_results[result.species]['Area'] += result.mpaPercOverallArea
+                aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
+                aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
-
     
 def get_empty_array_results_dictionary(group):
     group_species = GetSpeciesByGroup(group)
+    group_ports = GetPortsByGroup(group)
     initialValue = '---'
     initialArea = '---'
     if group == 'Commercial':
         empty_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
+    elif group == 'Commercial Passenger Fishing Vessel':
+        empty_results = dict( (port, {'Value':initialValue, 'Area':initialArea}) for port in group_ports)
     else:
-        empty_results = dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)
-    #change this name to results once we know this works
+        empty_results = dict( (port, dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)) for port in group_ports) 
     return empty_results
   
 '''
@@ -133,7 +203,7 @@ def mpa_analysis_results(mpa, group, port, species):
         
     #Get results for each port
     for single_port in ports:
-        analysis_results = []
+        port_results = []
         #See if we can retreive results from cache
         if species is None:
             cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
@@ -152,43 +222,55 @@ def mpa_analysis_results(mpa, group, port, species):
         if cache_available:
             results = list(cache)
             for result in results:
-                analysis_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
+                port_results.append(AnalysisResult(id=result.mpa_id, type='mpa', group=group, port=single_port, species=result.species, percOverallArea=result.perc_area, percOverallValue=result.perc_value))
         else: 
             #since at least one cache was not current, remove all related entries as they will all be recreated and recached below
             for single_cache in cache:
                 single_cache.delete()
             #Get all maps from the group and port (and possibly species) that we want to analyze
             maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
+            #WILL THIS SOMETIMES BE EMPTY?
+            #AND IF SO, SHOULD THIS BE ALLOWED (I'M SEEING EMPTY RIGHT NOW WITH EUREKA SALMON ON DIV) -- RETURNS [] (NOT '')
+            #IF IT'S ALLOWED, WE CAN SIMPLY COUCH THE REST OF THIS ELSE IN AN IF LEN(MAPS) > 0
             if maps is '':
                 return HttpResponseBadRequest('A Fishing Map with User group, %s, Port, %s, and Species, %s, does not exist.' % (group, single_port, species))
-            
-            #run the analysis
-            analysis = Analysis()
-            analysis_results = analysis.run(mpa, maps)
-            if analysis_results < 0:
-                return HttpResponseBadRequest('Error running analysis')
-            
-            #Cache analysis results 
-            cache_analysis_results(analysis_results, group, mpa)
+            if len(maps) > 0:
+                #run the analysis
+                analysis = Analysis()
+                port_results = analysis.run(mpa, maps)
+                if port_results < 0:
+                    return HttpResponseBadRequest('Error running analysis')
+                #Cache analysis results 
+                cache_analysis_results(port_results, group, mpa)
             
         #Expand results to include those species that exist within the group but not perhaps within this port (denoted with '---')
-        analysis_results = flesh_out_results(group, single_port, analysis_results)
+        port_results = flesh_out_results(group, single_port, port_results)
 
         #sort results alphabetically by species name
-        analysis_results.sort(key=lambda obj: obj.species)
+        port_results.sort(key=lambda obj: obj.species)
         
         #adjust recreational Fort Bragg display
-        analysis_results = adjust_fortbragg_rec_display(analysis_results, group)
+        port_results = adjust_fortbragg_rec_display(port_results, group)
         
-        mpa_results.append(analysis_results)
+        mpa_results.append(port_results)
     return mpa_results
     
 def roundPercentageValues(results, sig_digs):
     import utilities as mmutil  
     for result in results:
-        if result.mpaPercOverallValue != '---':
-            result.mpaPercOverallArea = mmutil.trueRound(float(result.mpaPercOverallArea), sig_digs)
-            result.mpaPercOverallValue = mmutil.trueRound(float(result.mpaPercOverallValue), sig_digs)
+        if result.type == 'mpa': 
+            if result.percOverallValue != '---':
+                result.percOverallArea = mmutil.trueRound(float(result.percOverallArea), sig_digs)
+                result.percOverallValue = mmutil.trueRound(float(result.percOverallValue), sig_digs)
+        else:
+            if result.percGEI != '---':
+                result.percGEI = mmutil.trueRound(float(result.percGEI), sig_digs)
+            if result.percNEI != '---':
+                result.percNEI = mmutil.trueRound(float(result.percNEI), sig_digs)
+            if result.GEI != '---':
+                result.GEI = mmutil.trueRound(float(result.GEI), 0)
+            if result.NEI != '---':
+                result.NEI = mmutil.trueRound(float(result.NEI), 0)
     return results
     
 '''
@@ -210,7 +292,7 @@ def print_report(request, feature_id, user_group):
         results = list(cache)
         analysis_results = []
         for result in results:
-            analysis_results.append(AnalysisResult(id=result.mpa_id, id_type='mpa', user_grp=user_group, port=single_port, species=result.species, mpaPercOverallArea=result.perc_area, mpaPercOverallValue=result.perc_value))
+            analysis_results.append(AnalysisResult(id=result.mpa_id, type='mpa', group=user_group, port=single_port, species=result.species, percOverallArea=result.perc_area, percOverallValue=result.perc_value))
         analysis_results = flesh_out_results(user_group, single_port, analysis_results)
         
         #sort results alphabetically by species name
@@ -227,7 +309,8 @@ def print_report(request, feature_id, user_group):
 
 def cache_analysis_results(results, group, mpa):
     for result in results:
-        cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.mpaPercOverallValue, perc_area=result.mpaPercOverallArea)
+        cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.percOverallValue, perc_area=result.percOverallArea)
+        #WHY IS THIS NOT SAVING DURING ARRAY ANALYSIS???
         cache.save()
 
 def adjust_fortbragg_rec_display(results, group):
@@ -246,7 +329,7 @@ def flesh_out_results(group, port, results):
     result_species = [result.species for result in results]
     missing_species = [specs for specs in group_species if specs not in result_species]
     for spec in missing_species:
-        results.append(EmptyAnalysisResult(group, port, spec))
+        results.append(EmptyAnalysisResult(group, port, spec, 'mpa'))
     if group == 'Commercial':
         results = adjust_commercial_species(results)
     if group == 'Edible Seaweed':
@@ -297,16 +380,3 @@ def MpaEconAnalysis(request, feature_id):
     
     return display_mpa_analysis(request, feature_id, group, port, species)
 
-    
-'''
-Testing Remnant
-Not ready to throw this away yet...
-'''
-def MpaEconAnalysisTest(request):
-    #from Analysis import Analysis    
-    analysis = Analysis()    
-   
-    mpa = {'array_id': '', 'name': u'CI - Painted CaveHarris Point', 'id': 3002}
-    all_results = [[{'port': u'Santa Barbara', 'array_id': None, 'srPercOverallValue': '93.67', 'mpaArea': '100.02', 'user_grp': u'Commercial', 'totalValue': '100000.00', 'totalArea': '343.46', 'mpa_id': 2949, 'mpaPercSrValue': '41.25', 'mpaPercSrArea': '31.15', 'srPercOverallArea': '93.49', 'mpaPercOverallValue': '38.63', 'mpaPercOverallArea': '29.12', 'mpaCells': 4145.0, 'mpaValue': '38634.29', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '93665.50', 'srArea': '321.12'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 30849, 'srPercOverallValue': '80.38', 'mpaArea': '229.83', 'user_grp': u'Commercial', 'srCells': 10844, 'totalValue': '100000.00', 'totalArea': '744.43', 'mpa_id': 2949, 'mpaPercSrValue': '91.33', 'mpaPercSrArea': '87.83', 'srPercOverallArea': '35.15', 'mpaPercOverallValue': '73.42', 'mpaPercOverallArea': '30.87', 'mpaCells': 9524.0, 'mpaValue': '73415.79', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '80381.20', 'srArea': '261.68'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 19943, 'srPercOverallValue': '97.13', 'mpaArea': '142.59', 'user_grp': u'Commercial', 'srCells': 17870, 'totalValue': '100000.00', 'totalArea': '481.25', 'mpa_id': 2949, 'mpaPercSrValue': '37.60', 'mpaPercSrArea': '33.07', 'srPercOverallArea': '89.61', 'mpaPercOverallValue': '36.52', 'mpaPercOverallArea': '29.63', 'mpaCells': 5909.0, 'mpaValue': '36520.49', 'species': u'Lobster', 'home_type': u'Port', 'srValue': '97134.02', 'srArea': '431.23'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 3991, 'srPercOverallValue': '99.69', 'mpaArea': '30.84', 'user_grp': u'Commercial', 'srCells': 3984, 'totalValue': '100000.00', 'totalArea': '96.31', 'mpa_id': 2949, 'mpaPercSrValue': '23.04', 'mpaPercSrArea': '32.08', 'srPercOverallArea': '99.82', 'mpaPercOverallValue': '22.97', 'mpaPercOverallArea': '32.02', 'mpaCells': 1278.0, 'mpaValue': '22966.37', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99689.65', 'srArea': '96.14'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12979, 'srPercOverallValue': '99.24', 'mpaArea': '44.59', 'user_grp': u'Commercial', 'srCells': 12915, 'totalValue': '100000.00', 'totalArea': '313.20', 'mpa_id': 2949, 'mpaPercSrValue': '6.07', 'mpaPercSrArea': '14.31', 'srPercOverallArea': '99.51', 'mpaPercOverallValue': '6.02', 'mpaPercOverallArea': '14.24', 'mpaCells': 1848.0, 'mpaValue': '6020.58', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99243.44', 'srArea': '311.66'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12978, 'srPercOverallValue': '95.91', 'mpaArea': '133.04', 'user_grp': u'Commercial', 'srCells': 12251, 'totalValue': '100000.00', 'totalArea': '313.18', 'mpa_id': 2949, 'mpaPercSrValue': '51.96', 'mpaPercSrArea': '45.00', 'srPercOverallArea': '94.40', 'mpaPercOverallValue': '49.83', 'mpaPercOverallArea': '42.48', 'mpaCells': 5513.0, 'mpaValue': '49830.35', 'species': u'Rock Crab', 'home_type': u'Port', 'srValue': '95905.80', 'srArea': '295.63'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 8177, 'srPercOverallValue': '99.30', 'mpaArea': '27.17', 'user_grp': u'Commercial', 'srCells': 8131, 'totalValue': '100013.82', 'totalArea': '197.32', 'mpa_id': 2949, 'mpaPercSrValue': '8.10', 'mpaPercSrArea': '13.85', 'srPercOverallArea': '99.44', 'mpaPercOverallValue': '8.04', 'mpaPercOverallArea': '13.77', 'mpaCells': 1126.0, 'mpaValue': '8040.01', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '99316.73', 'srArea': '196.21'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 29015, 'srPercOverallValue': '43.11', 'mpaArea': '200.07', 'user_grp': u'Commercial', 'srCells': 10223, 'totalValue': '100000.00', 'totalArea': '700.17', 'mpa_id': 2949, 'mpaPercSrValue': '90.93', 'mpaPercSrArea': '81.10', 'srPercOverallArea': '35.23', 'mpaPercOverallValue': '39.20', 'mpaPercOverallArea': '28.57', 'mpaCells': 8291.0, 'mpaValue': '39198.96', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '43110.29', 'srArea': '246.70'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 2620, 'srPercOverallValue': '31.84', 'mpaArea': '8.20', 'user_grp': u'Commercial', 'srCells': 673, 'totalValue': '100000.00', 'totalArea': '63.22', 'mpa_id': 2949, 'mpaPercSrValue': '68.40', 'mpaPercSrArea': '50.52', 'srPercOverallArea': '25.69', 'mpaPercOverallValue': '21.78', 'mpaPercOverallArea': '12.98', 'mpaCells': 340.0, 'mpaValue': '21782.13', 'species': u'Spot Prawn', 'home_type': u'Port', 'srValue': '31843.52', 'srArea': '16.24'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 11151, 'srPercOverallValue': '99.56', 'mpaArea': '87.26', 'user_grp': u'Commercial', 'srCells': 11109, 'totalValue': '100000.00', 'totalArea': '269.09', 'mpa_id': 2949, 'mpaPercSrValue': '5.07', 'mpaPercSrArea': '32.55', 'srPercOverallArea': '99.62', 'mpaPercOverallValue': '5.05', 'mpaPercOverallArea': '32.43', 'mpaCells': 3616.0, 'mpaValue': '5049.70', 'species': u'Urchin', 'home_type': u'Port', 'srValue': '99557.05', 'srArea': '268.08'}],[{'port': u'Santa Barbara', 'array_id': None, 'srPercOverallValue': '93.67', 'mpaArea': '100.02', 'user_grp': u'Commercial', 'totalValue': '100000.00', 'totalArea': '343.46', 'mpa_id': 2949, 'mpaPercSrValue': '41.25', 'mpaPercSrArea': '31.15', 'srPercOverallArea': '93.49', 'mpaPercOverallValue': '38.63', 'mpaPercOverallArea': '29.12', 'mpaCells': 4145.0, 'mpaValue': '38634.29', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '93665.50', 'srArea': '321.12'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 30849, 'srPercOverallValue': '80.38', 'mpaArea': '229.83', 'user_grp': u'Commercial', 'srCells': 10844, 'totalValue': '100000.00', 'totalArea': '744.43', 'mpa_id': 2949, 'mpaPercSrValue': '91.33', 'mpaPercSrArea': '87.83', 'srPercOverallArea': '35.15', 'mpaPercOverallValue': '73.42', 'mpaPercOverallArea': '30.87', 'mpaCells': 9524.0, 'mpaValue': '73415.79', 'species': u'California Halibut', 'home_type': u'Port', 'srValue': '80381.20', 'srArea': '261.68'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 19943, 'srPercOverallValue': '97.13', 'mpaArea': '142.59', 'user_grp': u'Commercial', 'srCells': 17870, 'totalValue': '100000.00', 'totalArea': '481.25', 'mpa_id': 2949, 'mpaPercSrValue': '37.60', 'mpaPercSrArea': '33.07', 'srPercOverallArea': '89.61', 'mpaPercOverallValue': '36.52', 'mpaPercOverallArea': '29.63', 'mpaCells': 5909.0, 'mpaValue': '36520.49', 'species': u'Lobster', 'home_type': u'Port', 'srValue': '97134.02', 'srArea': '431.23'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 3991, 'srPercOverallValue': '99.69', 'mpaArea': '30.84', 'user_grp': u'Commercial', 'srCells': 3984, 'totalValue': '100000.00', 'totalArea': '96.31', 'mpa_id': 2949, 'mpaPercSrValue': '23.04', 'mpaPercSrArea': '32.08', 'srPercOverallArea': '99.82', 'mpaPercOverallValue': '22.97', 'mpaPercOverallArea': '32.02', 'mpaCells': 1278.0, 'mpaValue': '22966.37', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99689.65', 'srArea': '96.14'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12979, 'srPercOverallValue': '99.24', 'mpaArea': '44.59', 'user_grp': u'Commercial', 'srCells': 12915, 'totalValue': '100000.00', 'totalArea': '313.20', 'mpa_id': 2949, 'mpaPercSrValue': '6.07', 'mpaPercSrArea': '14.31', 'srPercOverallArea': '99.51', 'mpaPercOverallValue': '6.02', 'mpaPercOverallArea': '14.24', 'mpaCells': 1848.0, 'mpaValue': '6020.58', 'species': u'Nearshore Fishery', 'home_type': u'Port', 'srValue': '99243.44', 'srArea': '311.66'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 12978, 'srPercOverallValue': '95.91', 'mpaArea': '133.04', 'user_grp': u'Commercial', 'srCells': 12251, 'totalValue': '100000.00', 'totalArea': '313.18', 'mpa_id': 2949, 'mpaPercSrValue': '51.96', 'mpaPercSrArea': '45.00', 'srPercOverallArea': '94.40', 'mpaPercOverallValue': '49.83', 'mpaPercOverallArea': '42.48', 'mpaCells': 5513.0, 'mpaValue': '49830.35', 'species': u'Rock Crab', 'home_type': u'Port', 'srValue': '95905.80', 'srArea': '295.63'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 8177, 'srPercOverallValue': '99.30', 'mpaArea': '27.17', 'user_grp': u'Commercial', 'srCells': 8131, 'totalValue': '100013.82', 'totalArea': '197.32', 'mpa_id': 2949, 'mpaPercSrValue': '8.10', 'mpaPercSrArea': '13.85', 'srPercOverallArea': '99.44', 'mpaPercOverallValue': '8.04', 'mpaPercOverallArea': '13.77', 'mpaCells': 1126.0, 'mpaValue': '8040.01', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '99316.73', 'srArea': '196.21'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 29015, 'srPercOverallValue': '43.11', 'mpaArea': '200.07', 'user_grp': u'Commercial', 'srCells': 10223, 'totalValue': '100000.00', 'totalArea': '700.17', 'mpa_id': 2949, 'mpaPercSrValue': '90.93', 'mpaPercSrArea': '81.10', 'srPercOverallArea': '35.23', 'mpaPercOverallValue': '39.20', 'mpaPercOverallArea': '28.57', 'mpaCells': 8291.0, 'mpaValue': '39198.96', 'species': u'Sea Cucumber', 'home_type': u'Port', 'srValue': '43110.29', 'srArea': '246.70'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 2620, 'srPercOverallValue': '31.84', 'mpaArea': '8.20', 'user_grp': u'Commercial', 'srCells': 673, 'totalValue': '100000.00', 'totalArea': '63.22', 'mpa_id': 2949, 'mpaPercSrValue': '68.40', 'mpaPercSrArea': '50.52', 'srPercOverallArea': '25.69', 'mpaPercOverallValue': '21.78', 'mpaPercOverallArea': '12.98', 'mpaCells': 340.0, 'mpaValue': '21782.13', 'species': u'Spot Prawn', 'home_type': u'Port', 'srValue': '31843.52', 'srArea': '16.24'}, {'port': u'Santa Barbara', 'area_units': 'square miles', 'array_id': None, 'totalCells': 11151, 'srPercOverallValue': '99.56', 'mpaArea': '87.26', 'user_grp': u'Commercial', 'srCells': 11109, 'totalValue': '100000.00', 'totalArea': '269.09', 'mpa_id': 2949, 'mpaPercSrValue': '5.07', 'mpaPercSrArea': '32.55', 'srPercOverallArea': '99.62', 'mpaPercOverallValue': '5.05', 'mpaPercOverallArea': '32.43', 'mpaCells': 3616.0, 'mpaValue': '5049.70', 'species': u'Urchin', 'home_type': u'Port', 'srValue': '99557.05', 'srArea': '268.08'}]]
-
-    return render_to_response('fishery_impacts.html', RequestContext(request, {'mpa':mpa, 'all_results': all_results}))

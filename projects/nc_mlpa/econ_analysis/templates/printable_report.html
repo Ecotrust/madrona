@@ -34,16 +34,16 @@
         {% for result in results %}
         <tr>
             <td style="width: 180px;">{{ result.species }}</td>
-            {% if result.mpaPercOverallValue == '---' %}
-                <td align=center style='color:#E0051D'>{{ result.mpaPercOverallValue }}</td>
+            {% if result.percOverallValue == '---' %}
+                <td align=center style='color:#E0051D'>{{ result.percOverallValue }}</td>
             {% else %}
-                <td align=center style='color:#E0051D'>{{ result.mpaPercOverallValue }}&nbsp;<small>%</small></td>
+                <td align=center style='color:#E0051D'>{{ result.percOverallValue }}&nbsp;<small>%</small></td>
             {% endif %}
                 <td style="width: 40px;"></td>
-            {% if result.mpaPercOverallArea == '---' %}
-                <td align=center style='color:#E0051D'>{{ result.mpaPercOverallArea }}</td>
+            {% if result.percOverallArea == '---' %}
+                <td align=center style='color:#E0051D'>{{ result.percOverallArea }}</td>
             {% else %}
-            <td align=center style='color:#2B4BFA'>{{ result.mpaPercOverallArea }}&nbsp;<small>%</small></td>
+            <td align=center style='color:#2B4BFA'>{{ result.percOverallArea }}&nbsp;<small>%</small></td>
             {% endif %}
         </tr>
         {% endfor %}

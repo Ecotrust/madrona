@@ -345,27 +345,68 @@ class Analysis:
 
         
 class EmptyAnalysisResult:
-    def __init__(self, group_name, port_name, species_name):
-        self.user_grp = group_name
+    def __init__(self, group_name, port_name, species_name, type):
+        self.group = group_name
         self.port = port_name
         self.species = species_name
-        self.mpaPercOverallArea = '---'
-        self.mpaPercOverallValue = '---'
+        self.type = type
+        self.percOverallArea = '---'
+        self.percOverallValue = '---'
+        self.percGEI = '---'
+        self.percNEI = '---'
         
 '''
 An AnalysisResult represents the result of running the impact analysis on a single Layer
 '''
 class AnalysisResult:
-    def __init__(self, id=None, id_type=None, user_grp=None, port=None, species=None, mpaPercOverallArea=None, mpaPercOverallValue=None):
+    def __init__(self, id=None, type=None, group=None, port=None, species=None, percOverallArea=None, percOverallValue=None):
         self.mpa_id = None
         self.array_id = None
-        if id_type == 'mpa':
-            self.mpa_id = id            
-        else:
-            self.array_id = id
-
-        self.user_grp = user_grp
+        self.type = type
+        self.group = group
         self.port = port
         self.species = species
-        self.mpaPercOverallArea = mpaPercOverallArea
-        self.mpaPercOverallValue = mpaPercOverallValue    #% of total fishing value captured by mpa
+        
+        if type == 'mpa':
+            self.mpa_id = id  
+            self.percOverallArea = percOverallArea
+            self.percOverallValue = percOverallValue    #% of total fishing value captured by mpa
+        else: #must be an array 
+            self.array_id = id
+            self.percGEI = percOverallValue
+            if self.percGEI == '---':
+                self.GEI = self.percNEI = self.NEI = '---'
+            else:
+                from econ_analysis.models import FishingImpactBaselineCost
+                if group == 'Commercial':
+                    costs = FishingImpactBaselineCost.objects.get(species=self.species)
+                    #what to do if costs.gross_revenue is absent?
+                    self.GEI = costs.gross_revenue * self.percGEI / 100
+                    (self.percNEI, self.NEI) = self.calculateNEI(costs)
+                elif group == 'Commercial Passenger Fishing Vessel':
+                    costs = FishingImpactBaselineCost.objects.get(port=self.port)                    
+                    #what to do if costs.gross_revenue is absent?
+                    self.GEI = costs.gross_revenue * self.percGEI / 100
+                    (self.percNEI, self.NEI) = self.calculateNEI(costs)
+                else:
+                    self.GEI = self.percNEI = self.NEI = '---'
+        
+        
+    def calculateNEI(self, costs):
+        BGER = costs.gross_revenue
+        total_costs = BGER * costs.percentage_costs / 100
+        BNER = BGER - total_costs
+        Fixed = costs.fixed
+        Crew = costs.crew
+        Fuel = costs.fuel
+        
+        GEI = self.GEI
+        GER = BGER - GEI
+        Fixed_Costs = BGER * Fixed / 100
+        Variable_Costs = GER * (Crew + Fuel) / 100
+        NER = GER - Fixed_Costs - Variable_Costs
+        NEI = BNER - NER
+        percNEI = NEI / BNER
+        
+        return percNEI, NEI
+        
