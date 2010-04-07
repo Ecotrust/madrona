@@ -95,6 +95,29 @@ class InstalledAppTest(TestCase):
         for k,v in counts.items():
             self.assertEquals(v, 1, 'app_label %s refers to %s apps' % (k,v))
 
+class DependenciesTest(TestCase):
+
+    def test_dependencies(self):
+        imports = [ 
+            'networkx',
+            'south',
+            'django.contrib.gis',
+            'elementtree',
+            'sphinx',
+            'mapnik',
+            'feedvalidator',
+            'BeautifulSoup',
+            'xlwt',
+            'registration',
+            'compress',
+            'maintenancemode',
+        ]
+        from django.utils import importlib
+        for dep in imports:
+            try:
+                m = importlib.import_module(dep)
+            except:
+                m = None
+            self.assertNotEquals(m,None,'Cannot import %s' % dep)
 
 
-        
