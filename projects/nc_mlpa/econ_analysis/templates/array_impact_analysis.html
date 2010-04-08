@@ -105,7 +105,11 @@
     {% for results in array_results %}
         <tr><td></td><td></td><td></td><td></td></tr>
         <tr>
-            <td style="width: 165px;" class="habitat_name"><b>{{ results.0.port }}</b></td>
+            {% if results.0.port == 'Fort Bragg' %}
+                <td style="width: 165px;" class="habitat_name"><b>Fort Bragg / Albion</b></td>
+            {% else %}
+                <td style="width: 165px;" class="habitat_name"><b>{{ results.0.port }}</b></td>
+            {% endif %}
             <td></td>
             <td></td>
             <td></td>

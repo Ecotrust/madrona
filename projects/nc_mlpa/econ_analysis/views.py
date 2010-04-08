@@ -30,7 +30,7 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
         #return display_array_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
         return display_array_analysis(request, feature_id, group_name)
 
-#remember to remove unused templates from repository (and my own directory)
+
 def display_array_analysis(request, feature_id, group, port=None, species=None, template='array_impact_analysis.html'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
@@ -51,15 +51,17 @@ def display_array_analysis(request, feature_id, group, port=None, species=None, 
             mpa_results = mpa_analysis_results(mpa, group, port, species)
             array_results.append(mpa_results)
     
+    #what to do if the following throws an exception/error?
+    #could happen if array_results is empty (no mpas with lops for example)
     analysis_results = aggregate_array_results(array, array_results, group, port, species)
     
     return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
     
 def aggregate_array_results(array, array_results, group, port, species):
+    analysis_results = []
     if group == 'Commercial':
         aggregated_results = aggregate_com_array_results(array_results)
-        analysis_results = []
         for species, results in aggregated_results.iteritems():
             analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
         #sort results by species name (alphabetically)
@@ -67,7 +69,6 @@ def aggregate_array_results(array, array_results, group, port, species):
         analysis_results = roundPercentageValues(analysis_results, 1)
     elif group == 'Commercial Passenger Fishing Vessel':
         aggregated_results = aggregate_cpfv_array_results(array_results)
-        analysis_results = []
         for port, results in aggregated_results.iteritems():
             analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
         #sort results by port name (north to south)
@@ -75,7 +76,6 @@ def aggregate_array_results(array, array_results, group, port, species):
         analysis_results = roundPercentageValues(analysis_results, 1) 
     else:
         aggregated_results = aggregate_rec_array_results(array_results, group)
-        analysis_results = []
         for port, dict in aggregated_results.iteritems():
             port_results = []
             for species, results in dict.iteritems():
@@ -110,13 +110,12 @@ def aggregate_cpfv_array_results(array_results):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     #used for determining average gei% among all species for each port
     group_ports = GetPortsByGroup(group)
+    port_counts = dict( (port, 0) for port in group_ports)
     #sum up the value percentages at each port, keeping track of the number of summations made
-    for mpa_results in array_results:
-        #we put this here so that we only count the number of species per port once (in this case it will be for the last mpa_results)
-        port_counts = dict( (port, 0) for port in group_ports)
-        #why does this have to be index 0?  
-        #is there an unneeded list here?
-        for result in mpa_results[0]:
+    #why does this have to be index 0?  
+    #is there an unneeded list here?
+    for port_results in array_results[0]:
+        for result in port_results:
             if result.percOverallValue == '---':
                 pass
             elif aggregated_array_results[result.port]['Value'] == '---':
@@ -134,10 +133,10 @@ def aggregate_cpfv_array_results(array_results):
     
 def aggregate_rec_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
-    for mpa_results in array_results:
+    for mpa_results in array_results[0]:
         #why does this have to be index 0?  
         #is there an unneeded list here?
-        for result in mpa_results[0]:
+        for result in mpa_results:
             if result.percOverallValue == '---':
                 pass
             elif aggregated_array_results[result.port][result.species]['Value'] == '---':
@@ -264,10 +263,7 @@ def mpa_analysis_results(mpa, group, port, species):
 
         #sort results alphabetically by species name
         port_results.sort(key=lambda obj: obj.species)
-        
-        #adjust recreational Fort Bragg display
-        port_results = adjust_fortbragg_rec_display(port_results, group)
-        
+                
         mpa_results.append(port_results)
     return mpa_results
     
@@ -328,13 +324,6 @@ def cache_analysis_results(results, group, mpa):
         cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.percOverallValue, perc_area=result.percOverallArea)
         #WHY IS THIS NOT SAVING DURING ARRAY ANALYSIS???
         cache.save()
-
-def adjust_fortbragg_rec_display(results, group):
-    if group in ['Recreational Dive', 'Recreational Kayak', 'Recreational Private Vessel']:
-        for result in results:
-            if result.port == 'Fort Bragg':
-                result.port = 'Fort Bragg / Albion'
-    return results
         
 '''
 Called by display_mpa_analysis and print_report
