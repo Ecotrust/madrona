@@ -108,13 +108,14 @@ def aggregate_com_array_results(array_results):
 def aggregate_cpfv_array_results(array_results):
     group = 'Commercial Passenger Fishing Vessel'
     aggregated_array_results = get_empty_array_results_dictionary(group)
-    #used for determining average gei% among all species for each port
     group_ports = GetPortsByGroup(group)
-    port_counts = dict( (port, 0) for port in group_ports)
     #sum up the value percentages at each port, keeping track of the number of summations made
     #why does this have to be index 0?  
     #is there an unneeded list here?
     for mpa_results in array_results:
+        #port_counts is used for determining average gei% among all relevant species for each port 
+        #(will be the same regardless of which mpa results we look at)
+        port_counts = dict( (port, 0) for port in group_ports)
         for port_results in mpa_results:
             for result in port_results:
                 if result.percOverallValue == '---':
