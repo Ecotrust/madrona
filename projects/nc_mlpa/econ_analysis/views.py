@@ -114,18 +114,19 @@ def aggregate_cpfv_array_results(array_results):
     #sum up the value percentages at each port, keeping track of the number of summations made
     #why does this have to be index 0?  
     #is there an unneeded list here?
-    for port_results in array_results[0]:
-        for result in port_results:
-            if result.percOverallValue == '---':
-                pass
-            elif aggregated_array_results[result.port]['Value'] == '---':
-                aggregated_array_results[result.port]['Value'] = float(result.percOverallValue)
-                aggregated_array_results[result.port]['Area'] = float(result.percOverallArea)
-                port_counts[result.port] = 1
-            else:
-                aggregated_array_results[result.port]['Value'] += result.percOverallValue
-                aggregated_array_results[result.port]['Area'] += result.percOverallArea
-                port_counts[result.port] += 1
+    for mpa_results in array_results:
+        for port_results in mpa_results:
+            for result in port_results:
+                if result.percOverallValue == '---':
+                    pass
+                elif aggregated_array_results[result.port]['Value'] == '---':
+                    aggregated_array_results[result.port]['Value'] = float(result.percOverallValue)
+                    aggregated_array_results[result.port]['Area'] = float(result.percOverallArea)
+                    port_counts[result.port] = 1
+                else:
+                    aggregated_array_results[result.port]['Value'] += result.percOverallValue
+                    aggregated_array_results[result.port]['Area'] += result.percOverallArea
+                    port_counts[result.port] += 1
     for port in group_ports:
         if aggregated_array_results[port]['Value'] != '---':
             aggregated_array_results[port]['Value'] /= port_counts[port]
