@@ -110,11 +110,9 @@ def aggregate_cpfv_array_results(array_results):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     group_ports = GetPortsByGroup(group)
     #sum up the value percentages at each port, keeping track of the number of summations made
-    #why does this have to be index 0?  
-    #is there an unneeded list here?
     for mpa_results in array_results:
         #port_counts is used for determining average gei% among all relevant species for each port 
-        #(will be the same regardless of which mpa results we look at)
+        #(we only need to calculate port_counts for one mpa as it will be the same for each mpa)
         port_counts = dict( (port, 0) for port in group_ports)
         for port_results in mpa_results:
             for result in port_results:
@@ -135,18 +133,17 @@ def aggregate_cpfv_array_results(array_results):
     
 def aggregate_rec_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
-    for mpa_results in array_results[0]:
-        #why does this have to be index 0?  
-        #is there an unneeded list here?
-        for result in mpa_results:
-            if result.percOverallValue == '---':
-                pass
-            elif aggregated_array_results[result.port][result.species]['Value'] == '---':
-                aggregated_array_results[result.port][result.species]['Value'] = float(result.percOverallValue)
-                aggregated_array_results[result.port][result.species]['Area'] = float(result.percOverallArea)
-            else:
-                aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
-                aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
+    for mpa_results in array_results:
+        for port_results in mpa_results:
+            for result in port_results:
+                if result.percOverallValue == '---':
+                    pass
+                elif aggregated_array_results[result.port][result.species]['Value'] == '---':
+                    aggregated_array_results[result.port][result.species]['Value'] = float(result.percOverallValue)
+                    aggregated_array_results[result.port][result.species]['Area'] = float(result.percOverallArea)
+                else:
+                    aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
+                    aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
     
 def sort_results_by_species(results):   
