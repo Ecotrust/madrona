@@ -6,7 +6,7 @@
 <div class='freetext'>
 <br>
 {% if array_results.0.group == 'Commercial' %}
-    <table  style='width:450px' class='hab_repr_container'>
+    <table  style='width:450px' class='impact_analysis_container'>
         <thead>
             <tr>
                 <th></th>
@@ -18,17 +18,17 @@
         <tbody>
         {% for result in array_results %}
             <tr class="{% cycle '' 'grey' %}">
-                <td class="habitat_name">{{ result.species }}</td>
+                <td class="species_name">{{ result.species }}</td>
                 {% if result.GEI == '---' %}
-                    <td>{{ result.GEI }}</td>
+                    <td>---</td>
                 {% else %}
                     <td>{{ result.GEI|currency }}</td>
                 {% endif %}
-                    <td></td>
+                <td></td>
                 {% if result.percGEI == '---' %}
-                    <td>{{ result.percGEI }}</td>
+                    <td>---</td>
                 {% else %}
-                <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -36,7 +36,7 @@
     </table>
 
     <br>
-    <table  style='width:450px' class='hab_repr_container'>
+    <table  style='width:450px' class='impact_analysis_container'>
         <thead>
             <tr>
                 <th></th>
@@ -48,24 +48,24 @@
         <tbody>
         {% for result in array_results %}
             <tr class="{% cycle '' 'grey' %}">
-                <td class="habitat_name">{{ result.species }}</td>
+                <td class="species_name">{{ result.species }}</td>
                 {% if result.NEI == '---' %}
-                    <td>{{ result.NEI }}</td>
+                    <td>---</td>
                 {% else %}
                     <td>{{ result.NEI|currency }}</td>
                 {% endif %}
-                    <td></td>
+                <td></td>
                 {% if result.percNEI == '---' %}
-                    <td>{{ result.percNEI }}</td>
+                    <td>---</td>
                 {% else %}
-                <td>{{ result.percNEI }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}
         </tbody>
     </table>
 {% else %}{% if array_results.0.group == 'Commercial Passenger Fishing Vessel' %}
-    <table  style='width:450px' class='hab_repr_container'>
+    <table  style='width:450px' class='impact_analysis_container'>
         <thead>
             <tr>
                 <th></th>
@@ -77,24 +77,24 @@
         <tbody>
         {% for result in array_results %}
             <tr class="{% cycle '' 'grey' %}">
-                <td class="habitat_name">{{ result.port }}</td>
+                <td class="species_name">{{ result.port }}</td>
                 {% if result.percGEI == '---' %}
-                    <td>{{ result.percGEI }}</td>
+                    <td>---</td>
                 {% else %}
-                    <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
                 {% endif %}
                 <td></td>
                 {% if result.percNEI == '---' %}
-                    <td>{{ result.percNEI }}</td>
+                    <td>---</td>
                 {% else %}
-                    <td>{{ result.percNEI }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}
         </tbody>
     </table>
 {% else %} <!--if group is Recreational-->
-<table  style='width:450px' class='hab_repr_container'>
+<table  style='width:450px' class='impact_analysis_container'>
     <thead>
         <tr>
             <th></th>
@@ -106,9 +106,9 @@
         <tr><td></td><td></td><td></td><td></td></tr>
         <tr>
             {% if results.0.port == 'Fort Bragg' %}
-                <td style="width: 165px;" class="habitat_name"><b>Fort Bragg / Albion</b></td>
+                <td style="width: 165px;" class="species_name"><b>Fort Bragg / Albion</b></td>
             {% else %}
-                <td style="width: 165px;" class="habitat_name"><b>{{ results.0.port }}</b></td>
+                <td style="width: 165px;" class="species_name"><b>{{ results.0.port }}</b></td>
             {% endif %}
             <td></td>
             <td></td>
@@ -117,11 +117,11 @@
         <tr><td></td><td></td><td></td><td></td></tr>
         {% for result in results %}
             <tr class="{% cycle '' 'grey' %}">
-                <td class="habitat_name">{{ result.species }}</td>
+                <td class="species_name">{{ result.species }}</td>
                 {% if result.percGEI == '---' %}
-                    <td>{{ result.percGEI }}</td>
+                    <td>---</td>
                 {% else %}
-                    <td>{{ result.percGEI }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}
