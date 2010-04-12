@@ -1,0 +1,92 @@
+[
+  {
+    "pk": 2, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "How to login to MarineMap and reset your password", 
+      "title": "Login", 
+      "importance": 1, 
+      "image": "projects/nc_mlpa/screencasts/images/Log_In__.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "vlQFN51WQu4", 
+      "video_width": 853
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "How to navigate MarineMap and view data layers", 
+      "title": "Navigating", 
+      "importance": 2, 
+      "image": "projects/nc_mlpa/screencasts/images/Navigating__.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "hyIW1NV2l-Y", 
+      "video_width": 853
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "Handy tools to help you with MarineMap", 
+      "title": "Useful Tools", 
+      "importance": 3, 
+      "image": "projects/nc_mlpa/screencasts/images/Tools__.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "bEOATuv5als", 
+      "video_width": 853
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "How do I create and edit an MPA?", 
+      "title": "MPA Creation and Editing", 
+      "importance": 4, 
+      "image": "projects/nc_mlpa/screencasts/images/MPA_Editing__.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "tKaj-_IepTw", 
+      "video_width": 853
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "How do I capture an estuarine MPA", 
+      "title": "Capturing an Estuarine MPA", 
+      "importance": 5, 
+      "image": "projects/nc_mlpa/screencasts/images/Capturing_an_Estuary.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "9NSYHpn_BJM", 
+      "video_width": 853
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "screencasts.youtubescreencast", 
+    "fields": {
+      "description": "How do I share and copy MPAs and Arrays?", 
+      "title": "Sharing & Copying", 
+      "importance": 6, 
+      "image": "projects/nc_mlpa/screencasts/images/Sharing__.png", 
+      "selected_for_help": true, 
+      "video_height": 505, 
+      "play_hd": true, 
+      "youtube_id": "tyuy6_6yBOs", 
+      "video_width": 853
+    }
+  }
+]
