@@ -27,7 +27,7 @@
 	        spmodhigh.load();
 			$(spmodhigh).bind('kmlLoaded', function(e, kmlObject){
 				turnOnCurrentLayer( $('#sp-mod-high .tree') );
-				$('#sp-mod-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() {
+				$('#sp-mod-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() {
 					 on_index = $('#sp-mod-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
 				} );
 			})
@@ -48,7 +48,7 @@
 	        sphigh.load();
 			$(sphigh).bind('kmlLoaded', function(e, kmlObject){
 				turnOnCurrentLayer( $('#sp-high .tree') );
-				$('#sp-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() { 
+				$('#sp-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() { 
 					on_index = $('#sp-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
 				} );
 			})
@@ -69,7 +69,7 @@
 	        spveryhigh.load();
 			$(spveryhigh).bind('kmlLoaded', function(e, kmlObject){
 				turnOnCurrentLayer( $('#sp-very-high .tree') );
-				$('#sp-very-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() { 
+				$('#sp-very-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() { 
 					on_index = $('#sp-very-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
 				} );
 			})
@@ -92,7 +92,7 @@
 		});
 		
 		function hideTree(tree){
-			tree.find('ul:first > li.visible > span.toggler').click();	
+			tree.find('ul:first > li.visible > .toggler').click();	
 		}
 		
 		function currentLayer(the_div,onlayer){
@@ -103,7 +103,7 @@
 		}
 		
 		function turnOnCurrentLayer(tree){
-			$( tree.find('ul:first > li:first > ul > li > span.toggler').get(on_index) ).click();
+			$( tree.find('ul:first > li:first > ul > li > .toggler').get(on_index) ).click();
 		}
 		/*
 		function currentOnIndex(tree){
