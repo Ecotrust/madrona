@@ -3,6 +3,7 @@
 		<name>{{ folder.name }}</name>
 		<description>{{ folder.description }}</description>
 		<styleUrl>{{ folder.styleUrl}}</styleUrl>
+		<visibility>0</visibility>
 		{% for placemark in folder.placemarks %}
 			{% include "placemark.kml" %}
 		{% endfor %}

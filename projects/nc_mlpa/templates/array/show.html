@@ -5,7 +5,8 @@
     <div class="tabs">
         <ul>
             <li><a href="#Attributes"><span>Information</span></a></li>
-            <li><a href="{% url array_replication instance.pk,'html' %}"><span>Habitat Replication</span></a></li>
+            <li><a href="{% url array_replication instance.pk,'html' %}"><span>Hab Replication</span></a></li>
+			<li><a href="{% url array_spacing instance.pk, 'html' %}"><span>Hab Spacing</span></a></li>
             {% if perms.layers.view_ecotrustlayerlist %}
               <li><a href="#Groups"><span>Impact Analysis</span></a></li>
             {% endif %}

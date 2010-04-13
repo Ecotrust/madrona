@@ -66,6 +66,7 @@ admin.site.register(TestPolygon, TestPolygonAdmin)
 
 class IntersectionFeatureAdmin(admin.ModelAdmin):
     list_display = ('id','name','feature_model','date_created','date_modified')
+    list_filter = ['date_modified']
     fieldsets = [
         (None,  {'fields': (('name','description'),('study_region_total','output_units','native_units'),('multi_shapefile','shapefile','feature_model'),)}),
     ]

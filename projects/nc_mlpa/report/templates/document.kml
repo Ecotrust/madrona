@@ -75,7 +75,8 @@
 		  <Style id="radioFolder">	
 			<ListStyle>
 			  <listItemType>radioFolder</listItemType>
-			</ListStyle>		    
+			</ListStyle>
+			<visibility>0</visibility>
 		  </Style>
 		<StyleMap id="too_far_map">
 			<Pair>
@@ -99,9 +100,17 @@
 		</StyleMap>
 	{% endblock %}
 	{% block folders_and_placemarks %}
-		{% for folder in document.folders %}
-			{% include "folder.kml" %}
-		{% endfor %}
+		<Folder>
+			<Style>
+			<ListStyle>
+			  <listItemType>radioFolder</listItemType>
+			</ListStyle>
+			</Style>
+			<open>1</open>
+			{% for folder in document.folders %}
+				{% include "radio_folder.kml" %}
+			{% endfor %}
+		</Folder>
 	{% endblock %}
 </Document>
 </kml>

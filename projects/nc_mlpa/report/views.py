@@ -47,6 +47,14 @@ def replication_habitats():
     org_sch = int_models.OrganizationScheme.objects.get(name=settings.SAT_OPEN_COAST_REPLICATION)
     return org_sch.featuremapping_set.all()
     
+def array_spacing_report(request, array_id, format='html'):
+    array_class = utils.get_array_class()
+    array = get_viewable_object_or_respond(array_class,array_id,request.user)
+    #array = mlpa.MpaArray.objects.get(pk=array_id)
+    if format=='html':
+        template = 'array_spacing_panel.html'
+    return render_to_response(template, {'array': array}, context_instance=RequestContext(request) )
+
 def array_spacing_kml(request,array_id,lop_value,use_centroids=False):
     array_class = utils.get_array_class()
     array = get_viewable_object_or_respond(array_class,array_id,request.user)
@@ -59,7 +67,7 @@ def array_spacing_kml(request,array_id,lop_value,use_centroids=False):
         if True in [ l.geometry.contains(cl.geometry_collection.centroid) for l in Land.objects.all() ]:
             raise Exception('One of the cluster centroids is on land.  I can not work out the spacing.')
     habitats = replication_habitats()
-    doc_title = "Spacing for %s" % array.name
+    doc_title = "Spacing for %s at %s LOP" % (array.name,lop.name.title())
     document = { 'name': doc_title, 'folders': [] }
     for hab in habitats:
         # Make a kml folder dictionary to work with the kml template
