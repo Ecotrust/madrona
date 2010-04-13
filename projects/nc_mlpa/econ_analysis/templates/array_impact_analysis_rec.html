@@ -1,0 +1,50 @@
+{% extends 'common/panel.html' %}
+{% load currency %}
+{% block title %}{{array.name}} Impact Analysis{% endblock title %}
+{% block panel %}
+<h3>Impact Analysis {{array_results.0.0.group}} Report</h3>
+<div class='freetext'>
+<br>
+
+<!--if group is Recreational--><!--what to do about seaweed group?-->
+<table  style='width:450px' class='impact_analysis_container'>
+    <thead>
+        <tr>
+            <th></th>
+            <th><b>Gross Economic Impact</b> </th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for results in array_results %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr>
+            {% if results.0.port == 'Fort Bragg' %}
+                <td style="width: 165px;" class="species_name"><b>Fort Bragg / Albion</b></td>
+            {% else %}
+                <td style="width: 165px;" class="species_name"><b>{{ results.0.port }}</b></td>
+            {% endif %}
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        {% for result in results %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="species_name">{{ result.species }}</td>
+                {% if result.percGEI == '---' %}
+                    <td>---</td>
+                {% else %}
+                    <td>{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+    
+</div>
+<br>
+<!--need to add printable array result link here-->
+<br>
+{% endblock panel %}

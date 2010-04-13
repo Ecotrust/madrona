@@ -377,23 +377,37 @@ class AnalysisResult:
             if self.percGEI == '---':
                 self.GEI = self.percNEI = self.NEI = '---'
             else:
-                from econ_analysis.models import FishingImpactBaselineCost
+                from econ_analysis.models import CommercialSpecies, CommercialPort, CommercialCosts, CommercialGrossRevenue
                 if group == 'Commercial':
-                    costs = FishingImpactBaselineCost.objects.get(species=self.species)
-                    #what to do if costs.gross_revenue is absent?
-                    self.GEI = costs.gross_revenue * self.percGEI / 100
-                    (self.percNEI, self.NEI) = self.calculateNEI(costs)
+                    try:
+                        revenue = CommercialGrossRevenue.objects.get(species__name=self.species, port__name=self.port)
+                    except:
+                        #WHAT TO DO IF QUERY IS EMPTY???
+                        self.GEI = self.percNEI = self.NEI = '---'
+                        return
+                    gross_revenue = revenue.gross_revenue
+                    costs = CommercialCosts.objects.get(species__name=self.species)
+                    #what to do if costs query is empty or errors?
+                    self.GEI = gross_revenue * self.percGEI / 100
+                    (self.percNEI, self.NEI) = self.calculateNEI(gross_revenue, costs)
                 elif group == 'Commercial Passenger Fishing Vessel':
-                    costs = FishingImpactBaselineCost.objects.get(port=self.port)                    
-                    #what to do if costs.gross_revenue is absent?
-                    self.GEI = costs.gross_revenue * self.percGEI / 100
-                    (self.percNEI, self.NEI) = self.calculateNEI(costs)
+                    try:
+                        revenue = CPFVGrossRevenue.objects.get(port__name=self.port)
+                    except:
+                        #WHAT TO DO IF QUERY IS EMPTY or ERRORS???
+                        self.GEI = self.percNEI = self.NEI = '---'
+                        return
+                    gross_revenue = revenue.gross_revenue
+                    costs = CPFVCosts.objects.get(port__name=self.port)                  
+                    #what to do if costs query is empty or errors?
+                    self.GEI = gross_revenue * self.percGEI / 100
+                    (self.percNEI, self.NEI) = self.calculateNEI(gross_revenue, costs)
                 else:
                     self.GEI = self.percNEI = self.NEI = '---'
         
         
-    def calculateNEI(self, costs):
-        BGER = costs.gross_revenue
+    def calculateNEI(self, gross_revenue, costs):
+        BGER = gross_revenue
         total_costs = BGER * costs.percentage_costs / 100
         BNER = BGER - total_costs
         Fixed = costs.fixed

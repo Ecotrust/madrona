@@ -32,9 +32,7 @@ FishingImpactStats maintains the results of fishing impact analysis precalculati
 at the overall and study region level.  These results are then combined with
 mpa analysis done real-time.
 '''
-class FishingImpactStats(models.Model):
-    #class Meta:
-    #    db_table = u'fishing_impact_stats'    
+class FishingImpactStats(models.Model): 
     map = models.OneToOneField(FishingImpactAnalysisMap)    
     totalCells = models.IntegerField()  #Overall number of cells with fishing value
     srCells = models.IntegerField()     #Number of cells with fishing value in study region
@@ -54,24 +52,73 @@ class FishingImpactResults(models.Model):
     perc_value = models.FloatField(verbose_name="Percentage Value affected by MPA")
     perc_area = models.FloatField(verbose_name="Percentage Area affected by MPA", null=True, blank=True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
-  
+
 '''
-The following model is used for storing some of the baseline data relating to the impact analysis 
-'''  
-class FishingImpactBaselineCost(models.Model):
-    species = models.TextField(verbose_name="Species", null=True, blank=True)
-    port = models.TextField(verbose_name="Port Name", null=True, blank=True)
-    gross_revenue = models.FloatField(verbose_name="Baseline Gross Economic Revenue", null=True, blank=True)
+The following model provides a list of Species (Method) names that relate to the Commercial user group
+'''
+class CommercialSpecies(models.Model):
+    name = models.TextField(verbose_name="Species Name (Method)", unique=True)
+    def __unicode__(self):
+        return u'%s' % (self.name)
+
+'''
+The following model provides a list of Port names that relate to the Commercial user group
+'''
+class CommercialPort(models.Model):
+    name = models.TextField(verbose_name="Port Name", unique=True)
+    def __unicode__(self):
+        return u'%s' % (self.name)
+    
+'''
+The following model relates cost percentages to given species related to the Commercial user group
+'''
+class CommercialCosts(models.Model):
+    species = models.ForeignKey(CommercialSpecies, verbose_name="Species")
     crew = models.FloatField(verbose_name="Percent of costs related to Crew")
     fuel = models.FloatField(verbose_name="Percent of costs related to Fuel")
     fixed = models.FloatField(verbose_name="Percent of costs that are Fixed")
     percentage_costs = models.FloatField(verbose_name="Total Percentage of Costs", editable=False)
-    
     def save(self):
-        if self.species is None and self.port is None:
-            raise Exception, "You must specify either a Species (for Commercial) or a Port (for CPFV).  Both can not be blank."
-        elif self.species and self.port:
-            raise Exception, "You must specify EITHER a Species (for Commercial) OR a Port (for CPFV) but NOT both."
         self.percentage_costs = self.crew + self.fuel + self.fixed
-        super(FishingImpactBaselineCost, self).save()
+        super(CommercialCosts, self).save()
+       
+'''
+The following model relates gross revenue values to given species,ports related to the Commercial user group
+''' 
+class CommercialGrossRevenue(models.Model):
+    species = models.ForeignKey(CommercialSpecies, verbose_name="Species")
+    port = models.ForeignKey(CommercialPort, verbose_name="Port")
+    gross_revenue = models.FloatField(verbose_name="Baseline Gross Economic Revenue")
+    def __unicode__(self):
+        return u'%s, %s, $%.2f' % (self.species.name, self.port.name, self.gross_revenue)
     
+'''
+The following model provides a list of Port names that relate to the Commercial Passenger Fishing Vessel user group
+'''
+class CPFVPort(models.Model):
+    name = models.TextField(verbose_name="Port Name", unique=True)
+    def __unicode__(self):
+        return u'%s' % (self.name)
+      
+'''
+The following model relates cost percentages to given ports related to the Commercial Passenger Fishing Vessel user group
+'''  
+class CPFVCosts(models.Model):
+    port = models.ForeignKey(CPFVPort, verbose_name="Port")
+    crew = models.FloatField(verbose_name="Percent of costs related to Crew", default=27)
+    fuel = models.FloatField(verbose_name="Percent of costs related to Fuel", default=8.7)
+    fixed = models.FloatField(verbose_name="Percent of costs that are Fixed", default=16.1)
+    percentage_costs = models.FloatField(verbose_name="Total Percentage of Costs", editable=False)
+    def save(self):
+        self.percentage_costs = self.crew + self.fuel + self.fixed
+        super(CPFVCosts, self).save()        
+            
+'''
+The following model relates gross revenue values to given ports related to the Commercial Passenger Fishing Vessel user group
+''' 
+class CPFVGrossRevenue(models.Model):
+    port = models.ForeignKey(CPFVPort, verbose_name="Port")
+    gross_revenue = models.FloatField(verbose_name="Baseline Gross Economic Revenue", default=100)
+    def __unicode__(self):
+        return u'%s, $%.2f' % (self.port.name, self.gross_revenue)
+        

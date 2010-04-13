@@ -26,87 +26,116 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
         #return display_mpa_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
         return display_mpa_analysis(request, feature_id, group_name)
     else:
-        #the following port and species parameters are for testing on my local machine
-        #return display_array_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
-        return display_array_analysis(request, feature_id, group_name)
+        array = get_object_or_404(MpaArray, pk=feature_id)
+        mpas = array.mpa_set
+        array_results = compile_array_results(mpas, group_name)
+        return display_array_analysis(request, group_name, array, array_results)
 
-
-def display_array_analysis(request, feature_id, group, port=None, species=None, template='array_impact_analysis.html'):
-    user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
-    
-    array = get_object_or_404(MpaArray, pk=feature_id)
-    
-    #Get a list of mpas associated with this array
-    mpas = array.mpa_set
-       
+def compile_array_results(mpas, group, port=None, species=None):
     array_results = []
     #Sum results for each species, for each mpa in the array
-    #What to do if mpa_analysis_results returns a Response object instead of a result?
     for mpa in mpas:
         if mpa.designation_id is not None: #ignore Stewardship Zones and other mpas that have no LOP
+            #What to do if mpa_analysis_results returns a Response object instead of a result?
             mpa_results = mpa_analysis_results(mpa, group, port, species)
             array_results.append(mpa_results)
-    
-    #what to do if the following throws an exception/error?
-    #could happen if array_results is empty (no mpas with lops for example)
-    analysis_results = aggregate_array_results(array, array_results, group, port, species)
-    
-    return render_to_response(template, RequestContext(request, {'array':array, 'array_results': analysis_results}))  
-
-    
-def aggregate_array_results(array, array_results, group, port, species):
-    analysis_results = []
+    return array_results
+        
+def display_array_analysis(request, group, array, array_results, port=None, species=None):
     if group == 'Commercial':
-        aggregated_results = aggregate_com_array_results(array_results)
-        for species, results in aggregated_results.iteritems():
-            analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-        #sort results by species name (alphabetically)
-        analysis_results = sort_results_by_species(analysis_results)
-        analysis_results = roundPercentageValues(analysis_results, 1)
+        #aggregate array results for commercial group
+        aggregated_results = aggregate_com_array_results(array_results, group)
+        #restructure into AnalysisResults data structure
+        analysis_results = restructure_aggregated_commercial_results(array, group, aggregated_results)
+        return render_to_response('array_impact_analysis_com.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
     elif group == 'Commercial Passenger Fishing Vessel':
-        aggregated_results = aggregate_cpfv_array_results(array_results)
-        for port, results in aggregated_results.iteritems():
-            analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-        #sort results by port name (north to south)
-        analysis_results = sort_results_by_port(analysis_results, group) 
-        analysis_results = roundPercentageValues(analysis_results, 1) 
-    else:
+        #aggregate array results for commercial passenger fishing vessel group
+        aggregated_results = aggregate_cpfv_array_results(array_results, group)
+        #restructure into AnalysisResults data structure
+        analysis_results = restructure_aggregated_cpfv_results(array, group, species, aggregated_results)
+        return render_to_response('array_impact_analysis_cpfv.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+    elif group == 'Edible Seaweed':
+        #aggregate array results for edible seaweed group
+        aggregated_results = aggregate_swd_array_results(array_results, group)
+        #restructure into AnalysisResults data structure
+        analysis_results = restructure_aggregated_swd_results(array, group, aggregated_results)
+        return render_to_response('array_impact_analysis_rec.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+    else: #(must be Recreational or Seaweed)
+        #aggregate array results for edible seaweed group
         aggregated_results = aggregate_rec_array_results(array_results, group)
-        for port, dict in aggregated_results.iteritems():
-            port_results = []
-            for species, results in dict.iteritems():
-                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
-            #sort results by species name (alphabetically)
-            port_results = sort_results_by_species(port_results)
-            port_results = roundPercentageValues(port_results, 1)  
-            analysis_results.append(port_results)
-        #sort results by port name (north to south)
-        analysis_results = sort_results_by_port(analysis_results, group) 
-    return analysis_results
+        #restructure into AnalysisResults data structure
+        analysis_results = restructure_aggregated_rec_results(array, group, aggregated_results)
+        return render_to_response('array_impact_analysis_rec.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
 
-def aggregate_com_array_results(array_results):
-    aggregated_array_results = get_empty_array_results_dictionary('Commercial')
-    for mpa_results in array_results:
-        #why does this have to be index 0?  
-        #is there an unneeded list here?
-        for result in mpa_results[0]:
-            if result.percOverallValue == '---':
-                pass
-            elif aggregated_array_results[result.species]['Value'] == '---':
-                aggregated_array_results[result.species]['Value'] = float(result.percOverallValue)
-                aggregated_array_results[result.species]['Area'] = float(result.percOverallArea)
+def restructure_aggregated_commercial_results(array, group, aggregated_results):
+    analysis_results = []
+    for port, species_results in aggregated_results.iteritems():
+        port_results = []
+        for species, results in species_results.iteritems():
+            if 'Urchin' in species:
+                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Dive Captain)', percOverallArea=results['Area'], percOverallValue=results['Value']))
+                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Walk-on Dive)', percOverallArea=results['Area'], percOverallValue=results['Value']))
             else:
-                aggregated_array_results[result.species]['Value'] += result.percOverallValue
-                aggregated_array_results[result.species]['Area'] += result.percOverallArea
+                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        #sort results by species name (alphabetically)
+        port_results = sort_results_by_species(port_results)
+        analysis_results.append(port_results)
+    analysis_results = sort_results_by_port(analysis_results, group)
+    return analysis_results
+        
+def restructure_aggregated_cpfv_results(array, group, species, aggregated_results):
+    analysis_results = []
+    for port, results in aggregated_results.iteritems():
+        analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+    #sort results by port name (north to south)
+    analysis_results = sort_results_by_port(analysis_results, group) 
+    return analysis_results       
+    
+def restructure_aggregated_swd_results(array, group, aggregated_results):
+    analysis_results = []
+    for port, species_results in aggregated_results.iteritems():
+        port_results = []
+        for species, results in species_results.iteritems():
+            port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        #sort results by species name (alphabetically)
+        port_results = sort_results_by_species(port_results)
+        #port_results = roundPercentageValues(port_results, 1)  
+        analysis_results.append(port_results)
+    #sort results by port name (north to south)
+    analysis_results = sort_results_by_port(analysis_results, group) 
+    return analysis_results       
+               
+def restructure_aggregated_rec_results(array, group, aggregated_results):
+    analysis_results = []
+    for port, species_results in aggregated_results.iteritems():
+        port_results = []
+        for species, results in species_results.iteritems():
+            port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        #sort results by species name (alphabetically)
+        port_results = sort_results_by_species(port_results)
+        #port_results = roundPercentageValues(port_results, 1)  
+        analysis_results.append(port_results)
+    #sort results by port name (north to south)
+    analysis_results = sort_results_by_port(analysis_results, group) 
+    return analysis_results       
+
+def aggregate_com_array_results(array_results, group):
+    aggregated_array_results = get_empty_array_results_dictionary(group)
+    for mpa_results in array_results:
+        for port in mpa_results:
+            for result in port:
+                if result.percOverallValue == '---':
+                    pass
+                elif aggregated_array_results[result.port][result.species]['Value'] == '---':
+                    aggregated_array_results[result.port][result.species]['Value'] = float(result.percOverallValue)
+                    aggregated_array_results[result.port][result.species]['Area'] = float(result.percOverallArea)
+                else:
+                    aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
+                    aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
         
 
-def aggregate_cpfv_array_results(array_results):
-    group = 'Commercial Passenger Fishing Vessel'
+def aggregate_cpfv_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     group_ports = GetPortsByGroup(group)
     #sum up the value percentages at each port, keeping track of the number of summations made
@@ -145,6 +174,21 @@ def aggregate_rec_array_results(array_results, group):
                     aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
                     aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
+   
+def aggregate_swd_array_results(array_results, group):
+    aggregated_array_results = get_empty_array_results_dictionary(group)
+    for mpa_results in array_results:
+        for port_results in mpa_results:
+            for result in port_results:
+                if result.percOverallValue == '---':
+                    pass
+                elif aggregated_array_results[result.port][result.species]['Value'] == '---':
+                    aggregated_array_results[result.port][result.species]['Value'] = float(result.percOverallValue)
+                    aggregated_array_results[result.port][result.species]['Area'] = float(result.percOverallArea)
+                else:
+                    aggregated_array_results[result.port][result.species]['Value'] += result.percOverallValue
+                    aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
+    return aggregated_array_results      
     
 def sort_results_by_species(results):   
     #sort results alphabetically by species name
@@ -155,26 +199,31 @@ def sort_results_by_port(results, group):
     #sort results by port name (north to south)
     ports = GetPortsByGroup(group)
     count = 0
+    #build a dictionary that maps each port (key), with an ordinal (value)
     ordering = {}
     for port in ports:
         count += 1
         ordering[port] = count
-    if 'Recreational' in group:
-        results.sort(lambda x, y : cmp (ordering[x[0].port], ordering[y[0].port])) 
+    #use that dictionary to order the results by port
+    if group in ['Commercial Passenger Fishing Vessel']:
+        results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port]))  
     else: 
-        results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port])) 
+        results.sort(lambda x, y : cmp (ordering[x[0].port], ordering[y[0].port]))
     return results
     
     
 def get_empty_array_results_dictionary(group):
+    #CAN WE CHANGE THE FOLLOWING TWO PROCEDURE CALLS TO DB QUERIES?
     group_species = GetSpeciesByGroup(group)
     group_ports = GetPortsByGroup(group)
     initialValue = '---'
     initialArea = '---'
     if group == 'Commercial':
-        empty_results = dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)
+        empty_results = dict( (port, dict( (Layers.COMMERCIAL_SPECIES_DISPLAY[species], {'Value':initialValue, 'Area':initialArea}) for species in group_species)) for port in group_ports)
     elif group == 'Commercial Passenger Fishing Vessel':
         empty_results = dict( (port, {'Value':initialValue, 'Area':initialArea}) for port in group_ports)
+    elif group == 'Edible Seaweed':
+        empty_results = dict( (port, {'Seaweed (Hand Harvest)': {'Value':initialValue, 'Area':initialArea}}) for port in group_ports) 
     else:
         empty_results = dict( (port, dict( (species, {'Value':initialValue, 'Area':initialArea}) for species in group_species)) for port in group_ports) 
     return empty_results
@@ -201,8 +250,6 @@ def display_mpa_analysis(request, feature_id, group, port=None, species=None, te
             return response_object
     except:
         #otherwise it worked 
-        for port_results in mpa_results:
-            port_results = roundPercentageValues(port_results, 1)
         return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': mpa_results}))  
 
 #would be nice to produce some helper methods from within here...
@@ -219,6 +266,10 @@ def mpa_analysis_results(mpa, group, port, species):
     for single_port in ports:
         port_results = []
         #See if we can retreive results from cache
+        #There is a problem here in that when a cache row is deleted for a particular mpa_id, group, port, AND species
+        #The cache retreival will assume there are no results for that species when the reality may be different
+        #This issue should be resolved by future caching strategy 
+        #(a strategy that maybe packages a single cache by mpa, group? or mpa, group, port?)
         if species is None:
             cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
         else:
@@ -340,8 +391,7 @@ def flesh_out_results(group, port, results):
         for result in results:
             result.species = 'Seaweed (Hand Harvest)'
     return results
-    
-    
+     
 '''
 Called by flesh_out_results
 Modifies commercial species for appropriate display:
@@ -352,8 +402,7 @@ def adjust_commercial_species(results):
     for result in results:
         result.species = species_dict[result.species]
     return results
-
-    
+ 
 '''
 Primarily used for testing...
 '''
