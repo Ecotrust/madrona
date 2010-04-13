@@ -1,0 +1,152 @@
+{% extends 'common/panel.html' %}
+{% block head %}
+
+{% endblock head %}
+{% block title %}{{array.name}} Spacing Analysis{% endblock title %}
+{% block panel %}
+	<script type="text/javascript" charset="utf-8">
+		
+		var spmodhigh;
+		var sphigh;
+		var spveryhigh;
+		
+		var spmhon;
+		var sphon;
+		var spvhon;
+		
+		var on_index = 0;
+		
+		lingcod.onShow('#sp-mod-high', function() {
+			spmodhigh = lingcod.kmlTree({
+	            url: "{% url array_spacing_kml array.pk, 6 %}",
+	            ge: ge, 
+	            gex: gex, 
+	            map_div: $('#map'), 
+	            element: $('#sp-mod-high div.tree'),
+	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
+	            title: true
+	        });
+	        spmodhigh.load();
+			$(spmodhigh).bind('kmlLoaded', function(e, kmlObject){
+				turnOnCurrentLayer( $('#sp-mod-high .tree') );
+				$('#sp-mod-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() {
+					 on_index = $('#sp-mod-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
+				} );
+			})
+		});
+		
+		lingcod.onUnhide('#sp-mod-high', function() {
+			turnOnCurrentLayer( $('#sp-mod-high .tree') );
+		});
+		
+		lingcod.onShow('#sp-high', function() {
+			sphigh = lingcod.kmlTree({
+	            url: "{% url array_spacing_kml array.pk, 8 %}",
+	            ge: ge, 
+	            gex: gex, 
+	            map_div: $('#map'), 
+	            element: $('#sp-high div.tree'),
+	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
+	            title: true
+	        });
+	        sphigh.load();
+			$(sphigh).bind('kmlLoaded', function(e, kmlObject){
+				turnOnCurrentLayer( $('#sp-high .tree') );
+				$('#sp-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() { 
+					on_index = $('#sp-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
+				} );
+			})
+		});
+		
+		lingcod.onUnhide('#sp-high', function() {
+			turnOnCurrentLayer( $('#sp-high .tree') );
+		});
+		
+		lingcod.onShow('#sp-very-high', function() {
+			spveryhigh = lingcod.kmlTree({
+	            url: "{% url array_spacing_kml array.pk, 10 %}",
+	            ge: ge, 
+	            gex: gex, 
+	            map_div: $('#map'), 
+	            element: $('#sp-very-high div.tree'),
+	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
+	            title: true
+	        });
+	        spveryhigh.load();
+			$(spveryhigh).bind('kmlLoaded', function(e, kmlObject){
+				turnOnCurrentLayer( $('#sp-very-high .tree') );
+				$('#sp-very-high > div.tree ul:first > li:first > ul > li > span.toggler').click( function() { 
+					on_index = $('#sp-very-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
+				} );
+			})
+		});
+		
+		lingcod.onUnhide('#sp-very-high', function() {
+			turnOnCurrentLayer( $('#sp-very-high .tree') );
+		});
+		
+		lingcod.onHide('#sp-mod-high', function(){
+			hideTree($('#sp-mod-high .tree'));
+		});
+		
+		lingcod.onHide('#sp-high', function(){
+			hideTree($('#sp-high .tree'));
+		});
+		
+		lingcod.onHide('#sp-very-high', function(){
+			hideTree($('#sp-very-high .tree'));
+		});
+		
+		function hideTree(tree){
+			tree.find('ul:first > li.visible > span.toggler').click();	
+		}
+		
+		function currentLayer(the_div,onlayer){
+			if( !onlayer ){
+				onlayer = the_div.find('.tree').find('ul:first > li:first > ul > li.visible');
+			}
+			return onlayer;
+		}
+		
+		function turnOnCurrentLayer(tree){
+			$( tree.find('ul:first > li:first > ul > li > span.toggler').get(on_index) ).click();
+		}
+		/*
+		function currentOnIndex(tree){
+			var blahblah;
+			blahblah = tree.find('ul:first > li:first > ul > li').index(tree.find('ul:first > li:first > ul > li.visible'));
+			if (blahblah == -1){
+				return on_index
+			} else {
+				return blahblah
+			}
+		}
+		*/
+		lingcod.beforeDestroy(function(){
+			if(spmodhigh){
+				spmodhigh.destroy();
+			}
+			if(sphigh){
+				sphigh.destroy();
+			}
+			if(spveryhigh){
+				spveryhigh.destroy();
+			}
+		});
+		
+	</script>
+	<p>The validity of these results depend on MarineMap's ability to accurately calculate levels of protection for each MPA.  MarineMap can not calculate a level of protection
+		unless all proposed allowed uses are selected from the drop down boxes.  If anything is entered into the "other allowed uses" field, MarineMap will not be able to calculate a level
+		of protection.  Due to these limitations, these results should be regarded as preliminary and subject to review by the Science Advisory Team and staff.</p>
+	<br><br>
+    <div class="tabs">
+		<ul>
+			<li><a href="#sp-mod-high"><span>Moderate High</span></a></li>
+			<li><a href="#sp-high"><span>High</span></a></li>
+			<li><a href="#sp-very-high"><span>Very High</span></a></li>
+		</ul>
+		<div id="sp-mod-high" class="spacing_analysis"><div class="tree"></div></div>
+		<div id="sp-high" class="spacing_analysis"><div class="tree"></div></div>
+		<div id="sp-very-high" class="spacing_analysis"><div class="tree"></div></div>
+	</div>
+{% endblock panel %}
