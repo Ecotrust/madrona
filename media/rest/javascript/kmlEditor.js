@@ -259,8 +259,9 @@ lingcod.rest.kmlEditor = function(options){
     $(tree).bind('select', function(e, node, kmlObject){
         $(that).trigger('select', [e, node, kmlObject]);
         if(options.client.inShowState){
-            var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
-            options.client.show(kmlObject, {syncTabs: (selectedTab.indexOf('Spacing') !== -1)});
+            if((selectedTab.indexOf('Spacing') !== -1)){
+                options.client.show(kmlObject, {syncTabs: true});                
+            }
         }
         that.selected = node;
         setSelectionMenuItemEnabled(!!node);
