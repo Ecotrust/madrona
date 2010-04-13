@@ -209,8 +209,8 @@ def clip(request):
                 overlapping_geom = Mpa.objects.filter(
                     geometry_final__bboverlaps=bottom_geom, 
                     pk__in=mpa_ids, 
-                    user=user).aggregate(Collect('geometry_final'))['geometry_final__collect']
-                    #user=user).aggregate(Union('geometry_final'))['geometry_final__union']
+                    #user=user).aggregate(Collect('geometry_final'))['geometry_final__collect']
+                    user=user).aggregate(Union('geometry_final'))['geometry_final__union']
             except:
                 pass
 
@@ -220,7 +220,7 @@ def clip(request):
                     new_geom = bottom_geom.difference(overlapping_geom)
                     if new_geom.empty:
                         new_geom = None 
-                except GEOSException as e:
+                except GEOSException, e:
                     print "ERROR: geos barfed on mpa %s : %s" % (bottom_id, e)
                     errors.append(bottom_id)
 
