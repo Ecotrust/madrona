@@ -3,6 +3,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
+from django.contrib.gis.db.models import Collect, Union
+from django.contrib.gis.geos.error import GEOSException
 
 from django.conf import settings
 from django.utils import simplejson
@@ -164,3 +166,104 @@ def copy(request, pk):
         return res
     else:
         return HttpResponse( "MPA copy service received unexpected " + request.method + " request.", status=400 )
+
+def clip(request):
+    # User must be logged in
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+
+    Mpa = get_mpa_class()
+
+    if request.method == 'GET':
+        mpa_ids = [int(x) for x in request.GET.getlist('mpaid')]
+        mpas = Mpa.objects.filter(pk__in=mpa_ids, user=user)
+        if len(mpas) < 2:
+            return HttpResponse("Please supply 2 or more MPAs (owned by you) using the mpaid param. You gave (%s)" % ','.join(mpa_ids), status=404)
+        else:
+            return render_to_response('mpa/clip_form.html', {'mpas': mpas, 'post_to': request.META['PATH_INFO'] }) 
+
+    elif request.method == 'POST':
+        # Note: if this contains invalid mpa ids or mpas owned by other users, they will pass silently 
+        mpa_ids = [int(x) for x in request.POST.getlist('mpaid[]')]
+
+        changed = []
+        unchanged = []
+        errors = []
+
+        for i in range(len(mpa_ids)):
+            # Start at the bottom
+            bottom_id = mpa_ids.pop()
+
+            bottom_geom = None
+            overlapping_geom = None
+            new_geom = None
+            new_poly = None
+
+            try:
+                # Get the bottom MPA geom
+                bottom_mpa = Mpa.objects.get(pk=bottom_id, user=user)
+                bottom_geom = bottom_mpa.geometry_final
+
+                # Create a multigeometry of all overlapping mpas that take clipping precedence  
+                overlapping_geom = Mpa.objects.filter(
+                    geometry_final__bboverlaps=bottom_geom, 
+                    pk__in=mpa_ids, 
+                    user=user).aggregate(Collect('geometry_final'))['geometry_final__collect']
+                    #user=user).aggregate(Union('geometry_final'))['geometry_final__union']
+            except:
+                pass
+
+            # Clip bottom geometry to the overlapping mutligeom
+            if bottom_geom and overlapping_geom:
+                try:
+                    new_geom = bottom_geom.difference(overlapping_geom)
+                    if new_geom.empty:
+                        new_geom = None 
+                except GEOSException as e:
+                    print "ERROR: geos barfed on mpa %s : %s" % (bottom_id, e)
+                    errors.append(bottom_id)
+
+
+                from django.contrib.gis.geos.collections import MultiPolygon
+                from django.contrib.gis.geos.polygon import Polygon
+                if isinstance(new_geom, MultiPolygon):
+                    # If multipoly is actually multi
+                    if len(new_geom) > 1:
+                        # 1/10,000th of the original area = insignificant sliver 
+                        area_threshold = bottom_geom.area / 10000.0
+                        valid_pieces = [x for x in new_geom if x.area > area_threshold]
+                        if len(valid_pieces) > 1:
+                            # We've split the mpa into two! 
+                            print "WARNING: %s split into two, only the largest piece will remain" % bottom
+                            largest_area = 0.0
+                            largest_piece = None
+                            for piece in valid_pieces:
+                                if piece.area > largest_area:
+                                    largest_piece = piece
+                            new_poly = largest_piece
+                        else:
+                            # new_geom is multipolygon with > 1 part but we're taking the only valid piece
+                            new_poly = valid_pieces[0]
+                    else:
+                        # new_geom is multipolygon with single part
+                        new_poly = new_geom[0]
+                elif isinstance(new_geom, Polygon):
+                    # new_geom is a polygon
+                    new_poly = new_geom        
+                else:
+                    # New Geometry diff is not a polygon or a multipolygon!
+                    new_poly = None
+                    
+
+            if new_poly and isinstance(new_poly, Polygon):
+                bottom_mpa.geometry_final = new_poly
+                bottom_mpa.save()
+                changed.append(bottom_id)
+            else:
+                unchanged.append(bottom_id)
+
+        res = HttpResponse("Clipping complete; clipped = (%s) ; unchanged = (%s); unchanged due to GEOS errors = (%s)" % (changed, unchanged, errors), status=201)
+        # TODO return atom links to updated mpas??
+        return res
+

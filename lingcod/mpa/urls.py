@@ -9,6 +9,7 @@ urlpatterns = patterns('lingcod.mpa.views',
     # (r'^load/form/$', 'mpaLoadForm'),
     # (r'^(?P<pk>\d)/$', 'lingcod.rest.views.resource', {'model': get_mpa_class, 'get_func': lingcod.mpa.views.get_mpa}),
     url(r'^(?P<pk>\d+)/copy/$', 'copy', name="mpa-copy"),
+    url(r'^clip/$', 'clip', name='mpa-clip'),
 )
 
 MpaForm = get_mpa_form()
