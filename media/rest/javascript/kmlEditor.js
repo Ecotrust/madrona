@@ -225,7 +225,7 @@ lingcod.rest.kmlEditor = function(options){
     $(options.appendTo).append(that.el);
     
     var visitFunction = function(kmlObject, config){
-        var kml = lingcod.parseKml(kmlObject.getKml());
+        var kml = kmldom(kmlObject.getKml());
         var self = kml.find('kml>Placemark>[nodeName=atom:link][rel=self], kml>NetworkLink>[nodeName=atom:link][rel=self], kml>Folder>[nodeName=atom:link][rel=self]');
         if(self.length === 1){
             config.fireEvents = true;
@@ -236,15 +236,12 @@ lingcod.rest.kmlEditor = function(options){
         return config;
     };
     
-    var tree = lingcod.kmlTree({
+    var tree = kmltree({
         url: options.url,
         ge: options.ge, 
         gex: options.gex, 
-        animate: false, 
         map_div: options.div, 
         element: that.kmlEl,
-        trans: lingcod.options.media_url + 'common/images/transparent.gif',
-        title: false,
         visitFunction: visitFunction,
         bustCache: true,
         restoreState: true,
@@ -279,7 +276,7 @@ lingcod.rest.kmlEditor = function(options){
     });
         
     var addExportItems = function(menu, kmlObject){
-        lingcod.parseKml(kmlObject.getKml()).find('kml>Folder>[nodeName=atom:link][rel=alt], kml>NetworkLink>[nodeName=atom:link][rel=alt], kml>Placemark>[nodeName=atom:link][rel=alt],').each(function(){
+        kmldom(kmlObject.getKml()).find('kml>Folder>[nodeName=atom:link][rel=alt], kml>NetworkLink>[nodeName=atom:link][rel=alt], kml>Placemark>[nodeName=atom:link][rel=alt],').each(function(){
             var title = $(this).attr('title');
             var href = $(this).attr('href');
             var item = new goog.ui.MenuItem(title);
@@ -291,7 +288,10 @@ lingcod.rest.kmlEditor = function(options){
     }
     
     $(tree).bind('dblclick', function(e, node, kmlObject){
-        options.client.show(kmlObject);
+        if(kmldom(kmlObject.getKml()).find(
+            '[nodeName=atom:link][rel=self]').length){
+            options.client.show(kmlObject);
+        }
     });
     
     $(options.client).bind('saving', function(e, msg){

@@ -11,7 +11,7 @@
     var add_to_array = "{% url array-add-mpa 999999999999999 %}";
     var remove_mpa = "{% url array-remove-mpa 999999999999999 %}"
     var getId = function(node, editor){
-        return lingcod.parseKml(editor.tree.lookup(node).getKml()).findLinks({rel: 'self'}).attr('mm:pk');
+        return kmldom(editor.tree.lookup(node).getKml()).find('[nodeName=atom:link][rel=self]').attr('mm:pk');
     };
     
     var getLocation = function(node, editor){

@@ -37,8 +37,8 @@
     <file path="common/js/map/geocoder.js" />
     <test path="common/js/test/map/googleLayers.js" />
     <test path="common/js/test/map/geocoder.js" />
-    <file path="common/js/tree/kmlTree.js" />
-    <test path="common/js/test/tree/kmlTree.js" />
+    <!-- <file path="common/js/tree/kmlTree.js" /> -->
+    <!-- <test path="common/js/test/tree/kmlTree.js" /> -->
     <file path="common/js/lib/json2.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
     <file path="common/js/tools/formats.js" />

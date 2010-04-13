@@ -35,9 +35,9 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // Reads a kml document (from a string) and returns an array of objects 
     // that can be used as input to client.create().
     var parseDocument = function(kml){
-        var kml = lingcod.parseKml(kml);
+        var kml = kmldom(kml);
         var return_values = {};
-        kml.findLinks({rel: 'marinemap.create_form'}).each(function(){
+        kml.find('[nodeName=atom:link][rel=marinemap.create_form]').each(function(){
             $link = $(this);
             return_values[$link.attr('mm:model')] = {
                 model: $link.attr('mm:model'),
@@ -52,7 +52,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
     that.parseDocument = parseDocument;
     
     var parseResource = function(kmlFeatureObject){
-        var kml = lingcod.parseKml(kmlFeatureObject.getKml());
+        var kml = kmldom(kmlFeatureObject.getKml());
         var self = kml.find('kml>Folder>[nodeName=atom:link][rel=self], kml>NetworkLink>[nodeName=atom:link][rel=self], kml>Placemark>[nodeName=atom:link][rel=self]')
         var form = kml.find('kml>Folder>[nodeName=atom:link][rel=marinemap.update_form], kml>NetworkLink>[nodeName=atom:link][rel=marinemap.update_form], kml>Placemark>[nodeName=atom:link][rel=marinemap.update_form]')
         var share_form = kml.find('kml>Folder>[nodeName=atom:link][rel=marinemap.share_form], kml>NetworkLink>[nodeName=atom:link][rel=marinemap.share_form], kml>Placemark>[nodeName=atom:link][rel=marinemap.share_form]')
@@ -530,9 +530,9 @@ lingcod.rest.client = function(gex, panel, manipulators){
     // Finds Kml Feature within a text file that contains a Feature with 
     // matching location.
     var findResourceInString = function(location, text){
-        var kml = lingcod.parseKml(text);
+        var kml = kmldom(text);
         var path = getPath(location);
-        var link = kml.findLinks({href: path});
+        var link = kml.find('[nodeName=atom:link][href='+path+']');
         if(link.length === 0){
             var link = kml.findLinks({href: location});
         }

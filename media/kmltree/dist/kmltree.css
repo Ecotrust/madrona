@@ -1,0 +1,240 @@
+div.kmltree {
+  font-family: sans-serif;
+  font-size: 12px;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none; }
+  div.kmltree p.error {
+    -moz-user-select: text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    user-select: text; }
+  div.kmltree ul {
+    list-style: none;
+    padding-left: 18px; }
+  div.kmltree li ul {
+    padding-top: 5px;
+    display: none; }
+  div.kmltree li.open > ul {
+    display: block; }
+
+span.kmlId, span.nlDocId {
+  display: none; }
+
+li.kmltree-item {
+  white-space: nowrap;
+  margin: 0;
+  padding: 5px 0; }
+  li.kmltree-item span.name {
+    color: #313841; }
+  li.kmltree-item.hasDescription > span.name {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer; }
+
+h4.kmltree-title {
+  color: #6C7C90;
+  font-weight: bold;
+  margin: 0 0 -5px 0; }
+
+.expander, .toggler, .icon {
+  margin: 0;
+  padding: 0;
+  float: left;
+  width: 16px;
+  height: 16px; }
+
+.expander {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -168px 0px;
+  width: 16px;
+  height: 16px;
+  margin-left: -17px; }
+  .expander:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -189px 0px;
+    width: 16px;
+    height: 16px; }
+  .expander:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -210px 0px;
+    width: 16px;
+    height: 16px; }
+
+li.open > .expander {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -105px 0px;
+  width: 16px;
+  height: 16px; }
+  li.open > .expander:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -126px 0px;
+    width: 16px;
+    height: 16px; }
+  li.open > .expander:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -147px 0px;
+    width: 16px;
+    height: 16px; }
+
+.toggler {
+  margin-right: 4px;
+  background: url('images/sprites/kml.png?1271189275') no-repeat -231px 0px;
+  width: 16px;
+  height: 16px; }
+  .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -273px 0px;
+    width: 16px;
+    height: 16px; }
+  .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -294px 0px;
+    width: 16px;
+    height: 16px; }
+
+li.checkOffOnly > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -252px 0px;
+  width: 16px;
+  height: 16px; }
+
+li.visible > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -315px 0px;
+  width: 16px;
+  height: 16px; }
+  li.visible > .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -336px 0px;
+    width: 16px;
+    height: 16px; }
+  li.visible > .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -357px 0px;
+    width: 16px;
+    height: 16px; }
+li.radioFolder > ul > li > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -378px 0px;
+  width: 16px;
+  height: 16px; }
+  li.radioFolder > ul > li > .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -399px 0px;
+    width: 16px;
+    height: 16px; }
+  li.radioFolder > ul > li > .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -420px 0px;
+    width: 16px;
+    height: 16px; }
+li.radioFolder > ul > li.visible > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -441px 0px;
+  width: 16px;
+  height: 16px; }
+  li.radioFolder > ul > li.visible > .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -462px 0px;
+    width: 16px;
+    height: 16px; }
+  li.radioFolder > ul > li.visible > .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -483px 0px;
+    width: 16px;
+    height: 16px; }
+li.radioFolder > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -378px 0px;
+  width: 16px;
+  height: 16px; }
+  li.radioFolder > .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -399px 0px;
+    width: 16px;
+    height: 16px; }
+  li.radioFolder > .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -420px 0px;
+    width: 16px;
+    height: 16px; }
+li.radioFolder.visible > .toggler {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -441px 0px;
+  width: 16px;
+  height: 16px; }
+  li.radioFolder.visible > .toggler:hover {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -462px 0px;
+    width: 16px;
+    height: 16px; }
+  li.radioFolder.visible > .toggler:active {
+    background: url('images/sprites/kml.png?1271189275') no-repeat -483px 0px;
+    width: 16px;
+    height: 16px; }
+li.KmlPlacemark > .expander, li.KmlPhotoOverlay > .expander, li.KmlGroundOverlay > .expander, li.KmlTour > .expander {
+  display: none; }
+
+div.kmltree li.checkHideChildren ul, div.kmltree li.checkHideChildren .expander {
+  display: none; }
+div.kmltree .icon {
+  display: none;
+  padding: 0px; }
+
+li.KmlFolder > .icon, li.KmlNetworkLink > .icon, li.KmlTour > .icon, li.KmlPhotoOverlay > .icon, li.KmlGroundOverlay > .icon, li.customIcon > .icon {
+  margin-right: 4px;
+  display: block; }
+
+li.KmlFolder > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat 0px 0px;
+  width: 16px;
+  height: 16px; }
+li.KmlFolder.open > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -21px 0px;
+  width: 16px;
+  height: 16px; }
+li.KmlNetworkLink > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat 0px 0px;
+  width: 16px;
+  height: 16px; }
+li.KmlNetworkLink.loading > .icon {
+  background: transparent url(./images/kml-throbber.gif) no-repeat; }
+li.KmlNetworkLink.error > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -42px 0px;
+  width: 16px;
+  height: 16px; }
+li.KmlTour > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -63px 0px;
+  width: 16px;
+  height: 16px; }
+li.KmlPhotoOverlay > .icon, li.KmlGroundOverlay > .icon {
+  background: url('images/sprites/kml.png?1271189275') no-repeat -84px 0px;
+  width: 16px;
+  height: 16px; }
+li.customIcon > .icon {
+  background: transparent no-repeat; }
+li.kmltree-item p.snippet {
+  text-indent: 0px;
+  width: 80%;
+  margin: 5px 0px 5px 20px;
+  color: #6C7C90;
+  white-space: normal; }
+
+span.name {
+  clear: both;
+  position: relative;
+  top: 1px; }
+
+div.kmltree li.selected {
+  background-color: #B2E1FF;
+  padding-left: 5px;
+  margin-left: -5px; }
+  div.kmltree li.selected > span.name {
+    font-weight: bold;
+    border-bottom: none; }
+    div.kmltree li.selected > span.name:hover {
+      border: none; }
+
+div.kmltree-loading {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #FFF;
+  opacity: 0.7;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity='70');
+  text-align: center; }
+  div.kmltree-loading span {
+    position: absolute;
+    padding-top: 20px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity='100');
+    font-weight: bold;
+    height: 40px;
+    padding-bottom: 15px;
+    background: transparent url(images/ajax-loader.gif) no-repeat center bottom; }

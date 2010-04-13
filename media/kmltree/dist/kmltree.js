@@ -1,40 +1,81 @@
-// For some reason GEAPI can't switch between features when opening new
-// balloons accurately. Have to clear the old popup and add a timeout to
-// make sure the balloon A is closed before balloon b is opened.
-lingcod.openBalloon = function(kmlObject, plugin, whitelisted){
-    var a = plugin.getBalloon();
-    if(a){
-        // there is already a balloon(a) open
-        var f = a.getFeature();
-        if(f !== kmlObject){
-            // not trying to re-open the same balloon
-            plugin.setBalloon(null);
-            // try this function again in 50ms
-            setTimeout(function(){
-                lingcod.openBalloon(kmlObject, plugin, whitelisted);
-            }, 10);
-            // setTimeout(lingcod.openBalloon, 10, [kmlObject, plugin, whitelisted]);
+
+// src/tmpl.js
+
+// Simple JavaScript Templating
+// John Resig - http://ejohn.org/ - MIT Licensed
+(function(){
+  var cache = {};
+  
+  this.tmpl = function tmpl(str, data){
+    // Figure out if we're getting a template, or if we need to
+    // load the template - and be sure to cache the result.
+    var fn = !/\W/.test(str) ?
+      cache[str] = cache[str] ||
+        tmpl(document.getElementById(str).innerHTML) :
+      
+      // Generate a reusable function that will serve as a template
+      // generator (and which will be cached).
+      new Function("obj",
+        "var p=[],print=function(){p.push.apply(p,arguments);};" +
+        
+        // Introduce the data as local variables using with(){}
+        "with(obj){p.push('" +
+        
+        // Convert the template into pure JavaScript
+        str
+          .replace(/[\r\t\n]/g, " ")
+          .split("<%").join("\t")
+          .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+          .replace(/\t=(.*?)%>/g, "',$1,'")
+          .split("\t").join("');")
+          .split("%>").join("p.push('")
+          .split("\r").join("\\'")
+      + "');}return p.join('');");
+    
+    // Provide some basic currying to the user
+    return data ? fn( data ) : fn;
+  };
+})();
+
+
+
+// src/kmldom.js
+
+// returns a jquery object that wraps the kml dom
+kmldom = (function(){
+    return function(kml){
+        if( window.ActiveXObject && window.GetObject ) { 
+            var dom = new ActiveXObject( 'Microsoft.XMLDOM' ); 
+            dom.loadXML(kml); 
+            return jQuery(dom);
+        } 
+        if( window.DOMParser ) {
+            return jQuery(new DOMParser().parseFromString( kml, 'text/xml' ));
         }
-    }else{
-        // if balloon A closed or never existed, create & open balloon B
-        kmlObject.setVisibility(true);
-        if(whitelisted && kmlObject.getDescription()){
-            var b = plugin.createHtmlStringBalloon('');
-            b.setFeature(kmlObject); // optional
-            b.setContentString(kmlObject.getDescription());
-            plugin.setBalloon(b);
-        }else{
-            var b = plugin.createFeatureBalloon('');
-            b.setFeature(kmlObject);
-            setTimeout(function(){
-                plugin.setBalloon(b);
-            }, 10);
-        }
+        throw new Error( 'No XML parser available' );
     }
-};
+})();
 
 
-lingcod.kmlTree = (function(){
+
+// src/kmltree.js
+
+var kmltree = (function(){
+
+    openBalloon = function(kmlObject, ge, whitelisted){
+        var b = ge.createFeatureBalloon('');
+        b.setFeature(kmlObject);
+        b.setMinWidth(100);
+        ge.setBalloon(b);
+    }
+    
+    // can be removed when the following ticket is resolved:
+    // http://code.google.com/p/earth-api-samples/issues/detail?id=290
+    function qualifyURL(url) {
+        var a = document.createElement('a');
+        a.href = url;
+        return a.href;
+    }
 
     var NetworkLinkQueue = function(opts){
         if(opts['success'] && opts['error'] && opts['tree'] && opts['my']){
@@ -46,7 +87,12 @@ lingcod.kmlTree = (function(){
     };
     
     NetworkLinkQueue.prototype.add = function(node, callback){
-        this.queue.push({node: node, callback: callback, loaded: false, errors: false});
+        this.queue.push({
+            node: node,
+            callback: callback,
+            loaded: false,
+            errors: false
+        });
     };
     
     NetworkLinkQueue.prototype.execute = function(){
@@ -58,26 +104,28 @@ lingcod.kmlTree = (function(){
                 item.node.data('queueItem', item);
                 if(!item.loaded && !item.loading){
                     var self = this;
-                    $(item.node).bind('loaded', function(e, node, kmlObject){self.nodeLoadedCallback(e, node, kmlObject)});
+                    $(item.node).bind('loaded', function(e, node, kmlObject){
+                        self.nodeLoadedCallback(e, node, kmlObject)
+                    });
                     this.opts['tree'].openNetworkLink(item.node);
                     item.loading = true;
                 }
             }
-            // start up opening networklinks
         }
     };
     
-    NetworkLinkQueue.prototype.nodeLoadedCallback = function(e, node, kmlObject){
+    NetworkLinkQueue.prototype.nodeLoadedCallback = function(e, node, kmlObj){
         var item = node.data('queueItem');
         if(item.loaded === true){
-            throw('event listener fired twice for '+node.find('>span.name').text());
+            throw('event listener fired twice for '
+                + node.find('>span.name').text());
         }
         item.loaded = true;
         item.loading = false;
         $(node).unbind('loaded');
         item.callback(node);
         this.finish(item);
-    }
+    };
     
     NetworkLinkQueue.prototype.finish = function(item){
         var done = true;
@@ -108,33 +156,38 @@ lingcod.kmlTree = (function(){
     // Returns a jquery object representing a kml file
     
     var template = tmpl([
-        '<li class="',
+        '<li UNSELECTABLE="on" class="',
         '<%= listItemType %> ',
         '<%= type %> ',
         '<%= customClass %> ',
         '<%= (visible ? "visible " : "") %>',
         '<%= (customIcon ? "hasIcon " : "") %>',
-        '<%= (fireEvents ? "fireEvents " : "") %>',
         '<%= (alwaysRenderNodes ? "alwaysRenderNodes " : "") %>',
         '<%= (select ? "select " : "") %>',
         '<%= (open ? "open " : "") %>',
         '<%= (description ? "hasDescription " : "") %>',
         '<%= (snippet ? "hasSnippet " : "") %>',
         '<%= (customIcon ? "customIcon " : "") %>',
-        'marinemap-kmltree-id-<%= id %> marinemap-kmltree-item',
+        'kmltree-id-<%= id %> kmltree-item',
         '">',
             '<span class="kmlId"><%= kmlId %></span>',
             '<span class="nlDocId"></span>',
-            '<span class="expander"><img width="16" height="16" src="<%= trans %>" /></span>',
-            '<span class="toggler"><img width="16" height="16" src="<%= trans %>" /></span>',
-            '<span ',
+            '<div UNSELECTABLE="on" class="expander">',
+                '&nbsp;',
+            '</div>',
+            '<div UNSELECTABLE="on" class="toggler">',
+                '&nbsp;',
+            '</div>',
+            '<div ',
             '<% if(customIcon){ %>',
                 'style="background:url(<%= customIcon %>);"',
             '<% } %>',
-            ,'class="icon"><img width="16" height="16" src="<%= trans %>" /></span>',
-            '<span class="name"><%= name %></span>',
+            'class="icon">',
+                '&nbsp;',
+            '</div>',
+            '<span UNSELECTABLE="on" class="name"><%= name %></span>',
             '<% if(snippet){ %>',
-                '<p class="snippet"><%= snippet %></p>',
+                '<p UNSELECTABLE="on" class="snippet"><%= snippet %></p>',
             '<% } %>',
             '<% if(children.length) { %>',
             '<ul><%= renderOptions(children) %></ul>',
@@ -144,22 +197,19 @@ lingcod.kmlTree = (function(){
     
     var constructor_defaults = {
         enableSelection: function(){return false;},
-        fireEvents: function(){return false;},
         visitFunction: function(kmlObject, config){return config},
         openNetworkLinks: true,
         restoreStateOnRefresh: true,
-        showTitle: true,
         bustCache: false,
         restoreState: false,
-        whiteListed: false,
+        // whiteListed: false,
         supportItemIcon: false,
         loadingMsg: 'Loading data'
     };
         
-    
-    openBalloon = lingcod.openBalloon;
-    
+        
     return function(opts){
+        
         var that = {};
         var errorCount = 0;
         var lookupTable = {};
@@ -167,17 +217,20 @@ lingcod.kmlTree = (function(){
         that.kmlObject = null;
         var docs = {};
         var my = {};
-        that.parseKml = lingcod.parseKml;
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
+
+        if(parseFloat(ge.getPluginVersion()) < 5.1){
+            throw('kmltree requires a google earth plugin version >= 5.1');
+        }
                 
-        if(!opts.url || !opts.gex || !opts.element || !opts.trans){
-            throw('kmlTree must be called with options url, gex, trans & element');
-            return false;
+        if(!opts.url || !opts.gex || !opts.element){
+            throw('kmltree requires options url, gex & element');
         }
         
         if(!opts.element.attr('id')){
             opts.element.attr('id', 'kml-tree'+(new Date()).getTime());
+            opts.element.attr('UNSELECTABLE', "on");
         }
         
         if(opts.restoreState){
@@ -186,7 +239,9 @@ lingcod.kmlTree = (function(){
             });
         }
         
-        $(opts.element).css({position: 'relative'});
+        if(opts.element.css('position') !== 'absolute'){
+          $(opts.element).css({position: 'relative'});
+        }
         
         
         var load = function(cachebust){
@@ -194,16 +249,14 @@ lingcod.kmlTree = (function(){
                 throw('KML already loaded');
             }
             showLoading();
-            var url = opts.url;
-            // can be removed when the following ticket is resolved:
-            // http://code.google.com/p/earth-api-samples/issues/detail?id=290&q=label%3AType-Defect&sort=-stars%20-status&colspec=ID%20Type%20Summary%20Component%20OpSys%20Browser%20Status%20Stars
-            if(!url.match('http')){
-                url = window.location.protocol + "//" + window.location.host +
-                    "/" + url;
-                url = url.replace(/(\w)\/\//g, '$1/');
-            }
+            var url = qualifyURL(opts.url);
             if(cachebust || opts.bustCache){
-                url = url + '?' + (new Date()).valueOf();
+                var buster = (new Date()).getTime();
+                if(url.indexOf('?') === -1){
+                    url = url + '?cachebuster=' + buster;
+                }else{
+                    url = url + '&cachebuster=' + buster;
+                }
             }
             google.earth.fetchKml(ge, url, function(kmlObject){
                 processKmlObject(kmlObject, url);
@@ -216,7 +269,7 @@ lingcod.kmlTree = (function(){
         var getNodesById = function(id){
             if(id){
                 id = id.replace(/\//g, '-');
-                return opts.element.find('.marinemap-kmltree-id-'+id);
+                return opts.element.find('.kmltree-id-'+id);
             }
         };
         
@@ -231,7 +284,8 @@ lingcod.kmlTree = (function(){
         that.selectById = selectById;
         
         var clearSelection = function(keepBalloons, dontTriggerEvent){
-            var prev = $('#'+opts.element.attr('id')).find('.selected').removeClass('selected');
+            var prev = $('#'+opts.element.attr('id'))
+                .find('.selected').removeClass('selected');
             if(prev.length){
                 prev.each(function(){
                     setModified($(this), 'selected', false);
@@ -250,24 +304,26 @@ lingcod.kmlTree = (function(){
         
         var restoreState = function(node, state, queue){
             if(node && state && queue){
-                var unloadedNL = node.hasClass('KmlNetworkLink') && !node.hasClass('loaded');
+                var unloadedNL = node.hasClass('KmlNetworkLink') 
+                    && !node.hasClass('loaded');
                 if(state.name !== 'root'){
-                    if(state['modified']){
-                        if(state['modified']['open'] !== undefined){
+                    var mods = state['modified'];
+                    if(mods){
+                        if(mods['open'] !== undefined){
                             if(unloadedNL){
                                 queue.add(node, function(loadedNode){
                                     restoreState(loadedNode, state, queue);
                                     queue.execute();
                                 });
                             }else{
-                                node.toggleClass('open', state['modified']['open'].current);
-                                setModified(node, 'open', state['modified']['open'].current);
+                                node.toggleClass('open', mods.open.current);
+                                setModified(node, 'open', mods.open.current);
                             }
                         }
-                        if(state['modified']['visibility'] !== undefined){
-                            toggleItem(node, state['modified']['visibility'].current);
+                        if(mods['visibility'] !== undefined){
+                            toggleItem(node, mods['visibility'].current);
                         }
-                        if(state['modified']['selected'] !== undefined){
+                        if(mods['selected'] !== undefined){
                             selectNode(node, lookup(node));
                         }
                     }
@@ -275,12 +331,14 @@ lingcod.kmlTree = (function(){
                 if(!unloadedNL){
                     for(var i=0; i<state.children.length; i++){
                         var child = state.children[i];
-                        var n = node.find('>ul>li>span.name:contains('+child.name+')').parent();
+                        var n = node.find('>ul>li>span.name:contains(' 
+                            + child.name + ')').parent();
                         if(n.length === 1){
                             restoreState(n, child, queue);
                         }else if(n.length > 1){
                             n.each(function(){
-                                if($(this).find('>span.name').text() === child.name){
+                                var name = $(this).find('>span.name').text();
+                                if(name === child.name){
                                     restoreState($(this), child, queue);
                                 }
                             });
@@ -295,7 +353,7 @@ lingcod.kmlTree = (function(){
         var showLoading = function(msg){
             hideLoading();
             var msg = msg || opts.loadingMsg;
-            var h = $('<div class="marinemap-kmltree-loading"><span>' + 
+            var h = $('<div class="kmltree-loading"><span>' + 
                 msg + '</span></div>');
             var height = opts.element.height();
             if(height !== 0){
@@ -309,7 +367,7 @@ lingcod.kmlTree = (function(){
         that.showLoading = showLoading;
         
         var hideLoading = function(){
-            opts.element.find('.marinemap-kmltree-loading').remove();
+            opts.element.find('.kmltree-loading').remove();
         };
         
         that.hideLoading = hideLoading;
@@ -335,11 +393,20 @@ lingcod.kmlTree = (function(){
                 }else{
                     // show error
                     setTimeout(function() {
-                        var content = '<div class="marinemap-kmltree">';
-                        if(opts.title){
-                            content += '<h4 class="marinemap-kmltree-title">Error Loading</h4>';
-                        }
-                        opts.element.html(content + '<p class="error">could not load kml file. Try clicking <a target="_blank" href="'+url+'">this link</a>, then refreshing the application.</p></div>');
+                        opts.element.html([
+                            '<div class="kmltree">',
+                                '<h4 class="kmltree-title">',
+                                    'Error Loading',
+                                '</h4>',
+                                '<p class="error">',
+                                    'could not load kml file. Try clicking ',
+                                    '<a target="_blank" href="', url, '">',
+                                        'this link',
+                                    '</a>',
+                                    ', then refreshing the application.',
+                                '<p>',
+                            '</div>'
+                        ].join(''));
                         $(that).trigger('kmlLoadError', [kmlObject]);
                     },
                     0);
@@ -353,12 +420,17 @@ lingcod.kmlTree = (function(){
             
             
             var rendered = renderOptions(options.children[0].children);
-            var content = '<div class="marinemap-kmltree">';
-            if(opts.title){
-                content += '<h4 class="marinemap-kmltree-title">'+options.children[0].name+'</h4>';
-            }
-            opts.element.find('div.marinemap-kmltree').remove();
-            opts.element.find('.marinemap-kmltree-loading').before(content + '<ul class="marinemap-kmltree">' + rendered +'</ul></div>');
+            opts.element.find('div.kmltree').remove();
+            opts.element.find('.kmltree-loading').before([
+                '<div UNSELECTABLE="on" class="kmltree">',
+                    '<h4 UNSELECTABLE="on" class="kmltree-title">',
+                        options.children[0].name,
+                    '</h4>',
+                    '<ul UNSELECTABLE="on" class="kmltree">',
+                        rendered,
+                    '</ul>',
+                '</div>'
+            ].join(''));
             ge.getFeatures().appendChild(kmlObject);
             var queue = new NetworkLinkQueue({
                 success: function(links){
@@ -379,10 +451,16 @@ lingcod.kmlTree = (function(){
             }
             
             if(that.previousState && that.previousState.children.length){
-                // This will need to be altered at some point to run the queue regardless of previousState, expanding networklinks that are set to open within the kml
-                restoreState(opts.element.find('div.marinemap-kmltree'), that.previousState, queue);
+                // This will need to be altered at some point to run the queue
+                // regardless of previousState, expanding networklinks that 
+                // are set to open within the kml
+                restoreState(
+                    opts.element.find('div.kmltree'), 
+                    that.previousState, 
+                    queue);
             }else{
-                queueOpenNetworkLinks(queue, $('#' + opts.element.attr('id')));
+                queueOpenNetworkLinks(queue, 
+                    $('#' + opts.element.attr('id')));
             }
             queue.execute();
         };
@@ -429,13 +507,12 @@ lingcod.kmlTree = (function(){
                             description: this.getDescription(),
                             snippet: snippet,
                             select: opts.enableSelection(this),
-                            fireEvents: opts.fireEvents(this),
+                            // fireEvents: opts.fireEvents(this),
                             listItemType: getListItemType(this),
                             customIcon: customIcon(this),
                             customClass: '',
                             children: [],
                             kmlId: lookupId,
-                            trans: opts.trans,
                             alwaysRenderNodes: false
                         }
                         child = opts.visitFunction(this, child);
@@ -457,8 +534,9 @@ lingcod.kmlTree = (function(){
             if(!opts.supportItemIcon){
                 return false;
             }
-            var doc = lingcod.parseKml(kmlObject.getKml());
-            var root = doc.find('kml>Folder, kml>Document, kml>Placemark, kml>NetworkLink');
+            var doc = kmldom(kmlObject.getKml());
+            var root = doc.find('kml>Folder, kml>Document, kml>Placemark, ' + 
+                'kml>NetworkLink');
             var href = root.find('>Style>ListStyle>ItemIcon>href').text();
             if(href){
                 return href;
@@ -559,7 +637,8 @@ lingcod.kmlTree = (function(){
         };
         
         var getStateFromLocalStorage = function(){
-            var json = localStorage.getItem('marinemap-kmltree-('+opts.url+')');
+            var json = localStorage.getItem(
+                'kmltree-('+opts.url+')');
             if(json){
                 return JSON.parse(json);
             }else{
@@ -569,7 +648,7 @@ lingcod.kmlTree = (function(){
         
         var setStateInLocalStorage = function(){
             var state = JSON.stringify(getState());
-            localStorage.setItem('marinemap-kmltree-('+opts.url+')', state);
+            localStorage.setItem('kmltree-('+opts.url+')', state);
         };
         
         
@@ -582,7 +661,7 @@ lingcod.kmlTree = (function(){
             var id = opts.element.attr('id');
             $('#'+id+' li > span.name').die();
             $('#'+id+' li').die();
-            $('#'+id+' li > span.expander').die();
+            $('#'+id+' li > .expander').die();
             opts.element.html('');
             // $(that).unbind();
         };
@@ -647,11 +726,15 @@ lingcod.kmlTree = (function(){
             toggleVisibility(node, true);
             node.addClass('selected');
             openBalloon(kmlObject, ge);
+            
             var parent = node.parent().parent();
-            while(!parent.hasClass('marinemap-kmltree') && !parent.find('>ul:visible').length){
+            
+            while(!parent.hasClass('kmltree') 
+                && !parent.find('>ul:visible').length){
                 parent.addClass('open');
                 var parent = parent.parent().parent();
             }
+            
             setModified(node, 'selected', true);
             $(that).trigger('select', [node, kmlObject]);
         };
@@ -695,7 +778,7 @@ lingcod.kmlTree = (function(){
         
         var toggleUp = function(node, toggling, from){
             var parent = node.parent().parent();
-            if(!parent.hasClass('marinemap-kmltree')){
+            if(!parent.hasClass('kmltree')){
                 if(toggling){
                     var herParent = parent.parent().parent();
                     if(herParent.hasClass('radioFolder')){
@@ -744,6 +827,7 @@ lingcod.kmlTree = (function(){
                 return;
             }
             setModified(node, 'visibility', toggling);
+            var o = lookup(node);
             lookup(node).setVisibility(toggling);
             node.toggleClass('visible', toggling);
             
@@ -773,10 +857,19 @@ lingcod.kmlTree = (function(){
         };
         
         var getState = function(){
-            var asdf = opts.element.find('span.name:contains(asdf)').parent().find('ul span.name:contains(asdf)').parent();
-            var state = {name: 'root', remove: false, children: [], parent: false};
+            var state = {
+                name: 'root', 
+                remove: false, 
+                children: [], 
+                parent: false
+            };
             walk(function(node, context){
-                var me = {name: node.find('>span.name').text(), remove: true, children: [], parent: context};
+                var me = {
+                    name: node.find('>span.name').text(), 
+                    remove: true, 
+                    children: [], 
+                    parent: context
+                };
                 var modified = node.data('modified');
                 var new_modified = {};
                 var anykey = false;
@@ -838,11 +931,19 @@ lingcod.kmlTree = (function(){
                 throw('networklink already loaded');
             }else{
                 var NetworkLink = lookup(node);
-                var link = NetworkLink.getLink().getHref();
+                var link = NetworkLink.getLink();
+                if(link){
+                    link = link.getHref();
+                }else{
+                    node.addClass('error');
+                    node.addClass('checkHideChildren');
+                    $(node).trigger('loaded', [node, false]);
+                    return;
+                }
                 if(opts.bustCache){
                     var buster = (new Date()).getTime();
                     if(link.indexOf('?') === -1){
-                        link = link + '?' + buster;
+                        link = link + '?cachebuster=' + buster;
                     }else{
                         link = link + '&cachebuster=' + buster;
                     }
@@ -850,7 +951,7 @@ lingcod.kmlTree = (function(){
                 node.addClass('loading');
                 google.earth.fetchKml(ge, link, function(kmlObject){
                     if(!kmlObject){
-                        // alert('Error loading ' + link);
+                        alert('Error loading ' + link);
                         node.addClass('error');
                         node.addClass('checkHideChildren');
                         $(that).trigger('kmlLoadError', [kmlObject]);
@@ -893,41 +994,40 @@ lingcod.kmlTree = (function(){
                 });
             };
             if(!node){
-                node = opts.element.find('div.marinemap-kmltree');
+                node = opts.element.find('div.kmltree');
             }
             recurse_(node, context);
         };
         
         that.walk = walk;
         var id = opts.element.attr('id');
-                
+        
+        
         $('#'+id+' li > span.name').live('click', function(){
             var node = $(this).parent();
             var kmlObject = lookup(node);
             if(node.hasClass('error') && node.hasClass('KmlNetworkLink')){
-                alert('There was an error loading this NetworkLink. '+kmlObject.getLink().getHref());
+                var href = kmlObject.getLink().getHref();
+                alert('There was an error loading this NetworkLink. ' + href);
             }
             if(node.hasClass('select')){
                 selectNode(node, kmlObject);
             }else{
                 clearSelection();
-                if(node.hasClass('hasDescription')){
-                    toggleVisibility(node, true);
-                    openBalloon(kmlObject, ge, opts.whiteListed);
-                }                
+                if(node.hasClass('hasDescription') || kmlObject.getType() === 'KmlPlacemark'){
+                    if(kmlObject.getType() === 'KmlPlacemark'){
+                        toggleVisibility(node, true);
+                    }
+                    openBalloon(kmlObject, ge, opts['whiteListed']);
+                }
             }
-            if(node.hasClass('fireEvents')){
-                $(that).trigger('click', [node[0], kmlObject]);
-            }
-            // node.trigger('mouseup');
+            $(that).trigger('click', [node[0], kmlObject]);
         });
-            
-        $('#'+id+' li.fireEvents > span.name').live('contextmenu', function(){
+
+        $('#'+id+' li > span.name').live('contextmenu', function(){            
             var parent = $(this).parent();
             var kmlObject = lookup(parent);
-            if(parent.hasClass('fireEvents')){
-                $(that).trigger('contextmenu', [parent[0], kmlObject]);
-            }
+            $(that).trigger('contextmenu', [parent[0], kmlObject]);
         });
         
         // Events to handle clearing selection
@@ -936,16 +1036,18 @@ lingcod.kmlTree = (function(){
             if(e.target === this){
                 clearSelection();
             }else{
-                if($(e.target).hasClass('toggle') && !$(e.target).hasClass('select')){
+                var el = $(e.target);
+                if(el.hasClass('toggle') && !el.hasClass('select')){
                     clearSelection();
                 }
             }
         });
         
         // expand events
-        $('#'+id+' li > span.expander').live('click', function(e){
+        $('#'+id+' li > .expander').live('click', function(e){
             var el = $(this).parent();
-            if(el.hasClass('KmlNetworkLink') && !el.hasClass('loaded') && !el.hasClass('loading')){
+            if(el.hasClass('KmlNetworkLink') && !el.hasClass('loaded') 
+                && !el.hasClass('loading')){
                 openNetworkLink(el);
             }else{
                 el.toggleClass('open');
@@ -953,7 +1055,7 @@ lingcod.kmlTree = (function(){
             }
         });
         
-        $('#'+id+' li > span.toggler').live('click', function(){
+        $('#'+id+' li > .toggler').live('click', function(){
             var node = $(this).parent();
             var toggle = !node.hasClass('visible');
             if(!toggle && node.hasClass('selected')){
@@ -964,10 +1066,13 @@ lingcod.kmlTree = (function(){
             }
             if(node.hasClass('checkOffOnly') && toggle){
                 // do nothing. Should not be able to toggle-on from this node.
-                // http://code.google.com/apis/kml/documentation/kmlreference.html#liststyle
                 return;
             }else{
-                if(node.hasClass('KmlNetworkLink') && node.hasClass('alwaysRenderNodes') && !node.hasClass('open') && !node.hasClass('loading') && !node.hasClass('loaded')){
+                if(node.hasClass('KmlNetworkLink') 
+                    && node.hasClass('alwaysRenderNodes') 
+                    && !node.hasClass('open') 
+                    && !node.hasClass('loading') 
+                    && !node.hasClass('loaded')){
                     openNetworkLink(node);
                     $(node).bind('loaded', function(e, node, kmlObject){
                         toggleVisibility(node, true);
@@ -976,17 +1081,20 @@ lingcod.kmlTree = (function(){
                 }else{
                     toggleVisibility(node, toggle);                    
                 }
-                if(node.hasClass('fireEvents')){
+                // if(node.hasClass('fireEvents')){
                     $(that).trigger('toggleItem', [node, toggle]);
-                }
+                // }
             }
         });
         
         $('#'+id+' li').live('dblclick', function(e){
             var target = $(e.target);
             var parent = target.parent();
-            if(target.hasClass('expander') || target.hasClass('toggler') || parent.hasClass('expander') || parent.hasClass('toggler')){
-                // Double-clicking the expander icon or checkbox should not zoom
+            if(target.hasClass('expander')
+                || target.hasClass('toggler') 
+                || parent.hasClass('expander') 
+                || parent.hasClass('toggler')){
+                // dblclicking the expander icon or checkbox should not zoom
                 return;
             }
             var node = $(this);
@@ -996,10 +1104,12 @@ lingcod.kmlTree = (function(){
                 ge.getTourPlayer().setTour(kmlObject);
             }else{
                 var aspectRatio = null;
-                if(opts.map_div){
-                    var aspectRatio = $(opts.map_div).width() / $(opts.map_div).height();
+                var m = $(opts.map_div);
+                if(m.length){
+                    var aspectRatio = m.width() / m.height();
                 }
-                if(kmlObject.getType() === 'KmlNetworkLink' && node.hasClass('loaded')){
+                if(kmlObject.getType() === 'KmlNetworkLink' 
+                    && node.hasClass('loaded')){
                     opts.gex.util.flyToObject(lookupNlDoc(node), {
                         boundsFallback: true,
                         aspectRatio: aspectRatio
@@ -1011,15 +1121,16 @@ lingcod.kmlTree = (function(){
                     });
                 }
             }
-            if(node.hasClass('fireEvents')){
+            // if(node.hasClass('fireEvents')){
                 $(that).trigger('dblclick', [node, kmlObject]);
-            }
+            // }
             
         });
         
         // Google Earth Plugin Events
+        var geAddListener = google.earth.addEventListener;
         
-        google.earth.addEventListener(ge.getGlobe(), 'click', function(e, d){
+        geAddListener(ge.getGlobe(), 'click', function(e, d){
             if(e.getButton() === -1){
                 // related to scrolling, ignore
                 return;
@@ -1027,10 +1138,10 @@ lingcod.kmlTree = (function(){
             var target = e.getTarget();
             var balloon = ge.getBalloon();
             if(target.getType() === 'GEGlobe' && !balloon){
-                // Seems like this combo makes balloons close when the user clicks
-                // on the globe. When that !balloon test is not there, random 
-                // click events fired when the user zooms in and out close the 
-                // balloon. Not sure why
+                // Seems like this combo makes balloons close when the user 
+                // clicks on the globe. When that !balloon test is not there, 
+                // random click events fired when the user zooms in and out 
+                // close the balloon. Not sure why
                 clearSelection();
             }else if(target.getType() === 'KmlPlacemark'){
                 var id = target.getId();
@@ -1047,7 +1158,7 @@ lingcod.kmlTree = (function(){
         
         var doubleClicking = false;
         
-        google.earth.addEventListener(ge.getGlobe(), 'dblclick', function(e, d){
+        geAddListener(ge.getGlobe(), 'dblclick', function(e, d){
             if(e.getButton() === -1){
                 // related to scrolling, ignore
                 return;
@@ -1064,7 +1175,8 @@ lingcod.kmlTree = (function(){
                         doubleClicking = true;
                         setTimeout(function(){
                             doubleClicking = false;
-                            $(that).trigger('dblclick', [$(nodes[0]), target]);
+                            var n = $(nodes[0]);
+                            $(that).trigger('dblclick', [n, target]);
                         }, 200);
                     }
                 }else{
