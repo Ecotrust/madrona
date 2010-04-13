@@ -17,14 +17,12 @@
 		var on_index = 0;
 		
 		lingcod.onShow('#sp-mod-high', function() {
-			spmodhigh = lingcod.kmlTree({
+			spmodhigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk, 6 %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
-	            element: $('#sp-mod-high div.tree'),
-	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
-	            title: true
+	            element: $('#sp-mod-high div.tree')
 	        });
 	        spmodhigh.load();
 			$(spmodhigh).bind('kmlLoaded', function(e, kmlObject){
@@ -40,14 +38,12 @@
 		});
 		
 		lingcod.onShow('#sp-high', function() {
-			sphigh = lingcod.kmlTree({
+			sphigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk, 8 %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
-	            element: $('#sp-high div.tree'),
-	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
-	            title: true
+	            element: $('#sp-high div.tree')
 	        });
 	        sphigh.load();
 			$(sphigh).bind('kmlLoaded', function(e, kmlObject){
@@ -63,14 +59,12 @@
 		});
 		
 		lingcod.onShow('#sp-very-high', function() {
-			spveryhigh = lingcod.kmlTree({
+			spveryhigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk, 10 %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
-	            element: $('#sp-very-high div.tree'),
-	            trans: lingcod.options.media_url + 'common/images/transparent.gif',
-	            title: true
+	            element: $('#sp-very-high div.tree')
 	        });
 	        spveryhigh.load();
 			$(spveryhigh).bind('kmlLoaded', function(e, kmlObject){
