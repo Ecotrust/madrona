@@ -219,6 +219,7 @@ var kmltree = (function(){
         var my = {};
         var opts = jQuery.extend({}, constructor_defaults, opts);
         var ge = opts.gex.pluginInstance;
+        var destroyed = false;
 
         if(parseFloat(ge.getPluginVersion()) < 5.1){
             throw('kmltree requires a google earth plugin version >= 5.1');
@@ -259,7 +260,9 @@ var kmltree = (function(){
                 }
             }
             google.earth.fetchKml(ge, url, function(kmlObject){
-                processKmlObject(kmlObject, url);
+                if(!destroyed){
+                    processKmlObject(kmlObject, url);
+                }
             });
         };
         
@@ -653,6 +656,7 @@ var kmltree = (function(){
         
         
         var destroy = function(){
+            destroyed = true;
             if(opts.restoreState && !!window.localStorage){
                 setStateInLocalStorage();
             }
