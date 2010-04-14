@@ -940,8 +940,9 @@ var kmltree = (function(){
                     link = link.getHref();
                 }else{
                     node.addClass('error');
-                    node.addClass('checkHideChildren');
+                    setModified(node, 'visibility', false);
                     $(node).trigger('loaded', [node, false]);
+                    node.removeClass('open');
                     return;
                 }
                 if(opts.bustCache){
@@ -957,8 +958,9 @@ var kmltree = (function(){
                     if(!kmlObject){
                         alert('Error loading ' + link);
                         node.addClass('error');
-                        node.addClass('checkHideChildren');
+                        setModified(node, 'visibility', false);
                         $(that).trigger('kmlLoadError', [kmlObject]);
+                        node.removeClass('open');
                         return;
                     }
                     ge.getFeatures().appendChild(kmlObject);
@@ -1006,13 +1008,16 @@ var kmltree = (function(){
         that.walk = walk;
         var id = opts.element.attr('id');
         
-        
         $('#'+id+' li > span.name').live('click', function(){
             var node = $(this).parent();
             var kmlObject = lookup(node);
             if(node.hasClass('error') && node.hasClass('KmlNetworkLink')){
-                var href = kmlObject.getLink().getHref();
-                alert('There was an error loading this NetworkLink. ' + href);
+                if(kmlObject.getLink() && kmlObject.getLink().getHref()){
+                    alert('Could not load NetworkLink with url ' + 
+                        kmlObject.getLink().getHref())
+                }else{
+                    alert('Could not load NetworkLink. Link tag with href not found');
+                }
             }
             if(node.hasClass('select')){
                 selectNode(node, kmlObject);
@@ -1103,6 +1108,15 @@ var kmltree = (function(){
             }
             var node = $(this);
             var kmlObject = lookup(node);
+            if(node.hasClass('error')){
+                if(kmlObject.getLink() && kmlObject.getLink().getHref()){
+                    alert('Could not load NetworkLink with url ' + 
+                        kmlObject.getLink().getHref())
+                }else{
+                    alert('Could not load NetworkLink. Link tag with href not found');
+                }                
+                return;
+            }
             toggleVisibility(node, true);
             if(kmlObject.getType() == 'KmlTour'){
                 ge.getTourPlayer().setTour(kmlObject);
