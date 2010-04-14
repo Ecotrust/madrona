@@ -61,24 +61,24 @@ def map(request, template_name='common/map.html'):
         # Haven't ever visited MM or cleared their cookies
         set_viewed_cookie = True
         show_panel = "about"
-
-    # Check if user has a single active UserLayerList
-    from lingcod.layers.models import UserLayerList
-    user = request.user
-    user_layers = False
-    if user.is_authenticated():
-        try:
-            UserLayerList.objects.get(user=user.id, active=True)
-            user_layers = True
-        except:
-            pass
+    # 
+    # # Check if user has a single active UserLayerList
+    # from lingcod.layers.models import UserLayerList
+    # user = request.user
+    # user_layers = False
+    # if user.is_authenticated():
+    #     try:
+    #         UserLayerList.objects.get(user=user.id, active=True)
+    #         user_layers = True
+    #     except:
+    #         pass
             
     response = render_to_response(template_name, RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
         'WAVE_ID': settings.WAVE_ID,
         'session_key': request.session.session_key,
         'show_panel': show_panel,
-        'user_layers': user_layers,
+        #'user_layers': user_layers,
         }))
     
     if set_news_cookie:
