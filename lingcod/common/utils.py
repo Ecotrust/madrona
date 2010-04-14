@@ -210,6 +210,7 @@ def valid_browser(ua):
             ('Safari', 3, 1, 'Mac'),
             ('Firefox', 3, 5, 'Windows'),
             ('Chrome', 1, 0, 'Windows'),
+            ('IE', 8, 0, 'Windows'),
     ]
 
     from lingcod.common import uaparser
