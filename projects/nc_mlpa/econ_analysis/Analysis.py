@@ -343,7 +343,76 @@ class Analysis:
                 os.remove(filePath)            
         return True         
 
+'''
+Acronyms:
+    GEI - Gross Economic Impact
+    GER - Gross Economic Revenue
+    NEI - Net Economic Impact
+    NER - Net Economic Revenue
+'''        
+class CommercialResultsByPort:
+    def __init__(self, port, gross_impact, net_impact, species_list):
+        self.port = port
+        self.species_list = species_list
+        self.GEI = gross_impact
+        (self.GER, self.percGEI) = self.get_percentage_gross_impact()
+        self.NEI = net_impact
+        (self.total_costs, self.NER, self.percNEI) = self.get_percentage_net_impact()
         
+    def get_percentage_gross_impact(self):
+        from econ_analysis.models import CommercialGrossRevenue
+        revenues = CommercialGrossRevenue.objects.filter(port__name=self.port)
+        total_revenue = 0
+        for rev in revenues:
+            total_revenue += rev.gross_revenue
+        return total_revenue, (self.GEI / total_revenue) * 100
+    
+    def get_percentage_net_impact(self):
+        from econ_analysis.models import CommercialCosts, CommercialGrossRevenue
+        total_costs = 0
+        for species in self.species_list:
+            revenue = CommercialGrossRevenue.objects.get(port__name=self.port, species__name=species)
+            costs = CommercialCosts.objects.get(species__name=species)
+            species_cost = revenue.gross_revenue * costs.percentage_costs / 100
+            total_costs += species_cost
+        baseline_net_revenue = self.GER - total_costs
+        return total_costs, baseline_net_revenue, (self.NEI / baseline_net_revenue) * 100
+
+'''
+Acronyms:
+    GEI - Gross Economic Impact
+    GER - Gross Economic Revenue
+    NEI - Net Economic Impact
+    NER - Net Economic Revenue
+'''   
+class CommercialStudyRegionResults:
+    def __init__(self, port_impacts):
+        self.port_impacts = port_impacts
+        (self.GER, self.costs, self.NER, self.GEI, self.NEI) = self.calculate_totals()
+        (self.percGEI, self.percNEI) = self.calculate_percentages()
+        
+    def calculate_totals(self):
+        GER = costs = NER = GEI = NEI = 0
+        for p_impact in self.port_impacts:
+            GER += p_impact.GER
+            costs += p_impact.total_costs
+            NER += p_impact.NER
+            GEI += p_impact.GEI
+            NEI += p_impact.NEI
+        return GER, costs, NER, GEI, NEI
+        
+    def calculate_percentages(self):
+        percGEI = (self.GEI / self.GER) * 100
+        percNEI = (self.NEI / self.NER) * 100
+        return percGEI, percNEI
+  
+'''
+Acronyms:
+    GEI - Gross Economic Impact
+    GER - Gross Economic Revenue
+    NEI - Net Economic Impact
+    NER - Net Economic Revenue
+'''         
 class EmptyAnalysisResult:
     def __init__(self, group_name, port_name, species_name, type):
         self.group = group_name
@@ -357,6 +426,13 @@ class EmptyAnalysisResult:
         
 '''
 An AnalysisResult represents the result of running the impact analysis on a single Layer
+
+Acronyms:
+    GEI - Gross Economic Impact
+    GER - Gross Economic Revenue
+    NEI - Net Economic Impact
+    NER - Net Economic Revenue
+
 '''
 class AnalysisResult:
     def __init__(self, id=None, type=None, group=None, port=None, species=None, percOverallArea=None, percOverallValue=None):
@@ -377,7 +453,7 @@ class AnalysisResult:
             if self.percGEI == '---':
                 self.GEI = self.percNEI = self.NEI = '---'
             else:
-                from econ_analysis.models import CommercialSpecies, CommercialPort, CommercialCosts, CommercialGrossRevenue
+                from econ_analysis.models import CommercialCosts, CommercialGrossRevenue
                 if group == 'Commercial':
                     try:
                         revenue = CommercialGrossRevenue.objects.get(species__name=self.species, port__name=self.port)

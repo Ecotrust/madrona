@@ -46,8 +46,8 @@ def display_array_analysis(request, group, array, array_results, port=None, spec
         #aggregate array results for commercial group
         aggregated_results = aggregate_com_array_results(array_results, group)
         #restructure into AnalysisResults data structure
-        analysis_results = restructure_aggregated_commercial_results(array, group, aggregated_results)
-        return render_to_response('array_impact_analysis_com.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+        (analysis_results, port_impacts, studyregion_impacts) = restructure_aggregated_commercial_results(array, group, aggregated_results)
+        return render_to_response('array_impact_analysis_com.html', RequestContext(request, {'array':array, 'analysis_results': analysis_results, 'port_impacts': port_impacts, 'studyregion_impacts': studyregion_impacts}))  
     elif group == 'Commercial Passenger Fishing Vessel':
         #aggregate array results for commercial passenger fishing vessel group
         aggregated_results = aggregate_cpfv_array_results(array_results, group)
@@ -69,19 +69,39 @@ def display_array_analysis(request, group, array, array_results, port=None, spec
 
 def restructure_aggregated_commercial_results(array, group, aggregated_results):
     analysis_results = []
+    port_impacts = []
     for port, species_results in aggregated_results.iteritems():
         port_results = []
+        port_gross_impact = 0
+        port_net_impact = 0
+        species_list = []
         for species, results in species_results.iteritems():
             if 'Urchin' in species:
-                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Dive Captain)', percOverallArea=results['Area'], percOverallValue=results['Value']))
-                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Walk-on Dive)', percOverallArea=results['Area'], percOverallValue=results['Value']))
+                result1 = AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Dive Captain)', percOverallArea=results['Area'], percOverallValue=results['Value'])
+                result2 = AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Walk-on Dive)', percOverallArea=results['Area'], percOverallValue=results['Value'])
+                if result1.GEI != '---':
+                    port_results.append(result1)
+                    port_results.append(result2)
+                    port_gross_impact += result1.GEI + result2.GEI
+                    port_net_impact += result1.NEI + result2.NEI
+                    species_list.append('Urchin (Dive Captain)')
+                    species_list.append('Urchin (Walk-on Dive)')
             else:
-                port_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+                result = AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value'])
+                if result.GEI != '---':
+                    port_results.append(result)
+                    port_gross_impact += float(result.GEI)
+                    port_net_impact += float(result.NEI)
+                    species_list.append(species)
+        port_totals = CommercialResultsByPort(port, port_gross_impact, port_net_impact, species_list)
+        port_impacts.append( port_totals )
         #sort results by species name (alphabetically)
         port_results = sort_results_by_species(port_results)
         analysis_results.append(port_results)
+    studyregion_impacts = CommercialStudyRegionResults(port_impacts)
     analysis_results = sort_results_by_port(analysis_results, group)
-    return analysis_results
+    port_impacts = sort_results_by_port(port_impacts)
+    return analysis_results, port_impacts, studyregion_impacts
         
 def restructure_aggregated_cpfv_results(array, group, species, aggregated_results):
     analysis_results = []
@@ -195,9 +215,12 @@ def sort_results_by_species(results):
     results.sort(key=lambda obj: obj.species)  
     return results
     
-def sort_results_by_port(results, group):
+def sort_results_by_port(results, group=None):
     #sort results by port name (north to south)
-    ports = GetPortsByGroup(group)
+    if group is None:
+        ports = GetPortsByGroup('Commercial')
+    else:
+        ports = GetPortsByGroup(group)
     count = 0
     #build a dictionary that maps each port (key), with an ordinal (value)
     ordering = {}
@@ -205,7 +228,7 @@ def sort_results_by_port(results, group):
         count += 1
         ordering[port] = count
     #use that dictionary to order the results by port
-    if group in ['Commercial Passenger Fishing Vessel']:
+    if group in ['Commercial Passenger Fishing Vessel', None]:
         results.sort(lambda x, y : cmp (ordering[x.port], ordering[y.port]))  
     else: 
         results.sort(lambda x, y : cmp (ordering[x[0].port], ordering[y[0].port]))

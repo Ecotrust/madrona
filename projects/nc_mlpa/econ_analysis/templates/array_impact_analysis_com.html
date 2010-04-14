@@ -2,10 +2,64 @@
 {% load currency %}
 {% block title %}{{array.name}} Impact Analysis{% endblock title %}
 {% block panel %}
-<h3>Impact Analysis {{array_results.0.0.group}} Report</h3>
+<h3>Impact Analysis {{analysis_results.0.0.group}} Report</h3>
 <div class='freetext'>
 <br>
-
+    <!-- Estimated Annual Gross Impact on Commercial Fisheries by Port (reduction in revenue)-->
+    <table  style='width:450px' class='impact_analysis_container'>
+        <thead>
+            <tr>
+                <th></th>
+                <th><b>Total Gross Economic Impact</b> (U.S. Dollars)</th>
+                <th></th>
+                <th><b>Total Gross Economic Impact</b> (Percentage of Baseline Gross)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for impact in port_impacts %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="species_name">{{ impact.port }}</td>
+                <td>{{ impact.GEI|currency }}</td>
+                <td></td>
+                <td>{{ impact.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+            </tr>
+        {% endfor %}
+        <tr class="{% cycle '' 'grey' %}">
+            <td class="species_name"><b>Entire Study Region</b></td>
+            <td><b>{{ studyregion_impacts.GEI|currency }}</b></td>
+            <td></td>
+            <td><b>{{ studyregion_impacts.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+        </tbody>
+    </table>
+    <!-- Estimated Annual Net Impact on Commercial Fisheries by Port (reduction in revenue)-->
+    <table  style='width:450px' class='impact_analysis_container'>
+        <thead>
+            <tr>
+                <th></th>
+                <th><b>Total Net Economic Impact</b> (U.S. Dollars)</th>
+                <th></th>
+                <th><b>Total Net Economic Impact</b> (Percentage of Baseline Gross)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for impact in port_impacts %}
+            <tr class="{% cycle '' 'grey' %}">
+                <td class="species_name">{{ impact.port }}</td>
+                <td>{{ impact.NEI|currency }}</td>
+                <td></td>
+                <td>{{ impact.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+            </tr>
+        {% endfor %}
+        <tr class="{% cycle '' 'grey' %}">
+            <td class="species_name"><b>Entire Study Region</b></td>
+            <td><b>{{ studyregion_impacts.NEI|currency }}</b></td>
+            <td></td>
+            <td><b>{{ studyregion_impacts.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+        </tbody>
+        </tbody>
+    </table>
+    <!-- Estimated Annual Gross Impact on Commercial Fisheries by Species (reduction in revenue)-->
+    <br>
     <table  style='width:450px' class='impact_analysis_container'>
         <thead>
             <tr>
@@ -16,7 +70,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for results in array_results %}
+        {% for results in analysis_results %}
             <tr><td></td><td></td><td></td><td></td></tr>
             <tr>
                 <td style="width: 165px;" class="species_name"><b>{{ results.0.port }}</b></td>
@@ -45,6 +99,7 @@
         </tbody>
     </table>
 
+    <!-- Estimated Annual Net Impact on Commercial Fisheries by Species (reduction in profit)-->
     <br>
     <table  style='width:450px' class='impact_analysis_container'>
         <thead>
@@ -56,7 +111,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for results in array_results %}
+        {% for results in analysis_results %}
             <tr><td></td><td></td><td></td><td></td></tr>
             <tr>
                 <td style="width: 165px;" class="species_name"><b>{{ results.0.port }}</b></td>
