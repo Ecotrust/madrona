@@ -4,7 +4,7 @@
         "model": "auth.group", 
         "fields": {
             "name": "Share with Public", 
-            "permissions": [125]
+            "permissions": [161]
         }
     },
 
@@ -13,7 +13,7 @@
         "model": "auth.group", 
         "fields": {
             "name": "Share with Staff", 
-            "permissions": [125]
+            "permissions": [161]
         }
     } 
 ]
