@@ -11,6 +11,7 @@ from lingcod.common.utils import load_session
 from lingcod.sharing.models import get_content_type_id
 from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
+from django.conf import settings
 
 def get_user_mpa_data(user):
     """

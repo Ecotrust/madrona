@@ -1,5 +1,5 @@
 {% extends "style.kml" %}
-{% load rest_uid array_uid mpa_uid absurl %}
+{% load rest_uid array_uid mpa_uid absurl absolute_media_url %}
 
 {% block folders_and_placemarks %}
 {% for array_nameid, a in shapes.items %}
@@ -10,9 +10,9 @@
           <ItemIcon>
             <state>open closed</state>                
             {% if a.array.sharing_groups.all %}
-            <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/multi_shape_shared.gif</href>
+            <href>{% absolute_media_url %}common/images/multi_shape_shared.gif</href>
             {% else %}
-            <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/shape_move_forwards.png</href>
+            <href>{% absolute_media_url %}common/images/silk/shape_move_forwards.png</href>
             {% endif %}
           </ItemIcon>
         </ListStyle>	       
@@ -51,9 +51,9 @@
                 <ItemIcon>
                     <state>open closed</state>                
                     {% if a.array.sharing_groups.all %}
-                    <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/multi_shape_shared.gif</href>
+                    <href>{% absolute_media_url %}common/images/multi_shape_shared.gif</href>
                     {% else %}
-                    <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/shape_move_forwards.png</href>
+                    <href>{% absolute_media_url %}common/images/silk/shape_move_forwards.png</href>
                     {% endif %}
                 </ItemIcon>
                 </ListStyle>	       
@@ -95,9 +95,9 @@
               <ItemIcon>
                 <state>open closed</state>                
                 {% if mpa.sharing_groups.all %}
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/mpa-shared_16px.png</href>
+                <href>{% absolute_media_url %}common/images/mpa-shared_16px.png</href>
                 {% else %}
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/mpa_16px.png</href>
+                <href>{% absolute_media_url %}common/images/mpa_16px.png</href>
                 {% endif %}
               </ItemIcon>
             </ListStyle>	       
