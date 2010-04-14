@@ -315,7 +315,7 @@ lingcod.layout.SanitizedContent.prototype.extractCallbacks = function(){
     jQuery.globalEval(this.js.join(';\n'));
     
     // remove the event registration functions to ensure no overlap
-    lingcod.onTabShow = lingcod.onPanelShow = false;
+    // lingcod.onShow = lingcod.onHide = lingod.onUnhide = lingcode.beforeDestroy = false;
     
     return returnObj;
 }
