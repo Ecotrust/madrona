@@ -20,7 +20,10 @@
 						$('#MPAHabitatRepresentation').append(report.paper.canvas);
 						report.update(hab_data, true);
 					}else{
-						lingcod.persistentReports['MPAHabitatReplication'] = mlpa.representationReport($('#MPAHabitatRepresentation'), hab_data, true);
+					    var report = mlpa.representationReport($('#MPAHabitatRepresentation'), hab_data, true);
+					    if(!$.browser.msie){
+					        lingcod.persistentReports['MPAHabitatReplication'] = report;
+					    }
 					}					
 				});
             </script>

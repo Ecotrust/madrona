@@ -57,7 +57,9 @@ class GeographicReportNode(template.Node):
                         $('#%s').append(report.paper.canvas);
                     }else{
                         report = lingcod.geographicReport(%s);
-                        lingcod.persistentReports[persist_id] = report;
+                        if(!$.browser.msie){
+                            lingcod.persistentReports[persist_id] = report;
+                        }
                     }
                     report.updateValue(%s, true);
                 });

@@ -259,7 +259,8 @@ lingcod.rest.kmlEditor = function(options){
     $(tree).bind('select', function(e, node, kmlObject){
         $(that).trigger('select', [e, node, kmlObject]);
         if(options.client.inShowState){
-            if((selectedTab.indexOf('Spacing') !== -1)){
+            var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
+            if((selectedTab.indexOf('Spacing') === -1)){
                 options.client.show(kmlObject, {syncTabs: true});                
             }
         }
