@@ -1,0 +1,104 @@
+[
+  {
+    "pk": 3, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 1", 
+      "description": "To protect the natural diversity and abundance of marine life, and the structure, function, and integrity of marine ecosystems."
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 2", 
+      "description": "To help sustain, conserve, and protect marine life populations, including those of economic value, and rebuild those that are depleted."
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 3", 
+      "description": "To improve recreational, educational, and study opportunities provided by marine ecosystems that are subject to minimal human disturbances, and to manage these uses in a manner consistent with protecting biodiversity."
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 4", 
+      "description": "To protect marine natural heritage, including protection of representative and unique marine life habitats in north coast California waters, for their intrinsic value."
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 5", 
+      "description": "To ensure that north coast California\u2019s MPAs have clearly defined objectives, effective management measures, and adequate enforcement, and are based on sound scientific guidelines."
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "mlpa.goalcategory", 
+    "fields": {
+      "name": "Goal 6", 
+      "description": "To ensure that the north coast\u2019s MPAs are designed and managed, to the extent possible, as a component of a statewide network."
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 3, 
+      "name": "Goal 1", 
+      "description": "To protect the natural diversity and abundance of marine life, and the structure, function, and integrity of marine ecosystems."
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 4, 
+      "name": "Goal 2", 
+      "description": "To help sustain, conserve, and protect marine life populations, including those of economic value, and rebuild those that are depleted."
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 5, 
+      "name": "Goal 3", 
+      "description": "To improve recreational, educational, and study opportunities provided by marine ecosystems that are subject to minimal human disturbances, and to manage these uses in a manner consistent with protecting biodiversity."
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 6, 
+      "name": "Goal 4", 
+      "description": "To protect marine natural heritage, including protection of representative and unique marine life habitats in north coast California waters, for their intrinsic value."
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 7, 
+      "name": "Goal 5", 
+      "description": "To ensure that north coast California\u2019s MPAs have clearly defined objectives, effective management measures, and adequate enforcement, and are based on sound scientific guidelines."
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "mlpa.goalobjective", 
+    "fields": {
+      "goal_category": 8, 
+      "name": "Goal 6", 
+      "description": "To ensure that the north coast\u2019s MPAs are designed and managed, to the extent possible, as a component of a statewide network."
+    }
+  } 
+]
