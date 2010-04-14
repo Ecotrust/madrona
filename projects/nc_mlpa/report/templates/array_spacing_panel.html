@@ -10,15 +10,11 @@
 		var sphigh;
 		var spveryhigh;
 		
-		var spmhon;
-		var sphon;
-		var spvhon;
-		
 		var on_index = 0;
 		
 		lingcod.onShow('#sp-mod-high', function() {
 			spmodhigh = kmltree({
-	            url: "{% url array_spacing_kml array.pk, 6 %}",
+	            url: "{% url array_spacing_kml array.pk 6 session_key %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
@@ -26,7 +22,7 @@
 	        });
 	        spmodhigh.load();
 			$(spmodhigh).bind('kmlLoaded', function(e, kmlObject){
-				turnOnCurrentLayer( $('#sp-mod-high .tree') );
+				//turnOnCurrentLayer( $('#sp-mod-high .tree') );
 				$('#sp-mod-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() {
 					 on_index = $('#sp-mod-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
 				} );
@@ -39,7 +35,7 @@
 		
 		lingcod.onShow('#sp-high', function() {
 			sphigh = kmltree({
-	            url: "{% url array_spacing_kml array.pk, 8 %}",
+	            url: "{% url array_spacing_kml array.pk 8 session_key %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
@@ -60,7 +56,7 @@
 		
 		lingcod.onShow('#sp-very-high', function() {
 			spveryhigh = kmltree({
-	            url: "{% url array_spacing_kml array.pk, 10 %}",
+	            url: "{% url array_spacing_kml array.pk 10 session_key %}",
 	            ge: ge, 
 	            gex: gex, 
 	            map_div: $('#map'), 
@@ -103,7 +99,9 @@
 		}
 		
 		function turnOnCurrentLayer(tree){
-			$( tree.find('ul:first > li:first > ul > li > .toggler').get(on_index) ).click();
+			if( ! $( tree.find('ul:first > li:first > ul > li').get(on_index) ).hasClass('visible') ){
+				$( tree.find('ul:first > li:first > ul > li > .toggler').get(on_index) ).click();
+			}
 		}
 		/*
 		function currentOnIndex(tree){
@@ -129,9 +127,8 @@
 		});
 		
 	</script>
-	<p>The validity of these results depend on MarineMap's ability to accurately calculate levels of protection for each MPA.  MarineMap can not calculate a level of protection
-		unless all proposed allowed uses are selected from the drop down boxes.  If anything is entered into the "other allowed uses" field, MarineMap will not be able to calculate a level
-		of protection.  Due to these limitations, these results should be regarded as preliminary and subject to review by the Science Advisory Team and staff.</p>
+	<p>For each habitat in the list below, MPA clusters that count as a replicate will be outlined in yellow.  Gaps between habitat replicates will be shown as either red or
+		green lines.  Red lines indicate a gap of more than 100 km (62 miles) while green lines indicate a gap of less than 100 km.</p>
 	<br><br>
     <div class="tabs">
 		<ul>
@@ -143,4 +140,8 @@
 		<div id="sp-high" class="spacing_analysis"><div class="tree"></div></div>
 		<div id="sp-very-high" class="spacing_analysis"><div class="tree"></div></div>
 	</div>
+	<br style="clear: both;">
+	<p>The validity of these results depend on MarineMap's ability to accurately calculate levels of protection for each MPA.  MarineMap can not calculate a level of protection
+		unless all proposed allowed uses are selected from the drop down boxes.  If anything is entered into the "other allowed uses" field, MarineMap will not be able to calculate a level
+		of protection.  Due to these limitations, these results should be regarded as preliminary and subject to review by the Science Advisory Team and staff.</p>
 {% endblock panel %}

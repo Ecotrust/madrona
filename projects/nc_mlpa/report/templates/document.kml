@@ -106,6 +106,7 @@
 			  <listItemType>radioFolder</listItemType>
 			</ListStyle>
 			</Style>
+			<name>Habitats</name>
 			<open>1</open>
 			{% for folder in document.folders %}
 				{% include "radio_folder.kml" %}

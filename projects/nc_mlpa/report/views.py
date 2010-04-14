@@ -53,10 +53,11 @@ def array_spacing_report(request, array_id, format='html'):
     #array = mlpa.MpaArray.objects.get(pk=array_id)
     if format=='html':
         template = 'array_spacing_panel.html'
-    return render_to_response(template, {'array': array}, context_instance=RequestContext(request) )
+    return render_to_response(template, {'array': array, 'session_key': request.session.session_key}, context_instance=RequestContext(request) )
 
-def array_spacing_kml(request,array_id,lop_value,use_centroids=False):
+def array_spacing_kml(request,array_id,lop_value,session_key,use_centroids=False):
     array_class = utils.get_array_class()
+    load_session(request, session_key)
     array = get_viewable_object_or_respond(array_class,array_id,request.user)
     lop = mlpa.Lop.objects.get(value=lop_value)
     clusters = array.clusters_with_habitat.filter(lop=lop)
