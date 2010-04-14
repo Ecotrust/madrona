@@ -1,0 +1,187 @@
+{% load currency %}
+<h1>Commercial Potential Impact Analysis Report</h1>
+
+<div class="freetext">
+<h4>Report Summary</h4>
+<table class='allowed_uses'>
+<tr><td width=100>User Group:</td><td>{{ user_group }}</td></tr>
+<tr><td width=100>Array:</td><td>{{ array.name }}</td></tr>
+<tr><td width=100>Array ID:</td><td>{{ array.id }}</td></tr>
+</table>
+</div>
+
+<div class='freetext'>
+<br>
+
+<!-- Estimated Annual Net Impact on Commercial Fisheries by Port (reduction in revenue)-->
+    <table class='marinemap-table' rules=rows>
+        <thead>
+            <tr>
+                <th></th>
+                <th></ align=center style="width: 200px;"><b>Potential Net Economic Impact</b> (2007 U.S. Dollars)</th>
+                <th></ style="width: 40px;"></th>
+                <th></ align=center style="width: 200px;"><b>Potential Net Economic Impact</b> (% Net Revenue)</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        {% for impact in port_impacts %}
+            <tr>
+                <td style="width: 165px;">{{ impact.port }}</td>
+                <td align="center">{{ impact.NEI|currency }}</td>
+                <td></td>
+                <td align="center">{{ impact.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+            </tr>
+        {% endfor %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr>
+            <td style="width: 165px;"><b>Entire Study Region</b></td>
+            <td align="center"><b>{{ studyregion_impacts.NEI|currency }}</b></td>
+            <td></td>
+            <td align="center"><b>{{ studyregion_impacts.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+        </tbody>
+        </tbody>
+    </table>
+    <br>
+    
+    <!-- Estimated Annual Gross Impact on Commercial Fisheries by Port (reduction in revenue)-->
+    <table class='marinemap-table' rules=rows>
+        <thead>
+            <tr>
+                <th></th>
+                <th></ align=center style="width: 200px;"><b>Potential Gross Economic Impact</b> (2007 U.S. Dollars)</th>
+                <th></ style="width: 40px;"></th>
+                <th></ align=center style="width: 200px;"><b>Potential Gross Economic Impact</b> (% Gross Revenue)</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        {% for impact in port_impacts %}
+            <tr>
+                <td style="width: 165px;">{{ impact.port }}</td>
+                <td align="center">{{ impact.GEI|currency }}</td>
+                <td></td>
+                <td align="center">{{ impact.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+            </tr>
+        {% endfor %}
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr>
+            <td style="width: 165px;"><b>Entire Study Region</b></td>
+            <td align="center"><b>{{ studyregion_impacts.GEI|currency }}</b></td>
+            <td></td>
+            <td align="center"><b>{{ studyregion_impacts.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+        </tbody>
+    </table>
+    
+    <!-- Estimated Annual Net Impact on Commercial Fisheries by Species (reduction in profit)-->
+    <br>
+    <table class='marinemap-table' rules=rows>
+        <thead>
+            <tr>
+                <th></th>
+                <th></ align=center style="width: 200px;"><b>Potential Net Economic Impact</b> (2007 U.S. Dollars)</th>
+                <th></ style="width: 40px;"></th>
+                <th></ align=center style="width: 200px;"><b>Potential Net Economic Impact</b> (% Net Revenue)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for results in analysis_results %}
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr>
+                <td style="width: 165px;"><b>{{ results.0.port }}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% for result in results %}
+                <tr class="{% cycle '' 'grey' %}">
+                    <td class="species_name">{{ result.species }}</td>
+                    {% if result.NEI == '---' %}
+                        <td align="center">---</td>
+                    {% else %}
+                        <td align="center">{{ result.NEI|currency }}</td>
+                    {% endif %}
+                    <td></td>
+                    {% if result.percNEI == '---' %}
+                        <td align="center">---</td>
+                    {% else %}
+                        <td align="center">{{ result.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Estimated Annual Gross Impact on Commercial Fisheries by Species (reduction in revenue)-->
+    <br>
+    <table class='marinemap-table' rules=rows>
+        <thead>
+            <tr>
+                <th></th>
+                <th></ align=center style="width: 200px;"><b>Potential Gross Economic Impact</b> (2007 U.S. Dollars)</th>
+                <th></ style="width: 40px;"></th>
+                <th></ align=center style="width: 200px;"><b>Potential Gross Economic Impact</b> (% Gross Revenue)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for results in analysis_results %}
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr>
+                <td style="width: 165px;"><b>{{ results.0.port }}</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.species }}</td>
+                    {% if result.GEI == '---' %}
+                        <td align="center">---</td>
+                    {% else %}
+                        <td align="center">{{ result.GEI|currency }}</td>
+                    {% endif %}
+                    <td></td>
+                    {% if result.percGEI == '---' %}
+                        <td align="center">---</td>
+                    {% else %}
+                        <td align="center">{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<style type="text/css">
+table.marinemap-table {
+    font-size:12px;
+    width:100%;
+    border:solid 1px #ccc;
+    margin:5px;
+}
+
+table.marinemap-table th {
+    color:#344E63;
+    font-weight:bold;
+    text-shadow:0 1px 0 #FCFAFF;
+}
+
+table.marinemap-table thead tr {
+    background:#FAFAFA url(../images/toolbar-bg.png) repeat-x scroll left bottom;
+    text-align:center;
+}
+
+table.marinemap-table tbody {
+    background-color:white;
+}
+
+table.marinemap-table tr.zebra {
+    background-color:#eee;
+}
+
+</style>
+
+

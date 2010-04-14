@@ -1,7 +1,7 @@
 {% extends 'common/panel.html' %}
-{% block title %}{{mpa.name}} Impact Analysis{% endblock title %}
+{% block title %}{{mpa.name}} Potential Impact Analysis{% endblock title %}
 {% block panel %}
-<h3>Impact Analysis {{all_results.0.0.group}} Report</h3>
+<h3>{{all_results.0.0.group}} Potential Impact Analysis Report</h3>
 <div class='freetext'>
 <br>
 <table  style='width:450px' class='impact_analysis_container'>
@@ -50,6 +50,6 @@
 
 </div>
 <br>
-<div style='font-size: small'><a target='_blank' href='{% url printable_analysis mpa.id all_results.0.0.group %}'>View Printable Report</a></div>
+<div style='font-size: small'><a target='_blank' href='{% url mpa_printable_analysis mpa.id all_results.0.0.group %}'>View Printable Report</a></div>
 <br>
 {% endblock panel %}

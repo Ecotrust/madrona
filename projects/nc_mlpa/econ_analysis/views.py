@@ -41,31 +41,45 @@ def compile_array_results(mpas, group, port=None, species=None):
             array_results.append(mpa_results)
     return array_results
         
-def display_array_analysis(request, group, array, array_results, port=None, species=None):
+def display_array_analysis(request, group, array, array_results, port=None, species=None, template=None):
     if group == 'Commercial':
         #aggregate array results for commercial group
         aggregated_results = aggregate_com_array_results(array_results, group)
         #restructure into AnalysisResults data structure
         (analysis_results, port_impacts, studyregion_impacts) = restructure_aggregated_commercial_results(array, group, aggregated_results)
-        return render_to_response('array_impact_analysis_com.html', RequestContext(request, {'array':array, 'analysis_results': analysis_results, 'port_impacts': port_impacts, 'studyregion_impacts': studyregion_impacts}))  
+        if template is None:
+            template = 'array_impact_analysis_com.html'
+        return render_to_response(template, RequestContext(request, {'user_group': group, 'array':array, 'analysis_results': analysis_results, 'port_impacts': port_impacts, 'studyregion_impacts': studyregion_impacts}))  
     elif group == 'Commercial Passenger Fishing Vessel':
         #aggregate array results for commercial passenger fishing vessel group
         aggregated_results = aggregate_cpfv_array_results(array_results, group)
         #restructure into AnalysisResults data structure
         analysis_results = restructure_aggregated_cpfv_results(array, group, species, aggregated_results)
-        return render_to_response('array_impact_analysis_cpfv.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+        if template is None:
+            template = 'array_impact_analysis_cpfv.html'
+        return render_to_response(template, RequestContext(request, {'user_group': group, 'array':array, 'array_results': analysis_results}))  
     elif group == 'Edible Seaweed':
         #aggregate array results for edible seaweed group
         aggregated_results = aggregate_swd_array_results(array_results, group)
         #restructure into AnalysisResults data structure
         analysis_results = restructure_aggregated_swd_results(array, group, aggregated_results)
-        return render_to_response('array_impact_analysis_swd.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+        if template is None:
+            template = 'array_impact_analysis_swd.html'
+        return render_to_response(template, RequestContext(request, {'user_group': group, 'array':array, 'array_results': analysis_results}))  
     else: #(must be Recreational)
         #aggregate array results for edible seaweed group
         aggregated_results = aggregate_rec_array_results(array_results, group)
         #restructure into AnalysisResults data structure
         analysis_results = restructure_aggregated_rec_results(array, group, aggregated_results)
-        return render_to_response('array_impact_analysis_rec.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+        if template is None:
+            template = 'array_impact_analysis_rec.html'
+        if group == 'Recreational Dive':
+            group_abbr = 'div'
+        elif group == 'Recreational Kayak':
+            group_abbr = 'kyk'
+        elif group == 'Recreational Private Vessel':
+            group_abbr = 'pvt'
+        return render_to_response(template, RequestContext(request, {'group_abbr': group_abbr, 'user_group': group, 'array':array, 'array_results': analysis_results}))  
 
 def restructure_aggregated_commercial_results(array, group, aggregated_results):
     analysis_results = []
@@ -361,13 +375,17 @@ def roundPercentageValues(results, sig_digs):
 '''
 Accessed via named url when a user selects the View Printable Report link at the bottom of analysis results display
 '''
-def print_report(request, feature_id, user_group):
+def print_report(request, feature_id, user_group, feature='mpa'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     if not user.has_perm('layers.view_ecotrustlayerlist'):
         return HttpResponse('You must have permission to view this information.', status=401)
         
+    if feature == 'array':
+        return print_array_report(request, feature_id, user_group)
+    #CAN'T WE ABSTRACT THE FOLLOWING A BIT BETTER?
+    #MAYBE WITH A display_array_analysis FOR mpas? (see print_array_report below)
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     ports = GetPortsByGroup(user_group)
     all_results = []
@@ -390,8 +408,33 @@ def print_report(request, feature_id, user_group):
                     result.port = 'Fort Bragg / Albion'
         
         all_results.append(analysis_results)
-    return render_to_response('printable_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group, 'all_results':all_results})) 
+    return render_to_response('printable_mpa_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group, 'all_results':all_results})) 
 
+def print_array_report(request, array_id, group):
+    array = get_object_or_404(MpaArray, pk=array_id)
+    mpas = array.mpa_set
+    if group == 'com':
+        group_name = 'Commercial'
+        group_abbr = group
+    elif group == 'cpfv':
+        group_name = 'Commercial Passenger Fishing Vessel'
+        group_abbr = group
+    elif group == 'swd':
+        group_name = 'Edible Seaweed'
+        group_abbr = group
+    elif group == 'div':
+        group_name = 'Recreational Dive'
+        group_abbr = 'rec'
+    elif group == 'kyk':
+        group_name = 'Recreational Kayak'
+        group_abbr = 'rec'
+    elif group == 'pvt':
+        group_name = 'Recreational Private Vessel'
+        group_abbr = 'rec'
+    array_results = compile_array_results(mpas, group_name)
+    template = 'printable_%s_array_report.html' % group_abbr
+    return display_array_analysis(request, group_name, array, array_results, template=template)
+    
 def cache_analysis_results(results, group, mpa):
     for result in results:
         cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.percOverallValue, perc_area=result.percOverallArea)

@@ -1,12 +1,11 @@
 {% extends 'common/panel.html' %}
 {% load currency %}
-{% block title %}{{array.name}} Impact Analysis{% endblock title %}
+{% block title %}{{array.name}} Potential Impact Analysis{% endblock title %}
 {% block panel %}
-<h3>Impact Analysis {{array_results.0.0.group}} Report</h3>
+<h3>{{array_results.0.0.group}} Potential Impact Analysis Report</h3>
 <div class='freetext'>
 <br>
 
-<!--if group is Recreational--><!--what to do about seaweed group?-->
 <table  style='width:450px' class='impact_analysis_container'>
     <thead>
         <tr>
@@ -45,6 +44,6 @@
     
 </div>
 <br>
-<!--need to add printable array result link here-->
+<div style='font-size: small'><a target='_blank' href='{% url array_printable_analysis array.id group_abbr %}'>View Printable Report</a></div>
 <br>
 {% endblock panel %}
