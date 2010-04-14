@@ -456,8 +456,8 @@ class MlpaMpa(Mpa):
     cluster_id = models.IntegerField(null=True, blank=True)
     boundary_description = models.TextField(null=True, blank=True, default = default_boundary_description,
             verbose_name="Boundary Description", help_text="Written description of the MPA boundaries.")
-    specific_objective = models.TextField(verbose_name='Site Specific Rationale', null=True, blank=True, help_text="""In one or two sentences, please describe how this MPA contributes to meeting the goals of your planning process. This section should describe the main reason that an MPA is proposed in this location.""")
-    design_considerations = models.TextField(null=True, blank=True, verbose_name="Other considerations for MPA design", help_text="""Please list below any additional considerations that have been taken into account in the design of this MPA. Potential information to describe here might include socioeconomic or feasibility considerations.""")
+    specific_objective = models.TextField(verbose_name='Site-Specific Rationale', null=True, blank=True, help_text="""In one or two sentences, please describe how this MPA contributes to meeting the goals of the Marine Life Protection Act. This section should describe the main reason that an MPA is proposed in this location.""")
+    design_considerations = models.TextField(null=True, blank=True, verbose_name="Other considerations for MPA design", help_text="""Please list below any additional considerations that have been taken into account in the design of this MPA. Potential information to describe here might include more details on the design, designation, and may reference socioeconomic, feasibility issues, or other specific considerations that were taken into account.""")
     comments = models.TextField(null=True, blank=True)
     group_before_edits = models.CharField(max_length=255, null=True, blank=True) # for existing mpas
     evolution = models.TextField(null=True, blank=True, verbose_name='Staff MPA Evolution Notes')    

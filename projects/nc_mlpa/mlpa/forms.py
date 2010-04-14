@@ -27,7 +27,7 @@ class GoalObjectivesWidget(forms.CheckboxSelectMultiple):
         if value is None: value = []
         has_id = attrs and 'id' in attrs
         final_attrs = self.build_attrs(attrs, name=name)
-        output = ['<p class="help_text">Please select one or more regional objectives below to which this MPA contributes.</p>']
+        output = ['<p class="help_text">Please select one or more MLPA goals below to which this MPA contributes.</p>']
         # Normalize to strings
         str_values = set([force_unicode(v) for v in value])
         checkboxes = dict()
@@ -140,7 +140,7 @@ class MpaForm(BaseMpaForm):
         widgets = {
             'other_allowed_uses': ShortTextarea(), # limit defaults to 1024 char
             'other_regulated_activities': ShortTextarea(),
-            'specific_objective': ShortTextarea(limit=400), # about 2-3 sentences
+            'specific_objective': ShortTextarea(limit=600), # about 2-3 sentences
             'design_considerations': ShortTextarea(),
             'boundary_description': ShortTextarea(),
             'evolution': ShortTextarea(),
