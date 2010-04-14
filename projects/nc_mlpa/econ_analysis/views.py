@@ -59,8 +59,8 @@ def display_array_analysis(request, group, array, array_results, port=None, spec
         aggregated_results = aggregate_swd_array_results(array_results, group)
         #restructure into AnalysisResults data structure
         analysis_results = restructure_aggregated_swd_results(array, group, aggregated_results)
-        return render_to_response('array_impact_analysis_rec.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
-    else: #(must be Recreational or Seaweed)
+        return render_to_response('array_impact_analysis_swd.html', RequestContext(request, {'array':array, 'array_results': analysis_results}))  
+    else: #(must be Recreational)
         #aggregate array results for edible seaweed group
         aggregated_results = aggregate_rec_array_results(array_results, group)
         #restructure into AnalysisResults data structure
