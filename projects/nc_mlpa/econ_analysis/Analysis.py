@@ -354,9 +354,9 @@ class CommercialResultsByPort:
     def __init__(self, port, gross_impact, net_impact, species_list):
         self.port = port
         self.species_list = species_list
-        self.GEI = gross_impact
+        self.GEI = int(gross_impact)
         (self.GER, self.percGEI) = self.get_percentage_gross_impact()
-        self.NEI = net_impact
+        self.NEI = int(net_impact)
         (self.total_costs, self.NER, self.percNEI) = self.get_percentage_net_impact()
         
     def get_percentage_gross_impact(self):
@@ -399,7 +399,7 @@ class CommercialStudyRegionResults:
             NER += p_impact.NER
             GEI += p_impact.GEI
             NEI += p_impact.NEI
-        return GER, costs, NER, GEI, NEI
+        return GER, costs, NER, int(GEI), int(NEI)
         
     def calculate_percentages(self):
         percGEI = (self.GEI / self.GER) * 100
@@ -464,7 +464,7 @@ class AnalysisResult:
                     gross_revenue = revenue.gross_revenue
                     costs = CommercialCosts.objects.get(species__name=self.species)
                     #what to do if costs query is empty or errors?
-                    self.GEI = gross_revenue * self.percGEI / 100
+                    self.GEI = int(gross_revenue * self.percGEI / 100)
                     (self.percNEI, self.NEI) = self.calculateNEI(gross_revenue, costs)
                 elif group == 'Commercial Passenger Fishing Vessel':
                     try:
@@ -476,7 +476,7 @@ class AnalysisResult:
                     gross_revenue = revenue.gross_revenue
                     costs = CPFVCosts.objects.get(port__name=self.port)                  
                     #what to do if costs query is empty or errors?
-                    self.GEI = gross_revenue * self.percGEI / 100
+                    self.GEI = int(gross_revenue * self.percGEI / 100)
                     (self.percNEI, self.NEI) = self.calculateNEI(gross_revenue, costs)
                 else:
                     self.GEI = self.percNEI = self.NEI = '---'
@@ -498,5 +498,5 @@ class AnalysisResult:
         NEI = BNER - NER
         percNEI = NEI / BNER * 100
         
-        return percNEI, NEI
+        return percNEI, int(NEI)
         
