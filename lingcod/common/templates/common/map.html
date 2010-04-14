@@ -37,7 +37,7 @@
         {% endblock aftermyshapes %}
                 
         {% if user.is_authenticated %}
-            {% if perms.layers.view_userlayerlist %}
+            {% if perms.layers.view_userlayerlist and user_layers %}
                 options.user_kml = {url: "{% url user-data-layers input_username=user.username session_key=session_key %}"};
             {% endif %}
         {% endif %}
