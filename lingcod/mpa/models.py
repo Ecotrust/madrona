@@ -193,6 +193,9 @@ class Mpa(models.Model):
         from lingcod.common.utils import clean_geometry
         self.apply_manipulators()
         self.geometry_final = clean_geometry(self.geometry_final)
+        # needed to expire report caches on arrays
+        if self.array:
+            self.array.save()
         super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
 
     def apply_manipulators(self, force=False):
