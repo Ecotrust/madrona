@@ -119,17 +119,9 @@
                     {% if objectives_by_category %}
                     <ul class="goal_objectives">
                         {% for dict in objectives_by_category  %}
-                            <li>
-                            {% with dict.grouper as category %}
-                                <h4>{{category.name}}</h4>
-                                {{category.description}}
-                                <ul>
-                                    {% for objective in dict.list %}
-                                        <li><label>{{objective.name}}</label><p>{{objective.description}}</p></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endwith %}
-                            </li>
+                            {% for objective in dict.list %}
+                                <li><label>{{objective.name}}</label><p>{{objective.description}}</p></li>
+                            {% endfor %}
                         {% endfor %}        
                     </ul>
                     {% endif %}

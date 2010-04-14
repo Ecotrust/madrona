@@ -47,7 +47,8 @@ class GoalObjectivesWidget(forms.CheckboxSelectMultiple):
             checkboxes[option_value] = u'<label%s>%s %s</label>' % (label_for, rendered_cb, option_label)
         for category in GoalCategory.objects.all():
             output.append(u'<ul>')
-            output.append(u'<h4>%s</h4><p>%s</p>' % (category.name, category.description))
+            # Goal -> Objective heirarchy not used anymore
+            # output.append(u'<h4>%s</h4><p>%s</p>' % (category.name, category.description))
             for objective in category.goalobjective_set.all():
                 # print checkboxes[str(objective.pk)]
                 output.append(u'<li>')
@@ -56,7 +57,6 @@ class GoalObjectivesWidget(forms.CheckboxSelectMultiple):
                 output.append(u'</li>')
             output.append(u'</ul>')
         return mark_safe(u'\n'.join(output))
-
 
 class AllowedUsesWidget(forms.SelectMultiple):
     def render(self, *args, **kwargs):
