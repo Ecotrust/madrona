@@ -79,17 +79,17 @@ def restructure_aggregated_commercial_results(array, group, aggregated_results):
             if 'Urchin' in species:
                 result1 = AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Dive Captain)', percOverallArea=results['Area'], percOverallValue=results['Value'])
                 result2 = AnalysisResult(id=array.id, type='array', group=group, port=port, species='Urchin (Walk-on Dive)', percOverallArea=results['Area'], percOverallValue=results['Value'])
+                port_results.append(result1)
+                port_results.append(result2)
                 if result1.GEI != '---':
-                    port_results.append(result1)
-                    port_results.append(result2)
                     port_gross_impact += result1.GEI + result2.GEI
                     port_net_impact += result1.NEI + result2.NEI
                     species_list.append('Urchin (Dive Captain)')
                     species_list.append('Urchin (Walk-on Dive)')
             else:
                 result = AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value'])
+                port_results.append(result)
                 if result.GEI != '---':
-                    port_results.append(result)
                     port_gross_impact += float(result.GEI)
                     port_net_impact += float(result.NEI)
                     species_list.append(species)
