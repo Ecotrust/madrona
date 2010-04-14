@@ -17,6 +17,7 @@ Mpa = utils.get_mpa_class()
 MpaArray = utils.get_array_class()
 
 class KMLAppTest(TestCase):
+    fixtures = ['example_data']
     def setUp(self):
         self.client = Client()
         self.other_client = Client()

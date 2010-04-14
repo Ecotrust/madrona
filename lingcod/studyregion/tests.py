@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 
 
 class StudyRegionTest(TestCase):
+    fixtures = ['example_data']
 
     def testStudyRegionPresent(self):
         """

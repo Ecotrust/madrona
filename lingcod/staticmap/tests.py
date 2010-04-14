@@ -22,6 +22,8 @@ class StaticmapTestArray(MpaArray):
     extra_attr = models.CharField(max_length=255, blank=True)
 
 class StaticMapTest(TestCase):
+    fixtures = ['example_data']
+
     def setUp(self):
         self.settings_manager.set(MPA_CLASS = 'lingcod.staticmap.tests.StaticmapTestMpa')
         self.settings_manager.set(ARRAY_CLASS = 'lingcod.staticmap.tests.StaticmapTestArray')

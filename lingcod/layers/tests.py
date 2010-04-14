@@ -20,6 +20,8 @@ urlpatterns = patterns('',
 
 
 class PublicLayerListTest(TestCase):
+    fixtures = ['example_data']
+
     def testCreate(self):
         """
         Test saving an instance of PublicLayerList to the repository

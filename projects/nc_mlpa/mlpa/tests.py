@@ -31,6 +31,7 @@ class MlpaValidateTest(TestCase):
             python manage.py test mlpa
             this calls setUp, testManipulators, and tearDown, in that order
     '''
+    fixtures = ['example_data']
 
     def setUp(self):
         '''

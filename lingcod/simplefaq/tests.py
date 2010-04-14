@@ -17,6 +17,7 @@ urlpatterns = patterns('',
 
 
 class SimpleFaqTest(TestCase):
+    fixtures = ['example_data']
 
     def testFaqItemsPresent(self):
         """
