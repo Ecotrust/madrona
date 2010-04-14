@@ -97,6 +97,7 @@ class Cluster(models.Model):
     lop = models.ForeignKey(Lop)
     bioregion = models.ForeignKey(Bioregion,null=True,blank=True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    northing = models.FloatField(null=True,blank=True)
     objects = ClusterManager()
     
     class Meta:
@@ -108,6 +109,8 @@ class Cluster(models.Model):
     def save(self, with_hab=False, *args, **kwargs):
         super(Cluster,self).save(*args,**kwargs)
         self.bioregion = self.get_bioregion()
+        if not self.geometry_collection.empty:
+            self.northing = self.geometry_collection.centroid.y
         super(Cluster,self).save(*args,**kwargs)
         if with_hab:
             self.calculate_habitat_info()

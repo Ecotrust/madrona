@@ -57,6 +57,7 @@ class MpaArray(models.Model):
         """Simply removes an MPA from the Array. The MPA will not be deleted."""
         if mpa.array == self:
             mpa.remove_from_array()
+            self.save() # This updates the date_modified field of the array
         else:
             raise Exception('MPA `%s` is not in Array `%s`' % (mpa.name, self.name))
         

@@ -13,6 +13,7 @@
 		var on_index = 0;
 		
 		lingcod.onShow('#sp-mod-high', function() {
+			$('div .temp_spacer').show()
 			spmodhigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk 6 session_key %}",
 	            ge: ge, 
@@ -22,7 +23,8 @@
 	        });
 	        spmodhigh.load();
 			$(spmodhigh).bind('kmlLoaded', function(e, kmlObject){
-				//turnOnCurrentLayer( $('#sp-mod-high .tree') );
+				$('div .temp_spacer').hide()
+				turnOnCurrentLayer( $('#sp-mod-high .tree') );
 				$('#sp-mod-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() {
 					 on_index = $('#sp-mod-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
 				} );
@@ -34,6 +36,7 @@
 		});
 		
 		lingcod.onShow('#sp-high', function() {
+			$('div .temp_spacer').show()
 			sphigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk 8 session_key %}",
 	            ge: ge, 
@@ -43,6 +46,7 @@
 	        });
 	        sphigh.load();
 			$(sphigh).bind('kmlLoaded', function(e, kmlObject){
+				$('div .temp_spacer').hide()
 				turnOnCurrentLayer( $('#sp-high .tree') );
 				$('#sp-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() { 
 					on_index = $('#sp-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
@@ -55,6 +59,7 @@
 		});
 		
 		lingcod.onShow('#sp-very-high', function() {
+			$('div .temp_spacer').show()
 			spveryhigh = kmltree({
 	            url: "{% url array_spacing_kml array.pk 10 session_key %}",
 	            ge: ge, 
@@ -64,6 +69,7 @@
 	        });
 	        spveryhigh.load();
 			$(spveryhigh).bind('kmlLoaded', function(e, kmlObject){
+				$('div .temp_spacer').hide()
 				turnOnCurrentLayer( $('#sp-very-high .tree') );
 				$('#sp-very-high > div.tree ul:first > li:first > ul > li > .toggler').click( function() { 
 					on_index = $('#sp-very-high .tree').find('ul:first > li:first > ul > li').index($(this).parent());
@@ -140,7 +146,7 @@
 		<div id="sp-high" class="spacing_analysis"><div class="tree"></div></div>
 		<div id="sp-very-high" class="spacing_analysis"><div class="tree"></div></div>
 	</div>
-	<br style="clear: both;">
+	<div class="temp_spacer"><br><br><br><br><br><br></div>
 	<p>The validity of these results depend on MarineMap's ability to accurately calculate levels of protection for each MPA.  MarineMap can not calculate a level of protection
 		unless all proposed allowed uses are selected from the drop down boxes.  If anything is entered into the "other allowed uses" field, MarineMap will not be able to calculate a level
 		of protection.  Due to these limitations, these results should be regarded as preliminary and subject to review by the Science Advisory Team and staff.</p>
