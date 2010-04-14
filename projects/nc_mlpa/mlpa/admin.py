@@ -1,6 +1,7 @@
 from django.contrib import admin
 from mlpa.models import *
 from lingcod.mpa.admin import MpaAdmin
+from lingcod.array.admin import ArrayAdmin
 
 class GoalObjectiveAdmin (admin.ModelAdmin):
     list_display = ( 'goal_category', 'name', 'description')
@@ -41,4 +42,9 @@ admin.site.register(MlpaMpa, MpasAdmin)
 
 from django.contrib.auth.models import Permission
 admin.site.register(Permission)
-admin.site.register(MpaArray)
+
+class MpaArrayAdmin(ArrayAdmin):
+    list_display = ('name','short_name','user','date_created','date_modified')
+    list_filter = ['date_modified','date_created']
+    search_fields = ('name','short_name','user__username','user__first_name','user__last_name')
+admin.site.register(MpaArray,MpaArrayAdmin)
