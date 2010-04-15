@@ -8,15 +8,41 @@ from nc_mlpa.mlpa.models import *
 from econ_analysis.models import *
 from Layers import *
 from Analysis import *
+from django.contrib.auth.models import Group
+from django.conf import settings
 
+def get_public_id_lists():
+    public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
+    public_arrays = MpaArray.objects.filter(sharing_groups__in=public_groups)
+    public_array_ids = [array.id for array in public_arrays]
+    public_mpas = MlpaMpa.objects.filter(sharing_groups__in=public_groups)
+    public_mpa_ids = [mpa.id for mpa in public_mpas]
+    mpa_ids_in_public_arrays = [[mpa.id for mpa in array.mpa_set] for array in public_arrays]
+    for mpas in mpa_ids_in_public_arrays:
+        for id in mpas:
+            public_mpa_ids.append(id)
+    return public_array_ids, public_mpa_ids
 
+def feature_is_public(feature, feature_id):
+    (public_array_ids, public_mpa_ids) = get_public_id_lists()
+    if feature == 'mpa':
+        mpa_id = int(feature_id)
+        if mpa_id not in public_mpa_ids:
+            return False
+    else: #must be array request
+        array_id = int(feature_id)
+        if array_id not in public_array_ids:
+            return False
+    return True
+    
 '''
 Accessed via named url when user selects a group (Commercial, Recreational Dive, etc) to run analysis on 
 '''
 def impact_analysis(request, feature_id, group, feature='mpa'): 
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
+        if not feature_is_public(feature, feature_id):
+            return HttpResponse('You do not have permission to view this feature', status=401)
     #if not user.has_perm('layers.view_ecotrustlayerlist'):
     #    return HttpResponse('You must have permission to view this information.', status=401)  
     
@@ -373,7 +399,8 @@ Accessed via named url when a user selects the View Printable Report link at the
 def print_report(request, feature_id, user_group, feature='mpa'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401)
+        if not feature_is_public(feature, feature_id):
+            return HttpResponse('You do not have permission to view this feature', status=401)
     #if not user.has_perm('layers.view_ecotrustlayerlist'):
     #    return HttpResponse('You must have permission to view this information.', status=401)
         
