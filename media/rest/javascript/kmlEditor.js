@@ -290,6 +290,12 @@ lingcod.rest.kmlEditor = function(options){
     }
     
     $(tree).bind('dblclick', function(e, node, kmlObject){
+        if(options.client.inShowState){
+            var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
+            if((selectedTab && selectedTab.indexOf('Spacing') !== -1)){
+                return;
+            }
+        }
         if(kmldom(kmlObject.getKml()).find(
             '[nodeName=atom:link][rel=self]').length){
             options.client.show(kmlObject);
