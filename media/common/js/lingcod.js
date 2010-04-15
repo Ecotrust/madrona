@@ -91,7 +91,7 @@ var lingcod = (function(){
             gex: gex, 
             map_div: $('#map'), 
             element: $('#study_region'),
-            restoreState: true
+            restoreState: !$.browser.msie
         });
         if(!setCameraFromLocalStorage()){
             $(studyRegion).bind('kmlLoaded', function(){
@@ -106,7 +106,7 @@ var lingcod = (function(){
             gex: gex, 
             map_div: $('#map'), 
             element: $('#public_data'),
-            restoreState: true
+            restoreState: !$.browser.msie
         });
         publicData.load();
 
@@ -173,7 +173,7 @@ var lingcod = (function(){
                 gex: gex, 
                 map_div: $('#map'), 
                 element: $('#ecotrust_data'),
-                restoreState: true
+                restoreState: !$.browser.msie
             });
             ecotrustData.load();
         }
