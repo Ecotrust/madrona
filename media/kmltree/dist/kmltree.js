@@ -199,7 +199,7 @@ var kmltree = (function(){
         enableSelection: function(){return false;},
         visitFunction: function(kmlObject, config){return config},
         openNetworkLinks: true,
-        restoreStateOnRefresh: true,
+        refreshWithState: true,
         bustCache: false,
         restoreState: false,
         // whiteListed: false,
@@ -311,13 +311,21 @@ var kmltree = (function(){
                     && !node.hasClass('loaded');
                 if(state.name !== 'root'){
                     var mods = state['modified'];
+                    // console.log(node, node.find('>span.name').text(), mods);
                     if(mods){
                         if(mods['open'] !== undefined){
                             if(unloadedNL){
-                                queue.add(node, function(loadedNode){
-                                    restoreState(loadedNode, state, queue);
-                                    queue.execute();
-                                });
+                                if(mods['open'].current){
+                                    queue.add(node, function(loadedNode){
+                                        restoreState(loadedNode, state, queue);
+                                        queue.execute();
+                                    });                                    
+                                }else{
+                                    if(node.hasClass('open')){
+                                        node.removeClass('open');
+                                        setModified(node, 'open', false);
+                                    }
+                                }
                             }else{
                                 node.toggleClass('open', mods.open.current);
                                 setModified(node, 'open', mods.open.current);
@@ -330,6 +338,8 @@ var kmltree = (function(){
                             selectNode(node, lookup(node));
                         }
                     }
+                }else{
+                    node.find('.KmlNetworkLink.open').removeClass('open');
                 }
                 if(!unloadedNL){
                     for(var i=0; i<state.children.length; i++){
@@ -346,8 +356,19 @@ var kmltree = (function(){
                                 }
                             });
                         }
-                    }                    
+                    }
                 }
+                // node.find('.KmlNetworkLink.open').each(function(){
+                //     var n = $(this);
+                //     if(!n.hasClass('loading') && !n.hasClass('checkHideChildren')){
+                //         queue.add(n, function(loadedNode){
+                //             console.log('restoreState', loadedNode, state, queue);
+                //             restoreState(loadedNode, state, queue);
+                //             queueOpenNetworkLinks(queue, loadedNode);
+                //             queue.execute();                                    
+                //         });
+                //     }
+                // });                    
             }else{
                 throw('called with invalid arguments');
             }
@@ -447,6 +468,7 @@ var kmltree = (function(){
                 tree: that,
                 my: my
             });
+            // console.log('processKmlHandler: that.previousState: ', that.previousState);
             if(!that.previousState){
                 if(opts.restoreState && !!window.localStorage){
                     that.previousState = getStateFromLocalStorage();
@@ -457,6 +479,7 @@ var kmltree = (function(){
                 // This will need to be altered at some point to run the queue
                 // regardless of previousState, expanding networklinks that 
                 // are set to open within the kml
+                // console.log('restoring state with', that.previousState);
                 restoreState(
                     opts.element.find('div.kmltree'), 
                     that.previousState, 
@@ -471,16 +494,24 @@ var kmltree = (function(){
         var queueOpenNetworkLinks = function(queue, topNode){
             // $(that).trigger('kmlLoaded', kmlObject);
             var links = topNode.find('li.KmlNetworkLink.open');
+            // links.removeClass('open');
+            // console.log(links);
             links.each(function(){
-                var node = $(this);
-                setModified(node, 'open', node.hasClass('open'));
-                node.removeClass('open');
-                queue.add(node, function(loadedNode){
-                    setModified(loadedNode, 'open', node.hasClass('open'));
-                    loadedNode.removeClass('open');
-                    queueOpenNetworkLinks(queue, loadedNode);
-                    queue.execute();
-                });
+                // no need to open if checkHideChildren is set
+                if(!$(this).hasClass('checkHideChildren')){
+                    var node = $(this);
+                    // console.log('queueOpenNetworkLinks', '"' + node.find('span.name').text() + '"');
+                    // setModified(node, 'open', node.hasClass('open'));
+                    node.removeClass('open');
+                    queue.add(node, function(loadedNode){
+                        // console.log('loadedNode', loadedNode);
+                        loadedNode.addClass('open');
+                        setModified(loadedNode, 'open', node.hasClass('open'));
+                        // loadedNode.removeClass('open');
+                        queueOpenNetworkLinks(queue, loadedNode);
+                        queue.execute();
+                    });                    
+                }
             });
         };
         
@@ -604,8 +635,10 @@ var kmltree = (function(){
         };
         
         var refresh = function(){
-            if(opts.restoreStateOnRefresh){
+            if(opts.refreshWithState){
+                // console.log('should restore state');
                 that.previousState = getState();
+                // console.log('that.previousState=', that.previousState);
             }
             clearLookups();
             clearKmlObjects();
@@ -842,6 +875,7 @@ var kmltree = (function(){
         };
         
         var setModified = function(node, key, value){
+            // console.log('setModified', node, key, value);
             var data = node.data('modified');
             if(!data){
                 data = {};
@@ -939,10 +973,12 @@ var kmltree = (function(){
                 if(link){
                     link = link.getHref();
                 }else{
+                    // console.log('could not find link: ', '"' + node.find('span.name').text() + '"');
                     node.addClass('error');
-                    setModified(node, 'visibility', false);
+                    // setModified(node, 'visibility', false);
                     $(node).trigger('loaded', [node, false]);
                     node.removeClass('open');
+                    setModified(node, 'open', false);
                     return;
                 }
                 if(opts.bustCache){
@@ -958,7 +994,7 @@ var kmltree = (function(){
                     if(!kmlObject){
                         alert('Error loading ' + link);
                         node.addClass('error');
-                        setModified(node, 'visibility', false);
+                        // setModified(node, 'visibility', false);
                         $(that).trigger('kmlLoadError', [kmlObject]);
                         node.removeClass('open');
                         return;

@@ -47,109 +47,109 @@ h4.kmltree-title {
   height: 16px; }
 
 .expander {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -168px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -168px 0px;
   width: 16px;
   height: 16px;
   margin-left: -17px; }
   .expander:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -189px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -189px 0px;
     width: 16px;
     height: 16px; }
   .expander:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -210px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -210px 0px;
     width: 16px;
     height: 16px; }
 
 li.open > .expander {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -105px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -105px 0px;
   width: 16px;
   height: 16px; }
   li.open > .expander:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -126px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -126px 0px;
     width: 16px;
     height: 16px; }
   li.open > .expander:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -147px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -147px 0px;
     width: 16px;
     height: 16px; }
 
 .toggler {
   margin-right: 4px;
-  background: url('images/sprites/kml.png?1271281995') no-repeat -231px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -231px 0px;
   width: 16px;
   height: 16px; }
   .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -273px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -273px 0px;
     width: 16px;
     height: 16px; }
   .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -294px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -294px 0px;
     width: 16px;
     height: 16px; }
 
 li.checkOffOnly > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -252px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -252px 0px;
   width: 16px;
   height: 16px; }
 
 li.visible > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -315px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -315px 0px;
   width: 16px;
   height: 16px; }
   li.visible > .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -336px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -336px 0px;
     width: 16px;
     height: 16px; }
   li.visible > .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -357px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -357px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > ul > li > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -378px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -378px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > ul > li > .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -399px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -399px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > ul > li > .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -420px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -420px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > ul > li.visible > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -441px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -441px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > ul > li.visible > .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -462px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -462px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > ul > li.visible > .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -483px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -483px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -378px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -378px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -399px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -399px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -420px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -420px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder.visible > .toggler {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -441px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -441px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder.visible > .toggler:hover {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -462px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -462px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder.visible > .toggler:active {
-    background: url('images/sprites/kml.png?1271281995') no-repeat -483px 0px;
+    background: url('images/sprites/kml.png?1271369654') no-repeat -483px 0px;
     width: 16px;
     height: 16px; }
 li.KmlPlacemark > .expander, li.KmlPhotoOverlay > .expander, li.KmlGroundOverlay > .expander, li.KmlTour > .expander {
@@ -169,31 +169,31 @@ li.KmlFolder > .icon, li.KmlNetworkLink > .icon, li.KmlTour > .icon, li.KmlPhoto
   display: block; }
 
 li.KmlFolder > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat 0px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat 0px 0px;
   width: 16px;
   height: 16px; }
 li.KmlFolder.open > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -21px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -21px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat 0px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat 0px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink.loading > .icon {
   background: transparent url(./images/kml-throbber.gif) no-repeat !important; }
 li.KmlNetworkLink.error > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -42px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -42px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink.error > .expander {
   display: none; }
 li.KmlTour > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -63px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -63px 0px;
   width: 16px;
   height: 16px; }
 li.KmlPhotoOverlay > .icon, li.KmlGroundOverlay > .icon {
-  background: url('images/sprites/kml.png?1271281995') no-repeat -84px 0px;
+  background: url('images/sprites/kml.png?1271369654') no-repeat -84px 0px;
   width: 16px;
   height: 16px; }
 li.customIcon > .icon {
