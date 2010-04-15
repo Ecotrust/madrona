@@ -9,9 +9,7 @@
         <ul>
             <li><a href="#Attributes"><span>Information</span></a></li>
             <li><a href="{% url mpa_habitat_representation instance.pk 'html' %}"><span>Representation</span></a></li>
-            {% if perms.layers.view_ecotrustlayerlist %}
-              <li><a href="#Groups"><span>Impact</span></a></li>
-            {% endif %}
+            <li><a href="#Groups"><span>Impact</span></a></li>
         </ul>
         <div id="Attributes">
             <ul class="metadata">

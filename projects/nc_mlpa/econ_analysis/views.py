@@ -17,8 +17,8 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)  
+    #if not user.has_perm('layers.view_ecotrustlayerlist'):
+    #    return HttpResponse('You must have permission to view this information.', status=401)  
     
     group_name = Layers.GROUPS[group]
     if feature == 'mpa':
@@ -273,8 +273,8 @@ def display_mpa_analysis(request, feature_id, group, port=None, species=None, te
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
+    #if not user.has_perm('layers.view_ecotrustlayerlist'):
+    #    return HttpResponse('You must have permission to view this information.', status=401)
 
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
     
@@ -379,8 +379,8 @@ def print_report(request, feature_id, user_group, feature='mpa'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
+    #if not user.has_perm('layers.view_ecotrustlayerlist'):
+    #    return HttpResponse('You must have permission to view this information.', status=401)
         
     if feature == 'array':
         return print_array_report(request, feature_id, user_group)
@@ -476,8 +476,8 @@ def MpaEconAnalysis(request, feature_id):
     user = request.user 
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401) 
-    if not user.has_perm('layers.view_ecotrustlayerlist'):
-        return HttpResponse('You must have permission to view this information.', status=401)
+    #if not user.has_perm('layers.view_ecotrustlayerlist'):
+    #    return HttpResponse('You must have permission to view this information.', status=401)
     if request.method != 'GET':
         return HttpResponseBadRequest('You must use GET')    
 

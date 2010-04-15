@@ -7,9 +7,7 @@
             <li><a href="#Attributes"><span>Information</span></a></li>
             <li><a href="{% url array_replication instance.pk,'html' %}"><span>Replication</span></a></li>
 			<li><a href="{% url array_spacing instance.pk, 'html' %}"><span>Spacing</span></a></li>
-            {% if perms.layers.view_ecotrustlayerlist %}
-              <li><a href="#Groups"><span>Impact</span></a></li>
-            {% endif %}
+            <li><a href="#Groups"><span>Impact</span></a></li>
         </ul>
         <div id="Attributes">
             <ul class="metadata">
