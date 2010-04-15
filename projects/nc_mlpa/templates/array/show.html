@@ -45,7 +45,6 @@
             {% endif %}
 		</div>
 		
-        {% if perms.layers.view_ecotrustlayerlist %}
         <div id="Groups" class="tabs">
             <ul>
                 <li><a href="#Instructions"><span>Instructions</span></a></li>
@@ -65,7 +64,6 @@
                 <p>PLEASE BE AWARE: Selecting a group for analysis may require 20-30 minutes to execute.  Selecting other buttons within this panel while a group is loading will cause unpredictable behavior within this panel.  If this is done accidentally, simply close out of the results panel, and then reselect your proposal. </p>
             </div>
         </div>
-        {% endif %}
         
     </div>
 {% endblock panel %}
