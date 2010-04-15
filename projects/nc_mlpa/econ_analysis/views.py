@@ -11,20 +11,41 @@ from Analysis import *
 from django.contrib.auth.models import Group
 from django.conf import settings
 
+'''
+Generates and returns a list of id values for all publicy shared arrays and all publicly shared mpas
+Called by feature_is_public()
+'''
 def get_public_id_lists():
+    #get list of public groups
     public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
+    #use the public groups list to obtain a list of public arrays
     public_arrays = MpaArray.objects.filter(sharing_groups__in=public_groups)
+    #generate a list of public array id values
     public_array_ids = [array.id for array in public_arrays]
+    
+    #use the public groups list to obtain a list of public mpas
     public_mpas = MlpaMpa.objects.filter(sharing_groups__in=public_groups)
+    #generate a list of public mpa id values
     public_mpa_ids = [mpa.id for mpa in public_mpas]
+    #add to the list of public mpa id values, all those mpa ids belonging to the mpas in the public arrays
+    #we want to ensure that a user can view impact analysis on an mpa that belongs to a publicly shared array 
+    #(the mpa itself might not be marked as public, but the array it belongs to is)
     mpa_ids_in_public_arrays = [[mpa.id for mpa in array.mpa_set] for array in public_arrays]
     for mpas in mpa_ids_in_public_arrays:
         for id in mpas:
             public_mpa_ids.append(id)
+    
     return public_array_ids, public_mpa_ids
 
+'''
+Returns boolean value based on whether the feature (mpa/array) in question is publicly shared or not
+'''   
 def feature_is_public(feature, feature_id):
-    (public_array_ids, public_mpa_ids) = get_public_id_lists()
+    try:
+        (public_array_ids, public_mpa_ids) = get_public_id_lists()
+    except:
+        return False
+    #if the feature does not belong to the list of public features, return false
     if feature == 'mpa':
         mpa_id = int(feature_id)
         if mpa_id not in public_mpa_ids:
@@ -33,6 +54,68 @@ def feature_is_public(feature, feature_id):
         array_id = int(feature_id)
         if array_id not in public_array_ids:
             return False
+    #otherwise return true
+    return True
+    
+'''
+Returns boolean value based on whether the feature (mpa/array) in question belongs to the user
+'''   
+def feature_belongs_to_user(user, feature_type, feature_id):
+    #if a feature does not exist with the given id and the given user, return false
+    if feature_type == 'mpa':
+        try:
+            mpa = MlpaMpa.objects.get(user=user, id=feature_id)
+        except:
+            return False
+    else: #feature_type must be array
+        try:
+            array = MpaArray.objects.get(user=user, id=feature_id)
+        except:
+            return False
+    #otherwise, return true
+    return True
+        
+'''
+Returns boolean value based on whether the feature (mpa/array) in question is shared with the user
+'''  
+def feature_is_shared_with_user(user, feature_type, feature_id):
+    #obtain the groups this feature is associated with
+    if feature_type == 'mpa':
+        try:
+            #obtain the groups this mpa is associated with
+            mpa = MlpaMpa.objects.get(id=feature_id)
+            sharing_groups = mpa.sharing_groups
+            #obtain the groups this mpa's array is associated with
+            array = mpa.array
+            if array:
+                sharing_groups_for_array = array.sharing_groups.all()
+                for group in sharing_groups_for_array:
+                    sharing_groups.append(group)
+        except:
+            return False
+    else:
+        try:
+            array = MpaArray.objects.get(id=feature_id)
+            sharing_groups = array.sharing_groups.all()
+        except:
+            return False
+    #check all groups the user is associated with against those the feature is associated with
+    #if we find a match, return true
+    for user_group in user.groups.all():
+        if user_group in sharing_groups:
+            return True
+    #otherwise, return false
+    return False
+
+def user_can_view_feature(user, feature_id, feature_type):
+    if user.is_anonymous() or not user.is_authenticated():
+        if not feature_is_public(feature_type, feature_id):
+            return False
+    else:
+        if not feature_belongs_to_user(user, feature_type, feature_id):
+            if not feature_is_public(feature_type, feature_id):
+                if not feature_is_shared_with_user(feature_type, feature_id):
+                    return False
     return True
     
 '''
@@ -40,12 +123,9 @@ Accessed via named url when user selects a group (Commercial, Recreational Dive,
 '''
 def impact_analysis(request, feature_id, group, feature='mpa'): 
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        if not feature_is_public(feature, feature_id):
-            return HttpResponse('You do not have permission to view this feature', status=401)
-    #if not user.has_perm('layers.view_ecotrustlayerlist'):
-    #    return HttpResponse('You must have permission to view this information.', status=401)  
-    
+    if not user_can_view_feature(user, feature_id, feature):
+        return HttpResponse('You do not have permission to view this feature', status=401)
+        
     group_name = Layers.GROUPS[group]
     if feature == 'mpa':
         #the following port and species parameters are for testing on my local machine
@@ -375,6 +455,7 @@ def mpa_analysis_results(mpa, group, port, species):
         mpa_results.append(port_results)
     return mpa_results
     
+#no longer used...
 def roundPercentageValues(results, sig_digs):
     import utilities as mmutil  
     for result in results:
@@ -398,11 +479,8 @@ Accessed via named url when a user selects the View Printable Report link at the
 '''
 def print_report(request, feature_id, user_group, feature='mpa'):
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
-        if not feature_is_public(feature, feature_id):
-            return HttpResponse('You do not have permission to view this feature', status=401)
-    #if not user.has_perm('layers.view_ecotrustlayerlist'):
-    #    return HttpResponse('You must have permission to view this information.', status=401)
+    if not user_can_view_feature(user, feature_id, feature):
+        return HttpResponse('You do not have permission to view this feature', status=401)
         
     if feature == 'array':
         return print_array_report(request, feature_id, user_group)
@@ -491,33 +569,5 @@ def adjust_commercial_species(results):
         result.species = species_dict[result.species]
     return results
  
-'''
-Primarily used for testing...
-'''
-def MpaEconAnalysis(request, feature_id):  
-    user = request.user 
-    if user.is_anonymous() or not user.is_authenticated():
-        return HttpResponse('You must be logged in', status=401) 
-    #if not user.has_perm('layers.view_ecotrustlayerlist'):
-    #    return HttpResponse('You must have permission to view this information.', status=401)
-    if request.method != 'GET':
-        return HttpResponseBadRequest('You must use GET')    
 
-    group = request.GET.get("group")
-    if not group:
-        return HttpResponseBadRequest('Missing "group" parameter')
-    else:
-        group = group.replace('+',' ')
-    
-    #Optional port parameter
-    port = request.GET.get("port")    
-    if port:
-        port = port.replace('+',' ')    
-        
-    #Optional species parameter
-    species = request.GET.get('species')
-    if species:
-        species = species.replace('+',' ')
-    
-    return display_mpa_analysis(request, feature_id, group, port, species)
 
