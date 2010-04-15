@@ -114,7 +114,7 @@ def user_can_view_feature(user, feature_id, feature_type):
     else:
         if not feature_belongs_to_user(user, feature_type, feature_id):
             if not feature_is_public(feature_type, feature_id):
-                if not feature_is_shared_with_user(feature_type, feature_id):
+                if not feature_is_shared_with_user(user, feature_type, feature_id):
                     return False
     return True
     
