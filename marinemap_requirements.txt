@@ -31,7 +31,8 @@
 #############
 
 # Lingcod itself
--e svn+https://marinemap.googlecode.com/svn/trunk#egg=marinemap
+# We dont want to install this explicity by default in case someone wants a newer version
+# -e svn+https://marinemap.googlecode.com/svn/trunk#egg=marinemap
 
 # Django/GeoDjango
 -e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
