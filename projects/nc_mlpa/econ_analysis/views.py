@@ -84,7 +84,7 @@ def feature_is_shared_with_user(user, feature_type, feature_id):
         try:
             #obtain the groups this mpa is associated with
             mpa = MlpaMpa.objects.get(id=feature_id)
-            sharing_groups = mpa.sharing_groups
+            sharing_groups = mpa.sharing_groups.all()
             #obtain the groups this mpa's array is associated with
             array = mpa.array
             if array:
