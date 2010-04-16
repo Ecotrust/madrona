@@ -20,12 +20,18 @@
                     <td class="hab_name" id="hab{{habinfo.habitat.pk}}">{{ habinfo.habitat.name }}</td>
                     <td>{{ habinfo.replicate }}</td>
                     <td class="hab_result">
-						<span class="rounded">{{ habinfo.result|floatformat:"-2" }} {{ habinfo.units|title }}</span>
-						<span class="unrounded">{{ habinfo.result|floatformat:"-8" }}</span>
+						<span class="rounded" style="text-align: center;">{{ habinfo.result|floatformat:"-2" }}
+							{% if habinfo.units|title = "Miles" %}mi{% endif %}
+							{% if habinfo.units|title = "Sq Miles" %}mi<small><sup>2</sup></small>{% endif %}
+						</span>
+						<span class="unrounded" style="text-align: center;">{{ habinfo.result|floatformat:"-6" }}</span>
 					</td>
                     <td class="hab_result">
-						<span class="rounded">{{ habinfo.additional_required|floatformat:"-2" }} {{ habinfo.units|title }}</span>
-						<span class="unrounded">{{ habinfo.additional_required|floatformat:"-8" }}</span>
+						<span class="rounded" style="text-align: center;">{{ habinfo.additional_required|floatformat:"-2" }}
+							{% if habinfo.units|title = "Miles" %}mi{% endif %}
+							{% if habinfo.units|title = "Sq Miles" %}mi<small><sup>2</sup></small>{% endif %}
+						</span>
+						<span class="unrounded" style="text-align: center;">{{ habinfo.additional_required|floatformat:"-6" }}</span>
 					</td>
                 </tr>
                 {% endfor %}
