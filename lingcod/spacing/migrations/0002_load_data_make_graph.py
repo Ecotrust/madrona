@@ -1,5 +1,6 @@
 from lingcod.spacing.models import Land, create_pickled_graph
 from south.v2 import SchemaMigration
+from django.core.management import call_command
 
 class Migration(SchemaMigration):
     
