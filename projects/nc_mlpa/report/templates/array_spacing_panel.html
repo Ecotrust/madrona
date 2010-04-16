@@ -13,12 +13,12 @@
 		var on_index = 0;
 		
 		lingcod.onShow('#sp-mod-high', function() {	
-			$('a.no_lop_mpas_link').toggle( 
+			$('#spacing_no_lop > p > a.no_lop_mpas_link').toggle( 
 				function() {
-					$('#no_lop_mpas').show();
+					$('#spacing_no_lop > #no_lop_mpas').show();
 				}, 
 				function() {	
-					$('#no_lop_mpas').hide(); 
+					$('#spacing_no_lop > #no_lop_mpas').hide(); 
 				}
 			);
 			$('div .temp_spacer').show()
@@ -156,10 +156,12 @@
 	</div>
 	<div class="temp_spacer"><br><br><br><br><br><br></div>
 	{% if array.unassigned_lop_opencoast_mpas %}
+		<span id="spacing_no_lop">
 		<p>This array contains <a href="#" class="no_lop_mpas_link">{{array.unassigned_lop_opencoast_mpas.count}} open coast MPA{% if array.unassigned_lop_opencoast_mpas.count > 1 %}s{% endif %}</a> with unassigned levels of protection.  Estuarine (non open coast) MPAs are not considered in this analysis.</p>
 		{% with array.unassigned_lop_opencoast_mpas as unassigned_mpas %}
 			{% include "unassigned_lop_mpas_table.html" %}
 		{% endwith %}
+		</span>
 	{% else %}
 		<p>All open coast MPAs in this array received level of protection assignments.  Estuarine (non open coast) MPAs are not considered in this analysis.</p>
 	{% endif %}

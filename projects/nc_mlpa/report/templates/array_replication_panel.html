@@ -4,56 +4,37 @@
 	<script type="text/javascript" src="http://jqueryui.com/latest/jquery-1.3.2.js"></script>
 	<script src="{{MEDIA_URL}}report/js/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.core.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.tabs.js"></script>
-	
-    <script type="text/javascript" charset="utf-8">
-			lingcod.onShow(function(){
-				$("td.hab_name").hoverIntent(
-	                function(){
-	                    var cell_id = $(this).attr('id');
-	                    var div_id = "#" + cell_id + "_descript";
-	                    var offset = $(this).offset();
-	                    var height = $(this).height();
-	                    $(div_id).css("position", "absolute").css("left", offset.left).css("top", offset.top + height).show();
-	                },
-	                function() {
-	                    var cell_id = $(this).attr('id');
-	                    var div_id = "#" + cell_id + "_descript";
-	                    $(this).removeClass("selected");
-	                    $(div_id).hide();
-	                }
-	            );
-			});
-/*
-			$("td.hab_result").click(
-                function(){
-                    var cell_id = $(this).attr('id');
-                    var div_id = "#" + cell_id + "_unrounded";
-                    var offset = $(this).offset();
-                    var width = $(this).width();
-                    $(this).css("visibility","hidden");
-                    $(div_id).css("position", "absolute").css("width",width).css("left", offset.left).css("top", offset.top).show();
-                },
-                function() {
-                    var cell_id = $(this).attr('id');
-                    var div_id = "#" + cell_id + "_unrounded";
-                    $(this).removeClass("selected");
-                    $(div_id).hide("fast");
-                }
-            );
-			$("div.unrounded").click(
-				function(){
-					var cell_id = $(this).attr('id');
-					var div_id = "#" + cell_id.replace("_unrounded","")
-					$(this).hide();
-                    $(div_id).css("visibility","visible");
-				}
-			);*/
-		});
-		
-    </script>
+	<script type="text/javascript" src="http://jqueryui.com/latest/ui/ui.tabs.js"></script>	
 {% endblock head %}
 {% block title %}{{array.name}} Replication Report{% endblock title %}
 {% block panel %}
+	    <script type="text/javascript" charset="utf-8">
+				lingcod.onShow(function(){
+					$('#replication_no_lop > p > a.no_lop_mpas_link').toggle( 
+						function() {
+							console.log('toggle1');
+							$('#replication_no_lop > #no_lop_mpas').show();
+						}, 
+						function() {	
+							console.log('toggle2');
+							$('#replication_no_lop > #no_lop_mpas').hide(); 
+						}
+					);
+				});
+	    </script>
+	
     {% include "array_replication.html" %}
+	{% if array.unassigned_lop_opencoast_mpas %}
+		<span id="replication_no_lop">
+		<p>This array contains <a href="#" class="no_lop_mpas_link">{{array.unassigned_lop_opencoast_mpas.count}} open coast MPA{% if array.unassigned_lop_opencoast_mpas.count > 1 %}s{% endif %}</a> with unassigned levels of protection.  Estuarine (non open coast) MPAs are not considered in this analysis.</p>
+		{% with array.unassigned_lop_opencoast_mpas as unassigned_mpas %}
+			{% include "unassigned_lop_mpas_table.html" %}
+		{% endwith %}
+		</span>
+	{% else %}
+		<p>All open coast MPAs in this array received level of protection assignments.  Estuarine (non open coast) MPAs are not considered in this analysis.</p>
+	{% endif %}
+	<p>The validity of these results depend on MarineMap's ability to accurately calculate levels of protection for each MPA.  MarineMap can not calculate a level of protection
+		unless all proposed allowed uses are selected from the drop down boxes.  If anything is entered into the "other allowed uses" field, MarineMap will not be able to calculate a level
+		of protection.  Due to these limitations, these results should be regarded as preliminary and subject to review by the Science Advisory Team and staff.</p>
 {% endblock panel %}

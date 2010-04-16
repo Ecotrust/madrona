@@ -87,6 +87,15 @@ class MpaArray(BaseArray):
         return self.mpa_set.filter(pk__in=pk_list)
         
     @property
+    def unassigned_lop_mpas(self):
+        """Return a query set of all mpas with unassigned LOP or an empty query set if all have LOPs."""
+        pk_list = []
+        for m in self.mpa_set.all():
+            if m.lop==None:
+                pk_list.append(m.pk)
+        return self.mpa_set.filter(pk__in=pk_list)
+        
+    @property
     def clusterable_mpa_set(self):
         pk_list = []
         for mpa in self.opencoast_mpa_set:
