@@ -313,9 +313,11 @@ var kmltree = (function(){
                     var mods = state['modified'];
                     // console.log(node, node.find('>span.name').text(), mods);
                     if(mods){
+                        var opening = false;
                         if(mods['open'] !== undefined){
                             if(unloadedNL){
                                 if(mods['open'].current){
+                                    opening = true;
                                     queue.add(node, function(loadedNode){
                                         restoreState(loadedNode, state, queue);
                                         queue.execute();
@@ -335,7 +337,7 @@ var kmltree = (function(){
                             if(node.hasClass('KmlNetworkLink') 
                             && node.hasClass('alwaysRenderNodes') 
                             && mods['visibility'].current
-                            && !node.hasClass('open') 
+                            && !opening
                             && !node.hasClass('loading') 
                             && !node.hasClass('loaded')){
                                 openNetworkLink(node);
