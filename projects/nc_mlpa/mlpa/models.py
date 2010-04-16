@@ -508,6 +508,11 @@ class MlpaMpa(Mpa):
         mgs.save()
         self.lop # calling this will calculate and store the LOP
         
+    def delete(self, *args, **kwargs):
+        if self.array:
+            self.array.save() # Change modification date on array to make caching work
+        super(MlpaMpa,self).delete(*args, **kwargs)
+        
     @property
     def lop(self):
         try:
