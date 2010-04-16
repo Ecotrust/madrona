@@ -332,7 +332,20 @@ var kmltree = (function(){
                             }
                         }
                         if(mods['visibility'] !== undefined){
-                            toggleItem(node, mods['visibility'].current);
+                            if(node.hasClass('KmlNetworkLink') 
+                            && node.hasClass('alwaysRenderNodes') 
+                            && mods['visibility'].current
+                            && !node.hasClass('open') 
+                            && !node.hasClass('loading') 
+                            && !node.hasClass('loaded')){
+                                openNetworkLink(node);
+                                $(node).bind('loaded', function(e, node, kmlObject){
+                                    toggleVisibility(node, true);
+                                    node.removeClass('open');
+                                });                                
+                            }else{
+                                toggleItem(node, mods['visibility'].current);                                
+                            }
                         }
                         if(mods['selected'] !== undefined){
                             selectNode(node, lookup(node));
