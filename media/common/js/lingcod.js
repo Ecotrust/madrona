@@ -353,6 +353,23 @@ var lingcod = (function(){
             // $(window).die('beforunload', unload);
         }
         
+        $('#sidebar-toggler').click(function(){
+            $('#map_container').css({'width': '100%', 'left': 0, 'z-index': 10});
+            $('.menu_items').hide();
+            $('#sidebar > .ui-tabs-nav').hide();
+            $(this).hide();
+            $('#show-sidebar').show();
+        });
+        
+        $('#show-sidebar').click(function(){
+            $(this).hide();
+            $('#map_container').css({left: 500});
+            $('.menu_items').show();
+            $('#sidebar > .ui-tabs-nav').show();            
+            $('#sidebar-toggler').show();
+            resize();
+        });
+        
         $(window).bind('beforeunload', unload);
     };
     
@@ -439,6 +456,8 @@ var lingcod = (function(){
         var w = $(document.body).width() - $('#sidebar').width();
         $('#map_container').height(h).width(w);
     };
+    
+    that.resize = resize;
     
     that.maskSidebar = function(){
         $('#panel-holder').show();

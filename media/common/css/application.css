@@ -400,3 +400,29 @@ div.field textarea {
 .kmlEditor .kmltree-title {
     display:none;
 }
+
+#sidebar-toggler {
+    background: transparent url(../images/sidebar-toggler.png) no-repeat scroll 0 0;
+    width:29px;
+    height:30px;
+    position:absolute;
+    top:5px;
+    left:500px;
+    cursor:pointer;
+}
+
+#sidebar-toggler:hover {
+    background: transparent url(../images/sidebar-toggler-hover.png) no-repeat scroll 0 0;
+}
+
+#sidebar-toggler:active {
+    background: transparent url(../images/sidebar-toggler-active.png) no-repeat scroll 0 0;
+}
+
+#show-sidebar {
+    display:none;
+    color:white;
+    position:absolute;
+    left:10px;
+    top:10px;
+}
