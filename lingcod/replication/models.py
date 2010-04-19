@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-import lingcod.intersection.models as int_models
+from lingcod.intersection import models as int_models
 
 class ReplicationSetup(models.Model):
     org_scheme = models.ForeignKey(int_models.OrganizationScheme)

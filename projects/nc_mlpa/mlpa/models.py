@@ -5,8 +5,8 @@ from lingcod.mpa.models import Mpa
 from lingcod.manipulators.manipulators import *
 from lingcod.array.models import MpaArray as BaseArray
 from lingcod.studyregion.models import StudyRegion
-import lingcod.intersection.models as int_models
-import lingcod.replication.models as rep_models
+from lingcod.intersection import models as int_models
+from lingcod.replication import models as rep_models
 from lingcod.depth_range.models import depth_range as depth_range_calc
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
