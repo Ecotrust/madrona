@@ -59,7 +59,21 @@ Once the models have been configured for sharing, the application or project mus
     * The groups_users_sharing_with() function which returns the groups and users which are currently sharing objects with a given user. 
     * The get_content_type_id() function which is just a conveinience shortcut for determining the content_type of a given model class. 
 
-You can look at the kmlapp.views.get_mpas_shared_by and kmlapp.views.create_shared_kml for an example of how sharing code can be used by another application.
+You can look at the kmlapp.views.get_mpas_shared_by and kmlapp.views.create_shared_kml for an example of how sharing code can be used by another application. Also take a look at the views for mpa, array, rest and staticmap.
+
+The most common use case will be to determine if an object is readable by a user. In other words, is the object owned by OR shared with a given user. You can use the can_user_view() utility function which returns two items: A boolean indicating if the user has read access and an appropriate HttpResponse object. It's up to the implementation whether or not you return the HttpResponse or not but the common scenario would be to check if the object were readable by the user and, if not, return the HttpResponse. For example::
+
+    from lingcod.sharing.utils import can_user_view
+    from lingcod.common.utils import get_mpa_class
+
+    def some_view(request, pk):
+        mpa_class = get_mpa_class()
+        viewable, response = can_user_view(mpa_class, pk, request.user)
+        if not viewable:
+            return response
+        else:
+            do_stuff()
+
 
 Special Cases
 ******************
