@@ -2,7 +2,7 @@ import os
 from django.contrib.gis.geos import Point, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
-
+from django.db import connection
 
 def KmlWrap( string ):
     return '<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">' + string + '</kml>'
@@ -24,9 +24,22 @@ def LargestPolyFromMulti(geom):
         largest_geom = geom
     return largest_geom  
     
+def angle(pnt1,pnt2,pnt3):
+    """
+    Return the angle in radians between line(pnt2,pnt1) and line(pnt2,pnt3)
+    """
+    cursor = connection.cursor()
+    if pnt1.srid:
+        query = "SELECT abs(ST_Azimuth(ST_PointFromText(\'%s\',%i), ST_PointFromText(\'%s\',%i) ) - ST_Azimuth(ST_PointFromText(\'%s\',%i), ST_PointFromText(\'%s\',%i)) )" % (pnt2.wkt,pnt2.srid,pnt1.wkt,pnt1.srid,pnt2.wkt,pnt2.srid,pnt3.wkt,pnt3.srid)
+    else:
+        query = "SELECT abs(ST_Azimuth(ST_PointFromText(\'%s\'), ST_PointFromText(\'%s\') ) - ST_Azimuth(ST_PointFromText(\'%s\'), ST_PointFromText(\'%s\')) )" % (pnt2.wkt,pnt1.wkt,pnt2.wkt,pnt3.wkt)
+    #print query
+    cursor.execute(query)
+    row = cursor.fetchone()
+    return row[0]
+    
 def clean_geometry(geom):
     """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
-    from django.db import connection
     cursor = connection.cursor()
     query = "select cleangeometry(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
     cursor.execute(query)
