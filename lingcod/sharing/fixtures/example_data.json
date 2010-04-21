@@ -3,8 +3,7 @@
         "pk": 999999, 
         "model": "auth.group", 
         "fields": {
-            "name": "Share with Public", 
-            "permissions": [161]
+            "name": "Share with Public"
         }
     },
 
@@ -12,8 +11,7 @@
         "pk": 999998, 
         "model": "auth.group", 
         "fields": {
-            "name": "Share with Staff", 
-            "permissions": [161]
+            "name": "Share with Staff" 
         }
     } 
 ]
