@@ -31,7 +31,7 @@
         {% block aftermyshapes %}
             {% if user.is_authenticated %}
                 {% if perms.layers.view_ecotrustlayerlist %}
-                    options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key %}";
+                options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key as ecotrust_data_url%}{{ecotrust_data_url}}";
                 {% endif %}
             {% endif %}
         {% endblock aftermyshapes %}
