@@ -59,14 +59,14 @@ First, while we appreciate django-admin's attempt at an initial settings.py file
 
     TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
-    INSTALLED_APPS += ( 'mpa', )
+    INSTALLED_APPS += ( 'mlpa', )
 
-    MPA_CLASS = 'mpa.models.Mpa'
-    ARRAY_CLASS = 'mpa.models.MpaArray'
-    MPA_FORM = 'mpa.forms.MpaForm'
-    ARRAY_FORM = 'mpa.forms.ArrayForm'
+    MPA_CLASS = 'mlpa.models.Mpa'
+    ARRAY_CLASS = 'mlpa.models.MpaArray'
+    MPA_FORM = 'mlpa.forms.MpaForm'
+    ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
-Notice the final 5 lines; Here we install an app called 'mpa' and define the classes and forms based on that 'mpa' app. Let's go ahead and create that app and the proper classes to match our settings.
+Notice the final 5 lines; Here we install an app called 'mlpa' and define the classes and forms based on that 'mlpa' app. Let's go ahead and create that app and the proper classes to match our settings.
 
 Creating MPA/Array Classes
 --------------------------
@@ -76,17 +76,17 @@ Lingcod is set up so that MPAs and Arrays are not installed by default. Instead 
 First we *must* create an app to hold our custom MPA and Array information::
 
     cd oregon
-    python manage.py startapp mpa
+    python manage.py startapp mlpa
     
 Here we should see the following directory structure created for us::
 
-    mpa
+    mlpa
     |-- __init__.py
     |-- models.py
     |-- tests.py
     `-- views.py
 
-We can ignore the tests and views for now; for now we'll focus on creating the Mpa and MpaArray models. Open mpa/models.py and add::
+We can ignore the tests and views for now; for now we'll focus on creating the Mpa and MpaArray models. Open mlpa/models.py and add::
 
     from lingcod.mpa.models import Mpa as BaseMpa
     from lingcod.array.models import MpaArray as BaseMpaArray
@@ -99,7 +99,7 @@ We can ignore the tests and views for now; for now we'll focus on creating the M
 
 You can see that we merely took the abstract base classes from lingcod which define the default behavior and created our own classes based on them. If you need to customize the behavior, you can extend the models here instead of simply 'pass'ing. 
 
-Finally we'll need to create some django forms for Mpa and MpaArray objects. These define how the editing interfaces will appear in MarineMap. Create a new file mpa/forms.py and add::
+Finally we'll need to create some django forms for Mpa and MpaArray objects. These define how the editing interfaces will appear in MarineMap. Create a new file mlpa/forms.py and add::
 
     from lingcod.mpa.forms import MpaForm as BaseMpaForm
     from lingcod.array.forms import ArrayForm as BaseArrayForm
@@ -165,6 +165,8 @@ Next we'll create a new postgis-enabled database for this project and use django
 
     createdb oregon -U postgres
     python manage.py syncdb
+    python manage.py schemamigration --initial mlpa
+    python manage.py migrate
 
 
 Study Region
@@ -194,6 +196,7 @@ For now, we'll just test our new project using django's built-in development ser
 for any absolute urls created by our MarineMap project. Then run the dev server to test it::
 
     python manage.py site_setup_for_dev
+    python manage.py sharing_setup
     python manage.py runserver
 
 Our Oregon MarineMap project should now be accessible at http://localhost:8000/
