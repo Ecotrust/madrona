@@ -167,6 +167,8 @@ Next we'll create a new postgis-enabled database for this project and use django
     python manage.py syncdb
     python manage.py schemamigration --initial mlpa
     python manage.py migrate
+    # install example data?
+    python manage.py loaddata example_data
 
 
 Study Region
