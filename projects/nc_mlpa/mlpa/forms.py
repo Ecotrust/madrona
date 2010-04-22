@@ -133,8 +133,8 @@ class MpaForm(BaseMpaForm):
     class Meta:
         model = MlpaMpa
         fields = ('user', 'geometry_orig', 'geometry_final',
-            'name', 'designation', 'allowed_uses', 'other_allowed_uses',
-            'other_regulated_activities', 'specific_objective', 
+            'name', 'designation', 'specific_objective', 'allowed_uses', 
+            'other_allowed_uses', 'other_regulated_activities',  
             'goal_objectives', 'design_considerations', 
             'boundary_description', 'evolution')
         widgets = {
