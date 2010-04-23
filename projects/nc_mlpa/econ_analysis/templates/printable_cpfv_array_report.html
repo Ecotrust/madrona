@@ -30,13 +30,13 @@
                 {% if result.percGEI == '---' %}
                     <td align="center">---</td>
                 {% else %}
-                    <td align="center">{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                    <td align="center">{{ result.percGEI|floatformat:'1' }}&nbsp;<small>%</small></td>
                 {% endif %}
                 <td></td>
                 {% if result.percNEI == '---' %}
                     <td align="center">---</td>
                 {% else %}
-                    <td align="center">{{ result.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                    <td align="center">{{ result.percNEI|floatformat:'1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}

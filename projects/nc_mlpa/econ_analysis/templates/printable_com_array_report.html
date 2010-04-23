@@ -38,7 +38,7 @@
             <td style="width: 165px;"><b>Entire Study Region</b></td>
             <td align="center"><b>{{ studyregion_impacts.NEI|currency }}</b></td>
             <td></td>
-            <td align="center"><b>{{ studyregion_impacts.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+            <td align="center"><b>{{ studyregion_impacts.percNEI|floatformat:'1' }}&nbsp;<small>%</small></b></td>
         </tbody>
         </tbody>
     </table>
@@ -61,7 +61,7 @@
                 <td style="width: 165px;">{{ impact.port }}</td>
                 <td align="center">{{ impact.GEI|currency }}</td>
                 <td></td>
-                <td align="center">{{ impact.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                <td align="center">{{ impact.percGEI|floatformat:'1' }}&nbsp;<small>%</small></td>
             </tr>
         {% endfor %}
         <tr><td></td><td></td><td></td><td></td></tr>
@@ -69,7 +69,7 @@
             <td style="width: 165px;"><b>Entire Study Region</b></td>
             <td align="center"><b>{{ studyregion_impacts.GEI|currency }}</b></td>
             <td></td>
-            <td align="center"><b>{{ studyregion_impacts.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></b></td>
+            <td align="center"><b>{{ studyregion_impacts.percGEI|floatformat:'1' }}&nbsp;<small>%</small></b></td>
         </tbody>
     </table>
     
@@ -105,7 +105,7 @@
                     {% if result.percNEI == '---' %}
                         <td align="center">---</td>
                     {% else %}
-                        <td align="center">{{ result.percNEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                        <td align="center">{{ result.percNEI|floatformat:'1' }}&nbsp;<small>%</small></td>
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -145,7 +145,7 @@
                     {% if result.percGEI == '---' %}
                         <td align="center">---</td>
                     {% else %}
-                        <td align="center">{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                        <td align="center">{{ result.percGEI|floatformat:'1' }}&nbsp;<small>%</small></td>
                     {% endif %}
                 </tr>
             {% endfor %}

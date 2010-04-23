@@ -39,6 +39,7 @@ def get_public_id_lists():
 
 '''
 Returns boolean value based on whether the feature (mpa/array) in question is publicly shared or not
+Called by user_can_view_feature
 '''   
 def feature_is_public(feature, feature_id):
     try:
@@ -59,6 +60,7 @@ def feature_is_public(feature, feature_id):
     
 '''
 Returns boolean value based on whether the feature (mpa/array) in question belongs to the user
+Called by user_can_view_feature
 '''   
 def feature_belongs_to_user(user, feature_type, feature_id):
     #if a feature does not exist with the given id and the given user, return false
@@ -77,6 +79,7 @@ def feature_belongs_to_user(user, feature_type, feature_id):
         
 '''
 Returns boolean value based on whether the feature (mpa/array) in question is shared with the user
+Called by user_can_view_feature
 '''  
 def feature_is_shared_with_user(user, feature_type, feature_id):
     #obtain the groups this feature is associated with
@@ -107,6 +110,9 @@ def feature_is_shared_with_user(user, feature_type, feature_id):
     #otherwise, return false
     return False
 
+'''    
+Called by impact_analysis and print_report
+'''
 def user_can_view_feature(user, feature_id, feature_type):
     if user.is_anonymous() or not user.is_authenticated():
         if not feature_is_public(feature_type, feature_id):
@@ -128,8 +134,6 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
         
     group_name = Layers.GROUPS[group]
     if feature == 'mpa':
-        #the following port and species parameters are for testing on my local machine
-        #return display_mpa_analysis(request, feature_id, group_name, port='Eureka', species='Salmon')
         return display_mpa_analysis(request, feature_id, group_name)
     else:
         array = get_object_or_404(MpaArray, pk=feature_id)
@@ -137,17 +141,23 @@ def impact_analysis(request, feature_id, group, feature='mpa'):
         array_results = compile_array_results(mpas, group_name)
         return display_array_analysis(request, group_name, array, array_results)
 
-def compile_array_results(mpas, group, port=None, species=None):
+'''
+Called from impact_analysis and print_array_report        
+'''        
+def compile_array_results(mpas, group, port=None):
     array_results = []
-    #Sum results for each species, for each mpa in the array
+    #run analysis results for each mpa in the array
     for mpa in mpas:
         if mpa.designation_id is not None: #ignore Stewardship Zones and other mpas that have no LOP
             #What to do if mpa_analysis_results returns a Response object instead of a result?
-            mpa_results = mpa_analysis_results(mpa, group, port, species)
+            mpa_results = mpa_analysis_results(mpa, group, port)
             array_results.append(mpa_results)
     return array_results
         
-def display_array_analysis(request, group, array, array_results, port=None, species=None, template=None):
+'''
+Called from impact_analysis and print_array_report        
+'''        
+def display_array_analysis(request, group, array, array_results, port=None, template=None):
     if group == 'Commercial':
         #aggregate array results for commercial group
         aggregated_results = aggregate_com_array_results(array_results, group)
@@ -160,7 +170,7 @@ def display_array_analysis(request, group, array, array_results, port=None, spec
         #aggregate array results for commercial passenger fishing vessel group
         aggregated_results = aggregate_cpfv_array_results(array_results, group)
         #restructure into AnalysisResults data structure
-        analysis_results = restructure_aggregated_cpfv_results(array, group, species, aggregated_results)
+        analysis_results = restructure_aggregated_cpfv_results(array, group, aggregated_results)
         if template is None:
             template = 'array_impact_analysis_cpfv.html'
         return render_to_response(template, RequestContext(request, {'user_group': group, 'array':array, 'array_results': analysis_results}))  
@@ -187,6 +197,9 @@ def display_array_analysis(request, group, array, array_results, port=None, spec
             group_abbr = 'pvt'
         return render_to_response(template, RequestContext(request, {'group_abbr': group_abbr, 'user_group': group, 'array':array, 'array_results': analysis_results}))  
 
+'''
+Called from display_array_analysis
+'''
 def restructure_aggregated_commercial_results(array, group, aggregated_results):
     analysis_results = []
     port_impacts = []
@@ -223,14 +236,20 @@ def restructure_aggregated_commercial_results(array, group, aggregated_results):
     port_impacts = sort_results_by_port(port_impacts)
     return analysis_results, port_impacts, studyregion_impacts
         
-def restructure_aggregated_cpfv_results(array, group, species, aggregated_results):
+'''
+Called from display_array_analysis
+'''
+def restructure_aggregated_cpfv_results(array, group, aggregated_results):
     analysis_results = []
     for port, results in aggregated_results.iteritems():
-        analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, species=species, percOverallArea=results['Area'], percOverallValue=results['Value']))
+        analysis_results.append(AnalysisResult(id=array.id, type='array', group=group, port=port, percOverallArea=results['Area'], percOverallValue=results['Value']))
     #sort results by port name (north to south)
     analysis_results = sort_results_by_port(analysis_results, group) 
     return analysis_results       
     
+'''
+Called from display_array_analysis
+'''
 def restructure_aggregated_swd_results(array, group, aggregated_results):
     analysis_results = []
     for port, species_results in aggregated_results.iteritems():
@@ -245,6 +264,9 @@ def restructure_aggregated_swd_results(array, group, aggregated_results):
     analysis_results = sort_results_by_port(analysis_results, group) 
     return analysis_results       
                
+'''
+Called from display_array_analysis
+'''
 def restructure_aggregated_rec_results(array, group, aggregated_results):
     analysis_results = []
     for port, species_results in aggregated_results.iteritems():
@@ -259,6 +281,11 @@ def restructure_aggregated_rec_results(array, group, aggregated_results):
     analysis_results = sort_results_by_port(analysis_results, group) 
     return analysis_results       
 
+'''   
+Aggregates array results for Commercial group 
+This aggregation simply sums percentage area and percentage value results for each species (in each port)
+Called from display_arrray_analysis
+'''
 def aggregate_com_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     for mpa_results in array_results:
@@ -275,6 +302,11 @@ def aggregate_com_array_results(array_results, group):
     return aggregated_array_results       
         
 
+'''   
+Aggregates array results for Commercial Passenger Fishing Vessel group 
+This aggregation calculates the average percentage area and percentage value results for all species in each port
+Called from display_arrray_analysis
+'''
 def aggregate_cpfv_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     group_ports = GetPortsByGroup(group)
@@ -300,6 +332,11 @@ def aggregate_cpfv_array_results(array_results, group):
             aggregated_array_results[port]['Value'] /= port_counts[port]
     return aggregated_array_results       
     
+'''   
+Aggregates array results for Recreational groups
+This aggregation simply sums percentage area and percentage value results for each species (in each port)
+Called from display_arrray_analysis
+'''
 def aggregate_rec_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     for mpa_results in array_results:
@@ -315,6 +352,11 @@ def aggregate_rec_array_results(array_results, group):
                     aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results       
    
+'''   
+Aggregates array results for Seaweed group 
+This aggregation simply sums percentage area and percentage value results for each species (in each port)
+Called from display_arrray_analysis
+'''
 def aggregate_swd_array_results(array_results, group):
     aggregated_array_results = get_empty_array_results_dictionary(group)
     for mpa_results in array_results:
@@ -330,11 +372,19 @@ def aggregate_swd_array_results(array_results, group):
                     aggregated_array_results[result.port][result.species]['Area'] += result.percOverallArea
     return aggregated_array_results      
     
+'''   
+Sorts results by species name (alphabetical)
+Called from various restructure_aggregated_<group name>_results methods
+'''
 def sort_results_by_species(results):   
     #sort results alphabetically by species name
     results.sort(key=lambda obj: obj.species)  
     return results
     
+'''   
+Sorts results by port name (north to south)
+Called from various restructure_aggregated_<group name>_results methods
+'''
 def sort_results_by_port(results, group=None):
     #sort results by port name (north to south)
     if group is None:
@@ -354,7 +404,10 @@ def sort_results_by_port(results, group=None):
         results.sort(lambda x, y : cmp (ordering[x[0].port], ordering[y[0].port]))
     return results
     
-    
+'''   
+Creates an empty dictionary structure for a given group 
+Called from various aggregate_<group name>_array_results methods
+'''
 def get_empty_array_results_dictionary(group):
     #CAN WE CHANGE THE FOLLOWING TWO PROCEDURE CALLS TO DB QUERIES?
     group_species = GetSpeciesByGroup(group)
@@ -375,11 +428,9 @@ def get_empty_array_results_dictionary(group):
 Called from impact_analysis and MpaEconAnalysis
 Renders template with embedded analysis results
 '''
-def display_mpa_analysis(request, feature_id, group, port=None, species=None, template='impact_analysis.html'):
-
+def display_mpa_analysis(request, feature_id, group, port=None, template='impact_analysis.html'):
     mpa = get_object_or_404(MlpaMpa, pk=feature_id)
-    
-    mpa_results = mpa_analysis_results(mpa, group, port, species)
+    mpa_results = mpa_analysis_results(mpa, group, port)
     
     try:
         #if mpa_analysis_results threw an error it will return a response object of some sort
@@ -390,61 +441,136 @@ def display_mpa_analysis(request, feature_id, group, port=None, species=None, te
         #otherwise it worked 
         return render_to_response(template, RequestContext(request, {'mpa':mpa, 'all_results': mpa_results}))  
 
-#would be nice to produce some helper methods from within here...
-def mpa_analysis_results(mpa, group, port, species):
+'''        
+Returns an attempted retrieval from original cache table for this mpa, group, port
+Called from mpa_analysis_results
+'''   
+def check_original_cache(mpa, group, single_port):
+    orig_cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
+    return orig_cache
+
+'''
+Returns True if original cache value has older timestamp than the mpa, False otherwise
+Called from mpa_analysis_results
+''' 
+def original_cache_is_out_of_date(orig_cache, mpa):
+    out_of_date = True
+    #check to see if cache exists and that date_modifed for this mpa is not more recent than the cached results
+    if len(orig_cache) > 0:
+        out_of_date = False
+        for single_cache in orig_cache:
+            if single_cache.date_modified < mpa.date_modified:
+                out_of_date = True
+                break
+    return out_of_date
+  
+'''
+Removes cache entries from database
+Currently, it is only used to remove entries from original cache table if that mpa has become out of date
+Called from mpa_analysis_results
+'''
+def remove_cache_results(cache_results):
+    #remove all related entries from cache
+    for single_cache in cache_results:
+        single_cache.delete()
+        
+'''
+Checks for cached entries for this mpa, group, port
+Returns an attempt at a cache specific to this mpa, and an attempt at a cache that is related to this mpa (same geometry)
+Called from mpa_analysis_results
+'''   
+def check_cache(mpa, group, single_port):
+    mpa_hash = str(mpa.geometry_final.wkt.__hash__())
+    cache = FishingImpactCache.objects.filter(wkt_hash=mpa_hash, group=group, port=single_port)
+    mpa_specific_cache = FishingImpactCache.objects.filter(mpa__id=mpa.id, wkt_hash=mpa_hash, group=group, port=single_port)
+    if len(cache) > 0:
+        #get results related to an arbitrary single mpa
+        arbitrary_mpa_cache = FishingImpactCache.objects.filter(mpa__id=cache[0].mpa.id, wkt_hash=mpa_hash, group=group, port=single_port)
+    else:
+        arbitrary_mpa_cache = cache #empty list
+    return arbitrary_mpa_cache, mpa_specific_cache
+           
+'''
+Checks to see if allowed uses for the mpa differ from those cached for this (or related) mpa
+Called from mpa_analysis_results
+'''   
+def uses_have_not_changed(mpa, single_mpa_cache):
+    mpa_uses = mpa.allowed_uses.all()
+    cache_uses = FishingImpactCacheAllowedUse.objects.filter(mpaid=single_mpa_cache[0].mpa.id)
+    old_uses = [cache.use for cache in cache_uses]
+    if uses_differ(old_uses, mpa_uses):
+        return False
+    return True
+         
+'''
+Returns a list of AnalysisResults for given mpa cache, group, port
+Called from mpa_analysis_results
+'''         
+def construct_port_results(cache, group, single_port):
+    port_results = []
+    results = list(cache)
+    for result in results:
+        port_results.append(AnalysisResult(id=result.mpa_id, type='mpa', group=group, port=single_port, species=result.species, percOverallArea=result.perc_area, percOverallValue=result.perc_value))
+    return port_results       
+         
+'''  
+Returns a list of port results (itself a list of species results) for the given mpa
+Called from compile_array_results and display_mpa_analysis
+'''  
+def mpa_analysis_results(mpa, group, port):
     mpa_results = []
-    
-    #Get analysis results for given port or all ports 
-    if not port:
+    if port is None:
         ports = GetPortsByGroup(group)
     else:
         ports = [port]
         
     #Get results for each port
     for single_port in ports:
-        port_results = []
-        #See if we can retreive results from cache
-        #There is a problem here in that when a cache row is deleted for a particular mpa_id, group, port, AND species
-        #The cache retreival will assume there are no results for that species when the reality may be different
-        #This issue should be resolved by future caching strategy 
-        #(a strategy that maybe packages a single cache by mpa, group? or mpa, group, port?)
-        if species is None:
-            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port)
-        else:
-            cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=group, port=single_port, species=species)
-        cache_available = False
-        if len(cache) > 0:
-            cache_available = True
-        for single_cache in cache:
-            if single_cache.date_modified < mpa.date_modified:
-                cache_available = False
-                break
+        #First, check to see if results for this mpa, group, port have been cached
+        #checking original cache table...
+        orig_cache_available = False
+        orig_cache = check_original_cache(mpa, group, single_port)
+        if len(orig_cache) > 0:
+            orig_cache_available = True
+            if original_cache_is_out_of_date(orig_cache, mpa):
+                orig_cache_available = False
+                remove_cache_results(orig_cache)
+
+        #checking new cache table...
+        new_cache_available = False
+        arbitrary_mpa_cache, mpa_specific_cache = check_cache(mpa, group, single_port)
+        if len(mpa_specific_cache) > 0:
+            if uses_have_not_changed(mpa, mpa_specific_cache):
+                new_cache_available = True
+        elif len(arbitrary_mpa_cache) > 0:
+            if uses_have_not_changed(mpa, arbitrary_mpa_cache):
+                new_cache_available = True
         
-        #get results from cache
-        #if they don't exist or are out of date, then run the analysis
-        if cache_available:
-            results = list(cache)
-            for result in results:
-                port_results.append(AnalysisResult(id=result.mpa_id, type='mpa', group=group, port=single_port, species=result.species, percOverallArea=result.perc_area, percOverallValue=result.perc_value))
-        else: 
-            #since at least one cache was not current, remove all related entries as they will all be recreated and recached below
-            for single_cache in cache:
-                single_cache.delete()
-            #Get all maps from the group and port (and possibly species) that we want to analyze
-            maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port, species)
-            #WILL THIS SOMETIMES BE EMPTY?
-            #AND IF SO, SHOULD THIS BE ALLOWED (I'M SEEING EMPTY RIGHT NOW WITH EUREKA SALMON ON DIV) -- RETURNS [] (NOT '')
-            #IF IT'S ALLOWED, WE CAN SIMPLY COUCH THE REST OF THIS ELSE IN AN IF LEN(MAPS) > 0
-            if maps is '':
-                return HttpResponseBadRequest('A Fishing Map with User group, %s, Port, %s, and Species, %s, does not exist.' % (group, single_port, species))
+        #if cache is available (old style or new style) then use it
+        if orig_cache_available:
+            port_results = construct_port_results(orig_cache, group, single_port)
+            #if there is not yet cached results for this mpa_id, cache it 
+            if len(mpa_specific_cache) == 0: 
+                cache_analysis_results(port_results, group, mpa, port=single_port)
+        elif new_cache_available:
+            if len(mpa_specific_cache) > 0: #see if we can use cache specific to this mpa
+                port_results = construct_port_results(mpa_specific_cache, group, single_port)
+            else: #otherwise use cache results with identical geometry
+                port_results = construct_port_results(arbitrary_mpa_cache, group, single_port)
+                #since cache for this mpa does not yet exist, create one
+                cache_analysis_results(port_results, group, mpa, port=single_port)
+        #otherwise (if no cache is available), 
+        #or if mpas are out of date (original cache), or have different allowed uses (new cache), then run the analysis
+        else:           
+            #Get all maps from the group and port that we want to analyze
+            maps = FishingImpactAnalysisMap.objects.getSubset(group, single_port)
+            port_results = []
             if len(maps) > 0:
                 #run the analysis
                 analysis = Analysis()
                 port_results = analysis.run(mpa, maps)
-                if port_results < 0:
-                    return HttpResponseBadRequest('Error running analysis')
                 #Cache analysis results 
-                cache_analysis_results(port_results, group, mpa)
+                cache_analysis_results(port_results, group, mpa, port=single_port)
             
         #Expand results to include those species that exist within the group but not perhaps within this port (denoted with '---')
         port_results = flesh_out_results(group, single_port, port_results)
@@ -454,26 +580,35 @@ def mpa_analysis_results(mpa, group, port, species):
                 
         mpa_results.append(port_results)
     return mpa_results
-    
-#no longer used...
-def roundPercentageValues(results, sig_digs):
-    import utilities as mmutil  
+
+'''
+This function will replace any cached results with new results, or simply add results if none are there already
+'''    
+def cache_analysis_results(results, group, mpa, port=None):
+    #do we still need to remove any rows, or is this handled in FishingImpactCache.save?
+    #remove any rows that may already exist for this mpa, group
+    if port is None:
+        old_cache = FishingImpactCache.objects.filter(mpa__id=mpa.id, group=group)
+    else:
+        old_cache = FishingImpactCache.objects.filter(mpa__id=mpa.id, group=group, port=port)
+    for single_row in old_cache:
+        single_row.delete() 
+    #cache results
     for result in results:
-        if result.type == 'mpa': 
-            if result.percOverallValue != '---':
-                result.percOverallArea = mmutil.trueRound(float(result.percOverallArea), sig_digs)
-                result.percOverallValue = mmutil.trueRound(float(result.percOverallValue), sig_digs)
-        else:
-            if result.percGEI != '---':
-                result.percGEI = mmutil.trueRound(float(result.percGEI), sig_digs)
-            if result.percNEI != '---':
-                result.percNEI = mmutil.trueRound(float(result.percNEI), sig_digs)
-            if result.GEI != '---':
-                result.GEI = mmutil.trueRound(float(result.GEI), 0)
-            if result.NEI != '---':
-                result.NEI = mmutil.trueRound(float(result.NEI), 0)
-    return results
-    
+        cache = FishingImpactCache(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.percOverallValue, perc_area=result.percOverallArea, wkt_hash=str(mpa.geometry_final.wkt.__hash__()))
+        cache.save()
+   
+'''
+Checks to see if two lists of allowed uses differ 
+'''   
+def uses_differ(old_uses, new_uses):
+    if len(old_uses) != len(new_uses):
+        return True
+    for use in old_uses:
+        if use not in new_uses:
+            return True
+    return False
+   
 '''
 Accessed via named url when a user selects the View Printable Report link at the bottom of analysis results display
 '''
@@ -491,7 +626,8 @@ def print_report(request, feature_id, user_group, feature='mpa'):
     all_results = []
     for single_port in ports:
         #should we ensure this only returns a single row?
-        cache = FishingImpactResults.objects.filter(mpa=mpa.id, group=user_group, port=single_port)
+        cache = FishingImpactCache.objects.filter(mpa=mpa.id, group=user_group, port=single_port)
+        #ADD HANDLING CODE FOR EMPTY CACHE (should only happen in cases of explicit url -- shouldn't happen when coming from within MM)
         results = list(cache)
         analysis_results = []
         for result in results:
@@ -506,10 +642,14 @@ def print_report(request, feature_id, user_group, feature='mpa'):
             for result in analysis_results:
                 if result.port == 'Fort Bragg':
                     result.port = 'Fort Bragg / Albion'
-        
         all_results.append(analysis_results)
     return render_to_response('printable_mpa_report.html', RequestContext(request, {'mpa':mpa, 'user_group':user_group, 'all_results':all_results})) 
 
+'''
+Called from print_report
+Compiles array results (a list of mpa results)
+Returns rendering results from display_array_analysis
+'''   
 def print_array_report(request, array_id, group):
     array = get_object_or_404(MpaArray, pk=array_id)
     mpas = array.mpa_set
@@ -535,12 +675,6 @@ def print_array_report(request, array_id, group):
     template = 'printable_%s_array_report.html' % group_abbr
     return display_array_analysis(request, group_name, array, array_results, template=template)
     
-def cache_analysis_results(results, group, mpa):
-    for result in results:
-        cache = FishingImpactResults(mpa_id=mpa.id, group=group, port=result.port, species=result.species, perc_value=result.percOverallValue, perc_area=result.percOverallArea)
-        #WHY IS THIS NOT SAVING DURING ARRAY ANALYSIS???
-        cache.save()
-        
 '''
 Called by display_mpa_analysis and print_report
 Fills out analysis results with species that are relevant for the given group, but not yet present in the results
@@ -561,7 +695,7 @@ def flesh_out_results(group, port, results):
 '''
 Called by flesh_out_results
 Modifies commercial species for appropriate display:
-    Species Name(s) (Catch Method)
+Species Name(s) (Catch Method)
 '''
 def adjust_commercial_species(results):
     species_dict = Layers.COMMERCIAL_SPECIES_DISPLAY

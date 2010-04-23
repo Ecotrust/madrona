@@ -34,7 +34,7 @@
                 {% if result.percGEI == '---' %}
                     <td>---</td>
                 {% else %}
-                    <td>{{ result.percGEI|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                    <td>{{ result.percGEI|floatformat:'1' }}&nbsp;<small>%</small></td>
                 {% endif %}
             </tr>
         {% endfor %}

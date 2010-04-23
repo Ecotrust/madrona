@@ -42,7 +42,7 @@ class FishingImpactStats(models.Model):
     srValue = models.FloatField()     #Fishing value in the study region
     
 '''
-The following model is used for caching the impact analysis results after they are run for the first time
+The following model was originally used for caching the impact analysis results after they are run for the first time
 '''
 class FishingImpactResults(models.Model):
     mpa = models.ForeignKey(MlpaMpa, verbose_name="MPA ID")
@@ -53,6 +53,62 @@ class FishingImpactResults(models.Model):
     perc_area = models.FloatField(verbose_name="Percentage Area affected by MPA", null=True, blank=True)
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
 
+'''
+The following model is used for caching the impact analysis results after they are run for the first time
+'''
+class FishingImpactCache(models.Model):
+    mpa = models.ForeignKey(MlpaMpa, verbose_name="MPA ID")
+    group = models.TextField(verbose_name="Group")
+    port = models.TextField(verbose_name="Port")
+    species = models.TextField(verbose_name="Species")
+    perc_value = models.FloatField(verbose_name="Percentage Value affected by MPA")
+    perc_area = models.FloatField(verbose_name="Percentage Area affected by MPA", null=True, blank=True)
+    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    wkt_hash = models.CharField(max_length=255)
+    
+    def save(self, *args, **kwargs):
+        #Update FishingImpactCacheAllowedUse table (if necessary)
+        old_cache_uses = FishingImpactCacheAllowedUse.objects.filter(mpaid=self.mpa.id)
+        old_uses = [cache.use for cache in old_cache_uses]
+        new_uses = self.mpa.allowed_uses.all()
+        if self.uses_differ(old_uses, new_uses):
+            #if old cache has values, these values need to be removed because allowed uses have changed
+            #what if cached mpas didn't have any allowed uses before, but now they do? does this still work?
+            original_cache = FishingImpactResults.objects.filter(mpa__id=self.mpa.id)
+            old_cache = FishingImpactCache.objects.filter(mpa__id=self.mpa.id)
+            if len(old_cache) > 0:
+                #remove any rows from FishingImpactResults that relate to this mpas id
+                for cache in original_cache:
+                    cache.delete()
+                #remove any rows from FishingImpactCahe table that relate to this mpas id
+                for cache in old_cache:
+                    cache.delete()
+                #remove any rows from FishingImpactCacheAllowedUse table that relate to this mpas id
+                for cache in old_cache_uses:
+                    cache.delete()
+            #add new uses to FishingImpactCacheAllowedUse table
+            for use in new_uses:
+                mpa_use = FishingImpactCacheAllowedUse(mpaid=self.mpa.id, use=use)
+                mpa_use.save() 
+        #make sure an identical entry is not there already
+        if not FishingImpactCache.objects.filter(mpa__id = self.mpa.id, group=self.group, port=self.port, species=self.species).exists():
+            super(FishingImpactCache, self).save(*args, **kwargs)
+        else:
+            from django.db import IntegrityError
+            raise IntegrityError("Entry already exists in database...")
+    
+    def uses_differ(self, old_uses, new_uses):
+        if len(old_uses) != len(new_uses):
+            return True
+        for use in old_uses:
+            if use not in new_uses:
+                return True
+        return False
+        
+class FishingImpactCacheAllowedUse(models.Model):
+    mpaid = models.IntegerField(verbose_name="Mpa Id")
+    use = models.ForeignKey(AllowedUse, verbose_name="Allowed Use")
+        
 '''
 The following model provides a list of Species (Method) names that relate to the Commercial user group
 '''

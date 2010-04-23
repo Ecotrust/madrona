@@ -33,13 +33,13 @@
             {% if result.percOverallValue == '---' %}
                 <td>---</td>
             {% else %}
-                <td>{{ result.percOverallValue|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                <td>{{ result.percOverallValue|floatformat:'1' }}&nbsp;<small>%</small></td>
             {% endif %}
             <td></td>
             {% if result.percOverallArea == '---' %}
                 <td>---</td>
             {% else %}
-                <td>{{ result.percOverallArea|floatformat:'-1' }}&nbsp;<small>%</small></td>
+                <td>{{ result.percOverallArea|floatformat:'1' }}&nbsp;<small>%</small></td>
             {% endif %}
         </tr>
         {% endfor %}
