@@ -253,7 +253,6 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
     array_ctid = get_content_type_id(utils.get_array_class())
 
-    print shapes
     t = get_template('placemarks.kml')
     kml = t.render(Context({'user': user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
         'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': organize_in_array_folders}))
