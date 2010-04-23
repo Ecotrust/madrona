@@ -1,8 +1,9 @@
 import os
-from django.contrib.gis.geos import Point, fromstr
+from django.contrib.gis.geos import Point, LinearRing, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
+#from django.db import transaction
 
 def KmlWrap( string ):
     return '<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">' + string + '</kml>'
@@ -23,7 +24,7 @@ def LargestPolyFromMulti(geom):
     else:
         largest_geom = geom
     return largest_geom  
-    
+   
 def angle(pnt1,pnt2,pnt3):
     """
     Return the angle in radians between line(pnt2,pnt1) and line(pnt2,pnt3)
@@ -37,6 +38,69 @@ def angle(pnt1,pnt2,pnt3):
     cursor.execute(query)
     row = cursor.fetchone()
     return row[0]
+    
+def angle_degrees(pnt1,pnt2,pnt3):
+    """
+    Return the angle in degrees between line(pnt2,pnt1) and line(pnt2,pnt3)
+    """
+    rads = angle(pnt1,pnt2,pnt3)
+    return rads * (180/pi)
+
+def spike_ring_indecies(line_ring,threshold=0.01):
+    """
+    Returns a list of point indexes if ring contains spikes (angles of less than threshold degrees).
+    Otherwise, an empty list.
+    """
+    radian_thresh = threshold * (pi/180)
+    spike_indecies = []
+    for i,pnt in enumerate(line_ring.coords):
+        if(i==0 and line_ring.num_points > 3): # The first point  ...which also equals the last point
+            p1_coords = line_ring.coords[len(line_ring.coords) - 2]
+        elif(i==line_ring.num_points-1): # The first and last point are the same in a line ring so we're done
+            break
+        else:
+            p1_coords = line_ring.coords[i - 1]
+            
+        # set up the points for the angle test.
+        p1_str = 'POINT (%f %f), %i' % (p1_coords[0], p1_coords[1], settings.GEOMETRY_DB_SRID)
+        p1 = fromstr(p1_str)
+        p2_str = 'POINT (%f %f), %i' % (pnt[0],pnt[1],settings.GEOMETRY_DB_SRID)
+        p2 = fromstr(p2_str)
+        p3_coords = line_ring.coords[i + 1]
+        p3_str = 'POINT (%f %f), %i' % (p3_coords[0], p3_coords[1], settings.GEOMETRY_DB_SRID)
+        p3 = fromstr(p3_str)
+        if( angle(p1,p2,p3) <= radian_thresh ):
+            spike_indecies.append(i)
+    
+    return spike_indecies
+
+def remove_spikes(poly,threshold=0.01):
+    """
+    Looks for spikes (angles < threshold degrees) in the polygons exterior ring.  If there are spikes,
+    they will be removed and a polygon (without spikes) will be returned.  If no spikes are found, method
+    will return original geometry.
+    
+    NOTE: This method does not examine or fix interior rings.  So far those haven't seemed to have been a problem.
+    """
+    line_ring = poly.exterior_ring
+    spike_indecies = spike_ring_indecies(line_ring,threshold=threshold)
+    if( spike_indecies ):
+        for i,org_index in enumerate(spike_indecies):
+            if(org_index==0): # special case, must remove first and last point, and add end point that overlaps new first point
+                # get the list of points
+                pnts = list(line_ring.coords)
+                # remove the first point
+                pnts.remove(pnts[0])
+                # remove the last point
+                pnts.remove(pnts[-1])
+                # append a copy of the new first point (old second point) onto the end so it makes a closed ring
+                pnts.append(pnts[0])
+                # replace the old line ring
+                line_ring = LinearRing(pnts)
+            else:
+                line_ring.remove(line_ring.coords[org_index])
+        poly.exterior_ring = line_ring
+    return poly
     
 def clean_geometry(geom):
     """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
@@ -58,7 +122,6 @@ def clean_geometry(geom):
 # cleans again if needed before returning 
 # Note, it does not scrub the geometry before transforming, so if needed
 # call check_validity(geo, geo.srid) first.
-# NO LONGER USES SPIKE REMOVER BECAUSE IT WAS REMOVING ISLANDS
 def ensure_clean(geo, srid):
     old_srid = geo.srid
     if geo.srid is not srid:

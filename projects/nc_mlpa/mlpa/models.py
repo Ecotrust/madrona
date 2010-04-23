@@ -8,6 +8,7 @@ from lingcod.studyregion.models import StudyRegion
 from lingcod.intersection import models as int_models
 from lingcod.replication import models as rep_models
 from lingcod.depth_range.models import depth_range as depth_range_calc
+from lingcod.common.utils import remove_spikes
 from django.contrib.gis import geos
 from django.contrib.gis.measure import A, D
 from django.db import transaction
@@ -626,6 +627,20 @@ class MlpaMpa(Mpa):
         from report.models import MpaShapefile
         # This is a round about way of gettting a queryset with just this one MPA
         return MpaShapefile.objects.filter(pk=self.export_version.pk)
+    
+    @property
+    def has_spikes(self):
+        if(remove_spikes(self.geometry_final)):
+            return True
+        else:
+            return False
+            
+    def remove_spikes(self):
+        oringal_num_points = self.geometry_final.num_points
+        new_poly = remove_spikes(self.geometry_final)
+        if(new_poly.num_points!=oringal_num_points):
+            self.geometry_final = new_poly
+            self.save()
         
     def delete_cached_lop(self):
         MpaLop.objects.filter(mpa=self).delete()

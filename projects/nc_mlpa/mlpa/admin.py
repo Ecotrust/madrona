@@ -2,6 +2,7 @@ from django.contrib import admin
 from mlpa.models import *
 from lingcod.mpa.admin import MpaAdmin
 from lingcod.array.admin import ArrayAdmin
+from django.conf.urls.defaults import patterns, url
 
 class GoalObjectiveAdmin (admin.ModelAdmin):
     list_display = ( 'goal_category', 'name', 'description')
@@ -36,8 +37,17 @@ admin.site.register(LopOverride,LopOverrideAdmin)
 #     list_display = ('name', 'type', 'sat_standard')
 # admin.site.register(SatHabitat, SatHabitatAdmin)
 class MpasAdmin (MpaAdmin):
-    list_display = ( 'pk', 'name', 'user')
-    list_filter = ['user','is_estuary']
+    list_display = ( 'pk', 'name', 'user','array','date_created','date_modified')
+    list_filter = ['date_modified','date_created','is_estuary']
+    search_fields = ('name','id','user__username','user__first_name','user__last_name')
+    
+    def get_urls(self):
+        from mlpa.views import mpa_remove_spikes
+        urls = super(MpasAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^/admin/mlpa/mpa/remove_spikes/(\w+)$', mpa_remove_spikes, name='mpa_remove_spikes')
+        )
+        return my_urls + urls
 admin.site.register(MlpaMpa, MpasAdmin)
 
 from django.contrib.auth.models import Permission
