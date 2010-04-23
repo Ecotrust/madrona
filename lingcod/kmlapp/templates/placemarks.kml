@@ -2,7 +2,7 @@
 {% load rest_uid array_uid mpa_uid absurl absolute_media_url %}
 
 {% block folders_and_placemarks %}
-{% for array_nameid, a in shapes.items %}
+{% for array_nameid, a in shapes %}
 {% if a.array.id and use_network_links %}
     <NetworkLink id="{{a.array.get_absolute_url}}">
     <Style>

@@ -13,6 +13,13 @@ from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
 
+# This is the dict key used for mpas without an array
+# Since it's sorted alphabetically by key, this string
+# determines where the 'Unattached' MPA folder will appear
+UNATTACHED = "zzzzzzz"
+# This is the nice name as it will appear on screen
+UNATTACHED_NAME = "Marine Protected Areas"
+
 def get_user_mpa_data(user):
     """
     Organizes user's MPAs into arrays and provides their designations.
@@ -27,11 +34,11 @@ def get_user_mpa_data(user):
 
     mpas = Mpa.objects.filter(user=user).add_kml()
 
-    unattached = utils.get_array_class()(name='Marine Protected Areas')
-    shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
+    unattached = utils.get_array_class()(name=UNATTACHED_NAME)
+    shapes = {UNATTACHED: {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
         if not mpa.array:
-            shapes['Unattached']['mpas'].append(mpa)
+            shapes[UNATTACHED]['mpas'].append(mpa)
         else:
             array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
             if array_nameid in shapes.keys():
@@ -125,8 +132,8 @@ def get_single_mpa_data(user, input_mpa_id):
         array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
         shapes = {array_nameid: {'array':mpa.array, 'mpas': [mpa]} }
     else:
-        unattached = utils.get_array_class()(name='Unattached')
-        shapes = {'Unattached': {'array': unattached, 'mpas':[mpa]} }
+        unattached = utils.get_array_class()(name=UNATTACHED)
+        shapes = {UNATTACHED: {'array': unattached, 'mpas':[mpa]} }
     designations = [mpa.designation]
     return shapes, designations
 
@@ -149,8 +156,8 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
     except Mpa.DoesNotExist:
         raise Http404
 
-    unattached = utils.get_array_class()(name='Marine Protected Areas')
-    shapes = {'Unattached': {'array': unattached, 'mpas':[]} }
+    unattached = utils.get_array_class()(name=UNATTACHED_NAME)
+    shapes = {UNATTACHED: {'array': unattached, 'mpas':[]} }
     for mpa in mpas:
         # Does it belong to an array that is shared?
         if mpa.array and sg in mpa.array.sharing_groups.all():
@@ -161,9 +168,9 @@ def get_mpas_shared_by(shareuser, sharegroup, user):
                 shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
         # Or is it a lone MPA?
         else:
-            shapes['Unattached']['mpas'].append(mpa)
-    if len(shapes['Unattached']['mpas']) == 0:
-        del shapes['Unattached']
+            shapes[UNATTACHED]['mpas'].append(mpa)
+    if len(shapes[UNATTACHED]['mpas']) == 0:
+        del shapes[UNATTACHED]
     designations = MpaDesignation.objects.all()
     return shapes, designations
 
@@ -246,8 +253,9 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
     array_ctid = get_content_type_id(utils.get_array_class())
 
+    print shapes
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'user': user, 'shapes': shapes, 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
+    kml = t.render(Context({'user': user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
         'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': organize_in_array_folders}))
 
     response = HttpResponse()
@@ -305,7 +313,7 @@ def shared_public(request, kmz=False, session_key='0'):
     array_ctid = get_content_type_id(utils.get_array_class())
 
     t = get_template('placemarks.kml')
-    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 'shapes': shapes, 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
+    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
         'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': False}))
 
     response = HttpResponse()
