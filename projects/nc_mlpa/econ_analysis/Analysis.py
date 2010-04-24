@@ -442,7 +442,6 @@ class AnalysisResult:
         self.group = group
         self.port = port
         self.species = species
-        
         if type == 'mpa':
             self.mpa_id = id  
             self.percOverallArea = percOverallArea
@@ -476,7 +475,7 @@ class AnalysisResult:
                     gross_revenue = revenue.gross_revenue
                     costs = CPFVCosts.objects.get(port__name=self.port)                  
                     #what to do if costs query is empty or errors?
-                    self.GEI = int(gross_revenue * self.percGEI / 100)
+                    self.GEI = gross_revenue * self.percGEI / 100
                     (self.percNEI, self.NEI) = self.calculateNEI(gross_revenue, costs)
                 else:
                     self.GEI = self.percNEI = self.NEI = '---'
