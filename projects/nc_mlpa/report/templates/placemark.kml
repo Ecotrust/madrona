@@ -1,6 +1,0 @@
-<Placemark>
-	<name>{{placemark.name}}</name>
-	<description>{{placemark.description}}</description>
-	<styleUrl>{{placemark.styleurl|default:"#spacingStyles"}}</styleUrl>
-	{{placemark.geometry|safe}}
-</Placemark>
