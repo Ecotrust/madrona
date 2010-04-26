@@ -63,7 +63,7 @@ template.close()
 # Add paths of example projects
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/example_projects/test_project')
 #sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/projects/nc_mlpa')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'projects.nc_mlpa.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'example_projects.test_project.settings'
 # from example_projects.simple import settings as project_settings
 # from projects.nc_mlpa import settings as project_settings
 
