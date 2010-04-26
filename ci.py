@@ -38,15 +38,15 @@ if options.docs_output:
 
 # Remove settings_local if it exists
 try:
-    # os.remove('example_projects/simple/settings_local.py')
-    os.remove('projects/nc_mlpa/settings_local.py')    
+    os.remove('example_projects/test_project/settings_local.py')
+    #os.remove('projects/nc_mlpa/settings_local.py')    
 except:
     pass
 
-# f = open('example_projects/simple/settings_local.py', 'w')
-# template = open('example_projects/simple/settings_local.template')
-f = open('projects/nc_mlpa/settings_local.py', 'w')
-template = open('projects/nc_mlpa/settings_local.template')
+f = open('example_projects/test_project/settings_local.py', 'w')
+template = open('example_projects/test_project/settings_local.template')
+#f = open('projects/nc_mlpa/settings_local.py', 'w')
+#template = open('projects/nc_mlpa/settings_local.template')
 
 f.write(template.read())
 
@@ -61,8 +61,8 @@ f.close()
 template.close()
 
 # Add paths of example projects
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/example_projects/simple')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/projects/nc_mlpa')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/example_projects/test_project')
+#sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/projects/nc_mlpa')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'projects.nc_mlpa.settings'
 # from example_projects.simple import settings as project_settings
 # from projects.nc_mlpa import settings as project_settings

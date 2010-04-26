@@ -23,3 +23,5 @@ MPA_CLASS = 'mlpa.models.Mpa'
 ARRAY_CLASS = 'mlpa.models.MpaArray'
 MPA_FORM = 'mlpa.forms.MpaForm'
 ARRAY_FORM = 'mlpa.forms.ArrayForm'
+
+from settings_local import *
