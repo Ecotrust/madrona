@@ -2,3 +2,5 @@ syntax: glob
 
 *.pyc
 marinemap.egg-info*
+marinemap.r*.css
+marinemap.r*.js
