@@ -61,10 +61,8 @@ class Command(BaseCommand):
         return lingcod_media_dir
 
     def get_project_dir(self):
-        # We know project media is relative to the root_urlconf 
-        from django.utils import importlib
-        m = importlib.import_module(settings.ROOT_URLCONF)
-        return os.path.realpath(os.path.join(os.path.dirname(m.__file__), '..', 'media'))
+        # We know project media is relative to the project base dir
+        return os.path.realpath(os.path.join(settings.BASE_DIR, '..', 'media'))
 
     def copy_media_to_root(self, source_dir):
         if self.dry_run:
