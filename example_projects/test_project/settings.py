@@ -1,6 +1,8 @@
 # Django settings for oregon project.
 from lingcod.common.default_settings import *
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 DATABASE_ENGINE = 'postgresql_psycopg2'
 DATABASE_NAME = 'test_project'
 DATABASE_USER = 'postgres'

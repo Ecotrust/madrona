@@ -129,6 +129,10 @@ MarineMap Settings
     (with alterations made to models.py and admin.py) 
     allows for managing of Google Analytics accounts from the Django admin page.
     
+.. _BASE_DIR:
+
+``BASE_DIR``
+    Provides the path to the project codebase. 
 
 Django Settings
 ---------------

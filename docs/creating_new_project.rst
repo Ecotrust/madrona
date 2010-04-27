@@ -43,6 +43,8 @@ First, while we appreciate django-admin's attempt at an initial settings.py file
     # Django settings for oregon project.
     from lingcod.common.default_settings import *
 
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
     DATABASE_ENGINE = 'postgresql_psycopg2'
     DATABASE_NAME = 'oregon'
     DATABASE_USER = 'postgres'
