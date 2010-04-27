@@ -41,6 +41,10 @@ class Command(BaseCommand):
 
         if self.dry_run:
             print "    DRY RUN! NO FILES WILL BE MODIFIED."
+            
+        if os.path.abspath(os.path.realpath(lingcod_media_dir)) == os.path.abspath(os.path.realpath(self.media_root)) or \
+           os.path.abspath(os.path.realpath(project_media_dir)) == os.path.abspath(os.path.realpath(self.media_root)):
+            raise Exception("Your MEDIA_ROOT setting has to be a directory other than your lingcod or project media folder!")
 
         self.copy_media_to_root(lingcod_media_dir)
         self.copy_media_to_root(project_media_dir)
