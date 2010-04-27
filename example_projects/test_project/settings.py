@@ -24,4 +24,7 @@ ARRAY_CLASS = 'mlpa.models.MpaArray'
 MPA_FORM = 'mlpa.forms.MpaForm'
 ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
+import os
+MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
+
 from settings_local import *
