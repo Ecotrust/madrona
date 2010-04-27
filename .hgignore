@@ -4,3 +4,4 @@ syntax: glob
 marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js
+example_projects/test_project/mediaroot/*
