@@ -73,5 +73,5 @@ from django.conf import settings
 
 from django.core import management
 print "Running tests"
-#management.call_command('syncdb', interactive=False)
+management.call_command('syncdb', interactive=False)
 management.call_command('test', interactive=False)
