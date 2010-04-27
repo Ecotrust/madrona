@@ -75,7 +75,9 @@ class Command(BaseCommand):
             print "    This would compile all the media assets in %s" % (self.media_root)
             return
 
-        print "    Compiling media (not yet implemented)"
+        print "    Compiling media"
+        from django.core.management import call_command
+        call_command('synccompress')
         return
 
     def remove_uncompressed_media(self):
