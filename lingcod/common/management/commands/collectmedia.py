@@ -24,6 +24,8 @@ class Command(BaseCommand):
             help="Specifies the name of the media directory to look for in each app."),
         make_option('-e', '--exclude', action='append', default=exclude, dest='exclude', metavar='PATTERNS',
             help="A space-delimited list of glob-style patterns to ignore. Use multiple times to add more."),
+        make_option('-f', '--force', action='store_true', dest='force_compress',
+            help="Force django-compress to re-create the compressed media files."),
         make_option('-l', '--link', action='store_true', dest='link',
             help="Create a symbolic link to each file instead of copying.")
         )
@@ -32,6 +34,7 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         self.dry_run = options.get('dry_run', False)
         self.media_root = options.get('media_root', settings.MEDIA_ROOT)
+        self.force_compress = options.get('force_compress', False)
 
         lingcod_media_dir = self.get_lingcod_dir()
         project_media_dir = self.get_project_dir()
@@ -75,9 +78,13 @@ class Command(BaseCommand):
             print "    This would compile all the media assets in %s" % (self.media_root)
             return
 
-        print "    Compiling media"
+        force_msg = ''
+        if self.force_compress:
+            force_msg = "--force"
+
+        print "    Compiling media using synccompress %s" % force_msg
         from django.core.management import call_command
-        call_command('synccompress')
+        call_command('synccompress', force=self.force_compress)
         return
 
     def remove_uncompressed_media(self):
