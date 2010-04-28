@@ -158,6 +158,8 @@ class MpaCopyTestCase(TestCase):
     fixtures = ['example_data']
     def setUp(self):
         self.settings_manager.set(MPA_FORM = 'lingcod.mpa.tests.MpaTestForm', MPA_CLASS = 'lingcod.mpa.tests.TestMpa')
+        self.settings_manager.set(MPA_CLASS = 'lingcod.mpa.tests.TestMpa')
+        self.settings_manager.set(ARRAY_CLASS = 'lingcod.mpa.tests.TestArray')
         self.client = Client()
         self.password = 'iluvmpas'
         self.user = User.objects.create_user('mpaarraytest', 'test@marinemap.org', password=self.password)
