@@ -95,11 +95,14 @@
     <div id="sidebar">
         <div id="sidebar-mask"><span class="loadingMsg"></span></div>
         <ul>
+            {% block tabs %}
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
             <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared With Me{% else %}MPA Proposals{% endif %}</span></a></li>
+            {% endblock tabs %}
         </ul>
+        {% block tabscontents %}
         {% if user.is_authenticated %}
         <div id="MyShapes">
             <div style="font-size:1em;" id="myshapestree"></div>
@@ -107,7 +110,8 @@
         {% endif %}
         <div id="SharedShapes">
             <div style="font-size:1em;" id="sharedshapestree"></div>
-        </div>
+        </div>            
+        {% endblock tabscontents %}
     </div>
     <div id="map_container">
         <div id="map"></div>

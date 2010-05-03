@@ -90,6 +90,48 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
+        var setEarthOptions = function(){
+            $('#earthOptions li').each(function(){
+                var li = $(this);
+                switch(li.attr('id')){
+                    case 'nav':
+                        if(li.hasClass('visible')){
+                            ge.getNavigationControl().setVisibility(
+                                ge.VISIBILITY_AUTO);
+                        }else{
+                            ge.getNavigationControl().setVisibility(
+                                ge.VISIBILITY_HIDE);
+                        }
+                        break;
+                    case 'overview':
+                        ge.getOptions().setOverviewMapVisibility(
+                            li.hasClass('visible'));
+                        break;
+                    case 'scale':
+                        ge.getOptions().setScaleLegendVisibility(
+                            li.hasClass('visible'));
+                        break;
+                    case 'atm':
+                        ge.getOptions().setAtmosphereVisibility(
+                            li.hasClass('visible'));
+                        break;
+                    case 'terrain':
+                        ge.getLayerRoot().enableLayerById(
+                            ge.LAYER_TERRAIN, li.hasClass('visible'));
+                        break;
+                }
+            });
+        }
+        
+        $('#earthOptions li').click(function(e){
+            $(this).toggleClass('visible');
+            setEarthOptions();
+        });
+        
+        setEarthOptionsFromLocalStore();
+        setEarthOptions();
+        
+        
         var cameraSet = setCameraFromLocalStorage();
         
         for(var i=0; i<layers.length; i++){
@@ -128,19 +170,25 @@ var lingcod = (function(){
                     var name = item.find('span.name').text();
                     switch(name){
                         case 'Grid':
-                            ge.getOptions().setGridVisibility(item.hasClass('visible'));
+                            ge.getOptions().setGridVisibility(
+                                item.hasClass('visible'));
                             break;
                         case '3d Buildings':
-                            ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, item.hasClass('visible'));
+                            ge.getLayerRoot().enableLayerById(
+                                ge.LAYER_BUILDINGS, item.hasClass('visible'));
                             break;
                         case 'Low Resolution 3d Buildings':
-                            ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS_LOW_RESOLUTION, item.hasClass('visible'));
+                            ge.getLayerRoot().enableLayerById(
+                                ge.LAYER_BUILDINGS_LOW_RESOLUTION, 
+                                item.hasClass('visible'));
                             break;
                         case 'Roads':
-                            ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, item.hasClass('visible'));
+                            ge.getLayerRoot().enableLayerById(
+                                ge.LAYER_ROADS, item.hasClass('visible'));
                             break;
                         case 'Borders and Labels':
-                            ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, item.hasClass('visible'));
+                            ge.getLayerRoot().enableLayerById(
+                                ge.LAYER_BORDERS, item.hasClass('visible'));
                             break;
                     }
                 });
@@ -184,7 +232,7 @@ var lingcod = (function(){
                     allow_copy: options.allow_copy
                 });
                 if(callback){
-                    $(editor).bind('kmlLoaded', function(event, original_event, kmlObject){
+                    $(editor).bind('kmlLoaded', function(event, e, kmlObject){
                         callback(this, this.el, kmlObject)
                     });
                 }
@@ -269,6 +317,8 @@ var lingcod = (function(){
             }
         });
         
+        // If news or about links aren't included in the interface these will
+        // do nothing (good for extensible templates).
         $('#news').click(function(e){
             opts = {};
             opts['load_msg'] = 'Loading News';
@@ -285,58 +335,30 @@ var lingcod = (function(){
             e.preventDefault();
         });
 
-        if (options.show_panel){
+        // for showing the news or about panels if they haven't been viewed 
+        // yet (that determination is done with cookies in the django view)
+        if(options.show_panel){
             opts = {};
             opts['showClose'] = true;
-            if (options.show_panel == 'about') {
+            if(options.show_panel == 'about' && that.options.about_url){
                 panel.showUrl(that.options.about_url, opts);
-            } else if (options.show_panel == 'news') {
+            }else if(options.show_panel == 'news' && that.options.news_url){
                 panel.showUrl(that.options.news_url, opts);
             }
         }
 
+        // A UI enhancement to add a drop-shadow from sidebar falling on map
         var url = that.options.media_url + 'common/kml/shadow.kmz';
         google.earth.fetchKml(ge, url, function(k){
             ge.getFeatures().appendChild(k);
         });
-        
-        var setEarthOptions = function(){
-            $('#earthOptions li').each(function(){
-                var li = $(this);
-                switch(li.attr('id')){
-                    case 'nav':
-                        if(li.hasClass('visible')){
-                            ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
-                        }else{
-                            ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
-                        }
-                        break;
-                    case 'overview':
-                        ge.getOptions().setOverviewMapVisibility(li.hasClass('visible'));
-                        break;
-                    case 'scale':
-                        ge.getOptions().setScaleLegendVisibility(li.hasClass('visible'));
-                        break;
-                    case 'atm':
-                        ge.getOptions().setAtmosphereVisibility(li.hasClass('visible'));
-                        break;
-                    case 'terrain':
-                        ge.getLayerRoot().enableLayerById(ge.LAYER_TERRAIN, li.hasClass('visible'));
-                        break;
-                }
-            });
-        }
-        
-        $('#earthOptions li').click(function(e){
-            $(this).toggleClass('visible');
-            setEarthOptions();
-        });
-        
-        setEarthOptionsFromLocalStore();
-        setEarthOptions();
-        
+                
         $('#sidebar-toggler').click(function(){
-            $('#map_container').css({'width': '100%', 'left': 0, 'z-index': 10});
+            $('#map_container').css({
+                'width': '100%', 
+                'left': 0, 
+                'z-index': 10
+            });
             $('.menu_items').hide();
             $('#sidebar > .ui-tabs-nav').hide();
             $(this).hide();
@@ -386,7 +408,8 @@ var lingcod = (function(){
         if(!!window.localStorage && localStorage.getItem('earthOptions')){
             var json = JSON.parse(localStorage.getItem('earthOptions'));
             for(key in json){
-                $('#earthOptions').find('#'+key).toggleClass('visible', json[key]);
+                $('#earthOptions').find('#'+key).toggleClass('visible', 
+                    json[key]);
             }
         }else{
             return false;
