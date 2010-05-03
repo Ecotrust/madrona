@@ -42,7 +42,7 @@
             {% endif %}
         {% endif %}
                 
-        options.media_url = 'http://' + window.location.host + "{{MEDIA_URL}}";
+        options.media_url = "{{MEDIA_URL}}";
         options.news_url = '{% url news-main %}';
         options.about_url = '{% url news-about %}';
         
