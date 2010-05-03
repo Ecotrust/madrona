@@ -75,7 +75,6 @@ def map(request, template_name='common/map.html'):
             
     response = render_to_response(template_name, RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
-        'WAVE_ID': settings.WAVE_ID,
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         #'user_layers': user_layers,
