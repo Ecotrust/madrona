@@ -1,10 +1,20 @@
 var lingcod = (function(){
 
     var options = {};
-    var that = {};
+    var that = {};    
+    var layers = [];
     
+    var constructor_defaults = {
+        hideGoogleLayers: false
+    };
+    
+    
+    that.addLayer = function(url, opts){
+        layers.push({url: url, opts: opts});
+    };
+
     that.init = function(opts){
-        options = opts;
+        options = jQuery.extend({}, constructor_defaults, opts);
         that.options = opts;
         
         $('#sidebar').tabs({
@@ -19,8 +29,7 @@ var lingcod = (function(){
         if(selectedTab){
             $('#sidebar').tabs('select', selectedTab);
         };
-        
-        
+                
         resize();
         
         $('.marinemap-panel').live('click', function(){
@@ -44,7 +53,9 @@ var lingcod = (function(){
         }else{
             geFailure();
         }
-        $(document).find('#meta-navigation a, a.button, a.close, .menu_items span, .ui-tabs-nav a').live('dragstart', function(){
+        // just so that buttons act more like buttons
+        $(document).find('#meta-navigation a, a.button, a.close, ' +
+            '.menu_items span, .ui-tabs-nav a').live('dragstart', function(){
             return false;
         });
     };
@@ -55,12 +66,8 @@ var lingcod = (function(){
         ge.getOptions().setStatusBarVisibility(true);
         gex = new GEarthExtensions(ge);
         
-        // that.googleLayers = new lingcod.map.googleLayers(ge, 
-        //     $('#ge_options'), $('#ge_layers'));
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
-
-        //alert(ge.getPluginVersion().toString());
                 
         $('#measure_distance').click(function(){
             that.measureTool.clear();
@@ -83,85 +90,79 @@ var lingcod = (function(){
             that.measureTool.setUnits($(this).val());
         });
         
-        $('#datalayerstree').append('<div id="study_region"></div><div id="ecotrust_data"></div><div id="user_data"></div><div id="public_data"></div><div id="googlelayers"></div>');
-
-        var studyRegion = kmltree({
-            url: window.studyregion,
-            ge: ge, 
-            gex: gex, 
-            map_div: $('#map'), 
-            element: $('#study_region'),
-            restoreState: !$.browser.msie
-        });
-        if(!setCameraFromLocalStorage()){
-            $(studyRegion).bind('kmlLoaded', function(){
-                $('#study_region').find('li').dblclick();
-            });            
-        }
-        studyRegion.load();
-
-        var publicData = kmltree({
-            url: window.public_data_layers,
-            ge: ge, 
-            gex: gex, 
-            map_div: $('#map'), 
-            element: $('#public_data'),
-            restoreState: !$.browser.msie
-        });
-        publicData.load();
-
-        var googleLayers = kmltree({
-            url: options.media_url + 'common/fixtures/earthLayers.kml',
-            ge: ge, 
-            gex: gex, 
-            map_div: $('#map'), 
-            element: $('#googlelayers'),
-            restoreState: true,
-            supportItemIcon: true,
-            fireEvents: function(){
-                return true;
-            }
-        });
+        var cameraSet = setCameraFromLocalStorage();
         
-        var updateGoogleLayers = function(tree){
-            $('#googlelayers li').each(function(){
-                var item = $(this);
-                var name = item.find('span.name').text();
-                switch(name){
-                    case 'Grid':
-                        ge.getOptions().setGridVisibility(item.hasClass('visible'));
-                        break;
-                    case '3d Buildings':
-                        ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, item.hasClass('visible'));
-                        break;
-                    case 'Low Resolution 3d Buildings':
-                        ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS_LOW_RESOLUTION, item.hasClass('visible'));
-                        break;
-                    case 'Roads':
-                        ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, item.hasClass('visible'));
-                        break;
-                    case 'Borders and Labels':
-                        ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, item.hasClass('visible'));
-                        break;
-                }
+        for(var i=0; i<layers.length; i++){
+            var div = $('<div id="datalayerstree'+i+'"></div>');
+            $('#datalayerstree').append(div);
+            layers[i].tree = kmltree({
+                url: layers[i].url,
+                ge: ge,
+                gex: gex,
+                map_div: $('#map'),
+                element: div,
+                restoreState: !$.browser.msie,
+                setExtent: !cameraSet && layers[i].opts && 
+                    layers[i].opts.setExtent
             });
+            layers[i].tree.load();
         }
-        
-        $(googleLayers).bind('kmlLoaded', function(){
-            updateGoogleLayers(googleLayers);
-        });
-        
-        $(googleLayers).bind('toggleItem', function(){
-            updateGoogleLayers(googleLayers);
-        });
-        
-        googleLayers.load();
+
+        if(!that.options.hideGoogleLayers){
+            var div = $('<div id="googlelayers"></div>');
+            $('#datalayerstree').append(div);
+
+            var googleLayers = kmltree({
+                url: options.media_url + 'common/fixtures/earthLayers.kml',
+                ge: ge, 
+                gex: gex, 
+                map_div: $('#map'), 
+                element: div,
+                restoreState: true,
+                supportItemIcon: true
+            });
+
+            var updateGoogleLayers = function(tree){
+                $('#googlelayers li').each(function(){
+                    var item = $(this);
+                    var name = item.find('span.name').text();
+                    switch(name){
+                        case 'Grid':
+                            ge.getOptions().setGridVisibility(item.hasClass('visible'));
+                            break;
+                        case '3d Buildings':
+                            ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS, item.hasClass('visible'));
+                            break;
+                        case 'Low Resolution 3d Buildings':
+                            ge.getLayerRoot().enableLayerById(ge.LAYER_BUILDINGS_LOW_RESOLUTION, item.hasClass('visible'));
+                            break;
+                        case 'Roads':
+                            ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, item.hasClass('visible'));
+                            break;
+                        case 'Borders and Labels':
+                            ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, item.hasClass('visible'));
+                            break;
+                    }
+                });
+            }
+
+            $(googleLayers).bind('kmlLoaded', function(){
+                updateGoogleLayers(googleLayers);
+            });
+
+            $(googleLayers).bind('toggleItem', function(){
+                updateGoogleLayers(googleLayers);
+            });
+
+            googleLayers.load();            
+        }
                 
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
             
         that.client = lingcod.rest.client(gex, panel);
-        
+                
+        // Allows projects to add a callback to run after any form is shown
         if(typeof options.form_shown === 'function'){
             $(that.client).bind('form_shown', options.form_shown);
         }
@@ -491,7 +492,7 @@ var lingcod = (function(){
         $(panel).bind('panelshow', onPanelShown);
         $(panel).bind('panelhide', onPanelHide);
         $(panel).bind('panelclose', onPanelHide);
-    },
+    };
     
     var onPanelShown = function(e, panel){
         that.maskSidebar();
@@ -525,6 +526,6 @@ var lingcod = (function(){
     };
         
     that.persistentReports = {};
-    
+
     return that;
 })();

@@ -2,15 +2,29 @@
 
 {% block head %}
     <script type="text/javascript">
-        window.public_data_layers = '{% url public-data-layers %}';
-        window.studyregion = '{% url studyregion-kml %}';
+
         google.load("earth", "1");
         google.load('maps', '3', {"other_params":"sensor=false"});
 
         var ge = null;
         var gex = null;
         
-        var options = {};
+        var options = {
+            media_url: "{{MEDIA_URL}}",
+            news_url: '{% url news-main %}',
+            about_url: '{% url news-about %}'
+        };
+        
+        // Used to identify whether the about or news panel should be shown
+        {% if show_panel %}
+            options.show_panel = '{{ show_panel }}';
+        {% endif %}
+
+        {% block layersConfig %}
+        // setup which kml files are shown in the data layers panel
+        lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});
+        lingcod.addLayer('{% url public-data-layers %}');            
+        {% endblock layersConfig %}
 
         {% block sharedshapes %}
             {% if user.is_authenticated %}
@@ -27,35 +41,19 @@
                 options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"}];
             {% endif %}
         {% endblock myshapes %}
-        
-        {% block aftermyshapes %}{% endblock aftermyshapes %}
-                
-        options.media_url = "{{MEDIA_URL}}";
-        options.news_url = '{% url news-main %}';
-        options.about_url = '{% url news-about %}';
-        
-        {% if show_panel %}
-            options.show_panel = '{{ show_panel }}';
-        {% endif %}
-        
-        {% block addToOptions %}
-        {% endblock addToOptions %}
+                                        
+        {% block addToOptions %}{% endblock addToOptions %}
         
         $(document).ready(function(){
             lingcod.init(options);
         });
     </script>
-    <style type="text/css" media="screen">
-        body {
-            font-size:1em;
-            font-family:verdana;
-        }
-        
-    </style>    
 {% endblock %}
+
 {% block body %}
     <div id="meta-navigation">
         <ul>
+            {% block metanavigation %}
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>
             {% endif %}
@@ -69,7 +67,8 @@
             {% else %}
             <li><a href="{% url registration_register %}">register</a> | </li>
             <li><a href="{% url auth_login %}">sign in</a></li>
-            {% endif %}
+            {% endif %}                
+            {% endblock metanavigation %}
             {% block meta_navigation_list_append %}{% endblock %}
         </ul>
         <br />
