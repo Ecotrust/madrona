@@ -491,7 +491,7 @@ var lingcod = (function(){
         $(panel).bind('panelshow', onPanelShown);
         $(panel).bind('panelhide', onPanelHide);
         $(panel).bind('panelclose', onPanelHide);
-    };
+    },
     
     var onPanelShown = function(e, panel){
         that.maskSidebar();
