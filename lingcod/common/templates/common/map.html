@@ -66,10 +66,6 @@
     </style>    
 {% endblock %}
 {% block body %}
-    <div style="display:none;" id="data-spinner">
-        <img src="{{MEDIA_URL}}common/images/data-loader.gif" />
-        loading data
-    </div>
     <div id="meta-navigation">
         <ul>
             {% if user.is_authenticated %}
