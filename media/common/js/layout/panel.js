@@ -166,11 +166,8 @@ lingcod.panel = function(options){
     // Methods needed for test management
     that.destroy = function(){
         that.getEl().remove();
-        if(lingcod && lingcod.removePanel){
-            if(that.shown){
-                that.close();
-            }
-            lingcod.removePanel(that);
+        if(that.shown){
+            that.close();
         }
     }
     
