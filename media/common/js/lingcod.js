@@ -167,18 +167,6 @@ var lingcod = (function(){
             $(that.client).bind('form_shown', options.form_shown);
         }
         
-        if(options.ecotrust){
-            var ecotrustData = kmltree({
-                url: options.ecotrust,
-                ge: ge, 
-                gex: gex, 
-                map_div: $('#map'), 
-                element: $('#ecotrust_data'),
-                restoreState: !$.browser.msie
-            });
-            ecotrustData.load();
-        }
-        
         var editors = [];
         
         if(options.myshapes){
