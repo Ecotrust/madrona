@@ -28,19 +28,7 @@
             {% endif %}
         {% endblock myshapes %}
         
-        {% block aftermyshapes %}
-            {% if user.is_authenticated %}
-                {% if perms.layers.view_ecotrustlayerlist %}
-                options.ecotrust = "{% url ecotrust-data-layers input_username=user.username session_key=session_key as ecotrust_data_url%}{{ecotrust_data_url}}";
-                {% endif %}
-            {% endif %}
-        {% endblock aftermyshapes %}
-                
-        {% if user.is_authenticated %}
-            {% if perms.layers.view_userlayerlist and user_layers %}
-                options.user_kml = {url: "{% url user-data-layers input_username=user.username session_key=session_key %}"};
-            {% endif %}
-        {% endif %}
+        {% block aftermyshapes %}{% endblock aftermyshapes %}
                 
         options.media_url = "{{MEDIA_URL}}";
         options.news_url = '{% url news-main %}';
@@ -108,7 +96,6 @@
     <div id="sidebar">
         <div id="sidebar-mask"><span class="loadingMsg"></span></div>
         <ul>
-            {# <li><a href="#DataLayers"><span>Data Layers</span></a></li> #}
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
