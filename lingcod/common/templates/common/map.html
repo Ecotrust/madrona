@@ -143,9 +143,6 @@
         <div id="measurement_tools" class="tool">
             <a id="measure_distance" href="#" class="button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/ruler.png">Measure Distance</span></a>
             <a id="measure_area" href="#" class="button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/ruler_square.png">Measure Area</span></a>
-            {# <button id="measure_distance">measure distance</button> #}
-            {# <button id="measure_area">measure area</button> #}
-            {# <button id="measure_clear">clear</button> #}
             <a id="measure_clear" href="#" class="button red disabled" onclick="this.blur(); return false;"><span>Clear</span></a>
             <p style="clear:both;">
                 Choose to measure distance or area and then draw a shape on the map. Double-click when finished drawing.
@@ -158,14 +155,6 @@
                     <option value="nautical">nautical</option>                            
                 </select>
             </div>
-            {# <dl> #}
-            {#     <dt style="display:none;" class="distance">Distance: </dt> #}
-            {#     <dd style="display:none;" class="distance" id="distance">124</dd> #}
-            {#     <dt style="display:none;" class="area">Area: </dt> #}
-            {#     <dd style="display:none;" class="area" id="area"></dd>             #}
-            {# </dl> #}
-            {# Distance: <span id="distance">N/A</span></p> #}
-            {# Area: <span id="area">N/A</span></p> #}
         </div>
         <hr />
         <div id="earthOptions">
