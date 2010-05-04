@@ -202,7 +202,9 @@ var lingcod = (function(){
                 updateGoogleLayers(googleLayers);
             });
 
-            googleLayers.load();            
+            googleLayers.load();
+            
+            $(that).trigger('earthReady', [ge, gex]);
         }
                 
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
