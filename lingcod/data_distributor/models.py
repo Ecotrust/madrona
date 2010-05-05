@@ -3,6 +3,17 @@ from django.conf import settings
 from lingcod.data_manager.models import DataLayer
 import sys
 
+def functions_in_module(module):
+    result = {}
+    mod = sys.modules[module]
+    for k,v in mod.__dict__.items():
+        try:
+            if v.__class__.__name__=='function':
+                result.update({k:v})
+        except AttributeError:
+            continue
+    return result
+
 def modules_in_module(module='lingcod',exclude_list=['views','urls']):
     """This will return a list of modules found in a given module while excluding
     modules whos name is in the exclude_list."""
