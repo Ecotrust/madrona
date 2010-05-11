@@ -685,9 +685,9 @@ class OrganizationScheme(models.Model):
             subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
         return subdict
     
-    def validate(self):
+    def my_validate(self):
         for fm in self.featuremapping_set.all():
-            if not fm.validate(quiet=True):
+            if not fm.my_validate(quiet=True):
                 return False
         return True
     
@@ -777,6 +777,7 @@ class FeatureMapping(models.Model):
                     if with_geometries or with_kml:
                         f_gc = f_gc + had_dict['geo_collection']
         return_dict[self.name]['result'] = intersection_total
+        blah = self.feature.all()
         return_dict[self.name]['units'] = self.feature.all()[0].output_units
         return_dict[self.name]['percent_of_total'] = (intersection_total / self.study_region_total) * 100
         return_dict[self.name]['sort'] = self.sort
@@ -805,12 +806,12 @@ class FeatureMapping(models.Model):
         
     @property
     def units(self):
-        if self.validate():
+        if self.my_validate():
             return self.feature.all()[0].output_units
         
     @property
     def type(self):
-        if self.validate():
+        if self.my_validate():
             return self.feature.all()[0].feature_model.lower().replace('feature','')
             
     @property
@@ -824,7 +825,7 @@ class FeatureMapping(models.Model):
     def geometry_collection_within(self,geom):
         return self.geometry_collection.intersection(geom)
     
-    def validate(self, quiet=False):
+    def my_validate(self, quiet=False):
         if not self.pk:
             return True # I'm gonna punt if there's no pk yet
         elif self.validate_feature_count(quiet) and self.validate_type(quiet) and self.validate_units(quiet):
@@ -867,15 +868,6 @@ class FeatureMapping(models.Model):
                 raise Exception(error)
         else:
             return True
-        
-#    def save(self):
-#        super(FeatureMapping,self).save()
-#        pk = self.pk
-#        if not self.validate():
-#            self.delete()
-#            raise Exception('You can not combine feature types with different output units.  That just would not make any sense, would it?')
-#        else:
-#            super(FeatureMapping,self).save()
     
 class CommonFeatureInfo(models.Model):
     name = models.CharField(max_length=255)
