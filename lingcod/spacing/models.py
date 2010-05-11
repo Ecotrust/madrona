@@ -134,7 +134,7 @@ class Land(models.Model):
         self.geometry = geos.Polygon(self.geometry.exterior_ring)
         self.save()
 
-### Spacing matrx models and methods ###
+### Spacing matrix models and methods ###
 # This stuff is related to building a spacing matrix for a set of points
 class SpacingPoint(models.Model):
     """

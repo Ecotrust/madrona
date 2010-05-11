@@ -8,7 +8,8 @@ from django.core.management import call_command
 class Migration(DataMigration):
     
     def forwards(self, orm):
-        call_command('loaddata','replication_20100504.json')
+        # This migration used to load some data but we decided it shouldn't but we don't want to delete it because that fucks everything up so now it just sits here and does absolutely nothing.  It's like a state employee!
+        pass
     
     
     def backwards(self, orm):
