@@ -8,3 +8,4 @@ example_projects/test_project/mediaroot/*
 env1/*
 docs/.build/*
 .coverage
+TEST*.xml
