@@ -50,7 +50,7 @@ pdir = os.path.join(hdir,'example_projects/test_project')
 spdir = os.path.join(hdir,'example_projects')
 sys.path.insert(0, pdir)
 sys.path.insert(0, spdir)
-os.chdir(pdir)
+#os.chdir(pdir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'test_project.settings'
 
 settings.TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
