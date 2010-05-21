@@ -16,7 +16,7 @@ Dependencies
 You need the following installed on your system in order to start running
 MarineMap.
 
-    * A working installation of `GeoDjango <http://geodjango.org>`_
+    * A working installation of `GeoDjango <http://geodjango.org>`_ (which has it's own set of dependencies including proj, gdal and postgres/postgis)
     * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
     * `elementtree <http://effbot.org/zone/element-index.htm>`_
     * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
@@ -28,46 +28,70 @@ MarineMap.
     * `django-registration <http://pypi.python.org/pypi/django-registration>`_ provides the user account managment and registration (Version 0.8+ is required - v0.7 wont work so don't use easy_install! Use `0.8alpha1 <http://bitbucket.org/ubernostrum/django-registration/downloads/django-registration-0.8-alpha-1.tar.gz>`_ instead.)
     * `south <http://south.aeracode.org/>`_ for database schema migrations
     * `networkx <http://networkx.lanl.gov/>`_ for graph networks in the spacing app
-    
+    * `pip <http://pip.openplans.org/>`_ for package management (optional). 
+
+Most of the dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
+We have created a `pip requirements file <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_ which can be used to install most of the dependencies::
+
+    pip install -r http://marinemap.googlecode.com/hg/marinemap_requirements.txt    
+
+Some dependencies are a bit trickier and take additional installtion steps. Specifically geodjango, postgis and mapnik are not easily installed so refer to the links above. 
+
 .. note::
     MarineMap development tends to follow django trunk. It may work on the 
     point releases but it's safer to just start from source.
 
-In addition, you should be familiar with programming in Python, how web 
-application are structured in `Django <http://djangoproject.com>`_, and using 
-a `Subversion <http://subversion.tigris.org/>`_ client.
+In addition, you should be familiar with
 
-Installation
-************
-First you will need to checkout a copy of trunk from the `project page <http://code.google.com/p/marinemap/source/checkout>`_. 
-Next you'll need to add some MarineMap modules to your site-packages 
-directory. This way all the appropriate modules will automatically be in your
-python path. Rather than physically moving them there, you can instead create 
-a symlink. On Linux or OS X, you can use the following command to find your
-site-packages directory::
+    * programming in Python
+    * how web application are structured in `Django <http://djangoproject.com>`_
+    * the command line interface in a unix-style operating system
+    * the basics of `Mercurial <http://mercurial.selenic.com/>`_ source control
 
-    python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
-    
-Once you have that directory, create the symlink::
-    
-    ln -s `pwd`/marinemap-trunk/lingcod SITE-PACKAGES-DIR/lingcod
+Project Structure
+*****************
 
-Test that you can now import modules without throwing an exception. Go into a
-shell such as ipython and type the following::
+It is important to understand how a MarineMap application is structured. There are essentially two codebases:
 
-    from lingcod import layers
+    * lingcod - a python module providing many django apps that contain the core functionality common to all MarineMap instances.
+    * the project code - a django project which implements and extends the functionality provided by lingcod (specific to the particular project's needs).
+
+By seperating the two codebases, we can more easily maintain multiple MarineMap projects while continuing to improve the underlying core functionality.
+If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the lingcod library can be installed 
+just like any other python module and you should't need to mess with any lingcod code.
+
+Installing Lingcod
+*******************
+
+First you will need to checkout a copy of the default branch of lingcod from the `project page <http://code.google.com/p/marinemap/source/checkout>`_ ::
+
+     cd ~/src
+     hg clone https://marinemap.googlecode.com/hg/ marinemap  
+
+.. note::
+     Though the top-level directory name is 'marinemap', the python module provided by this code is called 'lingcod'
+
+To install, use the setup.py script provided. We recommend using the 'develop' command instead of 'install' as this
+allows you to alter the lingcod code in place without reinstalling.::
+
+    cd marinemap
+    python setup.py develop
+
+Finally, confirm that we can import the lingcod module. This example simply prints out the release number::
+
+    python -c "from lingcod.common import default_settings; print default_settings.RELEASE"
     
 Using the Sample App
 ********************
 
 Inside the example-projects/ directory there are sample applications built
 using the MarineMap components. These serve as useful documentation as well as
-practical tests. We'll be starting up ``example-projects/simple`` here.
+practical tests. We'll be starting up ``example-projects/test_project`` here.
 
 using settings.py and settings_local.py
 ---------------------------------------
 
-Take a look at ``example-projects/simple/settings_local.template`` and 
+Take a look at ``example-projects/test_project/settings_local.template`` and 
 ``settings.py``. MarineMap uses a simple splitsetting scheme as described 
 `here <http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother>`_. What this enables is the ability to specify standard 
 settings in settings.py and commit them to a public repository, but these
@@ -87,9 +111,18 @@ lines as needed to allow this application to connect to your local database::
     # DATABASE_USER = 'postgres'
     # DATABASE_PASSWORD = 'my-secret-password'
     
-Grab a `Google Maps API key <http://code.google.com/apis/maps/signup.html>`_ and put it into the proper setting (not needed for localhost)::
+handling media
+--------------
+Because a MarineMap instance is split between lingcod (core functionality) and the project-specific code, static media files such as html, javascript, css, images, etc. may exist in both. Django, however, expects all the static media to be in a single directory. In order to merge the lingcod media with the project media, you need to create a third (empty) media directory and set it as your MEDIA_ROOT in the project settings_local.py ::
 
-    GOOGLE_API_KEY = 'ABQIAAAAbEBR9v0lqBFdTfOcbe5WjRSwtTT5GAxiJqzQ69gC1VuJs9XrFRSHtkp9BFyAR6_lVVfY3MBP3uA7Mg'
+    mkdir /tmp/test_media
+    cd ~/src/marinemap/example_projects/test_project/
+    echo "MEDIA_ROOT='/tmp/test_media'" >> settings_local.py
+
+Then use the 'install_media' management command to merge all the media files into the MEDIA_ROOT directory::
+
+    python manage.py install_media
+
 
 setup the database
 ------------------
@@ -97,7 +130,7 @@ setup the database
 Create a database accessible by the connection settings above using a tool
 like `pgAdmin <http://www.pgadmin.org/>`_. It is very important that this
 database be created from a template with all the PostGIS functions installed. One approach
-is to set up postgis in the default postgres template::
+is to set up postgis in the default postgres database called template1::
 
    #run as postgres superuser
    POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib
@@ -107,17 +140,26 @@ is to set up postgis in the default postgres template::
    psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
    psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
 
-Once the template is spatially enabled, to setup the database schema all you'll need to do is run the 
-django syncdb command from within the ``example-projects/simple`` directory::
+Once the template is spatially enabled, create your project database::
+
+   createdb simple_example -U postgres
+
+To setup the database schema and populate with some initial data, run the 
+django syncdb command from within the ``example-projects/test_project`` directory::
 
     python manage.py syncdb
+
+And then use the migrate command which will handle creating the schemas and populating the database
+for those applications which are under `migration control <http://south.aeracode.org/docs/about.html>`_::
+
+    python manage.py migrate
     
 .. note::
     
     If syncdb fails and you get an error related to importing settings.py 
     failing, you are likely missing a python dependency. Double-check 
     :ref:`the dependencies <dependencies>`, and if none are missing jump into a python shell from
-    ``example-projects/simple``, ``import settings``, and look for any errors.
+    ``example-projects/test_project``, ``import settings``, and look for any errors.
 
 verify and run the dev server
 -----------------------------
