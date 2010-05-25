@@ -274,6 +274,7 @@ class Shapefile(models.Model):
             for feat in lyr:
                 fm = feature_model()
                 load_single_record(feat.geom, fm, geometry_only, feat, origin_field_name, target_field_name)
+                # print fm.geometry.__class__.__name__
                 fm.save()
             
         else: # Target Feature Model has non-multi geometry (Polygon and so forth)
@@ -310,6 +311,14 @@ def is_multi_geometry(geom):
         return True
     else:
         return False
+        
+def convert_to_2d(geom):
+    """Convert a geometry from 3D to 2D"""
+    from django.contrib.gis.geos import WKBWriter, WKBReader
+    wkb_r = WKBReader()
+    wkb_w = WKBWriter()
+    wkb_w.outdim = 2
+    return wkb_r.read(wkb_w.write(geom))
 
 def load_single_record(geom,target_model_instance,geometry_only=True,origin_feature=None,origin_field_name=None,target_field_name=None):
     """docstring for load_single_record"""
@@ -337,9 +346,12 @@ def load_single_geometry(geom, target_model_instance):
         g_type = geom.geos.geom_type.upper()
         mgeom = geos.fromstr('MULTI%s EMPTY' % g_type)
         mgeom.append(geom.geos)
+        if mgeom.hasz:
+            mgeom = convert_to_2d(mgeom)
         tmi.geometry = mgeom
     elif geom_multi:
-        pass # uh, actually this shouldn't ever happen because this is load_SINGLE_geometry, right?
+        raise Exception("I am a multi geometry.")
+        #pass # uh, actually this shouldn't ever happen because this is load_SINGLE_geometry, right?
     
     if not tmi.geometry.valid:
         tmi.geometry = clean_geometry(tmi.geometry)

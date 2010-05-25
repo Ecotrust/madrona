@@ -87,7 +87,6 @@ def rule_for_soft_30_100m(geom):
     """
     IF area 30-100m soft bottom >= 7 sq mi
     OR total area soft bottom >= 7 sq mi AND area 30-100m soft bottom >= 5 sq mi AND [length 0-30m soft proxy >= 1.1 mi OR area >100m soft bottom >= 1 sq mi]
-    OR total area soft bottom >= 10 sq mi AND area 30-100m soft bottom >= 5 sq mi AND length 0-30m soft proxy >= 1.1 mi AND area 100-3000m soft bottom >= 1 sq mi
     """
     from lingcod.intersection.models import OrganizationScheme, FeatureMapping
     replicate = False
@@ -102,18 +101,17 @@ def rule_for_soft_30_100m(geom):
     elif total_soft >= 7 and soft_30_100 >= 5 and (soft_0_30_proxy >= 1.1 or soft_100_3000 >= 1):
         replicate = True
         reason = 'total_soft >= 7 sq mi and soft_30_100 >= 5 sq mi and (soft_0_30_proxy >= 1.1 mi or soft_100_3000 >= 1 sq mi). total_soft: %f sq mi, soft_30_100: %f sq mi, soft_0_30_proxy: %f mi, soft_100_3000: %f sq mi' % (total_soft, soft_30_100, soft_0_30_proxy, soft_100_3000)
-    elif total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1:
-        replicate = True
-        reason = 'total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1  (total_soft: %f sq mi, soft_30_100: %f sq mi, soft_0_30_proxy: %f mi, soft_100_3000: %f sq mi)' % (total_soft, soft_30_100, soft_0_30_proxy, soft_100_3000)
+    # elif total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1:
+    #     replicate = True
+    #     reason = 'total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1  (total_soft: %f sq mi, soft_30_100: %f sq mi, soft_0_30_proxy: %f mi, soft_100_3000: %f sq mi)' % (total_soft, soft_30_100, soft_0_30_proxy, soft_100_3000)
     else:
-        reason = 'None of the replication requirements were met: IF area 30-100m soft bottom >= 7 sq mi OR total area soft bottom >= 7 sq mi AND area 30-100m soft bottom >= 5 sq mi AND [length 0-30m soft proxy >= 1.1 mi OR area >100m soft bottom >= 1 sq mi] OR total area soft bottom >= 10 sq mi AND area 30-100m soft bottom >= 5 sq mi AND length 0-30m soft proxy >= 1.1 mi AND area 100-3000m soft bottom >= 1 sq mi'
+        reason = 'None of the replication requirements were met: IF area 30-100m soft bottom >= 7 sq mi OR total area soft bottom >= 7 sq mi AND area 30-100m soft bottom >= 5 sq mi AND [length 0-30m soft proxy >= 1.1 mi OR area >100m soft bottom >= 1 sq mi]'
     return replicate, reason
     
 def rule_for_soft_100_3000m(geom):
     """
     IF area 100-3000m soft bottom >= 17 sq mi
     OR total area soft bottom >= 7 sq mi AND area 100-3000m >= 1 sq mi AND area 30-100m soft bottom >= 5 sq mi
-    OR total area soft bottom >= 10 sq mi AND area 100-3000m soft bottom >= 1 sq mi AND area 30-100m soft bottom >=5 sq mi AND length 0-30m soft proxy >= 1.1 mi
     """
     from lingcod.intersection.models import OrganizationScheme, FeatureMapping
     replicate = False
@@ -128,11 +126,11 @@ def rule_for_soft_100_3000m(geom):
     elif total_soft >= 7 and soft_100_3000 >= 1 and soft_30_100 >= 5:
         replicate = True
         reason = 'total area soft bottom >= 7 sq mi AND area 100-3000m >= 1 sq mi AND area 30-100m soft bottom >= 5 sq mi. total_soft: %f sq mi, soft_30_100: %f sq mi, soft_100_3000: %f sq mi' % (total_soft, soft_30_100, soft_100_3000)
-    elif total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1:
-        replicate = True
-        reasone = 'total area soft bottom >= 10 sq mi AND area 100-3000m soft bottom >= 1 sq mi AND area 30-100m soft bottom >=5 sq mi AND length 0-30m soft proxy >= 1.1 mi. (total_soft: %f sq mi, soft_30_100: %f sq mi, soft_0_30_proxy: %f mi, soft_100_3000: %f sq mi)' % (total_soft, soft_30_100, soft_0_30_proxy, soft_100_3000)
+    # elif total_soft >= 10 and soft_100_3000 >= 1 and soft_30_100 >= 5 and soft_0_30_proxy >= 1.1:
+    #     replicate = True
+    #     reason = 'total area soft bottom >= 10 sq mi AND area 100-3000m soft bottom >= 1 sq mi AND area 30-100m soft bottom >=5 sq mi AND length 0-30m soft proxy >= 1.1 mi. (total_soft: %f sq mi, soft_30_100: %f sq mi, soft_0_30_proxy: %f mi, soft_100_3000: %f sq mi)' % (total_soft, soft_30_100, soft_0_30_proxy, soft_100_3000)
     else: 
-        reason = 'None of the replication requirements for this habitat were met: IF area 100-3000m soft bottom >= 17 sq mi OR total area soft bottom >= 7 sq mi AND area 100-3000m >= 1 sq mi AND area 30-100m soft bottom >= 5 sq mi OR total area soft bottom >= 10 sq mi AND area 100-3000m soft bottom >= 1 sq mi AND area 30-100m soft bottom >=5 sq mi AND length 0-30m soft proxy >= 1.1 mi'
+        reason = 'None of the replication requirements for this habitat were met: IF area 100-3000m soft bottom >= 17 sq mi OR total area soft bottom >= 7 sq mi AND area 100-3000m >= 1 sq mi AND area 30-100m soft bottom >= 5 sq mi'
     return replicate, reason
 ### End Rule Functions ###
     

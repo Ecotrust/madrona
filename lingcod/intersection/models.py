@@ -572,7 +572,7 @@ class IntersectionFeature(models.Model):
     native_units = models.CharField(max_length=255,null=True, blank=True, help_text="Units native to this layer's projection.")
     output_units = models.CharField(max_length=255,null=True, blank=True, help_text="Unit label to be displayed after results from this table.")
     shapefile = models.ForeignKey(SingleFeatureShapefile, null=True)
-    multi_shapefile = models.ForeignKey(MultiFeatureShapefile,null=True)
+    multi_shapefile = models.ForeignKey(MultiFeatureShapefile,null=True,blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     TYPE_CHOICES = (
