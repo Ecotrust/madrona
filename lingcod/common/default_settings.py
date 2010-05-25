@@ -157,3 +157,6 @@ USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
+
+AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media. 
+                          # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET, AWS_MEDIA_SUBDIR and MEDIA_URL

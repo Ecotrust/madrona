@@ -48,12 +48,14 @@ class Command(BaseCommand):
 
         self.copy_media_to_root(lingcod_media_dir)
         self.copy_media_to_root(project_media_dir)
-    
+
         self.compile_media()
 
         self.remove_uncompressed_media()
 
-        self.publish_media()
+        if settings.AWS_USE_S3_MEDIA:
+            self.copy_mediaroot_to_s3()
+    
 
     def get_lingcod_dir(self):
         # We know lingcod/../media is relative to this file
@@ -97,11 +99,20 @@ class Command(BaseCommand):
         print "    Removing uncompressed media (not yet implemented)"
         return
        
-    def publish_media(self):
+    def copy_mediaroot_to_s3(self):
+        if settings.AWS_USE_S3_MEDIA and \
+           settings.AWS_MEDIA_BUCKET and \
+           settings.AWS_ACCESS_KEY and \
+           settings.AWS_SECRET_KEY:
+            pass
+        else:
+            return None
+
+        print "    This would publish all the media in %s to your S3 bucket at %s and be accessible at url %s" % \
+              (self.media_root, settings.AWS_MEDIA_BUCKET, settings.MEDIA_URL)
+
         if self.dry_run:
-            print "    This would publish all the media in %s" % (self.media_root)
             return
 
-        print "    Publishing media (not yet implemented)"
         return
 
