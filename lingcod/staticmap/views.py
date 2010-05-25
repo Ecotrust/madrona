@@ -2,7 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
-from lingcod.common import mimetypes, utils
+from lingcod.common import default_mimetypes as mimetypes
+from lingcod.common import utils
 from lingcod.mpa.models import MpaDesignation
 from lingcod.sharing.utils import can_user_view
 import mapnik

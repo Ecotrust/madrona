@@ -1,0 +1,6 @@
+AWS_USE_S3_MEDIA = False  # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET, AWS_MEDIA_SUBDIR and MEDIA_URL
+AWS_ACCESS_KEY = '...'
+AWS_SECRET_KEY = '...'
+AWS_MEDIA_BUCKET = 'marinemap-bucket'
+AWS_MEDIA_SUBDIR = 'media'
+MEDIA_URL = 'http://blah.cloudfront.net/media/'

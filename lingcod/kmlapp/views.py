@@ -3,7 +3,7 @@ from django.contrib.auth.models import *
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse, Http404
-from lingcod.common import mimetypes
+from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils 
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404

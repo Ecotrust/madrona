@@ -9,3 +9,4 @@ env1/*
 docs/.build/*
 .coverage
 TEST*.xml
+*settings_local.py

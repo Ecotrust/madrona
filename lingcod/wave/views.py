@@ -1,6 +1,5 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from lingcod.common import mimetypes
 
 from django.conf import settings
 
