@@ -6,7 +6,7 @@ from mimetypes import guess_type
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from django.conf import settings
-
+import os
 
 def s3_bucket(bucket=None):
     """
@@ -14,7 +14,7 @@ def s3_bucket(bucket=None):
     Uses settings.ACCESS_KEY, settings.AWS_SECRET_KEY
     defaults to settings.AWS_MEDIA_BUCKET
     """
-    conn = S3Connection(settings.AWS_ACCESS_KEY, settings.AWS_PASS_KEY)
+    conn = S3Connection(settings.AWS_ACCESS_KEY, settings.AWS_SECRET_KEY)
     if not bucket:
         try: 
             bucket = settings.AWS_MEDIA_BUCKET
@@ -24,13 +24,13 @@ def s3_bucket(bucket=None):
     return conn.create_bucket(bucket)
     
 
-def get_s3_url(key):
+def get_s3_url(b,k):
     """
-    Uses the MEDIA_URL to guess the url for an S3 key
+    Returns the standard s3 url
     """
-    return ''.join(settings.MEDIA_URL, k.key)
+    return 'http://%s.s3.amazonaws.com/%s' % (b.name, k.key)
 
-def upload_to_s3(local_path, keyname, bucket=None, acl='public-read'):
+def upload_to_s3(local_path, keyname, mimetype=None, bucket=None, acl='public-read'):
     """
     Given a local filepath, bucket name and keyname (the new s3 filename), 
     this function will connect, guess the mimetype of the file, upload the contents and set the acl.
@@ -38,15 +38,19 @@ def upload_to_s3(local_path, keyname, bucket=None, acl='public-read'):
     """
     b = s3_bucket(bucket)
  
-    content = open(local_path).read()
-    mime = guess_type(local_path)[0]
-    if not mime:
-        mime = "text/plain"
+    if not os.path.exists(local_path):
+        raise Exception("%s does not exist; can't upload to S3" % local_path)
+
+    if not mimetype:
+        mimetype = guess_type(local_path)[0]
+        if not mimetype:
+            mimetype = "text/plain"
 
     k = Key(b)
     k.key = keyname
-    k.set_metadata("Content-Type", mime)
-    k.set_contents_from_string(content)
+    k.set_metadata("Content-Type", mimetype)
+    k.set_contents_from_filename(local_path)
     k.set_acl(acl)
     
-    return get_s3_url(k)
+    return get_s3_url(b,k)
+

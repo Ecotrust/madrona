@@ -106,13 +106,28 @@ class Command(BaseCommand):
            settings.AWS_SECRET_KEY:
             pass
         else:
+            print " AWS_USE_S3_MEDIA and associated settings are not found; Files will not be uploaded to S3" 
             return None
 
-        print "    This would publish all the media in %s to your S3 bucket at %s and be accessible at url %s" % \
-              (self.media_root, settings.AWS_MEDIA_BUCKET, settings.MEDIA_URL)
 
         if self.dry_run:
+            print "    This would publish all the media in %s to your S3 bucket at %s and be accessible at url %s" % \
+                (self.media_root, settings.AWS_MEDIA_BUCKET, settings.MEDIA_URL)
             return
+
+        if self.media_root[-1] != '/':
+            root = self.media_root + "/"
+        else:
+            root = self.media_root
+
+        from lingcod.common import s3
+
+        for top, dirs, files in os.walk(root):
+            for nm in files:       
+                fpath = os.path.join(top, nm)
+                key = fpath.replace(root,'')
+                print "  -- Uploading %s to %s " % (fpath, key)
+                s3.upload_to_s3(fpath, key)
 
         return
 
