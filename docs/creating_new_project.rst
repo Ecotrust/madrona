@@ -166,12 +166,6 @@ Databases
 Next we'll create a new postgis-enabled database for this project and use django's syncdb command to create the necessary tables. Assuming you installed postgis functions, etc into your postgres template1, this is as simple as::
 
     createdb oregon -U postgres
-    python manage.py syncdb
-    python manage.py schemamigration --initial mlpa
-    python manage.py migrate
-    # install example data?
-    python manage.py loaddata example_data
-
 
 Study Region
 -------------
@@ -191,6 +185,14 @@ Next, we'll use some custom lingcod management commands to load up our carefully
 
     python manage.py create_study_region --name oregon_coast data/oregon_study_region.shp
     python manage.py change_study_region 2
+
+Populating Database
+-------------------
+We need to put our mlpa app under migration, sync and migrate (which create all other necessary database tables and populate them with data if needed)::
+
+    python manage.py schemamigration --initial mlpa
+    python manage.py syncdb
+    python manage.py migrate
 
 
 Deployment
