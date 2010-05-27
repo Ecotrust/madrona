@@ -99,7 +99,7 @@ class StudyRegion(models.Model):
         bUseLod = False
         
         if not bUseLod:
-            transform_geom = self.geometry.simplify(20, preserve_topology=True)
+            transform_geom = self.geometry.simplify(settings.KML_SIMPLIFY_TOLERANCE, preserve_topology=True)
             transform_geom.transform(4326)
             
             shape_kml = transform_geom.kml
