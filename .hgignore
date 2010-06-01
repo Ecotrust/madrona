@@ -10,3 +10,5 @@ docs/.build/*
 .coverage
 TEST*.xml
 *settings_local.py
+build/*
+dist/*
