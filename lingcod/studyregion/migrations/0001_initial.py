@@ -3,6 +3,7 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from django.conf import settings
 
 class Migration(SchemaMigration):
     
@@ -13,7 +14,7 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('modification_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('geometry', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(srid=3310, null=True, blank=True)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)),
             ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('lookAt_Lat', self.gf('django.db.models.fields.FloatField')(default=0, null=True, blank=True)),
             ('active', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),

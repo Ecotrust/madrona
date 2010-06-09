@@ -77,6 +77,9 @@ def create_pickled_graph(verbose=False):
     tf = tempfile.NamedTemporaryFile()
     graph = nx.Graph()
     graph = add_land_to_graph(graph,verbose=verbose)
+    # add spacing points to graph
+    points = [ sp.geometry for sp in SpacingPoint.objects.all() ]
+    graph = add_points_to_graph(points,graph)
     pickle.dump(graph, tf)
     pg = PickledGraph()
     pg.pickled_graph = File(tf)
@@ -246,6 +249,15 @@ def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=Fal
     return { 'labels': spl_dict['labels'], 'matrix': dist_mat }
     
 ### End of spacing matrix methods ###
+
+def add_points_to_graph(points,graph):
+    """
+    points is a list of points.  graph is a NetworkX graph.
+    """
+    graph.add_nodes_from(points)
+    for pnt in points:
+        graph = add_ocean_edges_for_node(graph,get_node_from_point(graph, pnt))
+    return graph
     
 def fish_distance(point1,point2):
     """
@@ -262,9 +274,10 @@ def fish_distance(point1,point2):
     if line_crosses_land(line): 
         # The straight line cut across land so we have to do it the hard way.
         G = PickledGraph.objects.all()[0].graph
-        G.add_nodes_from([point1,point2])
-        G = add_ocean_edges_for_node(G,get_node_from_point(G,point1))
-        G = add_ocean_edges_for_node(G,get_node_from_point(G,point2))
+        G = add_points_to_graph([point1,point2],G)
+        # G.add_nodes_from([point1,point2])
+        # G = add_ocean_edges_for_node(G,get_node_from_point(G,point1))
+        # G = add_ocean_edges_for_node(G,get_node_from_point(G,point2))
         # Replace the straight line with the shortest path around land
         line = geos.LineString( nx.dijkstra_path(G,get_node_from_point(G,point1),get_node_from_point(G,point2)) )
         line.srid = settings.GEOMETRY_DB_SRID

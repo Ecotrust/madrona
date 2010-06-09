@@ -15,7 +15,15 @@ class Command(BaseCommand):
     def handle(self, shapefile, *args, **options):
         ds = DataSource(shapefile)
         if len(ds) != 1:
-            raise Exception("Data source should only contain a single feature. Aborting.")
+            raise Exception("Data source should only contain a single layer. Aborting.")
+
+        layer = ds[0]
+        if len(layer) != 1: 
+            raise Exception("Layer should containing ONLY a single feature")
+
+        if not 'polygon' in layer.geom_type.name.lower():
+            print layer.geom_type.name
+            raise Exception("Study region must be a multigeometry")
 
         if options.get('region_name'):
             mapping = {

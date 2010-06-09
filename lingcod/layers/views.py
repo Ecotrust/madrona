@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from models import *
 import os
 from django.conf import settings
-from lingcod.common import mimetypes
+from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 
 

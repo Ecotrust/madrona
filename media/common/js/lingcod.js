@@ -131,9 +131,11 @@ var lingcod = (function(){
         setEarthOptionsFromLocalStore();
         setEarthOptions();
         
-        
-        var cameraSet = setCameraFromLocalStorage();
-        
+        var cameraSet = false;
+        if(options.rememberMapExtent){
+            cameraSet = setCameraFromLocalStorage();
+        }
+                
         for(var i=0; i<layers.length; i++){
             var div = $('<div id="datalayerstree'+i+'"></div>');
             $('#datalayerstree').append(div);

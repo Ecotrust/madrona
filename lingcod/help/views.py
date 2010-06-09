@@ -3,7 +3,6 @@ from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.shortcuts import get_object_or_404, render_to_response
 from django.conf import settings
-from lingcod.common import mimetypes
 from lingcod.screencasts.models import YoutubeScreencast
 from lingcod.simplefaq.models import *
 

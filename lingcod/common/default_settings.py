@@ -4,7 +4,7 @@ import os
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
-RELEASE = '1.3' # The next milestone
+RELEASE = '1.4' # The next milestone
 
 GEOMETRY_DB_SRID = 3310
 
@@ -157,3 +157,6 @@ USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
+
+AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media. 
+                          # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL

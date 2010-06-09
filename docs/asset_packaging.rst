@@ -166,13 +166,13 @@ testing unpackaged javascript
 -----------------------------
 It's possible to test the client javascript code without a running server by
 simply opening ``media/tests.html``. Because it's a static file, one could even
-run the tests by opening ``tests.html`` directly from the online svn repository.
+run the tests by opening ``tests.html`` directly from the online mercurial repository.
 
 This page loads all the same files that django-compress packages, but loads
 each file individually and dynamically, so you don't need a server running. In
-fact, one can simple browse to the svn repository and run tests from there!
+fact, one can simple browse to the mercurial repository and run tests from there!
 
-`<http://marinemap.googlecode.com/svn/trunk/media/tests.html>`_
+`<http://marinemap.googlecode.com/hg/media/tests.html>`_
 
 This method *will not test whether the code runs after packaging*. For that
 reason it is suitable for quick use during development but cannot adequately
