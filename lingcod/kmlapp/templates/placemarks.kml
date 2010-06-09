@@ -38,7 +38,9 @@
     {% url array_summary_excel a.array.pk as array_summary_excel %}
     {# {% if user.is_staff and array_summary_excel %} #}
 		<atom:link rel="alt" href="{{array_summary_excel}}" title="Array Spreadsheet" type="application/ms-excel" />
-    {# {% endif %} #}
+    {# {% endif %} #}	
+	{% url array_replication_excel a.array.pk as array_replication_excel %}
+	<atom:link rel="alt" href="{{array_replication_excel}}" title="Habitat Replication Spreadsheet" type="application/ms-excel" />
 	
     </NetworkLink>
 {% else %}
@@ -71,7 +73,9 @@
             {# {% if user.is_staff and array_summary_excel %} #}
                 <atom:link rel="alt" href="{{array_summary_excel}}" title="Array Spreadsheet" type="application/ms-excel" />
             {# {% endif %} #}
-
+			{% url array_replication_excel a.array.pk as array_replication_excel %}
+			<atom:link rel="alt" href="{{array_replication_excel}}" title="Habitat Replication Spreadsheet" type="application/ms-excel" />
+			
             <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url sharing-object-form object_type=array_ctid,pk=a.array.pk %}" />
             <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% array_uid %}" href="{% url array-copy pk=a.array.pk %}" />
             <atom:link rel="alt" href="{% url staticmap-show "default" %}?array={{a.array.id}}&amp;attachment=true" title="as image (PNG)" type="application/shapefile" />

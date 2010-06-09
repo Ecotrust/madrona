@@ -12,6 +12,14 @@ class BioregionManager(models.GeoManager):
             return None
         else:
             return qs[0]
+            
+    def spans_multiple(self,geom):
+        """Will return True if geometry spans multiple bioregions.  False otherwise."""
+        qs = super(BioregionManager,self).get_query_set().filter(geometry__intersects=geom)
+        if qs.count() > 1:
+            return True
+        else:
+            return False
 
 class Bioregion(models.Model):
     """Model used for representing bioregions.  Bioregions are biologically significant

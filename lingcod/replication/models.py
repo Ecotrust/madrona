@@ -3,6 +3,17 @@ from lingcod.intersection import models as int_models
 from lingcod.data_distributor.models import functions_in_module
 from django.contrib.gis.geos import fromstr
 
+def use_sort_as_key(results):
+    """
+    we want the results sorted by the sort value, not by the habitat name.
+    """
+    sort_results = {}
+    for hab,sub_dict in results.iteritems():
+        sub_dict.update( {'name':hab} )
+        sort_results.update( {results[hab]['sort']:sub_dict} )
+    
+    return sort_results
+    
 class ReplicationSetup(models.Model):
     org_scheme = models.ForeignKey(int_models.OrganizationScheme)
     
