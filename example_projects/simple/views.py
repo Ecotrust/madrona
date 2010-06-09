@@ -30,5 +30,5 @@ def simpleCommit(request):
         saveform = SimpleSaveForm(request.POST)
     return mpaCommit(request, saveform)
 
-def manipulatorList(request):
-    return redirect('/manipulators/list/simple_app/mpa/')
+#def manipulatorList(request):
+#    return redirect('/manipulators/list/simple_app/mpa/')
