@@ -57,11 +57,12 @@ def display_kml(geom):
 def parsekmlpoly(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Polygon/{http://www.opengis.net/kml/2.2}outerBoundaryIs/{http://www.opengis.net/kml/2.2}LinearRing/{http://www.opengis.net/kml/2.2}coordinates').text
-    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '');
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
     lra = []
     for yxz in coords.split(' '):
         a = yxz.split(',')
-        lra.append((float(a[0]), float(a[1])))
+        if len(a) > 1:
+            lra.append((float(a[0]), float(a[1])))
     lr = LinearRing(lra)
     poly = Polygon(lr)
     return poly 
