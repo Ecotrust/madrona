@@ -18,7 +18,10 @@ from django.conf import settings
 # determines where the 'Unattached' MPA folder will appear
 UNATTACHED = "zzzzzzz"
 # This is the nice name as it will appear on screen
-UNATTACHED_NAME = "Marine Protected Areas"
+try:
+    UNATTACHED_NAME = settings.KML_UNATTACHED_NAME
+except:
+    UNATTACHED_NAME = "Marine Protected Areas"
 
 def get_user_mpa_data(user):
     """
