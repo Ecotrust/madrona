@@ -218,13 +218,13 @@ lingcod.Manipulator.prototype.isDefiningShape = function(){
     return this.is_defining_shape_;
 }
 
-lingcod.Manipulator.prototype.process = function(wkt, url, callback){
+lingcod.Manipulator.prototype.process = function(kml, url, callback){
     $(this).trigger('processing');
 	var self = this;
     $.ajax({
         url: url,
         type: 'POST',
-        data: { target_shape: wkt },
+        data: { target_shape: kml },
         success: function(data, status){
             $(self).trigger('doneprocessing');
             if(status === 'success'){
