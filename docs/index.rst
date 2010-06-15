@@ -30,6 +30,7 @@ MarineMap Decision Support Tool Documentation
    sharing_configuration
    rest
    settings
+   template_customization
    
 API
 ===

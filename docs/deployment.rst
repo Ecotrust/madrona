@@ -12,7 +12,7 @@ See the instructions for deploying a django project on the
     did lingcod. 
 
 Apache Configuration
-====================
+--------------------
 
 Using Apache2, you can configure your project as an apache virtual host using the following::
 

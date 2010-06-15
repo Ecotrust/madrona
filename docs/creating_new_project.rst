@@ -21,8 +21,7 @@ Create new django project
 
 In this example, we'll set up a new MarineMap instance for the state of Oregon. We use django-admin.py to create a standard django project:: 
 
-    # Assuming you keep your code in ~/src
-    cd ~/src
+    cd ~/oregon_stuff
     django-admin.py startproject oregon
 
 You should see the following directory structure::
@@ -181,19 +180,33 @@ shapes so we'll add this to our settings.py::
 
     GEOMETRY_DB_SRID = 32610
 
+First we have to create some necessary table in the database::
+    python manage.py syncdb
+    jpython manage.py migrate
+
 Next, we'll use some custom lingcod management commands to load up our carefully and meticulously created study region::
 
     python manage.py create_study_region --name oregon_coast data/oregon_study_region.shp
-    python manage.py change_study_region 2
+    python manage.py change_study_region 1
 
-Populating Database
+Migrating our MLPA app
 -------------------
-We need to put our mlpa app under migration, sync and migrate (which create all other necessary database tables and populate them with data if needed)::
+We need to put our mlpa app under migration which ensures that future changes to the MLPA models' schema get reflected in the database::
 
     python manage.py schemamigration --initial mlpa
-    python manage.py syncdb
-    python manage.py migrate
+    python manage.py migrate mlpa --fake
 
+Static Media
+------------
+All static media is split between the project and the lingcod library. The project media goes in a 'media' directory at the same level as your project directory. (ie ~/oregon_stuff/oregon/ is your django project, ~/oregon_stuff/media is your oregon media dir). First you must define the MEDIA_ROOT in our settings.py file::
+
+    MEDIA_ROOT = '/var/www/oregon_media'
+
+The install_media command will then take all files from lingcod media and oregon media directories and combine them into this directory. It is safe to assume that when you deploy marinemap you'll want this directory to be fully web accessible::
+
+    python manage.py install_media 
+
+This step also compresses all js and css using the django-compress app to ensure that your js and css are single compact files to maximize performance. 
 
 Deployment
 ----------
@@ -229,6 +242,7 @@ needed:
    static_map_configuration
    sharing_configuration
    kml_configuration
+   template_customization
    
 The setup this guide has walked through only specifies how to run the django
 development server. To setup a public facing website using Apache, consult the
