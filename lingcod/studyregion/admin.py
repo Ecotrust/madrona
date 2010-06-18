@@ -1,12 +1,13 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from lingcod.studyregion.models import StudyRegion
 
-class StudyRegionAdmin(admin.ModelAdmin):
+
+class StudyRegionAdmin(admin.GeoModelAdmin):
     list_display = ('name', 'active', 'creation_date', 'modification_date', )
     ordering = ('-active', '-creation_date', )
     fieldsets = (
         (None, {
-            'fields': ('name', )
+            'fields': ('name', 'geometry')
         }),
         ('LookAt options', {
             'fields': ('lookAt_Lat', 'lookAt_Lon', 'lookAt_Range', 'lookAt_Tilt', 'lookAt_Heading', ), 
