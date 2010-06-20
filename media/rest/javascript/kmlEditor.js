@@ -25,6 +25,15 @@ lingcod.rest.kmlEditor = function(options){
         a.hide();
     }
     
+    var lookup = function(node){
+        var nl = tree.getNetworkLinkForNode(node);
+        if(nl){
+            return nl;
+        }else{
+            return tree.lookup(node);
+        }
+    }
+        
     var that = {};
     
     that.el = $('<div class="kmlEditor"><h1 class="name"></h1><div class="toolbar"></div><div class="kmllist"></div></div>');
@@ -79,8 +88,8 @@ lingcod.rest.kmlEditor = function(options){
                 success: function(location){
                     refresh(function(){
                         var node = tree.getNodesById(location);
-                        tree.selectNode(node, tree.lookup(node));
-                        options.client.show(tree.lookup(node));
+                        tree.selectNode(node, lookup(node));
+                        options.client.show(lookup(node));
                     });
                 },
                 error: function(){
@@ -105,7 +114,7 @@ lingcod.rest.kmlEditor = function(options){
     attr.setEnabled(false);
     attr.setTooltip("Show the selected feature's attributes");
     goog.events.listen(attr, 'action', function(e) {
-        options.client.show(tree.lookup(that.selected));
+        options.client.show(lookup(that.selected));
     });
     tbar.addChild(attr, true);
     
@@ -115,15 +124,15 @@ lingcod.rest.kmlEditor = function(options){
         goog.events.listen(edit, 'action', function(e) {
             tbar.setEnabled(false);
             options.ge.setBalloon(null);
-            var kmlObject = tree.lookup(that.selected);
+            var kmlObject = lookup(that.selected);
             kmlObject.setVisibility(false);
             options.client.update(kmlObject, {
                 success: function(location){
                     tbar.setEnabled(true);
                     refresh(function(){
                         var node = tree.getNodesById(location);
-                        tree.selectNode(node, tree.lookup(node));
-                        options.client.show(tree.lookup(node));
+                        tree.selectNode(node, lookup(node));
+                        options.client.show(lookup(node));
                     });
                 },
                 cancel: function(){
@@ -147,7 +156,7 @@ lingcod.rest.kmlEditor = function(options){
         del.setEnabled(false);
         goog.events.listen(del, 'action', function(e) {
             tbar.setEnabled(false);
-            var kmlObject = tree.lookup(that.selected);
+            var kmlObject = lookup(that.selected);
             options.client.destroy(kmlObject, {
                 success: function(location){
                     tbar.setEnabled(true);
@@ -179,7 +188,7 @@ lingcod.rest.kmlEditor = function(options){
         copy.setEnabled(false);
         copy.setTooltip("Copy the selected feature");
         goog.events.listen(copy, 'action', function(e) {
-            kmlObject = tree.lookup(that.selected);
+            kmlObject = lookup(that.selected);
             options.client.copy(kmlObject, {
                 success: function(location){
                     tbar.setEnabled(true);
@@ -201,7 +210,7 @@ lingcod.rest.kmlEditor = function(options){
         share.setEnabled(false);
         share.setTooltip("Share the selected feature");
         goog.events.listen(share, 'action', function(e) {
-            options.client.share(tree.lookup(that.selected), {
+            options.client.share(lookup(that.selected), {
                 success: function(){
                     tbar.setEnabled(true);
                     refresh();
@@ -238,9 +247,8 @@ lingcod.rest.kmlEditor = function(options){
     
     var tree = kmltree({
         url: options.url,
-        ge: options.ge, 
         gex: options.gex, 
-        map_div: options.div, 
+        mapElement: options.div, 
         element: that.kmlEl,
         visitFunction: visitFunction,
         bustCache: true,
@@ -257,6 +265,10 @@ lingcod.rest.kmlEditor = function(options){
     that.clearSelection = tree.clearSelection;
     
     $(tree).bind('select', function(e, node, kmlObject){
+        var nl = tree.getNetworkLinkForNode(node);
+        if(nl){
+            kmlObject = nl;
+        }
         $(that).trigger('select', [e, node, kmlObject]);
         if(options.client.inShowState){
             var selectedTab = options.client.panel.getEl().find('.ui-tabs-selected:first a').text();
