@@ -476,6 +476,7 @@ lingcod.rest.client = function(gex, panel, manipulators){
                 } else {
                     alert('There was a problem getting the sharing form. Please try again; if the problem persists, please contact us.');
                 }
+                option.error();
             }
         });
     };
