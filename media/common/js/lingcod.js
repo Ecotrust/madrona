@@ -141,9 +141,8 @@ var lingcod = (function(){
             $('#datalayerstree').append(div);
             layers[i].tree = kmltree({
                 url: layers[i].url,
-                ge: ge,
                 gex: gex,
-                map_div: $('#map'),
+                mapElement: $('#map'),
                 element: div,
                 restoreState: !$.browser.msie,
                 setExtent: !cameraSet && layers[i].opts && 
@@ -158,9 +157,8 @@ var lingcod = (function(){
 
             var googleLayers = kmltree({
                 url: options.media_url + 'common/fixtures/earthLayers.kml',
-                ge: ge, 
                 gex: gex, 
-                map_div: $('#map'), 
+                mapElement: $('#map'), 
                 element: div,
                 restoreState: true,
                 supportItemIcon: true
