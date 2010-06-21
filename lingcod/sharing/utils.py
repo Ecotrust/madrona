@@ -53,3 +53,18 @@ def can_user_view(model_class, pk, user):
             return False, HttpResponse("Object permissions cannot be determined using can_user_view.", status=500) 
 
     return False, HttpResponse("Server Error in can_user_view", status=500) 
+
+def user_sharing_groups(user):
+    """
+    Returns a list of groups that user is member of and 
+    and group must have sharing permissions (on any object)  
+    """
+    sbs = get_shareables()
+    perms = []
+    for model in sbs.keys():
+        perm = sbs[model][1]
+        if perm not in perms:
+            perms.append(perm)
+    groups = user.groups.filter(permissions__in=perms).distinct()
+    return groups
+

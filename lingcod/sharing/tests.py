@@ -3,7 +3,7 @@ from lingcod.array.models import MpaArray
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.common import utils 
 from lingcod.sharing.models import * 
-from lingcod.sharing.utils import can_user_view
+from lingcod.sharing.utils import can_user_view, user_sharing_groups
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -87,6 +87,16 @@ class SharingTestCase(TestCase):
         mpa1.add_to_array(array1)
         self.array1_id = array1.id
 
+    def test_user_sharing_groups(self):
+        sgs = user_sharing_groups(self.user1)
+        self.assertEquals(len(sgs),1)
+
+        sgs = user_sharing_groups(self.user2)
+        self.assertEquals(len(sgs),1)
+
+        sgs = user_sharing_groups(self.user3)
+        self.assertEquals(len(sgs),0)
+        
     def test_nothing_shared(self):
         """
         Make sure nothing is shared yet
