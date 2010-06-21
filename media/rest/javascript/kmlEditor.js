@@ -214,6 +214,11 @@ lingcod.rest.kmlEditor = function(options){
                 success: function(){
                     tbar.setEnabled(true);
                     refresh();
+                },
+                error: function(){
+                    tbar.setEnabled(true);
+                    options.client.panel.stopSpinning();
+                    options.client.panel.close();
                 }
             });
         });
