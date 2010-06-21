@@ -77,7 +77,7 @@ def map(request, template_name='common/map.html'):
     from lingcod.sharing.utils import user_sharing_groups
     member_of_sharing_group = False
     user = request.user
-    if user.is_authenthicated() and len(user_sharing_groups(user)) > 0:
+    if user.is_authenticated() and len(user_sharing_groups(user)) > 0:
         member_of_sharing_group = True
     
     response = render_to_response(template_name, RequestContext(request,{
