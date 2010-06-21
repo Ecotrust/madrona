@@ -966,7 +966,7 @@ var kmltree = (function(){
             rememberedLinks.push(networkLink);
         };
         
-        var getNetworkLinkForNode = function(node){
+        var getNetworkLink = function(node){
             var id = $(node).attr('data-rememberedLink');
             if(id && rememberedLinks.length >= id){
                 return rememberedLinks[id];

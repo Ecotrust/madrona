@@ -26,7 +26,7 @@ lingcod.rest.kmlEditor = function(options){
     }
     
     var lookup = function(node){
-        var nl = tree.getNetworkLinkForNode(node);
+        var nl = tree.getNetworkLink(node);
         if(nl){
             return nl;
         }else{
@@ -265,7 +265,7 @@ lingcod.rest.kmlEditor = function(options){
     that.clearSelection = tree.clearSelection;
     
     $(tree).bind('select', function(e, node, kmlObject){
-        var nl = tree.getNetworkLinkForNode(node);
+        var nl = tree.getNetworkLink(node);
         if(nl){
             kmlObject = nl;
         }
