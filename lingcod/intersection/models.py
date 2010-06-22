@@ -329,6 +329,11 @@ class MultiFeatureShapefile(Shapefile):
     
     @transaction.commit_on_success
     def process_proxy_line(self, field_name='Aj_pct_rck', hard_name='Hard Proxy', soft_name='Soft Proxy'):
+        """This function is rather specific to the North Coast MLPA but could concievably be useful elsewhere.  This method
+        takes a linear shapefile and, based on the neumeric field specified under field_name, splits it into two linear shapefiles.
+        The new shapefiles have segements that are substrings of the original line features.  The length of the substrings is 
+        determined by the values in the field_name field.  Yeah, that sounds kind of confusing but that is the best explaination I 
+        can come up with.  Sorry."""
         driver = ogr.GetDriverByName('ESRI Shapefile')
         shpfile = self.unzip_to_temp()
         tempdir = tempfile.gettempdir()
