@@ -80,6 +80,15 @@ def clean_geometry(geom):
     else:
         return geometry
 
+def line_substring(linestring, startfraction, endfraction):
+    """Return a linestring being a substring of the input one starting and ending at the given fractions of total 2d length. Second and third arguments are float8 values between 0 and 1. Calls ST_Line_Substring in PostGIS."""
+    from django.db import connection
+    cursor = connection.cursor()
+    query = "select st_line_substring(st_geomfromewkt(\'%s\'),%f,%f)" % (linestring.ewkt, startfraction, endfraction)
+    cursor.execute(query)
+    row = cursor.fetchone()
+    newline = geos.fromstr(row[0])
+    return newline
 
 def zip_from_shp(shp_path):
     # given a path to a '.shp' file, zip it and return the filename and a file object
@@ -317,7 +326,103 @@ class MultiFeatureShapefile(Shapefile):
         for f,dv in info_dict.iteritems():
             sf = ShapefileField(name=f,distinct_values=dv,shapefile=self)
             sf.save()
+    
+    @transaction.commit_on_success
+    def process_proxy_line(self, field_name='Aj_pct_rck', hard_name='Hard Proxy', soft_name='Soft Proxy'):
+        driver = ogr.GetDriverByName('ESRI Shapefile')
+        shpfile = self.unzip_to_temp()
+        tempdir = tempfile.gettempdir()
+        
+        
+        #determine what geometry type we're dealing with
+        # feat = lyr_in.GetFeature(0)
+        # geom = feat.GetGeometryRef()
+        # gname = geom.GetGeometryName()
+        # 
+        # Create two new shapefiles.  One for hard, one for soft
+        files = {}
+        file_names = [hard_name,soft_name]
+        for i,file_name in enumerate(file_names):
+            # create a new data source and layer
+            fn = slugify(file_name) + '.shp'
+            fn = str(os.path.abspath(os.path.join(tempdir, fn)))
+        
+            if os.path.exists(fn):
+              driver.DeleteDataSource(fn)
+            ds_out = driver.CreateDataSource(fn)
+            if ds_out is None:
+              raise 'Could not create file: %s' % fn
+            files.update({file_name: ds_out})
+        
+        zipped_files = {}
+        for name,ds_out in files.iteritems():
+            #open input data source
+            ds_in = driver.Open(shpfile,0)
+            if ds_in is None:
+                raise 'Could not open input shapefile'
+            lyr_in = ds_in.GetLayer()
+            if name.lower().find('hard') != -1:
+                sub_type = 'hard'
+            else:
+                sub_type = 'soft'
+            outLayer = ds_out.CreateLayer(name,geom_type=ogr.wkbLineString)
+            # get the FieldDefn's for the id field in the input shapefile
+            feature = lyr_in.GetFeature(0)
+            idFieldDefn = feature.GetFieldDefnRef('id')
+            # create new id field in the output shapefile
+            outLayer.CreateField(idFieldDefn)
+            # get the FeatureDefn for the output layer
+            featureDefn = outLayer.GetLayerDefn()
+
+            # loop through the input features
+            inFeature = lyr_in.GetNextFeature()
+            while inFeature:
+                percent_hard = inFeature.GetField(field_name)
+                #create a new feature
+                outFeature = ogr.Feature(featureDefn)
+                
+                # set the geometry
+                oldGeom = geos.fromstr(inFeature.GetGeometryRef().ExportToWkt())
+                # print oldGeom.__class__.__name__
+                # print oldGeom.ewkt
+                if sub_type == 'hard':
+                    newGeom = line_substring(oldGeom,0,percent_hard)
+                else:
+                    newGeom = line_substring(oldGeom,percent_hard,1)
+                if newGeom.num_points > 1:
+                    the_id = inFeature.GetFID()
+                    outFeature.SetFID(the_id)
+                    outFeature.SetGeometry(ogr.CreateGeometryFromWkt(newGeom.ewkt))
+                    outLayer.CreateFeature(outFeature)
+                outFeature.Destroy()
+                inFeature.Destroy()
+                inFeature = lyr_in.GetNextFeature()
+        
+            # get the projection from the input shapefile and write a .prj file for the output
+            spatial_ref = lyr_in.GetSpatialRef()
+            fn_prj = slugify(name) + '.prj'
+            fn_prj = str(os.path.abspath(os.path.join(tempdir, fn_prj)))
+            file = open(fn_prj,'w')
+            spatial_ref.MorphToESRI()
+            file.write(spatial_ref.ExportToWkt())
+            file.close()
+            zip_file_name = ds_out.GetName()
+            ds_in.Destroy()
+            ds_out.Destroy()
+            new_name, zip_o_rama = zip_from_shp(zip_file_name)
+            zipped_files.update({name:zip_o_rama})
             
+            
+        for file_name, zipped_file in zipped_files.iteritems():
+            sfsf, created = SingleFeatureShapefile.objects.get_or_create(name=file_name)
+            
+            if not created and sfsf.shapefile: #get rid of the old shapefile so it's not hangin around
+                print 'I am deleting'
+                sfsf.shapefile.delete()
+            sfsf.shapefile = zipped_file
+            sfsf.save()
+        
+        
     def split_to_single_feature_shapefiles(self, field_name):
         file_path = self.unzip_to_temp()
         ds = DataSource(file_path)

@@ -39,7 +39,7 @@ def test_drawing_intersect(request):
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
                 if format=='html':
-                    return render_to_response('generic_results.html', {'result': use_sort_as_key(result)})
+                    return render_to_response('generic_results.html', {'result': result})
                 elif format=='csv':
                     return build_csv_response(result, str(hash(geom)) )
                 elif format=='json':

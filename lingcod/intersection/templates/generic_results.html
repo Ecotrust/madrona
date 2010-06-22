@@ -12,10 +12,10 @@
 			<td>Percent of SR Total</td>
 			<td>Units</td>
 		</tr>
-		{% for item in result %}
+		{% for hab_name,item in result.items %}
 		<tr>	
 			<td>{{ item.hab_id }}</td>
-			<td>{{ item.feature_name }}</td>
+			<td>{{ hab_name }}</td>
 			<td>{{ item.result }}</td>
 			<td>{{ item.percent_of_total }}</td>
 			<td>{{ item.units }}</td>

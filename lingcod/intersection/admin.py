@@ -11,6 +11,11 @@ def load_to_features(modeladmin, request, queryset):
     return HttpResponseRedirect('../intersectionfeature')
 load_to_features.short_description = 'Load the selected shapefiles to intersection features'
 
+def process_continuous_proxy_line(modeladmin, request, queryset):
+    for shp in queryset:
+        shp.process_proxy_line()
+    return HttpResponseRedirect('../singlefeatureshapefile')
+
 def validate_feature_mapping(modeladmin,request,queryset):
     mismatch_errors = []
     missing_errors = []
@@ -107,6 +112,7 @@ class MultiFeatureShapefileAdmin(admin.ModelAdmin):
         (None,               {'fields': ('name','shapefile')}),
         ('Descriptive information', {'fields': ('description','metadata')}),
     ]
+    actions = [process_continuous_proxy_line]
     #inlines = [ShapefileFieldInline]
     
     def get_urls(self):
