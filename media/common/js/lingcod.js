@@ -5,7 +5,8 @@ var lingcod = (function(){
     var layers = [];
     
     var constructor_defaults = {
-        hideGoogleLayers: false
+        hideGoogleLayers: false,
+        rememberMapExtent: true
     };
     
     
