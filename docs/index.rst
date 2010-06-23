@@ -32,6 +32,7 @@ MarineMap Decision Support Tool Documentation
    settings
    template_customization
    async_task_queue
+   raster_stats
    
 API
 ===
