@@ -31,6 +31,7 @@ MarineMap Decision Support Tool Documentation
    rest
    settings
    template_customization
+   async_task_queue
    
 API
 ===
