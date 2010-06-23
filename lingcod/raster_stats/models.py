@@ -21,6 +21,9 @@ class RasterDataset(models.Model):
     filepath = models.FilePathField(path=RASTDIR, recursive=True)
     type = models.CharField(max_length=30, choices=RASTER_TYPES)
     
+    def __unicode__(self):
+        return unicode(self.name + " raster at " + self.filepath)
+    
 class ZonalStatsCache(models.Model):
     geom_hash = models.CharField(max_length=255)
     raster = models.ForeignKey('RasterDataset')
