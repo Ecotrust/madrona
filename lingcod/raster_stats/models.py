@@ -5,7 +5,7 @@ import tempfile
 import os
 
 verbose = False
-RASTDIR = '/Users/perry/src/marinemap/lingcod/raster_stats/test_data'
+RASTDIR = os.path.join(os.path.dirname(__file__), 'test_data')
 RASTER_TYPES = ( 
                 ("continuous", "continuous"),
                 ("categorical", "catgorical"),
