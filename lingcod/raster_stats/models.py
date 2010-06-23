@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core import serializers
+from django.db.utils import DatabaseError
 import tempfile
 import time
 import os
@@ -137,8 +138,9 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True):
     if read_cache:
         try:
             cached = ZonalStatsCache.objects.get(geom_hash=hash, raster=rasterds)
-        except ZonalStatsCache.DoesNotExist:
+        except (ZonalStatsCache.DoesNotExist, DatabaseError):
             cached = None
+             
     else:
         write_cache = False #If we're not reading the cache, we're not going to write to it either
 
