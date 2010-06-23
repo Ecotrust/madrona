@@ -48,6 +48,8 @@ elementtree
 xlwt==0.7.2
 networkx
 boto
+celery
+ghettoq
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson==1.0.5
