@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core import serializers
 import tempfile
+import time
 import os
 
 verbose = False
@@ -70,24 +71,20 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
     os.chdir(tmpdir)
 
     # Output geom to temp dataset
-    out_json = os.path.join(tmpdir, 'geom.json')
+    timestamp = str(time.time())
+    out_json = os.path.join(tmpdir, 'geom_%s.json' % timestamp)
     geom_to_file(geom, out_json)
 
     # Run starspan
-    out_csv = os.path.join(tmpdir, 'output_stats.csv')
+    out_csv = os.path.join(tmpdir, 'output_%s_stats.csv' % timestamp)
     if os.path.exists(out_csv):
         os.remove(out_csv)
-    cmd = '%s --vector %s --where "id=1" --out-prefix %s/output --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls ' % (STARSPAN_BIN,out_json,tmpdir, rasterds.filepath)
+    cmd = '%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls ' % (STARSPAN_BIN,out_json,tmpdir, timestamp, rasterds.filepath)
     if verbose: print cmd
     starspan_out = os.popen(cmd).read()
     if verbose: print starspan_out
 
-    # Parse output
-    try:
-        res = open(out_csv,'r').readlines()
-    except IOError:
-        print "Starspan failed to create output csv properly"
-        raise Exception
+    res = open(out_csv,'r').readlines()
     if verbose: print res
 
     # Create zonal model
