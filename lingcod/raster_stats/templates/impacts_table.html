@@ -1,0 +1,9 @@
+     <table width="100%">
+     <tr> <th>Raster</th><th>Average</th><th>Min</th><th>Max</th><th>Median</th><th>StDev</td><th>Nulls</th><th>Pixels</th> </tr>
+  {% for stats in impacts %}
+     <tr>
+          <th>{{stats.raster.name}}</th><td>{{stats.avg}}</td><td>{{stats.min}}</td><td>{{stats.max}}</td><td>{{stats.median}}</td>
+          <td>{{stats.stdev}}</td><td>{{stats.nulls}}</td><td>{{stats.pixels}}</td> 
+     </tr>
+  {% endfor %}
+     </table>
