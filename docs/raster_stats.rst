@@ -50,4 +50,22 @@ Use the utility function which will first check the cache. If nothing is in the 
 
 Using the web service
 ---------------------
-TODO
+The app provides a urls.py file; just point your main URLCONF file to it::
+
+    (r'^zonal/', include('lingcod.raster_stats.urls')),
+
+You can get a json list of the rasters at this url::
+
+	http://localhost/zonal/
+
+And you can append the raster name and supply a `geom_txt` parameter (either wkt or json) which returns the rasters stats as json::
+
+	http://localhost/zonal/sst/?geom_txt=POLYGON ((-122.735420504497029 37.238868044757552,-122.516579972608298 37.245550198403009,-122.50822728055148 37.043415050627928,-122.730408889262932 37.046756127450656,-122.735420504497029 37.238868044757552))
+
+	[
+         {"pk": 764, "model": "raster_stats.zonalstatscache", 
+          "fields": {"raster": 23, "min": 0.0, "max": 1.5440739999999999, "geom_hash": "-8107990604081680573", 
+                     "nulls": 0.0, "median": 0.28777199999999997, "mode": 0.0, "stdev": 0.44484400000000002, 
+                     "date_modified": "2010-06-23 19:00:30", "avg": 0.40776400000000002, "pixels": 531.0}
+         }
+        ]
