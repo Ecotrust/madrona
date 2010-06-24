@@ -150,6 +150,9 @@ var lingcod = (function(){
                     layers[i].opts.setExtent
             });
             layers[i].tree.load();
+            if(layers[i]['opts'].showDownloadLink){
+                $('#datalayerstree').append('<p class="download_layer"><a href="'+layers[i].url+'">Download this layer</a> for use in Google Earth or your own website.</p>');
+            }
         }
 
         if(!that.options.hideGoogleLayers){

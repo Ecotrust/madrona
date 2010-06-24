@@ -427,3 +427,9 @@ div.field textarea {
     left:10px;
     top:10px;
 }
+
+.marinemap-panel p.download_layer {
+    margin-left:20px;
+    margin-bottom: 20px;
+    font-style: italic;
+}
