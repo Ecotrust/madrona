@@ -48,7 +48,7 @@ class ZonalStatsCache(models.Model):
         return serializers.serialize("json", self)
 
     def __unicode__(self):
-        return unicode("Zonal Stats - avg:%s , min:%s, max:%s" % (self.avg, self.min, self.max))
+        return unicode("Zonal Stats for %s - avg:%s , pixels:%s, nulls:%s" % (self.raster.name, self.avg, self.pixels, self.nulls))
 
     class Meta:
         unique_together = ('geom_hash', 'raster')
@@ -125,7 +125,7 @@ def clear_cache():
     if verbose: print "Clearing %s objects from cache" % len(objs)
     objs.delete()
 
-def zonal_stats(geom, rasterds, write_cache=True, read_cache=True):
+def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=False):
     """
     Given a GEOSGeometry and a RasterDataset,
     compute the zonal stats and return json like
@@ -142,9 +142,12 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True):
     if read_cache:
         try:
             cached = ZonalStatsCache.objects.get(geom_hash=hash, raster=rasterds)
-        except (ZonalStatsCache.DoesNotExist, DatabaseError):
+        #except (ZonalStatsCache.DoesNotExist, DatabaseError):
+        except ZonalStatsCache.DoesNotExist:
             cached = None
-             
+        except DatabaseError:
+            cached = None
+            #cached = ZonalStatsCache(geom_hash=hash, raster=rasterds)
     else:
         write_cache = False #If we're not reading the cache, we're not going to write to it either
 
@@ -152,7 +155,11 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True):
         result = cached
         result.from_cache = True
     else:
-        result = run_starspan_zonal(geom, rasterds, write_cache=write_cache)
+        if cache_only:
+            # Return an empty result
+            result = ZonalStatsCache(geom_hash=hash, raster=rasterds)
+        else:
+            result = run_starspan_zonal(geom, rasterds, write_cache=write_cache)
         result.from_cache = False
     
     return result
