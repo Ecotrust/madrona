@@ -16,7 +16,7 @@ http://projects.atlas.ca.gov/frs/download.php/667/starspan-1.2.03.tar.gz
 
 Settings
 --------
-optionally set the `STARSPAN_BIN` setting to point to your starspan executable.
+optionally set the `STARSPAN_BIN` setting to point to your starspan executable and the `RASTER_DIR` setting for the filepath to the directory containing your raster files.
 
 Then just add to your installed apps::
 

@@ -7,7 +7,11 @@ import time
 import os
 
 verbose = False
-RASTDIR = os.path.join(os.path.dirname(__file__), 'test_data')
+try:
+    RASTDIR = settings.RASTER_DIR
+except:
+    RASTDIR = os.path.join(os.path.dirname(__file__), 'test_data')
+
 RASTER_TYPES = ( 
                 ("continuous", "continuous"),
                 ("categorical", "catgorical"),
