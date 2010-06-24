@@ -81,14 +81,12 @@ class ZonalWebServiceTest(TestCase):
     def setUp(self):
         clear_cache()
         raster, created = RasterDataset.objects.get_or_create(name="test_impact",filepath=RASTER,type='continuous')  
-        self.raster_pk  = rast.pk
 
     def test_webservice(self):
         data = {'geom_txt': POLYGONS[0].wkt}
-        response = self.client.get('/%s/' % self.raster_pk, data)
+        response = self.client.get('/test_impact/', data)
         self.failUnlessEqual(response.status_code, 200)
 
-        print response.content
         for obj in serializers.deserialize("json", response.content):
             web_zonal = obj.object
             util_zonal = zonal_stats(POLYGONS[0], rast, read_cache=False)

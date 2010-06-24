@@ -4,7 +4,7 @@ from lingcod.raster_stats.models import zonal_stats, RasterDataset, ZonalStatsCa
 from django.core import serializers
 from django.contrib.gis.geos import fromstr
 
-def stats_for_geom(request,pk):
+def stats_for_geom(request, raster_name):
     # Confirm that we have a valid polygon geometry
     if 'geom_txt' in request.REQUEST: 
         geom_txt = str(request.REQUEST['geom_txt'])
@@ -18,7 +18,7 @@ def stats_for_geom(request,pk):
  
     # Confirm raster with pk exists
     try:
-        raster = RasterDataset.objects.get(pk=pk)
+        raster = RasterDataset.objects.get(name=raster_name)
     except:
         return HttpResponse("No raster with pk of %s" % pk, status=404)
 
@@ -29,3 +29,9 @@ def stats_for_geom(request,pk):
     data = serializers.serialize("json", zqs)
 
     return HttpResponse(data, mimetype='application/javascript')
+
+def raster_list(request):
+    rasts = RasterDataset.objects.all()
+    data = serializers.serialize("json", rasts)
+    return HttpResponse(data, mimetype='application/javascript')
+
