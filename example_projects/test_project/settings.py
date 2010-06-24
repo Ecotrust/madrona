@@ -19,7 +19,7 @@ ROOT_URLCONF = 'test_project.urls'
 
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
-INSTALLED_APPS += ( 'mlpa', )
+INSTALLED_APPS += ( 'mlpa', 'lingcod.raster_stats' )
 
 MPA_CLASS = 'mlpa.models.Mpa'
 ARRAY_CLASS = 'mlpa.models.MpaArray'

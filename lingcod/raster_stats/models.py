@@ -1,11 +1,17 @@
 from django.db import models
 from django.conf import settings
 from django.core import serializers
+from django.db.utils import DatabaseError
 import tempfile
+import time
 import os
 
 verbose = False
-RASTDIR = '/Users/perry/src/marinemap/lingcod/raster_stats/test_data'
+try:
+    RASTDIR = settings.RASTER_DIR
+except:
+    RASTDIR = os.path.join(os.path.dirname(__file__), 'test_data')
+
 RASTER_TYPES = ( 
                 ("continuous", "continuous"),
                 ("categorical", "catgorical"),
@@ -20,6 +26,9 @@ class RasterDataset(models.Model):
     name = models.CharField(max_length=30, unique=True)
     filepath = models.FilePathField(path=RASTDIR, recursive=True)
     type = models.CharField(max_length=30, choices=RASTER_TYPES)
+    
+    def __unicode__(self):
+        return unicode(self.name + " raster at " + self.filepath)
     
 class ZonalStatsCache(models.Model):
     geom_hash = models.CharField(max_length=255)
@@ -67,24 +76,20 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
     os.chdir(tmpdir)
 
     # Output geom to temp dataset
-    out_json = os.path.join(tmpdir, 'geom.json')
+    timestamp = str(time.time())
+    out_json = os.path.join(tmpdir, 'geom_%s.json' % timestamp)
     geom_to_file(geom, out_json)
 
     # Run starspan
-    out_csv = os.path.join(tmpdir, 'output_stats.csv')
+    out_csv = os.path.join(tmpdir, 'output_%s_stats.csv' % timestamp)
     if os.path.exists(out_csv):
         os.remove(out_csv)
-    cmd = '%s --vector %s --where "id=1" --out-prefix %s/output --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls ' % (STARSPAN_BIN,out_json,tmpdir, rasterds.filepath)
+    cmd = '%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls ' % (STARSPAN_BIN,out_json,tmpdir, timestamp, rasterds.filepath)
     if verbose: print cmd
     starspan_out = os.popen(cmd).read()
     if verbose: print starspan_out
 
-    # Parse output
-    try:
-        res = open(out_csv,'r').readlines()
-    except IOError:
-        print "Starspan failed to create output csv properly"
-        raise Exception
+    res = open(out_csv,'r').readlines()
     if verbose: print res
 
     # Create zonal model
@@ -107,7 +112,12 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
 
     # return zonal object (caching it if needed)
     if write_cache:
-        zonal.save()
+        try:
+            zonal.save()
+        except:
+            # Most likely another zonal stats cache for this geom/raster
+            # was saved to the cache before this one completed.
+            pass
     return zonal
 
 def clear_cache():
@@ -132,8 +142,9 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True):
     if read_cache:
         try:
             cached = ZonalStatsCache.objects.get(geom_hash=hash, raster=rasterds)
-        except ZonalStatsCache.DoesNotExist:
+        except (ZonalStatsCache.DoesNotExist, DatabaseError):
             cached = None
+             
     else:
         write_cache = False #If we're not reading the cache, we're not going to write to it either
 

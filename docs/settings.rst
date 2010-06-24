@@ -104,6 +104,14 @@ MarineMap Settings
 ``VIDEO_PLAYER``
     Path to .swf flash video player for streaming screencast videos
 
+.. _RASTER_DIR:
+``RASTER_DIR``
+    Absolute filepath to a directory containing raster files. Used with the `lingcod.raster_stats` app. (Optional; defaults to `lingcod/raster_stats/test_data`)
+
+.. _STARSPAN_BIN:
+``STARSPAN_BIN``
+    Location of the starspan executable. Used with the `lingcod.raster_stats` app. (Optional; defaults to `starspan`)
+
 3rd Party App Settings
 ----------------------
 
