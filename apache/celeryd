@@ -15,7 +15,8 @@
 # 3. sudo chmod +x /etc/init.d/celeryd
 # 4. sudo /etc/init.d/celeryd start
 #
-# To set to autostart
+# To set to autostart on a debian system
+# 5. sudo update-rc.d celeryd defaults
 #
 # For multiple projects on the same server
 # rename to celeryd-project1 and change the paths in the CHANGEME section below
