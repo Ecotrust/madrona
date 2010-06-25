@@ -115,6 +115,9 @@ def get_single_mpa_data(user, input_mpa_id):
 
     try:
         # Frst see if user owns it
+        if user.is_anonymous() or not user.is_authenticated():
+            raise Mpa.DoesNotExist
+
         mpas = list(Mpa.objects.filter(id=input_mpa_id, user=user).add_kml())
         if len(mpas)==0:
             raise Mpa.DoesNotExist
