@@ -433,3 +433,14 @@ div.field textarea {
     margin-bottom: 20px;
     font-style: italic;
 }
+
+p.download_layer {
+    font-size:12px;
+    margin-left:23px;
+}
+
+p.download_layer a {
+    padding-bottom:5px;
+    padding-left:20px;
+    background: transparent url(../images/kml_document_icon.png) no-repeat top left;
+}
