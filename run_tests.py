@@ -58,6 +58,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings' # test_project.settings
 settings.TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
 settings.TEST_OUTPUT_DESCRIPTIONS=True
 settings.DEBUG=True
-#settings.POSTGIS_TEMPLATE='template1'
+settings.POSTGIS_TEMPLATE='template1'
 
 use_exec(pdir)
