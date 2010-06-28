@@ -6,7 +6,7 @@ from lingcod.raster_stats.models import ZonalStatsCache, RasterDataset, zonal_st
 from django.core import serializers
 
 
-RASTER = os.path.join(os.path.dirname(__file__), 'test_data/impact.tif')
+RASTER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/impact.tif')
 rast, created = RasterDataset.objects.get_or_create(name="test_impact",filepath=RASTER,type='continuous')  
 
 POLYGONS = []
