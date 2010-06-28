@@ -3,7 +3,6 @@
 import sys
 import os
 from django.core.management import call_command, execute_manager, execute_from_command_line
-from django.conf import settings
 
 def use_exec(pdir):
     """
@@ -53,7 +52,10 @@ sys.path.insert(0, pdir)
 sys.path.insert(0, spdir)
 sys.path.insert(0, hdir)
 #os.chdir(pdir)
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings' # test_project.settings
+
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'example_projects.test_project.settings' # test_project.settings
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from django.conf import settings
 
 settings.TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
 settings.TEST_OUTPUT_DESCRIPTIONS=True
