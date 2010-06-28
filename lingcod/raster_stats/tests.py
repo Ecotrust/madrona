@@ -1,10 +1,10 @@
-import os
-import sys
 from django.test import TestCase
 from django.contrib.gis.gdal.datasource import DataSource
 from lingcod.raster_stats.models import ZonalStatsCache, RasterDataset, zonal_stats, clear_cache
+from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from django.core import serializers
-
+import os
+import sys
 
 RASTER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/impact.tif')
 rast, created = RasterDataset.objects.get_or_create(name="test_impact",filepath=RASTER,type='continuous')  
@@ -80,6 +80,7 @@ class ZonalWebServiceTest(TestCase):
 
     def setUp(self):
         clear_cache()
+        self.settings_manager.set(ROOT_URLCONF = 'lingcod.raster_stats.urls')
         raster, created = RasterDataset.objects.get_or_create(name="test_impact",filepath=RASTER,type='continuous')  
 
     def test_webservice(self):
