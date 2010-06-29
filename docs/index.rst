@@ -8,31 +8,11 @@ MarineMap Decision Support Tool Documentation
 .. toctree::
    :maxdepth: 2
    
-   introduction
    getting_started
    creating_new_project
-   deployment
-   study_region
-   layers
-   managing_users
-   waves
-   marine_protected_areas
-   arrays
-   manipulators
-   reports
-   sidebar
-   templatetags
-   asset_packaging
-   maintenance_mode
-   postgis_django_tests
-   static_map_configuration
-   kml_configuration
-   sharing_configuration
-   rest
-   settings
-   template_customization
-   async_task_queue
-   raster_stats
+   apps
+   topics
+   background
    
 API
 ===

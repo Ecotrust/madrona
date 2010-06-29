@@ -2,6 +2,22 @@
 
 Getting Started
 ===============
+
+Introduction
+************
+MarineMap is a framework for building web-based spatial decision support tools. 
+Originally designed to support the :ref:`California Marine Life Protection Act Initiative<background>`, 
+MarineMap has evolved into a reusable platform for marine and terrestrial applications. 
+If your problem involves spatial data and multi-user collaboration, MarineMap is the premier tool. 
+
+This documentation is aimed at developers/programmers who want to
+implement a MarineMap based project of their own. You should be familiar with
+
+    * programming in Python
+    * how web application are structured in `Django <http://djangoproject.com>`_
+    * the command line interface in a unix-style operating system
+    * the basics of `Mercurial <http://mercurial.selenic.com/>`_ source control
+
 These instructions will walk you through developing a basic implementation of
 MarineMap. This includes installing from the development repository, setting
 up a sample app, testing that everything installed smoothly, then doing some
@@ -28,11 +44,14 @@ MarineMap.
     * `django-registration <http://pypi.python.org/pypi/django-registration>`_ provides the user account managment and registration (Version 0.8+ is required - v0.7 wont work so don't use easy_install! Use `0.8alpha1 <http://bitbucket.org/ubernostrum/django-registration/downloads/django-registration-0.8-alpha-1.tar.gz>`_ instead.)
     * `south <http://south.aeracode.org/>`_ for database schema migrations
     * `networkx <http://networkx.lanl.gov/>`_ for graph networks in the spacing app
-    * `pip <http://pip.openplans.org/>`_ for package management (optional). 
+    * `pip <http://pip.openplans.org/>`_ for package management (optional)
+    * `celery <http://celeryproject.org/>`_ for asynchronous task management (optional)
+    * `ghettoq <http://pypi.python.org/pypi/ghettoq/0.1.2>`_ as a task queue for celery (optional)
 
 Most of the dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
 We have created a `pip requirements file <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_ which can be used to install most of the dependencies::
 
+    cd /usr/local # Assuming you want to put stuff in /usr/local/src
     pip install -r http://marinemap.googlecode.com/hg/marinemap_requirements.txt    
 
 Some dependencies are a bit trickier and take additional installtion steps. Specifically geodjango, postgis and mapnik are not easily installed so refer to the links above. 
@@ -41,19 +60,12 @@ Some dependencies are a bit trickier and take additional installtion steps. Spec
     MarineMap development tends to follow django trunk. It may work on the 
     point releases but it's safer to just start from source.
 
-In addition, you should be familiar with
-
-    * programming in Python
-    * how web application are structured in `Django <http://djangoproject.com>`_
-    * the command line interface in a unix-style operating system
-    * the basics of `Mercurial <http://mercurial.selenic.com/>`_ source control
-
 Project Structure
 *****************
 
 It is important to understand how a MarineMap application is structured. There are essentially two codebases:
 
-    * lingcod - a python module providing many django apps that contain the core functionality common to all MarineMap instances.
+    * lingcod - a python module providing a set of django apps that contain the core functionality common to all MarineMap instances.
     * the project code - a django project which implements and extends the functionality provided by lingcod (specific to the particular project's needs).
 
 By seperating the two codebases, we can more easily maintain multiple MarineMap projects while continuing to improve the underlying core functionality.
