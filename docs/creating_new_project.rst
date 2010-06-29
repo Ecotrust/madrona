@@ -190,7 +190,7 @@ Next, we'll use some custom lingcod management commands to load up our carefully
     python manage.py change_study_region 1
 
 Migrating our MLPA app
--------------------
+----------------------
 We need to put our mlpa app under migration which ensures that future changes to the MLPA models' schema get reflected in the database::
 
     python manage.py schemamigration --initial mlpa
@@ -237,7 +237,6 @@ needed:
    study_region
    layers
    managing_users
-   waves
    marine_protected_areas
    static_map_configuration
    sharing_configuration
