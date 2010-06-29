@@ -1,1 +1,0 @@
-gdal2tiles.py -p geodetic -k -v -z 2-8 map.png overlay
