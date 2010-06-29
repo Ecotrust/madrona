@@ -41,10 +41,24 @@ class Command(BaseCommand):
 
         # Default groups
         try:
-            to_public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
-            to_staff_groups = Group.objects.filter(name__in=settings.SHARING_TO_STAFF_GROUPS)
+            to_public_groups = []
+            to_staff_groups = []
+            for g in settings.SHARING_TO_PUBLIC_GROUPS:
+                grp, created = Group.objects.get_or_create(name=g)
+                if created:
+                    print "Created group '%s'" % grp.name
+                else:
+                    print "Groups '%s' already present" % grp.name
+                to_public_groups.append(grp)
+            for g in settings.SHARING_TO_STAFF_GROUPS:
+                grp, created = Group.objects.get_or_create(name=g)
+                if created:
+                    print "Created group '%s'" % grp.name
+                else:
+                    print "Groups '%s' already present" % grp.name
+                to_staff_groups.append(grp)
         except:
-            print "Sharing groups defined in settings don't exist"
+            print "Sharing groups defined in settings were not configured properly."
             return
         
         # Then set the permissions on the default groups
