@@ -50,6 +50,7 @@ networkx==1.1
 boto
 celery>=1.0.5
 ghettoq>=0.1.2
+django-unittest-depth>=0.6
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson>=1.0.5
