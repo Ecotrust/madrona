@@ -47,7 +47,7 @@ django-maintenancemode>=0.9.2
 elementtree
 xlwt>=0.7.2
 networkx==1.1
-boto>=1.8
+boto
 celery>=1.0.5
 ghettoq>=0.1.2
 
