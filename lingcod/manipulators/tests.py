@@ -21,6 +21,8 @@ urlpatterns = patterns('',
 
 
 class ManipulatorsTest(TestCase):
+    fixtures = ['manipulators_test_data']
+
     def setUp(self):
         '''
             Build geometries for the following test cases:
@@ -51,6 +53,11 @@ class ManipulatorsTest(TestCase):
    
         self.client = None
         
+    def test_studyregion(self):
+        studyregion = StudyRegion.objects.current()
+        studyregions = StudyRegion.objects.all()
+        self.assertEquals(len(studyregions),1)
+
     def testManipulators(self):
         #call individual test methods from here
         self.manipulatorViewTest()

@@ -47,9 +47,10 @@ django-maintenancemode>=0.9.2
 elementtree
 xlwt>=0.7.2
 networkx==1.1
-boto>=1.8
-celery>=1.0.5
+boto
+django-celery>=2.0
 ghettoq>=0.1.2
+django-unittest-depth>=0.6
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson>=1.0.5
