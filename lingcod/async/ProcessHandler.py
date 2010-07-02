@@ -1,5 +1,5 @@
 from models import URLtoTaskID
-from celery.models import TaskMeta
+from djcelery.models import TaskMeta
 
 '''
 NOTES:
@@ -13,6 +13,7 @@ NOTES:
     if the caller wants the process to be run ONLY IF it hasn't been run already,
         the caller should first check with process_exists_in_cache
 '''
+#should also add a task_kwargs parameter in case the task has keyword parameters
 def begin_process(polling_url, task_method, task_args, cache_results=False):
     #see if task exists already
     try:
@@ -22,8 +23,10 @@ def begin_process(polling_url, task_method, task_args, cache_results=False):
 
     #initialize task
     task = task_method.delay(*task_args)
-    if cache_results:
-        URLtoTaskID(url=polling_url, task_id=task.task_id).save()
+    #task_method(*task_args)
+    #return 
+    #if cache_results:
+    URLtoTaskID(url=polling_url, task_id=task.task_id).save()
     return task.task_id
   
 #returns boolean based on whether process is present (completed or not)
@@ -36,16 +39,29 @@ def begin_process(polling_url, task_method, task_args, cache_results=False):
 #   ignore the issue
 #   remove from ghettoq_message when process is requested a second time
 #   add third condition to if statement that checks for existence in ghettoq_message (process_is_queued_up)
+#Problem:  
+#   __get_task is returning None (for task) while process is running (should return the task with a pending/started status)
 def process_exists_in_cache(polling_url=None, task_id=None):
     if process_is_running(polling_url, task_id) or process_is_complete(polling_url, task_id):
         return True
     else:
         return False
   
+def process_has_begun(polling_url=None, task_id=None):
+    try:
+        URLtoTaskID.objects.get(url=polling_url)
+        return True
+    except:
+        task = __get_task(polling_url, task_id)
+        if task is not None:
+            return True
+        else:
+            return False
+  
 #returns boolean based on whether process is in cache but not yet complete
 def process_is_running(polling_url=None, task_id=None):
     task = __get_task(polling_url, task_id)
-    if task is not None and task.status == 'PENDING':
+    if task is not None and task.status == 'PENDING': #might check for 'STARTED' as well
         return True
     else:
         return False

@@ -93,7 +93,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'lingcod.async',
-    'celery', 
+    'djcelery', 
     'ghettoq', 
 )
 

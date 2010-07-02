@@ -48,7 +48,7 @@ elementtree
 xlwt>=0.7.2
 networkx==1.1
 boto
-celery>=1.0.5
+django-celery>=2.0
 ghettoq>=0.1.2
 django-unittest-depth>=0.6
 
