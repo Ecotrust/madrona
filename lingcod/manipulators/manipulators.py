@@ -20,9 +20,12 @@ def simplify(geom):
     query = "select simplify(st_geomfromewkt(\'%s\'), %s) as geometry" % (geom.ewkt,settings.KML_SIMPLIFY_TOLERANCE)
     cursor.execute(query)
     row = cursor.fetchone()
-    newgeom = fromstr(row[0])
-    newgeom.transform(settings.GEOMETRY_CLIENT_SRID)
-    return newgeom
+    try:
+        newgeom = fromstr(row[0])
+        newgeom.transform(settings.GEOMETRY_CLIENT_SRID)
+        return newgeom
+    except:
+        raise Exception("KML_SIMPLIFY_TOLERANCE might be too high; simplify failed. Try setting the srid on the input geometry")
 
 def display_kml(geom):
     geom = simplify(geom)
