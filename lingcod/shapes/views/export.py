@@ -174,25 +174,27 @@ class ShpResponder(object):
         ###ogr.OGR_DS_Destroy(ds)
         ###ogr.OGRCleanupAll()
         ds.Destroy()
-        
-        # Read resulting shapefile into a zipfile buffer
-        buffer = cStringIO.StringIO()
-        zip = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
-        files = ['shp','shx','prj','dbf']
-        for item in files:
-            filename= '%s.%s' % (tmp.name.replace('.shp',''), item)
-            zip.write(filename, arcname='%s.%s' % (self.file_name.replace('.shp',''), item))
-        if self.readme:
-            zip.writestr('README.txt',self.readme)
-        zip.close()
-        buffer.flush()
-        zip_stream = buffer.getvalue()
-        buffer.close()
-        
-        # Stick it all in a django HttpResponse
-        response = HttpResponse()
-        response['Content-Disposition'] = 'attachment; filename=%s.zip' % self.file_name.replace('.shp','')
-        response['Content-length'] = str(len(zip_stream))
-        response['Content-Type'] = self.mimetype
-        response.write(zip_stream)
-        return response
+    
+        if 'return_file_not_response' in args:
+            return tmp.name
+        else:
+            # Read resulting shapefile into a zipfile buffer
+            buffer = cStringIO.StringIO()
+            zip = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
+            files = ['shp','shx','prj','dbf']
+            for item in files:
+                filename= '%s.%s' % (tmp.name.replace('.shp',''), item)
+                zip.write(filename, arcname='%s.%s' % (self.file_name.replace('.shp',''), item))
+            if self.readme:
+                zip.writestr('README.txt',self.readme)
+            zip.close()
+            buffer.flush()
+            zip_stream = buffer.getvalue()
+            buffer.close()
+            # Stick it all in a django HttpResponse
+            response = HttpResponse()
+            response['Content-Disposition'] = 'attachment; filename=%s.zip' % self.file_name.replace('.shp','')
+            response['Content-length'] = str(len(zip_stream))
+            response['Content-Type'] = self.mimetype
+            response.write(zip_stream)
+            return response
