@@ -21,6 +21,11 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', )
 
+# For some reason, running the raster_stats tests causes
+# the xml test runner to fail to output the xml
+EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
+
+
 MPA_CLASS = 'mlpa.models.Mpa'
 ARRAY_CLASS = 'mlpa.models.MpaArray'
 MPA_FORM = 'mlpa.forms.MpaForm'
