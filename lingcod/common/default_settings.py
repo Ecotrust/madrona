@@ -78,7 +78,6 @@ INSTALLED_APPS = (
     'lingcod.array',
     'lingcod.mpa',
     'lingcod.sharing',
-    'lingcod.wave',
     'lingcod.kmlapp',
     'lingcod.rest',
     'lingcod.intersection',
@@ -96,6 +95,8 @@ INSTALLED_APPS = (
     'djcelery', 
     'ghettoq', 
 )
+
+EXCLUDE_FROM_TESTS = ['ghettoq', 'south']
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?

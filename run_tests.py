@@ -43,7 +43,25 @@ def use_exec(pdir):
 
     print "Executing from command line"
     #execute_from_command_line(['manage.py','test','array','--failfast','-v','2'])
-    execute_from_command_line(['manage.py','test','--noinput'])
+    cmd_dict = create_test_cmd()
+    print
+    print ' '.join(cmd_dict)
+    print
+    execute_from_command_line(cmd_dict)
+
+def create_test_cmd():
+    base = ['manage.py','test','--noinput']
+    cmd_dict = base
+    for app in settings.INSTALLED_APPS:
+        try:
+            if not app in settings.EXCLUDE_FROM_TESTS:
+                cmd_dict.append(app.split(".")[-1])
+        except:
+            cmd_dict = base
+            break
+    return cmd_dict
+
+
 
 hdir = os.path.dirname(os.path.abspath(__file__))
 pdir = os.path.join(hdir,'example_projects/test_project')
