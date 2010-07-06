@@ -181,8 +181,9 @@ shapes so we'll add this to our settings.py::
     GEOMETRY_DB_SRID = 32610
 
 First we have to create some necessary table in the database::
+
     python manage.py syncdb
-    jpython manage.py migrate
+    python manage.py migrate
 
 Next, we'll use some custom lingcod management commands to load up our carefully and meticulously created study region::
 
