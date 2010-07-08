@@ -8,6 +8,15 @@ from django.conf import settings
 #
 
 class SQLLogToConsoleMiddleware:
+    """
+    Add to settings_local like so to log sql commands:
+    
+    from lingcod.common.default_settings import MIDDLEWARE_CLASSES
+
+    MIDDLEWARE_CLASSES += (
+        'lingcod.common.middleware.SQLLogToConsoleMiddleware',
+    )
+    """
     def process_response(self, request, response): 
         if settings.DEBUG and connection.queries:
             time = sum([float(q['time']) for q in connection.queries])        
