@@ -47,6 +47,7 @@ def process_exists_in_cache(polling_url=None, task_id=None):
     else:
         return False
   
+#Probably should get rid of this method now...
 def process_has_begun(polling_url=None, task_id=None):
     try:
         URLtoTaskID.objects.get(url=polling_url)
@@ -60,8 +61,8 @@ def process_has_begun(polling_url=None, task_id=None):
   
 #returns boolean based on whether process is in cache but not yet complete
 def process_is_running(polling_url=None, task_id=None):
-    task = __get_task(polling_url, task_id)
-    if task is not None and task.status == 'PENDING': #might check for 'STARTED' as well
+    result = __get_result(polling_url, task_id)
+    if result is not None and result.status == 'PENDING': #might check for 'STARTED' as well
         return True
     else:
         return False
@@ -100,6 +101,7 @@ def get_url_from_taskid(task_id):
     return entry.url
     
 #get the task record from celery_taskmeta   
+#i wonder if we can get away with using __get_result instead...
 def __get_task(polling_url=None, task_id=None):
     if polling_url == task_id == None:
         raise ValueError("Either polling_url or task_id must be passed a value")
@@ -111,6 +113,19 @@ def __get_task(polling_url=None, task_id=None):
         #raise ValueError("Requested task does not exist")
         return None
     return task
+    
+#get the AsyncResult object associated with the given (directly or indirectly) task_id
+#(this object provides us access to the status field)
+def __get_result(polling_url=None, task_id=None):
+    if polling_url == task_id == None:
+        raise ValueError("Either polling_url or task_id must be passed a value")
+    if task_id is None:
+        task_id = get_taskid_from_url(polling_url)
+    from celery import result
+    result = result.AsyncResult(task_id)
+    if result.task_id == None:
+        return None
+    return result    
     
 
     
