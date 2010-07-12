@@ -5,6 +5,7 @@ from django.contrib.gis.measure import *
 from django.template.defaultfilters import slugify
 from django.db import transaction
 from lingcod.data_manager.models import DataLayer
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 from osgeo import ogr
 from django.conf import settings
 #from django.contrib.gis.utils import LayerMapping
@@ -645,9 +646,9 @@ class SingleFeatureShapefile(Shapefile):
         
         
         if out_units==AREAL_OUT_UNITS:
-            intersection_feature.study_region_total = A(sq_m=area).sq_mi
+            intersection_feature.study_region_total = area_in_display_units(area)
         elif out_units==LINEAR_OUT_UNITS:
-            intersection_feature.study_region_total = D(m=length).mi
+            intersection_feature.study_region_total = length_in_display_units(length)
         else:
             intersection_feature.study_region_total = count
         intersection_feature.output_units = out_units
@@ -740,9 +741,9 @@ class IntersectionFeature(models.Model):
         sr = StudyRegion.objects.current()
         result = self.geometry.intersection(sr.geometry)
         if self.feature_model == 'ArealFeature':
-            return A(sq_m=result.area).sq_mi
+            return area_in_display_units(result.area)
         elif self.feature_model == 'LinearFeature':
-            return D(m=result.length).mi
+            return length_in_display_units(result.length)
         else:
             return result.count
     
@@ -757,14 +758,14 @@ class IntersectionFeature(models.Model):
             [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__overlaps=sr.geometry) ]
             area_overlap = mgeom.intersection(sr.geometry).area
             area_total = area_overlap + area_within
-            return A(sq_m=area_total).sq_mi
+            return area_in_display_units(area_total)
         elif self.feature_model == 'LinearFeature':
             length_within = sum( [ a.geometry.length for a in features_within ] )
             mgeom = geos.fromstr('MULTILINESTRING EMPTY')
             [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__crosses=sr.geometry) ]
             length_overlap = mgeom.intersection(sr.geometry).length
             length_total = length_overlap + length_within
-            return D(m=length_total).mi
+            return length_in_display_units(length_total)
         else:
             return features_within.count
     def expire_cached_results(self):
@@ -909,9 +910,9 @@ class FeatureMapping(models.Model):
     
     def calculate_study_region_total(self,sr_geom):
         if self.type == 'linear':
-            return D(m=self.geometry_collection_within(sr_geom).length).mi
+            return length_in_display_units(self.geometry_collection_within(sr_geom).length)
         elif self.type == 'areal':
-            return A(sq_m=self.geometry_collection_within(sr_geom).area).sq_mi
+            return area_in_display_units(self.geometry_collection_within(sr_geom).area)
         else:
             return self.geometry_collection_within(sr_geom).num_points
         
@@ -1077,9 +1078,9 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                 result_dict[int_feature.name]['kml'] = f_gc.kml    
                 
             if int_feature.feature_model=='ArealFeature':
-                result_dict[int_feature.name]['result'] = A(sq_m=f_gc.area).sq_mi
+                result_dict[int_feature.name]['result'] = area_in_display_units(f_gc.area)
             elif int_feature.feature_model=='LinearFeature':
-                result_dict[int_feature.name]['result'] = D(m=f_gc.length).mi
+                result_dict[int_feature.name]['result'] = length_in_display_units(f_gc.length)
             elif int_feature.feature_model=='PointFeature':
                 result_dict[int_feature.name]['result'] = f_gc.num_geom
                 

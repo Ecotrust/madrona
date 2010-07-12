@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.measure import A, D
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 from lingcod.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
 
@@ -90,7 +91,7 @@ class StudyRegion(models.Model):
         WARNING:  This method assumes that the native units of the geometry are meters.  
         Returns the area of the study region in sq_mi
         """
-        return A(sq_m=self.geometry.area).sq_mi
+        return area_in_display_units(self.geometry.area)
             
     def kml(self, style_domain):
         """

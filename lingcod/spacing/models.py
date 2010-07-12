@@ -4,6 +4,7 @@ from django.contrib.gis.measure import *
 from django.core.files import File
 from django.db import connection
 from django.conf import settings
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 from exceptions import AttributeError
 import os
 import tempfile
@@ -179,7 +180,7 @@ def distance_row_dict(from_dict, to_dict):
     for point, pnt_label in to_dict.iteritems():
         result[point] = {
             'label': pnt_label,
-            'distance': D(m=point.distance(from_pnt)).mi,
+            'distance': length_in_display_units(point.distance(from_pnt)),
             'sort': point.y
         }
     return result
@@ -192,7 +193,7 @@ def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
     for point in to_list:
         point_pair_dict = {}
         if straight_line:
-            point_pair_dict.update( {'distance': D(m=point.distance(from_pnt)).mi } )
+            point_pair_dict.update( {'distance': length_in_display_units(point.distance(from_pnt)) } )
             if with_geom:
                 line = geos.LineString(point,from_pnt)
         else:
@@ -283,7 +284,7 @@ def fish_distance(point1,point2):
         line.srid = settings.GEOMETRY_DB_SRID
     
     # Figure out the distance of the line (straight or otherwise) in miles
-    distance = D(m=line.length).mi
+    distance = length_in_display_units(line)
     return distance, line
     
 def fish_distance_from_edges(geom1,geom2):
@@ -305,7 +306,7 @@ def fish_distance_from_edges(geom1,geom2):
         c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point( c_line.coords[c_line.num_points - 2] ) ).coords
         line = c_line
     # Adjust the distance
-    distance = D(m=line.length).mi
+    distance = length_in_display_units(line)
     return distance, line
 
 def get_node_from_point(graph, point):
@@ -369,7 +370,7 @@ def add_ocean_edges_for_node(graph, node):
     for n in graph:
         line = geos.LineString(node,n)
         if not line_crosses_land(line):
-            graph.add_edge(node,n,{'weight': D(m=node.distance(n)).mi})
+            graph.add_edge(node,n,{'weight': length_in_display_units(node.distance(n))})
     return graph
 
 def add_ocean_edges_complete(graph, verbose=False):
@@ -389,7 +390,7 @@ def add_ocean_edges_complete(graph, verbose=False):
             if node <> n:
                 line = geos.LineString(node,n)
                 if not line_crosses_land(line):
-                    graph.add_edge(node,n,{'weight': D(m=node.distance(n)).mi})
+                    graph.add_edge(node,n,{'weight': length_in_display_units(node.distance(n))})
     if verbose:
         print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges() )
     return graph

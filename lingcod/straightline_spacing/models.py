@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.measure import A, D
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 
 class SpacingPoint(models.Model):
     name = models.CharField(max_length=200)
@@ -37,7 +38,7 @@ def distance_row_dict(from_dict, to_dict):
     for point, pnt_label in to_dict.iteritems():
         result[point] = {
             'label': pnt_label,
-            'distance': D(m=point.distance(from_pnt)).mi,
+            'distance': length_in_display_units(point.distance(from_pnt)),
             'sort': point.y
         }
     return result
@@ -48,7 +49,7 @@ def distance_row_list(from_pnt, to_list):
     """
     result = []
     for point in to_list:
-        result.append(D(m=point.distance(from_pnt)).mi)
+        result.append(length_in_display_units(point.distance(from_pnt)))
     return result
     
 def distance_matrix(point_list):

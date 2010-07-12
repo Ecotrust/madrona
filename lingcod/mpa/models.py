@@ -4,6 +4,7 @@ from django.conf import settings
 from lingcod.common.utils import LookAtKml
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.manipulators.manipulators import *
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.gis.db.models.query import GeoQuerySet
@@ -111,7 +112,7 @@ class Mpa(models.Model):
             Return the summed area of the mpas in the query set in square miles.
             """
             raw_area = sum( [m.geometry_final.area for m in self.all() ] )
-            return A(sq_m=raw_area).sq_mi
+            return area_in_display_units(raw_area)
             
     class Meta:
         permissions = (("can_share_mpas", "Can share MPAs"),)
