@@ -1,5 +1,6 @@
 from models import URLtoTaskID
 from djcelery.models import TaskMeta
+from django.template.loader import render_to_string
 
 '''
 NOTES:
@@ -14,72 +15,54 @@ NOTES:
         the caller should first check with process_exists_in_cache
 '''
 #should also add a task_kwargs parameter in case the task has keyword parameters
-def begin_process(polling_url, task_method, task_args, cache_results=False):
+def begin_process(polling_url, task_method, task_args, cache_results=True):
     #see if task exists already
     try:
         URLtoTaskID.objects.get(url=polling_url).delete()
     except:
         pass
-
     #initialize task
     task = task_method.delay(*task_args)
-    #task_method(*task_args)
-    #return 
-    #if cache_results:
-    URLtoTaskID(url=polling_url, task_id=task.task_id).save()
+    if cache_results:
+        URLtoTaskID(url=polling_url, task_id=task.task_id).save()
     return task.task_id
+
+#should also add a task_kwargs parameter in case the task has keyword parameters
+def check_pending_or_begin(polling_url, task_method, task_args, cache_results=True):
+    if process_is_pending(polling_url):
+        return render_to_string('already_processing.html', {})
+    else:
+        begin_process(polling_url, task_method, task_args, cache_results)
+        return render_to_string('starting_process.html', {})
   
-#returns boolean based on whether process is present (completed or not)
-#Question:
-#   how to handle this when celeryd is not running (temporarily shutdown for whatever reason)?
-#   currently, it returns false 
-#   this has the potential problem of the client requesting multiple identical processes 
-#   which will all be executed once celerd is restarted (they will be queued up in ghettoq_message waiting for celeryd)
-#Possible Solutions:
-#   ignore the issue
-#   remove from ghettoq_message when process is requested a second time
-#   add third condition to if statement that checks for existence in ghettoq_message (process_is_queued_up)
-#Problem:  
-#   __get_task is returning None (for task) while process is running (should return the task with a pending/started status)
-def process_exists_in_cache(polling_url=None, task_id=None):
-    if process_is_running(polling_url, task_id) or process_is_complete(polling_url, task_id):
+#returns boolean based on process.status == 'PENDING' or 'SUCCESS' (pending or complete)
+def process_is_pending_or_complete(polling_url=None, task_id=None):
+    if process_is_pending(polling_url, task_id) or process_is_complete(polling_url, task_id):
         return True
     else:
         return False
   
-#Probably should get rid of this method now...
-def process_has_begun(polling_url=None, task_id=None):
-    try:
-        URLtoTaskID.objects.get(url=polling_url)
-        return True
-    except:
-        task = __get_task(polling_url, task_id)
-        if task is not None:
-            return True
-        else:
-            return False
-  
 #returns boolean based on whether process is in cache but not yet complete
-def process_is_running(polling_url=None, task_id=None):
-    result = __get_result(polling_url, task_id)
-    if result is not None and result.status == 'PENDING': #might check for 'STARTED' as well
+def process_is_pending(polling_url=None, task_id=None):
+    result = __get_asyncresult(polling_url, task_id)
+    if result is not None and result.status == 'PENDING': 
         return True
     else:
         return False
         
 #returns boolean value based on result=='SUCCESS' from celery table
 def process_is_complete(polling_url=None, task_id=None):
-    task = __get_task(polling_url, task_id)
-    if task is not None and task.status == 'SUCCESS':
+    result = __get_asyncresult(polling_url, task_id)
+    if result is not None and result.status == 'SUCCESS':
         return True
     else:
         return False
     
 #returns result.result from celery table
 def get_process_result(polling_url=None, task_id=None):
-    task = __get_task(polling_url, task_id)
-    if task is not None:
-        return task.result
+    result = __get_asyncresult(polling_url, task_id)
+    if result is not None:
+        return result.result
     else:
         return None
     
@@ -99,24 +82,10 @@ def get_url_from_taskid(task_id):
     except:
         raise ValueError("Given task_id does not map to any known URL")
     return entry.url
-    
-#get the task record from celery_taskmeta   
-#i wonder if we can get away with using __get_result instead...
-def __get_task(polling_url=None, task_id=None):
-    if polling_url == task_id == None:
-        raise ValueError("Either polling_url or task_id must be passed a value")
-    if task_id is None:
-        task_id = get_taskid_from_url(polling_url)
-    try:
-        task = TaskMeta.objects.get(task_id=task_id)
-    except:
-        #raise ValueError("Requested task does not exist")
-        return None
-    return task
-    
+
 #get the AsyncResult object associated with the given (directly or indirectly) task_id
 #(this object provides us access to the status field)
-def __get_result(polling_url=None, task_id=None):
+def __get_asyncresult(polling_url=None, task_id=None):
     if polling_url == task_id == None:
         raise ValueError("Either polling_url or task_id must be passed a value")
     if task_id is None:
