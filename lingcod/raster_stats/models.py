@@ -24,6 +24,7 @@ except:
 
 class RasterDataset(models.Model):
     name = models.CharField(max_length=30, unique=True)
+    full_name = models.CharField(max_length=255, default="")
     filepath = models.FilePathField(path=RASTDIR, recursive=True)
     type = models.CharField(max_length=30, choices=RASTER_TYPES)
     
