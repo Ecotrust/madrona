@@ -90,6 +90,9 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
     starspan_out = os.popen(cmd).read()
     if verbose: print starspan_out
 
+    if not os.path.exists(out_csv):
+        raise Exception("Starspan failed to produce output file: %s" % starspan_out)
+
     res = open(out_csv,'r').readlines()
     if verbose: print res
 
