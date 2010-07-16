@@ -187,8 +187,11 @@ class Mpa(models.Model):
         
     def remove_from_array(self):
         """Sets the MPA's `array` property to None."""
+        array = self.array
         self.array = None
         self.save()
+        if array:
+            array.save()
 
     def save(self, *args, **kwargs):
         from lingcod.common.utils import clean_geometry
