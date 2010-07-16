@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'lingcod.geographic_report',
     'lingcod.spacing',
     'lingcod.user_profile',
+    'lingcod.unit_converter',
     'registration',
     'south',
     'lingcod.async',
