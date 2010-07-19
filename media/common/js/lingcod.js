@@ -4,9 +4,13 @@ var lingcod = (function(){
     var that = {};    
     var layers = [];
     
+    var localAuthority = new URI(window.location.href).getAuthority();
+    
     var constructor_defaults = {
         hideGoogleLayers: false,
-        rememberMapExtent: true
+        rememberMapExtent: true,
+        srcWhitelist: [new RegExp('^http://' + localAuthority)],
+        targetWhitelist: [new RegExp('^http://' + localAuthority)]
     };
     
     
@@ -214,6 +218,8 @@ var lingcod = (function(){
         var panel = lingcod.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
             
+        setupSidebarLinkHandler(panel);
+        
         that.client = lingcod.rest.client(gex, panel);
                 
         // Allows projects to add a callback to run after any form is shown
@@ -543,6 +549,54 @@ var lingcod = (function(){
     };
         
     that.persistentReports = {};
+
+    var setupSidebarLinkHandler = function(panel){
+        $('#map a[rel=sidebar]').live('click', function(e){
+            var balloon = ge.getBalloon();
+            if(balloon){
+                var feature = balloon.getFeature();
+                if(feature && feature.getUrl){
+                    var src = feature.getUrl();
+                    if(src){
+                        var target = $(this).attr('href');
+                        if(safeURI(src, target)){
+                            panel.showUrl(target, {
+                                load_msg: $(this).attr('title')
+                            });
+                            e.preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+    };
+    
+    var safeURI = function(src, target){
+        var src = new URI(src);
+        var target = new URI(target);
+        var wuri = new URI(window.location.href);
+        if(target.getAuthority() === null){
+            target = target.resolve(wuri);
+        }
+        if(src.getAuthority() === null){
+            src = src.resolve(wuri);
+        }
+        src = src.toString();
+        target = target.toString();
+        var safeSrc = false;
+        for(var i = 0; i<options.srcWhitelist.length; i++){
+            if(safeSrc === false){
+                safeSrc = options.srcWhitelist[i].test(src);
+            }
+        }
+        var safeTarget = false;
+        for(var i = 0; i<options.targetWhitelist.length; i++){
+            if(safeTarget === false){
+                safeTarget = options.targetWhitelist[i].test(target);
+            }
+        }
+        return (safeTarget && safeSrc);
+    };
 
     return that;
 })();
