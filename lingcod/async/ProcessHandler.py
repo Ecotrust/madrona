@@ -2,7 +2,7 @@ from models import URLtoTaskID
 from djcelery.models import TaskMeta
 from django.template.loader import render_to_string
 
-'''
+"""
 NOTES:
     url entries should be unique -- a single url maps to a single task_id in a one-to-one fashion
     this strategy allows the asynchronous models to serve as a cache for those apps that wish to use it as such
@@ -12,27 +12,36 @@ NOTES:
         even if the process has started, but not finished
     this way polling urls can remain unique
     if the caller wants the process to be run ONLY IF it hasn't been run already,
-        the caller should first check with process_exists_in_cache
+        the caller should check process_is_pending_or_complete or use check_pending_or_begin instead
+"""
+
 '''
-#should also add a task_kwargs parameter in case the task has keyword parameters
-def begin_process(polling_url, task_method, task_args, cache_results=True):
+begin_process starts the background process
+if the process has already been run, the related URLtoTaskID entry is cleared and re-calculated
+if the process is currently running, the related URLtoTaskID entry is cleared, and the process is started again
+(in this case more than one identical process may be running at the same time -- to prevent this see NOTES above)
+'''
+def begin_process(task_method, task_args=(), task_kwargs={}, polling_url=None, cache_results=True):
     #see if task exists already
     try:
         URLtoTaskID.objects.get(url=polling_url).delete()
     except:
         pass
     #initialize task
-    task = task_method.delay(*task_args)
-    if cache_results:
+    task = task_method.delay(*task_args, **task_kwargs)
+    if polling_url and cache_results:
         URLtoTaskID(url=polling_url, task_id=task.task_id).save()
     return task.task_id
 
-#should also add a task_kwargs parameter in case the task has keyword parameters
-def check_pending_or_begin(polling_url, task_method, task_args, cache_results=True):
-    if process_is_pending(polling_url):
+'''
+check_pending_or_begin, starts the background process ONLY IF the process is not currently running 
+if the process had already completed, it will be run again
+'''
+def check_pending_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, cache_results=True):
+    if process_is_pending(polling_url, task_id):
         return render_to_string('already_processing.html', {})
     else:
-        begin_process(polling_url, task_method, task_args, cache_results)
+        begin_process(task_method, task_args, task_kwargs, polling_url, cache_results)
         return render_to_string('starting_process.html', {})
   
 #returns boolean based on process.status == 'PENDING' or 'SUCCESS' (pending or complete)
