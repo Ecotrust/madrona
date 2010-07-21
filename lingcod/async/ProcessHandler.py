@@ -37,24 +37,24 @@ def begin_process(task_method, task_args=(), task_kwargs={}, polling_url=None, c
 check_pending_or_begin, starts the background process ONLY IF the process is not currently running 
 if the process had already completed, it will be run again
 '''
-def check_pending_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, cache_results=True):
-    if process_is_pending(polling_url, task_id):
+def check_status_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, cache_results=True):
+    if process_is_running(polling_url, task_id):
         return render_to_string('already_processing.html', {})
     else:
         begin_process(task_method, task_args, task_kwargs, polling_url, cache_results)
         return render_to_string('starting_process.html', {})
   
-#returns boolean based on process.status == 'PENDING' or 'SUCCESS' (pending or complete)
-def process_is_pending_or_complete(polling_url=None, task_id=None):
-    if process_is_pending(polling_url, task_id) or process_is_complete(polling_url, task_id):
+#returns boolean based on process.status == 'STARTED' or 'SUCCESS' (currently running or complete)
+def process_is_running_or_complete(polling_url=None, task_id=None):
+    if process_is_running(polling_url, task_id) or process_is_complete(polling_url, task_id):
         return True
     else:
         return False
   
-#returns boolean based on whether process is in cache but not yet complete
-def process_is_pending(polling_url=None, task_id=None):
+#returns boolean based on whether process is in cache and marked as STARTED
+def process_is_running(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
-    if result is not None and result.status == 'PENDING': 
+    if result is not None and result.status == 'STARTED': 
         return True
     else:
         return False

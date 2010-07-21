@@ -51,8 +51,8 @@ to ``async.begin_process`` with the task method and the task method arguments wi
 
 .. code-block:: python
 
-    from tasks import add
-    task_id = begin_process(add, task_args=(3,5))
+    from my_app import tasks
+    task_id = begin_process(tasks.add, task_args=(3,5))
     
 The above call returns an id that helps to identify the process for later retrieval.  Rather than force
 you to store this ``task_id`` somewhere for later use, it may be more useful to utilize the url that 
@@ -60,11 +60,11 @@ triggered this process in the first place.
 
 .. code-block:: python
 
-    from tasks import add
+    from my_app import tasks
     url = request.META['PATH_INFO']
-    begin_process(add, task_args=(3,5), polling_url=url)
+    begin_process(tasks.add, task_args=(3,5), polling_url=url)
     
-The advantage to this url strategy is that in django there is often a one-to-one correlation between 
+The advantage to this url strategy is that there is often a one-to-one correlation between 
 a url and an expected result.  When the same url is accessed, such as ``<your-domain>/add/3/5/``,
 ``async`` methods can be used to help determine whether the process associated with that url has completed 
 and can be retrieved for the user, or whether the process is still running and the user should receive some 
@@ -77,12 +77,13 @@ A common flow of control may be as follows:
 
     #get the url that caused this view to execute
     url = request.META['PATH_INFO']
-    #check to see if the background process has been run already
+    #check to see if the requested process has been run already
     if process_is_complete(url):
         return HttpResponse(str(get_process_result(url)))
     else: 
         #start the process or continue to wait for the process to complete
-        status_text = check_pending_or_begin(add, task_args=(3,5), polling_url=url)
+        from my_app import tasks
+        status_text = check_status_or_begin(tasks.add, task_args=(3,5), polling_url=url)
         return render_to_response(my_template, RequestContext( request, {'status': status_text} )) 
         
 The above strategy allows the code to deal with the possibility that the process has already completed and cached 
@@ -92,8 +93,26 @@ the user with an explanation relating to whether the process is still running or
 
 .. note::
 
-  It may also be useful, if possible, to provide the user with some sort of time estimate for process completion.  
-        
+  The manner in which the import tasks statement is structured is very important to Celery.
+  Where one of the following strategies may work on one machine or platform, the other strategy might be 
+  necessary on another machine or platform.  
+    
+  .. code-block:: python
+    
+    >>>from my_proj.my_app.tasks import add 
+    >>>result = add.delay(2,2)
+    >>>result.status
+    PENDING
+    
+    >>>from my_proj.my_app import tasks
+    >>>result = tasks.add.delay(2,2)
+    >>>result.status
+    SUCCESS
+    
+  If the process seems to register with Celery but never completes (status equals ``PENDING`` and never changes), 
+  then your import command is not structured correctly for your platform.  If ``result.status`` eventually
+  returns ``STARTED`` or ``SUCCESS``, then your import command is structured correctly and should be written 
+  as such in your code.      
 
 lingcod.async API
 -----------------
@@ -110,27 +129,27 @@ The following is a list of all the functions included with the ``async`` app.
     A unique task id is returned.  This task id and the polling url can both be used to retrieve the status
     and results via the methods below.  
        
-  **check_pending_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, cache_results=True)**
+  **check_status_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, cache_results=True)**
     This method begins the process if the process is not marked as ``PENDING`` in the task queue.  
     
     Either the polling url or the task id is necessary to identify the process.  If the process is not
-    marked as ``PENDING``, then the function referred to by ``task_method`` will be called with the arguments 
+    marked as ``STARTED``, then the function referred to by ``task_method`` will be called with the arguments 
     included in the ``task_args`` parameter.  
     
-  **process_is_pending_or_complete(polling_url=None, task_id=None)**
+  **process_is_running_or_complete(polling_url=None, task_id=None)**
     This method takes either the polling url or the task id as a unique identifier.  
     
-    Returns ``True`` if the process is pending, or if the process is complete.
+    Returns ``True`` if the process is currently running, or if the process is complete.
 
-  **process_is_pending(polling_url=None, task_id=None)**
+  **process_is_running(polling_url=None, task_id=None)**
     This method takes either the polling url or the task id as a unique identifier.  
     
-    Returns ``True`` if the process is pending (in the queue, but not yet complete).
+    Returns ``True`` if the process is running (``status=='STARTED'``).
   
   **process_is_complete(polling_url=None, task_id=None)**
     This method takes either the polling url or the task id as a unique identifier.  
     
-    Returns ``True`` if the process is complete.
+    Returns ``True`` if the process is complete (``status=='SUCCESS'``).
   
   **get_process_result(polling_url=None, task_id=None)**
     This method takes either the polling url or the task id as a unique identifier.  
