@@ -46,7 +46,7 @@ MarineMap.
     * `networkx <http://networkx.lanl.gov/>`_ for graph networks in the spacing app
     * `pip <http://pip.openplans.org/>`_ for package management (optional)
     * `celery <http://celeryproject.org/>`_ for asynchronous task management (optional)
-    * `ghettoq <http://pypi.python.org/pypi/ghettoq/0.1.2>`_ as a task queue for celery (optional)
+    * `ghettoq <http://pypi.python.org/pypi/ghettoq/>`_ as a task queue for celery (optional)
 
 Most of the dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
 We have created a `pip requirements file <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_ which can be used to install most of the dependencies::
