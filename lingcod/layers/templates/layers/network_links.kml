@@ -1,0 +1,15 @@
+{% load absurl %}<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+    <name>Private Layers for {{username}}</name>
+    <visibility>1</visibility>
+    {% for layer in layers %}
+    <NetworkLink>
+        <name>{{layer.name}}</name>
+        <open>0</open>
+        <visibility>1</visibility>
+        <Link> <href>{% absurl layers-private pk=layer.pk session_key=session_key %}</href> </Link>
+    </NetworkLink>
+    {% endfor %}
+</Document>
+</kml>

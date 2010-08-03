@@ -1,12 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from models import *
 import os
+import itertools
 from django.conf import settings
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 from lingcod.sharing.utils import can_user_view
-
+from django.core.urlresolvers import reverse
 
 def get_user_layers(request, session_key='0', input_username=None):
     """Returns uploaded kml from the :class:`UserLayerList <lingcod.layers.models.UserLayerList>`.
@@ -22,25 +23,40 @@ def get_user_layers(request, session_key='0', input_username=None):
     layer = get_object_or_404(UserLayerList, user=user.id, active=True)
     return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
 
-def get_layers_for_user(request,session_key):
+def get_networklink_private_layers(request, session_key):
     load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    shared_layers = PrivateLayerList.objects.shared_with_user(user)
-    owned_layers = PrivateLayerList.objects.filter(user=user)
+    layers = get_layers_for_user(user)
+    response = render_to_response('layers/network_links.kml', 
+            {'username': user.username, 'session_key': session_key, 'layers': layers}, mimetype=mimetypes.KML)
+    response['Content-Disposition'] = 'attachment; filename=private_links.kml'
+    print response.content
+    return response
+
+def get_layerlist(request,session_key):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    layers = get_layers_for_user(user)
     urls = []
-    from django.core.urlresolvers import reverse
-    for layer in shared_layers:
+    for layer in layers:
         url = reverse('layers-private', kwargs={'pk': layer.pk, 'session_key': session_key})
         urls.append(url)
-    for layer in owned_layers:
-        url = reverse('layers-private', kwargs={'pk': layer.pk, 'session_key': session_key})
-        if url not in urls:
-            urls.append(url)
     # TODO how should these be returned? certainly not a comma-seperated list
     lstr = ','.join(urls)
     return HttpResponse(lstr, status=200)
+
+def get_layers_for_user(user):
+    shared_layers = PrivateLayerList.objects.shared_with_user(user).order_by('-priority')
+    owned_layers = PrivateLayerList.objects.filter(user=user).order_by('-priority')
+    layers = []
+    for lyr in itertools.chain(owned_layers, shared_layers):
+        if lyr not in layers:
+            layers.append(lyr)
+    return layers
 
 def get_private_layer(request, pk, session_key='0'):
     load_session(request, session_key)
