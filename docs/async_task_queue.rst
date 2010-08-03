@@ -19,6 +19,7 @@ In the simplest case, we can just add the apps and point them to use the current
 
     CARROT_BACKEND = "ghettoq.taproot.Database" 
     CELERY_RESULT_BACKEND = 'database'
+    CELERY_TRACK_STARTED = True
     INSTALLED_APPS += ( 'celery', 'ghettoq' )
 
 After that, make sure to run `python manage.py syncdb`
@@ -28,6 +29,7 @@ Writing your tasks
 Just a normal python function with a decorator::
 
 	from celery.decorators import task
+    
 	@task(rate_limit='4/m')
 	def get_shps(name, **kwargs):
 	   logger = get_shps.get_logger(**kwargs)
@@ -45,6 +47,7 @@ Like a cron job. Requires that you start the celeryd service with a 'heartbeat':
 
     from celery.decorators import periodic_task
     from datetime import timedelta
+    
     @periodic_task(run_every=timedelta(seconds=30))
     def do_stuff(**kwargs):
         clean_up_temp_files()
@@ -63,10 +66,43 @@ Or you can do it async via the task queue::
 The result of the async call can be monitored and the result retrieved when ready::
 
     ax.status # u'PENDING'
+    ax.status # u'STARTED'
     ax.status # u'SUCCESS'
     ax.ready() # True or False
     ax.result # The polygon objects returned by the task
 
+.. note::
+
+  The manner in which the import tasks statement is structured is very important to Celery.
+  Where one of the following strategies may work on one machine or platform, the other strategy might be 
+  necessary on another machine or platform.  
+    
+  .. code-block:: python
+    
+    >>>from my_proj.my_app.tasks import add 
+    >>>result = add.delay(2,2)
+    >>>result.status
+    PENDING
+    
+    >>>from my_proj.my_app import tasks
+    >>>result = tasks.add.delay(2,2)
+    >>>result.status
+    SUCCESS
+    
+  You can test your import strategy in the shell with a simple process such as ``add``.  
+  
+  .. code-block:: python
+
+      from celery.decorators import task
+        
+      @task
+      def add(x, y):
+          return x + y  
+  
+  If the process seems to register with Celery but never completes (status equals ``PENDING`` and never changes), 
+  then your import command is not structured correctly for your platform.  If ``result.status`` eventually
+  returns ``STARTED`` or ``SUCCESS``, then your import command is structured correctly and should be written 
+  as such in your code.      
     
 Running the celeryd service
 ---------------------------

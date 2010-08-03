@@ -117,7 +117,8 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
     # return zonal object (caching it if needed)
     if write_cache:
         try:
-            zonal.save()
+            if zonal.pixels:
+                zonal.save()
         except:
             # Most likely another zonal stats cache for this geom/raster
             # was saved to the cache before this one completed.

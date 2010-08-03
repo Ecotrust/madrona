@@ -14,3 +14,4 @@ Apps
    rest
    raster_stats
    news
+   async_app

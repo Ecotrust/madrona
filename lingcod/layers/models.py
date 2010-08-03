@@ -1,6 +1,30 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from lingcod.sharing.managers import ShareableGeoManager
 
+class PrivateLayerList(models.Model):
+    """Model for storing uploaded restricted-access kml files"""
+    creation_date = models.DateTimeField(auto_now=True) 
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=50,help_text="Layer name as it will appear in the KML tree.",default='')
+    priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
+    kml = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
+        KML file (not publically available). This file can use
+        NetworkLinks pointing to remote kml datasets or WMS servers.
+    """, blank=False, max_length=510)
+
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share layer with the following groups")
+    objects = ShareableGeoManager()
+
+    def __unicode__(self):
+        return "PrivateLayerList %s " % (self.name)
+
+    class Meta:
+        permissions = (
+            ("can_share_privatelayerlist", "Can share private layer list"),
+        )
+    
+            
 class UserLayerList(models.Model):
     """Model used for storing uploaded kml files that list all public layers.
 

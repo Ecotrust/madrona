@@ -49,7 +49,7 @@ xlwt>=0.7.2
 networkx==1.1
 boto
 django-celery>=2.0
-ghettoq>=0.1.2
+ghettoq>=0.4.1
 django-unittest-depth>=0.6
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
