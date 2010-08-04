@@ -6,7 +6,6 @@ import tempfile
 import time
 import os
 
-verbose = False
 try:
     RASTDIR = settings.RASTER_DIR
 except:
@@ -86,15 +85,12 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
     if os.path.exists(out_csv):
         os.remove(out_csv)
     cmd = '%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls ' % (STARSPAN_BIN,out_json,tmpdir, timestamp, rasterds.filepath)
-    if verbose: print cmd
     starspan_out = os.popen(cmd).read()
-    if verbose: print starspan_out
 
     if not os.path.exists(out_csv):
         raise Exception("Starspan failed to produce output file: %s" % starspan_out)
 
     res = open(out_csv,'r').readlines()
-    if verbose: print res
 
     # Create zonal model
     hash = geom.wkt.__hash__()
@@ -127,7 +123,6 @@ def run_starspan_zonal(geom, rasterds, write_cache=False):
 
 def clear_cache():
     objs = ZonalStatsCache.objects.all()
-    if verbose: print "Clearing %s objects from cache" % len(objs)
     objs.delete()
 
 def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=False):
