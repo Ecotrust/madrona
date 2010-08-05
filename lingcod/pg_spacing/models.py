@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis import geos
 from django.contrib.gis.measure import *
 from django.db import connection
+from django.conf import settings
 
 def kml_doc_from_queryset(qs):
     dict = {}
@@ -30,7 +31,7 @@ def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
 
 class Land(models.Model): #may want to simplify geometry before storing in this table
     name = models.TextField(null=True, blank=True)
-    geometry = models.PolygonField(srid=3310,null=True, blank=True)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True)
     objects = models.GeoManager()
     
 def add_geometry_to_network(qs):
@@ -82,10 +83,10 @@ def fish_distance(source,target):
     query = """
         DROP TABLE IF EXISTS dijsktra_result;
         CREATE TABLE dijsktra_result(gid int4) with oids;
-        SELECT AddGeometryColumn('dijsktra_result', 'the_geom', '3310', 'MULTILINESTRING', 2);
+        SELECT AddGeometryColumn('dijsktra_result', 'the_geom', '%s', 'MULTILINESTRING', 2);
         INSERT INTO dijsktra_result(the_geom)
             SELECT the_geom FROM dijkstra_sp('pg_routing_network', %i, %i);
-        """ % (source_id,target_id)
+        """ % (settings.GEOMETRY_DB_SRID, source_id,target_id)
     cursor = connection.cursor()
     cursor.execute(query)
     cursor.db._commit()
@@ -101,7 +102,7 @@ class Network(models.Model):
     source = models.IntegerField(null=True,blank=True,db_index=True)
     target = models.IntegerField(null=True,blank=True,db_index=True)
     length = models.FloatField()
-    geometry = models.MultiLineStringField(srid=3310)
+    geometry = models.MultiLineStringField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
     
     def save(self):
@@ -109,7 +110,7 @@ class Network(models.Model):
         super(Network,self).save()
 
 class Vertices(models.Model):
-    the_geom = models.PointField(srid=3310)
+    the_geom = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
     
     class Meta:

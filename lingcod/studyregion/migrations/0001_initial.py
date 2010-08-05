@@ -39,7 +39,7 @@ class Migration(SchemaMigration):
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'geometry': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': '3310', 'null': 'True', 'blank': 'True'}),
+            'geometry': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'srid': str(settings.GEOMETRY_DB_SRID), 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lookAt_Heading': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'lookAt_Lat': ('django.db.models.fields.FloatField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),

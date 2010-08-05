@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.gis import geos
+from django.conf import settings
 import numpy as np
 
 # Create your models here.
@@ -39,7 +40,7 @@ class Habitat(models.Model):
 class Extent(models.Model):
     name = models.CharField(max_length=255, help_text="Very brief description of the area.")
     description = models.TextField(help_text="A full description of the area.")
-    geometry = models.PolygonField(srid=3310, null=True, blank=True)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)
     objects = models.GeoManager()
     
     def __unicode__(self):
@@ -137,7 +138,7 @@ class StudyRegionManager(models.GeoManager):
  
 class StudyRegion(models.Model):
     name = models.CharField(max_length=255,null=True,blank=True)
-    geometry = models.PolygonField(srid=3310, null=True, blank=True)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)
     objects = StudyRegionManager()
     
     def __unicode__(self):
@@ -153,7 +154,7 @@ class PolygonGridManager(models.GeoManager):
         
 
 class PolygonGrid(models.Model):
-    geometry = models.PolygonField(srid=3310)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID)
     objects = PolygonGridManager()
     
     def load_attributes(self, habitat_list):
@@ -201,7 +202,7 @@ def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_s
                 points.append(corner_pnt)
     return points
 
-def create_grid_cell(corner_pnt, cell_size, mgeom = StudyRegion.objects.multigeometry(), test_intersection=True, srid=3310):
+def create_grid_cell(corner_pnt, cell_size, mgeom = StudyRegion.objects.multigeometry(), test_intersection=True, srid=settings.GEOMETRY_DB_SRID):
     bbox = (corner_pnt.x,corner_pnt.y,cell_size + corner_pnt.x,cell_size + corner_pnt.y)
     poly = geos.Polygon.from_bbox(bbox)
     if not test_intersection:
@@ -273,9 +274,9 @@ def convert_to_color_ramp(the_list,base_color='green',alpha=0.5):
     return dict(zip(the_list,color_hex_list))
 
 class PointScrap(models.Model):
-    geometry = models.PointField(srid=3310)
+    geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
 
 class Scrap(models.Model):
-    geometry = models.PolygonField(srid=3310)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
