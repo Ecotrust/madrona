@@ -77,6 +77,17 @@ class MpaArray(models.Model):
             content_type=ContentType.objects.get_for_model(self),
             object_id=self.pk)
     
+    @property
+    def mpa_overlap(self):
+        """Boolean: true if any mpas in the array have topological overlap"""
+        mpas = self.mpa_set
+        geoms = [mpa.geometry_final for mpa in mpas]
+        for geom in geoms:
+            overlap = mpas.filter(geometry_final__bboverlaps=geom).filter(geometry_final__overlaps=geom).exclude(geometry_final=geom)
+            if len(overlap) > 0:
+                return True
+        return False
+        
     @models.permalink
     def get_absolute_url(self):
         return ('array_resource', (), {
