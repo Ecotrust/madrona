@@ -94,7 +94,7 @@ class Land(models.Model):
     so don't get too fancy.  Land can be made up of multiple polygons but each polygon gets it's own single polygon record.
     """ 
     name = models.CharField(max_length=200, null=True, blank=True)
-    geometry = models.PolygonField(srid=3310,null=True, blank=True)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True)
     objects = models.GeoManager()
     
     def add_hull_nodes_to_graph(self, graph):

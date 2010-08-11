@@ -23,7 +23,7 @@ If you get errors similar to::
 
     src/csv/Csv.h:52: error: ‘stdout’ was not declared in this scope
 
-it means that you are probably compiling with a newer version of GCC (eg GCC 4.4 which ships with Ubuntu 10.4) and does not include some standard libraries by default. This means that you need to explicitly include them (eg add `#include <cstdio>` to the affected files). We also have a patched version available at http://maps11.msi.ucsb.edu/downloads/starspan-1.2.04.tar.gz
+it means that you are probably compiling with a newer version of GCC (eg GCC 4.4 which ships with Ubuntu 10.4) and does not include some standard libraries by default. This means that you need to explicitly include them (eg add `#include <cstdio>` to the affected files). We also have a patched version available at http://marinemap.org/downloads/starspan-1.2.04.tar.gz
 
 Settings
 --------

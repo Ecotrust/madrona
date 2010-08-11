@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
+from django.conf import settings
 from lingcod.intersection.models import *
 from lingcod.intersection.forms import *
 from lingcod.shapes.views import ShpResponder
@@ -35,7 +36,7 @@ def test_drawing_intersect(request):
             geom = geos.fromstr(form.cleaned_data['geometry'])
             org_scheme = form.cleaned_data['org_scheme']
             format = form.cleaned_data['format']
-            geom.transform(3310)
+            geom.transform(settings.GEOMETRY_DB_SRID)
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
                 if format=='html':
@@ -144,7 +145,7 @@ def test_poly_intersect(request):
             geom = geos.fromstr(form.cleaned_data['geometry'])
             org_scheme = form.cleaned_data['org_scheme']
             format = form.cleaned_data['format']
-            geom.transform(3310)
+            geom.transform(settings.GEOMETRY_DB_SRID)
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
                 if format=='html':
@@ -168,7 +169,7 @@ def test_poly_intersect(request):
 
 def default_intersection(request, format, geom_wkt):
     geom = geos.fromstr(geom_wkt)
-    geom.transform(3310)
+    geom.transform(settings.GEOMETRY_DB_SRID)
     result = intersect_the_features(geom)
     if format=='html':
         return render_to_response('generic_results.html', {'result': result})
@@ -177,7 +178,7 @@ def default_intersection(request, format, geom_wkt):
         
 def organized_intersection(request, org_scheme, format, geom_wkt):
     geom = geos.fromstr(geom_wkt)
-    geom.transform(3310)
+    geom.transform(settings.GEOMETRY_DB_SRID)
     osc = OrganizationScheme.objects.get(pk=int(org_scheme) )
     result = osc.transformed_results(geom)
     if format=='html':
@@ -215,7 +216,7 @@ def all_org_scheme_info(request):
 #        if form.is_valid():
 #            geom = geos.fromstr(form.cleaned_data['geometry'])
 #            org_scheme = form.cleaned_data['org_scheme']
-#            geom.transform(3310)
+#            geom.transform(settings.GEOMETRY_DB_SRID)
 #            if org_scheme == 'None':
 #                result = intersect_the_features(geom)
 #                if type=='html':

@@ -178,7 +178,7 @@ verify and run the dev server
 
 Confirm that everything is working as expected by running the tests::
     
-    python manage.py test
+    python /usr/local/src/marinemap/run_tests.py
     
 .. note::
 

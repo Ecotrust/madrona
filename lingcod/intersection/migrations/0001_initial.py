@@ -3,6 +3,7 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from django.conf import settings
 
 class Migration(SchemaMigration):
     
@@ -46,7 +47,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'TestPolygon'
         db.create_table('intersection_testpolygon', (
-            ('geometry', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=3310)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=settings.GEOMETRY_DB_SRID)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
         ))
         db.send_create_signal('intersection', ['TestPolygon'])
@@ -98,7 +99,7 @@ class Migration(SchemaMigration):
         db.create_table('intersection_arealfeature', (
             ('feature_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.IntersectionFeature'])),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('geometry', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=3310)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=settings.GEOMETRY_DB_SRID)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -109,7 +110,7 @@ class Migration(SchemaMigration):
         db.create_table('intersection_linearfeature', (
             ('feature_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.IntersectionFeature'])),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('geometry', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=3310)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=settings.GEOMETRY_DB_SRID)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -120,7 +121,7 @@ class Migration(SchemaMigration):
         db.create_table('intersection_pointfeature', (
             ('feature_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.IntersectionFeature'])),
             ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('geometry', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=3310)),
+            ('geometry', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=settings.GEOMETRY_DB_SRID)),
             ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -192,7 +193,7 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'feature_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['intersection.IntersectionFeature']"}),
-            'geometry': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '3310'}),
+            'geometry': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': str(settings.GEOMETRY_DB_SRID)}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -225,7 +226,7 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'feature_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['intersection.IntersectionFeature']"}),
-            'geometry': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': '3310'}),
+            'geometry': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': str(settings.GEOMETRY_DB_SRID)}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -250,7 +251,7 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'feature_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['intersection.IntersectionFeature']"}),
-            'geometry': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '3310'}),
+            'geometry': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': str(settings.GEOMETRY_DB_SRID)}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
@@ -287,7 +288,7 @@ class Migration(SchemaMigration):
         },
         'intersection.testpolygon': {
             'Meta': {'object_name': 'TestPolygon'},
-            'geometry': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '3310'}),
+            'geometry': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': str(settings.GEOMETRY_DB_SRID)}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         }
     }

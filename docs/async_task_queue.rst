@@ -11,7 +11,7 @@ Installation
 The requirements are easy_installable since we;re using ghettoq instead of the more powerful but complicated RabbitMQ::
 
     sudo pip install ghettoq
-    sudo pip install celery
+    sudo pip install django-celery
 
 Settings
 --------

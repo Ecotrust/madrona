@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirec
 from django.template.loader import get_template
 from lingcod.spacing.models import *
 from django.template.defaultfilters import slugify
+from django.conf import settings
 import lingcod.intersection.views as int_views
 import xlwt
 
@@ -37,11 +38,11 @@ def FishDistanceKML(request):
     lat2 = float(request.GET.get('lat2'))
     lon2 = float(request.GET.get('lon2'))
     pnt1 = geos.GEOSGeometry( geos.Point(lon1,lat1), srid=4326 )
-    pnt1.transform(3310)
+    pnt1.transform(settings.GEOMETRY_DB_SRID)
     pnt2 = geos.GEOSGeometry( geos.Point(lon2,lat2), srid=4326 )
-    pnt2.transform(3310)
+    pnt2.transform(settings.GEOMETRY_DB_SRID)
     distance, line = fish_distance(pnt1,pnt2)
-    line.srid = 3310
+    line.srid = settings.GEOMETRY_DB_SRID
     line.transform(4326)
     response = HttpResponse('<Placemark>' + line.kml + '</Placemark>', mimetype='application/vnd.google-earth.kml+xml')
     response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'line'
