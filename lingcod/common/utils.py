@@ -3,6 +3,8 @@ from django.contrib.gis.geos import Point, LinearRing, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
+import zipfile
+
 #from django.db import transaction
 
 def KmlWrap( string ):
@@ -300,3 +302,43 @@ def valid_browser(ua):
                return True
 
     return False
+
+class KMZUtil:
+    """
+    Recursively adds a directory to a zipfile
+    modified from http://stackoverflow.com/questions/458436/adding-folders-to-a-zip-file-using-python
+    
+    from lingcod.common.utils import ZipUtil
+    zu = ZipUtil()
+    filename = 'TEMP.zip'
+    directory = 'kmldir' # containing doc.kml, etc
+    zu.toZip(directory, filename)
+    """
+    def toZip(self, file, filename):
+        zip_file = zipfile.ZipFile(filename, 'w')
+        if os.path.isfile(file):
+            zip_file.write(file)
+        else:
+            self.addFolderToZip(zip_file, file)
+        zip_file.close()
+
+    def addFolderToZip(self, zip_file, folder): 
+        if not folder or folder == '':
+            folder_path = '.'
+        else:
+            folder_path = folder
+
+        # first add doc.kml - IMPORTANT that it be the first file added!
+        doc = os.path.join(folder,'doc.kml')
+        if os.path.exists(doc):
+            print 'File added: ' + str(doc)
+            zip_file.write(doc)
+
+        for file in os.listdir(folder_path):
+            full_path = os.path.join(folder, file)
+            if os.path.isfile(full_path) and not full_path.endswith("doc.kml"):
+                print 'File added: ' + str(full_path)
+                zip_file.write(full_path)
+            elif os.path.isdir(full_path):
+                print 'Entering folder: ' + str(full_path)
+                self.addFolderToZip(zip_file, full_path)
