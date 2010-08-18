@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from lingcod.common.utils import get_spatial_class_names
 
 
 class ShareableContent(models.Model):
@@ -151,14 +152,19 @@ def share_object_with_groups(the_object, the_group_ids):
 
     the_object.save()
 
-def groups_users_sharing_with(user, include_public=False):
+def groups_users_sharing_with(user, include_public=False, spatial_only=True):
     """
     Get a dict of groups and users that are currently sharing items with a given user
+    If spatial_only = True, it will not reflect shared items that don't show up in the kmltree (eg private layers)
     returns something like {'our_group': {'group': <Group our_group>, 'users': [<user1>, <user2>,...]}, ... }
     """
     shareables = get_shareables()
     groups_sharing = {}
-    for s in shareables.keys():
+    if spatial_only:
+        classnames = [s for s in shareables.keys() if s in get_spatial_class_names()]
+    else:
+        classnames = shareables.keys()
+    for s in classnames:
         model_class = shareables[s][0]
         permission = shareables[s][1]
         shared_objects = model_class.objects.shared_with_user(user)
@@ -186,4 +192,3 @@ def groups_users_sharing_with(user, include_public=False):
         return groups_sharing
     else:
         return None
-
