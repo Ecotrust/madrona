@@ -70,7 +70,7 @@ def overlap_kmz_response(request, array_id_list_str):
     print os.popen(cmd).read()
          
     # Split into wgs84 tiles
-    cmd = "gdal2tiles.py -k -z 2-10 -p geodetic %s %s" % (outvrt, outkmldir)
+    cmd = "gdal2tiles.py -k -z 6-10 -p geodetic %s %s" % (outvrt, outkmldir)
     print cmd
     print os.popen(cmd).read()
 
