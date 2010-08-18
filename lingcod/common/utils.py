@@ -204,6 +204,15 @@ def get_array_class():
     except:
         raise Exception("Problem importing Array class. Is ARRAY_CLASS defined correctly in your settings?")
 
+def get_spatial_class_names():
+    """
+    Create a list of spatial types which show up in kmltree
+    TODO: Currently just assumes that MPA and Arrays are the only kmltree-able models
+    """
+    mk = get_mpa_class()
+    ak = get_array_class()
+    return [mk._meta.object_name.lower(), ak._meta.object_name.lower()]
+    
 def get_mpa_form():
     try:
         return get_class(settings.MPA_FORM)
@@ -331,14 +340,14 @@ class KMZUtil:
         # first add doc.kml - IMPORTANT that it be the first file added!
         doc = os.path.join(folder,'doc.kml')
         if os.path.exists(doc):
-            print 'File added: ' + str(doc)
+            #print 'File added: ' + str(doc)
             zip_file.write(doc)
 
         for file in os.listdir(folder_path):
             full_path = os.path.join(folder, file)
             if os.path.isfile(full_path) and not full_path.endswith("doc.kml"):
-                print 'File added: ' + str(full_path)
+                #print 'File added: ' + str(full_path)
                 zip_file.write(full_path)
             elif os.path.isdir(full_path):
-                print 'Entering folder: ' + str(full_path)
+                #print 'Entering folder: ' + str(full_path)
                 self.addFolderToZip(zip_file, full_path)
