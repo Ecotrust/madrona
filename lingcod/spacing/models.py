@@ -301,9 +301,9 @@ def fish_distance_from_edges(geom1,geom2):
         # Replace the first point in the fish path with the point on geom1
         # that lies closest to the second point on the path.
         #print c_line[1]
-        c_line[0] = closest_point(geom1, geos.Point( c_line.coords[1] ) ).coords
+        c_line[0] = closest_point(geom1, geos.Point( c_line.coords[1], srid=geom1.srid ) ).coords
         # Do the same for the last point in the path
-        c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point( c_line.coords[c_line.num_points - 2] ) ).coords
+        c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point( c_line.coords[c_line.num_points - 2], srid=geom2.srid ) ).coords
         line = c_line
     # Adjust the distance
     distance = length_in_display_units(line)
@@ -412,7 +412,7 @@ def closest_point(geom1,geom2):
     PostGIS 1.5 or newer.  
     """
     cursor = connection.cursor()
-    query = "select st_astext( ST_ClosestPoint('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
+    query = "select st_asewkt( ST_ClosestPoint('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.ewkt, geom2.ewkt)
     cursor.execute(query)
     return geos.fromstr(cursor.fetchone()[0])
 

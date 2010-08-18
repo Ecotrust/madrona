@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from lingcod.intersection import models as int_models
 from lingcod.data_distributor.models import functions_in_module
+from lingcod.unit_converter.models import length_in_display_units, area_in_display_units
 from django.contrib.gis.geos import fromstr
 
 def use_sort_as_key(results):
@@ -143,6 +144,92 @@ def rule_for_soft_100_3000m(geom):
     else: 
         reason = 'None of the replication requirements for this habitat were met: IF area 100-3000m soft bottom >= 17 sq mi OR total area soft bottom >= 7 sq mi AND area 100-3000m >= 1 sq mi AND area 30-100m soft bottom >= 5 sq mi'
     return replicate, reason
+
+AREA_PROPORTION_THRESHOLD = 0.85
+INSHORE_AREA_PROPORTION_THRESHOLD = 0.93
+ANGLE_THRESHOLD = 2.0
+
+def sub_rule_for_0_30_area(geom):
+    from lingcod.intersection.models import OrganizationScheme, FeatureMapping
+    from report.models import construct_0_30_poly
+    replicate = False
+    all_0_30 = OrganizationScheme.objects.get(name='shallow030').featuremapping_set.filter(name='shallow030')[0].transformed_results(geom).values()[0]['result']
+    theoretical_0_30 = area_in_display_units( construct_0_30_poly(geom) )
+    if all_0_30 < theoretical_0_30 * AREA_PROPORTION_THRESHOLD:
+        reason = 'Area problems. In addition to containing the 0-30m proxy line, the shape must contain a corresponding amount of 0-30m depth zone area.'
+        return replicate, reason
+    else:
+        reason = 'Sufficient 0-30m proxy and sufficient 0-30m depth range area.'
+        replicate = True
+        return replicate, reason
+        
+def sub_rule_for_shoreline_length(geom):
+    from report.models import ShoreLine
+    sl = ShoreLine.objects.all()[0]
+    sl_segment = sl.segment_proxy_parallel(geom)
+    # I don't really think this method will work either.  I think I'm just giving up on this whole idea.
+    
+def sub_rule_for_inshore_area(geom):
+    from report.models import construct_inshore_poly
+    replicate = False
+    inshore = construct_inshore_poly(geom)
+    inshore_intersection = inshore.intersection(geom)
+    if inshore_intersection.area == 0.0:
+        reason = 'Insufficient area captured between proxy line and shore.'
+        return replicate, reason
+    else:
+        proportion_captured = inshore_intersection.area / inshore.area
+    if proportion_captured > INSHORE_AREA_PROPORTION_THRESHOLD:
+        reason = 'Sufficient 0-30m proxy and sufficient inshore area.'
+        replicate = True
+        return replicate, reason
+    else:
+        reason = 'Insufficient area captured between proxy line and shore.'
+        return replicate, reason
+    
+def sub_rule_for_boundary_angle(geom):
+    from lingcod.intersection.models import OrganizationScheme, FeatureMapping
+    from report.models import angle_test
+    replicate = False
+    angle_results = angle_test(geom,degrees_of_slop=ANGLE_THRESHOLD)
+    if False not in angle_results:
+        reason = 'Sufficient 0-30m proxy and sufficient 0-30m boundaries.'
+        replicate = True
+        return replicate, reason
+    else:
+        reason = 'Boundary problems. In addition to containing the 0-30m proxy line, the shape must contain a corresponding amount of 0-30m depth zone area.'
+        return replicate, reason
+        
+def sub_rule_for_0_30m_proxies(geom):
+    from report.models import touches_30m_contour_test
+    area_result, reason = sub_rule_for_0_30_area(geom)
+    replicate = False
+    if area_result:
+        if touches_30m_contour_test(geom):
+            replicate = True
+            return replicate, reason
+        else:
+            reason = 'The shape must extend to the 30m depth contour or offshore edge of the study region boundary in order to count as a replicated of 0-30m habitat.'
+            return replicate, reason
+    else:
+        # second chance
+        replicate, second_reason = sub_rule_for_boundary_angle(geom)
+        if replicate:
+            return replicate, second_reason
+        else:
+            return replicate, reason
+
+def rule_for_soft_0_30m(geom):
+    THRESHOLD = 1.1
+    from lingcod.intersection.models import OrganizationScheme, FeatureMapping
+    replicate = False
+    soft_0_30_proxy = OrganizationScheme.objects.get(name='satopencoast_replication').featuremapping_set.filter(name__icontains='soft').filter(name__icontains='0 - 30').filter(name__icontains='proxy')[0].transformed_results(geom).values()[0]['result']
+    if soft_0_30_proxy < THRESHOLD:
+        reason = 'Not enough soft substrate.  Needed %f, had %f' % (THRESHOLD,soft_0_30_proxy)
+        return replicate, reason
+    else:
+        return sub_rule_for_0_30m_proxies(geom)
+            
 ### End Rule Functions ###
     
 def rule_functions(module=__name__):

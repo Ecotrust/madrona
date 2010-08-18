@@ -72,7 +72,7 @@ def fields_in_model(the_model):
     result = [ f.name for f in the_model._meta.fields ]
     return result
 
-def load_potential_targets(modules=settings.INSTALLED_APPS,keep_previous=False,geometry_models_only=True):
+def load_potential_targets(modules=settings.INSTALLED_APPS,keep_previous=True,geometry_models_only=True):
     """Find all the models in all the apps within the module (lingcod)
     and load their info into the PotentialTarget model and the 
     PotentialTargetField model.  If geometry_models_only is True,
@@ -81,7 +81,10 @@ def load_potential_targets(modules=settings.INSTALLED_APPS,keep_previous=False,g
         PotentialTarget.objects.all().delete()
     result = models_in_module_recursive(modules)
     for k,v in result.items():
-        pt = PotentialTarget(name=k,module_text=v)
+        if v.find('south.') > -1: # we don't want to mess with south.  there's weird stuff in there  ...and yeah, that's janky code.  So?
+            continue
+        pt, created = PotentialTarget.objects.get_or_create(name=k)
+        pt.module_text = v
         pt.save()
         for name in pt.field_name_list:
             ptf = PotentialTargetField(name=name,potential_target=pt)
