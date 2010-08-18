@@ -4,13 +4,18 @@ from lingcod.common.utils import get_array_class
 from lingcod.shapes.views import ShpResponder
 from lingcod.common import default_mimetypes as mimetypes
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
+from lingcod.sharing.utils import can_user_view
 import os
 
-def overlap_geotiff(array_id_list_str):
+def overlap_geotiff(array_id_list_str, user=None):
     Array = get_array_class()
     array_set = Array.objects.filter(pk__in=array_id_list_str.split(','))
     if len(array_set) < 1:
         raise Http404
+    for array in array_set:
+        viewable, response = can_user_view(Array, array.pk, user)
+        if user and not viewable:
+            return response
     filenames = []
     for array in array_set:
         responder = ShpResponder(array.shapefile_export_query_set)
@@ -22,7 +27,7 @@ def overlap_geotiff(array_id_list_str):
 def overlap_geotiff_response(request, array_id_list_str):
     import cStringIO
     buff = cStringIO.StringIO()
-    temp_geotiff = overlap_geotiff(array_id_list_str)
+    temp_geotiff = overlap_geotiff(array_id_list_str, request.user)
     rfile = open(temp_geotiff,'rb')
     buff.write(rfile.read())
     buff.flush()
@@ -34,20 +39,24 @@ def overlap_geotiff_response(request, array_id_list_str):
     response.write(stream)
     return response
 
-def overlap_kml_response(request, array_id_list_str):
+def overlap_kmz_response(request, array_id_list_str):
     import cStringIO
-    buff = cStringIO.StringIO()
-    temp_geotiff = overlap_geotiff(array_id_list_str)
-    
+    import shutil
     import tempfile
+
+    buff = cStringIO.StringIO()
+    temp_geotiff = overlap_geotiff(array_id_list_str, request.user)
+    
     tempdir = os.path.join(tempfile.gettempdir(),str(array_id_list_str.__hash__()))
     if os.path.exists(tempdir):
-        import shutil
         shutil.rmtree(tempdir)
     os.mkdir(tempdir)
     outrgb = os.path.join(tempdir, "rgb.png")
     outvrt = os.path.join(tempdir, "rgb.vrt")
     outkmldir = os.path.join(tempdir, "kmlfiles")
+    if os.path.exists(outkmldir):
+        shutil.rmtree(outkmldir)
+    os.mkdir(outkmldir)
     outkmz = os.path.join(tempdir, "array_overlap.kmz")
 
     # Convert to RGB 
@@ -74,6 +83,8 @@ def overlap_kml_response(request, array_id_list_str):
     directory = ""
     zu.toZip(directory, filename)
 
+    if not os.path.exists(outkmz):
+        return HttpResponse("KMZ creation error", status=500)
     rfile = open(outkmz,'rb')
     buff.write(rfile.read())
     buff.flush()
