@@ -66,11 +66,11 @@ class HabitatThreshold(models.Model):
     def __unicode__(self):
         return self.habitat.name
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.minimum_quantity!=None and self.rule!=None:
             raise Exception, "You can specify minimum quantity or a rule.  You may not specify both."
         else:
-            super(HabitatThreshold, self).save()
+            super(HabitatThreshold, self).save(*args, **kwargs)
             
     def analyze(self, value=0.0, geom=fromstr('POLYGON EMPTY')):
         results = {}
