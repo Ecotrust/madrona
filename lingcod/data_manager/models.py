@@ -116,6 +116,16 @@ class DataLayer(models.Model):
         except Shapefile.DoesNotExist:
             return None
             
+    @property
+    def active_generalfile(self):
+        """Return the active general file (or None if there aren't any). Raise a stink if there is more than one general file marked as active."""
+        try:
+            return self.generalfile_set.get(active=True)
+        except MultipleObjectsReturned:
+            raise Exception("The %s data layer has more than one general file marked as active.  That is bad.  There can be only one!" % self.name)
+        except GeneralFile.DoesNotExist:
+            return None
+            
     @property 
     def has_active_shapefile(self):
         """Returns true if there's an active shapefile associated with this data layer.  Returns False otherwise.  I just realize this is kind of useless
@@ -129,6 +139,7 @@ class DataLayer(models.Model):
             return False
     
 class GeneralFile(models.Model):
+    active = models.BooleanField(default=False,help_text="The general file marked as active will be used as the current version.")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True,blank=True)
     data_layer = models.ForeignKey(DataLayer)
