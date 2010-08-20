@@ -14,7 +14,7 @@ readme_text = file('README.txt', 'rb').read()
 
 setup_args = dict(
     name                = 'marinemap',
-    version             = '1.6dev',
+    version             = '1.7dev',
     #requires_python     = '>=2.5,<3',
     #requires_external  = 
     description         = 'A framework for building decisison support tools supporting marine spatial planning',
