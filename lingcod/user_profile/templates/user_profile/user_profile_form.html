@@ -20,7 +20,20 @@
 </form>
 
 <hr/>
+<h2> Identification Providers </h2>
 
+<div>
+{% if assoc %}
+    <p> Your are currently associated with the following OpenID providers.  </p>
+    <ul class="groups">
+    {% for openid in assoc %}
+    <li class="group"> <span> {{openid.openid_url}}</span><span>[<a href="{% url user_dissociate %}?openid_url={{openid.openid_url}}">Remove</a>]</span> </li>
+    {% endfor %}        
+    </ul>
+{% endif %}
+</div>
+
+<hr/>
 <h2> Groups </h2>
 <div>
 {% if profile.user.groups %}

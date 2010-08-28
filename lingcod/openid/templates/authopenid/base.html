@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>MarineMap Sign In</title>
+        <!--[if IE]>
+
+        <script>
+            // allow IE to recognize HTMl5 elements
+            document.createElement('section');
+            document.createElement('article');
+            document.createElement('aside');
+            document.createElement('footer');
+            document.createElement('header');
+            document.createElement('nav');
+            document.createElement('time');
+
+        </script>
+        <![endif]-->
+        {% if request.is_secure %}
+        <meta http-equiv="X-XRDS-Location" content="https://{{ request.get_host }}{% url oid_xrdf %}" />
+        {% else %}
+        <meta http-equiv="X-XRDS-Location" content="http://{{ request.get_host }}{% url oid_xrdf %}" />  
+        {% endif %}
+
+        <link rel="stylesheet" href="{{ MEDIA_URL }}/openid/css/openid.css" />
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    	{% block extra_scripts %}{% endblock %}
+    </body>
+</html>

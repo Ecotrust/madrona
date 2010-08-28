@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'lingcod.openid.middleware.OpenIDMiddleware',
 )
 
 INSTALLED_APPS = (
@@ -93,6 +94,7 @@ INSTALLED_APPS = (
     'lingcod.spacing',
     'lingcod.user_profile',
     'lingcod.unit_converter',
+    'lingcod.openid',
     'registration',
     'south',
     'lingcod.async',
@@ -111,7 +113,7 @@ MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../
 
 MEDIA_URL = '/media/'
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/signin/'
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -132,20 +134,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
-    'django.core.context_processors.request'
+    'django.core.context_processors.request',
+    'lingcod.openid.context_processors.authopenid',
 )
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
-
-#MIDDLEWARE_CLASSES = (
-#    'django.middleware.common.CommonMiddleware',
-#    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'django.middleware.csrf.CsrfViewMiddleware',
-#    'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.messages.middleware.MessageMiddleware',
-#)
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -178,4 +173,5 @@ ASYNC_IS_DISABLED = False
 
 AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media. 
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
+
 LOG_FILE = '/tmp/marinemap.log'

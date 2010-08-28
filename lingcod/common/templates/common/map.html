@@ -66,10 +66,10 @@
             <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="{% url user_profile-form user.username %}">my profile</a> | </li>
-            <li><a href="{% url auth_logout %}">sign out</a></li>
+            <li><a href="{% url user_signout %}">sign out</a></li>
             {% else %}
             <li><a href="{% url registration_register %}">register</a> | </li>
-            <li><a href="{% url auth_login %}">sign in</a></li>
+            <li><a href="{% url user_signin %}">sign in</a></li>
             {% endif %}                
             {% endblock metanavigation %}
             {% block meta_navigation_list_append %}{% endblock %}

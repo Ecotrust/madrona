@@ -7,11 +7,13 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils 
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
-from lingcod.common.utils import load_session
+from lingcod.common.utils import load_session, get_logger
 from lingcod.sharing.models import get_content_type_id
 from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
+
+log = get_logger()
 
 # This is the dict key used for mpas without an array
 # Since it's sorted alphabetically by key, this string
@@ -240,6 +242,10 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     load_session(request, session_key)
     user = request.user
     if input_username and user.username != input_username:
+        log.debug("")
+        log.debug(request.get_full_path())
+        log.debug("Failed: Input username from the URL is %r but the request.user.username is %r" % (input_username, user.username))
+        log.debug("")
         return HttpResponse('Access denied', status=401)
 
     organize_in_array_folders = True

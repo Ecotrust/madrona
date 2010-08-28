@@ -279,10 +279,10 @@ def hex8_to_rgba(hex8):
 from django.utils.importlib import import_module
 
 def load_session(request, session_key):
+    log = get_logger()
     if session_key and session_key != '0':
         engine = import_module(settings.SESSION_ENGINE)
         request.session = engine.SessionStore(session_key)
-
 
 def valid_browser(ua):
     """
@@ -355,7 +355,7 @@ class KMZUtil:
 import logging
 import inspect
 import tempfile
-def getLogger(caller_name=None):
+def get_logger(caller_name=None):
     try:
         logfile = settings.LOG_FILE
     except:

@@ -1,0 +1,79 @@
+{% extends "authopenid/base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if msg %}
+<br />
+	<p class="warning">{{ msg }}</p>
+{% endif %}
+{% if form2.errors %}
+<div class="errors"><p>{% trans "Please correct errors below:" %}<br />
+	{% if form2.username.errors %} 
+		<span class="error">USERNAME errors {{ form2.username.errors|join:", " }}</span>
+        <br/>
+	{% endif %}
+         
+	{% if form2.password.errors %} 
+		<span class="error">PASSWORD errors {{ form2.password.errors|join:", " }}</span>
+        <br/>
+	{% endif %}
+</p></div>
+
+{% endif %}
+
+{% if form1.errors %}
+<div class="errors">
+    <p><span class="error">{{ form1.openid_url.errors|join:", " }}</span></p>
+</div>
+<br>
+{% endif %}
+<h2>Sign into MarineMap</h2>
+<!-- EVENTUALLY link to reg 
+<p> <a href="{% url registration_register %}">Register</a> | <a href="{% url user_signin %}">Log-In</a></p> -->
+
+<div class="login">
+
+<form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
+    <p class="explain">If you only have an account with this site and dont wish to use any other MarineMap sites, use this method. </p>
+
+    <input type="hidden" name="next" value="{{ next }}" />
+	<fieldset>
+		<legend>{% trans "Sign In Using Your Account ID" %}</legend>
+		<div class="form-row"><label for="id_username">{% trans "Username:" %}</label><br />{{ form2.username }}</div>
+		<div class="form-row"><label for="id_password">{% trans "Password" %}</label><br />{{ form2.password }}</div>
+        <div class="submit-row"><input type="submit" name="blogin" value="{% trans "Sign in" %}"> </div>
+	</fieldset>	
+</form>
+
+<form id="openid_form" name="openid_form" action="{% url user_signin %}" method="post">
+    <p class="explain">If you have a third-part account, use this method to log into this site and all supported MarineMap sites. </p>
+    <input type="hidden" name="action" value="verify" />
+    <input type="hidden" name="next" value="{{ next }}" />
+	<fieldset>
+		<legend>{% trans "Sign In Using Your OpenID URL" %}</legend>
+		<div id="openid_choice">
+    		<p>Please click your account provider:</p>
+    		<div id="openid_btns"></div>
+    	</div>
+    	    <div id="openid_input_area">
+                <label for="openid_url">OpenId URL :</label><input id="openid_url" type="text" class="required openid" name="openid_url" maxlength="255" />
+                <input name="openid_submit" type="submit" value="{% trans "Sign in with OpenID" %}">
+            </div>
+		
+	</fieldset>
+</form>	
+
+</div>	
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}/openid/js/openid-jquery.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() {
+    openid.img_path = '{{MEDIA_URL}}/openid/images/';
+    openid.init('openid_url');
+});
+</script>
+{% endblock %}
+

@@ -32,7 +32,6 @@ def get_networklink_private_layers(request, session_key):
     response = render_to_response('layers/network_links.kml', 
             {'username': user.username, 'session_key': session_key, 'layers': layers}, mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=private_links.kml'
-    print response.content
     return response
 
 def get_layerlist(request,session_key):
