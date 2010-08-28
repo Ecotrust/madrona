@@ -51,6 +51,7 @@ boto
 django-celery>=2.0.2
 ghettoq>=0.4.1
 django-unittest-depth>=0.6
+python-openid>=2.2.5
 
 # Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson>=1.0.5
