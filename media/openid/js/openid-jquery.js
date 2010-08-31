@@ -14,10 +14,10 @@ var providers_large = {
         name: 'Yahoo',      
         url: 'http://yahoo.com/'
     },    
-    aol: {
-        name: 'AOL',     
-        label: 'Enter your AOL screenname.',
-        url: 'http://openid.aol.com/{username}/'
+    myopenid: {
+        name: 'MyOpenID',     
+        label: 'Enter your MyOpenID username.',
+        url: 'http://{username}.myopenid.com/'
     },
     openid: {
         name: 'OpenID',     
@@ -107,21 +107,22 @@ var openid = {
         
            	openid_btns.append(this.getBoxHTML(providers_large[id], 'large', '.gif'));
         }
-        if (providers_small) {
+        /*if (providers_small) {
         	openid_btns.append('<br/>');
         	
 	        for (id in providers_small) {
 	        
 	           	openid_btns.append(this.getBoxHTML(providers_small[id], 'small', '.ico'));
 	        }
-        }
+        }*/
         
         $('#openid_form').submit(this.submit);
         
+        /*  Don't really like this behavior .. we wont read the cookies
         var box_id = this.readCookie();
         if (box_id) {
         	this.signin(box_id, true);
-        }  
+        } */ 
     },
     getBoxHTML: function(provider, box_size, image_ext) {
             
@@ -140,7 +141,8 @@ var openid = {
   		}
 		
 		this.highlight(box_id);
-		this.setCookie(box_id);
+		// No cookies 
+        // this.setCookie(box_id);
 		
 		// prompt user for input?
 		if (provider['label']) {
