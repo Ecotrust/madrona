@@ -95,6 +95,11 @@ def process_mapfile_text(mapfile, mpas):
     if DB_NAME != settings.DATABASE_NAME:
         connection_string += "<Parameter name='persist_connection'>false</Parameter>"
 
+    #it appears that ampersands are not allowed in well-formed xml
+    #throws the following runtime error: XML document not well formed: xmlParseEntityRef: no name
+    #hopefully this will account for those situations in which the db password (or something else) contains an ampersand
+    connection_string = connection_string.replace('&', '&amp;')
+        
     xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
     return xmltext
 
