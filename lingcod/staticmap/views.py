@@ -113,9 +113,11 @@ def get_designation_style(mpas):
         s.rules.append(r)
     # And for null designations
     r = mapnik.Rule()
-    r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (fill[0],fill[1],fill[2]))))
-    r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (outl[0],outl[1],outl[2])),0.8))
-    r.filter = mapnik.Filter("[designation_id] = '' and (%s)" % mpa_filter_string)
+    #the following colors may be overridden in mapfile's mpa_style section
+    r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(150,0,0)'))) 
+    r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(255,255,0)'),0.2))
+    if len(designations) > 0:
+        r.filter = mapnik.Filter("[designation_id] = '' and (%s)" % mpa_filter_string)
     s.rules.append(r)
     return s
 
