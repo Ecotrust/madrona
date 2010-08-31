@@ -146,6 +146,11 @@ MarineMap Settings
 ``BASE_DIR``
     Provides the path to the project codebase. 
 
+.. _OPENID_ENABLED:
+
+``OPENID_ENABLED``
+    Boolean. Determines whether to expose OpenID authentication. False implies local user/pass authentication only. Defaults to False. 
+
 Django Settings
 ---------------
 

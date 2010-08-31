@@ -1,0 +1,47 @@
+{% extends "authopenid/base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if msg %}
+<br />
+	<p class="warning">{{ msg }}</p>
+{% endif %}
+{% if form2.errors %}
+<div class="errors"><p>{% trans "Please correct errors below:" %}<br />
+	{% if form2.username.errors %} 
+		<span class="error">USERNAME errors {{ form2.username.errors|join:", " }}</span>
+        <br/>
+	{% endif %}
+         
+	{% if form2.password.errors %} 
+		<span class="error">PASSWORD errors {{ form2.password.errors|join:", " }}</span>
+        <br/>
+	{% endif %}
+</p></div>
+
+{% endif %}
+
+{% if form1.errors %}
+<div class="errors">
+    <p><span class="error">{{ form1.openid_url.errors|join:", " }}</span></p>
+</div>
+<br>
+{% endif %}
+<h2>Sign into MarineMap</h2>
+
+<div class="login">
+
+<form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
+    <input type="hidden" name="next" value="{{ next }}" />
+	<fieldset>
+		<legend>{% trans "Sign In Using Your Account ID" %}</legend>
+		<div class="form-row"><label for="id_username">{% trans "Username:" %}</label><br />{{ form2.username }}</div>
+		<div class="form-row"><label for="id_password">{% trans "Password" %}</label><br />{{ form2.password }}</div>
+        <div class="submit-row"><input type="submit" name="blogin" value="{% trans "Sign in" %}"> </div>
+	</fieldset>	
+</form>
+</div>	
+{% endblock %}
+
+
+

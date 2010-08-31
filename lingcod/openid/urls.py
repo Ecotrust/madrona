@@ -53,11 +53,9 @@ urlpatterns = patterns('',
     url(r'^associate/$', oid_views.associate, name='user_associate'),
     url(r'^dissociate/$', oid_views.dissociate, name='user_dissociate'),
     url(r'^register/$', oid_views.register, name='user_register'),
-    url(r'^signout/$', oid_views.signout, {'next_page': settings.LOGIN_REDIRECT_URL}, name='user_signout'),
+    url(r'^signout/$', oid_views.signout, {'next_page':  settings.LOGIN_REDIRECT_URL}, name='user_signout'),
     url(r'^signout/$', oid_views.signout, {'next_page': settings.LOGIN_REDIRECT_URL}, name='auth_logout'),
     url(r'^signin/complete/$', oid_views.complete_signin, name='user_complete_signin'),
-    url(r'^signin/$', oid_views.signin, name='user_signin'),
-    url(r'^signin/$', oid_views.signin, name='auth_login'),
     url(
         r'^signup/$',
         reg_views.register,
@@ -100,3 +98,21 @@ urlpatterns = patterns('',
 )
 
 
+## The openid login behavior can be 'hidden' by use of a 
+# template which only allows local user/pass authentication
+# Note that this does not disable openid completely; user could still
+# POST openid credentials if they wanted to
+try:
+    use_openid = settings.OPENID_ENABLED
+except:
+    use_openid = False
+
+if use_openid:
+    template_name = 'authopenid/signin.html'
+else:
+    template_name = 'authopenid/signin_local.html'
+
+urlpatterns += patterns('',
+    url(r'^signin/$', oid_views.signin, {'template_name':template_name}, name='user_signin'),
+    url(r'^signin/$', oid_views.signin, {'template_name':template_name}, name='auth_login'),
+)
