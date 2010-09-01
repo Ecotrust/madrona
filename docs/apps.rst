@@ -15,3 +15,4 @@ Apps
    raster_stats
    news
    async_app
+   openid
