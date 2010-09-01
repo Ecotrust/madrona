@@ -36,6 +36,8 @@ def get_mpas(request):
             
     return mpas
 
+#i suspect we could drop the conditional since we have srid assigned in the parameter list
+#also, we might want to use equivalent settings srid variable instead of hardcoding 4326    
 def auto_extent(mpa_ids,srid=4326):
     if not srid:
         srid = 4326 # Assume latlong if none
@@ -44,7 +46,7 @@ def auto_extent(mpa_ids,srid=4326):
     bbox = ugeom.extent
     width = bbox[2]-bbox[0]
     height = bbox[3]-bbox[1]
-    buffer = 0.15
+    buffer = 0.20 #might add a settings variable for this?
     return bbox[0]-width*buffer, bbox[1]-height*buffer, bbox[2]+width*buffer, bbox[3]+height*buffer
 
 def get_mpa_filter_string(mpas):
