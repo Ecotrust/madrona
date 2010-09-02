@@ -9,6 +9,7 @@ from exceptions import AttributeError
 import os
 import tempfile
 import pickle
+import datetime
 import networkx as nx
 
 
@@ -65,6 +66,7 @@ class PickledGraph(models.Model):
     given time.  This model just stores THE graph.
     """
     pickled_graph = models.FileField(upload_to='spacing/pickled_graphs')
+    date_modified = models.DateTimeField(auto_now_add=True,auto_now=True,default=datetime.datetime.now())
     
     @property
     def graph(self):
@@ -95,6 +97,7 @@ class Land(models.Model):
     """ 
     name = models.CharField(max_length=200, null=True, blank=True)
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True)
+    date_modified = models.DateTimeField(auto_now_add=True,auto_now=True,default=datetime.datetime.now())
     objects = models.GeoManager()
     
     def add_hull_nodes_to_graph(self, graph):
