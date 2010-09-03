@@ -36,18 +36,29 @@ def get_mpas(request):
             
     return mpas
 
-#i suspect we could drop the conditional since we have srid assigned in the parameter list
-#also, we might want to use equivalent settings srid variable instead of hardcoding 4326    
-def auto_extent(mpa_ids,srid=4326):
+def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
     if not srid:
-        srid = 4326 # Assume latlong if none
+        srid = settings.GEOMETRY_CLIENT_SRID # Assume latlong if none
     # would be nice to just do a transform().extent() but this doesnt work - geodjango bug
+    # i think this bug has been fixed (transform().extent() worked for me in pdb)
     ugeom = mpa_class.objects.filter(pk__in=mpa_ids).unionagg().transform(srid,clone=True)
     bbox = ugeom.extent
+    
+    #STATICMAP_STATIC_ZOOM is used to zoom out a bit more than was the case with buffer and the relative zoom 
+    #in order to return to the way things were prior to my mucking around, set STATICMAP_STATIC_ZOOM = None
+    STATICMAP_STATIC_ZOOM = .04
     width = bbox[2]-bbox[0]
     height = bbox[3]-bbox[1]
-    buffer = 0.20 #might add a settings variable for this?
-    return bbox[0]-width*buffer, bbox[1]-height*buffer, bbox[2]+width*buffer, bbox[3]+height*buffer
+    buffer = .15
+    
+    if STATICMAP_STATIC_ZOOM is not None:
+        width_buffer = STATICMAP_STATIC_ZOOM
+        height_buffer = STATICMAP_STATIC_ZOOM * 3
+    else:
+        width_buffer = width * buffer
+        height_buffer = height * buffer
+    
+    return bbox[0]-width_buffer, bbox[1]-height_buffer, bbox[2]+width_buffer, bbox[3]+height_buffer
 
 def get_mpa_filter_string(mpas):
     if len(mpas) < 1:
@@ -68,10 +79,17 @@ def process_mapfile_text(mapfile, mpas):
     # Assume MEDIA_ROOT and DATABASE_NAME are always defined
     xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
     xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
+    xmltext = xmltext.replace("GEOMETRY_CLIENT_SRID",str(settings.GEOMETRY_CLIENT_SRID))
 
     # Replace table names for mpas and mpaarrays
     xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
+    # Adding these offset variables
+    STATICMAP_OUTLINE_X_OFFSET = .07
+    STATICMAP_OUTLINE_Y_OFFSET = .14
+    xmltext = xmltext.replace("OUTLINE_X_OFFSET", str(STATICMAP_OUTLINE_X_OFFSET))
+    xmltext = xmltext.replace("OUTLINE_Y_OFFSET", str(STATICMAP_OUTLINE_Y_OFFSET))
+    
     # Deal with deprecated connection settings 
     # (http://docs.djangoproject.com/en/dev/ref/settings/#deprecated-settings)
     # Maintain compatibility with django pre-1.2
@@ -166,7 +184,7 @@ def show(request, map_name='default'):
         viewable, response = can_user_view(mpa_class, pk, user)
         if not viewable:
             return response
-
+    
     # Do the variable substitution
     xmltext = process_mapfile_text(mapfile, mpas)
     mapnik.load_map_from_string(m,xmltext)
@@ -179,6 +197,7 @@ def show(request, map_name='default'):
     # first, assume default image extent
     x1, y1 = maps.default_x1, maps.default_y1
     x2, y2 = maps.default_x2, maps.default_y2
+    
     if "autozoom" in request.REQUEST:
         if request.REQUEST['autozoom'].lower() == 'true' and mpas and len(mpas)>0:
             x1, y1, x2, y2 = auto_extent(mpas, maps.default_srid)
@@ -190,7 +209,7 @@ def show(request, map_name='default'):
 
     bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
     m.zoom_to_box(bbox)
-
+    
     # Render image and send out the response
     response = draw_to_response(m, draw, request)
 
