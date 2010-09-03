@@ -40,24 +40,25 @@ def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
     if not srid:
         srid = settings.GEOMETRY_CLIENT_SRID # Assume latlong if none
     # would be nice to just do a transform().extent() but this doesnt work - geodjango bug
-    # i think this bug has been fixed (transform().extent() worked for me in pdb)
     ugeom = mpa_class.objects.filter(pk__in=mpa_ids).unionagg().transform(srid,clone=True)
     bbox = ugeom.extent
     
-    #STATICMAP_STATIC_ZOOM is used to zoom out a bit more than was the case with buffer and the relative zoom 
-    #in order to return to the way things were prior to my mucking around, set STATICMAP_STATIC_ZOOM = None
-    STATICMAP_STATIC_ZOOM = .04
     width = bbox[2]-bbox[0]
     height = bbox[3]-bbox[1]
     buffer = .15
     
-    if STATICMAP_STATIC_ZOOM is not None:
-        width_buffer = STATICMAP_STATIC_ZOOM
-        height_buffer = STATICMAP_STATIC_ZOOM * 3
-    else:
+    # If the following settings variables are not defined (or set to None), then the original method
+    # for determining width_buffer and heigh_buffer is used
+    try:
+        if settings.STATICMAP_WIDTH_BUFFER is not None and settings.STATICMAP_HEIGHT_BUFFER is not None:
+            width_buffer = settings.STATICMAP_WIDTH_BUFFER
+            height_buffer = settings.STATICMAP_HEIGHT_BUFFER
+        else:
+            raise AttributeError
+    except AttributeError:
         width_buffer = width * buffer
         height_buffer = height * buffer
-    
+        
     return bbox[0]-width_buffer, bbox[1]-height_buffer, bbox[2]+width_buffer, bbox[3]+height_buffer
 
 def get_mpa_filter_string(mpas):
@@ -84,11 +85,13 @@ def process_mapfile_text(mapfile, mpas):
     # Replace table names for mpas and mpaarrays
     xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
 
-    # Adding these offset variables
-    STATICMAP_OUTLINE_X_OFFSET = .07
-    STATICMAP_OUTLINE_Y_OFFSET = .14
-    xmltext = xmltext.replace("OUTLINE_X_OFFSET", str(STATICMAP_OUTLINE_X_OFFSET))
-    xmltext = xmltext.replace("OUTLINE_Y_OFFSET", str(STATICMAP_OUTLINE_Y_OFFSET))
+    # Offset variables are used to create a bounding box that shows the extent of the zoomed in area
+    try:
+        if settings.STATICMAP_OUTLINE_X_OFFSET is not None and settings.STATICMAP_OUTLINE_Y_OFFSET is not None:
+            xmltext = xmltext.replace("OUTLINE_X_OFFSET", str(settings.STATICMAP_OUTLINE_X_OFFSET))
+            xmltext = xmltext.replace("OUTLINE_Y_OFFSET", str(settings.STATICMAP_OUTLINE_Y_OFFSET))
+    except AttributeError:
+        pass
     
     # Deal with deprecated connection settings 
     # (http://docs.djangoproject.com/en/dev/ref/settings/#deprecated-settings)
