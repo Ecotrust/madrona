@@ -27,19 +27,20 @@
 </div>
 <br>
 {% endif %}
-<h2>Sign into MarineMap</h2>
 
 <div class="login">
 
 <form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
-		<legend>{% trans "Sign In Using Your Account ID" %}</legend>
+        <legend>{% trans "Sign In To MarineMap" %}</legend> 
 		<div class="form-row"><label for="id_username">{% trans "Username:" %}</label><br />{{ form2.username }}</div>
 		<div class="form-row"><label for="id_password">{% trans "Password" %}</label><br />{{ form2.password }}</div>
         <div class="submit-row"><input type="submit" name="blogin" value="{% trans "Sign in" %}"> </div>
 	</fieldset>	
 </form>
+
+<p><a href="{% url auth_password_reset %}">Forgot your password?</a></p>
 </div>	
 {% endblock %}
 
