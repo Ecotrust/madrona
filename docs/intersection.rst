@@ -24,7 +24,7 @@ The Difference Between Multi Feature and Single Feature Shapefiles
 ------------------------------------------------------------------
 Sometimes, as is the case with the MLPA linear kelp data sets, the presence of geometry indicates the presence of the habitat. We'll refer to this type of shapefile as a Single Feature Shapefile.
 
-In other cases, a shapefile may contain geometries that represent any number of different habitats according to how each individual geometry is attributed. An example of one of these Multi Feature Shapefiles is available here. That example is a portion of the substrate data set used in the South Coast MLPA process. The shapefile consists of polygons with a sub_depth attribute (among others). Some values of this attribute are 'Hard 0 - 30m', 'Soft 30 - 50m', etc. If we want to know, for instance, how much hard substrate with a depth of 0 - 30 meters is within a given polygon, we want to intersect that polygon with a set of geometries that represent just that habitat type. In other words, we want to intersect with a single feature rather than a multi feature.
+In other cases, a shapefile may contain geometries that represent any number of different habitats according to how each individual geometry is attributed. An example of one of these Multi Feature Shapefiles is available `here <http://code.google.com/p/marinemap/source/browse/trunk/lingcod/intersection/test_data/test_substrate.zip>`_. That example is a portion of the substrate data set used in the South Coast MLPA process. The shapefile consists of polygons with a sub_depth attribute (among others). Some values of this attribute are 'Hard 0 - 30m', 'Soft 30 - 50m', etc. If we want to know, for instance, how much hard substrate with a depth of 0 - 30 meters is within a given polygon, we want to intersect that polygon with a set of geometries that represent just that habitat type. In other words, we want to intersect with a single feature rather than a multi feature.
 
 Turning a Multi Feature Shapefile into Single Feature Shapefiles
 ----------------------------------------------------------------
@@ -53,3 +53,16 @@ Once we have a single feature shapefile, whether it was started life as a single
 3. Select "Load the selected shapefiles to intersection features" from the "Action" drop down near the top of the page and click "Go".
 
 This will take you to the list of Intersection Features and you'll see that each of those single feature shapefiles have been imported into the database.
+
+Running Test Intersections Within the Intersection App
+------------------------------------------------------
+
+You may want to play around with the intersection app independently of the other apps in your project. You can do that in a couple of different ways. You can draw polygons and get results for the intersection features you have loaded into the application. You can also create test polygons in the admin tool, save them, and get intersection results on them repeatedly. This helps in evaluating how results are cached.
+
+Drawing a Polygon and Getting Intersection Results
+--------------------------------------------------
+
+Go to http://YOUR-HOST/intersection/intersect/testdrawing/
+Draw a polygon over some portion of the intersection features you've loaded (if you've been following along, that'll be a small portion of the coast just off shore of Point Conception).
+Choose the organization scheme and format for your results.
+Click the "Submit" button.
