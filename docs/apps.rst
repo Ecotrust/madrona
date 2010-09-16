@@ -5,6 +5,7 @@ Apps
    :maxdepth: 2
 
    study_region
+   intersection
    layers
    marine_protected_areas
    arrays
