@@ -62,7 +62,7 @@ You may want to play around with the intersection app independently of the other
 Drawing a Polygon and Getting Intersection Results
 --------------------------------------------------
 
-Go to http://YOUR-HOST/intersection/intersect/testdrawing/
-Draw a polygon over some portion of the intersection features you've loaded (if you've been following along, that'll be a small portion of the coast just off shore of Point Conception).
-Choose the organization scheme and format for your results.
-Click the "Submit" button.
+1. Go to http://YOUR-HOST/intersection/intersect/testdrawing/
+2. Draw a polygon over some portion of the intersection features you've loaded (if you've been following along, that'll be a small portion of the coast just off shore of Point Conception).
+3. Choose the organization scheme and format for your results.
+4. Click the "Submit" button.
