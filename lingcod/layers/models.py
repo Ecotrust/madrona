@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.sharing.managers import ShareableGeoManager
 
@@ -24,6 +25,28 @@ class PrivateLayerList(models.Model):
             ("can_share_privatelayerlist", "Can share private layer list"),
         )
     
+class PrivateSuperOverlay(models.Model):
+    """Model for presenting restricted-access multi-file kml trees on disk"""
+    creation_date = models.DateTimeField(auto_now=True) 
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=50,help_text="Layer name as it will appear in the KML tree.",default='')
+    priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
+    base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="doc.kml", recursive=True, help_text="""
+        Base KML file of the superoverlay. Must be called 'doc.kml'. This file (and all subsequent files in the tree) must use
+        relative paths.  The user making the request only needs permissions for the base kml. 
+        IMPORTANT: Every file in and below the base kml's directory path is accessible 
+        if the user has proper permissions on the base kml.""")
+
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share layer with the following groups")
+    objects = ShareableGeoManager()
+
+    def __unicode__(self):
+        return "PrivateSuperOverlay %s " % (self.name)
+
+    class Meta:
+        permissions = (
+            ("can_share_privatesuperoverlay", "Can share private superoverlays"),
+        )
             
 class UserLayerList(models.Model):
     """Model used for storing uploaded kml files that list all public layers.

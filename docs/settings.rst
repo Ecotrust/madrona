@@ -13,6 +13,10 @@ settings.py or settings_local.py file.
 MarineMap Settings
 ------------------
 
+.. _SUPEROVERLAY_ROOT:
+``SUPEROVERLAY_ROOT``
+    Directory path containing access-restricted/private superoverlay kmls. 
+
 .. _LOG_FILE:
 ``LOG_FILE``
     Location of the marinemap log file output. Used for debugging. Defaults to `/tmp/marinemap.log` 
