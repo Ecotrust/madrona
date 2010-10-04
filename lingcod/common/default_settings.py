@@ -102,7 +102,16 @@ INSTALLED_APPS = (
     'ghettoq', 
 )
 
-EXCLUDE_FROM_TESTS = ['ghettoq', 'south']
+EXCLUDE_FROM_TESTS = [
+    'ghettoq', 
+    'south', 
+    'django.contrib.auth',
+    'django.contrib.admin',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.gis'
+]
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?

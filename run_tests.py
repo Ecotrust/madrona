@@ -61,29 +61,18 @@ def create_test_cmd():
             break
     return cmd_dict
 
-
-
 hdir = os.path.dirname(os.path.abspath(__file__))
 pdir = os.path.join(hdir,'example_projects/test_project')
 spdir = os.path.join(hdir,'example_projects')
 sys.path.insert(0, pdir)
 sys.path.insert(0, spdir)
 sys.path.insert(0, hdir)
-#os.chdir(pdir)
 
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'example_projects.test_project.settings'
 os.environ['DJANGO_SETTINGS_MODULE'] = 'test_project.settings'
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 settings.TEST_RUNNER='xmlrunner.extra.djangotestrunner.run_tests'
-#settings.TEST_OUTPUT_DESCRIPTIONS=True
 settings.TEST_OUTPUT_VERBOSE = True
-#settings.TEST_OUTPUT_DIR = 'xmlrunner'
 settings.DEBUG=True
 settings.POSTGIS_TEMPLATE='template1'
-
-print
-print settings.INSTALLED_APPS
-print
 
 use_exec(pdir)
