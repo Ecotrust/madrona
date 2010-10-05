@@ -522,3 +522,26 @@ def get_url_for_model(model):
     for manipulator in model.Options.manipulators:
         names.append(manipulator.Options.name)
     return reverse('manipulate', args=[','.join(names)])
+
+def get_manipulators_for_model(model):
+    # required manipulators
+    required = []
+    for manipulator in model.Options.manipulators:
+        required.append(manipulator.Options.name)
+
+    # optional manipulators
+    try:
+        optional = []
+        for manipulator in model.Options.optional_manipulators:
+            optional.append(manipulator.Options.name)
+    except:
+        optional = None
+
+    manip = {'manipulators': required}
+    if optional:
+        manip['optional_manipulators'] = optional
+
+    url = reverse('manipulate', args=[','.join(required)])
+    manip['url'] = url
+
+    return manip

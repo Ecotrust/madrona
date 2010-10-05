@@ -120,6 +120,7 @@ class Mpa(models.Model):
         
     class Options:
         manipulators = [ ClipToStudyRegionManipulator ]
+        optional_manipulators = [ ClipToGraticuleManipulator ]
 
     def __unicode__(self):
         return self.name

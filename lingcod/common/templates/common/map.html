@@ -164,6 +164,22 @@
     </div>
     <div style="display:none;" id="panel-holder"></div>
     <div id="geopanel">
+
+        {% block shapeDefinitionPanelManipulators %}
+        {#  TODO - Eventually we can fix up the language, placement and UI for this #}
+        <div class="manipulators" style="display:none;">
+            <h4>Manipulators</h4>
+            <h5> Required </h5>
+            {#  These divs get populated in media/manipulators/js/manipulators.js #}
+            <div class="requiredManipulators"> </div>
+            <h5> Optional </h5>
+            <div class="optionalManipulators" style="display:none;"> </div>
+            <h5> Url </h5>
+            <div class="manipulatorUrl"> </div>
+        </div>
+        <hr />
+        {% endblock shapeDefinitionPanelManipulators %}
+
         {% block shapeDefinitionPanel %}
         {#  This text is defined within a block here so that individual #}
         {#  projects can extend this block to modify the text #}
