@@ -27,24 +27,31 @@ lingcod.Manipulator = function(gex, form, render_target, div){
         
     var self = this;
    
-    // Set up the manipulators UI
+    // Set up the manipulators UI 
     this.render_target_.find('.manipulators').show();
     this.render_target_.find('.manipulatorUrl').html("<p>"+this.manipulators_url+"</p>");
-    var required_html = "<ul>";
+
+    var required_html = "<form action=''><ul>";
     $.each(this.required_manipulators, function(index, value) { 
-        required_html += "<li>" + value + "</li>"; 
+            required_html += "<li class=\"required_manipulator\">";
+            required_html += "<input class=\"required_manipulator\" type=\"checkbox\" name=\"required_manipulators\"";
+            required_html += " value=\""+ value + "\" id=\"required_manipulator_" + value + "\" CHECKED DISABLED />";
+            required_html += "<span>" + value + "</span></li>";
     });
-    required_html += "</ul>";
+    required_html += "</ul></form>";
     this.render_target_.find('.requiredManipulators').html(required_html);
+
     if(this.optional_manipulators){
         var optional_html = "<form action=''><ul>";
         $.each(this.optional_manipulators, function(index, value) { 
                 optional_html += "<li class=\"optional_manipulator\">";
-                optional_html += "<input class=\"optional_manipulator\" type=\"checkbox\" name=\"optional_manipulators\"  value=\""+ value + "\" id=\"optional_manipulator_" + value + "\"/>"
+                optional_html += "<input class=\"optional_manipulator\" type=\"checkbox\" name=\"optional_manipulators\""
+                optional_html += " value=\""+ value + "\" id=\"optional_manipulator_" + value + "\"/>"
                 optional_html += "<span>" + value + "</span></li>";
         });
         optional_html += "</ul></form>";
         this.render_target_.find('.optionalManipulators').html(optional_html);
+    
         this.render_target_.find('input.optional_manipulator').each( function(index){
             $(this).click(function(){
                 self.constructUrl_();
