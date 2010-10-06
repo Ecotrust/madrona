@@ -81,6 +81,7 @@ class Mpa(models.Model):
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
+    manipulators = models.TextField(verbose_name="Manipulator List", default='')
     # Array relation fields
     content_type = models.ForeignKey(ContentType, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True,null=True)
@@ -200,16 +201,61 @@ class Mpa(models.Model):
         self.geometry_final = clean_geometry(self.geometry_final)
         super(Mpa, self).save(*args, **kwargs) # Call the "real" save() method
 
+    @property
+    def active_manipulators(self):
+        """
+        This method contains all the logic to determine which manipulators get applied to an MPA
+
+        If self.manipulators doesnt exist or is null or blank, 
+           apply the required manipulators (or the NullManipulator if none are required)
+
+        If there is a self.manipulators string and there are optional manipulators contained in it,
+           apply the required manipulators PLUS the specified optional manipulators
+        """
+        active = []
+        try:
+            manipulator_list = self.manipulators.split(',')
+            if len(manipulator_list) == 1 and manipulator_list[0] == '':
+                # list is blank
+                manipulator_list = []
+        except AttributeError:
+            print "No manipulators field - need to migrate sublclassed MPA"
+            manipulator_list = [] 
+
+        required = self.__class__.Options.manipulators
+        try:
+            optional = self.__class__.Options.optional_manipulators
+        except AttributeError:
+            optional = []
+
+        # Always include the required manipulators in the active list
+        active.extend(required)
+
+        if len(manipulator_list) < 1:
+            if not required or len(required) < 1:
+                manipulator_list = ['NullManipulator']
+            else:
+                return active 
+
+        for manipulator in manipulator_list:
+            manipClass = manipulatorsDict.get(manipulator)
+            if manipClass and (manipClass in optional or manipClass == NullManipulator):
+                active.append(manipClass)
+
+        return active
+
     def apply_manipulators(self, force=False):
         from lingcod.data_manager.models import clean_geometry
         if force or self.geometry_final is None:
             print "applying manipulators"
             target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
             result = False
-            for manipulator in self.__class__.Options.manipulators:
+            for manipulator in self.active_manipulators:
                 m = manipulator(target_shape)
                 result = m.manipulate()
                 target_shape = result['clipped_shape'].wkt
+            if not result:
+                raise Exception("No result returned - maybe manipulators did not run?")
             geo = result['clipped_shape']
             geo.transform(settings.GEOMETRY_DB_SRID)
             ensure_clean(geo, settings.GEOMETRY_DB_SRID)
