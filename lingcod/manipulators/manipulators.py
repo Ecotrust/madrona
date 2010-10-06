@@ -527,10 +527,14 @@ class NullManipulator(BaseManipulator):
 
     def manipulate(self): 
         target_shape = self.target_to_valid_geom(self.target_shape)
-        return self.result(target_shape)
+        status_html = self.do_template("0")
+        return self.result(target_shape, status_html)
 
     class Options(BaseManipulator.Options):
         name = 'NullManipulator'
+        html_templates = {
+            '0':'manipulators/valid.html', 
+        }
 
 manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
 
