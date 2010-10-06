@@ -28,9 +28,6 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     var self = this;
    
     // Set up the manipulators UI 
-    this.render_target_.find('.manipulators').show();
-    this.render_target_.find('.manipulatorUrl').html("<p>"+this.manipulators_url+"</p>");
-
     var required_html = "<form action=''><ul>";
     $.each(this.required_manipulators, function(index, value) { 
             required_html += "<li class=\"required_manipulator\">";
@@ -43,10 +40,15 @@ lingcod.Manipulator = function(gex, form, render_target, div){
 
     if(this.optional_manipulators){
         var optional_html = "<form action=''><ul>";
+        var stored_manipulator_string = this.form_.find('#id_manipulators').attr('value');
         $.each(this.optional_manipulators, function(index, value) { 
                 optional_html += "<li class=\"optional_manipulator\">";
-                optional_html += "<input class=\"optional_manipulator\" type=\"checkbox\" name=\"optional_manipulators\""
-                optional_html += " value=\""+ value + "\" id=\"optional_manipulator_" + value + "\"/>"
+                optional_html += "<input class=\"optional_manipulator\" type=\"checkbox\" name=\"optional_manipulators\"";
+                optional_html += " value=\""+ value + "\" id=\"optional_manipulator_" + value + "\"";
+                if( stored_manipulator_string && stored_manipulator_string.indexOf(value) >= 0) {
+                    optional_html += " CHECKED";
+                }
+                optional_html += "/>";
                 optional_html += "<span>" + value + "</span></li>";
         });
         optional_html += "</ul></form>";
@@ -57,6 +59,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
                 self.constructUrl_();
             });
         });
+        self.constructUrl_();
         this.render_target_.find('.optionalManipulators').show();
     }
 
@@ -109,7 +112,7 @@ lingcod.Manipulator.prototype.constructUrl_ = function(){
     url_parts.pop(); // remove the comm-seperated manipulators list
     url_parts.push(self.active.join(","));
     this.manipulators_url = "/" + url_parts.join("/") + "/";
-    this.render_target_.find('.manipulatorUrl').html("<p>"+this.manipulators_url+"</p>");
+    this.form_.find('#id_manipulators').val(self.active.join(","));
 }
 
 lingcod.Manipulator.prototype.drawNewShape_ = function(){
@@ -194,7 +197,7 @@ lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, origin
 }
 
 lingcod.Manipulator.prototype.hideStates_ = function(){
-    this.render_target_.find('div.new, div.edit, div.manipulated, div.editing').hide();
+    this.render_target_.find('div.manipulators, div.new, div.edit, div.manipulated, div.editing').hide();
 }
 
 lingcod.Manipulator.prototype.enterManipulatedState_ = function(html, success){
@@ -221,6 +224,7 @@ lingcod.Manipulator.prototype.enterNewState_ = function(){
     this.hideStates_();
     // this.is_defining_shape_ = true;
     this.render_target_.find('div.new').show();
+    this.render_target_.find('div.manipulators').show();
     this.render_target_.find('a.draw_shape').removeClass('disabled');
 }
 
@@ -234,6 +238,7 @@ lingcod.Manipulator.prototype.enterEditingState_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = false;
     this.render_target_.find('.done_editing').removeClass('disabled');
+    this.render_target_.find('div.manipulators').show();
     this.render_target_.find('div.editing').show();
 }
 

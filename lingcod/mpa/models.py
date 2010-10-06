@@ -81,7 +81,7 @@ class Mpa(models.Model):
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
-    manipulators = models.TextField(verbose_name="Manipulator List", default='')
+    manipulators = models.TextField(verbose_name="Manipulator List", null=True, blank=True, help_text='List of the active manipulators to be applied; comma-separated string, no spaces.')
     # Array relation fields
     content_type = models.ForeignKey(ContentType, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True,null=True)

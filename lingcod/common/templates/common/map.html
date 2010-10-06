@@ -166,16 +166,15 @@
     <div id="geopanel">
 
         {% block shapeDefinitionPanelManipulators %}
-        {#  TODO - Eventually we can fix up the language, placement and UI for this #}
         <div class="manipulators" style="display:none;">
             <h4>Manipulators</h4>
             {#  These divs get populated in media/manipulators/js/manipulators.js #}
             <div class="requiredManipulators"> </div>
             <div class="optionalManipulators" style="display:none;"> </div>
-            <span>URL:</span><div class="manipulatorUrl"> </div>
+            <hr />
         </div>
-        <hr />
         {% endblock shapeDefinitionPanelManipulators %}
+
 
         {% block shapeDefinitionPanel %}
         {#  This text is defined within a block here so that individual #}
