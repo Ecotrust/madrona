@@ -517,6 +517,24 @@ class ClipToGraticuleManipulator(BaseManipulator):
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
 
 
+class NullManipulator(BaseManipulator):
+    """ 
+    This manipulator does nothing but ensure the geometry is clean. 
+    Even if no manipulator is specified, this, at a minimum, needs to be run.
+    """
+    def __init__(self, target_shape, **kwargs):
+        self.target_shape = target_shape
+
+    def manipulate(self): 
+        target_shape = self.target_to_valid_geom(self.target_shape)
+        return self.result(target_shape)
+
+    class Options(BaseManipulator.Options):
+        name = 'NullManipulator'
+
+manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
+
+
 def get_url_for_model(model):
     names = []
     for manipulator in model.Options.manipulators:
@@ -540,8 +558,11 @@ def get_manipulators_for_model(model):
     manip = {'manipulators': required}
     if optional:
         manip['optional_manipulators'] = optional
+    
+    if len(required) > 0:
+        url = reverse('manipulate', args=[','.join(required)])
+    else:
+        url = reverse('manipulate-blank')
 
-    url = reverse('manipulate', args=[','.join(required)])
     manip['url'] = url
-
     return manip
