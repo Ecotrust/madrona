@@ -295,6 +295,7 @@ def valid_browser(ua):
     supported_browsers = [
             ('Firefox', 3, 5, 'Mac'),
             ('Safari', 3, 1, 'Mac'),
+            ('Chrome', 6, 0, 'Mac'),
             ('Firefox', 3, 5, 'Windows'),
             ('Chrome', 1, 0, 'Windows'),
             ('IE', 8, 0, 'Windows'),
