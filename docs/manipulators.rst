@@ -159,3 +159,32 @@ Things to keep in mind as you create your own manipulators:
 
 We invite you to use the manipulator provided by simple_app (or any of our manipulators defined in 
 ``lingcod/manipulators``) as a template for generating your own manipulators.  
+
+Optional Manipulators
+*********************
+
+There may be cases where certain manipulators should be optional and user-selectable depending on the purpose of their MPA. 
+In this case we can specify `optional_manipulators` in the MPA model Options.
+
+.. code-block:: python 
+
+    class Options:
+        manipulators = [ ClipToStudyRegionManipulator, ]
+        optional_manipulators = [ EastWestManipulator, ]
+
+On the user-interface side, when a user creates or edits a shape, there will be a form with checkboxes allowing them to select from these optional manipulators. 
+
+On the database side, the `active manipulators` that are applied to a given MPA are stored as a comma-separated string in the MPA table. 
+When and if the geometry needs to be saved again, the previously selected manipulators will be applied.  
+The required manipulators will always be applied regardless of the content of the MPA.manipulators field. 
+In other words, the MPA.manipulators field serves only to trigger the application of optional manipulators. 
+
+If there are no required manipulators, you must still provide an empty list for Options.manipulators
+
+.. code-block:: python 
+
+    class Options:
+        manipulators = []
+        optional_manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator, ]
+
+If the user doesn't select any other optional manipulators and there are none required, a special case is triggered. We can't allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the `NullManipulator` is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should *not* appear in either your manipulators or optional_manipulators lists. 
