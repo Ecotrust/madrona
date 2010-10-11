@@ -357,6 +357,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         
     class Options:
         name = 'ClipToStudyRegion'
+        #display_name = "Study Region"
+        #description = "Clip your shape to the study region"
         html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
@@ -546,16 +548,39 @@ def get_url_for_model(model):
     return reverse('manipulate', args=[','.join(names)])
 
 def get_manipulators_for_model(model):
-    # required manipulators
     required = []
+    display_names = {}
+    descriptions = {}
+
+    # required manipulators
     for manipulator in model.Options.manipulators:
         required.append(manipulator.Options.name)
+
+        try:
+            display_names[manipulator.Options.name] = manipulator.Options.display_name
+        except AttributeError:
+            pass
+
+        try:
+            descriptions[manipulator.Options.name] = manipulator.Options.description
+        except AttributeError:
+            pass
+
 
     # optional manipulators
     try:
         optional = []
         for manipulator in model.Options.optional_manipulators:
             optional.append(manipulator.Options.name)
+            try:
+                display_names[manipulator.Options.name] = manipulator.Options.display_name
+            except AttributeError:
+                pass
+
+            try:
+                descriptions[manipulator.Options.name] = manipulator.Options.description
+            except AttributeError:
+                pass
     except:
         optional = None
 
@@ -569,4 +594,6 @@ def get_manipulators_for_model(model):
         url = reverse('manipulate-blank')
 
     manip['url'] = url
+    manip['display_names'] = display_names
+    manip['descriptions'] = descriptions
     return manip

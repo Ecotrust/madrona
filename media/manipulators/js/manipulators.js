@@ -16,6 +16,8 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     this.shape_;
     this.required_manipulators = json.manipulators;
     this.optional_manipulators = json.optional_manipulators;
+    this.manip_desc = json.descriptions;
+    this.manip_name = json.display_names;
     this.active = this.required_manipulators.slice(); // pass by value
     this.manipulators_url = json.url;
     this.gex_ = gex;
@@ -31,10 +33,17 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     if(this.optional_manipulators){
         var required_html = "<form action=''><ul>";
         $.each(this.required_manipulators, function(index, value) { 
+                var display_name = self.manip_name[value];
+                if(!display_name)
+                    display_name = value;
+                var description = self.manip_desc[value];
                 required_html += "<li class=\"required_manipulator\">";
                 required_html += "<input class=\"required_manipulator\" type=\"checkbox\" name=\"required_manipulators\"";
                 required_html += " value=\""+ value + "\" id=\"required_manipulator_" + value + "\" CHECKED DISABLED />";
-                required_html += "<span>" + value + "</span></li>";
+                required_html += "<span>" + display_name + "</span>";
+                if(description)
+                    required_html += "<p><em>" + description + "</em></p>";
+                required_html += "</li>";
         });
         required_html += "</ul></form>";
         this.render_target_.find('.requiredManipulators').html(required_html);
@@ -42,6 +51,10 @@ lingcod.Manipulator = function(gex, form, render_target, div){
         var optional_html = "<form action=''><ul>";
         var stored_manipulator_string = this.form_.find('#id_manipulators').attr('value');
         $.each(this.optional_manipulators, function(index, value) { 
+                var display_name = self.manip_name[value];
+                if(!display_name)
+                    display_name = value;
+                var description = self.manip_desc[value];
                 optional_html += "<li class=\"optional_manipulator\">";
                 optional_html += "<input class=\"optional_manipulator\" type=\"checkbox\" name=\"optional_manipulators\"";
                 optional_html += " value=\""+ value + "\" id=\"optional_manipulator_" + value + "\"";
@@ -49,7 +62,10 @@ lingcod.Manipulator = function(gex, form, render_target, div){
                     optional_html += " CHECKED";
                 }
                 optional_html += "/>";
-                optional_html += "<span>" + value + "</span></li>";
+                optional_html += "<span>" + display_name + "</span>";
+                if(description)
+                    optional_html += "<p><em>" + description + "</em></p>";
+                optional_html += "</li>";
         });
         optional_html += "</ul></form>";
         this.render_target_.find('.optionalManipulators').html(optional_html);
