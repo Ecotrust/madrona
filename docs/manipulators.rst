@@ -140,7 +140,7 @@ Things to keep in mind as you create your own manipulators:
 .. code-block:: python
   
     class Options:
-        name = 'Your Manipulator Class'
+        name = 'YourManipulatorClass'
         html_templates = {
             '1':'manipulators/template1.html',
             '2':'manipulators/template2.html',
@@ -148,6 +148,17 @@ Things to keep in mind as you create your own manipulators:
         }
 ..
 
+  * The manipulators.Options class can optionally specify a ``display_name`` and ``description`` which 
+    will provide a nicer UI when using user-specified manipulators. If they are not specified, the ``name`` 
+    will be shown verbatim in the html form. 
+        
+.. code-block:: python
+  
+    class Options:
+        name = 'YourManipulatorClass'
+        display_name = 'Your Manipulator Class'
+        description = 'Check it out. This is my brand new manipulator.'
+..
   * As mentioned earlier, for each manipulator class in your ``manipulators.py`` there should also  
     be a dictionary entry for ``manipulatorsDict``.  This allows your manipulator to be seen from 
     the manipulators application.  
