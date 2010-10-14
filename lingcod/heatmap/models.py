@@ -51,7 +51,7 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     
 def create_raster_from_matrix(matrix,outfile,extent=SR_EXTENT,cellsize=CELL_SIZE,format='GTiff',srid=settings.GEOMETRY_DB_SRID):
     """
-    Creates a blank raster dataset with all 1s where there are shapes in the shapefile.
+    Creates a raster dataset with all 1s where there are shapes in the shapefile.
     """
     srs = osr.SpatialReference()
     srs.ImportFromEPSG(srid)

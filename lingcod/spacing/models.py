@@ -190,7 +190,10 @@ def distance_row_dict(from_dict, to_dict):
     
 def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
     """
-    NOTE: This method assumes that the projection units are meters.
+    NOTE: This method assumes that the projection units are meters.  This should be changed.  Check out
+    lingcod.unit_converter.models.  It's pretty easy to introspect the geometry for the srid and figure
+    out the native units from that.  I'd fix it but this is my last week here before taking a big trip
+    on a small boat.
     """
     result = []
     for point in to_list:

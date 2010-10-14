@@ -6,6 +6,7 @@ Apps
 
    study_region
    intersection
+   spacing
    layers
    marine_protected_areas
    arrays
