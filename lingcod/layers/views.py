@@ -3,6 +3,9 @@ from django.shortcuts import get_object_or_404, render_to_response
 from models import *
 import os
 import itertools
+import posixpath
+import urllib
+import mimetypes as _mimetypes
 from django.conf import settings
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
@@ -29,8 +32,10 @@ def get_networklink_private_layers(request, session_key):
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     layers = get_layers_for_user(user)
+    superoverlays = get_superoverlays_for_user(user)
+    print layers
     response = render_to_response('layers/network_links.kml', 
-            {'username': user.username, 'session_key': session_key, 'layers': layers}, mimetype=mimetypes.KML)
+            {'username': user.username, 'session_key': session_key, 'superoverlays': superoverlays, 'layers': layers}, mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=private_links.kml'
     return response
 
@@ -39,14 +44,32 @@ def get_layerlist(request,session_key):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    layers = get_layers_for_user(user)
     urls = []
+
+    layers = get_layers_for_user(user)
+    print layers
     for layer in layers:
         url = reverse('layers-private', kwargs={'pk': layer.pk, 'session_key': session_key})
         urls.append(url)
+
+    layers = get_superoverlays_for_user(user)
+    print layers
+    for layer in layers:
+        url = reverse('layers-superoverlay-private', kwargs={'pk': layer.pk, 'session_key': session_key})
+        urls.append(url)
+
     # TODO how should these be returned? certainly not a comma-seperated list
     lstr = ','.join(urls)
     return HttpResponse(lstr, status=200)
+
+def get_superoverlays_for_user(user):
+    shared_overlays = PrivateSuperOverlay.objects.shared_with_user(user).order_by('-priority')
+    owned_overlays = PrivateSuperOverlay.objects.filter(user=user).order_by('-priority')
+    layers = []
+    for lyr in itertools.chain(shared_overlays, owned_overlays):
+        if lyr not in layers:
+            layers.append(lyr)
+    return layers
 
 def get_layers_for_user(user):
     shared_layers = PrivateLayerList.objects.shared_with_user(user).order_by('-priority')
@@ -70,6 +93,59 @@ def get_private_layer(request, pk, session_key='0'):
         response = HttpResponse(layer.kml.read(), status=200, mimetype=mimetypes.KML)
         response['Content-Disposition'] = 'attachment; filename=private_%s.kml' % pk
         return response
+
+def get_private_superoverlay(request, pk, session_key='0'):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    viewable, response = can_user_view(PrivateSuperOverlay, pk, user)
+    print user, viewable, response
+    if not viewable:
+        return response
+    else:
+        layer = PrivateSuperOverlay.objects.get(pk=pk)
+        response = HttpResponse(open(layer.base_kml,'rb').read(), status=200, mimetype=mimetypes.KML)
+        response['Content-Disposition'] = 'attachment; filename=private_overlay_%s.kml' % pk
+        return response
+
+def get_relative_to_private_superoverlay(request, pk, path, session_key='0'):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    viewable, response = can_user_view(PrivateSuperOverlay, pk, user)
+    if not viewable:
+        return response
+
+    layer = PrivateSuperOverlay.objects.get(pk=pk)
+
+    # From django.views.static
+    path = posixpath.normpath(urllib.unquote(path))
+    path = path.lstrip('/')
+    newpath = ''
+    for part in path.split('/'):
+        if not part:
+            # Strip empty path components.
+            continue
+        drive, part = os.path.splitdrive(part)
+        head, part = os.path.split(part)
+        if part in (os.curdir, os.pardir):
+            # Strip '.' and '..' in path.
+            continue
+        newpath = os.path.join(newpath, part).replace('\\', '/')
+
+    # newpath is different from path any time path is unsafe. 
+    if newpath and path == newpath:
+        basedir = os.path.dirname(layer.base_kml)
+        requested_file = os.path.join(basedir,newpath)
+        if not os.path.exists(requested_file):
+            raise Http404
+        mimetype, encoding = _mimetypes.guess_type(requested_file)
+        mimetype = mimetype or 'application/octet-stream'
+        return HttpResponse(open(requested_file,'rb').read(), status=200, mimetype=mimetype)
+    else:
+        return HttpResponse("Nice try", status=403)
 
 
 def get_map(request, session_key, input_username, group_name, layer_name, z=None, x=None, y=None, ext=None, root=settings.USER_DATA_ROOT):

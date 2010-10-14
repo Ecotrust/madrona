@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 
 from lingcod.sharing.models import * 
-from lingcod.layers.models import PrivateLayerList
+from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group, Permission
 from django.conf import settings
@@ -11,14 +11,14 @@ from django.conf import settings
 class Command(BaseCommand):
     help = "Configures the sharing framework for private layers"
 
-    def handle(self, **options):
-        # First register the layers as shareable content types
-        ct = ContentType.objects.get_for_model(PrivateLayerList)
+    def register_as_shareable(self, obj):
+        #First register the layers as shareable content types
+        ct = ContentType.objects.get_for_model(obj)
 
         if len(ShareableContent.objects.filter(shared_content_type=ct)) == 0:
             share = ShareableContent.objects.create(shared_content_type=ct)
         else:
-            print "Private Layer List already added as SharedContent"
+            print "Content Type %r already added as SharedContent" % ct
 
         # Default groups
         try:
@@ -49,8 +49,12 @@ class Command(BaseCommand):
         for to_staff_group in to_staff_groups:
             to_staff_group.permissions.add(shareables[ct.natural_key()[1]][1])
     
+    def handle(self, **options):
+        self.register_as_shareable(PrivateLayerList)
+        self.register_as_shareable(PrivateSuperOverlay)
+
         out = """
-        MarineMap is now configured for sharing private layers. You can...
+        MarineMap is now configured for sharing private layers and superoverlays. You can...
 
          * create new groups
          * add the can_share_privatelayerlist permission to group
@@ -61,3 +65,4 @@ class Command(BaseCommand):
         """
 
         print out
+        

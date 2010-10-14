@@ -4,7 +4,7 @@ import os
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
-RELEASE = '1.7dev' # The next milestone
+RELEASE = '1.9dev' # The next milestone
 
 GEOMETRY_DB_SRID = 3310
 
@@ -102,7 +102,16 @@ INSTALLED_APPS = (
     'ghettoq', 
 )
 
-EXCLUDE_FROM_TESTS = ['ghettoq', 'south']
+EXCLUDE_FROM_TESTS = [
+    'ghettoq', 
+    'south', 
+    'django.contrib.auth',
+    'django.contrib.admin',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.gis'
+]
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?
@@ -176,3 +185,5 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
 
 OPENID_ENABLED = False
 LOG_FILE = '/tmp/marinemap.log'
+
+SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'

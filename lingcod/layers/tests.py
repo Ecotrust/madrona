@@ -7,7 +7,7 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.core.files import File
-from lingcod.layers.models import PublicLayerList, PrivateLayerList
+from lingcod.layers.models import PublicLayerList, PrivateLayerList, PrivateSuperOverlay
 from lingcod.sharing.models import share_object_with_group, ShareableContent, get_shareables
 from lingcod.sharing.utils import can_user_view
 from django.contrib.contenttypes.models import ContentType
@@ -30,8 +30,11 @@ class PrivateLayerListTest(TestCase):
         # kml file
         kml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures/public_layers.kml')
 
-        # Create shareable content type
+        # Create shareable content types
         ct = ContentType.objects.get_for_model(PrivateLayerList)
+        share = ShareableContent.objects.create(shared_content_type=ct)
+        share.save()
+        ct = ContentType.objects.get_for_model(PrivateSuperOverlay)
         share = ShareableContent.objects.create(shared_content_type=ct)
         share.save()
 
