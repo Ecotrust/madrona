@@ -11,6 +11,7 @@
         <Link> <href>{% absurl layers-private pk=layer.pk session_key=session_key %}</href> </Link>
     </NetworkLink>
     {% endfor %}
+    {% if superoverlays %}
     {% for layer in superoverlays %}
     <NetworkLink>
         <name>{{layer.name}}</name>
@@ -19,5 +20,6 @@
         <Link> <href>{% absurl layers-superoverlay-private pk=layer.pk session_key=session_key %}</href> </Link>
     </NetworkLink>
     {% endfor %}
+    {% endif %}
 </Document>
 </kml>
