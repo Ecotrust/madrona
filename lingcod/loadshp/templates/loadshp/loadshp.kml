@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+  <name>{{ layer.name }}</name>
+  <open>1</open>
+  <visibility>1</visibility>
+
+  <Style id="defaultstyle">
+    <IconStyle>
+        <color>01000000</color> 
+        <colorMode>normal</colorMode>
+        <scale>0.7</scale> 
+        <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
+    </IconStyle>
+    <BalloonStyle>
+        <text> <![CDATA[
+           <div>
+            <p><strong> $[name]</strong></p>
+           </div>
+        ]]> </text>
+    </BalloonStyle>
+    <LabelStyle>
+        <color>ffffffff</color>
+        <scale>0.7</scale>
+    </LabelStyle>
+    <PolyStyle>
+        <color>778B1A99</color>
+    </PolyStyle>
+    <LineStyle>
+        <color>ffffffff</color>
+    </LineStyle>
+  </Style>
+
+
+  {% for feature in layer %}
+   <Placemark id="{{feature.fid}}">
+       <name>Uploaded Feature ID {{ feature.fid }}</name>
+        <styleUrl>#defaultstyle</styleUrl>
+        <visibility>1</visibility>
+        {{ feature.geom.kml|safe }}
+    </Placemark>
+
+  {% endfor %}
+
+</Document>
+</kml>

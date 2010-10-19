@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'lingcod.user_profile',
     'lingcod.unit_converter',
     'lingcod.openid',
+    'lingcod.loadshp',
     'registration',
     'south',
     'lingcod.async',
