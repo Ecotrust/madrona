@@ -8,7 +8,8 @@ from django.template import RequestContext
 
 def load_single_shp(request, session_key):
     """
-    Private layers are shared superoverlays or privatelayers 
+    GET returns a form to upload a zipped shp
+    POST takes the zip, validates that it is a single-feature poly shp and returns KML
     """
     load_session(request, session_key)
     user = request.user
@@ -18,6 +19,12 @@ def load_single_shp(request, session_key):
     form = UploadForm()
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
+
+        # Override the defulat form behavior and 
+        # only allow single-feature polygon shps
+        form.multi_feature = False
+        form.supported_geomtypes = ['Polygon']
+
         if form.is_valid():
             layer = form.handle(request.FILES['file_obj'],user)
             response = render_to_response('loadshp/loadshp.kml', 

@@ -14,6 +14,8 @@ from django.contrib.gis import gdal
 class UploadForm(forms.Form):
 
     file_obj  = forms.FileField(label=_('Upload a Zipped Shapefile'))
+    multi_feature = True
+    supported_geomtypes = ['Polygon','Point','Line']
 
     def clean_file_obj(self):
         f = self.cleaned_data['file_obj']
@@ -114,15 +116,16 @@ class UploadForm(forms.Form):
         # one way of testing a sane shapefile...
         # further tests should be able to be plugged in here...
         if layer.test_capability('RandomRead'):
-            if str(ds.driver) == 'ESRI Shapefile':
-                return True, None
-            else:
+            if str(ds.driver) != 'ESRI Shapefile':
                 return False, "Sorry, we've experienced a problem on our server. Please try again later."
         else:
             return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again'
 
-        if layer.geom_type.name != Polygon:
-            return False, "Sorry, only polygon layers can be loaded at this time"
+        if layer.geom_type.name not in self.supported_geomtypes:
+            return False, "Sorry, %s geometries are not supported. Try uploading a zipped shapefile with %s geometries" % \
+                    (layer.geom_type.name, ', '.join(self.supported_geomtypes))
         
-        if layer.num_feat != 1:
-            return False, "We can only support shapefiles with a single polygon feature"
+        if not self.multi_feature and layer.num_feat != 1:
+            return False, "We can only support shapefiles with a single feature"
+
+        return True, "Shapefile is good to go"

@@ -2,15 +2,15 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document>
   <name>{{ layer.name }}</name>
-  <open>1</open>
+  <open>0</open>
   <visibility>1</visibility>
 
   <Style id="defaultstyle">
     <IconStyle>
-        <color>01000000</color> 
+        <color>FF8B1A99</color> 
         <colorMode>normal</colorMode>
         <scale>0.7</scale> 
-        <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
+        <Icon> <href> http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png </href> </Icon>
     </IconStyle>
     <BalloonStyle>
         <text> <![CDATA[
