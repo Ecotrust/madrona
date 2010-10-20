@@ -13,9 +13,12 @@ from django.contrib.gis import gdal
 
 class UploadForm(forms.Form):
 
-    file_obj  = forms.FileField(label=_('Upload a Zipped Shapefile'))
+    file_obj = forms.FileField(label=_('Upload a Zipped Shapefile'),
+                              help_text='(Shapefile must contain a single polygon feature in WGS84.)') # changeme
+
     multi_feature = True
     supported_geomtypes = ['Polygon','Point','Line']
+    enforce_4326 = True
 
     def clean_file_obj(self):
         f = self.cleaned_data['file_obj']
@@ -88,8 +91,8 @@ class UploadForm(forms.Form):
         # ensure proper file contents by extensions inside
         if not self.check_zip_contents('shp', zfile):
             return False, 'Found Zip Archive but no file with a .shp extension found inside.'
-        elif not self.check_zip_contents('prj', zfile):
-            return False, 'You must supply a .prj file with the Shapefile to indicate the projection.'
+        #elif not self.check_zip_contents('prj', zfile):
+        #    return False, 'You must supply a .prj file with the Shapefile to indicate the projection.'
         elif not self.check_zip_contents('dbf', zfile):
             return False, 'You must supply a .dbf file with the Shapefile to supply attribute data.'
         elif not self.check_zip_contents('shx', zfile):
@@ -112,7 +115,7 @@ class UploadForm(forms.Form):
 
         # shapefiles have just one layer, so grab the first...
         layer = ds[0]
-        
+
         # one way of testing a sane shapefile...
         # further tests should be able to be plugged in here...
         if layer.test_capability('RandomRead'):
@@ -127,5 +130,10 @@ class UploadForm(forms.Form):
         
         if not self.multi_feature and layer.num_feat != 1:
             return False, "We can only support shapefiles with a single feature"
+
+        if self.enforce_4326 and \
+            (layer.extent.min_x < -180.0 or layer.extent.max_x > 180.0 \
+             or layer.extent.min_y < -90.0 or layer.extent.max_y > 90.0):
+            return False, "Data must be in latlong WGS84. Please contact us if you need to reproject data."
 
         return True, "Shapefile is good to go"

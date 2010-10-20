@@ -5,7 +5,7 @@
 {% block content %}
 <h1>{{ form.user }}</h1>
     {% if form.errors %}
-    <p class="errorlist">{% trans "Sorry there are corrections needed in your form below:" %} {{ form.non_field_errors }}</p>
+    <p class="errorlist">{% trans "Sorry there are corrections needed:" %} {{ form.non_field_errors }}</p>
     {% endif %}
     {% if form.is_multipart %}
     <form enctype="multipart/form-data" method="post" action=".">
@@ -13,6 +13,6 @@
     <form method="post" action=".">
    {% endif %}
    {{ form.as_p }}
-   <input type="submit" value="Upload Zipped Shapefile" />
+   <input type="submit" value="Upload file" />
    </form>
 {% endblock %}
