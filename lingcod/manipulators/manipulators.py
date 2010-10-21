@@ -357,6 +357,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         
     class Options:
         name = 'ClipToStudyRegion'
+        #display_name = "Study Region"
+        #description = "Clip your shape to the study region"
         html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
@@ -517,8 +519,81 @@ class ClipToGraticuleManipulator(BaseManipulator):
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
 
 
+class NullManipulator(BaseManipulator):
+    """ 
+    This manipulator does nothing but ensure the geometry is clean. 
+    Even if no manipulator is specified, this, at a minimum, needs to be run.
+    """
+    def __init__(self, target_shape, **kwargs):
+        self.target_shape = target_shape
+
+    def manipulate(self): 
+        target_shape = self.target_to_valid_geom(self.target_shape)
+        status_html = self.do_template("0")
+        return self.result(target_shape, status_html)
+
+    class Options(BaseManipulator.Options):
+        name = 'NullManipulator'
+        html_templates = {
+            '0':'manipulators/valid.html', 
+        }
+
+manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
+
+
 def get_url_for_model(model):
     names = []
     for manipulator in model.Options.manipulators:
         names.append(manipulator.Options.name)
     return reverse('manipulate', args=[','.join(names)])
+
+def get_manipulators_for_model(model):
+    required = []
+    display_names = {}
+    descriptions = {}
+
+    # required manipulators
+    for manipulator in model.Options.manipulators:
+        required.append(manipulator.Options.name)
+
+        try:
+            display_names[manipulator.Options.name] = manipulator.Options.display_name
+        except AttributeError:
+            pass
+
+        try:
+            descriptions[manipulator.Options.name] = manipulator.Options.description
+        except AttributeError:
+            pass
+
+
+    # optional manipulators
+    try:
+        optional = []
+        for manipulator in model.Options.optional_manipulators:
+            optional.append(manipulator.Options.name)
+            try:
+                display_names[manipulator.Options.name] = manipulator.Options.display_name
+            except AttributeError:
+                pass
+
+            try:
+                descriptions[manipulator.Options.name] = manipulator.Options.description
+            except AttributeError:
+                pass
+    except:
+        optional = None
+
+    manip = {'manipulators': required}
+    if optional:
+        manip['optional_manipulators'] = optional
+    
+    if len(required) > 0:
+        url = reverse('manipulate', args=[','.join(required)])
+    else:
+        url = reverse('manipulate-blank')
+
+    manip['url'] = url
+    manip['display_names'] = display_names
+    manip['descriptions'] = descriptions
+    return manip
