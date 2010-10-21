@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod import rest
-
+from lingcod.rest.forms import UserForm
 
 class GeoQuerySetManager(ShareableGeoManager):
     """ 
@@ -37,6 +37,12 @@ class Feature(models.Model):
     sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this with the following groups")
 
     objects = GeoQuerySetManager()
+    
+    def verbose_name(self):
+        """Returns a name to use when representing this feature class within 
+        the user interface. Set this name on a model using Rest.verbose_name
+        """
+        return getattr(self.Rest, 'verbose_name', self.__class__.__name__)
 
     class Meta:
         abstract=True
@@ -56,7 +62,14 @@ class Folder(Feature):
     ext = models.CharField(max_length="12")
 
     class Rest():
-        share = 'can_share_folders'
+        verbose_name = 'Folder'
         form = FolderForm
+        
+        # share = 'can_share_folders'
+        # form = FolderForm
+
+class FolderForm(UserForm):
+    class Meta:
+        model = Folder
 
 rest.register(Folder)

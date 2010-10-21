@@ -17,3 +17,4 @@ Apps
    news
    async_app
    openid
+   feature_classes
