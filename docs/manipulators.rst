@@ -199,3 +199,13 @@ If there are no required manipulators, you must still provide an empty list for 
         optional_manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator, ]
 
 If the user doesn't select any other optional manipulators and there are none required, a special case is triggered. We can't allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the `NullManipulator` is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should *not* appear in either your manipulators or optional_manipulators lists. 
+
+.. note::
+
+   There are several steps that a marinemap-based project must take in order to ensure that optional manipulators function correctly.
+
+   First, make sure that the MPA superclass is migrated to reflect the MPA schema change.
+   Secondly, make sure to run manage.py install_media
+   Third, the superclass of MPAForm must include 'manipulators' in the fields list.
+   Lastly, the map.html template must include the manipulators div as specified in the common/map.html template. 
+
