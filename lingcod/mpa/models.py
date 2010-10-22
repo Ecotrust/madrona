@@ -96,6 +96,12 @@ class Mpa(models.Model):
                 a kml string with correct dimensions and Left-Hand Rule (LHR) enforced (ie the reversed RHR)
                 Ensures proper styling and clickability compared to the GEOSGeometry.kml property in geodjango
                 See issue #190 for more details
+                
+                Update 10/21/2010
+                It looks like the enforcement of the right-hand-rule has was integrated into django trunk a while back:
+                http://code.djangoproject.com/changeset/12349
+                Doesn't look like extrude is supported though
+                
             Warning: This relies on postgis-specific SQL and assumes 'geometry_final' is the geometry column name
             Usage: 
                 mpas = Mpa.objects.filter(...).add_kml()
