@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod import rest
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm
 
 class GeoQuerySetManager(ShareableGeoManager):
     """ 
@@ -53,22 +53,14 @@ class Feature(models.Model):
 
 # The following code would usually go in a project, I'm just screwing around 
 # here
-from lingcod.rest.forms import UserForm
 
-class FolderForm(UserForm):
-    model = 'lingcod.features.Folder'
-    
 class Folder(Feature):
-    ext = models.CharField(max_length="12")
 
     class Rest():
         verbose_name = 'Folder'
-        form = FolderForm
-        
-        # share = 'can_share_folders'
-        # form = FolderForm
+        form = 'lingcod.features.models.FolderForm'
 
-class FolderForm(UserForm):
+class FolderForm(FeatureForm):
     class Meta:
         model = Folder
 

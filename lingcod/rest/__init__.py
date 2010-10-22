@@ -18,8 +18,8 @@ def validate_feature_config(model):
     # check for the Rest inner-class
     if not hasattr(model, 'Rest'):
         raise FeatureConfigurationError(
-            'Have not defined Rest inner-class on feature class %s' % (
-                model.__name__,))
+            'Have not defined Rest inner-class on registered feature class %s' 
+                % (model.__name__,))
     # check that an associated form has been specified
     if not hasattr(model.Rest, 'form'):
         raise FeatureConfigurationError(

@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.conf import settings
 from lingcod.rest.views import *
-from lingcod.rest.forms import UserForm
+# TODO: Take care of all UserForm references
+# Temporary measure 
+from lingcod.features.forms import FeatureForm as UserForm
 from django.test.client import Client
 from django.contrib.gis.db import models
 from django.forms import ModelForm
@@ -454,7 +456,7 @@ def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid
 
 from lingcod.rest import validate_feature_config
 from lingcod.rest import FeatureConfigurationError
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm
 
 class FeatureConfigTest(TestCase):
     
@@ -474,7 +476,7 @@ class FeatureConfigTest(TestCase):
                 
         class TestFeature(object):
             class Rest:
-                form = UserForm
+                form = FeatureForm
 
         with self.assertRaisesRegexp(FeatureConfigurationError,'form'):
             validate_feature_config(TestFeatureFails)
