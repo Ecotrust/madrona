@@ -1,17 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from lingcod.common import default_mimetypes as mimetypes
-from lingcod.common.utils import load_session
 from forms import UploadForm
 from django.template import RequestContext
 
 
-def load_single_shp(request, session_key):
+def load_single_shp(request):
     """
     GET returns a form to upload a zipped shp
     POST takes the zip, validates that it is a single-feature poly shp and returns KML
     """
-    load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
