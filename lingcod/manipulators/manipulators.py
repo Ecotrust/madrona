@@ -31,7 +31,7 @@ def display_kml(geom):
     geom = simplify(geom)
     coords = []
     for coord in geom.shell.coords:
-        coords.append(str(coord[0])+','+str(coord[1])+','+str(settings.KML_EXTRUDE_HEIGHT))
+        coords.append(','.join([str(coord[0]), str(coord[1]), str(settings.KML_EXTRUDE_HEIGHT)]))
     coords = ' '.join(coords)
     return """<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
