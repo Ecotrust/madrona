@@ -13,9 +13,7 @@ from django.contrib.gis import gdal
 
 class UploadForm(forms.Form):
 
-    file_obj = forms.FileField(label=_('Upload a Zipped Shapefile'),
-                              help_text='(Shapefile must contain a single polygon feature in WGS84.)') # changeme
-
+    file_obj = forms.FileField(label='Upload a Zipped Shapefile')
     multi_feature = True
     supported_geomtypes = ['Polygon','Point','Line']
     enforce_4326 = True

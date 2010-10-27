@@ -86,6 +86,13 @@ lingcod.Manipulator = function(gex, form, render_target, div){
         }
     });
     
+    this.render_target_.find('.load_shape').click(function(){
+        if(!$(this).hasClass('disabled')){
+            $(this).addClass('disabled');
+            self.loadShapeForm_();
+        }
+    });
+    
     this.render_target_.find('div.manipulated .edit_shape').click(function(){
         if(!$(this).hasClass('disabled')){
             $(this).addClass('disabled');
@@ -148,6 +155,67 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
             coords.set(i, coord);
         },
         ensureCounterClockwise: false
+    });
+}
+
+lingcod.Manipulator.prototype.loadShapeForm_ = function(){
+    this.is_defining_shape_ = true;
+    this.is_defining_new_shape_ = true;
+	var self = this;
+    var action = '/loadshp/single/'; // AHHHHH WTF IS THIS ... and you call yourself a programmer
+    $.ajax({
+        url: action, 
+        type: 'GET',
+        success: function(data, status){
+            if(status === 'success'){
+                $('#load_shape_div').show().find('>p').html(data); 
+                $('.upload_button').hide();
+                var button_html = [
+                        '<a href="#" class="submit_button button" onclick="this.blur(); return false;">',
+                            '<span>Upload File</span>',
+                        '</a>',
+                ].join('');
+
+                var form = $('#load_shape_form');
+                form.after(button_html);
+                var opts = {
+                    dataType: 'json',
+                    beforeSubmit: function(formData,b,c) {
+                        $(self).trigger('saving', ["Uploading Shape"]);
+                        var queryString = $.param(formData); 
+                        console.log('About to submit: \n\n' + queryString); 
+                        return true;
+                    },
+                    success: function(response){
+                        $(self).trigger('doneSaving');       
+                        console.log(response);
+                        if (response.status == 'success') {
+                            var kml = response.input_kml;
+                            self.shape_ = self.gex_.pluginInstance.parseKml(kml);
+                            self.finishedEditingCallback_();
+                        } else {
+                            var errors = '<ul class="errorlist"><li>' + response.error_html + '</li></ul>';
+                            form.before(errors);
+                        }
+                        return true;
+                    },
+                    error: function(data, status){
+                        console.log('There was an error processing your shape. ' + status);
+                        console.log(data);
+                    }
+                }
+                $(form).ajaxForm(opts);
+
+                $('.submit_button').click(function(){
+                    form.trigger('submit');
+                });
+            }else{
+                $(self).trigger('error', "There was an error retrieving the form; Status was " + status + ".");
+            }
+        },
+        error: function(data, status){
+            $(self).trigger('error', 'There was an error processing your shape.');
+        }
     });
 }
 
@@ -240,6 +308,7 @@ lingcod.Manipulator.prototype.enterNewState_ = function(){
     // this.is_defining_shape_ = true;
     this.render_target_.find('div.new').show();
     this.render_target_.find('a.draw_shape').removeClass('disabled');
+    this.render_target_.find('a.load_shape').removeClass('disabled');
     if(this.optional_manipulators){
         this.render_target_.find('div.manipulators').show();
     }

@@ -1,18 +1,12 @@
-{% extends "base.html" %}
-
-{% load i18n %}
-
 {% block content %}
-<h1>{{ form.user }}</h1>
+    <br class="clear" />
     {% if form.errors %}
-    <p class="errorlist">{% trans "Sorry there are corrections needed:" %} {{ form.non_field_errors }}</p>
+    <p class="errorlist">"Sorry there are corrections needed:"{{ form.non_field_errors }}</p>
     {% endif %}
-    {% if form.is_multipart %}
-    <form enctype="multipart/form-data" method="post" action=".">
-    {% else %}
-    <form method="post" action=".">
-   {% endif %}
+    <form enctype="multipart/form-data" method="post" id="load_shape_form" action="{{action}}">
+        <input type="hidden" value="10485760" name="MAX_FILE_SIZE"> {# 10 MB limit #}
    {{ form.as_p }}
-   <input type="submit" value="Upload file" />
+   <p>Shapefile must be compressed into a single .zip file. Must contain a single polygon feature in WGS84.</p>
+   <input type="submit" value="Upload file" class="upload_button"/>
    </form>
 {% endblock %}
