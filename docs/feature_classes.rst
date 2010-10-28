@@ -45,3 +45,10 @@ Provide your feature class with a human readable name to be used within
 the interface. For example, this name determines the name used in the 
 "Create" menu. If not specified, the camelcase model name will be used. 
 Even though it is optional, this property is obviously highly recommended.
+
+show_template
+"""""""""""""
+By default, MarineMap will use a naming convention to look for the template 
+used to display a shapes attributes in the sidebar. The template for MpaArray 
+would be ``mpa_array/show.html``. You can specify a different location by 
+specifying the ``show_template`` option.
