@@ -30,6 +30,7 @@
     <test path="common/js/test/tools/measure_tool.js" />
     <file path="common/js/layout/layout.js" />
     <file path="common/js/layout/panel.js" />
+    <file path="common/js/layout/shortTextArea.js" />
     <test path="common/js/test/layout/panel.js" />
     <file path="common/js/layout/menu_items.js" />
     <file path="common/js/map/map.js" />
