@@ -89,8 +89,6 @@ class UploadForm(forms.Form):
         # ensure proper file contents by extensions inside
         if not self.check_zip_contents('shp', zfile):
             return False, 'Found Zip Archive but no file with a .shp extension found inside.'
-        #elif not self.check_zip_contents('prj', zfile):
-        #    return False, 'You must supply a .prj file with the Shapefile to indicate the projection.'
         elif not self.check_zip_contents('dbf', zfile):
             return False, 'You must supply a .dbf file with the Shapefile to supply attribute data.'
         elif not self.check_zip_contents('shx', zfile):
@@ -122,16 +120,22 @@ class UploadForm(forms.Form):
         else:
             return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again'
 
+        # Must have a prj or have data in the -180,-90,180,90 window (assumed to be latlong)
+        if not self.check_zip_contents('prj', zfile) and (layer.extent.min_x < -180.0 or layer.extent.max_x > 180.0 \
+               or layer.extent.min_y < -90.0 or layer.extent.max_y > 90.0):
+            return False, 'You must supply a .prj file with the Shapefile to indicate the projection.'
+        else:
+            g = layer[0].geom
+            g.transform_to(4326)
+            ext = g.envelope
+            if ext.min_x < -180.0 or ext.max_x > 180.0 or ext.min_y < -90.0 or ext.max_y > 90.0:
+                return False, 'There was an error reprojecting your geometry. You must supply a .prj file or reproject to WGS84.'
+
         if layer.geom_type.name not in self.supported_geomtypes:
             return False, "Sorry, %s geometries are not supported. Try uploading a zipped shapefile with %s geometries" % \
                     (layer.geom_type.name, ', '.join(self.supported_geomtypes))
         
         if not self.multi_feature and layer.num_feat != 1:
             return False, "We can only support shapefiles with a single feature"
-
-        if self.enforce_4326 and \
-            (layer.extent.min_x < -180.0 or layer.extent.max_x > 180.0 \
-             or layer.extent.min_y < -90.0 or layer.extent.max_y > 90.0):
-            return False, "Data must be in latlong WGS84. Please contact us if you need to reproject data."
 
         return True, "Shapefile is good to go"

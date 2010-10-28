@@ -10,8 +10,8 @@
             <color>8000ff00</color>
         </PolyStyle>
     </Style>
-  {% for feature in layer %}
-        {{ feature.geom.kml|safe }}
+  {% for geom in geoms %}
+        {{ geom.kml|safe }}
   {% endfor %}
 </Placemark>
 </kml>
