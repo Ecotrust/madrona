@@ -34,34 +34,28 @@ class Feature(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this with the following groups")
-
-    objects = GeoQuerySetManager()
+    sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this with the following groups")
     
-    def verbose_name(self):
-        """Returns a name to use when representing this feature class within 
-        the user interface. Set this name on a model using Rest.verbose_name
-        """
-        return getattr(self.Rest, 'verbose_name', self.__class__.__name__)
+    objects = GeoQuerySetManager()
 
     class Meta:
         abstract=True
     
     class Rest:
         share=False
-                
-
-# The following code would usually go in a project, I'm just screwing around 
-# here
-
-class Folder(Feature):
-
-    class Rest():
-        verbose_name = 'Folder'
-        form = 'lingcod.features.models.FolderForm'
-
-class FolderForm(FeatureForm):
-    class Meta:
-        model = Folder
-
-rest.register(Folder)
+#                 
+# 
+# # The following code would usually go in a project, I'm just screwing around 
+# # here
+# 
+# class Folder(Feature):
+# 
+#     class Rest():
+#         verbose_name = 'Folder'
+#         form = 'lingcod.features.models.FolderForm'
+# 
+# class FolderForm(FeatureForm):
+#     class Meta:
+#         model = Folder
+# 
+# rest.register(Folder)

@@ -2,7 +2,7 @@
 from django.db import models
 from django import forms
 from django.forms import ModelForm
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm as UserForm
 
 class ShapeForm(UserForm):
     def as_p(self, *args, **kwargs):

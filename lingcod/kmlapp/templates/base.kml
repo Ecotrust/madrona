@@ -5,7 +5,7 @@
   <open>1</open>
   <visibility>1</visibility>
   <atom:link rel="marinemap.create_form" title="Marine Protected Area" mm:icon="/path/to/icon.png" mm:model="{% mpa_uid %}" href="{% url mpa_create_form %}"></atom:link>
-  <atom:link rel="marinemap.create_form" title="Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url array_create_form %}"></atom:link>
+  <atom:link rel="marinemap.create_form" title="Array" mm:icon="/path/to/icon.png" mm:model="{% array_uid %}" href="{% url mpa_array_create_form %}"></atom:link>
   {% block style %}{% endblock %}
   {% block folders_and_placemarks %}{% endblock %}
 </Document>

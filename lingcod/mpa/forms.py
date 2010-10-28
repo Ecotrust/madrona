@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from lingcod.mpa.models import *
 from lingcod.mpa.models import Mpa
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm as UserForm
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.geos import fromstr
 from django.conf import settings

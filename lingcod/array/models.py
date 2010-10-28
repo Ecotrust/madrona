@@ -5,13 +5,14 @@ from django.contrib.contenttypes import generic
 from lingcod.common.utils import get_mpa_class, get_array_class
 from lingcod.array.managers import ArrayManager
 from django.template.defaultfilters import slugify
+from lingcod.features.models import Feature
 import os
 
 def get_supportfile_name(instance, filename):
     """ Determine the filepath to store uploaded files - relative to MEDIA_ROOT """
     return os.path.join('upload','array', slugify(instance.name), filename)
 
-class MpaArray(models.Model):
+class MpaArray(Feature):
     """
     Represents a grouping or potential network of Marine Protected Areas. Many
     subclasses of lingcod.mpa.models.Mpa (the same subclass) can be associated 
@@ -32,15 +33,15 @@ class MpaArray(models.Model):
     ``date_modified``       When the Array geometry was last updated.
     ======================  ==============================================
     """
-    user = models.ForeignKey(User)
-    name = models.CharField(verbose_name="Array Name", max_length=255)
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
-    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    # user = models.ForeignKey(User)
+    # name = models.CharField(verbose_name="Array Name", max_length=255)
+    # date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
+    # date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     description = models.TextField(blank=True)
     supportfile1 = models.FileField(upload_to=get_supportfile_name,null=True,blank=True)
     supportfile2 = models.FileField(upload_to=get_supportfile_name,null=True,blank=True)
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this array with the following groups")
+    # sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this array with the following groups")
     
     class Meta:
         permissions = (("can_share_arrays", "Can share arrays"),)
@@ -90,7 +91,7 @@ class MpaArray(models.Model):
         
     @models.permalink
     def get_absolute_url(self):
-        return ('array_resource', (), {
+        return ('mpa_array_resource', (), {
             'pk': self.pk
         })
     objects = ArrayManager()

@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from lingcod.common.utils import get_logger
+from lingcod.common.utils import get_class
 
 logger = get_logger()
 
@@ -25,4 +26,14 @@ def validate_feature_config(model):
             """Feature class %s is not configured with a form class. 
             To specify, add a `form` property to its Rest inner-class."""
              % (model.__name__))
+                       
+    # can't do this validation due to circular reference between form and 
+    # model
+    # # try:
+    # form_class = get_class(model.Rest.form)
+    # # except:
+    # #     raise FeatureConfigurationError(
+    # #         """Feature class %s is not configured with a valid form class. 
+    # #         Could not import %s."""
+    # #          % (model.__name__, model.Rest.form)
     return True

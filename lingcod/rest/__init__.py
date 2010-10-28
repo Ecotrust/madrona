@@ -8,5 +8,6 @@ registered_models = []
 def register(*args):
     for model in args:
         validate_feature_config(model)
-        logger.debug('registering %s' % (model.__name__,) )        
-        registered_models.append(model)
+        logger.debug('registering %s' % (model.__name__,) )
+        if model not in registered_models:
+            registered_models.append(model)

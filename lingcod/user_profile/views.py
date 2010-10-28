@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from models import UserProfile
-from forms import UserForm, UserProfileForm
+from lingcod.features.forms import FeatureForm as UserForm
+from forms import UserProfileForm
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from lingcod.openid.models import UserAssociation

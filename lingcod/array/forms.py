@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.utils.safestring import mark_safe
 from django import forms
 from lingcod.array.models import MpaArray
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm as UserForm
 from os.path import splitext,split
 
 class AdminFileWidget(forms.FileInput):

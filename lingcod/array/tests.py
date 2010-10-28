@@ -22,7 +22,7 @@ class ArrayTestArray(MpaArray):
     # objects = MpaArray.objects
 
         
-from lingcod.rest.forms import UserForm
+from lingcod.features.forms import FeatureForm as UserForm
 
 class ArrayTestForm(UserForm):
     class Meta:
