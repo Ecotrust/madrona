@@ -89,6 +89,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     this.render_target_.find('.draw_shape').click(function(){
         if(!$(this).hasClass('disabled')){
             $(this).addClass('disabled');
+            self.render_target_.find('.load_shape').addClass('disabled');
             self.drawNewShape_();
         }
     });
@@ -96,6 +97,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     this.render_target_.find('.load_shape').click(function(){
         if(!$(this).hasClass('disabled')){
             $(this).addClass('disabled');
+            self.render_target_.find('.draw_shape').addClass('disabled');
             self.loadShapeForm_();
         }
     });
@@ -185,6 +187,10 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
 
                 var form = $('#load_shape_form');
                 form.after(button_html);
+
+                var errors = '<ul class="errorlist" style="display:none"></ul>';
+                form.before(errors);
+
                 var opts = {
                     dataType: 'json',
                     beforeSubmit: function(formData,b,c) {
@@ -201,8 +207,9 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                             self.shape_ = self.gex_.pluginInstance.parseKml(kml);
                             self.finishedEditingCallback_();
                         } else {
-                            var errors = '<ul class="errorlist"><li>' + response.error_html + '</li></ul>';
-                            form.before(errors);
+                            ule = $('ul.errorlist')
+                            ule.show();
+                            ule.html("<li>" + response.error_html + "</li>");
                         }
                         return true;
                     },
