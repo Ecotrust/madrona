@@ -28,6 +28,13 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     this.render_target_.html($('#geopanel').html());
         
     var self = this;
+
+    // Do we expose any geometry input methods other than digitize?
+    $.each(json.geometry_input_methods, function(index, value){
+            if (value == 'load_shp') 
+                console.log(self.render_target_.find('.load_shape'));
+                self.render_target_.find('.load_shape').show();
+    });
    
     // Set up the manipulators UI 
     if(this.optional_manipulators){
@@ -183,12 +190,12 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                     beforeSubmit: function(formData,b,c) {
                         $(self).trigger('saving', ["Uploading Shape"]);
                         var queryString = $.param(formData); 
-                        console.log('About to submit: \n\n' + queryString); 
+                        //console.log('About to submit: \n\n' + queryString); 
                         return true;
                     },
                     success: function(response){
                         $(self).trigger('doneSaving');       
-                        console.log(response);
+                        //console.log(response);
                         if (response.status == 'success') {
                             var kml = response.input_kml;
                             self.shape_ = self.gex_.pluginInstance.parseKml(kml);

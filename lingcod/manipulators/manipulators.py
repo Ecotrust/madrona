@@ -566,7 +566,6 @@ def get_manipulators_for_model(model):
         except AttributeError:
             pass
 
-
     # optional manipulators
     try:
         optional = []
@@ -592,6 +591,15 @@ def get_manipulators_for_model(model):
         url = reverse('manipulate', args=[','.join(required)])
     else:
         url = reverse('manipulate-blank')
+
+    # Geometry Input Methods (defaults to 'digitize' only)
+    manip['geometry_input_methods'] = ['digitize']
+    try:
+        for imethod in model.Options.geometry_input_method:
+            if imethod not in manip['geometry_input_methods']:
+                manip['geometry_input_methods'].append(imethod)
+    except AttributeError:
+        pass
 
     manip['url'] = url
     manip['display_names'] = display_names
