@@ -95,11 +95,12 @@ INSTALLED_APPS = (
     'lingcod.user_profile',
     'lingcod.unit_converter',
     'lingcod.openid',
+    'lingcod.features',
     'registration',
     'south',
     'lingcod.async',
     'djcelery', 
-    'ghettoq', 
+    'ghettoq',
 )
 
 EXCLUDE_FROM_TESTS = [
