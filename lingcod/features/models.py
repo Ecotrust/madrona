@@ -4,6 +4,7 @@ from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod import rest
 from lingcod.features.forms import FeatureForm
+import re
 
 class GeoQuerySetManager(ShareableGeoManager):
     """ 
@@ -43,6 +44,14 @@ class Feature(models.Model):
     
     class Rest:
         share=False
+        
+    @models.permalink
+    def get_absolute_url(self):
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', self.__class__.__name__)
+        name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        return ('%s_resource' % (name, ), (), {
+            'pk': self.pk
+        })
 #                 
 # 
 # # The following code would usually go in a project, I'm just screwing around 

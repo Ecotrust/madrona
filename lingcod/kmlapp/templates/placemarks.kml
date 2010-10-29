@@ -106,7 +106,7 @@
               </ItemIcon>
             </ListStyle>	       
 	    </Style>
-        <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa_update_form pk=mpa.pk %}" />
+        <atom:link rel="marinemap.update_form" title="Edit" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mlpa_mpa_update_form pk=mpa.pk %}" />
         <atom:link rel="marinemap.share_form" title="Share" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url sharing-object-form object_type=mpa_ctid,pk=mpa.pk %}" />
         <atom:link rel="marinemap.copy" title="Copy" mm:icon="/path/to/icon.jpg" mm:model="{% mpa_uid %}" href="{% url mpa-copy pk=mpa.pk %}" />
         <atom:link rel="self" title="{{mpa.name}}" mm:model="{% mpa_uid %}" mm:pk="{{ mpa.pk }}" href="{{mpa.get_absolute_url}}" />

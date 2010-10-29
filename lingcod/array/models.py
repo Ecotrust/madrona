@@ -89,11 +89,6 @@ class MpaArray(Feature):
                 return True
         return False
         
-    @models.permalink
-    def get_absolute_url(self):
-        return ('mpa_array_resource', (), {
-            'pk': self.pk
-        })
     objects = ArrayManager()
 
     @property

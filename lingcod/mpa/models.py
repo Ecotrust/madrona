@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.gis.measure import A, D
+from lingcod.features.models import Feature
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
@@ -46,7 +47,7 @@ class GeoQuerySetManager(ShareableGeoManager):
         
     
 
-class Mpa(models.Model):
+class Mpa(Feature):
     """Model used for representing marine protected areas or MPAs
 
         ======================  ==============================================
@@ -74,10 +75,10 @@ class Mpa(models.Model):
         ``array``               Use to access the associated Array (read-only)
         ======================  ==============================================
     """   
-    user = models.ForeignKey(User)
-    name = models.CharField(verbose_name="MPA Name", max_length="255")
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
-    date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
+    # user = models.ForeignKey(User)
+    # name = models.CharField(verbose_name="MPA Name", max_length="255")
+    # date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
+    # date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
@@ -86,7 +87,7 @@ class Mpa(models.Model):
     object_id = models.PositiveIntegerField(blank=True,null=True)
     array = generic.GenericForeignKey('content_type', 'object_id')
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this MPA with the following groups")
+    # sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this MPA with the following groups")
 
     objects = GeoQuerySetManager()
     class QuerySet(GeoQuerySet):
@@ -129,12 +130,6 @@ class Mpa(models.Model):
 
     def __unicode__(self):
         return self.name
-        
-    @models.permalink
-    def get_absolute_url(self):
-        return ('mpa_resource', (), {
-            'pk': self.pk
-        })
             
     def centroid_kml(self):
         geom = self.geometry_final.point_on_surface.transform(4326, clone=True)
