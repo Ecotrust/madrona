@@ -180,7 +180,7 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                 $('#load_shape_div').show().find('>p').html(data); 
                 self.render_target_.find('.upload_button').hide();
                 var button_html = [
-                        '<a href="#" class="submit_button button" onclick="this.blur(); return false;">',
+                        '<a href="#" id="load_shape_submit_button" class="button" onclick="this.blur(); return false;">',
                             '<span>Upload File</span>',
                         '</a>',
                 ].join('');
@@ -190,6 +190,7 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
 
                 var errors = '<ul id="load_shape_errorlist" class="errorlist" style="display:none"></ul>';
                 form.before(errors);
+                var ule = $('#load_shape_errorlist')
 
                 var opts = {
                     dataType: 'json',
@@ -200,11 +201,9 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                     success: function(response){
                         $(self).trigger('doneSaving');       
                         if (response.status == 'success') {
-                            var kml = response.input_kml;
-                            self.shape_ = self.gex_.pluginInstance.parseKml(kml);
+                            self.shape_ = self.gex_.pluginInstance.parseKml(response.input_kml);
                             self.finishedEditingCallback_();
                         } else {
-                            ule = $('#load_shape_errors')
                             ule.show();
                             ule.html("<li>" + response.error_html + "</li>");
                         }
@@ -214,10 +213,10 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                         $(self).trigger('error', "There was an error processing your shape; Status was " + status + ".");
                     }
                 }
-                $(form).ajaxForm(opts);
 
-                $('.submit_button').click(function(){
-                    form.trigger('submit');
+                $('#load_shape_submit_button').click(function(){
+                    $(form).ajaxSubmit(opts); 
+                    return false; 
                 });
             }else{
                 $(self).trigger('error', "There was an error retrieving the form; Status was " + status + ".");
