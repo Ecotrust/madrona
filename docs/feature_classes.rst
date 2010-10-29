@@ -22,7 +22,7 @@ Look at this crap example::
 
         class Rest():
             verbose_name = 'Folder'
-            form = FolderForm
+            form = 'myproject.forms.FolderForm'
 
 Rest inner-class properties
 ---------------------------
@@ -34,7 +34,9 @@ form
 """"
 Specifies a `ModelForm <http://docs.djangoproject.com/en/dev/topics/forms/modelforms/>`_
 that will be used to create and edit features of this class. The form must
-be a subclass of lingcod.features.forms.FeatureForm.
+be a subclass of lingcod.features.forms.FeatureForm, and the path to the form
+must be provided as a *string*. Otherwise you'll cause circular reference 
+issues.
 
 optional
 ^^^^^^^^

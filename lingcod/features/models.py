@@ -4,6 +4,7 @@ from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod import rest
 from lingcod.features.forms import FeatureForm
+from lingcod.features import FeatureConfig
 import re
 
 class GeoQuerySetManager(ShareableGeoManager):
@@ -12,7 +13,6 @@ class GeoQuerySetManager(ShareableGeoManager):
     """
     def get_query_set(self):
         return self.model.QuerySet(self.model)
-
 
 class Feature(models.Model):
     """Model used for representing user-generated features
@@ -52,6 +52,21 @@ class Feature(models.Model):
         return ('%s_resource' % (name, ), (), {
             'pk': self.pk
         })
+    
+    @classmethod
+    def get_config(klass):
+        return FeatureConfig(klass, klass.Rest)
+
+    # 
+    # @classmethod
+    # def name_underscore(klass):
+    #     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', klass.__name__)
+    #     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+    #     
+    # @classmethod
+    # def show_template(klass):
+    #     return getattr(klass.Rest, 'show_template', 
+    #         '%s/show.html' % (klass.name_underscore, ))
 #                 
 # 
 # # The following code would usually go in a project, I'm just screwing around 

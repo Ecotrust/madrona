@@ -37,3 +37,24 @@ def validate_feature_config(model):
     # #         Could not import %s."""
     # #          % (model.__name__, model.Rest.form)
     return True
+    
+
+class FeatureConfig:
+    """Represents properties of Feature Classes derived from both defaults and
+    developer-specified options within the Rest inner-class. These properties
+    drive the features of the spatial content managment system, such as 
+    CRUD operations, copy, sharing, etc.
+    """
+    def __init__(self, model, config):
+        if not config:
+            raise FeatureConfigurationError(
+                'Have not defined Rest inner-class on registered feature \
+                class %s' % (model.__name__,))
+
+        if not hasattr(config, 'form'):
+            raise FeatureConfigurationError(
+                "Feature class %s is not configured with a form class. \
+                To specify, add a `form` property to its Rest inner-class."
+                 % (model.__name__))
+
+        self.form = config.form

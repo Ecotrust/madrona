@@ -268,13 +268,19 @@ def resource(request, form_class=None, pk=None, get_func=None,
             # Object is not viewable so we return httpresponse
             # should contain the appropriate error code
             return instance
+        try:
+            t = loader.get_template(template)
+        except TemplateDoesNotExist:
+            t = loader.get_template('rest/show.html')
+
         extra_context.update({
             'instance': instance,
             'MEDIA_URL': settings.MEDIA_URL,
             'is_ajax': request.is_ajax(),
+            'template': template,
         })
-        #Adding RequestContext here so that the show.html template has access to 'perms' in order to verify ecotrust permissions
-        return render_to_response(template, RequestContext(request, extra_context))
+
+        return HttpResponse(t.render(RequestContext(request, extra_context)))
     elif request.method == 'POST':
         return update(request, form_class, pk)
         

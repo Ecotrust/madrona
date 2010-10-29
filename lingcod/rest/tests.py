@@ -341,6 +341,7 @@ class UtilsTest(TestCase):
 
 from elementtree.ElementTree import fromstring
 
+# This whole test case is going to be irrelavent for the new system
 def assertImplementsRestInterface(testcase, user, password, url, rest_uid, valid_form_data):
     testcase.client.login(username=user.username, password=password)
     response = testcase.client.get(url)
