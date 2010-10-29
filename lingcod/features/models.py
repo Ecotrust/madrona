@@ -35,51 +35,19 @@ class Feature(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
     # Expose sharing functionality
-    sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share this with the following groups")
+    sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share with the following groups")
     
     objects = GeoQuerySetManager()
 
     class Meta:
         abstract=True
     
-    class Rest:
-        share=False
-        
     @models.permalink
     def get_absolute_url(self):
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', self.__class__.__name__)
-        name = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-        return ('%s_resource' % (name, ), (), {
+        return ('%s_resource' % (self.get_config().slug, ), (), {
             'pk': self.pk
         })
     
     @classmethod
     def get_config(klass):
-        return FeatureConfig(klass, klass.Rest)
-
-    # 
-    # @classmethod
-    # def name_underscore(klass):
-    #     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', klass.__name__)
-    #     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-    #     
-    # @classmethod
-    # def show_template(klass):
-    #     return getattr(klass.Rest, 'show_template', 
-    #         '%s/show.html' % (klass.name_underscore, ))
-#                 
-# 
-# # The following code would usually go in a project, I'm just screwing around 
-# # here
-# 
-# class Folder(Feature):
-# 
-#     class Rest():
-#         verbose_name = 'Folder'
-#         form = 'lingcod.features.models.FolderForm'
-# 
-# class FolderForm(FeatureForm):
-#     class Meta:
-#         model = Folder
-# 
-# rest.register(Folder)
+        return FeatureConfig(klass)
