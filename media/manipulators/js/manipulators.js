@@ -31,9 +31,10 @@ lingcod.Manipulator = function(gex, form, render_target, div){
 
     // Do we expose any geometry input methods other than digitize?
     $.each(json.geometry_input_methods, function(index, value){
-            if (value == 'load_shp') 
-                console.log(self.render_target_.find('.load_shape'));
+            if (value == 'load_shp'){
                 self.render_target_.find('.load_shape').show();
+                self.loadshp_url = json.loadshp_url;
+            }
     });
    
     // Set up the manipulators UI 
@@ -171,14 +172,13 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = true;
 	var self = this;
-    var action = '/loadshp/single/'; // AHHHHH WTF IS THIS ... and you call yourself a programmer
     $.ajax({
-        url: action, 
+        url: self.loadshp_url, 
         type: 'GET',
         success: function(data, status){
             if(status === 'success'){
                 $('#load_shape_div').show().find('>p').html(data); 
-                $('.upload_button').hide();
+                self.render_target_.find('.upload_button').hide();
                 var button_html = [
                         '<a href="#" class="submit_button button" onclick="this.blur(); return false;">',
                             '<span>Upload File</span>',
@@ -188,34 +188,30 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                 var form = $('#load_shape_form');
                 form.after(button_html);
 
-                var errors = '<ul class="errorlist" style="display:none"></ul>';
+                var errors = '<ul id="load_shape_errorlist" class="errorlist" style="display:none"></ul>';
                 form.before(errors);
 
                 var opts = {
                     dataType: 'json',
                     beforeSubmit: function(formData,b,c) {
                         $(self).trigger('saving', ["Uploading Shape"]);
-                        var queryString = $.param(formData); 
-                        //console.log('About to submit: \n\n' + queryString); 
                         return true;
                     },
                     success: function(response){
                         $(self).trigger('doneSaving');       
-                        //console.log(response);
                         if (response.status == 'success') {
                             var kml = response.input_kml;
                             self.shape_ = self.gex_.pluginInstance.parseKml(kml);
                             self.finishedEditingCallback_();
                         } else {
-                            ule = $('ul.errorlist')
+                            ule = $('#load_shape_errors')
                             ule.show();
                             ule.html("<li>" + response.error_html + "</li>");
                         }
                         return true;
                     },
                     error: function(data, status){
-                        console.log('There was an error processing your shape. ' + status);
-                        console.log(data);
+                        $(self).trigger('error', "There was an error processing your shape; Status was " + status + ".");
                     }
                 }
                 $(form).ajaxForm(opts);
