@@ -2,8 +2,9 @@ from django.conf.urls.defaults import *
 from lingcod.common.utils import get_logger
 from lingcod.common.utils import get_class
 from django.template.defaultfilters import slugify
-from django.template import loader
+from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
+
 
 logger = get_logger()
 
@@ -54,7 +55,7 @@ class FeatureConfig:
         """If the user has specified a show_template, grab that template.
         Otherwise use the convention '{{model_slug}}/show.html. If a template
         doesn't exist at either of those paths, returns the 'rest/show.html'
-        template
+        template.
         """
         template = getattr(self._config, 'show_template', 
             '%s/show.html' % (self.slug, ))
@@ -64,20 +65,22 @@ class FeatureConfig:
             t = loader.get_template('rest/show.html')
         return t
     
-    def get_form(self):
+    def get_form_class(self):
+        """Return the form class specified in the model configuration."""
         try:
             klass = get_class(self.form)
-            if not issubclass(klass, FeatureForm):
-                raise FeatureConfigurationError(
-                    """Feature class %s's form is not a subclass of 
-                    lingcod.features.forms.FeatureForm."""
-                     % (self._model.__name__, ))
-                
         except:
             raise FeatureConfigurationError(
                 """Feature class %s is not configured with a valid form class. 
                 Could not import %s."""
                  % (self._model.__name__, self.form))
+
+        if not issubclass(klass, FeatureForm):
+            raise FeatureConfigurationError(
+                """Feature class %s's form is not a subclass of 
+                lingcod.features.forms.FeatureForm."""
+                 % (self._model.__name__, ))
+        return klass
     
     def json(self):
         """Returns a json representation of this feature class configuration
