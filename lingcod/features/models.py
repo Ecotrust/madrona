@@ -2,7 +2,6 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
-from lingcod import rest
 from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureConfig
 import re
