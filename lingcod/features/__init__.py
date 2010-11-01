@@ -50,6 +50,10 @@ class FeatureConfig:
         self.form = self._config.form
         self.slug = slugify(name)
         self.verbose_name = getattr(self._config, 'verbose_name', name)
+        self.form_template = getattr(self._config, 'form_template', 
+            'rest/form.html')
+        self.form_context = getattr(self._config, 'form_context', {})
+        self.show_context = getattr(self._config, 'show_context', {})
     
     def get_show_template(self):
         """If the user has specified a show_template, grab that template.
@@ -88,7 +92,6 @@ class FeatureConfig:
         """
         pass
 
-logger = get_logger()
 registered_models = []
 
 def register(*args):

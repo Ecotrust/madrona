@@ -68,6 +68,8 @@ def delete(request, model=None, pk=None):
     404: resource for deletion could not be found
     5xx: server error
     """
+    if model is None:
+        return HttpResponse('Model not specified in feature urls', status=500)
     if request.method == 'DELETE':
         if model is None or pk is None:
             raise Exception('delete view not configured properly.')
@@ -158,14 +160,11 @@ def create_form(request, form_class=None, action=None, extra_context={},
     else:
         return HttpResponse('Invalid http method', status=405)
 
-def update_form(request, form_class=None, pk=None, extra_context={}, 
-    template='rest/form.html'):
+def update_form(request, model, pk):
     """
     Returns a form for editing features
     """
-    if form_class is None or pk is None:
-        raise Exception('update view not configured properly.')
-    instance = get_object_for_editing(request, form_class.Meta.model, pk)
+    instance = get_object_for_editing(request, model, pk)
     if isinstance(instance, HttpResponse):
         # get_object_for_editing is trying to return a 404, 401, or 403
         return instance
@@ -179,22 +178,24 @@ def update_form(request, form_class=None, pk=None, extra_context={},
     except:
         raise Exception('Model to be edited must have a name attribute.')
 
+    config = model.get_config()
     if request.method == 'GET':
+        form_class = config.get_form_class()
         form = form_class(instance=instance, label_suffix='')
-        extra_context.update({
+        context = config.form_context
+        context.update({
             'form': form,
             'title': "Edit '%s'" % (instance.name, ),
             'action': instance.get_absolute_url(),
             'is_ajax': request.is_ajax(),
             'MEDIA_URL': settings.MEDIA_URL,
         })
-        extra_context = decorate_with_manipulators(extra_context, form_class)
-        return render_to_response(template, extra_context)
+        context = decorate_with_manipulators(context, form_class)
+        return render_to_response(config.form_template, context)
     else:
         return HttpResponse('Invalid http method', status=405)        
 
-def update(request, form_class=None, pk=None, extra_context={}, 
-    template='rest/form.html'):
+def update(request, model, pk):
     """
         When calling, provide the request object, a model class, and the
         primary key of the instance to be updated.
@@ -210,9 +211,8 @@ def update(request, form_class=None, pk=None, extra_context={},
                 404: Instance for pk not found.
                 5xx: Server error.
     """
-    if form_class is None or pk is None:
-        raise Exception('update view not configured properly.')
-    instance = get_object_for_editing(request, form_class.Meta.model, pk)
+    config = model.get_config()
+    instance = get_object_for_editing(request, model, pk)
     if isinstance(instance, HttpResponse):
         # get_object_for_editing is trying to return a 404, 401, or 403
         return instance
@@ -231,6 +231,7 @@ def update(request, form_class=None, pk=None, extra_context={},
         # user is still set to the original owner to prevent staff from 
         # 'stealing' 
         values.__setitem__('user', instance.user.pk)
+        form_class = config.get_form_class()
         if request.FILES:
             form = form_class(
                 values, request.FILES, instance=instance, label_suffix='')
@@ -242,17 +243,17 @@ def update(request, form_class=None, pk=None, extra_context={},
             m.save()
             return HttpResponse('updated ' + m.name, status=200)
         else:
-            extra_context.update({
+            context = config.form_context
+            context.update({
                 'form': form,
                 'title': "Edit '%s'" % (instance.name, ),
                 'action': instance.get_absolute_url(),
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
             })
-            extra_context = decorate_with_manipulators(
-                extra_context, form_class)
-            c = RequestContext(request, extra_context)
-            t = loader.get_template(template)
+            context = decorate_with_manipulators(context, form_class)
+            c = RequestContext(request, context)
+            t = loader.get_template(config.form_template)
             return HttpResponse(t.render(c), status=400)
     else:
         return HttpResponse("""Invalid http method. 
@@ -260,11 +261,10 @@ def update(request, form_class=None, pk=None, extra_context={},
         but it was much easier to implement as POST :)""", status=405)
         
     
-def resource(request, form_class=None, pk=None, get_func=None, 
-    extra_context={}, template="rest/show.html"):
+def resource(request, model=None, pk=None):
     """
     Provides a resource for a django model that can be utilized by the 
-    lingcod.rest client module.
+    lingcod.features client module.
     
     Implements actions for the following http actions:
     
@@ -278,44 +278,42 @@ def resource(request, form_class=None, pk=None, get_func=None,
                 that returns an HttpResponse or a template can be specified
                 that will be passed the instance and an optional extra_context
         
-    Makes use of lingcod.rest.views.update and lingcod.rest.views.delete
+    Uses lingcod.features.views.update and lingcod.feature.views.delete
     """
-    if form_class is None or pk is None:
-        raise Exception('lingcod.rest.views.resource not setup correctly')
+    if model is None:
+        return HttpResponse('Model not specified in feature urls', status=500)
+    config = model.get_config()
     if request.method == 'DELETE':
-        return delete(request, form_class.Meta.model, pk)
+        return delete(request, model, pk)
     elif request.method == 'GET':
-        instance = get_object_for_viewing(request, form_class.Meta.model, pk)
+        instance = get_object_for_viewing(request, model, pk)
         if isinstance(instance, HttpResponse):
             # Object is not viewable so we return httpresponse
             # should contain the appropriate error code
             return instance
-        try:
-            t = loader.get_template(template)
-        except TemplateDoesNotExist:
-            t = loader.get_template('rest/show.html')
-
-        extra_context.update({
+            
+        t = config.get_show_template()
+        context = config.show_context
+        context.update({
             'instance': instance,
             'MEDIA_URL': settings.MEDIA_URL,
             'is_ajax': request.is_ajax(),
-            'template': template,
+            'template': t.name,
         })
 
-        return HttpResponse(t.render(RequestContext(request, extra_context)))
+        return HttpResponse(t.render(RequestContext(request, context)))
     elif request.method == 'POST':
-        return update(request, form_class, pk)
+        return update(request, model, pk)
         
-def form_resources(request, form_class=None, pk=None, extra_context={}, 
-    template='rest/form.html', create_title=None):
+def form_resources(request, model=None, pk=None):
+    if model is None:
+        return HttpResponse('Model not specified in feature urls', status=500)
     if request.method == 'POST':
         if pk is None:
             return create(
                 request,
-                form_class=form_class, 
-                action=request.build_absolute_uri(), 
-                title=create_title, 
-                extra_context=extra_context)
+                model,
+                action=request.build_absolute_uri())
         else:
             return HttpResponse('Invalid http method', status=405)        
     elif request.method == 'GET':
@@ -323,19 +321,11 @@ def form_resources(request, form_class=None, pk=None, extra_context={},
             # Get the create form
             return create_form(
                 request, 
-                form_class=form_class, 
-                action=request.build_absolute_uri(), 
-                extra_context=extra_context, 
-                title=create_title, 
-                template=template)
+                model,
+                action=request.build_absolute_uri())
         else:
             # get the update form
-            return update_form(
-                request, 
-                form_class=form_class, 
-                pk=pk, 
-                extra_context=extra_context, 
-                template=template)
+            return update_form(request, model, pk)
     else:
         return HttpResponse('Invalid http method', status=405)        
 

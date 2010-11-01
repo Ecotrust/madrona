@@ -26,7 +26,7 @@ urlpatterns += patterns('lingcod',
     (r'^heatmap/', include('lingcod.heatmap.urls')),
     (r'^data_manager/', include('lingcod.data_manager.urls')),
     (r'^admin/data_distributor', include('lingcod.data_distributor.admin_urls')),
-    (r'^rest/', include('lingcod.rest.urls')),
+    (r'^features/', include('lingcod.features.urls')),
 )
 
 urlpatterns += patterns('',
