@@ -68,14 +68,13 @@ def delete(request, model=None, pk=None):
     404: resource for deletion could not be found
     5xx: server error
     """
-    if request.method == 'DELETE':        
+    if request.method == 'DELETE':
         if model is None or pk is None:
             raise Exception('delete view not configured properly.')
         instance = get_object_for_editing(request, model, pk)
         if isinstance(instance, HttpResponse):
             # get_object_for_editing is trying to return a 404, 401, or 403
             return instance
-
         instance.delete()
         return HttpResponse('Deleted.')
     else:
