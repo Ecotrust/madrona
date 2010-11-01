@@ -6,15 +6,17 @@ from django.conf import settings
 
 def get_object_for_editing(request, klass, pk):
     """
-    Returns 404 if object cannot be found, or 403 if the user is not 
-    authorized to modify an object.
-
+    Return the specified instance of klass by it's pk for editing.
+    If the request has no logged-in user, a 401 Response will be returned. If 
+    the item is not found, a 404 Response will be returned. If the user is 
+    not authorized to edit the item (not the owner or a staff user), a 403 Not
+    Authorized Response will be returned.
+    
     usage:
 
-    instance = get_object_for_editing(Mpa, 12)
+    instance = get_object_for_editing(request, Mpa, 12)
     if isinstance(instance, HttpResponse):
         return instance
-    ...
 
     """
     instance = get_object_or_404(klass, pk=pk)
@@ -27,6 +29,20 @@ def get_object_for_editing(request, klass, pk):
     return instance
 
 def get_object_for_viewing(request, klass, pk):
+    """
+    Returns the specified instance of klass by it's pk for viewing.
+    If the request has no authenticated user, a 401 Response will be returned.
+    If the item is not found, a 404 Response will be returned. If the user is 
+    not authorized to view the item (not the owner or part of a group the item
+    is shared with), a 403 Not Authorized Response will be returned.
+
+    usage:
+
+    instance = get_object_for_viewing(request, Mpa, 12)
+    if isinstance(instance, HttpResponse):
+        return instance
+
+    """
     if not request.user.is_authenticated:
         return HttpResponse('You must be logged in.', status=401)
 
