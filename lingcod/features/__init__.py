@@ -87,3 +87,13 @@ class FeatureConfig:
         that can be used to specify client behavior
         """
         pass
+
+logger = get_logger()
+registered_models = []
+
+def register(*args):
+    for model in args:
+        model.get_config()
+        logger.debug('registering %s' % (model.__name__,) )
+        if model not in registered_models:
+            registered_models.append(model)
