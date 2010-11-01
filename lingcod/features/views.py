@@ -22,7 +22,8 @@ def get_object_for_editing(request, klass, pk):
         return HttpResponse('You must be logged in.', status=401)
     # Check that user owns the object or is staff
     if not request.user.is_staff and request.user != instance.user:
-        return HttpResponseForbidden('You do not have permission to modify this object.')
+        return HttpResponseForbidden(
+            'You do not have permission to modify this object.')
     return instance
 
 def get_object_for_viewing(request, klass, pk):
@@ -40,16 +41,16 @@ def get_object_for_viewing(request, klass, pk):
 
 def delete(request, model=None, pk=None):
     """
-        When calling, provide the request object, reference to the resource
-        class, and the primary key of the object to delete.
+    When calling, provide the request object, reference to the resource
+    class, and the primary key of the object to delete.
+
+    Possible response codes:
     
-        Possible response codes:
-        
-        200: delete operation successful
-        401: login required
-        403: user does not have permission (not admin user or doesn't own object)
-        404: resource for deletion could not be found
-        5xx: server error
+    200: delete operation successful
+    401: login required
+    403: user does not have permission (not admin user or doesn't own object)
+    404: resource for deletion could not be found
+    5xx: server error
     """
     if request.method == 'DELETE':        
         if model is None or pk is None:
@@ -68,15 +69,15 @@ def delete(request, model=None, pk=None):
 def create(request, form_class=None, action=None, title=None, 
     template='rest/form.html', extra_context={}):
     """
-        When calling, provide the request object and a ModelForm class
-                
-            POST:   Create a new instance from filled out ModelForm
+    When calling, provide the request object and a ModelForm class
+            
+        POST:   Create a new instance from filled out ModelForm
 
-                201: Created. Response body includes representation of resource
-                400: Validation error. Response body includes form. Form should
-                    be displayed back to the user for correction.
-                401: Not logged in.
-                5xx: Server error.
+            201: Created. Response body includes representation of resource
+            400: Validation error. Response body includes form. Form should
+                be displayed back to the user for correction.
+            401: Not logged in.
+            5xx: Server error.
     """
     if form_class is None or action is None:
         raise Exception('create view not configured properly.')
@@ -107,7 +108,8 @@ def create(request, form_class=None, action=None, title=None,
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
             })
-            extra_context = decorate_with_manipulators(extra_context, form_class)
+            extra_context = decorate_with_manipulators(
+                extra_context, form_class)
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
@@ -155,7 +157,8 @@ def update_form(request, form_class=None, pk=None, extra_context={},
     try:
         instance.get_absolute_url()
     except:
-        raise Exception('Model to be edited must have get_absolute_url defined.')
+        raise Exception(
+            'Model to be edited must have get_absolute_url defined.')
     try:
         instance.name
     except:
@@ -175,7 +178,8 @@ def update_form(request, form_class=None, pk=None, extra_context={},
     else:
         return HttpResponse('Invalid http method', status=405)        
 
-def update(request, form_class=None, pk=None, extra_context={}, template='rest/form.html'):
+def update(request, form_class=None, pk=None, extra_context={}, 
+    template='rest/form.html'):
     """
         When calling, provide the request object, a model class, and the
         primary key of the instance to be updated.
@@ -209,10 +213,12 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
     if request.method == 'POST':
         values = request.POST.copy()
         # Even if request.user is different (ie request.user is staff)
-        # user is still set to the original owner to prevent staff from 'stealing' 
+        # user is still set to the original owner to prevent staff from 
+        # 'stealing' 
         values.__setitem__('user', instance.user.pk)
         if request.FILES:
-            form = form_class(values, request.FILES, instance=instance, label_suffix='')
+            form = form_class(
+                values, request.FILES, instance=instance, label_suffix='')
         else:
             form = form_class(values, instance=instance, label_suffix='')
         # form.fields['user'] = request.user.pk
@@ -228,7 +234,8 @@ def update(request, form_class=None, pk=None, extra_context={}, template='rest/f
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
             })
-            extra_context = decorate_with_manipulators(extra_context, form_class)
+            extra_context = decorate_with_manipulators(
+                extra_context, form_class)
             c = RequestContext(request, extra_context)
             t = loader.get_template(template)
             return HttpResponse(t.render(c), status=400)
