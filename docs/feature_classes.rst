@@ -6,26 +6,26 @@ spatial and non-spatial designs from users that can be represented in the user
 interface with a KML file. These can be used to represent Folders, MPAs, MPA 
 Networks, Undersea Cables, Wind Farms, etc.
 
-Configuring Feature Class Capabilities - The Rest Inner-Class
-*************************************************************
+Configuring Feature Class Capabilities - The Config Inner-Class
+***************************************************************
 
 The capabilities of each feature class can be configured using a declarative
-syntax on an inner class called `Rest`. This can be used to enable and disable
-features such as shape sharing, specify a form to use when creating new 
-instances, and provide links to alternative representations such as Shapefiles
-that appear in the Export menu.
+syntax on an inner class called `Config`. This can be used to enable and 
+disable features such as shape sharing, specify a form to use when creating 
+new instances, and provide links to alternative representations such as 
+Shapefiles that appear in the Export menu.
 
 Look at this crap example::
 
     class Folder(Feature):
         ext = models.CharField(max_length="12")
 
-        class Rest():
+        class Config:
             verbose_name = 'Folder'
             form = 'myproject.forms.FolderForm'
 
-Rest inner-class properties
----------------------------
+Config inner-class properties
+-----------------------------
 
 required
 ^^^^^^^^

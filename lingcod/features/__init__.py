@@ -13,9 +13,9 @@ class FeatureConfigurationError(Exception):
 
 class FeatureConfig:
     """Represents properties of Feature Classes derived from both defaults and
-    developer-specified options within the Rest inner-class. These properties
-    drive the features of the spatial content managment system, such as 
-    CRUD operations, copy, sharing, etc.
+    developer-specified options within the Config inner-class. These 
+    properties drive the features of the spatial content managment system, 
+    such as CRUD operations, copy, sharing, etc.
     """
     def __init__(self, model):
         
@@ -29,17 +29,17 @@ class FeatureConfig:
         self._model = model
         name = model.__name__
         
-        if not getattr(model, 'Rest', False):
+        if not getattr(model, 'Config', False):
             raise FeatureConfigurationError(
-                'Have not defined Rest inner-class on registered feature \
+                'Have not defined Config inner-class on registered feature \
                 class %s' % (name, ))
         
-        self._config = model.Rest
+        self._config = model.Config
     
         if not hasattr(self._config, 'form'):
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a form class. \
-                To specify, add a `form` property to its Rest inner-class."
+                To specify, add a `form` property to its Config inner-class."
                  % (name,))
     
         if not isinstance(self._config.form, str):

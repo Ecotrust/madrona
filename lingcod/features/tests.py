@@ -24,7 +24,7 @@ def delete_template(path):
         shutil.rmtree(path)
         
 class TestGetFormClassFeature(Feature):
-    class Rest:
+    class Config:
         form = 'lingcod.features.tests.TestFeatureForm'
 
 class TestFeatureForm(FeatureForm):
@@ -32,7 +32,7 @@ class TestFeatureForm(FeatureForm):
         model = TestGetFormClassFeature
 
 class TestGetFormClassFailFeature(Feature):
-    class Rest:
+    class Config:
         form = 'lingcod.features.tests.TestForm'
 
 class TestForm:
@@ -58,7 +58,7 @@ class FeatureConfigTest(TestCase):
             
     def test_must_have_form_class(self):
         class TestFeatureNoForm(Feature):
-            class Rest:
+            class Config:
                 pass
 
         with self.assertRaisesRegexp(FeatureConfigurationError,'form'):
@@ -66,7 +66,7 @@ class FeatureConfigTest(TestCase):
     
     def test_must_specify_form_as_string(self):
         class TestFeature(Feature):
-            class Rest:
+            class Config:
                 form = FeatureForm
 
         with self.assertRaisesRegexp(FeatureConfigurationError,'string'):
@@ -74,14 +74,14 @@ class FeatureConfigTest(TestCase):
 
     def test_slug(self):
         class TestSlugFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
                 
         self.assertEqual(TestSlugFeature.get_config().slug, 'testslugfeature')
     
     def test_default_verbose_name(self):
         class TestDefaultVerboseNameFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
         
         self.assertEqual(
@@ -90,7 +90,7 @@ class FeatureConfigTest(TestCase):
     
     def test_custom_verbose_name(self):
         class TestCustomVerboseNameFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
                 verbose_name = 'vb-name'
         
@@ -100,7 +100,7 @@ class FeatureConfigTest(TestCase):
         
     def test_default_show_template(self):
         class TestDefaultShowTemplateFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
         
         config = TestDefaultShowTemplateFeature.get_config()
@@ -114,12 +114,12 @@ class FeatureConfigTest(TestCase):
     
     def test_custom_show_template(self):
         class TestCustomShowTemplateFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
         
         config = TestCustomShowTemplateFeature.get_config()
-        path = TestCustomShowTemplateFeature.Rest.show_template
+        path = TestCustomShowTemplateFeature.Config.show_template
         delete_template(path)
         create_template(path)
         self.assertEqual(
@@ -130,7 +130,7 @@ class FeatureConfigTest(TestCase):
     
     def test_missing_default_show_template(self):
         class TestMissingDefaultShowTemplateFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
         
         config = TestMissingDefaultShowTemplateFeature.get_config()
@@ -141,7 +141,7 @@ class FeatureConfigTest(TestCase):
 
     def test_missing_custom_show_template(self):
         class TestMissingCustomShowTemplateFeature(Feature):
-            class Rest:
+            class Config:
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
 
