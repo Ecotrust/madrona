@@ -1,11 +1,13 @@
 from django.test import TestCase
-from lingcod.features import FeatureConfigurationError, FeatureConfig
+from lingcod.features import FeatureConfigurationError, FeatureConfig, register
 from lingcod.features.models import Feature
 from lingcod.features.forms import FeatureForm
 import os
 import shutil
 from django.test.client import Client
 from django.contrib.auth.models import *
+from django.core.urlresolvers import reverse
+
 
 # used by some of the tests to temporarily create a template file
 def create_template(path):
@@ -166,15 +168,22 @@ class FeatureConfigTest(TestCase):
         pass
 
 # Generic view tests
+
+class TestDeleteFeature(Feature):
+    class Config:
+        form = 'lingcod.features.form.FeatureForm'
+        
+register(TestDeleteFeature)
         
 class DeleteTest(TestCase):
 
-    urls = 'lingcod.rest.test_urls'
 
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
-        self.test_instance = RestTestModel(user=self.user, name="My Name")
+        self.config = TestDeleteFeature.get_config()
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.test_instance = TestDeleteFeature(user=self.user, name="My Name")
         self.test_instance.save()
 
     def test_delete_not_logged_in(self):
@@ -182,7 +191,8 @@ class DeleteTest(TestCase):
         If user not logged in they can't delete anything
         401 status_code response
         """
-        response = self.client.delete('/delete/%d/' % (self.test_instance.pk, ))
+        url = self.test_instance.get_absolute_url()
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 401)
 
     def test_delete_not_owner(self):
@@ -190,60 +200,65 @@ class DeleteTest(TestCase):
         Don't allow just any old user to delete objects.
         Return 403 Forbidden status code
         """
-        other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
+        other_user = User.objects.create_user(
+            'other', 'other@marinemap.org', password='pword')
         self.client.login(username=other_user.username, password='pword')
-        response = self.client.delete('/delete/%d/' % (self.test_instance.pk, ))
+        url = self.test_instance.get_absolute_url()
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 403)
 
     def test_delete_not_owner_but_staff(self):
         """
         Staff users can delete anyone's stuff
         """
-        staff_user = User.objects.create_user('staff', 'staff@marinemap.org', password='pword')
+        staff_user = User.objects.create_user(
+            'staff', 'staff@marinemap.org', password='pword')
         staff_user.is_staff = True
         staff_user.save()
         pk = self.test_instance.pk
-        self.assertEqual(RestTestModel.objects.filter(pk=pk).count(), 1)
+        url = self.test_instance.get_absolute_url()
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 1)
         self.client.login(username='staff', password='pword')
-        response = self.client.delete('/delete/%d/' % (self.test_instance.pk, ))
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(RestTestModel.objects.filter(pk=pk).count(), 0)
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
 
     def test_delete_authorized(self):
         """
         Users can delete objects that belong to them
         """
         pk = self.test_instance.pk
-        self.assertEqual(RestTestModel.objects.filter(pk=pk).count(), 1)
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 1)
+        url = self.test_instance.get_absolute_url()
         self.client.login(username='resttest', password='pword')
-        response = self.client.delete('/delete/%d/' % (self.test_instance.pk, ))
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(RestTestModel.objects.filter(pk=pk).count(), 0)
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
+        
 
-    def test_delete_invalid_method(self):
-        """
-        http DELETE method must be used, not get or post
-        """
-        self.client.login(username='resttest', password='pword')
-        response = self.client.get('/delete/%d/' % (self.test_instance.pk, ))
-        self.assertEqual(response.status_code, 405)
-        response = self.client.post('/delete/%d/' % (self.test_instance.pk, ))
-        self.assertEqual(response.status_code, 405)
+class CreateFormTestFeature(Feature):
+    class Config:
+        form = 'lingcod.features.tests.CreateFormTestForm'
 
+class CreateFormTestForm(FeatureForm):
+    class Meta:
+        model = CreateFormTestFeature
+
+register(CreateFormTestFeature)
 
 class CreateFormTest(TestCase):
 
-    urls = 'lingcod.rest.test_urls'
-
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.config = CreateFormTestFeature.get_config()
 
     def test_user_not_logged_in(self):
         """
         Can't create stuff without being logged in.
         """
-        response = self.client.get('/create/form/')
+        response = self.client.get(self.config.get_create_form())
         self.assertEqual(response.status_code, 401)
 
     def test_get_form(self):
@@ -251,113 +266,160 @@ class CreateFormTest(TestCase):
         Returns a form that can be displayed on the client.
         """
         self.client.login(username='resttest', password='pword')
-        response = self.client.get('/create/form/')
+        response = self.client.get(self.config.get_create_form())
         self.assertEqual(response.status_code, 200)
+
+
+class CreateTestFeature(Feature):
+    class Config:
+        form = 'lingcod.features.tests.CreateTestForm'
+
+class CreateTestForm(FeatureForm):
+    class Meta:
+        model = CreateTestFeature
+
+register(CreateTestFeature)
+
 
 class CreateTest(TestCase):
 
-    urls = 'lingcod.rest.test_urls'
-
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.config = CreateTestFeature.get_config()
+        self.create_url = self.config.get_create_form()
 
     def test_submit_not_authenticated(self):
-        response = self.client.post('/create/', {'name': "My Test", 'user': 1})
+        response = self.client.post(self.create_url, 
+            {'name': "My Test", 'user': 1})
         self.assertEqual(response.status_code, 401)
 
     def test_submit_invalid_form(self):
-        old_count = RestTestModel.objects.count()
+        old_count = CreateTestFeature.objects.count()
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/create/', {'name': ''})
+        response = self.client.post(self.create_url, {'name': ''})
         self.assertEqual(response.status_code, 400)
-        self.assertTrue(old_count == RestTestModel.objects.count())
-        self.assertNotEqual(response.content.find('This field is required.'), -1)
+        self.assertTrue(old_count == CreateTestFeature.objects.count())
+        self.assertNotEqual(
+            response.content.find('This field is required.'), -1)
 
     def test_submit_valid_form(self):
-        old_count = RestTestModel.objects.count()
+        old_count = CreateTestFeature.objects.count()
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/create/', {'name': "My Test"})
+        response = self.client.post(self.create_url, {'name': "My Test"})
         self.assertEqual(response.status_code, 201)
-        self.assertTrue(old_count < RestTestModel.objects.count())
-        inst = RestTestModel.objects.get(name='My Test')
-        self.assertTrue(response['Location'].count(inst.get_absolute_url()) == 1)
+        self.assertTrue(old_count < CreateTestFeature.objects.count())
+        inst = CreateTestFeature.objects.get(name='My Test')
+        self.assertTrue(
+            response['Location'].count(inst.get_absolute_url()) == 1)
 
     def test_cannot_hack_user_field(self):
-        other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
-        old_count = RestTestModel.objects.count()
+        other_user = User.objects.create_user(
+            'other', 'other@marinemap.org', password='pword')
+        old_count = CreateTestFeature.objects.count()
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/create/', {'name': "My Test Hack Test", 'user': other_user.pk})
+        response = self.client.post(self.create_url, 
+            {'name': "My Test Hack Test", 'user': other_user.pk})
         self.assertEqual(response.status_code, 201)
-        self.assertTrue(old_count < RestTestModel.objects.count())
-        new_instance = RestTestModel.objects.get(name='My Test Hack Test')
+        self.assertTrue(old_count < CreateTestFeature.objects.count())
+        new_instance = CreateTestFeature.objects.get(name='My Test Hack Test')
         self.assertNotEqual(new_instance.user, other_user)
+
+class UpdateFormTestFeature(Feature):
+    class Config:
+        form = 'lingcod.features.tests.UpdateFormTestForm'
+
+class UpdateFormTestForm(FeatureForm):
+    class Meta:
+        model = UpdateFormTestFeature
+
+register(UpdateFormTestFeature)
 
 class UpdateFormTest(TestCase):
 
-    urls = 'lingcod.rest.test_urls'
-
     def setUp(self):
+        self.config = UpdateFormTestFeature.get_config()
         self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
-        self.test_instance = RestTestModel(user=self.user, name="My Name")
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.test_instance = UpdateFormTestFeature(
+            user=self.user, name="My Name")
         self.test_instance.save()
+        self.update_form_url = self.config.get_update_form(
+            self.test_instance.pk)
 
     def test_get_form(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.get('/update/%s/form/' % (self.test_instance.pk))
+        response = self.client.get(self.update_form_url)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.content.find('My Name'), -1)
 
     def test_not_logged_in(self):
-        response = self.client.get('/update/%s/form/' % (self.test_instance.pk, ))
+        response = self.client.get(self.update_form_url)
         self.assertEqual(response.status_code, 401)
 
     def test_not_owner(self):
-        other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
+        other_user = User.objects.create_user(
+            'other', 'other@marinemap.org', password='pword')
         self.client.login(username='other', password='pword')
-        response = self.client.get('/update/%s/form/' % (self.test_instance.pk))
+        response = self.client.get(self.update_form_url)
         self.assertEqual(response.status_code, 403)
 
     def test_not_owner_but_staff(self):
-        staff_user = User.objects.create_user('staff', 'other@marinemap.org', password='pword')
+        staff_user = User.objects.create_user(
+            'staff', 'other@marinemap.org', password='pword')
         staff_user.is_staff = True
         staff_user.save()
         self.client.login(username='staff', password='pword')
-        response = self.client.get('/update/%s/form/' % (self.test_instance.pk))
+        response = self.client.get(self.update_form_url)
         self.assertEqual(response.status_code, 200)
 
     def test_not_found(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.get('/update/300/form/')
+        response = self.client.get(self.config.get_update_form(30000000000))
         self.assertEqual(response.status_code, 404)
+
+
+class UpdateTestFeature(Feature):
+    class Config:
+        form = 'lingcod.features.tests.UpdateTestForm'
+
+class UpdateTestForm(FeatureForm):
+    class Meta:
+        model = UpdateTestFeature
+
+register(UpdateTestFeature)
 
 class UpdateTest(TestCase):
 
-    urls = 'lingcod.rest.test_urls'
-
     def setUp(self):
+        self.config = UpdateTestFeature.get_config()
         self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
-        self.test_instance = RestTestModel(user=self.user, name="My Name")
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.test_instance = UpdateTestFeature(user=self.user, name="My Name")
         self.test_instance.save()
+        self.update_form_url = self.config.get_update_form(
+            self.test_instance.pk)
+        self.instance_url = self.test_instance.get_absolute_url()
 
     def test_post(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 200)
 
     def test_post_validation_error(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': '',
         })
         self.assertEqual(response.status_code, 400)
 
     def test_post_not_logged_in(self):
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 401)
@@ -365,7 +427,7 @@ class UpdateTest(TestCase):
     def test_post_not_owner(self):
         other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
         self.client.login(username='other', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 403)
@@ -375,14 +437,14 @@ class UpdateTest(TestCase):
         other_user.is_staff = True
         other_user.save()
         self.client.login(username='other', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 200)
 
     def test_not_found(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk + 1000), {
+        response = self.client.post(self.config.get_resource(10000000), {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 404)
@@ -390,45 +452,10 @@ class UpdateTest(TestCase):
     def test_cannot_hack_user_field(self):
         other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
         self.client.login(username='resttest', password='pword')
-        response = self.client.post('/update/%s/' % (self.test_instance.pk), {
+        response = self.client.post(self.instance_url, {
             'name': 'My New Name',
             'user': other_user.pk,
         })
         self.assertEqual(response.status_code, 200)
-        edited_instance = RestTestModel.objects.get(pk=self.test_instance.pk)
+        edited_instance = UpdateTestFeature.objects.get(pk=self.test_instance.pk)
         self.assertNotEqual(edited_instance.user, other_user)
-
-class ResourceTest(TestCase):
-
-    urls = 'lingcod.rest.test_urls'
-
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('resttest', 'resttest@marinemap.org', password='pword')
-        self.test_instance = RestTestModel(user=self.user, name="My Name")
-        self.test_instance.save()
-
-    def test_delete(self):
-        old_count = RestTestModel.objects.count()
-        response = self.client.delete('/rest_test_models/%s/' % (self.test_instance.pk, ))
-        self.assertEqual(response.status_code, 401)
-        self.client.login(username='resttest', password='pword')
-        response = self.client.delete('/rest_test_models/%s/' % (self.test_instance.pk, ))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(old_count > RestTestModel.objects.count())
-
-    def test_update(self):
-        response = self.client.post('/rest_test_models/%s/' % (self.test_instance.pk), {
-            'name': 'My New Name',
-        })
-        self.assertEqual(response.status_code, 401)
-        self.client.login(username='resttest', password='pword')
-        response = self.client.post('/rest_test_models/%s/' % (self.test_instance.pk), {
-            'name': 'My New Name',
-        })
-        self.assertEqual(response.status_code, 200)
-
-    def test_get(self):
-        self.client.login(username='resttest', password='pword')
-        response = self.client.get('/rest_test_models/%s/' % (self.test_instance.pk, ))
-        self.assertContains(response, self.test_instance.name, status_code=200)

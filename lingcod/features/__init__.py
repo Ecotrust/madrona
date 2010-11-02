@@ -4,6 +4,7 @@ from lingcod.common.utils import get_class
 from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
+from django.core.urlresolvers import reverse
 
 
 logger = get_logger()
@@ -88,6 +89,15 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         that can be used to specify client behavior
         """
         pass
+        
+    def get_create_form(self):
+        return reverse('%s_create_form' % (self.slug, ))
+    
+    def get_update_form(self, pk):
+        return reverse('%s_update_form' % (self.slug, ), args=[pk])
+    
+    def get_resource(self, pk):
+        return reverse('%s_resource' % (self.slug, ), args=[pk])
 
 registered_models = []
 

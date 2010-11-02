@@ -6,13 +6,6 @@ from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureConfig
 import re
 
-class GeoQuerySetManager(ShareableGeoManager):
-    """ 
-    Used to extend the queryset manager; see http://simonwillison.net/2008/May/1/orm/
-    """
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
-
 class Feature(models.Model):
     """Model used for representing user-generated features
 
@@ -36,7 +29,7 @@ class Feature(models.Model):
     # Expose sharing functionality
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,null=True,verbose_name="Share with the following groups")
     
-    objects = GeoQuerySetManager()
+    objects = ShareableGeoManager()
 
     class Meta:
         abstract=True

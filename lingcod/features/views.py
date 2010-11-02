@@ -83,8 +83,7 @@ def delete(request, model=None, pk=None):
         return HttpResponse('DELETE http method must be used to delete', 
             status=405)
 
-def create(request, form_class=None, action=None, title=None, 
-    template='rest/form.html', extra_context={}):
+def create(request, model, action):
     """
     When calling, provide the request object and a ModelForm class
             
@@ -96,13 +95,11 @@ def create(request, form_class=None, action=None, title=None,
             401: Not logged in.
             5xx: Server error.
     """
-    if form_class is None or action is None:
-        raise Exception('create view not configured properly.')
+    config = model.get_config()
+    form_class = config.get_form_class()
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)    
-    if title == None:
-        classname = form_class.Meta.model.__name__
-        title = 'New %s' % (classname.capitalize())
+    title = 'New %s' % (config.slug, )
     if request.method == 'POST':
         values = request.POST.copy()
         values.__setitem__('user', request.user.pk)
@@ -118,45 +115,45 @@ def create(request, form_class=None, action=None, title=None,
             response['Location'] = m.get_absolute_url()
             return response
         else:
-            extra_context.update({
+            context = config.form_context
+            context.update({
                 'form': form,
                 'title': title,
                 'action': action,
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
             })
-            extra_context = decorate_with_manipulators(
-                extra_context, form_class)
-            c = RequestContext(request, extra_context)
-            t = loader.get_template(template)
+            context = decorate_with_manipulators(context, form_class)
+            c = RequestContext(request, context)
+            t = loader.get_template(config.form_template)
             return HttpResponse(t.render(c), status=400)
     else:
         return HttpResponse('Invalid http method', status=405)
 
-def create_form(request, form_class=None, action=None, extra_context={}, 
-    title=None, template='rest/form.html'):
+def create_form(request, model, action=None):
     """
     Serves a form for creating new objects
     
     GET only
     """
-    if form_class is None or action is None:
+    config = model.get_config()
+    form_class = config.get_form_class()
+    if action is None:
         raise Exception('create_form view is not configured properly.')
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
-    if title == None:
-        classname = form_class.Meta.model.__name__
-        title = 'New %s' % (classname.capitalize())
+    title = 'New %s' % (config.verbose_name)
+    context = config.form_context
     if request.method == 'GET':
-        extra_context.update({
+        context.update({
             'form': form_class(label_suffix=''),
             'title': title,
             'action': action,
             'is_ajax': request.is_ajax(),
             'MEDIA_URL': settings.MEDIA_URL,
         })
-        extra_context = decorate_with_manipulators(extra_context, form_class)
-        return render_to_response(template, extra_context)
+        context = decorate_with_manipulators(context, form_class)
+        return render_to_response(config.form_template, context)
     else:
         return HttpResponse('Invalid http method', status=405)
 
@@ -310,10 +307,7 @@ def form_resources(request, model=None, pk=None):
         return HttpResponse('Model not specified in feature urls', status=500)
     if request.method == 'POST':
         if pk is None:
-            return create(
-                request,
-                model,
-                action=request.build_absolute_uri())
+            return create(request, model, request.build_absolute_uri())
         else:
             return HttpResponse('Invalid http method', status=405)        
     elif request.method == 'GET':
