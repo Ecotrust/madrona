@@ -141,7 +141,7 @@ class FeatureConfigTest(TestCase):
         path = config.slug + '/show.html'
         self.assertEqual(
             config.get_show_template().name, 
-            'rest/show.html')
+            'features/show.html')
 
     def test_missing_custom_show_template(self):
         class TestMissingCustomShowTemplateFeature(Feature):
@@ -152,7 +152,7 @@ class FeatureConfigTest(TestCase):
         config = TestMissingCustomShowTemplateFeature.get_config()
         self.assertEqual(
             config.get_show_template().name, 
-            'rest/show.html')
+            'features/show.html')
 
     
     def test_get_form_class(self):

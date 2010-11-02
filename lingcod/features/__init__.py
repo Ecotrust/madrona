@@ -52,7 +52,7 @@ not a string path." % (name,))
         self.slug = slugify(name)
         self.verbose_name = getattr(self._config, 'verbose_name', name)
         self.form_template = getattr(self._config, 'form_template', 
-            'rest/form.html')
+            'features/form.html')
         self.form_context = getattr(self._config, 'form_context', {})
         self.show_context = getattr(self._config, 'show_context', {})
     
@@ -68,7 +68,7 @@ not a string path." % (name,))
         except TemplateDoesNotExist:
             # If a template has not been created, use a stub that displays
             # some documentation on how to override the default template
-            t = loader.get_template('rest/show.html')
+            t = loader.get_template('features/show.html')
         return t
     
     def get_form_class(self):
