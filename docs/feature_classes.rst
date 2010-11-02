@@ -45,12 +45,48 @@ verbose_name
 """"""""""""
 Provide your feature class with a human readable name to be used within 
 the interface. For example, this name determines the name used in the 
-"Create" menu. If not specified, the camelcase model name will be used. 
+"Create" menu. If not specified, the CamelCase model name will be used. 
 Even though it is optional, this property is obviously highly recommended.
 
 show_template
 """""""""""""
-By default, MarineMap will use a naming convention to look for the template 
-used to display a shapes attributes in the sidebar. The template for MpaArray 
-would be ``mpa_array/show.html``. You can specify a different location by 
-specifying the ``show_template`` option.
+By default, will look for the template at ``{{modelname}}/show.html`` when 
+rendering shape attributes. For example, the template for a model named 
+MpaArray  would be ``mpaarray/show.html``. You can specify a different 
+template location with this option.
+
+form_template
+"""""""""""""
+Use this option to specify a custom template to be shown when creating or 
+editing a feature. By default, looks for a template under ``rest/form.html``.
+
+form_context
+""""""""""""
+Specify a base context to use for rendering templates when creating and 
+editing features.
+
+show_context
+""""""""""""
+Specify a base context to use when rendering feature attributes.
+
+shareable
+"""""""""
+Enabled by default, set to False to disable sharing functionality.
+
+copy
+""""
+Enabled by default, set to False to disable copy functionality.
+
+copy_method
+"""""""""""
+By default, MarineMap will look for a method named ``copy`` on the model that 
+will be called to create copies. If none is found, and copying is enabled, a
+generic copy method will be used. This option can be used to specify a 
+function of another name::
+
+  class Config:
+    copy_method = 'duplicate'
+
+.. note::
+  copy functions must return the copied instance
+
