@@ -16,7 +16,7 @@ Feature Classes can be configured to:
 
   * Represent various management scenarios as Point, Linestring or Polygon data
   * Collect attributes from users using forms generated from the model 
-definition (or customized forms)
+    definition (or customized forms)
   * Pre-process and validate user-defined geometries with Manipulators
   * Enable sharing of features among users
   * Add custom downloads, like Shapefile or Excel files
