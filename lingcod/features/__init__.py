@@ -24,7 +24,7 @@ class FeatureConfig:
         
         if not issubclass(model, Feature):
             raise FeatureConfigurationError('Is not a subclass of \
-                lingcod.features.models.Feature')
+lingcod.features.models.Feature')
         
         self._model = model
         name = model.__name__
@@ -32,20 +32,19 @@ class FeatureConfig:
         if not getattr(model, 'Config', False):
             raise FeatureConfigurationError(
                 'Have not defined Config inner-class on registered feature \
-                class %s' % (name, ))
+class %s' % (name, ))
         
         self._config = model.Config
     
         if not hasattr(self._config, 'form'):
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a form class. \
-                To specify, add a `form` property to its Config inner-class."
-                 % (name,))
+To specify, add a `form` property to its Config inner-class." % (name,))
     
         if not isinstance(self._config.form, str):
             raise FeatureConfigurationError(
                 "Feature class %s is configured with a form property that is \
-                not a string path." % (name,))
+not a string path." % (name,))
                 
         self.form = self._config.form
         self.slug = slugify(name)
@@ -75,15 +74,13 @@ class FeatureConfig:
             klass = get_class(self.form)
         except:
             raise FeatureConfigurationError(
-                """Feature class %s is not configured with a valid form class. 
-                Could not import %s."""
-                 % (self._model.__name__, self.form))
+                "Feature class %s is not configured with a valid form class. \
+Could not import %s." % (self._model.__name__, self.form))
 
         if not issubclass(klass, FeatureForm):
             raise FeatureConfigurationError(
-                """Feature class %s's form is not a subclass of 
-                lingcod.features.forms.FeatureForm."""
-                 % (self._model.__name__, ))
+                "Feature class %s's form is not a subclass of \
+lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         return klass
     
     def json(self):
