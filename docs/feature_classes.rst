@@ -1,5 +1,5 @@
-Feature Classes
-===============
+The Features App
+================
 
 The ``lingcod.features`` app works along with other MarineMap apps to create a 
 system that is best described as a content management system for user-designed
@@ -27,15 +27,21 @@ Feature Class instances with their own attributes. These can be used to
 represent simple Folders to help users organize their designs, or represent 
 management concepts such as Marine Protected Area Networks.
 
-Configuring Feature Class Capabilities - The Config Inner-Class
-***************************************************************
+Creating a Spatial Feature Class
+================================
 
-The capabilities of each feature class can be configured using a declarative
-syntax on an inner class called `Config`. This can be used to enable and 
-disable features such as shape sharing, specify a form to use when creating 
-new instances, and provide links to alternative representations such as 
-Shapefiles that appear in the Export menu.
+Lets walk through the basics of creating a simple Feature Class. The basic 
+process involves:
 
+  * Defining a subclass of ``PointFeature``, ``LinestringFeature``, 
+    ``PolygonFeature``, or ``3dModelFeature``, including the attributes to be
+    stored with it.
+  * Creating a Config inner-class, and using it to specify a form to use when 
+    creating or editing this Feature Class.
+  * Creating a template to use when displaying this Feature Class' attributes
+  * Specifying links to downloads or services related to the Feature Class.
+  * Specifying any optional parameters on the Config inner-class
+  
 Look at this crap example::
 
     class Folder(Feature):
@@ -45,22 +51,29 @@ Look at this crap example::
             verbose_name = 'Folder'
             form = 'myproject.forms.FolderForm'
 
-Config inner-class properties
------------------------------
+Base Classes
+============
 
-required
-^^^^^^^^
+Spatial Types
+^^^^^^^^^^^^^
+
+FeatureCollection Base Class
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Config inner-class
+======================
 
 form
-""""
+^^^^
 Specifies a `ModelForm <http://docs.djangoproject.com/en/dev/topics/forms/modelforms/>`_
 that will be used to create and edit features of this class. The form must
 be a subclass of lingcod.features.forms.FeatureForm, and the path to the form
 must be provided as a *string*. Otherwise you'll cause circular reference 
 issues.
 
-optional
-^^^^^^^^
+
+optional parameters
+^^^^^^^^^^^^^^^^^^^
 
 verbose_name
 """"""""""""
@@ -110,4 +123,12 @@ function of another name::
 
 .. note::
   copy functions must return the copied instance
+
+
+
+Specifying a Template for Feature Attributes
+============================================
+
+Linking to Downloads and Services
+=================================
 
