@@ -13,7 +13,8 @@ class FeatureConfigurationError(Exception):
     pass
 
 class FeatureConfig:
-    """Represents properties of Feature Classes derived from both defaults and
+    """
+    Represents properties of Feature Classes derived from both defaults and
     developer-specified options within the Config inner-class. These 
     properties drive the features of the spatial content managment system, 
     such as CRUD operations, copy, sharing, etc.
@@ -56,21 +57,24 @@ not a string path." % (name,))
         self.show_context = getattr(self._config, 'show_context', {})
     
     def get_show_template(self):
-        """If the user has specified a show_template, grab that template.
-        Otherwise use the convention '{{model_slug}}/show.html. If a template
-        doesn't exist at either of those paths, returns the 'rest/show.html'
-        template.
         """
+        Returns the template used to render this Feature Class' attributes
+        """
+        # Grab a template specified in the Config object, or use the default
         template = getattr(self._config, 'show_template', 
             '%s/show.html' % (self.slug, ))
         try:
             t = loader.get_template(template)
         except TemplateDoesNotExist:
+            # If a template has not been created, use a stub that displays
+            # some documentation on how to override the default template
             t = loader.get_template('rest/show.html')
         return t
     
     def get_form_class(self):
-        """Return the form class specified in the model configuration."""
+        """
+        Returns the form class for this Feature Class.
+        """
         try:
             klass = get_class(self.form)
         except:
@@ -82,21 +86,34 @@ Could not import %s." % (self._model.__name__, self.form))
             raise FeatureConfigurationError(
                 "Feature class %s's form is not a subclass of \
 lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
+
         return klass
     
     def json(self):
-        """Returns a json representation of this feature class configuration
+        """
+        Returns a json representation of this feature class configuration
         that can be used to specify client behavior
         """
         pass
         
     def get_create_form(self):
+        """
+        Returns the path to a form for creating new instances of this model
+        """
         return reverse('%s_create_form' % (self.slug, ))
     
     def get_update_form(self, pk):
+        """
+        Given a primary key, returns the path to a form for updating a Feature
+        Class
+        """
         return reverse('%s_update_form' % (self.slug, ), args=[pk])
     
     def get_resource(self, pk):
+        """
+        Returns the primary url for a feature. This url supports GET, POST, 
+        and DELETE operations.
+        """
         return reverse('%s_resource' % (self.slug, ), args=[pk])
 
 registered_models = []
