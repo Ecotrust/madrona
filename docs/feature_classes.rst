@@ -1,10 +1,31 @@
 Feature Classes
 ===============
 
-MarineMap supports adding new *Feature Classes*, useful for collecting both 
-spatial and non-spatial designs from users that can be represented in the user
-interface with a KML file. These can be used to represent Folders, MPAs, MPA 
-Networks, Undersea Cables, Wind Farms, etc.
+The ``lingcod.features`` app works along with other MarineMap apps to create a 
+system that is best described as a content management system for user-designed
+spatial features. This system can be configured quickly to support a range of 
+management options such as marine protected areas, hydrokinetic generators, 
+wind turbines, or undersea cables. With one model definition it's possible to
+define the data schema for storing these features, as well as what behaviors 
+and actions they support within the MarineMap interface. I high degree of 
+customization can be achieved with a MarineMap project with this declarative 
+format, without having to customize the view or client-side javascript 
+components.
+
+Feature Classes can be configured to:
+
+  * Represent various management scenarios as Point, Linestring or Polygon data
+  * Collect attributes from users using forms generated from the model 
+definition (or customized forms)
+  * Pre-process and validate user-defined geometries with Manipulators
+  * Enable sharing of features among users
+  * Add custom downloads, like Shapefile or Excel files
+  * Support custom editing actions
+  
+In addition, FeatureCollection Classes can be created that are collections of
+Feature Class instances with their own attributes. These can be used to 
+represent simple Folders to help users organize their designs, or represent 
+management concepts such as Marine Protected Area Networks.
 
 Configuring Feature Class Capabilities - The Config Inner-Class
 ***************************************************************
