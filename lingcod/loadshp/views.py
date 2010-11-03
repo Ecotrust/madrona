@@ -30,7 +30,8 @@ def load_single_shp(request):
         if form.is_valid():
             layer = form.handle(request.FILES['file_obj'],user)
             g = layer[0].geom
-            g.transform_to(4326)
+            if g.srid:
+                g.transform_to(4326)
             geoms = [g]
             t = get_template('loadshp/loadshp.kml')
             kml = t.render(Context({'username': user.username, 'geoms': geoms}))
