@@ -358,27 +358,32 @@ import inspect
 import tempfile
 def get_logger(caller_name=None):
     try:
+        fh = open(settings.LOG_FILE,'w')
         logfile = settings.LOG_FILE
     except:
-        logfile = os.path.join(tempfile.gettempdir(),'marinemap_log.txt')
-        print "WARNING: settings.LOG_FILE not specified; using %s instead" % logfile
+        # print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        logfile = None
 
-    try:
-        # Use overall debug settings to determine loglevel
-        if settings.DEBUG:
-            level = logging.DEBUG
-        else:
-            level = logging.WARNING 
-    except:
+    if settings.DEBUG:
         level = logging.DEBUG
+    else:
+        level = logging.WARNING 
     
-    logging.basicConfig(level=level,
-                format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                filename=logfile)
+    format = '    %(asctime)s %(name)s %(levelname)s %(message)s'
+    if logfile:
+        logging.basicConfig(level=level, format=format, filename=logfile)
+    else:
+        logging.basicConfig(level=level, format=format)
 
     if not caller_name:
         caller = inspect.currentframe().f_back
         caller_name = caller.f_globals['__name__']
 
     logger = logging.getLogger(caller_name)
+
+    if logfile and settings.DEBUG:
+        import sys
+        strm_out = logging.StreamHandler(sys.__stdout__)
+        logger.addHandler(strm_out)
+
     return logger
