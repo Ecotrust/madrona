@@ -156,6 +156,11 @@ function of another name::
 
 .. note::
   copy functions must return the copied instance
+  
+manipulators
+------------
+fucking manipulators, `how do they work? <http://www.youtube.com/watch?v=_-agl0pOQfs>`_
+
 
 
 Specifying a Template for Feature Attributes
