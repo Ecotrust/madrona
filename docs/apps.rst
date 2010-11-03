@@ -18,3 +18,4 @@ Apps
    news
    async_app
    openid
+   loadshp
