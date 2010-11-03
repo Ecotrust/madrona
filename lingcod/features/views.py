@@ -95,7 +95,7 @@ def create(request, model, action):
             401: Not logged in.
             5xx: Server error.
     """
-    config = model.get_config()
+    config = model.get_options()
     form_class = config.get_form_class()
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)    
@@ -136,7 +136,7 @@ def create_form(request, model, action=None):
     
     GET only
     """
-    config = model.get_config()
+    config = model.get_options()
     form_class = config.get_form_class()
     if action is None:
         raise Exception('create_form view is not configured properly.')
@@ -175,7 +175,7 @@ def update_form(request, model, pk):
     except:
         raise Exception('Model to be edited must have a name attribute.')
 
-    config = model.get_config()
+    config = model.get_options()
     if request.method == 'GET':
         form_class = config.get_form_class()
         form = form_class(instance=instance, label_suffix='')
@@ -208,7 +208,7 @@ def update(request, model, pk):
                 404: Instance for pk not found.
                 5xx: Server error.
     """
-    config = model.get_config()
+    config = model.get_options()
     instance = get_object_for_editing(request, model, pk)
     if isinstance(instance, HttpResponse):
         # get_object_for_editing is trying to return a 404, 401, or 403
@@ -279,7 +279,7 @@ def resource(request, model=None, pk=None):
     """
     if model is None:
         return HttpResponse('Model not specified in feature urls', status=500)
-    config = model.get_config()
+    config = model.get_options()
     if request.method == 'DELETE':
         return delete(request, model, pk)
     elif request.method == 'GET':

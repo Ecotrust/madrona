@@ -1,5 +1,5 @@
 from django.test import TestCase
-from lingcod.features import FeatureConfigurationError, FeatureConfig, register
+from lingcod.features import FeatureConfigurationError, FeatureOptions, register
 from lingcod.features.models import Feature
 from lingcod.features.forms import FeatureForm
 import os
@@ -28,7 +28,7 @@ def delete_template(path):
         shutil.rmtree(path)
         
 class TestGetFormClassFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.TestFeatureForm'
 
 class TestFeatureForm(FeatureForm):
@@ -36,7 +36,7 @@ class TestFeatureForm(FeatureForm):
         model = TestGetFormClassFeature
 
 class TestGetFormClassFailFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.TestForm'
 
 class TestForm:
@@ -44,70 +44,70 @@ class TestForm:
         model = TestGetFormClassFeature
 
 
-class FeatureConfigTest(TestCase):
+class FeatureOptionsTest(TestCase):
     
     def test_check_for_subclass(self):
         class NotAFeature:
             pass
         
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
-            FeatureConfig(NotAFeature)
+            FeatureOptions(NotAFeature)
     
     def test_check_for_inner_class(self):
         class TestFeatureFails(Feature):
             pass
             
         with self.assertRaisesRegexp(FeatureConfigurationError,'not defined'):
-            TestFeatureFails.get_config()
+            TestFeatureFails.get_options()
             
     def test_must_have_form_class(self):
         class TestFeatureNoForm(Feature):
-            class Config:
+            class Options:
                 pass
 
         with self.assertRaisesRegexp(FeatureConfigurationError,'form'):
-            TestFeatureNoForm.get_config()
+            TestFeatureNoForm.get_options()
     
     def test_must_specify_form_as_string(self):
         class TestFeature(Feature):
-            class Config:
+            class Options:
                 form = FeatureForm
 
         with self.assertRaisesRegexp(FeatureConfigurationError,'string'):
-            TestFeature.get_config()
+            TestFeature.get_options()
 
     def test_slug(self):
         class TestSlugFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
                 
-        self.assertEqual(TestSlugFeature.get_config().slug, 'testslugfeature')
+        self.assertEqual(TestSlugFeature.get_options().slug, 'testslugfeature')
     
     def test_default_verbose_name(self):
         class TestDefaultVerboseNameFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
         
         self.assertEqual(
-            TestDefaultVerboseNameFeature.get_config().verbose_name, 
+            TestDefaultVerboseNameFeature.get_options().verbose_name, 
             'TestDefaultVerboseNameFeature')
     
     def test_custom_verbose_name(self):
         class TestCustomVerboseNameFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
                 verbose_name = 'vb-name'
         
         self.assertEqual(
-            TestCustomVerboseNameFeature.get_config().verbose_name, 
+            TestCustomVerboseNameFeature.get_options().verbose_name, 
             'vb-name')
         
     def test_default_show_template(self):
         class TestDefaultShowTemplateFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
         
-        config = TestDefaultShowTemplateFeature.get_config()
+        config = TestDefaultShowTemplateFeature.get_options()
         path = config.slug + '/show.html'
         delete_template(path)
         create_template(path)
@@ -118,12 +118,12 @@ class FeatureConfigTest(TestCase):
     
     def test_custom_show_template(self):
         class TestCustomShowTemplateFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
         
-        config = TestCustomShowTemplateFeature.get_config()
-        path = TestCustomShowTemplateFeature.Config.show_template
+        config = TestCustomShowTemplateFeature.get_options()
+        path = TestCustomShowTemplateFeature.Options.show_template
         delete_template(path)
         create_template(path)
         self.assertEqual(
@@ -134,10 +134,10 @@ class FeatureConfigTest(TestCase):
     
     def test_missing_default_show_template(self):
         class TestMissingDefaultShowTemplateFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
         
-        config = TestMissingDefaultShowTemplateFeature.get_config()
+        config = TestMissingDefaultShowTemplateFeature.get_options()
         path = config.slug + '/show.html'
         self.assertEqual(
             config.get_show_template().name, 
@@ -145,11 +145,11 @@ class FeatureConfigTest(TestCase):
 
     def test_missing_custom_show_template(self):
         class TestMissingCustomShowTemplateFeature(Feature):
-            class Config:
+            class Options:
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
 
-        config = TestMissingCustomShowTemplateFeature.get_config()
+        config = TestMissingCustomShowTemplateFeature.get_options()
         self.assertEqual(
             config.get_show_template().name, 
             'features/show.html')
@@ -157,12 +157,12 @@ class FeatureConfigTest(TestCase):
     
     def test_get_form_class(self):
         self.assertEqual(
-            TestGetFormClassFeature.get_config().get_form_class(),
+            TestGetFormClassFeature.get_options().get_form_class(),
             TestFeatureForm)
     
     def test_get_form_not_subclass(self):
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
-            TestGetFormClassFailFeature.get_config().get_form_class()
+            TestGetFormClassFailFeature.get_options().get_form_class()
 
     def test_json(self):
         pass
@@ -170,7 +170,7 @@ class FeatureConfigTest(TestCase):
 # Generic view tests
 
 class TestDeleteFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.form.FeatureForm'
         
 register(TestDeleteFeature)
@@ -180,7 +180,7 @@ class DeleteTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.config = TestDeleteFeature.get_config()
+        self.config = TestDeleteFeature.get_options()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
         self.test_instance = TestDeleteFeature(user=self.user, name="My Name")
@@ -237,7 +237,7 @@ class DeleteTest(TestCase):
         
 
 class CreateFormTestFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.CreateFormTestForm'
 
 class CreateFormTestForm(FeatureForm):
@@ -252,7 +252,7 @@ class CreateFormTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
-        self.config = CreateFormTestFeature.get_config()
+        self.config = CreateFormTestFeature.get_options()
 
     def test_user_not_logged_in(self):
         """
@@ -271,7 +271,7 @@ class CreateFormTest(TestCase):
 
 
 class CreateTestFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.CreateTestForm'
 
 class CreateTestForm(FeatureForm):
@@ -287,7 +287,7 @@ class CreateTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
-        self.config = CreateTestFeature.get_config()
+        self.config = CreateTestFeature.get_options()
         self.create_url = self.config.get_create_form()
 
     def test_submit_not_authenticated(self):
@@ -327,7 +327,7 @@ class CreateTest(TestCase):
         self.assertNotEqual(new_instance.user, other_user)
 
 class UpdateFormTestFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.UpdateFormTestForm'
 
 class UpdateFormTestForm(FeatureForm):
@@ -339,7 +339,7 @@ register(UpdateFormTestFeature)
 class UpdateFormTest(TestCase):
 
     def setUp(self):
-        self.config = UpdateFormTestFeature.get_config()
+        self.config = UpdateFormTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
@@ -382,7 +382,7 @@ class UpdateFormTest(TestCase):
 
 
 class UpdateTestFeature(Feature):
-    class Config:
+    class Options:
         form = 'lingcod.features.tests.UpdateTestForm'
 
 class UpdateTestForm(FeatureForm):
@@ -394,7 +394,7 @@ register(UpdateTestFeature)
 class UpdateTest(TestCase):
 
     def setUp(self):
-        self.config = UpdateTestFeature.get_config()
+        self.config = UpdateTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')

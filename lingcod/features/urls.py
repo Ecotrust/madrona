@@ -5,7 +5,7 @@ import re
 
 urlpatterns = []
 for model in registered_models:
-    config = model.get_config()
+    config = model.get_options()
     urlpatterns += patterns('lingcod.features.views',
         url(r'%s/form/$' % (config.slug,), 'form_resources', kwargs={'model': model}, 
             name="%s_create_form" % (config.slug, )),

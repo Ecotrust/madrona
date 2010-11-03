@@ -12,10 +12,10 @@ logger = get_logger()
 class FeatureConfigurationError(Exception):
     pass
 
-class FeatureConfig:
+class FeatureOptions:
     """
     Represents properties of Feature Classes derived from both defaults and
-    developer-specified options within the Config inner-class. These 
+    developer-specified options within the Options inner-class. These 
     properties drive the features of the spatial content managment system, 
     such as CRUD operations, copy, sharing, etc.
     """
@@ -31,37 +31,37 @@ lingcod.features.models.Feature')
         self._model = model
         name = model.__name__
         
-        if not getattr(model, 'Config', False):
+        if not getattr(model, 'Options', False):
             raise FeatureConfigurationError(
-                'Have not defined Config inner-class on registered feature \
+                'Have not defined Options inner-class on registered feature \
 class %s' % (name, ))
         
-        self._config = model.Config
+        self._options = model.Options
     
-        if not hasattr(self._config, 'form'):
+        if not hasattr(self._options, 'form'):
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a form class. \
-To specify, add a `form` property to its Config inner-class." % (name,))
+To specify, add a `form` property to its Options inner-class." % (name,))
     
-        if not isinstance(self._config.form, str):
+        if not isinstance(self._options.form, str):
             raise FeatureConfigurationError(
                 "Feature class %s is configured with a form property that is \
 not a string path." % (name,))
                 
-        self.form = self._config.form
+        self.form = self._options.form
         self.slug = slugify(name)
-        self.verbose_name = getattr(self._config, 'verbose_name', name)
-        self.form_template = getattr(self._config, 'form_template', 
+        self.verbose_name = getattr(self._options, 'verbose_name', name)
+        self.form_template = getattr(self._options, 'form_template', 
             'features/form.html')
-        self.form_context = getattr(self._config, 'form_context', {})
-        self.show_context = getattr(self._config, 'show_context', {})
+        self.form_context = getattr(self._options, 'form_context', {})
+        self.show_context = getattr(self._options, 'show_context', {})
     
     def get_show_template(self):
         """
         Returns the template used to render this Feature Class' attributes
         """
-        # Grab a template specified in the Config object, or use the default
-        template = getattr(self._config, 'show_template', 
+        # Grab a template specified in the Options object, or use the default
+        template = getattr(self._options, 'show_template', 
             '%s/show.html' % (self.slug, ))
         try:
             t = loader.get_template(template)
@@ -120,7 +120,7 @@ registered_models = []
 
 def register(*args):
     for model in args:
-        model.get_config()
+        model.get_options()
         logger.debug('registering %s' % (model.__name__,) )
         if model not in registered_models:
             registered_models.append(model)

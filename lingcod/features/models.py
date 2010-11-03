@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
-from lingcod.features import FeatureConfig
+from lingcod.features import FeatureOptions
 import re
 
 class Feature(models.Model):
@@ -36,10 +36,10 @@ class Feature(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('%s_resource' % (self.get_config().slug, ), (), {
+        return ('%s_resource' % (self.get_options().slug, ), (), {
             'pk': self.pk
         })
     
     @classmethod
-    def get_config(klass):
-        return FeatureConfig(klass)
+    def get_options(klass):
+        return FeatureOptions(klass)
