@@ -18,6 +18,7 @@ class FeatureOptions:
     developer-specified options within the Options inner-class. These 
     properties drive the features of the spatial content managment system, 
     such as CRUD operations, copy, sharing, etc.
+    
     """
     def __init__(self, model):
         
@@ -49,13 +50,39 @@ To specify, add a `form` property to its Options inner-class." % (name,))
 not a string path." % (name,))
                 
         self.form = self._options.form
+        """
+        Path to FeatureForm used to edit this class.
+        """
         self.slug = slugify(name)
+        """
+        Name used in the url path to this feature as well as part of 
+        the Feature's uid
+        """
         self.verbose_name = getattr(self._options, 'verbose_name', name)
+        """
+        Name specified or derived from the feature class name used 
+        in the user interface for representing this feature class.
+        """
         self.form_template = getattr(self._options, 'form_template', 
             'features/form.html')
+        """
+        Location of the template that should be used to render forms
+        when editing or creating new instances of this feature class.
+        """
         self.form_context = getattr(self._options, 'form_context', {})
+        """
+        Context to merge with default context items when rendering
+        templates to create or modify features of this class.
+        """
         self.show_context = getattr(self._options, 'show_context', {})
+        """
+        Context to merge with default context items when rendering
+        templates to view information about instances of this feature class.
+        """
         self.links = getattr(self._options, 'links', [])
+        """
+        Links associated with this class.
+        """
         for link in self.links:
             link.options = self
     
@@ -123,18 +150,50 @@ class Link:
     def __init__(self, rel, title, view, method='post', select='single', 
         type=None, slug=None, generic=False, extra_kwargs=None):
         self.rel = rel
+        """
+        Type of link - alternate, related, edit, or edit_form.
+        """
         try:
             self.view = get_class(view)
+            """
+            View function handling requests to this link.
+            """
         except:
             raise FeatureConfigurationError('Link "%s" configured with \
 invalid path to view %s' % (title, view))
         self.options = None
+        """
+        FeatureOptions instance that this link belongs to.
+        """
         self.title = title
+        """
+        Human-readable title for the link. Will be shown to users of the 
+        interface.
+        """
         self.method = method
+        """
+        TODO: is this even needed.
+        """
         self.type = type
+        """
+        MIME type of this link. Useful for alternate links. May in the future
+        be used to automatically assign an icon in the dropdown Export menu.
+        """
         self.generic = generic
+        """
+        Whether this link accepts requests for content for instances of 
+        multiple feature classes.
+        """
         self.slug = slug
+        """
+        Part of this link's path.
+        """
         self.select = select
+        """
+        Determines whether this link accepts requests with single or multiple
+        instances of a feature class. Valid values are "single", "multiple",
+        "single multiple", and "multiple single". 
+        """
         # Make sure title isn't empty
         if self.title is '':
             raise FeatureConfigurationError('Link title is empty')
@@ -182,8 +241,10 @@ self.title, ))
         # TODO: Check that extra_kwargs can be passed to the view
     
     def url_name(self):
-        # Can only be called if a Link is retrieved via 
-        # Feature.get_options().links
+        """
+        Links are registered with named-urls. This function will return 
+        that name so that it can be used in calls to reverse().
+        """
         return "%s_%s" % (self.options.slug, self.slug)
         
     def reverse(self, instances):
