@@ -7,6 +7,7 @@ import shutil
 from django.test.client import Client
 from django.contrib.auth.models import *
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseForbidden
 
 
 # used by some of the tests to temporarily create a template file
@@ -461,7 +462,7 @@ class UpdateTest(TestCase):
         self.assertNotEqual(edited_instance.user, other_user)
 
 def valid_single_select_view(request, instance):
-    pass
+    return HttpResponse(', '.join([i.name for i in instance]))
 
 def invalid_single_select_view(request, pk):
     pass

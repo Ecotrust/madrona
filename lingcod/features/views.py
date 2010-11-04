@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.template import loader, TemplateDoesNotExist
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 def get_object_for_editing(request, klass, pk):
     """
@@ -74,7 +75,35 @@ def handle_link(request, ids, link=None):
     400: requested for feature classes not supported by this view
     5xx: server error
     """
-    pass
+    if link is None:
+        raise Exception('handle_link configured without link kwarg!')
+    print ids
+    ids = ids.split(',')
+    # check that the number of instances matches the link.select property
+    if len(ids) > 1 and link.select is 'single':
+        # too many
+        return HttpResponse(
+            'Not Supported Error: Requested %s for multiple instances' % (
+            link.title, ), status=400)
+    singles = ('single', 'multiple single', 'single multiple')
+    if len(ids) is 1 and link.select not in singles:
+        # not enough
+        return HttpResponse(
+            'Not Supported Error: Requested %s for single instance' % (
+            link.title, ), status=400)
+    instances = []
+    for id in ids:
+        parts = id.split('_')
+        ct = ContentType.objects.get(app_label=parts[0], model=parts[1])
+        if link.rel in ('edit', 'edit_form'):
+            inst = get_object_for_editing(request, ct.model_class(), parts[2])
+        else:
+            inst = get_object_for_viewing(request, ct.model_class(), parts[2])
+        if isinstance(inst, HttpResponse):
+            return inst
+        else:
+            instances.append(inst)
+    return link.view(request, instances, **link.extra_kwargs)
     
 def delete(request, model=None, pk=None):
     """

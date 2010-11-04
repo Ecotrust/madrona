@@ -5,6 +5,7 @@ from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureOptions
 import re
+from django.contrib.contenttypes.models import ContentType
 
 class Feature(models.Model):
     """Model used for representing user-generated features
@@ -46,4 +47,5 @@ class Feature(models.Model):
         
     @property
     def uid(self):
-        return "%s_%s" % (self.__class__.__name__.lower(), self.pk, )
+        ct = ContentType.objects.get_for_model(self.__class__)
+        return "%s_%s_%s" % (ct.app_label, ct.model, self.pk, )

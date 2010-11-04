@@ -148,7 +148,7 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         
 class Link:
     def __init__(self, rel, title, view, method='post', select='single', 
-        type=None, slug=None, generic=False, extra_kwargs=None):
+        type=None, slug=None, generic=False, extra_kwargs={}):
         self.rel = rel
         """
         Type of link - alternate, related, edit, or edit_form.
@@ -165,35 +165,46 @@ invalid path to view %s' % (title, view))
         """
         FeatureOptions instance that this link belongs to.
         """
+        
         self.title = title
         """
-        Human-readable title for the link. Will be shown to users of the 
-        interface.
+        Human-readable title for the link to be shown in the user interface.
         """
+        
         self.method = method
         """
         TODO: is this even needed.
         """
+        
         self.type = type
         """
-        MIME type of this link. Useful for alternate links. May in the future
+        MIME type of this link, useful for alternate links. May in the future
         be used to automatically assign an icon in the dropdown Export menu.
         """
+        
         self.generic = generic
         """
         Whether this link accepts requests for content for instances of 
         multiple feature classes.
         """
+        
         self.slug = slug
         """
         Part of this link's path.
         """
+        
         self.select = select
         """
         Determines whether this link accepts requests with single or multiple
         instances of a feature class. Valid values are "single", "multiple",
         "single multiple", and "multiple single". 
         """
+        
+        self.extra_kwargs = extra_kwargs
+        """
+        Extra keyword arguments to pass to the view
+        """
+        
         # Make sure title isn't empty
         if self.title is '':
             raise FeatureConfigurationError('Link title is empty')
@@ -239,7 +250,7 @@ with a valid view. View must take a second argument named instances.' % (
 self.title, ))
 
         # TODO: Check that extra_kwargs can be passed to the view
-    
+            
     def url_name(self):
         """
         Links are registered with named-urls. This function will return 
@@ -283,7 +294,8 @@ def edit(*args, **kwargs):
     return create_link('edit', *args, **kwargs)
 
 def edit_form(*args, **kwargs):
-    kwargs['method'] = 'form'
+    if 'method' not in kwargs.keys():
+        kwargs['method'] = 'form'
     return create_link('edit', *args, **kwargs)
 
 
