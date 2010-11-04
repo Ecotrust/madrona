@@ -37,14 +37,118 @@ process involves:
   * Defining a subclass of ``PointFeature``, ``LineStringFeature``, 
     ``PolygonFeature``, or ``3dModelFeature``, including the attributes to be
     stored with it.
-  * Creating a Options inner-class, and using it to specify a form to use when 
-    creating or editing this Feature Class.
-  * Creating a template to use when displaying this Feature Class' attributes
+  * Creating an Options inner-class, and using it to specify a form to use 
+    when creating or editing this Feature Class.
   * Specifying links to downloads or services related to the Feature Class.
   * Specifying any optional parameters on the Options inner-class
+  * Creating a template to use when displaying this Feature Class' attributes
+  * Creating a kml template that can be used to represent it
   
 Look at this crap example::
 
+    @features.register
+    class Mpa(PolygonFeature):
+        ext = models.CharField(max_length="12")
+
+        class Options:
+            verbose_name = 'Marine Protected Area'
+            form = 'myproject.forms.MpaForm'
+            links = (
+                alternate('Shapefile',
+                    'mlpa.views.shapefile', 
+                    select='single', 
+                    type='application/shapefile'),
+
+                alternate('KMZ (Google Earth)', 
+                    'mlpa.views.kml_export', 
+                    select='single multiple', 
+                    type='application/vnd.google-earth.kmz',
+                    generic=True),
+
+                related('MPA Spreadsheet',
+                    'mlpa.views.spreadsheet', 
+                    select='single',
+                    type='application/excel'),
+
+                edit('Delete w/Grids', 
+                    'mlpa.views.delete_w_grids', 
+                    confirm="Are you sure you want to delete with grids?", 
+                    select="single multiple",
+                    args=[MpaArray],
+                    kwargs={'keyword_argument': True}),
+
+                edit_form('Tags',
+                    'mlpa.views.tag', 
+                    select='single multiple',
+                    generic=True,
+                    models=(MpaArray, MlpaMpa)),
+            )
+
+Defining the Model
+==================
+
+Must be a subclass of one of the ``Feature`` subclasses (``PointFeature``, 
+``PolygonFeature``, ``LineStringFeature``, ``3dModelFeature``)
+
+Specifying a Form
+=================
+
+All Feature Classes must have an ``Options`` inner-class that contains a 
+property specifying the ``FeatureForm`` subclass that can be used to edit it.
+All :ref:`other properties <optional-properties>` on the Options inner-class 
+are optional.
+
+Creating a "Show" Template
+==========================
+
+The show template is used to render sidebar content for a feature within the
+MarineMap interface, and can also be used to render a printable and 
+bookmarkable page for it. This template can be placed in any template 
+directory by default under ``{{slug}}/show.html``. Subdirectories are used to
+allow for overriding templates as mentioned in the 
+`django documentation <http://docs.djangoproject.com/en/1.2/ref/templates/api/#using-subdirectories>`_.
+The default path to the show template can be changed using an optional 
+`show_template`_ parameter to the Options inner-class.
+
+Templates will be rendered with the following context:
+    
+    * ``instance`` - the feature class instance being being displayed
+    * ...
+    * ...
+
+You can add to this list using the `show_context`_ Option property.
+
+Creating a KML Template
+=======================
+
+Create a template under ``{{slug}}/feature.kml`` that represents your feature,
+otherwise a default rendering will be used. The tag used must be a 
+`KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_,
+and have an ``id`` attribute populated with the value of ``instance.uid``.
+
+KML templates are rendered with the same context as show templates.
+
+Specifying Links
+================
+
+Links allow developers to extend the functionality of features by specifying
+downloads, actions, or related pages that should be made available through the
+interface. There are 4 types of Links:
+
+  * ``alternate`` links specify alternative representations of features that 
+    should be made available through the Export menu.
+  * ``related`` links specify related downloads or pages that are also made 
+    available in the Export menu but in a downloads section.
+  * ``edit`` links specify items that should appear in the Edit menu. These 
+    actions can be performed without any user interaction, such as a special 
+    delete view.
+  * ``edit_form`` links appear in the Edit menu. These types of edit actions
+    first display a form to the user requiring input. This can be used to 
+    implement actions such as tagging.
+
+Here's an example of links in use::
+    
+    @features.register
     class Mpa(PolygonFeature):
         ext = models.CharField(max_length="12")
 
@@ -52,30 +156,50 @@ Look at this crap example::
             verbose_name = 'Folder'
             form = 'myproject.forms.MpaForm'
             links = (
-                alternate('mlpa.views.shapefile', 'Shapefile', 
+                alternate('Shapefile',
+                    'mlpa.views.shapefile', 
                     select='single', 
                     type='application/shapefile'),
 
-                alternate('mlpa.views.kml_export', 'KMZ (Google Earth)', 
+                alternate('KMZ (Google Earth)', 
+                    'mlpa.views.kml_export', 
                     select='single multiple', 
                     type='application/vnd.google-earth.kmz',
                     generic=True),
 
-                related('mlpa.views.spreadsheet', 'MPA Spreadsheet',
+                related('MPA Spreadsheet',
+                    'mlpa.views.spreadsheet', 
                     select='single',
                     type='application/excel'),
 
-                edit('mlpa.views.delete_w_grids', 'Delete w/Grids', 
+                edit('Delete w/Grids', 
+                    'mlpa.views.delete_w_grids', 
                     confirm="Are you sure you want to delete with grids?", 
                     select="single multiple",
                     args=[MpaArray],
                     kwargs={'keyword_argument': True}),
 
-                edit_form('mlpa.views.tag', 'Tags',
+                edit_form('Tags',
+                    'mlpa.views.tag', 
                     select='single multiple',
                     generic=True,
                     models=(MpaArray, MlpaMpa)),
             )
+
+Beyond the Basics
+=================
+
+Enabling Sharing
+----------------
+
+Implementing a Custom Copy Method
+---------------------------------
+
+Specifying Manipulators
+-----------------------
+
+Etc
+---
 
 Base Classes
 ************
@@ -130,6 +254,8 @@ be a subclass of lingcod.features.forms.FeatureForm, and the path to the form
 must be provided as a *string*. Otherwise you'll cause circular reference 
 issues.
 
+.. _optional-properties:
+
 optional properties
 ===================
 
@@ -150,7 +276,8 @@ template location with this option.
 form_template
 -------------
 Use this option to specify a custom template to be shown when creating or 
-editing a feature. By default, looks for a template under ``rest/form.html``.
+editing a feature. By default, looks for a template under 
+``features/form.html``.
 
 form_context
 ------------
@@ -186,11 +313,11 @@ manipulators
 ------------
 fucking manipulators, `how do they work? <http://www.youtube.com/watch?v=_-agl0pOQfs>`_
 
+links
+-----
+Specify links associated a Feature Class that point to related downloads, 
+export tools, and editing actions that can be performed.
 
-
-Specifying a Template for Feature Attributes
-********************************************
-
-Linking to Downloads and Services
-*********************************
-
+kml_template
+------------
+Specify a template to use. Defaults to ``{{slug}}/feature.kml``.

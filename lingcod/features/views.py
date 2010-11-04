@@ -347,6 +347,7 @@ def form_resources(request, model=None, pk=None):
 from lingcod.manipulators.manipulators import get_url_for_model
 from django.utils import simplejson
 
+# TODO: Refactor this so that it is part of Feature.Options.edit_context
 def decorate_with_manipulators(extra_context, form_class):
     try:
         extra_context['json'] = simplejson.dumps(
