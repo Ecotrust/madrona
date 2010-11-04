@@ -5,12 +5,23 @@ import re
 
 urlpatterns = []
 for model in registered_models:
-    config = model.get_options()
+    options = model.get_options()
     urlpatterns += patterns('lingcod.features.views',
-        url(r'%s/form/$' % (config.slug,), 'form_resources', kwargs={'model': model}, 
-            name="%s_create_form" % (config.slug, )),
-        url(r'%s/(?P<pk>\d+)/$' % (config.slug, ), 'resource', kwargs={'model': model}, 
-            name='%s_resource' % (config.slug, )),
-        url(r'%s/(?P<pk>\d+)/form/$' % (config.slug, ), 
-            'form_resources', kwargs={'model': model}, name='%s_update_form' % (config.slug,)),
+        url(r'%s/form/$' % (options.slug,), 'form_resources', 
+            kwargs={'model': model}, 
+            name="%s_create_form" % (options.slug, )),
+            
+        url(r'%s/(?P<pk>\d+)/$' % (options.slug, ), 'resource', 
+            kwargs={'model': model}, 
+            name='%s_resource' % (options.slug, )),
+            
+        url(r'%s/(?P<pk>\d+)/form/$' % (options.slug, ), 
+            'form_resources', kwargs={'model': model}, 
+            name='%s_update_form' % (options.slug,)),
     )
+    for link in options.links:
+        path = r'%s/links/%s/(?P<ids>[\w_,]+)/$' % (options.slug, link.slug)
+        urlpatterns += patterns('lingcod.features.views',
+            url(path, 'handle_link', kwargs={'link': link}, 
+                name=link.url_name())
+        )

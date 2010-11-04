@@ -1,5 +1,5 @@
 from django.test import TestCase
-from lingcod.features import FeatureConfigurationError, FeatureOptions, register
+from lingcod.features import *
 from lingcod.features.models import Feature
 from lingcod.features.forms import FeatureForm
 import os
@@ -107,12 +107,12 @@ class FeatureOptionsTest(TestCase):
             class Options:
                 form = 'lingcod.features.form.FeatureForm'
         
-        config = TestDefaultShowTemplateFeature.get_options()
-        path = config.slug + '/show.html'
+        options = TestDefaultShowTemplateFeature.get_options()
+        path = options.slug + '/show.html'
         delete_template(path)
         create_template(path)
         self.assertEqual(
-            config.get_show_template().name, 
+            options.get_show_template().name, 
             path)
         delete_template(path)
     
@@ -122,12 +122,12 @@ class FeatureOptionsTest(TestCase):
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
         
-        config = TestCustomShowTemplateFeature.get_options()
+        options = TestCustomShowTemplateFeature.get_options()
         path = TestCustomShowTemplateFeature.Options.show_template
         delete_template(path)
         create_template(path)
         self.assertEqual(
-            config.get_show_template().name, 
+            options.get_show_template().name, 
             path)
         delete_template(path)
         
@@ -137,10 +137,10 @@ class FeatureOptionsTest(TestCase):
             class Options:
                 form = 'lingcod.features.form.FeatureForm'
         
-        config = TestMissingDefaultShowTemplateFeature.get_options()
-        path = config.slug + '/show.html'
+        options = TestMissingDefaultShowTemplateFeature.get_options()
+        path = options.slug + '/show.html'
         self.assertEqual(
-            config.get_show_template().name, 
+            options.get_show_template().name, 
             'features/show.html')
 
     def test_missing_custom_show_template(self):
@@ -149,9 +149,9 @@ class FeatureOptionsTest(TestCase):
                 form = 'lingcod.features.form.FeatureForm'
                 show_template = 'location/show.html'
 
-        config = TestMissingCustomShowTemplateFeature.get_options()
+        options = TestMissingCustomShowTemplateFeature.get_options()
         self.assertEqual(
-            config.get_show_template().name, 
+            options.get_show_template().name, 
             'features/show.html')
 
     
@@ -180,7 +180,7 @@ class DeleteTest(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.config = TestDeleteFeature.get_options()
+        self.options = TestDeleteFeature.get_options()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
         self.test_instance = TestDeleteFeature(user=self.user, name="My Name")
@@ -252,13 +252,13 @@ class CreateFormTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
-        self.config = CreateFormTestFeature.get_options()
+        self.options = CreateFormTestFeature.get_options()
 
     def test_user_not_logged_in(self):
         """
         Can't create stuff without being logged in.
         """
-        response = self.client.get(self.config.get_create_form())
+        response = self.client.get(self.options.get_create_form())
         self.assertEqual(response.status_code, 401)
 
     def test_get_form(self):
@@ -266,7 +266,7 @@ class CreateFormTest(TestCase):
         Returns a form that can be displayed on the client.
         """
         self.client.login(username='resttest', password='pword')
-        response = self.client.get(self.config.get_create_form())
+        response = self.client.get(self.options.get_create_form())
         self.assertEqual(response.status_code, 200)
 
 
@@ -287,8 +287,8 @@ class CreateTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
-        self.config = CreateTestFeature.get_options()
-        self.create_url = self.config.get_create_form()
+        self.options = CreateTestFeature.get_options()
+        self.create_url = self.options.get_create_form()
 
     def test_submit_not_authenticated(self):
         response = self.client.post(self.create_url, 
@@ -339,14 +339,14 @@ register(UpdateFormTestFeature)
 class UpdateFormTest(TestCase):
 
     def setUp(self):
-        self.config = UpdateFormTestFeature.get_options()
+        self.options = UpdateFormTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
         self.test_instance = UpdateFormTestFeature(
             user=self.user, name="My Name")
         self.test_instance.save()
-        self.update_form_url = self.config.get_update_form(
+        self.update_form_url = self.options.get_update_form(
             self.test_instance.pk)
 
     def test_get_form(self):
@@ -377,7 +377,7 @@ class UpdateFormTest(TestCase):
 
     def test_not_found(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.get(self.config.get_update_form(30000000000))
+        response = self.client.get(self.options.get_update_form(30000000000))
         self.assertEqual(response.status_code, 404)
 
 
@@ -394,13 +394,13 @@ register(UpdateTestFeature)
 class UpdateTest(TestCase):
 
     def setUp(self):
-        self.config = UpdateTestFeature.get_options()
+        self.options = UpdateTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
         self.test_instance = UpdateTestFeature(user=self.user, name="My Name")
         self.test_instance.save()
-        self.update_form_url = self.config.get_update_form(
+        self.update_form_url = self.options.get_update_form(
             self.test_instance.pk)
         self.instance_url = self.test_instance.get_absolute_url()
 
@@ -444,7 +444,7 @@ class UpdateTest(TestCase):
 
     def test_not_found(self):
         self.client.login(username='resttest', password='pword')
-        response = self.client.post(self.config.get_resource(10000000), {
+        response = self.client.post(self.options.get_resource(10000000), {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 404)
@@ -459,3 +459,103 @@ class UpdateTest(TestCase):
         self.assertEqual(response.status_code, 200)
         edited_instance = UpdateTestFeature.objects.get(pk=self.test_instance.pk)
         self.assertNotEqual(edited_instance.user, other_user)
+
+def valid_single_select_view(request, instance):
+    pass
+
+def invalid_single_select_view(request, pk):
+    pass
+
+def invalid_multiple_select_view(request, fail):
+    pass
+
+def valid_multiple_select_view(request, instances):
+    pass
+
+class LinkViewValidationTest(TestCase):
+    
+    def test_single_select_view_requires_instance_argument(self):
+        # Must accept at least a second argument for the instance
+        with self.assertRaises(FeatureConfigurationError):
+            link = alternate(
+                'test title',
+                'lingcod.features.tests.invalid_single_select_view')
+                
+        # Accepts the instance argument
+        link = alternate('test title',
+            'lingcod.features.tests.valid_single_select_view')
+        self.assertIsInstance(link, Link)
+    
+    def test_multiple_select_view_requires_instance_argument(self):
+        # Must accept at least a second argument for the instances
+        with self.assertRaises(FeatureConfigurationError):
+            link = alternate('test title',
+                'lingcod.features.tests.invalid_multiple_select_view', 
+                select='multiple')
+
+        # Accepts the instance argument
+        link = alternate('test title',
+            'lingcod.features.tests.valid_multiple_select_view', 
+            select='multiple')
+        self.assertIsInstance(link, Link)
+        
+    def test_check_extra_kwargs_allowed(self):
+        pass
+        # TODO: Test that Link validates extra_kwargs option is compatible 
+        # with the view
+
+class LinkTestFeature(Feature):
+    class Options:
+        form = 'lingcod.features.tests.LinkTestFeatureForm'
+        links = (
+            alternate('Single Select View',
+                'lingcod.features.tests.valid_single_select_view',  
+                type="application/shapefile"),
+                
+            alternate('Spreadsheet of all Features',
+                'lingcod.features.tests.valid_multiple_select_view',
+                type="application/xls", 
+                select='multiple single')
+        )
+        
+class LinkTestFeatureForm(FeatureForm):
+    class Meta:
+        model = LinkTestFeature
+
+register(LinkTestFeature)
+
+class LinkTest(TestCase):
+    
+    def setUp(self):
+        self.options = LinkTestFeature.get_options()
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.test_instance = LinkTestFeature(user=self.user, name="My Name")
+        self.test_instance.save()
+        self.update_form_url = self.options.get_update_form(
+            self.test_instance.pk)
+        self.instance_url = self.test_instance.get_absolute_url()
+    
+    def test_get_links(self):
+        links = LinkTestFeature.get_options().links
+        link = links[0]
+        link2 = links[1]
+        self.assertIsInstance(link, Link)
+        self.assertEqual('Single Select View', link.title)
+        self.assertEqual('single', link.select)
+        self.assertEqual('multiple single', link2.select)
+    
+    def test_links_registered(self):
+        options = LinkTestFeature.get_options()
+        links = options.links
+        link = links[0]
+        link2 = links[1]
+        # Check to see that the Feature Class was registered at all
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get(self.options.get_create_form())
+        self.assertEqual(response.status_code, 200)
+        # Check that both links have urls
+        path = link.reverse(self.test_instance)
+        response = self.client.get(path)
+        self.assertRegexpMatches(response.content, r'My Name')

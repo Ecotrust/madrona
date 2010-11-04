@@ -55,6 +55,27 @@ def get_object_for_viewing(request, klass, pk):
 
 # RESTful Generic Views
 
+def handle_link(request, ids, link=None):
+    """
+    Handles all requests to views setup via features.register using Link 
+    objects.
+    
+    Assuming a valid request, this generic view will call the view specified 
+    by the link including an instance or instances argument containing the 
+    relavent Feature(s).
+
+    If the incoming request is invalid, any one of the following errors may be
+    returned:
+    
+    401: login required
+    403: user does not have permission (not admin user or doesn't own object 
+         to be edited)
+    404: feature(s) could not be found
+    400: requested for feature classes not supported by this view
+    5xx: server error
+    """
+    pass
+    
 def delete(request, model=None, pk=None):
     """
     When calling, provide the request object, reference to the resource

@@ -43,3 +43,7 @@ class Feature(models.Model):
     @classmethod
     def get_options(klass):
         return FeatureOptions(klass)
+        
+    @property
+    def uid(self):
+        return "%s_%s" % (self.__class__.__name__.lower(), self.pk, )

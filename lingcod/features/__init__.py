@@ -6,7 +6,7 @@ from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
 from django.core.urlresolvers import reverse
 
-
+registered_models = []
 logger = get_logger()
 
 class FeatureConfigurationError(Exception):
@@ -55,6 +55,9 @@ not a string path." % (name,))
             'features/form.html')
         self.form_context = getattr(self._options, 'form_context', {})
         self.show_context = getattr(self._options, 'show_context', {})
+        self.links = getattr(self._options, 'links', [])
+        for link in self.links:
+            link.options = self
     
     def get_show_template(self):
         """
@@ -115,8 +118,113 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         and DELETE operations.
         """
         return reverse('%s_resource' % (self.slug, ), args=[pk])
+        
+class Link:
+    def __init__(self, rel, title, view, method='post', select='single', 
+        type=None, slug=None, generic=False, extra_kwargs=None):
+        self.rel = rel
+        try:
+            self.view = get_class(view)
+        except:
+            raise FeatureConfigurationError('Link "%s" configured with \
+invalid path to view %s' % (title, view))
+        self.options = None
+        self.title = title
+        self.method = method
+        self.type = type
+        self.generic = generic
+        self.slug = slug
+        self.select = select
+        # Make sure title isn't empty
+        if self.title is '':
+            raise FeatureConfigurationError('Link title is empty')
+        valid_options = ('single', 'multiple', 'single multiple', 
+            'multiple single')
+        # Check for valid 'select' kwarg
+        if self.select not in valid_options:
+            raise FeatureConfigurationError(
+                'Link specified with invalid select option "%s"' % (
+                    self.select, ))
+        # Create slug from the title unless a custom slug is specified
+        if self.slug is None:
+            self.slug = slugify(title)
+        # Make sure the view has the right signature
+        self._validate_view(self.view)
+    
+    def _validate_view(self, view):
+        """
+        Ensures view has a compatible signature to be able to hook into the 
+        features app url registration facilities
+        
+        For single-select views
+            must accept a second argument named instance
+        For multiple-select views
+            must accept a second argument named instances
 
-registered_models = []
+        Must also ensure that if the extra_kwargs option is specified, the 
+        view can handle them
+        """
+        # Check for instance or instances arguments
+        if self.select is 'single':
+            args = view.__code__.co_varnames
+            if len(args) < 2 or args[1] != 'instance':
+                raise FeatureConfigurationError('Link "%s" not configured \
+with a valid view. View must take a second argument named instance.' % (
+self.title, ))
+        else:
+            # select="multiple" or "multiple single" or "single multiple"
+            args = view.__code__.co_varnames
+            if len(args) < 2 or args[1] != 'instances':
+                raise FeatureConfigurationError('Link "%s" not configured \
+with a valid view. View must take a second argument named instances.' % (
+self.title, ))
+
+        # TODO: Check that extra_kwargs can be passed to the view
+    
+    def url_name(self):
+        # Can only be called if a Link is retrieved via 
+        # Feature.get_options().links
+        return "%s_%s" % (self.options.slug, self.slug)
+        
+    def reverse(self, instances):
+        """
+        Can be used to get the url for this link. 
+        
+        In the case of select=single links, just pass in a single instance. In
+        the case of select=multiple links, pass in an array.
+        """
+        if not isinstance(instances,tuple) and not isinstance(instances,list):
+            instances = [instances]
+        ids = ','.join([instance.uid for instance in instances])
+        return reverse(self.url_name(), kwargs={'ids': ids})
+    
+    def __str__(self):
+        return self.title
+    
+    def __unicode__(self):
+        return str(self)
+    
+    def json(self):
+        return ''
+
+def create_link(rel, *args, **kwargs):
+    nargs = [rel]
+    nargs.extend(args)
+    return Link(*nargs, **kwargs)
+
+def alternate(*args, **kwargs):
+    return create_link('alternate', *args, **kwargs)
+
+def related(*args, **kwargs):
+    return create_link('related', *args, **kwargs)
+
+def edit(*args, **kwargs):
+    return create_link('edit', *args, **kwargs)
+
+def edit_form(*args, **kwargs):
+    kwargs['method'] = 'form'
+    return create_link('edit', *args, **kwargs)
+
 
 def register(*args):
     for model in args:

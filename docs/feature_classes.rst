@@ -45,12 +45,37 @@ process involves:
   
 Look at this crap example::
 
-    class Folder(Feature):
+    class Mpa(PolygonFeature):
         ext = models.CharField(max_length="12")
 
         class Options:
             verbose_name = 'Folder'
-            form = 'myproject.forms.FolderForm'
+            form = 'myproject.forms.MpaForm'
+            links = (
+                alternate('mlpa.views.shapefile', 'Shapefile', 
+                    select='single', 
+                    type='application/shapefile'),
+
+                alternate('mlpa.views.kml_export', 'KMZ (Google Earth)', 
+                    select='single multiple', 
+                    type='application/vnd.google-earth.kmz',
+                    generic=True),
+
+                related('mlpa.views.spreadsheet', 'MPA Spreadsheet',
+                    select='single',
+                    type='application/excel'),
+
+                edit('mlpa.views.delete_w_grids', 'Delete w/Grids', 
+                    confirm="Are you sure you want to delete with grids?", 
+                    select="single multiple",
+                    args=[MpaArray],
+                    kwargs={'keyword_argument': True}),
+
+                edit_form('mlpa.views.tag', 'Tags',
+                    select='single multiple',
+                    generic=True,
+                    models=(MpaArray, MlpaMpa)),
+            )
 
 Base Classes
 ************
