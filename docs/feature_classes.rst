@@ -186,6 +186,12 @@ Here's an example of links in use::
                     models=(MpaArray, MlpaMpa)),
             )
 
+Views that are wired up to features using links must accept a second argument
+named ``instance`` or ``instances`` depending on whether they can work on a 
+single or multiple selected features. Generic views will handle cases where a
+user is not authorized to view or edit a feature, requests related to features
+that cannot be found, and improperly configured views. 
+
 Beyond the Basics
 =================
 
