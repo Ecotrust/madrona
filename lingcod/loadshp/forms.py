@@ -128,7 +128,6 @@ class UploadForm(forms.Form):
             g = layer[0].geom
             if g.srs:
                 g.transform_to(4326)
-            print g
             ext = g.envelope
             if ext.min_x < -180.0 or ext.max_x > 180.0 or ext.min_y < -90.0 or ext.max_y > 90.0:
                 return False, 'There was an error reprojecting your geometry. You must supply a .prj file or reproject to WGS84.'
