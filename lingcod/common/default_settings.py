@@ -189,3 +189,11 @@ OPENID_ENABLED = False
 LOG_FILE = '/tmp/marinemap.log'
 
 SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'simple_example',
+        'USER': 'postgres',
+     }
+}
