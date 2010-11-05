@@ -523,7 +523,8 @@ class LinkTestFeature(Feature):
             ),
             
             edit('Edit multiple features',
-                'lingcod.features.tests.valid_multiple_select_view'
+                'lingcod.features.tests.valid_multiple_select_view',
+                select='multiple'
             ),
         )
         
