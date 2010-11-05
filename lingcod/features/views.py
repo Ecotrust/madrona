@@ -94,7 +94,11 @@ def handle_link(request, ids, link=None):
     for id in ids:
         parts = id.split('_')
         ct = ContentType.objects.get(app_label=parts[0], model=parts[1])
-        if link.rel in ('edit', 'edit_form'):
+        if link.rel == 'edit':
+            if link.method == 'post' and request.method == 'GET':
+                resp = HttpResponse('Invalid Method', status=405)
+                resp['Allow'] = 'POST'
+                return resp
             inst = get_object_for_editing(request, ct.model_class(), parts[2])
         else:
             inst = get_object_for_viewing(request, ct.model_class(), parts[2])

@@ -522,9 +522,9 @@ class LinkTestFeature(Feature):
                 'lingcod.features.tests.valid_single_select_view'
             ),
             
-            edit('Edit multiple features',
+            edit_form('Edit multiple features',
                 'lingcod.features.tests.valid_multiple_select_view',
-                select='multiple'
+                select='multiple single'
             ),
         )
         
@@ -577,14 +577,37 @@ class LinkTest(TestCase):
         self.assertRegexpMatches(response.content, r'My Name, I2')
         
     def test_401_response(self):
-        pass
+        """Should not be able to perform editing actions without login.
+        """
+        links = self.options.links
+        response = self.client.post(links[2].reverse(self.test_instance))
+        self.assertEqual(response.status_code, 401)
+        response = self.client.get(links[3].reverse(self.test_instance))
+        self.assertEqual(response.status_code, 401)
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get(links[3].reverse(self.test_instance))
+        self.assertEqual(response.status_code, 200)        
     
+    def test_cant_GET_edit_links(self):
+        """For links of rel=edit, a post request should be required.
+        """
+        links = self.options.links
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get(links[2].reverse(self.test_instance))
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response['Allow'], 'POST')
+        
     def test_403_response(self):
+        """Should not be able to edit shapes a user doesn't own.
+        """
         pass
     
     def test_403_response_multiple_instances(self):
+        """Should not be able to edit shapes a user doesn't own. Test to make
+        sure every feature in a request is checked.
+        """
         pass
-    
+        
     def test_404_response(self):
         pass
     
