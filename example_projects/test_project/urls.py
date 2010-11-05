@@ -1,34 +1,20 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from lingcod import rest
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-
-    url(r'^$', 'lingcod.common.views.map', {'template_name': 'common/map.html'}, name="map"),
+    url(r'^marinemap/', 'django.views.generic.simple.redirect_to', {'url': '/'}),    
+    url(r'^$', 'lingcod.common.views.map', {'template_name': 'common/map_ext.html'}, name="map"),    
     (r'^tests/', 'django.views.generic.simple.direct_to_template', {'template': 'common/tests.html', 'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
-    (r'^layers/', include('lingcod.layers.urls')),
-    (r'^studyregion/', include('lingcod.studyregion.urls')),
-    (r'^faq/', include('lingcod.simplefaq.urls')),
-    (r'^help/', include('lingcod.help.urls')),
     (r'^kml/', include('lingcod.kmlapp.urls')),
-    (r'^manipulators/', include('lingcod.manipulators.urls')),
     (r'^mpas/', include('lingcod.mpa.urls')),
     (r'^arrays/', include('lingcod.array.urls')),
-    (r'^accounts/', include('lingcod.openid.urls')),
-    (r'^accounts/profile/', include('lingcod.user_profile.urls')),
-    (r'^intersection/', include('lingcod.intersection.urls')),
-    (r'^screencasts/', include('lingcod.screencasts.urls')),
-    (r'^sharing/', include('lingcod.sharing.urls')),
-    (r'^staticmap/', include('lingcod.staticmap.urls')),
-    (r'^news/', include('lingcod.news.urls')),
-    (r'^admin/', include(admin.site.urls)),
+    
+    # Include all lingcod app urls. Any urls above will overwrite the common 
+    # urls below
+    (r'', include('lingcod.common.urls')),
 )
-
-# Useful for serving files when using the django dev server
-urlpatterns += patterns('',
-    (r'^media(.*)/upload/', 'lingcod.common.views.forbidden'),
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
-)
-

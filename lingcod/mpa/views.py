@@ -121,7 +121,6 @@ def kmlDocWrap( string ):
     return '<Document><Placemark id="coords"> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+string+'</Placemark></Document>'
 
 
-from lingcod.rest.views import delete, update
 from lingcod.common.utils import get_mpa_class
 
 def mpa(request, pk):
