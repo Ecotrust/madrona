@@ -77,7 +77,6 @@ def handle_link(request, ids, link=None):
     """
     if link is None:
         raise Exception('handle_link configured without link kwarg!')
-    print ids
     ids = ids.split(',')
     # check that the number of instances matches the link.select property
     if len(ids) > 1 and link.select is 'single':
@@ -103,7 +102,10 @@ def handle_link(request, ids, link=None):
             return inst
         else:
             instances.append(inst)
-    return link.view(request, instances, **link.extra_kwargs)
+    if link.select is 'single':
+        return link.view(request, instances[0], **link.extra_kwargs)
+    else:
+        return link.view(request, instances, **link.extra_kwargs)
     
 def delete(request, model=None, pk=None):
     """

@@ -462,7 +462,7 @@ class UpdateTest(TestCase):
         self.assertNotEqual(edited_instance.user, other_user)
 
 def valid_single_select_view(request, instance):
-    return HttpResponse(', '.join([i.name for i in instance]))
+    return HttpResponse(instance.name)
 
 def invalid_single_select_view(request, pk):
     pass
@@ -471,7 +471,7 @@ def invalid_multiple_select_view(request, fail):
     pass
 
 def valid_multiple_select_view(request, instances):
-    pass
+    return HttpResponse(', '.join([i.name for i in instances]))
 
 class LinkViewValidationTest(TestCase):
     
@@ -516,7 +516,15 @@ class LinkTestFeature(Feature):
             alternate('Spreadsheet of all Features',
                 'lingcod.features.tests.valid_multiple_select_view',
                 type="application/xls", 
-                select='multiple single')
+                select='multiple single'),
+            
+            edit('Edit single feature',
+                'lingcod.features.tests.valid_single_select_view'
+            ),
+            
+            edit('Edit multiple features',
+                'lingcod.features.tests.valid_multiple_select_view'
+            ),
         )
         
 class LinkTestFeatureForm(FeatureForm):
@@ -537,6 +545,9 @@ class LinkTest(TestCase):
         self.update_form_url = self.options.get_update_form(
             self.test_instance.pk)
         self.instance_url = self.test_instance.get_absolute_url()
+        self.i2 = LinkTestFeature(user=self.user, name="I2")
+        self.i2.save()
+        
     
     def test_get_links(self):
         links = LinkTestFeature.get_options().links
@@ -560,3 +571,28 @@ class LinkTest(TestCase):
         path = link.reverse(self.test_instance)
         response = self.client.get(path)
         self.assertRegexpMatches(response.content, r'My Name')
+        path = link2.reverse([self.test_instance, self.i2])
+        response = self.client.get(path)
+        self.assertRegexpMatches(response.content, r'My Name, I2')
+        
+    def test_401_response(self):
+        pass
+    
+    def test_403_response(self):
+        pass
+    
+    def test_403_response_multiple_instances(self):
+        pass
+    
+    def test_404_response(self):
+        pass
+    
+    def test_404_response_multiple_instances(self):
+        pass
+    
+    def test_400_response(self):
+        pass
+    
+    def test_400_response_multiple_instances(self):
+        pass
+    
