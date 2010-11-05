@@ -527,6 +527,29 @@ class LinkTestFeature(Feature):
                 select='multiple single'
             ),
         )
+
+class OtherTestFeature(Feature):
+    class Options:
+        form = 'lingcod.features.tests.LinkTestFeatureForm',
+        links = (
+            alternate('Single Select View',
+                'lingcod.features.tests.valid_single_select_view',  
+                type="application/shapefile"),
+                
+            alternate('Spreadsheet of all Features',
+                'lingcod.features.tests.valid_multiple_select_view',
+                type="application/xls", 
+                select='multiple single'),
+            
+            edit('Edit single feature',
+                'lingcod.features.tests.valid_single_select_view'
+            ),
+            
+            edit_form('Edit multiple features',
+                'lingcod.features.tests.valid_multiple_select_view',
+                select='multiple single'
+            ),
+        )
         
 class LinkTestFeatureForm(FeatureForm):
     class Meta:
@@ -541,6 +564,8 @@ class LinkTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
+        self.other_user = User.objects.create_user(
+            'other', 'other@marinemap.org', password='pword')
         self.test_instance = LinkTestFeature(user=self.user, name="My Name")
         self.test_instance.save()
         self.update_form_url = self.options.get_update_form(
@@ -600,19 +625,35 @@ class LinkTest(TestCase):
     def test_403_response(self):
         """Should not be able to edit shapes a user doesn't own.
         """
-        pass
+        links = self.options.links
+        self.client.login(username='other', password='pword')
+        response = self.client.get(links[3].reverse(self.test_instance))
+        self.assertEqual(response.status_code, 403)        
+        
     
     def test_403_response_multiple_instances(self):
         """Should not be able to edit shapes a user doesn't own. Test to make
         sure every feature in a request is checked.
         """
-        pass
+        links = self.options.links
+        self.client.login(username='other', password='pword')
+        inst = LinkTestFeature(user=self.other_user, 
+            name="Other User's feature")
+        inst.save()
+        response = self.client.get(
+            links[3].reverse([inst, self.test_instance]))
+        self.assertEqual(response.status_code, 403)
         
     def test_404_response(self):
-        pass
-    
-    def test_404_response_multiple_instances(self):
-        pass
+        links = self.options.links
+        self.client.login(username='resttest', password='pword')
+        inst = LinkTestFeature(user=self.user, 
+            name="feature")
+        inst.save()
+        path = links[3].reverse([inst, self.test_instance])
+        inst.delete()
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 404)
     
     def test_400_response(self):
         pass
