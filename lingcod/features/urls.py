@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from lingcod.common.utils import get_class
-from lingcod.features import registered_models, FeatureConfigurationError, registered_links
+from lingcod.features import registered_models, registered_links
+from lingcod.feature import FeatureConfigurationError
 import re
 
 urlpatterns = []
