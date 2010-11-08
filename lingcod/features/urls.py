@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from lingcod.common.utils import get_class
-from lingcod.features import registered_models, FeatureConfigurationError
+from lingcod.features import registered_models, FeatureConfigurationError, registered_links
 import re
 
 urlpatterns = []
@@ -19,9 +19,10 @@ for model in registered_models:
             'form_resources', kwargs={'model': model}, 
             name='%s_update_form' % (options.slug,)),
     )
-    for link in options.links:
-        path = r'%s/links/%s/(?P<ids>[\w_,]+)/$' % (options.slug, link.slug)
-        urlpatterns += patterns('lingcod.features.views',
-            url(path, 'handle_link', kwargs={'link': link}, 
-                name=link.url_name())
-        )
+
+for link in registered_links:
+    path = r'%s/links/%s/(?P<ids>[\w_,]+)/$' % (link.parent_slug, link.slug)
+    urlpatterns += patterns('lingcod.features.views',
+        url(path, 'handle_link', kwargs={'link': link}, 
+            name=link.url_name)
+    )

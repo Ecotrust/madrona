@@ -106,6 +106,14 @@ def handle_link(request, ids, link=None):
             return inst
         else:
             instances.append(inst)
+    for instance in instances:
+        if link.generic and instance.__class__ not in link.models:
+            return HttpResponse(
+                'Not Supported Error: Requested for "%s" feature class. This \
+generic link only supports requests for feature classes %s' % (
+                instance.__class__.__name__, 
+                ', '.join([m.__name__ for m in link.models])), status=400)
+                
     if link.select is 'single':
         return link.view(request, instances[0], **link.extra_kwargs)
     else:

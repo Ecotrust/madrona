@@ -528,29 +528,6 @@ class LinkTestFeature(Feature):
             ),
         )
 
-class OtherTestFeature(Feature):
-    class Options:
-        form = 'lingcod.features.tests.LinkTestFeatureForm',
-        links = (
-            alternate('Single Select View',
-                'lingcod.features.tests.valid_single_select_view',  
-                type="application/shapefile"),
-                
-            alternate('Spreadsheet of all Features',
-                'lingcod.features.tests.valid_multiple_select_view',
-                type="application/xls", 
-                select='multiple single'),
-            
-            edit('Edit single feature',
-                'lingcod.features.tests.valid_single_select_view'
-            ),
-            
-            edit_form('Edit multiple features',
-                'lingcod.features.tests.valid_multiple_select_view',
-                select='multiple single'
-            ),
-        )
-        
 class LinkTestFeatureForm(FeatureForm):
     class Meta:
         model = LinkTestFeature
@@ -654,10 +631,99 @@ class LinkTest(TestCase):
         inst.delete()
         response = self.client.get(path)
         self.assertEqual(response.status_code, 404)
+
+def multi_select_view(request, instances):
+    return HttpResponse(', '.join([i.name for i in instances]))
     
-    def test_400_response(self):
-        pass
+class GenericLinksTestFeature(Feature):
+    class Options:
+        form = 'lingcod.features.tests.GenericLinksTestForm'
+        links = (
+            alternate('Generic Link',
+                'lingcod.features.tests.multi_select_view',  
+                type="application/shapefile",
+                select='multiple single'),
+        )
+
+class GenericLinksTestForm(FeatureForm):
+    class Meta:
+        model = GenericLinksTestFeature
+
+
+class OtherGenericLinksTestFeature(Feature):
+    class Options:
+        form = 'lingcod.features.tests.OtherGenericLinksTestForm'
+        links = (
+            alternate('Generic Link',
+                'lingcod.features.tests.multi_select_view',  
+                type="application/shapefile",
+                select='multiple single'),
+        )
+
+
+class OtherGenericLinksTestForm(FeatureForm):
+    class Meta:
+        model = OtherGenericLinksTestFeature
+
+class LastGenericLinksTestFeature(Feature):
+    class Options:
+        form = 'lingcod.features.tests.GenericLinksTestForm'
+        links = (
+            alternate('Different Name',
+                'lingcod.features.tests.multi_select_view',  
+                type="application/shapefile",
+                select='multiple single'),
+
+        )
+
+register(GenericLinksTestFeature)        
+register(OtherGenericLinksTestFeature)
+register(LastGenericLinksTestFeature)
+
+class GenericLinksTest(TestCase):
     
-    def test_400_response_multiple_instances(self):
-        pass
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.generic_instance = GenericLinksTestFeature(user=self.user, 
+            name="Generic")
+        self.other_instance = OtherGenericLinksTestFeature(user=self.user, 
+            name="Other")
+        self.last_instance = LastGenericLinksTestFeature(user=self.user, 
+            name="Last")
+        self.generic_instance.save()
+        self.other_instance.save()
+        self.last_instance.save()
     
+    def test_generic_links_reused_by_create_link(self):
+        """Test that the calls to lingcod.features.create_link return 
+        references to generic links when appropriate."""
+        self.assertEqual(GenericLinksTestFeature.get_options().links[0], 
+            OtherGenericLinksTestFeature.get_options().links[0])
+        self.assertNotEqual(
+            OtherGenericLinksTestFeature.get_options().links[0],
+            LastGenericLinksTestFeature.get_options().links[0])
+            
+    def test_generic_links_work(self):
+        """Test that a generic view can recieve a request related to more than
+        one feature class."""
+        link = GenericLinksTestFeature.get_options().links[0]
+        path = link.reverse([self.generic_instance, self.other_instance])
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertRegexpMatches(response.content, r'Generic')
+        self.assertRegexpMatches(response.content, r'Other')
+        
+    def test_generic_links_deny_unconfigured_models(self):
+        """Generic links shouldn't work for any model, only those that have 
+        the link configured in their Options class."""
+        link = GenericLinksTestFeature.get_options().links[0]
+        path = link.reverse([self.generic_instance, self.last_instance])
+        self.client.login(username='resttest', password='pword')
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 400)
+        self.assertRegexpMatches(response.content, r'GenericLinksTestFeature')
+        self.assertRegexpMatches(response.content, 
+            r'OtherGenericLinksTestFeature')

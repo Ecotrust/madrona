@@ -7,6 +7,7 @@ from lingcod.features.forms import FeatureForm
 from django.core.urlresolvers import reverse
 
 registered_models = []
+registered_links = []
 logger = get_logger()
 
 class FeatureConfigurationError(Exception):
@@ -43,7 +44,7 @@ class %s' % (name, ))
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a form class. \
 To specify, add a `form` property to its Options inner-class." % (name,))
-    
+        
         if not isinstance(self._options.form, str):
             raise FeatureConfigurationError(
                 "Feature class %s is configured with a form property that is \
@@ -53,38 +54,46 @@ not a string path." % (name,))
         """
         Path to FeatureForm used to edit this class.
         """
+        
         self.slug = slugify(name)
         """
         Name used in the url path to this feature as well as part of 
         the Feature's uid
         """
+        
         self.verbose_name = getattr(self._options, 'verbose_name', name)
         """
         Name specified or derived from the feature class name used 
         in the user interface for representing this feature class.
         """
+        
         self.form_template = getattr(self._options, 'form_template', 
             'features/form.html')
         """
         Location of the template that should be used to render forms
         when editing or creating new instances of this feature class.
         """
+        
         self.form_context = getattr(self._options, 'form_context', {})
         """
         Context to merge with default context items when rendering
         templates to create or modify features of this class.
         """
+        
         self.show_context = getattr(self._options, 'show_context', {})
         """
         Context to merge with default context items when rendering
         templates to view information about instances of this feature class.
         """
+        
         self.links = getattr(self._options, 'links', [])
         """
         Links associated with this class.
         """
+        
         for link in self.links:
-            link.options = self
+            if self._model not in link.models:
+                link.models.append(self._model)
     
     def get_show_template(self):
         """
@@ -145,10 +154,10 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         and DELETE operations.
         """
         return reverse('%s_resource' % (self.slug, ), args=[pk])
-        
+
 class Link:
     def __init__(self, rel, title, view, method='post', select='single', 
-        type=None, slug=None, generic=False, extra_kwargs={}):
+        type=None, slug=None, generic=False, models=None, extra_kwargs={}):
         self.rel = rel
         """
         Type of link - alternate, related, edit, or edit_form.
@@ -161,10 +170,6 @@ class Link:
         except:
             raise FeatureConfigurationError('Link "%s" configured with \
 invalid path to view %s' % (title, view))
-        self.options = None
-        """
-        FeatureOptions instance that this link belongs to.
-        """
         
         self.title = title
         """
@@ -173,19 +178,14 @@ invalid path to view %s' % (title, view))
         
         self.method = method
         """
-        TODO: is this even needed.
+        For rel=edit links, identifies whether a form should be requested or 
+        that url should just be POST'ed to.
         """
         
         self.type = type
         """
         MIME type of this link, useful for alternate links. May in the future
         be used to automatically assign an icon in the dropdown Export menu.
-        """
-        
-        self.generic = generic
-        """
-        Whether this link accepts requests for content for instances of 
-        multiple feature classes.
         """
         
         self.slug = slug
@@ -202,8 +202,22 @@ invalid path to view %s' % (title, view))
         
         self.extra_kwargs = extra_kwargs
         """
-        Extra keyword arguments to pass to the view
+        Extra keyword arguments to pass to the view.
         """
+        
+        self.generic = generic
+        """
+        Whether this view can be applied to multiple feature classes.
+        """
+        
+        self.models = models
+        """
+        List of feature classes that a this view can be applied to, if it is 
+        generic.
+        """
+        
+        if self.models is None:
+            self.models = []
         
         # Make sure title isn't empty
         if self.title is '':
@@ -248,15 +262,26 @@ self.title, ))
                 raise FeatureConfigurationError('Link "%s" not configured \
 with a valid view. View must take a second argument named instances.' % (
 self.title, ))
-
-        # TODO: Check that extra_kwargs can be passed to the view
             
+    @property
     def url_name(self):
         """
         Links are registered with named-urls. This function will return 
         that name so that it can be used in calls to reverse().
         """
-        return "%s_%s" % (self.options.slug, self.slug)
+        return "%s_%s" % (self.parent_slug, self.slug)
+    
+    @property
+    def parent_slug(self):
+        """
+        Returns either the slug of the only model this view applies to, or 
+        'generic'
+        """
+        if len(self.models) == 1:
+            return self.models[0].get_options().slug
+        else:
+            return 'generic-links'
+        
         
     def reverse(self, instances):
         """
@@ -268,7 +293,7 @@ self.title, ))
         if not isinstance(instances,tuple) and not isinstance(instances,list):
             instances = [instances]
         ids = ','.join([instance.uid for instance in instances])
-        return reverse(self.url_name(), kwargs={'ids': ids})
+        return reverse(self.url_name, kwargs={'ids': ids})
     
     def __str__(self):
         return self.title
@@ -278,11 +303,25 @@ self.title, ))
     
     def json(self):
         return ''
-
+        
+        
 def create_link(rel, *args, **kwargs):
     nargs = [rel]
     nargs.extend(args)
-    return Link(*nargs, **kwargs)
+    link = Link(*nargs, **kwargs)
+    must_match = ('rel', 'title', 'view', 'extra_kwargs', 'method', 'slug', 
+        'select')
+    for registered_link in registered_links:
+        matches = True
+        for key in must_match:
+            if getattr(link, key) != getattr(registered_link, key):
+                matches = False
+                break
+        if matches:
+            registered_link.generic = True
+            return registered_link
+    registered_links.append(link)
+    return link
 
 def alternate(*args, **kwargs):
     return create_link('alternate', *args, **kwargs)
@@ -301,7 +340,8 @@ def edit_form(*args, **kwargs):
 
 def register(*args):
     for model in args:
-        model.get_options()
+        options = model.get_options()
         logger.debug('registering %s' % (model.__name__,) )
         if model not in registered_models:
             registered_models.append(model)
+            registered_links.extend(options.links)
