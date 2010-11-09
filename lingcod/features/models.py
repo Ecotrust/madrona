@@ -44,8 +44,12 @@ class Feature(models.Model):
     @classmethod
     def get_options(klass):
         return FeatureOptions(klass)
+    
+    @classmethod
+    def model_uid(klass):
+        ct = ContentType.objects.get_for_model(klass)
+        return "%s_%s" % (ct.app_label, ct.model)
         
     @property
     def uid(self):
-        ct = ContentType.objects.get_for_model(self.__class__)
-        return "%s_%s_%s" % (ct.app_label, ct.model, self.pk, )
+        return "%s_%s" % (self.model_uid(), self.pk, )

@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
 from django.core.urlresolvers import reverse
+import json
 
 registered_models = []
 registered_links = []
@@ -128,12 +129,37 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
 
         return klass
     
-    def json(self):
+    def dict(self):
         """
         Returns a json representation of this feature class configuration
         that can be used to specify client behavior
         """
-        pass
+        link_rels = {
+            'id': self._model.model_uid(),
+            'title': self.verbose_name,
+            'link-relations': {
+                'self': {
+                    'uri-template': reverse("%s_resource" % (self.slug, ), 
+                        args=[14]).replace('14', '{id}')
+                },
+                'create': {
+                    'uri-template': reverse("%s_create_form" % (self.slug, ))
+                },
+                'update': {
+                    'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                        args=[14]).replace('14', '{id}')
+                }
+            }
+        }
+        for link in self.links:
+            if not link.generic:
+                if link.rel not in link_rels['link-relations'].keys():
+                    link_rels['link-relations'][link.rel] = []
+                link_rels['link-relations'][link.rel].append(link.dict())
+        return link_rels
+    
+    def json(self):
+        return json.dumps(self.dict())
         
     def get_create_form(self):
         """
@@ -301,8 +327,21 @@ self.title, ))
     def __unicode__(self):
         return str(self)
     
+    def dict(self):
+        d = {
+            'rel': self.rel,
+            'title': self.title,
+            'select': self.select,
+            'uri-template': reverse(self.url_name, 
+                kwargs={'ids': 'idplaceholder'}).replace(
+                    'idplaceholder', '{id+}')
+        }
+        if len(self.models) > 1:
+            d['models'] = [m.model_uid() for m in self.models]
+        return d
+    
     def json(self):
-        return ''
+        return json.dumps(self.dict())
         
         
 def create_link(rel, *args, **kwargs):
@@ -345,3 +384,16 @@ def register(*args):
         if model not in registered_models:
             registered_models.append(model)
             registered_links.extend(options.links)
+            
+def workspace_json(*args):
+    workspace = {
+        'feature-classes': [],
+        'generic-links': []
+    }
+    for model in args:
+        workspace['feature-classes'].append(model.get_options().dict())
+    for link in registered_links:
+        # See if the generic links are relavent to this list
+        if link.generic and [i for i in args if i in link.models]:
+            workspace['generic-links'].append(link.dict())
+    return json.dumps(workspace)

@@ -44,6 +44,7 @@ class TestForm:
     class Meta:
         model = TestGetFormClassFeature
 
+register(TestGetFormClassFeature)
 
 class FeatureOptionsTest(TestCase):
     
@@ -164,10 +165,7 @@ class FeatureOptionsTest(TestCase):
     def test_get_form_not_subclass(self):
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
             TestGetFormClassFailFeature.get_options().get_form_class()
-
-    def test_json(self):
-        pass
-
+    
 # Generic view tests
 
 class TestDeleteFeature(Feature):
@@ -643,6 +641,10 @@ class GenericLinksTestFeature(Feature):
                 'lingcod.features.tests.multi_select_view',  
                 type="application/shapefile",
                 select='multiple single'),
+            alternate('Non-Generic Link',
+                'lingcod.features.tests.multi_select_view',  
+                type="application/shapefile",
+                select='multiple single'),
         )
 
 class GenericLinksTestForm(FeatureForm):
@@ -727,3 +729,7 @@ class GenericLinksTest(TestCase):
         self.assertRegexpMatches(response.content, r'GenericLinksTestFeature')
         self.assertRegexpMatches(response.content, 
             r'OtherGenericLinksTestFeature')
+    
+    def test_json(self):
+        print GenericLinksTestFeature.get_options().json()
+        print workspace_json(GenericLinksTestFeature, OtherGenericLinksTestFeature)
