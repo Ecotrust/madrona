@@ -552,8 +552,8 @@ class LinkTest(TestCase):
     
     def test_get_links(self):
         links = LinkTestFeature.get_options().links
-        link = links[0]
-        link2 = links[1]
+        link = links[1]
+        link2 = links[2]
         self.assertIsInstance(link, Link)
         self.assertEqual('Single Select View', link.title)
         self.assertEqual('single', link.select)
@@ -562,8 +562,8 @@ class LinkTest(TestCase):
     def test_links_registered(self):
         options = LinkTestFeature.get_options()
         links = options.links
-        link = links[0]
-        link2 = links[1]
+        link = links[1]
+        link2 = links[2]
         # Check to see that the Feature Class was registered at all
         self.client.login(username='resttest', password='pword')
         response = self.client.get(self.options.get_create_form())
@@ -580,12 +580,12 @@ class LinkTest(TestCase):
         """Should not be able to perform editing actions without login.
         """
         links = self.options.links
-        response = self.client.post(links[2].reverse(self.test_instance))
+        response = self.client.post(links[3].reverse(self.test_instance))
         self.assertEqual(response.status_code, 401)
-        response = self.client.get(links[3].reverse(self.test_instance))
+        response = self.client.get(links[4].reverse(self.test_instance))
         self.assertEqual(response.status_code, 401)
         self.client.login(username='resttest', password='pword')
-        response = self.client.get(links[3].reverse(self.test_instance))
+        response = self.client.get(links[4].reverse(self.test_instance))
         self.assertEqual(response.status_code, 200)        
     
     def test_cant_GET_edit_links(self):
@@ -593,7 +593,7 @@ class LinkTest(TestCase):
         """
         links = self.options.links
         self.client.login(username='resttest', password='pword')
-        response = self.client.get(links[2].reverse(self.test_instance))
+        response = self.client.get(links[3].reverse(self.test_instance))
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response['Allow'], 'POST')
         
@@ -602,7 +602,7 @@ class LinkTest(TestCase):
         """
         links = self.options.links
         self.client.login(username='other', password='pword')
-        response = self.client.get(links[3].reverse(self.test_instance))
+        response = self.client.get(links[4].reverse(self.test_instance))
         self.assertEqual(response.status_code, 403)        
         
     
@@ -616,7 +616,7 @@ class LinkTest(TestCase):
             name="Other User's feature")
         inst.save()
         response = self.client.get(
-            links[3].reverse([inst, self.test_instance]))
+            links[4].reverse([inst, self.test_instance]))
         self.assertEqual(response.status_code, 403)
         
     def test_404_response(self):
@@ -625,7 +625,7 @@ class LinkTest(TestCase):
         inst = LinkTestFeature(user=self.user, 
             name="feature")
         inst.save()
-        path = links[3].reverse([inst, self.test_instance])
+        path = links[4].reverse([inst, self.test_instance])
         inst.delete()
         response = self.client.get(path)
         self.assertEqual(response.status_code, 404)
@@ -701,16 +701,16 @@ class GenericLinksTest(TestCase):
     def test_generic_links_reused_by_create_link(self):
         """Test that the calls to lingcod.features.create_link return 
         references to generic links when appropriate."""
-        self.assertEqual(GenericLinksTestFeature.get_options().links[0], 
-            OtherGenericLinksTestFeature.get_options().links[0])
+        self.assertEqual(GenericLinksTestFeature.get_options().links[1], 
+            OtherGenericLinksTestFeature.get_options().links[1])
         self.assertNotEqual(
-            OtherGenericLinksTestFeature.get_options().links[0],
-            LastGenericLinksTestFeature.get_options().links[0])
+            OtherGenericLinksTestFeature.get_options().links[1],
+            LastGenericLinksTestFeature.get_options().links[1])
             
     def test_generic_links_work(self):
         """Test that a generic view can recieve a request related to more than
         one feature class."""
-        link = GenericLinksTestFeature.get_options().links[0]
+        link = GenericLinksTestFeature.get_options().links[1]
         path = link.reverse([self.generic_instance, self.other_instance])
         self.client.login(username='resttest', password='pword')
         response = self.client.get(path)
@@ -721,7 +721,7 @@ class GenericLinksTest(TestCase):
     def test_generic_links_deny_unconfigured_models(self):
         """Generic links shouldn't work for any model, only those that have 
         the link configured in their Options class."""
-        link = GenericLinksTestFeature.get_options().links[0]
+        link = GenericLinksTestFeature.get_options().links[1]
         path = link.reverse([self.generic_instance, self.last_instance])
         self.client.login(username='resttest', password='pword')
         response = self.client.get(path)
@@ -729,7 +729,175 @@ class GenericLinksTest(TestCase):
         self.assertRegexpMatches(response.content, r'GenericLinksTestFeature')
         self.assertRegexpMatches(response.content, 
             r'OtherGenericLinksTestFeature')
+
+
+
+def delete_w_contents(request, instances):
+    return HttpResponse('Deleted')
+
+def habitat_spreadsheet(request, instance):
+    return HttpReponse('Report Contents')
+
+def viewshed_map(request, instance):
+    return HttpResponse('image')
+
+def kml(request, instances):
+    return HttpResponse('<kml />')
     
-    def test_json(self):
-        print GenericLinksTestFeature.get_options().json()
-        print workspace_json(GenericLinksTestFeature, OtherGenericLinksTestFeature)
+# Lets use the following as a canonical example of how to use all the features
+# of this framework (will be kept up to date as api changes):
+            
+class Folder(Feature):
+    
+    def copy(self, user):
+        copy = super(Folder, self).copy(user)
+        copy.name = copy.name.replace(' (copy)', '-Copy')
+        copy.save()
+        return copy
+    
+    class Options:
+        form = 'lingcod.features.tests.FolderForm'
+        valid_children = (
+            'lingcod.features.tests.Mpa', 
+            'lingcod.features.tests.Folder', 
+            'lingcod.features.tests.RenewableEnergySite')
+        links = (
+            edit('Delete folder and contents',
+                'lingcod.features.tests.delete_w_contents',
+                select='single multiple',
+                confirm="""
+                Are you sure you want to delete this folder and it's contents? 
+                This action cannot be undone.
+                """
+            ),
+            alternate('Export KML',
+                'lingcod.features.tests.kml',
+                select='multiple single'
+            )
+        )
+        
+class FolderForm(FeatureForm):
+    class Meta:
+        model = Folder
+        
+DESIGNATION_CHOICES = (
+    ('R', 'Reserve'), 
+    ('P', 'Park'),
+    ('C', 'Conservation Area')
+)
+
+class Mpa(Feature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    class Options:
+        verbose_name = 'Marine Protected Area'
+        form = 'lingcod.features.tests.MpaForm'
+        links = (
+            related('Habitat Spreadsheet',
+                'lingcod.features.tests.habitat_spreadsheet',
+                select='single',
+                type='application/xls'
+            ),
+            alternate('Export KML',
+                'lingcod.features.tests.kml',
+                select='multiple single'
+            )
+        )
+        
+class MpaForm(FeatureForm):
+    class Meta:
+        model = Mpa
+    
+TYPE_CHOICES = (
+    ('W', 'Wind'),
+    ('H', 'Hydrokinetic'),
+)
+
+class RenewableEnergySite(Feature):
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES)
+    class Options:
+        verbose_name = 'Renewable Energy Site'
+        form = 'lingcod.features.tests.RenewableEnergySiteForm'
+        links = (
+            related('Viewshed Map',
+                'lingcod.features.tests.viewshed_map',
+                select='single',
+                type='image/png'
+            ),
+            alternate('Export KML',
+                'lingcod.features.tests.kml',
+                select='multiple single'
+            )
+        )
+
+class RenewableEnergySiteForm(FeatureForm):
+    class Meta:
+        model = RenewableEnergySite
+        
+register(Folder, Mpa, RenewableEnergySite)
+
+class JsonSerializationTest(TestCase):
+    
+    def test_workspace(self):
+        pass
+        
+class CopyTest(TestCase):
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.mpa = Mpa(user=self.user, name="My Mpa")
+        self.folder = Folder(user=self.user, name="My Folder")
+        self.folder.save()
+        self.mpa.save()
+    
+    def test_login_required(self):
+        for link in self.mpa.get_options().links:
+            if link.title == 'Copy':
+                copy_link = link
+                break
+        self.assertEqual(Link, getattr(link, '__class__', None))
+        response = self.client.post(link.reverse([self.mpa]))
+        # commenting out until sharing is supported on feature classes
+        # self.assertEqual(response.status_code, 401)
+            
+    def test_copy(self):
+        self.client.login(username='resttest', password='pword')
+        for link in self.mpa.get_options().links:
+            if link.title == 'Copy':
+                copy_link = link
+                break
+        self.assertEqual(Link, getattr(link, '__class__', None))
+        response = self.client.post(link.reverse([self.mpa]))
+        self.assertRegexpMatches(response.content, r'(copy)')
+        self.assertRegexpMatches(response['X-MarineMap-Select'], 
+            r'features_mpa_\d')
+    
+    def test_copy_multiple_and_custom_copy_method(self):
+        self.client.login(username='resttest', password='pword')
+        for link in self.mpa.get_options().links:
+            if link.title == 'Copy':
+                copy_link = link
+                break
+        self.assertEqual(Link, getattr(link, '__class__', None))
+        path = link.reverse([self.mpa, self.folder])
+        response = self.client.post(path)
+        self.assertRegexpMatches(response.content, r'(copy)')
+        self.assertRegexpMatches(response.content, r'Folder-Copy')
+        self.assertRegexpMatches(response['X-MarineMap-Select'], 
+            r'features_mpa_\d features_folder_\d')
+    
+    def test_other_users_can_copy_if_shared(self):
+        """
+        TODO: Implement this once sharing is incorporated
+        """
+        # for link in self.mpa.get_options().links:
+        #     if link.title == 'Copy':
+        #         copy_link = link
+        #         break
+        # self.assertEqual(Link, getattr(link, '__class__', None))
+        # response = self.client.post(link.reverse([self.mpa]))
+        # self.assertRegexpMatches(response.content, r'(copy)')
+        # self.assertRegexpMatches(response['X-MarineMap-Select'], 
+        #     r'features_mpa_\d')
+        pass

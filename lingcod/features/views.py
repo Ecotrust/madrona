@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.template import loader, TemplateDoesNotExist
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from lingcod.features.models import Feature
 
 def get_object_for_editing(request, klass, pk):
     """
@@ -99,7 +100,11 @@ def handle_link(request, ids, link=None):
                 resp = HttpResponse('Invalid Method', status=405)
                 resp['Allow'] = 'POST'
                 return resp
-            inst = get_object_for_editing(request, ct.model_class(), parts[2])
+            if link.edits_original is False:
+                # users who can view the object can then make copies
+                inst = get_object_for_viewing(request, ct.model_class(), parts[2])
+            else:
+                inst = get_object_for_editing(request, ct.model_class(), parts[2])                
         else:
             inst = get_object_for_viewing(request, ct.model_class(), parts[2])
         if isinstance(inst, HttpResponse):
@@ -398,3 +403,30 @@ def decorate_with_manipulators(extra_context, form_class):
     except:
         extra_context['json'] = False
     return extra_context
+
+def copy(request, instances):
+    """
+    Generic view that can be used to copy any feature classes. Supports 
+    requests referencing multiple instances.
+    
+    To copy, this view will call the copy() method with the request's user as
+    it's sole argument. The Feature base class has a generic copy method, but
+    developers can override it. A poorly implemented copy method that does not
+    return the copied instance will raise an exception here.
+    
+    This view returns a space-delimited list of the Feature uid's for 
+    selection in the user-interface after this operation via the 
+    X-MarineMap-Select response header.
+    """
+    copies = []
+    for instance in instances:
+        copy = instance.copy(request.user)
+        if not copy or not isinstance(copy, Feature):
+            raise Exception('copy method on feature class %s did not return \
+Feature instance.' % (instance.__class__.__name__, ))
+        copies.append(copy)
+    links = ', '.join(['<a href="%s">%s</a>' % (
+        i.get_absolute_url(), i.name) for i in copies])
+    res = HttpResponse("Created %s" % (links, ), status=201)
+    res['X-MarineMap-Select'] = ' '.join([i.uid for i in copies])
+    return res

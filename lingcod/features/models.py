@@ -52,4 +52,44 @@ class Feature(models.Model):
         
     @property
     def uid(self):
+        if not self.pk:
+            raise Exception(
+                'Trying to get uid for feature class that is not yet saved!')
         return "%s_%s" % (self.model_uid(), self.pk, )
+    
+    def copy(self, user=None):
+        """
+        Returns a copy of this feature, setting the user to the specified 
+        owner. Copies many-to-many relations
+        """
+        # Took this code almost verbatim from the mpa model code.
+        # TODO: Test if this method is robust, and evaluate alternatives like
+        # that described in django ticket 4027
+        # http://code.djangoproject.com/ticket/4027
+        the_feature = self
+
+        # Make an inventory of all many-to-many fields in the original feature
+        m2m = {}
+        for f in the_feature._meta.many_to_many:
+            m2m[f.name] = the_feature.__getattribute__(f.name).all()
+
+        # The black magic voodoo way, 
+        # makes a copy but relies on this strange implementation detail of 
+        # setting the pk & id to null 
+        # An alternate, more explicit way, can be seen at:
+        # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
+        the_feature.pk = None
+        the_feature.id = None
+        the_feature.save()
+
+        the_feature.name = the_feature.name + " (copy)"
+
+        # Restore the many-to-many fields
+        for fname in m2m.keys():
+            for obj in m2m[fname]:
+                the_feature.__getattribute__(fname).add(obj)
+    
+        # Reassign User
+        the_feature.user = user
+        the_feature.save()
+        return the_feature

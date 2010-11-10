@@ -87,10 +87,27 @@ not a string path." % (name,))
         templates to view information about instances of this feature class.
         """
         
-        self.links = getattr(self._options, 'links', [])
+        self.links = []
         """
         Links associated with this class.
         """
+        
+        opts_links = getattr(self._options, 'links', False)
+        if opts_links:
+            self.links.extend(opts_links)
+        
+        self.enable_copy = getattr(self._options, 'disable_copy', True)
+        """
+        Enable copying features. Uses the feature class' copy() method. 
+        Defaults to True.
+        """
+        
+        # Add a copy method unless disabled
+        if self.enable_copy:
+            self.links.insert(0, edit('Copy', 
+                'lingcod.features.views.copy', 
+                select='multiple single',
+                edits_original=False))
         
         for link in self.links:
             if self._model not in link.models:
@@ -183,7 +200,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
 
 class Link:
     def __init__(self, rel, title, view, method='post', select='single', 
-        type=None, slug=None, generic=False, models=None, extra_kwargs={}):
+        type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
+        confirm=False, edits_original=None):
         self.rel = rel
         """
         Type of link - alternate, related, edit, or edit_form.
@@ -242,6 +260,18 @@ invalid path to view %s' % (title, view))
         generic.
         """
         
+        self.confirm = confirm
+        """
+        Confirmation message to show the user before POSTing to rel=edit link
+        """
+        
+        self.edits_original = edits_original
+        """
+        Set to false for editing links that create a copy of the original. 
+        This will allow users who do not own the instance(s) but can view them
+        perform the action.
+        """
+        
         if self.models is None:
             self.models = []
         
@@ -295,7 +325,7 @@ self.title, ))
         Links are registered with named-urls. This function will return 
         that name so that it can be used in calls to reverse().
         """
-        return "%s_%s" % (self.parent_slug, self.slug)
+        return "%s-%s" % (self.parent_slug, self.slug)
     
     @property
     def parent_slug(self):
@@ -383,7 +413,9 @@ def register(*args):
         logger.debug('registering %s' % (model.__name__,) )
         if model not in registered_models:
             registered_models.append(model)
-            registered_links.extend(options.links)
+            for link in options.links:
+                if link not in registered_links:
+                    registered_links.append(link)
             
 def workspace_json(*args):
     workspace = {
@@ -396,4 +428,4 @@ def workspace_json(*args):
         # See if the generic links are relavent to this list
         if link.generic and [i for i in args if i in link.models]:
             workspace['generic-links'].append(link.dict())
-    return json.dumps(workspace)
+    return json.dumps(workspace, indent=2)
