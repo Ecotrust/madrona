@@ -202,10 +202,11 @@ class Link:
     def __init__(self, rel, title, view, method='GET', select='single', 
         type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
         confirm=False, edits_original=None):
+        
         self.rel = rel
+        """Type of link - alternate, related, edit, or edit_form.
         """
-        Type of link - alternate, related, edit, or edit_form.
-        """
+        
         try:
             self.view = get_class(view)
             """
@@ -340,8 +341,7 @@ self.title, ))
         
         
     def reverse(self, instances):
-        """
-        Can be used to get the url for this link. 
+        """Can be used to get the url for this link. 
         
         In the case of select=single links, just pass in a single instance. In
         the case of select=multiple links, pass in an array.
