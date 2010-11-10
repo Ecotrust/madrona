@@ -199,7 +199,7 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         return reverse('%s_resource' % (self.slug, ), args=[pk])
 
 class Link:
-    def __init__(self, rel, title, view, method='post', select='single', 
+    def __init__(self, rel, title, view, method='GET', select='single', 
         type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
         confirm=False, edits_original=None):
         self.rel = rel
@@ -366,6 +366,8 @@ self.title, ))
                 kwargs={'ids': 'idplaceholder'}).replace(
                     'idplaceholder', '{id+}')
         }
+        if self.rel == 'edit':
+            d['method'] = self.method
         if len(self.models) > 1:
             d['models'] = [m.model_uid() for m in self.models]
         return d
@@ -399,11 +401,13 @@ def related(*args, **kwargs):
     return create_link('related', *args, **kwargs)
 
 def edit(*args, **kwargs):
+    if 'method' not in kwargs.keys():
+        kwargs['method'] = 'POST'
     return create_link('edit', *args, **kwargs)
 
 def edit_form(*args, **kwargs):
     if 'method' not in kwargs.keys():
-        kwargs['method'] = 'form'
+        kwargs['method'] = 'GET'
     return create_link('edit', *args, **kwargs)
 
 
