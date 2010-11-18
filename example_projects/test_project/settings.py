@@ -26,8 +26,8 @@ INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', )
 EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
 
 
-MPA_CLASS = 'mlpa.models.Mpa'
-ARRAY_CLASS = 'mlpa.models.MpaArray'
+MPA_CLASS = 'mlpa.models.NcMpa'
+ARRAY_CLASS = 'mlpa.models.NcMpaArray'
 MPA_FORM = 'mlpa.forms.MpaForm'
 ARRAY_FORM = 'mlpa.forms.ArrayForm'
 
