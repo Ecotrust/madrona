@@ -33,5 +33,13 @@ class BaseManipulatorGeometry(models.Model):
     
     objects = BaseManipulatorGeometryManager()
     
+    def save(self, *args, **kwargs):
+        super(BaseManipulatorGeometry, self).save(*args, **kwargs)
+        if self.active and self.__class__.objects.filter(active=True).count() > 1:
+            # Ensure that any previously active layer is deactivated -- There can be only one!
+            self.__class__.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
+            
     class Meta:
         abstract = True
+
+    

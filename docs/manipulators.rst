@@ -171,6 +171,13 @@ Things to keep in mind as you create your own manipulators:
 We invite you to use the manipulator provided by simple_app (or any of our manipulators defined in 
 ``lingcod/manipulators``) as a template for generating your own manipulators.  
 
+.. note::
+
+    In addition to ``BaseManipulator``, we also provide a ``ClipToShapeManipulator`` and a ``DifferenceFromShapeManipulator`` that can be subclassed to simplify your own manipulator.
+
+    Both of these classes inherit from ``BaseManipulator`` while also providing a ready-made ``manipulate()`` method that will take the respective interesection of or difference from any two shapes.
+
+    
 Optional Manipulators
 *********************
 
@@ -209,3 +216,34 @@ If the user doesn't select any other optional manipulators and there are none re
    Third, the superclass of MPAForm must include 'manipulators' in the fields list.
    Lastly, the map.html template must include the manipulators div as specified in the common/map.html template. 
 
+
+Manipulator Models
+******************
+
+You may want to store a pre-defined shape in the database that will be used by your manipulator.  
+
+For this purpose we provide an abstract model, ``BaseManipulatorGeometry``, that can be used to simplify your manipulator model building.
+
+There are also two management commands that can be used to load a geometry from a shapefile into the database provided certain fields and methods are present in the model (all of which are provided by ``BaseManipulatorGeometry``).
+
+First, create your own manipulator model such as the one below (be sure to inherit from ``BaseManipulatorGeometry``, as well as provide ``name`` and ``geometry`` fields):
+
+.. code-block:: python 
+  
+    class MyClippingLayer(BaseManipulatorGeometry):
+        name = models.CharField(verbose_name="My Clipping Layer Name", max_length=255, blank=True)
+        geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="My Clipping Layer")
+
+        def __unicode__(self):
+            return "MyClippingLayer data, created: %s" % (self.creation_date)
+
+Second, use ``syncdb`` or ``migrate`` to generate the associated database table.
+            
+Finally, load your own geometry layer with the following management commands:
+
+.. code-block:: python 
+  
+    manage.py create_manipulator_geom <path to shapefile>/my_clipping_region.shp MyClippingLayer 
+    manage.py change_manipulator_geom 1 MyClippingLayer      
+
+    

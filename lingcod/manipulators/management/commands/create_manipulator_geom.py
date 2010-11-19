@@ -8,13 +8,15 @@ from lingcod.common.utils import get_class
 #manipulator_list = ['EastOfTerritorialSeaLine', 'TerrestrialAndEstuaries', 'Terrestrial', 'Estuaries']
 
 class Command(BaseCommand):
+    option_list = AppCommand.option_list + (
+        make_option('--name', action='store', dest='region_name', default=False,
+            help='Give a name to the study region, otherwise the name attribute from the shapefile will be used.'),
+    )
     help = """Creates a new study region from a shapefile containing a single multigeometry.
             \n\tmanage.py create_manipulator_geom <path to shape> <manipulator model>"""
     args = '[shapefile, manipulator]'
     
     def handle(self, shapefile, manipulator, *args, **options):
-        #if manipulator not in manipulator_list:
-        #    raise Exception("%s is not one of the manipulator models defined for omm." %manipulator)
         try:
             manip_model = get_class("omm_manipulators.models.%s" %manipulator)
         except:
@@ -34,12 +36,16 @@ class Command(BaseCommand):
             raise Exception("This geometry must be a polygon")
 
         mapping = {'geometry': 'MULTIPOLYGON'}
-
+            
         lm = LayerMapping(manip_model, shapefile, mapping)
         lm.save()
         manip_geom = manip_model.objects.order_by('-creation_date')[0]
-        manip_geom.name = layer.name
-        manip_geom.save()
+        if options.get('region_name'):
+            manip_geom.name = options.get('region_name')
+            manip_geom.save()
+        else:
+            manip_geom.name = layer.name
+            manip_geom.save()
         
         print ""
         print "The manipulaotr geometry, %s, has been added to the %s model with primary key = %s" % (manip_geom.name, manipulator, manip_geom.pk)
