@@ -100,16 +100,45 @@ class Feature(models.Model):
         return the_feature
 
 class PolygonFeature(Feature):
-    """Model used for representing user-generated polygon features. 
-       Inherits from Feature and adds geometry fields.
+    """
+    Model used for representing user-generated polygon features. 
+    Inherits from Feature and adds geometry fields.
     """   
-    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original Polygon Geometry")
-    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final Polygon Geometry")
+    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,
+            null=True, blank=True, verbose_name="Original Polygon Geometry")
+    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Final Polygon Geometry")
     
     @property
     def centroid_kml(self):
         geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
         return geom.kml
 
+    class Meta(Feature.Meta):
+        abstract=True
+
+class LineFeature(Feature):
+    """
+    Model used for representing user-generated linestring features. 
+    Inherits from Feature and adds geometry fields.
+    """   
+    geometry_orig = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Original Polygon Geometry")
+    geometry_final = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Final Polygon Geometry")
+
+    class Meta(Feature.Meta):
+        abstract=True
+
+class PointFeature(Feature):
+    """
+    Model used for representing user-generated point features. 
+    Inherits from Feature and adds geometry fields.
+    """   
+    geometry_orig = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Original Polygon Geometry")
+    geometry_final = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Final Polygon Geometry")
+    
     class Meta(Feature.Meta):
         abstract=True

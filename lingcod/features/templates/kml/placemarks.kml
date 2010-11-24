@@ -7,10 +7,14 @@
         <name>{{ feature.uid }}</name>
         <styleUrl>#defaultstyle</styleUrl>
         <visibility>1</visibility>
-        <MultiGeometry>
-        {{ feature.centroid_kml|safe }} 
-        {{ feature.kml|safe }} 
-        </MultiGeometry>
+        {% if feature.centroid_kml %}
+            <MultiGeometry>
+            {{ feature.centroid_kml|safe }} 
+            {{ feature.kml|safe }} 
+            </MultiGeometry>
+        {% else %}
+            {{ feature.kml|safe }} 
+        {% endif %}
     </Placemark>
     {% endfor %}
 

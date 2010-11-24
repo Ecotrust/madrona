@@ -1,6 +1,6 @@
 from django.test import TestCase
 from lingcod.features import *
-from lingcod.features.models import Feature, PolygonFeature
+from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature
 from lingcod.features.forms import FeatureForm
 from lingcod.common.utils import kml_errors
 import os
@@ -835,7 +835,28 @@ class RenewableEnergySiteForm(FeatureForm):
     class Meta:
         model = RenewableEnergySite
         
-register(Folder, Mpa, RenewableEnergySite)
+class Pipeline(LineFeature):
+    type = models.CharField(max_length=30,default='')
+    diameter = models.FloatField(null=True)
+    class Options:
+        verbose_name = 'Pipeline'
+        form = 'lingcod.features.tests.PipelineForm'
+
+class PipelineForm(FeatureForm):
+    class Meta:
+        model = Pipeline
+
+class Shipwreck(PointFeature):
+    incident = models.CharField(max_length=100,default='')
+    class Options:
+        verbose_name = 'Shipwreck'
+        form = 'lingcod.features.tests.ShipwreckForm'
+
+class ShipwreckForm(FeatureForm):
+    class Meta:
+        model = Shipwreck
+
+register(Folder, Mpa, RenewableEnergySite, Pipeline, Shipwreck)
 
 class JsonSerializationTest(TestCase):
     
@@ -905,23 +926,55 @@ class CopyTest(TestCase):
         pass
 
 
-
-class KmlTest(TestCase):
+class SpatialTest(TestCase):
 
     def setUp(self):
         from django.contrib.gis.geos import GEOSGeometry 
         from django.conf import settings
         self.client = Client()
-        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
-        g1.transform(settings.GEOMETRY_DB_SRID)
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
         self.client.login(username='resttest', password='pword')
+        
+        g3 = GEOSGeometry('SRID=4326;POINT(-120.45 34.32)')
+        g3.transform(settings.GEOMETRY_DB_SRID)
+        self.wreck = Shipwreck(user=self.user, name="Nearby Wreck", geometry_final=g3)
+        self.wreck.save()
+
+        g2 = GEOSGeometry('SRID=4326;LINESTRING(-120.42 34.37, -121.42 33.37)')
+        g2.transform(settings.GEOMETRY_DB_SRID)
+        self.pipeline = Pipeline(user=self.user, name="My Pipeline", geometry_final=g2)
+        self.pipeline.save()
+
+        g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
         self.mpa = Mpa(user=self.user, name="My Mpa", geometry_final=g1)
         self.mpa.save()
 
-    def test_defaultkml_url(self):
-        url = [link.reverse(self.mpa) for link in Mpa.get_options().links if link.title == "KML"][0]
+    def test_feature_types(self):
+        self.assertTrue(isinstance(self.wreck, PointFeature))
+        self.assertEqual(self.wreck.geometry_final.geom_type,'Point')
+
+        self.assertTrue(isinstance(self.pipeline, LineFeature))
+        self.assertEqual(self.pipeline.geometry_final.geom_type,'LineString')
+
+        self.assertTrue(isinstance(self.mpa, PolygonFeature))
+        self.assertEqual(self.mpa.geometry_final.geom_type,'Polygon')
+
+    def test_point_defaultkml_url(self):
+        url = [link.reverse(self.wreck) for link in self.wreck.get_options().links if link.title == "KML"][0]
+        response = self.client.get(url)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+        
+    def test_line_defaultkml_url(self):
+        url = [link.reverse(self.pipeline) for link in self.pipeline.get_options().links if link.title == "KML"][0]
+        response = self.client.get(url)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))
+
+    def test_polygon_defaultkml_url(self):
+        url = [link.reverse(self.mpa) for link in self.mpa.get_options().links if link.title == "KML"][0]
         response = self.client.get(url)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
