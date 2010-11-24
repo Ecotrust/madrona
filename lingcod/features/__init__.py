@@ -422,15 +422,15 @@ def edit_form(*args, **kwargs):
     return create_link('edit', *args, **kwargs)
 
 
-def register(*args):
-    for model in args:
-        options = model.get_options()
-        logger.debug('registering %s' % (model.__name__,) )
-        if model not in registered_models:
-            registered_models.append(model)
-            for link in options.links:
-                if link not in registered_links:
-                    registered_links.append(link)
+def register(model):
+    options = model.get_options()
+    logger.debug('registering %s' % (model.__name__,) )
+    if model not in registered_models:
+        registered_models.append(model)
+        for link in options.links:
+            if link not in registered_links:
+                registered_links.append(link)
+    return model
             
 def workspace_json(*args):
     workspace = {

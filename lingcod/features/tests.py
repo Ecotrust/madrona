@@ -28,7 +28,8 @@ def delete_template(path):
     path = os.path.dirname(path)
     if os.path.exists(path):
         shutil.rmtree(path)
-        
+
+@register        
 class TestGetFormClassFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.TestFeatureForm'
@@ -45,7 +46,6 @@ class TestForm:
     class Meta:
         model = TestGetFormClassFeature
 
-register(TestGetFormClassFeature)
 
 class FeatureOptionsTest(TestCase):
     
@@ -169,11 +169,10 @@ class FeatureOptionsTest(TestCase):
     
 # Generic view tests
 
+@register
 class TestDeleteFeature(Feature):
     class Options:
         form = 'lingcod.features.form.FeatureForm'
-        
-register(TestDeleteFeature)
         
 class DeleteTest(TestCase):
 
@@ -236,6 +235,7 @@ class DeleteTest(TestCase):
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
         
 
+@register
 class CreateFormTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.CreateFormTestForm'
@@ -243,8 +243,6 @@ class CreateFormTestFeature(Feature):
 class CreateFormTestForm(FeatureForm):
     class Meta:
         model = CreateFormTestFeature
-
-register(CreateFormTestFeature)
 
 class CreateFormTest(TestCase):
 
@@ -269,7 +267,7 @@ class CreateFormTest(TestCase):
         response = self.client.get(self.options.get_create_form())
         self.assertEqual(response.status_code, 200)
 
-
+@register
 class CreateTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.CreateTestForm'
@@ -277,8 +275,6 @@ class CreateTestFeature(Feature):
 class CreateTestForm(FeatureForm):
     class Meta:
         model = CreateTestFeature
-
-register(CreateTestFeature)
 
 
 class CreateTest(TestCase):
@@ -326,6 +322,7 @@ class CreateTest(TestCase):
         new_instance = CreateTestFeature.objects.get(name='My Test Hack Test')
         self.assertNotEqual(new_instance.user, other_user)
 
+@register
 class UpdateFormTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.UpdateFormTestForm'
@@ -333,8 +330,6 @@ class UpdateFormTestFeature(Feature):
 class UpdateFormTestForm(FeatureForm):
     class Meta:
         model = UpdateFormTestFeature
-
-register(UpdateFormTestFeature)
 
 class UpdateFormTest(TestCase):
 
@@ -380,7 +375,7 @@ class UpdateFormTest(TestCase):
         response = self.client.get(self.options.get_update_form(30000000000))
         self.assertEqual(response.status_code, 404)
 
-
+@register
 class UpdateTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.UpdateTestForm'
@@ -388,8 +383,6 @@ class UpdateTestFeature(Feature):
 class UpdateTestForm(FeatureForm):
     class Meta:
         model = UpdateTestFeature
-
-register(UpdateTestFeature)
 
 class UpdateTest(TestCase):
 
@@ -504,6 +497,7 @@ class LinkViewValidationTest(TestCase):
         # TODO: Test that Link validates extra_kwargs option is compatible 
         # with the view
 
+@register
 class LinkTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.LinkTestFeatureForm'
@@ -531,7 +525,6 @@ class LinkTestFeatureForm(FeatureForm):
     class Meta:
         model = LinkTestFeature
 
-register(LinkTestFeature)
 
 class LinkTest(TestCase):
     
@@ -633,7 +626,8 @@ class LinkTest(TestCase):
 
 def multi_select_view(request, instances):
     return HttpResponse(', '.join([i.name for i in instances]))
-    
+
+@register
 class GenericLinksTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.GenericLinksTestForm'
@@ -653,6 +647,7 @@ class GenericLinksTestForm(FeatureForm):
         model = GenericLinksTestFeature
 
 
+@register
 class OtherGenericLinksTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.OtherGenericLinksTestForm'
@@ -668,6 +663,7 @@ class OtherGenericLinksTestForm(FeatureForm):
     class Meta:
         model = OtherGenericLinksTestFeature
 
+@register
 class LastGenericLinksTestFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.GenericLinksTestForm'
@@ -678,10 +674,6 @@ class LastGenericLinksTestFeature(Feature):
                 select='multiple single'),
 
         )
-
-register(GenericLinksTestFeature)        
-register(OtherGenericLinksTestFeature)
-register(LastGenericLinksTestFeature)
 
 class GenericLinksTest(TestCase):
     
@@ -749,6 +741,7 @@ def kml(request, instances):
 # Lets use the following as a canonical example of how to use all the features
 # of this framework (will be kept up to date as api changes):
             
+@register
 class Folder(Feature):
     
     def copy(self, user):
@@ -788,6 +781,7 @@ DESIGNATION_CHOICES = (
     ('C', 'Conservation Area')
 )
 
+@register
 class Mpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
     class Options:
@@ -814,6 +808,7 @@ TYPE_CHOICES = (
     ('H', 'Hydrokinetic'),
 )
 
+@register
 class RenewableEnergySite(PolygonFeature):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     class Options:
@@ -835,6 +830,7 @@ class RenewableEnergySiteForm(FeatureForm):
     class Meta:
         model = RenewableEnergySite
         
+@register
 class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
     diameter = models.FloatField(null=True)
@@ -846,6 +842,7 @@ class PipelineForm(FeatureForm):
     class Meta:
         model = Pipeline
 
+@register
 class Shipwreck(PointFeature):
     incident = models.CharField(max_length=100,default='')
     class Options:
@@ -856,7 +853,6 @@ class ShipwreckForm(FeatureForm):
     class Meta:
         model = Shipwreck
 
-register(Folder, Mpa, RenewableEnergySite, Pipeline, Shipwreck)
 
 class JsonSerializationTest(TestCase):
     
