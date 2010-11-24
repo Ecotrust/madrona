@@ -1,7 +1,8 @@
 from django.test import TestCase
 from lingcod.features import *
-from lingcod.features.models import Feature
+from lingcod.features.models import Feature, PolygonFeature
 from lingcod.features.forms import FeatureForm
+from lingcod.common.utils import kml_errors
 import os
 import shutil
 from django.test.client import Client
@@ -742,6 +743,7 @@ def viewshed_map(request, instance):
     return HttpResponse('image')
 
 def kml(request, instances):
+    print instances
     return HttpResponse('<kml />')
     
 # Lets use the following as a canonical example of how to use all the features
@@ -786,7 +788,7 @@ DESIGNATION_CHOICES = (
     ('C', 'Conservation Area')
 )
 
-class Mpa(Feature):
+class Mpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
     class Options:
         verbose_name = 'Marine Protected Area'
@@ -812,7 +814,7 @@ TYPE_CHOICES = (
     ('H', 'Hydrokinetic'),
 )
 
-class RenewableEnergySite(Feature):
+class RenewableEnergySite(PolygonFeature):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     class Options:
         verbose_name = 'Renewable Energy Site'
@@ -901,3 +903,25 @@ class CopyTest(TestCase):
         # self.assertRegexpMatches(response['X-MarineMap-Select'], 
         #     r'features_mpa_\d')
         pass
+
+
+
+class KmlTest(TestCase):
+
+    def setUp(self):
+        from django.contrib.gis.geos import GEOSGeometry 
+        from django.conf import settings
+        self.client = Client()
+        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+        self.user = User.objects.create_user(
+            'resttest', 'resttest@marinemap.org', password='pword')
+        self.client.login(username='resttest', password='pword')
+        self.mpa = Mpa(user=self.user, name="My Mpa", geometry_final=g1)
+        self.mpa.save()
+
+    def test_defaultkml_url(self):
+        url = [link.reverse(self.mpa) for link in Mpa.get_options().links if link.title == "KML"][0]
+        response = self.client.get(url)
+        errors = kml_errors(response.content)
+        self.assertFalse(errors,"invalid KML %s" % str(errors))

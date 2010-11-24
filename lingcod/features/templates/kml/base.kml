@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+  <name>{% block docname %}Marine Protected Areas and Arrays{% endblock %}</name>
+  <open>1</open>
+  <visibility>1</visibility>
+  {% block style %}{% endblock %}
+  {% block folders_and_placemarks %}{% endblock %}
+</Document>
+</kml>

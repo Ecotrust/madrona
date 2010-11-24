@@ -1,0 +1,17 @@
+{% extends "kml/style.kml" %}
+
+{% block folders_and_placemarks %}
+
+    {% for feature in instances %} 
+    <Placemark id="{{ feature.get_absolute_url }}">
+        <name>{{ feature.uid }}</name>
+        <styleUrl>#defaultstyle</styleUrl>
+        <visibility>1</visibility>
+        <MultiGeometry>
+        {{ feature.centroid_kml|safe }} 
+        {{ feature.kml|safe }} 
+        </MultiGeometry>
+    </Placemark>
+    {% endfor %}
+
+{% endblock %}

@@ -4,6 +4,7 @@ from django.conf import settings
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureOptions
+from lingcod.common.utils import asKml
 import re
 from django.contrib.contenttypes.models import ContentType
 
@@ -35,6 +36,10 @@ class Feature(models.Model):
     class Meta:
         abstract=True
     
+    @property
+    def kml(self):
+        return asKml(self.geometry_final.transform(settings.GEOMETRY_CLIENT_SRID, clone=True))
+
     @models.permalink
     def get_absolute_url(self):
         return ('%s_resource' % (self.get_options().slug, ), (), {
@@ -93,3 +98,18 @@ class Feature(models.Model):
         the_feature.user = user
         the_feature.save()
         return the_feature
+
+class PolygonFeature(Feature):
+    """Model used for representing user-generated polygon features. 
+       Inherits from Feature and adds geometry fields.
+    """   
+    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original Polygon Geometry")
+    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final Polygon Geometry")
+    
+    @property
+    def centroid_kml(self):
+        geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+        return geom.kml
+
+    class Meta(Feature.Meta):
+        abstract=True

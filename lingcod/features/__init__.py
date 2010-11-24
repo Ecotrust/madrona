@@ -109,6 +109,17 @@ not a string path." % (name,))
                 select='multiple single',
                 edits_original=False))
         
+        self.enable_kml = True
+        """
+        Enable kml visualization of features.  Defaults to True.
+        """
+
+        # Add a kml link by default
+        if self.enable_kml:
+            self.links.insert(0,alternate('KML',
+                'lingcod.features.views.kml',
+                select='multiple single'))
+
         for link in self.links:
             if self._model not in link.models:
                 link.models.append(self._model)

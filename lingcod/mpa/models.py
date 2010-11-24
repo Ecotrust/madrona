@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.gis.db.models.query import GeoQuerySet
 from django.contrib.gis.measure import A, D
-from lingcod.features.models import Feature
+from lingcod.features.models import PolygonFeature
 
 class MpaDesignation(models.Model):
     """Model used to represent the designation of the MPA
@@ -47,7 +47,7 @@ class GeoQuerySetManager(ShareableGeoManager):
         
     
 
-class Mpa(Feature):
+class Mpa(PolygonFeature):
     """Model used for representing marine protected areas or MPAs
 
         ======================  ==============================================
@@ -79,8 +79,8 @@ class Mpa(Feature):
     # name = models.CharField(verbose_name="MPA Name", max_length="255")
     # date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
     # date_modified = models.DateTimeField(auto_now=True, verbose_name="Date Modified")
-    geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
-    geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
+    # geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Original MPA boundary")
+    # geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
     # Array relation fields
     content_type = models.ForeignKey(ContentType, blank=True, null=True)

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.template import RequestContext, Context
 from django.template import loader, TemplateDoesNotExist
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -430,3 +430,25 @@ Feature instance.' % (instance.__class__.__name__, ))
     res = HttpResponse("Created %s" % (links, ), status=201)
     res['X-MarineMap-Select'] = ' '.join([i.uid for i in copies])
     return res
+
+def kml(request, instances):
+    """
+    Generic view for KML representation of feature classes. 
+    Can be overridden in options but this provided a default.
+
+    TODO (a lot)
+     - permissions/sharing
+     - assert features are proper type
+     - override templates
+     - organize into folders
+     - session keys
+     - kml vs kmz
+     - network linked and other data structure minutia
+    """
+    kml = ''
+    t = loader.get_template('kml/placemarks.kml')
+    kml = t.render(Context({'instances': instances})) 
+    return HttpResponse(kml, status=200)
+
+
+
