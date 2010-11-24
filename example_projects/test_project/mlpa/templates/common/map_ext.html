@@ -1,0 +1,146 @@
+{% extends 'common/map.html' %}
+{% load mpa_uid %}
+
+{% block layersConfig %}
+// setup which kml files are shown in the data layers panel
+lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});
+{% if user.is_authenticated %}
+    {% if perms.layers.view_ecotrustlayerlist %}
+    lingcod.addLayer("{% url ecotrust-data-layers input_username=user.username session_key=session_key as ecotrust_data_url%}{{ecotrust_data_url}}");
+    {% endif %}
+    {# lingcod.addLayer('{% url private-data-layers session_key=session_key %}');             #}
+{% endif %}
+lingcod.addLayer('{% url public-data-layers %}', {showDownloadLink: true});
+{% if user.is_authenticated %}
+lingcod.addLayer('{% url private-data-layers session_key=session_key %}');            
+{% endif %}
+{% endblock layersConfig %}
+
+{% block addToOptions %}
+    options.form_shown = function(e, panel, model){
+        if(model === '{% mpa_uid %}'){
+            mlpa.prepareForm(panel);
+        }
+    }
+    {% if user.is_authenticated %}
+    {% else %}
+    $(document).ready(function(){$('#SharedShapes').prepend('<div style="margin-top:5px; color:#333;">The following MPA proposals have been generated within the MLPA North Coast planning process.  These are available for public review.  Further information on the proposals and evaluations can be found <a href="http://www.dfg.ca.gov/mlpa/mpaproposals_nc.asp">here</a>.<div>');});
+    {% endif %}
+{% endblock addToOptions %}
+
+{% block myshapes %}
+    var add_to_array = "{% url array-add-mpa 999999999999999 %}";
+    var remove_mpa = "{% url array-remove-mpa 999999999999999 %}"
+    var getId = function(node, editor){
+        var kmlObject;
+        kmlObject = editor.tree.getNetworkLink(node);
+        if(!kmlObject){
+            kmlObject = editor.tree.lookup(node);
+        }
+        return kmldom(kmlObject.getKml()).find('[nodeName=atom:link][rel=self]').attr('mm:pk');
+    };
+    
+    var getLocation = function(node, editor){
+        var kmlObject;
+        kmlObject = editor.tree.getNetworkLink(node);
+        if(!kmlObject){
+            kmlObject = editor.tree.lookup(node);
+        }
+        var self = kmldom(kmlObject.getKml()).find('[nodeName=atom:link][rel=self]');
+        return self.attr('href');
+    }
+    
+    var dragDropCallback = function(array_location, mpa_location, editor){
+        editor.refresh(function(){
+            if(array_location){
+                var array_node = editor.tree.getNodesById(array_location);
+                if(array_node.hasClass('loaded')){
+                    var mpa_node = editor.tree.getNodesById(mpa_location);
+                    editor.tree.selectNode(
+                        mpa_node, 
+                        editor.tree.lookup(mpa_node)
+                    );
+                }else{
+                    $(array_node).bind('loaded', function(e, node, kmlObject){
+                        var mpa_node = editor.tree.getNodesById(mpa_location);
+                        editor.tree.selectNode(
+                            mpa_node, 
+                            editor.tree.lookup(mpa_node)
+                        );
+                    });
+                    editor.tree.openNetworkLink(array_node);
+                }
+            }else{
+                var node = editor.tree.getNodesById(mpa_location);
+                editor.tree.selectNode(node, editor.tree.lookup(node));                
+            }
+        });
+    }
+    
+    var setupDragDrop = function(editor, list, kmlObject){
+        $(editor.tree).bind('networklinkload', function(e, node, kmlObject){
+            enableDragDrop(editor, node, kmlObject);
+        });
+        enableDragDrop(editor, list, kmlObject);
+    }
+    
+    var enableDragDrop = function(editor, list, kmlObject){
+        list.find('li.mlpa_mlpampa').draggable({scope:'mlpa_mlpampa', containment: editor.el, scroll:true, revert:'invalid', handle: 'span.name, span.icon', delay: 150, scroll: true});
+        list.find('li.mlpa_mpaarray').droppable({scope:'mlpa_mlpampa', activeClass: '.ui-state-highlight', hoverClass: 'drophover', tolerance: 'pointer', drop: function(event, ui){
+            var array = event.target;
+            var array_pk = getId(array, editor);
+            var mpa = ui.draggable[0];
+            var mpa_pk = getId(mpa, editor);
+            if($(mpa).parent().parent()[0] === array){
+                $(mpa).css({left: 0, top: 0});
+                return false;
+            }
+            array_location = getLocation(array, editor);
+            mpa_location = getLocation(mpa, editor);
+            editor.el.find('li.mlpa_mpaarray').droppable('destroy');
+            $.ajax({
+                type: 'POST',
+                url: add_to_array.replace('999999999999999', array_pk),
+                data: {mpa_id: mpa_pk},
+                success: function(){
+                    dragDropCallback(array_location, mpa_location, editor);
+                },
+                error: function(){
+                    alert('could not assign mpa to array due to a server error.');
+                    editor.refresh();
+                }
+            });
+        }});
+        
+        editor.el.find('li span.name:contains(Marine Protected Areas)').parent().droppable({scope:'mlpa_mlpampa', activeClass: '.ui-state-highlight', hoverClass: 'drophover', tolerance: 'pointer', drop: function(event, ui){
+            // var array = event.target;
+            // var array_pk = getId(array, editor);
+            var mpa = ui.draggable[0];
+            var mpa_pk = getId(mpa, editor);
+            if($(mpa).parent().parent()[0] === this){
+                $(mpa).css({left: 0, top: 0});
+                return false;
+            }
+            var mpa_location = getLocation($(mpa), editor);
+            var array_pk = getId($(mpa).parent().parent(), editor);            
+            editor.el.find('li.mlpa_mpaarray').droppable('destroy');
+            $(this).droppable('destroy');
+            $.ajax({
+                type: 'POST',
+                url: remove_mpa.replace('999999999999999', array_pk),
+                data: {mpa_id: mpa_pk},
+                success: function(){
+                    dragDropCallback(null, mpa_location, editor);
+                },
+                error: function(){
+                    alert('could not remove mpa from array due to a server error.');
+                    editor.refresh();
+                }
+            });
+        }});
+        
+    };
+    {% if user.is_authenticated %}
+        options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}", callback: setupDragDrop}];
+    {% endif %}
+{% endblock myshapes %}
