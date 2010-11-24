@@ -382,3 +382,91 @@ def get_logger(caller_name=None):
 
     logger = logging.getLogger(caller_name)
     return logger
+
+
+def isCCW(ring):
+    """
+    Determines if a LinearRing is oriented counter-clockwise or not
+    """
+    area = 0.0
+    for i in range(0,len(ring)-1):
+        p1 = ring[i]
+        p2 = ring[i+1]
+        area += (p1[1] * p2[0]) - (p1[0] * p2[1])
+
+    if area > 0:
+        return False
+    else:
+        return True
+
+
+from django.contrib.gis.geos import Polygon
+def forceRHR(polygon):
+    """
+    reverses rings so that polygon follows the Right-hand rule
+    exterior ring = clockwise
+    interior rings = counter-clockwise
+    """
+    assert polygon.geom_type == 'Polygon'
+    assert not polygon.empty
+    exterior = True
+    rings = []
+    for ring in polygon:
+        assert ring.ring # Must be a linear ring at this point
+        if exterior:
+            if isCCW(ring):
+                ring.reverse()
+            exterior = False
+        else:
+            if not isCCW(ring):
+                ring.reverse()
+        rings.append(ring)
+    poly = Polygon(*rings)
+    return poly
+
+def forceLHR(polygon):
+    """
+    reverses rings so that geometry complies with the LEFT-hand rule
+    Google Earth KML requires this oddity
+    exterior ring = counter-clockwise
+    interior rings = clockwise
+    """
+    assert polygon.geom_type == 'Polygon'
+    assert not polygon.empty
+    exterior = True
+    rings = []
+    for ring in polygon:
+        assert ring.ring # Must be a linear ring at this point
+        if exterior:
+            if not isCCW(ring):
+                ring.reverse()
+            exterior = False
+        else:
+            if isCCW(ring):
+                ring.reverse()
+        rings.append(ring)
+    poly = Polygon(*rings)
+    return poly
+
+def asKml(geom):
+    """
+    Performs three critical functions for creating suitable KML geometries:
+     - simplifies the geoms (lines, polygons only)
+     - forces left-hand rule orientation
+     - extrudes the shape to 3 dimensions (polygon only)
+    """
+    if geom.geom_type in ['Polygon','LineString']:
+        geom = geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
+
+    if geom.geom_type == 'Polygon':
+        geom = forceLHR(geom)
+        
+    kml = geom.kml
+
+    if geom.geom_type == 'Polygon':
+        kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>absolute</altitudeMode><extrude>1</extrude>')
+        # The GEOSGeometry.kml() method always adds a z dim = 0
+        kml = kml.replace(',0', ',%s' % settings.KML_EXTRUDE_HEIGHT)
+
+    return kml
+

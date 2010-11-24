@@ -152,3 +152,36 @@ class DependenciesTest(TestCase):
             self.assertNotEquals(m,None,'Cannot import %s' % dep)
 
 
+from django.contrib.gis.geos import GEOSGeometry 
+from lingcod.common.utils import forceLHR, forceRHR
+
+class GeometryOpsTest(TestCase):
+
+    def test_reversals(self):
+        gright = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
+        gleft = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -122.44 34.15, -119.63 34.12, -119.64 34.32, -120.42 34.37))')
+
+        # Nothing should change
+        self.assertEqual(gright.coords, forceRHR(gright).coords)
+        self.assertEqual(gleft.coords, forceLHR(gleft).coords)
+
+        # Order should be reversed
+        self.assertEqual(gleft.coords, forceLHR(gright).coords)
+        self.assertEqual(gright.coords, forceRHR(gleft).coords)
+
+    def test_askml(self):
+        g = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
+        kml = asKml(g)
+        print kml
+        
+    def test_simplify(self):
+        # Note second coordinate in relation to the first, simplify will remove it if the tolerance is large enough
+        gcomplex = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -120.422 34.372, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
+        gsimple = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
+
+        gsimplified_large = gcomplex.simplify(0.01)
+        self.assertEqual(gsimple, gsimplified_large)
+
+        gsimplified_small = gcomplex.simplify(0.000001)
+        self.assertEqual(gcomplex, gsimplified_small)
+
