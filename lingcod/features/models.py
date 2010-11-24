@@ -123,9 +123,9 @@ class LineFeature(Feature):
     Inherits from Feature and adds geometry fields.
     """   
     geometry_orig = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
-            null=True, blank=True, verbose_name="Original Polygon Geometry")
+            null=True, blank=True, verbose_name="Original LineString Geometry")
     geometry_final = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
-            null=True, blank=True, verbose_name="Final Polygon Geometry")
+            null=True, blank=True, verbose_name="Final LineString Geometry")
 
     class Meta(Feature.Meta):
         abstract=True
@@ -136,9 +136,9 @@ class PointFeature(Feature):
     Inherits from Feature and adds geometry fields.
     """   
     geometry_orig = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
-            null=True, blank=True, verbose_name="Original Polygon Geometry")
+            null=True, blank=True, verbose_name="Original Point Geometry")
     geometry_final = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
-            null=True, blank=True, verbose_name="Final Polygon Geometry")
+            null=True, blank=True, verbose_name="Final Point Geometry")
     
     class Meta(Feature.Meta):
         abstract=True
