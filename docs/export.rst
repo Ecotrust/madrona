@@ -2,13 +2,12 @@
 
 Export Options
 ==============
-In order to provide the user the opportunity to export their shapes into formats 
-that are viewable (among other things) outside of MarineMap, 
-MarineMap provides an Export option allowing the user to export individual 
-shapes as well as arrays in a variety of formats.
+In order to provide the user the opportunity to make use of their shapes outside of the MarineMap environment, 
+MarineMap provides an `Export` option which allows the user to export individual 
+shapes and arrays of shapes in a variety of formats.
 
 Exporting as kmz and exporting as image are both built in to Lingcod and will 
-appear by default in the Export drop-down menu.  
+appear by default in the `Export` drop-down menu.  
 
 Exporting as shapefile requires the enabling of a urlpattern as explained below.
 
@@ -30,9 +29,9 @@ The `Export as shapefile` option can be enabled by adding a urlpattern named ``m
         url(r'shapefile/mpa/(?P<mpa_id_list_str>(\d+,?)+)/$', mpa_shapefile, name='mpa_shapefile'),
     )
 
-This urlpattern refers to a view, which we have called ``mpa_shapefile``.  This view will utilize the built-in ``ShpResponder`` 
-class to generate a shapefile from the ``export_query_set`` property of your model (we are using ``MPA`` as 
-the model in this example).  
+This urlpattern refers to a view, which, in this example, is called ``mpa_shapefile``.  
+This view will utilize the built-in ``ShpResponder`` class to generate a shapefile from the 
+``export_query_set`` property of your model (``MPA`` will serve as the model in this example).  
 
 .. code-block:: python
 
@@ -50,7 +49,7 @@ the model in this example).
         shp_response.file_name = slugify(mpa.name[0:8])
         return shp_response()
 
-In order for this view to function, your model (``MPA`` in this case) needs to have an ``export_query_set`` property defined.
+In order for this view to function, your model (``MPA`` in this case) should have an ``export_query_set`` property defined.
 
 .. code-block:: python
 
