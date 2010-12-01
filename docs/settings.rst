@@ -155,6 +155,13 @@ MarineMap Settings
 ``OPENID_ENABLED``
     Boolean. Determines whether to expose OpenID authentication. False implies local user/pass authentication only. Defaults to False. 
 
+.. _WSGI_USER:
+
+``WSGI_USER``
+    Username of the UNIX/system user which runs the wsgi process. This has implications for the ownership of the MEDIA_ROOT directory as it
+    needs to be writeable by the WSGI process. Setting WSGI_USER will cause the install_media command to chown the MEDIA_ROOT directory 
+    to this user. Defaults to None.
+
 Django Settings
 ---------------
 
