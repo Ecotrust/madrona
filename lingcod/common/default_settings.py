@@ -187,3 +187,8 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
 OPENID_ENABLED = False
 
 SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
+
+# UNIX username which owns the wsgi process.
+# Used to set ownership of MEDIA_ROOT 
+# None = MEDIA_ROOT is owned by whoever runs the install_media command
+WSGI_USER = None
