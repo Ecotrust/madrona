@@ -31,7 +31,8 @@ lingcod.Manipulator = function(gex, form, render_target, div){
 
     // Do we expose any geometry input methods other than digitize?
     $.each(json.geometry_input_methods, function(index, value){
-            if (value == 'load_shp'){
+            // disable for Internet Exploder
+            if (value == 'load_shp' && !$.browser.msie) {
                 self.render_target_.find('.load_shape').show();
                 self.loadshp_url = json.loadshp_url;
             }
@@ -209,9 +210,13 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
                         }
                         return true;
                     },
-                    error: function(data, status){
-                        $(self).trigger('error', "There was an error processing your shape; Status was " + status + ".");
-                    }
+                    error: function(data, stat, ethrown){
+                        alert(stat);
+                        alert(data);
+                        alert(ethrown);
+                        $(self).trigger('error', "There was an error processing your shape; Status was " + stat + ".");
+                        return true;
+                    } 
                 }
 
                 $('#load_shape_submit_button').click(function(){
