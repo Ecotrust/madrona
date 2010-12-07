@@ -307,9 +307,9 @@ def valid_browser(ua):
     from lingcod.common import uaparser
 
     bp = uaparser.browser_platform(ua)
-    log = get_logger()
-    log.debug("UA String is '%s'" % ua)
-    log.debug("Platform is %r" % bp.platform)
+    if not bp.platform:
+        log = get_logger()
+        log.warn("Platform is None: UA String is '%s'" % ua)
 
     for sb in supported_browsers:
         if bp.family == sb[0] and \
