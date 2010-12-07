@@ -291,12 +291,15 @@ def valid_browser(ua):
 
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
+    Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0b7) Gecko/20100101 Firefox/4.0b7
     """
     supported_browsers = [
             ('Firefox', 3, 5, 'Mac'),
+            ('Firefox', 4, 0, 'Mac'),
             ('Safari', 3, 1, 'Mac'),
             ('Chrome', 6, 0, 'Mac'),
             ('Firefox', 3, 5, 'Windows'),
+            ('Firefox', 4, 0, 'Windows'),
             ('Chrome', 1, 0, 'Windows'),
             ('IE', 8, 0, 'Windows'),
     ]
@@ -304,6 +307,9 @@ def valid_browser(ua):
     from lingcod.common import uaparser
 
     bp = uaparser.browser_platform(ua)
+    log = get_logger()
+    log.debug("UA String is '%s'" % ua)
+    log.debug("Platform is %r" % bp.platform)
 
     for sb in supported_browsers:
         if bp.family == sb[0] and \
