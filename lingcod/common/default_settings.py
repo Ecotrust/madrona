@@ -187,7 +187,7 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
 
 OPENID_ENABLED = False
-LOG_FILE = '/tmp/marinemap.log'
+LOG_FILE = None # write log to stdout
 
 SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
 
