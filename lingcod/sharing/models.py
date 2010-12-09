@@ -46,7 +46,7 @@ def get_shareables():
     for p in perms:
         model_class = p.content_type.model_class()
         # MP TODO this checks if field exists but need to do more robust checking on what type of field, where the fk points, etc
-        if p.content_type in registered_shareable and \
+        if model_class and p.content_type in registered_shareable and \
            model_class.__dict__.has_key('sharing_groups') and \
            model_class.__dict__.has_key('user') and \
            model_class.__dict__['user'].__class__.__name__ == 'ReverseSingleRelatedObjectDescriptor' and \

@@ -6,6 +6,11 @@ from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import Permission
+from lingcod.sharing.models import ShareableContent, get_shareables
+from lingcod.sharing import validate_sharing, sharing_enable, sharing_disable
 import json
 
 registered_models = []
@@ -114,10 +119,8 @@ not a string path." % (name,))
         """
         Enable sharing features. Requires the lingcod.share app.
         """
-        # make sure Feature is properly registered with the sharing app
         if self.enable_share:
-            from lingcod.sharing import enable_sharing
-            enable_sharing(self._model)
+            validate_sharing(self._model)
 
         self.enable_kml = True
         """
@@ -434,9 +437,17 @@ def edit_form(*args, **kwargs):
 
 def register(model):
     options = model.get_options()
-    logger.debug('registering %s' % (model.__name__,) )
+    logger.debug('registering Feature %s' % (model.__name__,) )
     if model not in registered_models:
         registered_models.append(model)
+        try:
+            ct = ContentType.objects.get_for_model(model)
+            if options.enable_share:
+                sharing_enable(model, ct)
+            else:
+                sharing_disable(model, ct)
+        except ContentType.DoesNotExist:
+            pass # wait until ContentType is created and post_save handler will kick in
         for link in options.links:
             if link not in registered_links:
                 registered_links.append(link)
@@ -455,66 +466,17 @@ def workspace_json(*args):
             workspace['generic-links'].append(link.dict())
     return json.dumps(workspace, indent=2)
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth.models import Permission
-from lingcod.sharing.models import ShareableContent
-from lingcod.sharing.models import get_shareables
-
 @receiver(post_save, sender=ContentType)
 def contentype_sharing_handler(sender, instance, created, **kwargs):
     """Because sharing involves setting up Permissions and ShareableContent
     which reference the ContentTypes table, we have to wait until the 
-    ContentType exists before we populate those tables. 
+    ContentType is created (post_save signal) before we populate those tables. 
     """
     mc = instance.model_class()
     if created and mc in registered_models: # it's a feature
-        logger.debug("%r added to contenttypes and it's a Feature" % instance)
+        logger.debug("Feature %r added to contenttypes" % instance)
         if mc.get_options().enable_share: # it's a shareable feature
-            logger.debug("%r is also a shareable Feature; insert Permissions and ShareableContent" % instance)
-
-            # Make sure ShareableContent instance exists
-            # TODO FeatureContainers and arrays
-            try:
-                ShareableContent.objects.get(shared_content_type=instance)
-            except ShareableContent.DoesNotExist:
-                logger.debug("Creating shareableContent for %r" % instance)
-                sc = ShareableContent.objects.create(shared_content_type=instance)
-                                                        #container_content_type=array_ct,
-                                                        #container_set_property='mpa_set')
-                sc.save()
-
-            # Make sure Feature has can_share_* permission;
-            codename = "can_share_%s" % mc._meta.module_name
-            try:
-                Permission.objects.get(codename=codename)
-            except Permission.DoesNotExist:
-                logger.debug("Creating permissions for %s and ct # %s" % (codename, instance.id))
-                p = Permission.objects.create(codename=codename,name=codename.replace('_',' '),content_type_id=instance.id)
-                p.save()
-
-            # Confirm get_shareables
-            if not get_shareables().has_key(mc.__name__.lower()):
-                raise SharingError("%s uses ShareableGeoManager but is not in get_shareables()" % mc.__name__)
-
+            sharing_enable(mc, instance)
         else:
-            logger.debug("%r is NOT a shareable Feature; drop Permissions and ShareableContent" % instance)
+            sharing_disable(mc, instance)
 
-            # Make sure Feature does NOT have can_share_* permission;
-            codename = "can_share_%s" % mc._meta.module_name
-            try:
-                p = Permission.objects.get(codename=codename)
-                p.delete()
-            except Permission.DoesNotExist:
-                pass
-           
-            # Make sure Feature does NOT have ShareableContent instance
-            try:
-                sc = ShareableContent.objects.get(shared_content_type=instance)
-                sc.delete()
-            except ShareableContent.DoesNotExist:
-                pass
-            
-            # Confirm NOT in get_shareables
-            if get_shareables().has_key(mc.__name__.lower()):
-                raise SharingError("%s is not a shared feature but somehow snuck into get_shareables()" % mc.__name__)
