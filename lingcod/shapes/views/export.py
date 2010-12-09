@@ -143,7 +143,11 @@ class ShpResponder(object):
                     # http://trac.osgeo.org/gdal/ticket/882
                     string_value = ''
                 ###ogr.OGR_F_SetFieldString(feat, idx, string_value)
-                feat.SetField(str(field.name),string_value)
+                #changing the following SetField command from accessing field by name to index
+                #this change solves an issue that arose sometime after gdal 1.6.3
+                #in which the field names became truncated to 10 chars in CreateField
+                #feat.SetField(str(field.name),string_value)
+                feat.SetField(idx, string_value)
                 idx += 1
               
             # Transforming & setting the geometry
