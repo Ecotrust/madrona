@@ -753,7 +753,7 @@ class Folder(Feature):
     class Options:
         form = 'lingcod.features.tests.FolderForm'
         valid_children = (
-            'lingcod.features.tests.Mpa', 
+            'lingcod.features.tests.TestMpa', 
             'lingcod.features.tests.Folder', 
             'lingcod.features.tests.RenewableEnergySite')
         links = (
@@ -782,9 +782,10 @@ DESIGNATION_CHOICES = (
 )
 
 @register
-class Mpa(PolygonFeature):
+class TestMpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
     class Options:
+        share = True
         verbose_name = 'Marine Protected Area'
         form = 'lingcod.features.tests.MpaForm'
         links = (
@@ -801,7 +802,7 @@ class Mpa(PolygonFeature):
         
 class MpaForm(FeatureForm):
     class Meta:
-        model = Mpa
+        model = TestMpa
     
 TYPE_CHOICES = (
     ('W', 'Wind'),
@@ -865,7 +866,7 @@ class CopyTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
-        self.mpa = Mpa(user=self.user, name="My Mpa")
+        self.mpa = TestMpa(user=self.user, name="My Mpa")
         self.folder = Folder(user=self.user, name="My Folder")
         self.folder.save()
         self.mpa.save()
@@ -944,7 +945,7 @@ class SpatialTest(TestCase):
 
         g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g1.transform(settings.GEOMETRY_DB_SRID)
-        self.mpa = Mpa(user=self.user, name="My Mpa", geometry_final=g1)
+        self.mpa = TestMpa(user=self.user, name="My Mpa", geometry_final=g1)
         self.mpa.save()
 
     def test_feature_types(self):

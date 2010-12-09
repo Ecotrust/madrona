@@ -4,7 +4,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from lingcod.common.utils import get_spatial_class_names
 
-
 class ShareableContent(models.Model):
     """
     Defines which objects are shareable and some details about their behavior
@@ -155,15 +154,22 @@ def share_object_with_groups(the_object, the_group_ids):
 def groups_users_sharing_with(user, include_public=False, spatial_only=True):
     """
     Get a dict of groups and users that are currently sharing items with a given user
-    If spatial_only = True, it will not reflect shared items that don't show up in the kmltree (eg private layers)
+    If spatial_only is True, only models which inherit from the Feature class will be reflected here
     returns something like {'our_group': {'group': <Group our_group>, 'users': [<user1>, <user2>,...]}, ... }
     """
     shareables = get_shareables()
     groups_sharing = {}
+
     if spatial_only:
-        classnames = [s for s in shareables.keys() if s in get_spatial_class_names()]
+        classnames = []
+        from lingcod.features import registered_models
+        from lingcod.features.models import Feature        
+        for s in shareables.keys():
+            if issubclass(shareables[s][0],Feature):
+                classnames.append(s)
     else:
         classnames = shareables.keys()
+
     for s in classnames:
         model_class = shareables[s][0]
         permission = shareables[s][1]
@@ -188,7 +194,6 @@ def groups_users_sharing_with(user, include_public=False, spatial_only=True):
                 else:
                     groups_sharing[group.name]={'group':group, 'users': user_list}
     if len(groups_sharing.keys()) > 0:
-        # MP TODO sort groups_sharing[*]['users'] by username
         return groups_sharing
     else:
         return None
