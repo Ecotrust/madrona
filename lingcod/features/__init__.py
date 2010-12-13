@@ -122,6 +122,53 @@ not a string path." % (name,))
         if self.enable_share:
             validate_sharing(self._model)
 
+        #TODO test for geom fields and enforce that 
+        #  geometry_final is the same type as geometry_original
+
+        self.manipulators = [] 
+        """
+        Required manipulators applied to user input geometries
+        """
+        manipulators = getattr(self._options, 'manipulators', []) 
+        for m in manipulators:
+            try:
+                manip = get_class(m)
+            except:
+                raise FeatureConfigurationError("Error trying to import module %s" % m)
+
+            # Test that manipulator is compatible with this Feature Class
+            geom_field = self._model.geometry_final._field.__class__.__name__ 
+            if geom_field not in manip.Options.supported_geom_fields:
+                raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
+                        (m, geom_field, manip.Options.supported_geom_fields))
+            
+            logger.debug("Added required manipulator %s" % m)
+            self.manipulators.append(manip)
+        
+        self.optional_manipulators = []
+        """
+        Optional manipulators that may be applied to user input geometries
+        """
+        optional_manipulators = getattr(self._options, 'optional_manipulators', [])
+        for m in optional_manipulators:
+            try:
+                manip = get_class(m)
+            except:
+                raise FeatureConfigurationError("Error trying to import module %s" % m)
+
+            # Test that manipulator is compatible with this Feature Class
+            geom_field = self._model.geometry_final._field.__class__.__name__ 
+            try:
+                if geom_field not in manip.Options.supported_geom_fields:
+                    raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
+                        (m, geom_field, manip.Options.supported_geom_fields))
+            except AttributeError:
+                raise FeatureConfigurationError("%s is not set up properly; must have "
+                        "Options.supported_geom_fields list." % m)
+            
+            logger.debug("Added optional manipulator %s" % m)
+            self.optional_manipulators.append(manip)
+
         self.enable_kml = True
         """
         Enable kml visualization of features.  Defaults to True.
