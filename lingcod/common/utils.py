@@ -114,7 +114,7 @@ def clean_geometry(geom):
     # sometimes, clean returns a multipolygon
     geometry = LargestPolyFromMulti(newgeom)
 
-    if not geometry.valid or geometry.num_coords < 2:
+    if not geometry.valid or (geometry.geom_type != 'Point' and geometry.num_coords < 2):
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
     else:
         return geometry
