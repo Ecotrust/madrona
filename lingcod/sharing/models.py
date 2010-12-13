@@ -58,9 +58,6 @@ def get_shareables():
                 pass
     return shareable
 
-class SharingError(Exception):
-    pass
-
         
 def share_object_with_group(the_object, the_group):
     """
@@ -197,3 +194,10 @@ def groups_users_sharing_with(user, include_public=False, spatial_only=True):
         return groups_sharing
     else:
         return None
+
+class NotShareable(Exception):
+    pass
+
+class SharingError(Exception):
+    pass
+

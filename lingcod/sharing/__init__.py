@@ -1,12 +1,9 @@
 from lingcod.common.utils import get_logger
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
-from lingcod.sharing.models import ShareableContent, get_shareables
+from lingcod.sharing.models import ShareableContent, get_shareables, SharingError
 
 logger = get_logger()
-
-class SharingError(Exception):
-    pass
 
 def validate_sharing(model):
     logger.debug('Validated sharing setup for %s' % (model.__name__,) )

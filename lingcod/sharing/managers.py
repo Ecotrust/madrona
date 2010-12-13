@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from models import get_shareables, ShareableContent
+from models import get_shareables, ShareableContent, NotShareable
 from django.contrib.auth.models import User, Group, Permission
 from django.conf import settings
 
@@ -15,7 +15,7 @@ class ShareableGeoManager(models.GeoManager):
         # throw an exception if this is not going to work
         shareables = get_shareables()
         if not shareables.has_key(self.model.__name__.lower()):
-            raise NotImplementedError("%s uses ShareableGeoManager but lacks a ManyToMany field 'sharing_groups',is not registered with ShareableContent, or lacks 'can_share*' permissions." % self.model.__name__)
+            raise NotShareable("%s is not a shareable feature." % self.model.__name__)
 
         app_name = self.model._meta.app_label
         model_name = self.model.__name__.lower()
