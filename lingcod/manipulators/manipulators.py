@@ -357,6 +357,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         
     class Options:
         name = 'ClipToStudyRegion'
+        supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
         html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
@@ -509,6 +510,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
         
     class Options:
         name = 'ClipToGraticule'
+        supported_geom_fields = ['PolygonField', 'LineStringField']
         html_templates = {
             '0':'manipulators/graticule.html', 
             '2':'manipulators/no_graticule_overlap.html',
