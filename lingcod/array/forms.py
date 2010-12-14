@@ -17,7 +17,8 @@ class AdminFileWidget(forms.FileInput):
         output = ['<p>']
         if value and hasattr(value, "name"):
             filename = split(value.name)[-1]
-            output.append('%s %s</p> <p>%s ' % ('Currently:', filename, 'Change:'))
+            output.append('Currently: %s : <input style="top:0px;margin-bottom:0px" type="checkbox" name="clear_%s" /> Remove </p>' % (filename,name))
+            output.append('<p> Change:') 
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         output.append("</p>")
         return mark_safe(u''.join(output))
@@ -51,3 +52,13 @@ class ArrayForm(UserForm):
 
     class Meta:
         model = MpaArray
+
+    def save(self, commit=True):
+        inst = super(ArrayForm, self).save(commit=False)
+        if self.data.get('clear_supportfile1'):
+            inst.supportfile1 = None
+        if self.data.get('clear_supportfile2'):
+            inst.supportfile2 = None
+        if commit:
+            inst.save()
+        return inst

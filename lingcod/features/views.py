@@ -392,14 +392,13 @@ def form_resources(request, model=None, pk=None):
     else:
         return HttpResponse('Invalid http method', status=405)        
 
-from lingcod.manipulators.manipulators import get_url_for_model
+from lingcod.manipulators.manipulators import get_manipulators_for_model
 from django.utils import simplejson
 
 # TODO: Refactor this so that it is part of Feature.Options.edit_context
 def decorate_with_manipulators(extra_context, form_class):
     try:
-        extra_context['json'] = simplejson.dumps(
-            {'manipulators': get_url_for_model(form_class.Meta.model)})
+        extra_context['json'] = simplejson.dumps(get_manipulators_for_model(form_class.Meta.model))
     except:
         extra_context['json'] = False
     return extra_context

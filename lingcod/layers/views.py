@@ -27,13 +27,46 @@ def get_user_layers(request, session_key='0', input_username=None):
     return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
 
 def get_networklink_private_layers(request, session_key):
+    """
+    Private layers are shared superoverlays or privatelayers 
+    """
     load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     layers = get_layers_for_user(user)
     superoverlays = get_superoverlays_for_user(user)
-    print layers
+    response = render_to_response('layers/network_links.kml', 
+            {'username': user.username, 'session_key': session_key, 'superoverlays': superoverlays, 'layers': layers}, mimetype=mimetypes.KML)
+    response['Content-Disposition'] = 'attachment; filename=private_links.kml'
+    return response
+
+def get_networklink_user_uploaded_layers(request, session_key):
+    """ 
+    User Uploaded layers are privatelayers
+    that are owned by non-staff
+    """
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    layers = get_layers_for_user(user, allow_owned_by_staff=False)
+    response = render_to_response('layers/network_links.kml', 
+            {'username': user.username, 'session_key': session_key, 'layers': layers}, mimetype=mimetypes.KML)
+    response['Content-Disposition'] = 'attachment; filename=private_links.kml'
+    return response
+
+def get_networklink_protected_layers(request, session_key):
+    """ 
+    Protected layers are superoverlays or privatelayers
+    that are owned by staff
+    """
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    layers = get_layers_for_user(user,staff_only=True)
+    superoverlays = get_superoverlays_for_user(user,staff_only=True)
     response = render_to_response('layers/network_links.kml', 
             {'username': user.username, 'session_key': session_key, 'superoverlays': superoverlays, 'layers': layers}, mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=private_links.kml'
@@ -62,22 +95,25 @@ def get_layerlist(request,session_key):
     lstr = ','.join(urls)
     return HttpResponse(lstr, status=200)
 
-def get_superoverlays_for_user(user):
+def get_superoverlays_for_user(user, staff_only=False):
     shared_overlays = PrivateSuperOverlay.objects.shared_with_user(user).order_by('-priority')
     owned_overlays = PrivateSuperOverlay.objects.filter(user=user).order_by('-priority')
     layers = []
     for lyr in itertools.chain(shared_overlays, owned_overlays):
         if lyr not in layers:
-            layers.append(lyr)
+            if not staff_only or (staff_only and lyr.user.is_staff):
+                layers.append(lyr)
     return layers
 
-def get_layers_for_user(user):
+def get_layers_for_user(user, allow_owned_by_staff=True, staff_only=False):
     shared_layers = PrivateLayerList.objects.shared_with_user(user).order_by('-priority')
     owned_layers = PrivateLayerList.objects.filter(user=user).order_by('-priority')
     layers = []
     for lyr in itertools.chain(owned_layers, shared_layers):
         if lyr not in layers:
-            layers.append(lyr)
+            if allow_owned_by_staff or (not allow_owned_by_staff and not lyr.user.is_staff):
+                if not staff_only or (staff_only and lyr.user.is_staff):
+                    layers.append(lyr)
     return layers
 
 def get_private_layer(request, pk, session_key='0'):

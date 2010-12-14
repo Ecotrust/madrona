@@ -164,6 +164,18 @@
     </div>
     <div style="display:none;" id="panel-holder"></div>
     <div id="geopanel">
+
+        {% block shapeDefinitionPanelManipulators %}
+        <div class="manipulators" style="display:none;">
+            <h3>Select geometry processing steps</h3>
+            {#  These divs get populated in media/manipulators/js/manipulators.js #}
+            <div class="requiredManipulators"> </div>
+            <div class="optionalManipulators"> </div>
+            <hr />
+        </div>
+        {% endblock shapeDefinitionPanelManipulators %}
+
+
         {% block shapeDefinitionPanel %}
         {#  This text is defined within a block here so that individual #}
         {#  projects can extend this block to modify the text #}
@@ -177,6 +189,8 @@
                 </p>                    
                 {% endblock shapeDefinitionPanelNewShape %}
                 <a href="#" class="draw_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/pencil.png">Draw Shape</span></a>                
+                <a href="#" class="load_shape button" onclick="this.blur(); return false;" style="display:none;"><span><img src="{{MEDIA_URL}}common/images/upload_icon.gif">Load Shape</span></a>                
+                <div style="display:none" id="load_shape_div"><p style="padding:10px;">CONTENT FROM SERVER</p></div>
             </div>
             <div class="edit" style="display:none;">
                 {% block shapeDefinitionPanelEditShape %}
@@ -212,7 +226,7 @@
             </div>
             <div id="manipulators_server_error" style="display:none;">
                 <h3>Server Error</h3>
-                <p>There was a server error processing your shape. You can try editing this shape again by pressing the "Edit Shape" button below. If problem may be specific to the region you are drawing within.</p>
+                <p>There was a server error processing your shape. You can try editing this shape again by pressing the "Edit Shape" button, or the "Cancel" button below. The problem may be specific to the region you are drawing within.</p>
                 <p>Please contact an administrator at help@marinemap.org if the problem persists.</p>
             </div>
         </div>

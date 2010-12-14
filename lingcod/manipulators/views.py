@@ -44,8 +44,11 @@ def multi_generic_manipulator_view(request, manipulators):
     except:
         return HttpResponse( "Target shape not provided", status=500 )
     # parse out which manipulators are requested
-    manipulator_list = manipulators.split(',')
-    
+    if manipulators:
+        manipulator_list = manipulators.split(',')
+    else:
+        manipulator_list = ['NullManipulator']
+
     html_response = ''
 
     # run the manipulators in the order presented

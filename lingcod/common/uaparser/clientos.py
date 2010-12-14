@@ -19,8 +19,9 @@ def client_os(user_agent):
     regex += '(?P<compatibility_flag>\w+)'
     regex += '; '
     # U 
-    regex += '(?P<version_token>[\w .]+)'
-    regex += '; '
+    if "U;" in user_agent or "MSIE" in user_agent:   # some UA strings leave out the U;
+        regex += '(?P<version_token>[\w .]+)'
+        regex += '; '
     # Linux i686
     regex += '(?P<platform_token>[\w .]+)'
     # anything else

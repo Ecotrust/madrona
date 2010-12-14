@@ -41,6 +41,3 @@ class ShortTextarea(Textarea):
         output.append("<p><span id='%s_chars_used'>%d</span> characters of %d limit entered.</p>" % (name, chars_used, self.limit))
 
         return mark_safe(u''.join(output))
-
-    class Media:
-        js = ('common/js/layout/shortTextArea.js',)

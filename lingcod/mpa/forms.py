@@ -46,3 +46,4 @@ class ShapeInput(forms.HiddenInput):
 class MpaForm(UserForm):
     geometry_orig = forms.CharField(widget=ShapeInput())
     geometry_final = forms.CharField(widget=ShapeInput(), required=False)
+    manipulators = forms.CharField(widget=forms.HiddenInput(), required=False)

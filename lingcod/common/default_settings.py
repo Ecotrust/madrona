@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'lingcod.unit_converter',
     'lingcod.openid',
     'lingcod.features',
+    'lingcod.loadshp',
     'registration',
     'south',
     'lingcod.async',
@@ -198,3 +199,8 @@ DATABASES = {
         'USER': 'postgres',
      }
 }
+
+# UNIX username which owns the wsgi process.
+# Used to set ownership of MEDIA_ROOT 
+# None = MEDIA_ROOT is owned by whoever runs the install_media command
+WSGI_USER = None

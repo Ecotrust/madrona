@@ -140,7 +140,7 @@ Things to keep in mind as you create your own manipulators:
 .. code-block:: python
   
     class Options:
-        name = 'Your Manipulator Class'
+        name = 'YourManipulatorClass'
         html_templates = {
             '1':'manipulators/template1.html',
             '2':'manipulators/template2.html',
@@ -148,6 +148,17 @@ Things to keep in mind as you create your own manipulators:
         }
 ..
 
+  * The manipulators.Options class can optionally specify a ``display_name`` and ``description`` which 
+    will provide a nicer UI when using user-specified manipulators. If they are not specified, the ``name`` 
+    will be shown verbatim in the html form. 
+        
+.. code-block:: python
+  
+    class Options:
+        name = 'YourManipulatorClass'
+        display_name = 'Your Manipulator Class'
+        description = 'Check it out. This is my brand new manipulator.'
+..
   * As mentioned earlier, for each manipulator class in your ``manipulators.py`` there should also  
     be a dictionary entry for ``manipulatorsDict``.  This allows your manipulator to be seen from 
     the manipulators application.  
@@ -159,3 +170,80 @@ Things to keep in mind as you create your own manipulators:
 
 We invite you to use the manipulator provided by simple_app (or any of our manipulators defined in 
 ``lingcod/manipulators``) as a template for generating your own manipulators.  
+
+.. note::
+
+    In addition to ``BaseManipulator``, we also provide a ``ClipToShapeManipulator`` and a ``DifferenceFromShapeManipulator`` that can be subclassed to simplify your own manipulator.
+
+    Both of these classes inherit from ``BaseManipulator`` while also providing a ready-made ``manipulate()`` method that will take the respective interesection of or difference from any two shapes.
+
+    
+Optional Manipulators
+*********************
+
+There may be cases where certain manipulators should be optional and user-selectable depending on the purpose of their MPA. 
+In this case we can specify `optional_manipulators` in the MPA model Options.
+
+.. code-block:: python 
+
+    class Options:
+        manipulators = [ ClipToStudyRegionManipulator, ]
+        optional_manipulators = [ EastWestManipulator, ]
+
+On the user-interface side, when a user creates or edits a shape, there will be a form with checkboxes allowing them to select from these optional manipulators. 
+
+On the database side, the `active manipulators` that are applied to a given MPA are stored as a comma-separated string in the MPA table. 
+When and if the geometry needs to be saved again, the previously selected manipulators will be applied.  
+The required manipulators will always be applied regardless of the content of the MPA.manipulators field. 
+In other words, the MPA.manipulators field serves only to trigger the application of optional manipulators. 
+
+If there are no required manipulators, you must still provide an empty list for Options.manipulators
+
+.. code-block:: python 
+
+    class Options:
+        manipulators = []
+        optional_manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator, ]
+
+If the user doesn't select any other optional manipulators and there are none required, a special case is triggered. We can't allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the `NullManipulator` is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should *not* appear in either your manipulators or optional_manipulators lists. 
+
+.. note::
+
+   There are several steps that a marinemap-based project must take in order to ensure that optional manipulators function correctly.
+
+   First, make sure that the MPA superclass is migrated to reflect the MPA schema change.
+   Secondly, make sure to run manage.py install_media
+   Third, the superclass of MPAForm must include 'manipulators' in the fields list.
+   Lastly, the map.html template must include the manipulators div as specified in the common/map.html template. 
+
+
+Manipulator Models
+******************
+
+You may want to store a pre-defined shape in the database that will be used by your manipulator.  
+
+For this purpose we provide an abstract model, ``BaseManipulatorGeometry``, that can be used to simplify your manipulator model building.
+
+There are also two management commands that can be used to load a geometry from a shapefile into the database provided certain fields and methods are present in the model (all of which are provided by ``BaseManipulatorGeometry``).
+
+First, create your own manipulator model such as the one below (be sure to inherit from ``BaseManipulatorGeometry``, as well as provide ``name`` and ``geometry`` fields):
+
+.. code-block:: python 
+  
+    class MyClippingLayer(BaseManipulatorGeometry):
+        name = models.CharField(verbose_name="My Clipping Layer Name", max_length=255, blank=True)
+        geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="My Clipping Layer")
+
+        def __unicode__(self):
+            return "MyClippingLayer data, created: %s" % (self.creation_date)
+
+Second, use ``syncdb`` or ``migrate`` to generate the associated database table.
+            
+Finally, load your own geometry layer with the following management commands:
+
+.. code-block:: python 
+  
+    manage.py create_manipulator_geom <path to shapefile>/my_clipping_region.shp MyClippingLayer 
+    manage.py change_manipulator_geom 1 MyClippingLayer      
+
+    

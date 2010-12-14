@@ -53,6 +53,8 @@ class Command(BaseCommand):
 
         self.remove_uncompressed_media()
 
+        self.change_mediaroot_owner()
+
         if settings.AWS_USE_S3_MEDIA:
             self.copy_mediaroot_to_s3()
     
@@ -99,6 +101,40 @@ class Command(BaseCommand):
         print "    Removing uncompressed media (not yet implemented)"
         return
        
+    def change_mediaroot_owner(self):
+        if self.dry_run:
+            print "    This would change the ownership of MEDIA_ROOT to the WSGI_USER"
+            return
+
+        if settings.WSGI_USER:
+            print "    Changing %s ownership to user '%s'" % (self.media_root, settings.WSGI_USER)
+
+            try:
+                from pwd import getpwnam  
+                uid = getpwnam(settings.WSGI_USER)[2]
+            except KeyError:
+                print "    **** WARNING: UID for user %s can't be found; %s ownership not changing" % \
+                        (settings.WSGI_USER, self.media_root)
+                return
+             
+            try:
+                os.chown(self.media_root, uid, -1)
+                for root, dirs, files in os.walk(self.media_root):  
+                    for m in dirs:  
+                        os.chown(os.path.join(root, m), uid, -1)
+                    for m in files:
+                        os.chown(os.path.join(root, m), uid, -1)
+            except OSError:
+                print "    **** WARNING: You don't have the permissions to change ownership of %s" % self.media_root
+                print "    ****    Perhaps try running the install_media command as root?"
+                print "    **** OR"
+                print "    ****    Try 'sudo chown -R %s %s'" % (settings.WSGI_USER, self.media_root)
+                return
+
+        else:
+            print "    Ownership of %s not altered (WSGI_USER not set)" % (self.media_root)
+
+
     def copy_mediaroot_to_s3(self):
         if settings.AWS_USE_S3_MEDIA and \
            settings.AWS_MEDIA_BUCKET and \

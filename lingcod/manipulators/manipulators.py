@@ -31,7 +31,7 @@ def display_kml(geom):
     geom = simplify(geom)
     coords = []
     for coord in geom.shell.coords:
-        coords.append(str(coord[0])+','+str(coord[1])+','+str(settings.KML_EXTRUDE_HEIGHT))
+        coords.append(','.join([str(coord[0]), str(coord[1]), str(settings.KML_EXTRUDE_HEIGHT)]))
     coords = ' '.join(coords)
     return """<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -175,6 +175,7 @@ class ClipToShapeManipulator(BaseManipulator):
         required arguments:
             target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
             clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
+            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
@@ -195,7 +196,7 @@ class ClipToShapeManipulator(BaseManipulator):
                                 or intersection call failed
                             clipped_shape will be returned as None
         html_templates=='invalid_geom'   
-                            This represents an 'user error' and is accessed by raising an InvalidGeometryException
+                            This represents a 'user error' and is accessed by raising an InvalidGeometryException
                             This should occur under the following circumstances:
                                 if geometry can not be generated from "target_shape" 
                                 or if "target_shape" is not a valid geometry
@@ -204,14 +205,15 @@ class ClipToShapeManipulator(BaseManipulator):
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
  
-    def __init__(self, target_shape, clip_against=None, **kwargs):
+    def __init__(self, target_shape, clip_against=None, zero=0.0, **kwargs):
         self.target_shape = target_shape
         self.clip_against = clip_against
+        self.zero = zero
     
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
-
+        
         #extract clip_against geometry
         try:
             clip_against = GEOSGeometry(self.clip_against)
@@ -229,11 +231,11 @@ class ClipToShapeManipulator(BaseManipulator):
             raise self.InternalException("Exception raised in ClipToShapeManipulator while intersecting geometries: " + e.message)  
         
         #if there was no overlap (intersection was empty)
-        if clipped_shape.area == 0:
+        if clipped_shape.area <= self.zero:
             status_html = self.do_template("2")
-            #message = "intersection resulted in empty geometry"
+            message = "intersection resulted in empty geometry"  #ALTERATION #1
             #return self.result(clipped_shape, target_shape, status_html, message)
-            return self.result(clipped_shape, status_html)
+            raise self.HaltManipulations(message, status_html)   #ALTERATION #2
          
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
@@ -271,6 +273,86 @@ class ClipToShapeManipulator(BaseManipulator):
 
 manipulatorsDict[ClipToShapeManipulator.Options.name] = ClipToShapeManipulator
 
+
+class DifferenceFromShapeManipulator(BaseManipulator):
+    '''
+        required arguments:
+            target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+            clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
+            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
+        concerning **kwargs:
+            kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
+        manipulate() return value:
+            a call to self.result() 
+            with required parameter 'clipped_shape': 
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+                The clipped shape will be the largest (in area) polygon result from taking the difference of 'target_shape' with 'clip_against' 
+            and optional parameters 'html' and 'success':
+                The html is usually a template that will be displayed to the client, explaining the manipulation
+                if not provided, this will remain empty
+                The success parameter is defined as '1' for success and '0' for failure
+                if not provided, the default value, '1', is used
+
+        html_templates=='internal'   
+                            This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
+                            This should occur under the following circumstances:
+                                if geometry can not be generated from "clip_against" 
+                                or intersection call failed
+                            clipped_shape will be returned as None
+        html_templates=='invalid_geom'   
+                            This represents a 'user error' and is accessed by raising an InvalidGeometryException
+                            This should occur under the following circumstances:
+                                if geometry can not be generated from "target_shape" 
+                                or if "target_shape" is not a valid geometry
+                            clipped_shape will be returned as None         
+        html_templates==2   clipped shape is empty (no overlap with "clip_against")
+        html_templates==0   if "target_shape" is successfully clipped to "clip_against"
+    '''
+ 
+    def __init__(self, target_shape, clip_against=None, zero=0.0, **kwargs):
+        self.target_shape = target_shape
+        self.diff_geom = clip_against
+        self.zero = zero
+    
+    def manipulate(self):
+        #extract target_shape geometry
+        target_shape = self.target_to_valid_geom(self.target_shape)
+
+        #extract diff_geom geometry
+        try:
+            diff_geom = GEOSGeometry(self.diff_geom)
+            diff_geom.set_srid(settings.GEOMETRY_CLIENT_SRID)
+        except Exception, e:
+            raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while initializing geometry on self.diff_geom: " + e.message)
+        
+        if not diff_geom.valid:
+            raise self.InternalException("DifferenceFromShapeManipulator: 'diff_geom' is not a valid geometry")
+        
+        #determine the difference in the two geometries
+        try:
+            clipped_shape = target_shape.difference( diff_geom )
+        except Exception, e:
+            raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while intersecting geometries: " + e.message)  
+        
+        #if there is no geometry left (difference was empty)
+        if clipped_shape.area <= self.zero:
+            status_html = self.do_template("2")
+            message = "difference resulted in empty geometry"
+            raise self.HaltManipulations(message, status_html)
+         
+        #if there was overlap
+        largest_poly = LargestPolyFromMulti(clipped_shape)
+        status_html = self.do_template("0")
+        return self.result(largest_poly, status_html)
+        
+    class Options:
+        name = 'DifferenceFromShape'
+        html_templates = {
+            '0':'manipulators/shape_clip.html', 
+            '2':'manipulators/outside_shape.html', 
+        }
+
+manipulatorsDict[DifferenceFromShapeManipulator.Options.name] = DifferenceFromShapeManipulator
         
         
 class ClipToStudyRegionManipulator(BaseManipulator):
@@ -358,6 +440,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
     class Options:
         name = 'ClipToStudyRegion'
         supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
+        display_name = "Study Region"
+        description = "Clip your shape to the study region"
         html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
@@ -519,8 +603,90 @@ class ClipToGraticuleManipulator(BaseManipulator):
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
 
 
+class NullManipulator(BaseManipulator):
+    """ 
+    This manipulator does nothing but ensure the geometry is clean. 
+    Even if no manipulator is specified, this, at a minimum, needs to be run.
+    """
+    def __init__(self, target_shape, **kwargs):
+        self.target_shape = target_shape
+
+    def manipulate(self): 
+        target_shape = self.target_to_valid_geom(self.target_shape)
+        status_html = self.do_template("0")
+        return self.result(target_shape, status_html)
+
+    class Options(BaseManipulator.Options):
+        name = 'NullManipulator'
+        html_templates = {
+            '0':'manipulators/valid.html', 
+        }
+
+manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
+
+
 def get_url_for_model(model):
     names = []
     for manipulator in model.Options.manipulators:
         names.append(manipulator.Options.name)
     return reverse('manipulate', args=[','.join(names)])
+
+def get_manipulators_for_model(model):
+    required = []
+    display_names = {}
+    descriptions = {}
+
+    # required manipulators
+    for manipulator in model.Options.manipulators:
+        required.append(manipulator.Options.name)
+
+        try:
+            display_names[manipulator.Options.name] = manipulator.Options.display_name
+        except AttributeError:
+            pass
+
+        try:
+            descriptions[manipulator.Options.name] = manipulator.Options.description
+        except AttributeError:
+            pass
+
+    # optional manipulators
+    try:
+        optional = []
+        for manipulator in model.Options.optional_manipulators:
+            optional.append(manipulator.Options.name)
+            try:
+                display_names[manipulator.Options.name] = manipulator.Options.display_name
+            except AttributeError:
+                pass
+
+            try:
+                descriptions[manipulator.Options.name] = manipulator.Options.description
+            except AttributeError:
+                pass
+    except:
+        optional = None
+
+    manip = {'manipulators': required}
+    if optional:
+        manip['optional_manipulators'] = optional
+    
+    if len(required) > 0:
+        url = reverse('manipulate', args=[','.join(required)])
+    else:
+        url = reverse('manipulate-blank')
+
+    # Geometry Input Methods (defaults to 'digitize' only)
+    manip['geometry_input_methods'] = ['digitize']
+    try:
+        for imethod in model.Options.geometry_input_methods:
+            if imethod not in manip['geometry_input_methods']:
+                manip['geometry_input_methods'].append(imethod)
+    except AttributeError:
+        pass
+
+    manip['loadshp_url'] = reverse('loadshp-single')
+    manip['url'] = url
+    manip['display_names'] = display_names
+    manip['descriptions'] = descriptions
+    return manip

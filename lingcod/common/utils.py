@@ -291,12 +291,15 @@ def valid_browser(ua):
 
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
+    Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0b7) Gecko/20100101 Firefox/4.0b7
     """
     supported_browsers = [
             ('Firefox', 3, 5, 'Mac'),
+            ('Firefox', 4, 0, 'Mac'),
             ('Safari', 3, 1, 'Mac'),
             ('Chrome', 6, 0, 'Mac'),
             ('Firefox', 3, 5, 'Windows'),
+            ('Firefox', 4, 0, 'Windows'),
             ('Chrome', 1, 0, 'Windows'),
             ('IE', 8, 0, 'Windows'),
     ]
@@ -304,6 +307,9 @@ def valid_browser(ua):
     from lingcod.common import uaparser
 
     bp = uaparser.browser_platform(ua)
+    if not bp.platform:
+        log = get_logger()
+        log.warn("Platform is None: UA String is '%s'" % ua)
 
     for sb in supported_browsers:
         if bp.family == sb[0] and \
@@ -358,29 +364,34 @@ import inspect
 import tempfile
 def get_logger(caller_name=None):
     try:
+        fh = open(settings.LOG_FILE,'w')
         logfile = settings.LOG_FILE
     except:
-        logfile = os.path.join(tempfile.gettempdir(),'marinemap_log.txt')
-        print "WARNING: settings.LOG_FILE not specified; using %s instead" % logfile
+        # print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        logfile = None
 
-    try:
-        # Use overall debug settings to determine loglevel
-        if settings.DEBUG:
-            level = logging.DEBUG
-        else:
-            level = logging.WARNING 
-    except:
+    if settings.DEBUG:
         level = logging.DEBUG
+    else:
+        level = logging.WARNING 
     
-    logging.basicConfig(level=level,
-                format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                filename=logfile)
+    format = '    %(asctime)s %(name)s %(levelname)s %(message)s'
+    if logfile:
+        logging.basicConfig(level=level, format=format, filename=logfile)
+    else:
+        logging.basicConfig(level=level, format=format)
 
     if not caller_name:
         caller = inspect.currentframe().f_back
         caller_name = caller.f_globals['__name__']
 
     logger = logging.getLogger(caller_name)
+
+    if logfile and settings.DEBUG:
+        import sys
+        strm_out = logging.StreamHandler(sys.__stdout__)
+        logger.addHandler(strm_out)
+
     return logger
 
 

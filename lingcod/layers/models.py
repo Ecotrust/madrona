@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.sharing.managers import ShareableGeoManager
+import os
 
 class PrivateLayerList(models.Model):
     """Model for storing uploaded restricted-access kml files"""
@@ -31,7 +32,7 @@ class PrivateSuperOverlay(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50,help_text="Layer name as it will appear in the KML tree.",default='')
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
-    base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="doc.kml", recursive=True, help_text="""
+    base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="^doc.kml$", recursive=True, help_text="""
         Base KML file of the superoverlay. Must be called 'doc.kml'. This file (and all subsequent files in the tree) must use
         relative paths.  The user making the request only needs permissions for the base kml. 
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
@@ -42,6 +43,12 @@ class PrivateSuperOverlay(models.Model):
 
     def __unicode__(self):
         return "PrivateSuperOverlay %s " % (self.name)
+
+    def save(self, *args, **kwargs):
+        if self.base_kml == os.path.join(settings.SUPEROVERLAY_ROOT, 'doc.kml'):
+            raise Exception("We don't allow /doc.kml at the SUPEROVERLAY_ROOT dir... security risk.")
+        else:
+            super(PrivateSuperOverlay, self).save(*args, **kwargs)
 
     class Meta:
         permissions = (
