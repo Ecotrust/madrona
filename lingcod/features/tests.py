@@ -2,6 +2,7 @@ from django.test import TestCase
 from lingcod.features import *
 from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature
 from lingcod.features.forms import FeatureForm
+from lingcod.sharing.models import get_shareables, share_object_with_group
 from lingcod.common.utils import kml_errors
 import os
 import shutil
@@ -868,8 +869,18 @@ class CopyTest(TestCase):
     
     def setUp(self):
         self.client = Client()
+
         self.user = User.objects.create_user(
             'resttest', 'resttest@marinemap.org', password='pword')
+        self.other_user = User.objects.create_user(
+            'othertest', 'othertest@marinemap.org', password='pword')
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        self.user.groups.add(self.group1)
+        self.other_user.groups.add(self.group1)
+        shareables = get_shareables()
+        self.group1.permissions.add(shareables['testmpa'][1])
+
         self.mpa = TestMpa(user=self.user, name="My Mpa")
         self.folder = Folder(user=self.user, name="My Folder")
         self.folder.save()
@@ -912,19 +923,17 @@ class CopyTest(TestCase):
             r'features_testmpa_\d features_folder_\d')
     
     def test_other_users_can_copy_if_shared(self):
-        """
-        TODO: Implement this once sharing is incorporated
-        """
-        # for link in self.mpa.get_options().links:
-        #     if link.title == 'Copy':
-        #         copy_link = link
-        #         break
-        # self.assertEqual(Link, getattr(link, '__class__', None))
-        # response = self.client.post(link.reverse([self.mpa]))
-        # self.assertRegexpMatches(response.content, r'(copy)')
-        # self.assertRegexpMatches(response['X-MarineMap-Select'], 
-        #     r'features_testmpa_\d')
-        pass
+        share_object_with_group(self.mpa, self.group1) 
+        self.client.login(username='othertest', password='pword')
+        for link in self.mpa.get_options().links:
+            if link.title == 'Copy':
+                copy_link = link
+                break
+        self.assertEqual(Link, getattr(link, '__class__', None))
+        response = self.client.post(link.reverse([self.mpa]))
+        self.assertRegexpMatches(response.content, r'(copy)')
+        self.assertRegexpMatches(response['X-MarineMap-Select'], 
+            r'features_testmpa_\d')
 
 
 class SpatialTest(TestCase):
