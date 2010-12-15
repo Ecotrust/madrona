@@ -618,6 +618,7 @@ class NullManipulator(BaseManipulator):
 
     class Options(BaseManipulator.Options):
         name = 'NullManipulator'
+        supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
         html_templates = {
             '0':'manipulators/valid.html', 
         }

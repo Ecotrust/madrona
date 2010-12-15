@@ -11,6 +11,26 @@ urlpatterns = patterns('',
     (r'/manipulators/', include('lingcod.manipulators.urls')),
 )
 
+# set up some test manipulators
+class TestManipulator(BaseManipulator):
+    """ 
+    This manipulator does nothing but ensure the geometry is clean. 
+    """
+    def __init__(self, target_shape, **kwargs):
+        self.target_shape = target_shape
+
+    def manipulate(self): 
+        target_shape = self.target_to_valid_geom(self.target_shape)
+        status_html = self.do_template("0")
+        return self.result(target_shape, status_html)
+
+    class Options(BaseManipulator.Options):
+        name = 'TestManipulator'
+        supported_geom_fields = ['PolygonField']
+        html_templates = { '0':'manipulators/valid.html', }
+
+manipulatorsDict[TestManipulator.Options.name] = TestManipulator        
+
 class ManipulatorsTest(TestCase):
     fixtures = ['manipulators_test_data']
 

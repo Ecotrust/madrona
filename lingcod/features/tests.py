@@ -791,7 +791,7 @@ class TestMpa(PolygonFeature):
         share = True
         verbose_name = 'Marine Protected Area'
         form = 'lingcod.features.tests.MpaForm'
-        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+        manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
         optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToGraticuleManipulator' ]
         links = (
             related('Habitat Spreadsheet',
@@ -808,7 +808,7 @@ class TestMpa(PolygonFeature):
 class MpaForm(FeatureForm):
     class Meta:
         model = TestMpa
-    
+
 TYPE_CHOICES = (
     ('W', 'Wind'),
     ('H', 'Hydrokinetic'),
@@ -958,11 +958,9 @@ class SpatialTest(TestCase):
 
         g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g1.transform(settings.GEOMETRY_DB_SRID)
-        self.mpa = TestMpa(user=self.user, name="My Mpa", geometry_final=g1)
+        self.mpa = TestMpa(user=self.user, name="My Mpa", geometry_orig=g1) 
+        # geometry_final will be set with manipulator
         self.mpa.save()
-
-    def test_manipulators(self):
-        self.assertTrue(True)
 
     def test_feature_types(self):
         self.assertTrue(isinstance(self.wreck, PointFeature))
@@ -991,3 +989,4 @@ class SpatialTest(TestCase):
         response = self.client.get(url)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
+
