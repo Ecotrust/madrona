@@ -375,7 +375,7 @@ def get_logger(caller_name=None):
     else:
         level = logging.WARNING 
     
-    format = '    %(asctime)s %(name)s %(levelname)s %(message)s'
+    format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     if logfile:
         logging.basicConfig(level=level, format=format, filename=logfile)
     else:
