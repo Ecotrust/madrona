@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
-from models import get_shareables, ShareableContent, NotShareable
+from lingcod.sharing.models import ShareableContent, NotShareable
+from lingcod.sharing.utils import get_shareables
 from django.contrib.auth.models import User, Group, Permission
 from django.conf import settings
 

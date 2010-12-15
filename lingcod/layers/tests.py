@@ -8,8 +8,8 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from django.core.files import File
 from lingcod.layers.models import PublicLayerList, PrivateLayerList, PrivateSuperOverlay
-from lingcod.sharing.models import share_object_with_group, ShareableContent, get_shareables
-from lingcod.sharing.utils import can_user_view
+from lingcod.sharing.models import ShareableContent
+from lingcod.sharing.utils import can_user_view, share_object_with_group, get_shareables
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group
 from django.conf import settings

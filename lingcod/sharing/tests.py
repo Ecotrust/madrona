@@ -1,8 +1,8 @@
 from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.common import utils 
 from lingcod.features.tests import TestMpa as Mpa
-from lingcod.sharing.models import * 
-from lingcod.sharing.utils import can_user_view, user_sharing_groups
+from lingcod.sharing.models import ShareableContent, SharingError, NotShareable
+from lingcod.sharing.utils import *
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings

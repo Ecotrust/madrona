@@ -2,7 +2,7 @@ from django.test import TestCase
 from lingcod.features import *
 from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature
 from lingcod.features.forms import FeatureForm
-from lingcod.sharing.models import get_shareables, share_object_with_group
+from lingcod.sharing.utils import get_shareables, share_object_with_group
 from lingcod.common.utils import kml_errors
 import os
 import shutil

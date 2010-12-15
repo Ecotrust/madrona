@@ -51,7 +51,8 @@ class KMLAppTest(TestCase):
         array1.add_mpa(mpa2)
 
         # Register the mpas and arrays as shareable content types
-        from lingcod.sharing.models import ShareableContent, get_content_type, get_shareables
+        from lingcod.sharing.models import ShareableContent
+        from lingcod.sharing.utils import get_content_type, get_shareables
         mpa_ct = get_content_type(Mpa)
         array_ct = get_content_type(MpaArray)
         share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
@@ -72,7 +73,7 @@ class KMLAppTest(TestCase):
         self.user2.groups.add(self.group1)
 
         # Share with common group
-        from lingcod.sharing.models import share_object_with_groups
+        from lingcod.sharing.utils import share_object_with_groups
         share_object_with_groups(array1, [self.group1.pk])
 
         # Share with public

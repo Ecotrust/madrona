@@ -2,7 +2,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.contenttypes.models import ContentType
-from models import get_shareables, share_object_with_groups
+from lingcod.sharing.utils import get_shareables, share_object_with_groups
 from django.conf import settings
 
 def get_shared_content_instance(ctid, pk, user):

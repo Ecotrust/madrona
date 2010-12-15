@@ -11,7 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 from lingcod.staticmap.models import MapConfig
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
-from lingcod.sharing.models import * 
+from lingcod.sharing.models import ShareableContent
+from lingcod.sharing.utils import 
 
 from django.conf import settings
 

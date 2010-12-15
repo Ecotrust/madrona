@@ -5,7 +5,8 @@ from django.contrib.auth.models import *
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.gis.geos import GEOSGeometry 
-from lingcod.sharing.models import ShareableContent, get_shareables
+from lingcod.sharing.models import ShareableContent
+from lingcod.sharing.utils import get_shareables
 # from lingcod.array.tests import ArrayTestArray as TestArray
 
 class TestMpa(Mpa):

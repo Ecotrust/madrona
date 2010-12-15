@@ -4,7 +4,8 @@ from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.mpa.tests import TestMpa, MpaTestForm
 from lingcod.common import utils 
 from django.contrib.auth.models import *
-from lingcod.sharing.models import * 
+from lingcod.sharing.models import ShareableContent
+from lingcod.sharing.utils import *
 from django.conf import settings
 from django.test.client import Client
 from django.contrib.gis.geos import GEOSGeometry 
@@ -271,7 +272,6 @@ class ArrayCopyTestCase(TestCase):
 
         # share the array
         the_array = ArrayTestArray.objects.get(pk=self.array1_pk)
-        from lingcod.sharing.models import share_object_with_groups
         share_object_with_groups(the_array, [self.group1.pk])
 
         # Test it

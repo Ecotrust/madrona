@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 
 from lingcod.sharing.models import * 
+from lingcod.sharing.utils import * 
 from lingcod.common.utils import get_mpa_class, get_array_class
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group, Permission

@@ -9,8 +9,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import Permission
-from lingcod.sharing.models import ShareableContent, get_shareables
-from lingcod.sharing import validate_sharing, sharing_enable, sharing_disable
+from lingcod.sharing.models import ShareableContent
+from lingcod.sharing.utils import get_shareables, validate_sharing, sharing_enable, sharing_disable
 import json
 
 registered_models = []
