@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from lingcod.sharing.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureOptions
@@ -35,9 +36,17 @@ class Feature(models.Model):
             verbose_name="Date Modified")
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,
             null=True,verbose_name="Share with the following groups")
+    content_type = models.ForeignKey(ContentType, blank=True, null=True)
+    object_id = models.PositiveIntegerField(blank=True,null=True)
+    collection = generic.GenericForeignKey('content_type', 'object_id')
 
-    
     objects = ShareableGeoManager()
+
+    def __unicode__(self):
+        return u"%s_%s" % (self.model_uid(), self.pk)
+
+    def __repr__(self):
+        return u"%s_%s" % (self.model_uid(), self.pk)
 
     class Meta:
         abstract=True
@@ -64,6 +73,18 @@ class Feature(models.Model):
                 'Trying to get uid for feature class that is not yet saved!')
         return "%s_%s" % (self.model_uid(), self.pk, )
     
+    def add_to_collection(self, collection):
+        assert issubclass(collection.__class__, FeatureCollection)
+        self.collection = collection
+        self.save()
+
+    def remove_from_collection(self):
+        collection = self.collection
+        self.collection = None
+        self.save()
+        if collection:
+            collection.save()
+
     def copy(self, user=None):
         """
         Returns a copy of this feature, setting the user to the specified 
@@ -226,3 +247,60 @@ class PointFeature(SpatialFeature):
     
     class Meta(Feature.Meta):
         abstract=True
+
+class FeatureCollection(Feature):
+    """
+    A Folder/Collection of Features
+    """
+    class Meta:
+        abstract = True
+    
+    def add(self, f):
+        """Adds a specified Feature to the Collection"""
+        f.add_to_collection(self)
+    
+    def remove(self, f):
+        """Removes a specified Feature from the Collection"""
+        if f.collection == self:
+            f.remove_from_collection()
+            self.save() # This updates the date_modified field of the collection
+        else:
+            raise Exception('Feature `%s` is not in Collection `%s`' % (f.name, self.name))
+
+    def feature_set(self, recurse=False, feature_classes=None):
+        """
+        Returns a list of Features belonging to the Collection
+        Optionally recurse into all child containers
+        or limit/filter for a list of feature classes
+        """
+        feature_set = []
+
+        if issubclass(feature_classes.__class__, Feature):
+            feature_classes = [feature_classes]
+
+        for model_class in self.get_options().get_valid_children():
+            if recurse and issubclass(model_class, FeatureCollection):
+                collections = model_class.objects.filter(
+                    content_type=ContentType.objects.get_for_model(self),
+                    object_id=self.pk
+                )
+                for collection in collections:
+                    feature_list = collection.feature_set(recurse, feature_classes)
+                    if len(feature_list) > 0:
+                        feature_set.extend(feature_list)
+
+            if feature_classes and model_class not in feature_classes:
+                continue
+
+            feature_list = list( 
+                model_class.objects.filter(
+                    content_type=ContentType.objects.get_for_model(self),
+                    object_id=self.pk
+                )
+            )
+            if len(feature_list) > 0:
+                feature_set.extend(feature_list)
+
+
+        return feature_set
+

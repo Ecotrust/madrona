@@ -265,10 +265,11 @@ def validate_sharing(model):
 
     return True
 
-def sharing_disable(mc, ct):
+def sharing_disable(mc):
     """
     Disable all sharing for a model
     """
+    ct = ContentType.objects.get_for_model(mc)
     # Make sure Feature does NOT have can_share_* permission;
     codename = "can_share_%s" % mc._meta.module_name
     try:
@@ -288,10 +289,11 @@ def sharing_disable(mc, ct):
     if get_shareables().has_key(mc.__name__.lower()):
         raise SharingError("%s is not a shared feature but somehow snuck into get_shareables()" % mc.__name__)
             
-def sharing_enable(mc, ct):
+def sharing_enable(mc):
     """
     Enable sharing for a model
     """
+    ct = ContentType.objects.get_for_model(mc)
     logger.debug("Insert can_share Permissions and ShareableContent for %r" % ct)
     # Make sure ShareableContent instance exists
     # TODO FeatureContainers and arrays

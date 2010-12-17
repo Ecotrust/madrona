@@ -83,9 +83,9 @@ class Mpa(PolygonFeature):
     # geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Final MPA boundary")
     designation = models.ForeignKey(MpaDesignation, blank=True, null=True)
     # Array relation fields
-    content_type = models.ForeignKey(ContentType, blank=True, null=True)
-    object_id = models.PositiveIntegerField(blank=True,null=True)
-    array = generic.GenericForeignKey('content_type', 'object_id')
+    #content_type = models.ForeignKey(ContentType, blank=True, null=True)
+    #object_id = models.PositiveIntegerField(blank=True,null=True)
+    #array = generic.GenericForeignKey('content_type', 'object_id')
     # Expose sharing functionality
     # sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share this MPA with the following groups")
 

@@ -6,7 +6,7 @@ from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
 from django.contrib.auth.models import Permission
 from lingcod.sharing.models import ShareableContent
@@ -31,7 +31,7 @@ class FeatureOptions:
     def __init__(self, model):
         
         # Import down here to avoid circular reference
-        from lingcod.features.models import Feature        
+        from lingcod.features.models import Feature, FeatureCollection    
         
         if not issubclass(model, Feature):
             raise FeatureConfigurationError('Is not a subclass of \
@@ -61,6 +61,7 @@ not a string path." % (name,))
         """
         Path to FeatureForm used to edit this class.
         """
+        
         
         self.slug = slugify(name)
         """
@@ -115,6 +116,14 @@ not a string path." % (name,))
                 select='multiple single',
                 edits_original=False))
         
+        self.valid_children = getattr(self._options, 'valid_children', None)
+        """
+        valid child classes for the feature container
+        """
+        if self.valid_children and not issubclass(self._model, FeatureCollection):
+            raise FeatureConfigurationError("valid_children Option is only \
+                    for FeatureCollection classes" % m)
+
         self.enable_share = getattr(self._options, 'share', False)
         """
         Enable sharing features. Requires the lingcod.share app.
@@ -199,6 +208,28 @@ not a string path." % (name,))
             t = loader.get_template('features/show.html')
         return t
     
+    def get_valid_children(self):
+        if not self.valid_children:
+            raise FeatureConfigurationError(
+                "%r is not a properly configured FeatureCollection" % (self._model))
+
+        valid_child_classes = []
+        for vc in self.valid_children:
+            try:
+                vc_class = get_class(vc)
+            except:
+                raise FeatureConfigurationError(
+                        "Error trying to import module %s" % vc) 
+            
+            from lingcod.features.models import Feature
+            if not issubclass(vc_class, Feature):
+                raise FeatureConfigurationError(
+                        "%r is not a Feature; can't be a child" % vc) 
+
+            valid_child_classes.append(vc_class)
+
+        return valid_child_classes
+
     def get_form_class(self):
         """
         Returns the form class for this Feature Class.
@@ -488,11 +519,10 @@ def register(model):
     if model not in registered_models:
         registered_models.append(model)
         try:
-            ct = ContentType.objects.get_for_model(model)
             if options.enable_share:
-                sharing_enable(model, ct)
+                sharing_enable(model)
             else:
-                sharing_disable(model, ct)
+                sharing_disable(model)
         except ContentType.DoesNotExist:
             pass # wait until ContentType is created and post_save handler will kick in
         for link in options.links:
@@ -523,7 +553,12 @@ def contentype_sharing_handler(sender, instance, created, **kwargs):
     if created and mc in registered_models: # it's a feature
         logger.debug("Feature %r added to contenttypes" % instance)
         if mc.get_options().enable_share: # it's a shareable feature
-            sharing_enable(mc, instance)
+            sharing_enable(mc)
         else:
-            sharing_disable(mc, instance)
+            sharing_disable(mc)
+
+#@receiver(class_prepared)
+#def class_prepared_handler(sender,**kwargs):
+#    print '%r prepared' % sender
+
 

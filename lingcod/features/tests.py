@@ -1,6 +1,6 @@
 from django.test import TestCase
 from lingcod.features import *
-from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature
+from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from lingcod.features.forms import FeatureForm
 from lingcod.sharing.utils import get_shareables, share_object_with_group
 from lingcod.common.utils import kml_errors
@@ -743,40 +743,6 @@ def kml(request, instances):
     
 # Lets use the following as a canonical example of how to use all the features
 # of this framework (will be kept up to date as api changes):
-            
-@register
-class Folder(Feature):
-    
-    def copy(self, user):
-        copy = super(Folder, self).copy(user)
-        copy.name = copy.name.replace(' (copy)', '-Copy')
-        copy.save()
-        return copy
-    
-    class Options:
-        form = 'lingcod.features.tests.FolderForm'
-        valid_children = (
-            'lingcod.features.tests.TestMpa', 
-            'lingcod.features.tests.Folder', 
-            'lingcod.features.tests.RenewableEnergySite')
-        links = (
-            edit('Delete folder and contents',
-                'lingcod.features.tests.delete_w_contents',
-                select='single multiple',
-                confirm="""
-                Are you sure you want to delete this folder and it's contents? 
-                This action cannot be undone.
-                """
-            ),
-            alternate('Export KML',
-                'lingcod.features.tests.kml',
-                select='multiple single'
-            )
-        )
-        
-class FolderForm(FeatureForm):
-    class Meta:
-        model = Folder
         
 DESIGNATION_CHOICES = (
     ('R', 'Reserve'), 
@@ -808,6 +774,41 @@ class TestMpa(PolygonFeature):
 class MpaForm(FeatureForm):
     class Meta:
         model = TestMpa
+
+@register
+class Folder(FeatureCollection):
+    
+    def copy(self, user):
+        copy = super(Folder, self).copy(user)
+        copy.name = copy.name.replace(' (copy)', '-Copy')
+        copy.save()
+        return copy
+    
+    class Options:
+        form = 'lingcod.features.tests.FolderForm'
+        share=True
+        valid_children = (
+            'lingcod.features.tests.TestMpa', 
+            'lingcod.features.tests.Folder', 
+            'lingcod.features.tests.RenewableEnergySite')
+        links = (
+            edit('Delete folder and contents',
+                'lingcod.features.tests.delete_w_contents',
+                select='single multiple',
+                confirm="""
+                Are you sure you want to delete this folder and it's contents? 
+                This action cannot be undone.
+                """
+            ),
+            alternate('Export KML',
+                'lingcod.features.tests.kml',
+                select='multiple single'
+            )
+        )
+
+class FolderForm(FeatureForm):
+    class Meta:
+        model = Folder
 
 TYPE_CHOICES = (
     ('W', 'Wind'),
@@ -920,7 +921,7 @@ class CopyTest(TestCase):
         self.assertRegexpMatches(response.content, r'(copy)')
         self.assertRegexpMatches(response.content, r'Folder-Copy')
         self.assertRegexpMatches(response['X-MarineMap-Select'], 
-            r'features_testmpa_\d features_folder_\d')
+            r'features_testmpa_\d+ features_folder_\d+')
     
     def test_other_users_can_copy_if_shared(self):
         share_object_with_group(self.mpa, self.group1) 
@@ -990,3 +991,145 @@ class SpatialTest(TestCase):
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
 
+
+class CollectionTest(TestCase):
+    
+    def setUp(self):
+        self.client = Client()
+
+        self.user1 = User.objects.create_user(
+            'user1', 'resttest@marinemap.org', password='pword')
+        self.user2 = User.objects.create_user(
+            'user2', 'othertest@marinemap.org', password='pword')
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        self.user1.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+        shareables = get_shareables()
+        self.group1.permissions.add(shareables['testmpa'][1])
+        self.group1.permissions.add(shareables['folder'][1])
+
+        self.mpa1 = TestMpa(user=self.user1, name="My Mpa")
+        self.mpa1.save()
+        self.mpa2 = TestMpa(user=self.user1, name="My Mpa 2")
+        self.mpa2.save()
+        self.folder1 = Folder(user=self.user1, name="My Folder")
+        self.folder1.save()
+        self.folder2 = Folder(user=self.user1, name="My Folder2")
+        self.folder2.save()
+
+    def test_add_remove_at_feature_level(self):
+        self.mpa1.add_to_collection(self.folder1)
+        self.assertEqual(self.mpa1.collection, self.folder1)
+        self.assertTrue(self.mpa1 in self.folder1.feature_set())
+
+        self.mpa1.remove_from_collection()
+        self.assertEqual(self.mpa1.collection, None)
+        self.assertTrue(self.mpa1 not in self.folder1.feature_set())
+        
+    def test_add_remove_at_collection_level(self):
+        self.folder1.add(self.mpa1)
+        self.assertEqual(self.mpa1.collection, self.folder1)
+        self.assertTrue(self.mpa1 in self.folder1.feature_set())
+
+        self.folder1.remove(self.mpa1)
+        self.assertEqual(self.mpa1.collection, None)
+        self.assertTrue(self.mpa1 not in self.folder1.feature_set())
+
+    def test_feature_set(self):
+        """
+        When checking which mpas belong to folder1 we can:
+        * look only at immediate children
+        * look for children of a given feature class
+        * look recursively through all containers
+
+         folder1
+          |- mpa1
+          |- folder2
+              | - mpa2
+        """
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
+
+        direct_children = self.folder1.feature_set(recurse=False)
+        self.assertEqual(len(direct_children), 2)
+        self.assertTrue(self.mpa1 in direct_children)
+        self.assertTrue(self.folder2 in direct_children)
+        self.assertTrue(self.mpa2 not in direct_children)
+
+        direct_mpa_children = self.folder1.feature_set(recurse=False,feature_classes=[TestMpa])
+        self.assertEqual(len(direct_mpa_children), 1)
+        self.assertTrue(self.mpa1 in direct_mpa_children)
+        self.assertTrue(self.folder2 not in direct_mpa_children)
+        self.assertTrue(self.mpa2 not in direct_mpa_children)
+
+        recursive_mpa_children = self.folder1.feature_set(recurse=True,feature_classes=[TestMpa])
+        self.assertEqual(len(recursive_mpa_children), 2)
+        self.assertTrue(self.mpa1 in recursive_mpa_children)
+        self.assertTrue(self.folder2 not in recursive_mpa_children)
+        self.assertTrue(self.mpa2 in recursive_mpa_children)
+
+    def test_deep_recursion(self):
+        """
+         folder1
+          |- mpa1
+          |- folder2
+              | - mpa2
+              | - folder3
+                   |- mpa3
+                   |- folder4
+                       |- mpa4
+                       |- mpa5
+        """
+        mpa3 = TestMpa(user=self.user1, name="My Mpa")
+        mpa3.save()
+        mpa4 = TestMpa(user=self.user1, name="My Mpa 2")
+        mpa4.save()
+        mpa5 = TestMpa(user=self.user1, name="My Mpa 2")
+        mpa5.save()
+        folder3 = Folder(user=self.user1, name="My Folder")
+        folder3.save()
+        folder4 = Folder(user=self.user1, name="My Folder2")
+        folder4.save()
+
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
+        self.folder2.add(folder3)
+        folder3.add(folder4)
+        folder3.add(mpa3)
+        folder4.add(mpa4)
+        folder4.add(mpa5)
+
+        recursive_mpa_children = self.folder1.feature_set(recurse=True,feature_classes=[TestMpa])
+        self.assertEqual(len(recursive_mpa_children), 5)
+        self.assertTrue(self.mpa1 in recursive_mpa_children)
+        self.assertTrue(mpa5 in recursive_mpa_children)
+        self.assertTrue(folder4 not in recursive_mpa_children)
+
+        recursive_children = self.folder1.feature_set(recurse=True)
+        self.assertEqual(len(recursive_children), 8)
+        self.assertTrue(self.mpa1 in recursive_children)
+        self.assertTrue(mpa5 in recursive_children)
+        self.assertTrue(folder4 in recursive_children)
+
+
+    def test_add_invalid_child_feature(self):
+        pass
+
+    def test_validate_bad_child_class_string(self):
+        pass
+
+    def test_share_collection_view_children(self):
+        """
+        If folder1 is shared, user2 should see mpa1, folder2 and mpa2
+        """
+        pass
+
+    def test_copy_feature_collection(self):
+        """ 
+        folder1 copied to folder1-copy
+        make sure it contains mpa1-copy, mpa2-copy and folder2-copy
+        """
+        pass
