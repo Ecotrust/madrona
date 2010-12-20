@@ -12,6 +12,11 @@ from lingcod.staticmap.models import MapConfig
 
 mpa_class = utils.get_mpa_class()
 
+try:
+    settings_dbname = settings.DATABASES['default']['NAME']
+except:
+    settings_dbname = settings.DATABASE_NAME
+
 def get_mpas(request):
     # get a list of the MPA ids to display
     mpas = []
@@ -115,7 +120,7 @@ def process_mapfile_text(mapfile, mpas):
     connection_string += "<Parameter name='host'>%s</Parameter>" % DB_HOST
 
     # if testing via django unit tests, close out the connection
-    if DB_NAME != settings.DATABASE_NAME:
+    if DB_NAME != settings_dbname:
         connection_string += "<Parameter name='persist_connection'>false</Parameter>"
 
     #it appears that ampersands are not allowed in well-formed xml
@@ -218,7 +223,7 @@ def show(request, map_name='default'):
 
     # if testing via django unit tests, close out the connection
     conn = connection.settings_dict
-    if conn['NAME'] != settings.DATABASE_NAME:
+    if conn['NAME'] != settings_dbname:
         del m
 
     return response

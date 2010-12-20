@@ -12,15 +12,15 @@ from lingcod.staticmap.models import MapConfig
 from lingcod.mpa.models import Mpa, MpaDesignation
 from lingcod.array.models import MpaArray
 from lingcod.sharing.models import ShareableContent
-from lingcod.sharing.utils import 
+from lingcod.sharing.utils import *  
 
 from django.conf import settings
 
 class StaticmapTestMpa(Mpa):
-    extra_attr = models.CharField(max_length=255, blank=True)
+    pass
 
 class StaticmapTestArray(MpaArray):
-    extra_attr = models.CharField(max_length=255, blank=True)
+    pass
 
 class StaticMapTest(TestCase):
     fixtures = ['example_data']
