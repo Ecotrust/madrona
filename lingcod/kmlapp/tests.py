@@ -12,6 +12,7 @@ from lingcod.common import utils
 from lingcod.mpa.models import MpaDesignation
 from lingcod.common.utils import kml_errors
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
 
 Mpa = utils.get_mpa_class()
 MpaArray = utils.get_array_class()
@@ -52,9 +53,9 @@ class KMLAppTest(TestCase):
 
         # Register the mpas and arrays as shareable content types
         from lingcod.sharing.models import ShareableContent
-        from lingcod.sharing.utils import get_content_type, get_shareables
-        mpa_ct = get_content_type(Mpa)
-        array_ct = get_content_type(MpaArray)
+        from lingcod.sharing.utils import get_shareables
+        mpa_ct = ContentType.objects.get_for_model(Mpa)
+        array_ct = ContentType.objects.get_for_model(MpaArray)
         share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
                                                     container_content_type=array_ct,
                                                     container_set_property='mpa_set')

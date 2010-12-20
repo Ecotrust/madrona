@@ -8,10 +8,10 @@ from lingcod.common import utils
 from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 from lingcod.common.utils import load_session, get_logger
-from lingcod.sharing.utils import get_content_type_id
 from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 log = get_logger()
 
@@ -262,8 +262,8 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
         raise Http404
 
     # determine content types for sharing
-    mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
-    array_ctid = get_content_type_id(utils.get_array_class())
+    mpa_ctid = ContentType.objects.get_for_model(utils.get_mpa_class()).id
+    array_ctid = ContentType.objects.get_for_model(utils.get_array_class()).id
 
     t = get_template('placemarks.kml')
     kml = t.render(Context({'user': user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
@@ -320,8 +320,8 @@ def shared_public(request, kmz=False, session_key='0'):
     shapes, designations = get_public_arrays()
 
     # determine content types for sharing
-    mpa_ctid = get_content_type_id(utils.get_mpa_class()) 
-    array_ctid = get_content_type_id(utils.get_array_class())
+    mpa_ctid = ContentType.objects.get_for_model(utils.get_mpa_class()).id
+    array_ctid = ContentType.objects.get_for_model(utils.get_array_class()).id
 
     t = get_template('placemarks.kml')
     kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
