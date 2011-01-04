@@ -57,13 +57,13 @@ class ShareableGeoManager(models.GeoManager):
             filter_groups = None
 
         # Check for a Container 
-        shared_content_type = permission.content_type.shared_content_type.all()[0] 
-        if shared_content_type.container_content_type and shared_content_type.container_set_property:
+        shared_ct = permission.content_type.shared_content_type.all()[0] 
+        if shared_ct.container_content_type and shared_ct.container_set_property:
             # Get container objects shared with user
             if filter_groups:
-                shared_containers = shared_content_type.container_content_type.model_class().objects.shared_with_user(user,filter_groups=filter_groups)
+                shared_containers = shared_ct.container_content_type.model_class().objects.shared_with_user(user,filter_groups=filter_groups)
             else:
-                shared_containers = shared_content_type.container_content_type.model_class().objects.shared_with_user(user)
+                shared_containers = shared_ct.container_content_type.model_class().objects.shared_with_user(user)
 
             # Create list of contained object ids
             contained_ids = []

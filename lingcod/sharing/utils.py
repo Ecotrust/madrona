@@ -14,7 +14,7 @@ def get_shareables():
     * if the model is a registered ShareableContent instance
     * whether those models have a user field (fk to auth Users)
     * whether those models have a sharing_groups ManyToMany field 
-    * whether those model managers implement the all_for_user() method (ie the ShareableGeoManager)
+    * whether those model managers implement the shared_with_user() method (ie the ShareableGeoManager)
 
     returns dict of models and their associated sharing permission 
      i.e. {'mlpampa': (<MplaMpa model class>, <CanShareMpa permission instance>) }
