@@ -2,25 +2,24 @@ from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
-#from lingcod.studyregion.models import StudyRegion
 from lingcod.common.utils import get_class
 
-#manipulator_list = ['EastOfTerritorialSeaLine', 'TerrestrialAndEstuaries', 'Terrestrial', 'Estuaries']
+#omm_manipulator_list = ['EastOfTerritorialSeaLine', 'TerrestrialAndEstuaries', 'Terrestrial', 'Estuaries']
 
 class Command(BaseCommand):
     option_list = AppCommand.option_list + (
         make_option('--name', action='store', dest='region_name', default=False,
-            help='Give a name to the study region, otherwise the name attribute from the shapefile will be used.'),
+            help='Give a name to the manipulator, otherwise the name attribute from the shapefile will be used.'),
     )
     help = """Creates a new study region from a shapefile containing a single multigeometry.
-            \n\tmanage.py create_manipulator_geom <path to shape> <manipulator model>"""
+            \n\tmanage.py create_manipulator_geom <path to shape> <module name>.models.<manipulator model name>"""
     args = '[shapefile, manipulator]'
     
     def handle(self, shapefile, manipulator, *args, **options):
         try:
-            manip_model = get_class("omm_manipulators.models.%s" %manipulator)
+            manip_model = get_class(manipulator)
         except:
-            raise Exception("%s is not one of the manipulator models defined for omm." %manipulator)
+            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" %manipulator)
             
         ds = DataSource(shapefile)
         if len(ds) != 1:
@@ -32,7 +31,6 @@ class Command(BaseCommand):
 
         if not 'polygon' in layer.geom_type.name.lower():
             print layer.geom_type.name
-            #raise Exception("Study region must be a multigeometry")
             raise Exception("This geometry must be a polygon")
 
         mapping = {'geometry': 'MULTIPOLYGON'}
