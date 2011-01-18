@@ -2,13 +2,11 @@ from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
-#from lingcod.studyregion.models import StudyRegion
-#from omm_manipulators.models import EastOfTerritorialSeaLine
 #from progressbar import Bar, Percentage, RotatingMarker, ProgressBar, ETA
 from lingcod.common.utils import get_class
 import time
 
-#manipulator_list = ['EastOfTerritorialSeaLine', 'TerrestrialAndEstuaries', 'Terrestrial', 'Estuaries']
+#omm_manipulator_list = ['EastOfTerritorialSeaLine', 'TerrestrialAndEstuaries', 'Terrestrial', 'Estuaries']
 
 class Command(BaseCommand):
     help = """Switches from one manipulator geometry to another, (eventually this command will re-process the AOIs and expiring report caches).
@@ -16,12 +14,10 @@ class Command(BaseCommand):
     args = '[pk, manipulator]'
 
     def handle(self, pk, manipulator, **options):
-        #if manipulator not in manipulator_list:
-        #    raise Exception("%s is not one of the manipulator models defined for omm." %manipulator)
         try:
-            manip_model = get_class("omm_manipulators.models.%s" %manipulator)
+            manip_model = get_class(manipulator)
         except:
-            raise Exception("%s is not one of the manipulator models defined for omm." %manipulator)
+            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" %manipulator)
         
         # Turn them all off
         regions = manip_model.objects.all()
@@ -34,7 +30,7 @@ class Command(BaseCommand):
         new_geom.active = True
         new_geom.save()
         
-        print "%s is now the active study region" % new_geom
+        print "%s is now the active %s manipulator" % (new_geom, manipulator)
     
     # Eventually we'll implement this 
     def handle2(self, pk, **options):

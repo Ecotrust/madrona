@@ -243,7 +243,7 @@ Finally, load your own geometry layer with the following management commands:
 
 .. code-block:: python 
   
-    manage.py create_manipulator_geom <path to shapefile>/my_clipping_region.shp MyClippingLayer 
+    manage.py create_manipulator_geom <path to shapefile>/my_clipping_region.shp <module name>.models.MyClippingLayer 
     manage.py change_manipulator_geom 1 MyClippingLayer      
 
     

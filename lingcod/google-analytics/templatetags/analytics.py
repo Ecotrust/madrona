@@ -43,7 +43,7 @@ class AnalyticsNode(template.Node):
             return ''
         
         if code.strip() != '':
-            t = loader.get_template('google_analytics/analytics_template.html')
+            t = loader.get_template('google-analytics/analytics_template.html')
             c = Context({
                 'analytics_code': code,
             })
