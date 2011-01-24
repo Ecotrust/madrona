@@ -83,7 +83,6 @@ INSTALLED_APPS = (
     'lingcod.mpa',
     'lingcod.sharing',
     'lingcod.kmlapp',
-    'lingcod.rest',
     'lingcod.features',
     'lingcod.intersection',
     'lingcod.replication',
