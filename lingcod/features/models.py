@@ -77,6 +77,7 @@ class Feature(models.Model):
     
     def add_to_collection(self, collection):
         assert issubclass(collection.__class__, FeatureCollection)
+        assert self.__class__ in collection.get_options().get_valid_children()
         self.collection = collection
         self.save()
 

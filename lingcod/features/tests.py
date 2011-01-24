@@ -182,7 +182,7 @@ class DeleteTest(TestCase):
         self.client = Client()
         self.options = TestDeleteFeature.get_options()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.test_instance = TestDeleteFeature(user=self.user, name="My Name")
         self.test_instance.save()
 
@@ -230,7 +230,7 @@ class DeleteTest(TestCase):
         pk = self.test_instance.pk
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 1)
         url = self.test_instance.get_absolute_url()
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
@@ -250,7 +250,7 @@ class CreateFormTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.options = CreateFormTestFeature.get_options()
 
     def test_user_not_logged_in(self):
@@ -264,7 +264,7 @@ class CreateFormTest(TestCase):
         """
         Returns a form that can be displayed on the client.
         """
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(self.options.get_create_form())
         self.assertEqual(response.status_code, 200)
 
@@ -283,7 +283,7 @@ class CreateTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.options = CreateTestFeature.get_options()
         self.create_url = self.options.get_create_form()
 
@@ -294,7 +294,7 @@ class CreateTest(TestCase):
 
     def test_submit_invalid_form(self):
         old_count = CreateTestFeature.objects.count()
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.create_url, {'name': ''})
         self.assertEqual(response.status_code, 400)
         self.assertTrue(old_count == CreateTestFeature.objects.count())
@@ -303,7 +303,7 @@ class CreateTest(TestCase):
 
     def test_submit_valid_form(self):
         old_count = CreateTestFeature.objects.count()
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.create_url, {'name': "My Test"})
         self.assertEqual(response.status_code, 201)
         self.assertTrue(old_count < CreateTestFeature.objects.count())
@@ -315,7 +315,7 @@ class CreateTest(TestCase):
         other_user = User.objects.create_user(
             'other', 'other@marinemap.org', password='pword')
         old_count = CreateTestFeature.objects.count()
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.create_url, 
             {'name': "My Test Hack Test", 'user': other_user.pk})
         self.assertEqual(response.status_code, 201)
@@ -338,7 +338,7 @@ class UpdateFormTest(TestCase):
         self.options = UpdateFormTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.test_instance = UpdateFormTestFeature(
             user=self.user, name="My Name")
         self.test_instance.save()
@@ -346,7 +346,7 @@ class UpdateFormTest(TestCase):
             self.test_instance.pk)
 
     def test_get_form(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(self.update_form_url)
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.content.find('My Name'), -1)
@@ -372,7 +372,7 @@ class UpdateFormTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_not_found(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(self.options.get_update_form(30000000000))
         self.assertEqual(response.status_code, 404)
 
@@ -391,7 +391,7 @@ class UpdateTest(TestCase):
         self.options = UpdateTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.test_instance = UpdateTestFeature(user=self.user, name="My Name")
         self.test_instance.save()
         self.update_form_url = self.options.get_update_form(
@@ -399,14 +399,14 @@ class UpdateTest(TestCase):
         self.instance_url = self.test_instance.get_absolute_url()
 
     def test_post(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.instance_url, {
             'name': 'My New Name',
         })
         self.assertEqual(response.status_code, 200)
 
     def test_post_validation_error(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.instance_url, {
             'name': '',
         })
@@ -437,7 +437,7 @@ class UpdateTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_not_found(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.options.get_resource(10000000), {
             'name': 'My New Name',
         })
@@ -445,7 +445,7 @@ class UpdateTest(TestCase):
 
     def test_cannot_hack_user_field(self):
         other_user = User.objects.create_user('other', 'other@marinemap.org', password='pword')
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.instance_url, {
             'name': 'My New Name',
             'user': other_user.pk,
@@ -533,7 +533,7 @@ class LinkTest(TestCase):
         self.options = LinkTestFeature.get_options()
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.other_user = User.objects.create_user(
             'other', 'other@marinemap.org', password='pword')
         self.test_instance = LinkTestFeature(user=self.user, name="My Name")
@@ -560,7 +560,7 @@ class LinkTest(TestCase):
         link = links[2]
         link2 = links[3]
         # Check to see that the Feature Class was registered at all
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(self.options.get_create_form())
         self.assertEqual(response.status_code, 200)
         # Check that both links have urls
@@ -579,7 +579,7 @@ class LinkTest(TestCase):
         self.assertEqual(response.status_code, 401,response.content)
         response = self.client.get(links[5].reverse(self.test_instance))
         self.assertEqual(response.status_code, 401)
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(links[5].reverse(self.test_instance))
         self.assertEqual(response.status_code, 200)        
     
@@ -587,7 +587,7 @@ class LinkTest(TestCase):
         """For links of rel=edit, a post request should be required.
         """
         links = self.options.links
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(links[4].reverse(self.test_instance))
         self.assertEqual(response.status_code, 405,response.content)
         self.assertEqual(response['Allow'], 'POST')
@@ -616,7 +616,7 @@ class LinkTest(TestCase):
         
     def test_404_response(self):
         links = self.options.links
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         inst = LinkTestFeature(user=self.user, 
             name="feature")
         inst.save()
@@ -683,7 +683,7 @@ class GenericLinksTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.generic_instance = GenericLinksTestFeature(user=self.user, 
             name="Generic")
         self.other_instance = OtherGenericLinksTestFeature(user=self.user, 
@@ -708,7 +708,7 @@ class GenericLinksTest(TestCase):
         one feature class."""
         link = GenericLinksTestFeature.get_options().links[2]
         path = link.reverse([self.generic_instance, self.other_instance])
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(path)
         self.assertEqual(response.status_code, 200)
         self.assertRegexpMatches(response.content, r'Generic')
@@ -719,7 +719,7 @@ class GenericLinksTest(TestCase):
         the link configured in their Options class."""
         link = GenericLinksTestFeature.get_options().links[2]
         path = link.reverse([self.generic_instance, self.last_instance])
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         response = self.client.get(path)
         self.assertEqual(response.status_code, 400,response.content)
         self.assertRegexpMatches(response.content, r'GenericLinksTestFeature')
@@ -872,7 +872,7 @@ class CopyTest(TestCase):
         self.client = Client()
 
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
         self.other_user = User.objects.create_user(
             'othertest', 'othertest@marinemap.org', password='pword')
         self.group1 = Group.objects.create(name="Test Group 1")
@@ -898,7 +898,7 @@ class CopyTest(TestCase):
         # self.assertEqual(response.status_code, 401)
             
     def test_copy(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         for link in self.mpa.get_options().links:
             if link.title == 'Copy':
                 copy_link = link
@@ -910,7 +910,7 @@ class CopyTest(TestCase):
             r'features_testmpa_\d')
     
     def test_copy_multiple_and_custom_copy_method(self):
-        self.client.login(username='resttest', password='pword')
+        self.client.login(username='featuretest', password='pword')
         for link in self.mpa.get_options().links:
             if link.title == 'Copy':
                 copy_link = link
@@ -944,8 +944,8 @@ class SpatialTest(TestCase):
         from django.conf import settings
         self.client = Client()
         self.user = User.objects.create_user(
-            'resttest', 'resttest@marinemap.org', password='pword')
-        self.client.login(username='resttest', password='pword')
+            'featuretest', 'featuretest@marinemap.org', password='pword')
+        self.client.login(username='featuretest', password='pword')
         
         g3 = GEOSGeometry('SRID=4326;POINT(-120.45 34.32)')
         g3.transform(settings.GEOMETRY_DB_SRID)
@@ -998,7 +998,7 @@ class CollectionTest(TestCase):
         self.client = Client()
 
         self.user1 = User.objects.create_user(
-            'user1', 'resttest@marinemap.org', password='pword')
+            'user1', 'featuretest@marinemap.org', password='pword')
         self.user2 = User.objects.create_user(
             'user2', 'othertest@marinemap.org', password='pword')
         self.group1 = Group.objects.create(name="Test Group 1")
@@ -1017,6 +1017,8 @@ class CollectionTest(TestCase):
         self.folder1.save()
         self.folder2 = Folder(user=self.user1, name="My Folder2")
         self.folder2.save()
+        self.pipeline = Pipeline(user=self.user1, name="My Pipeline")
+        self.pipeline.save()
 
     def test_add_remove_at_feature_level(self):
         self.mpa1.add_to_collection(self.folder1)
@@ -1116,20 +1118,29 @@ class CollectionTest(TestCase):
 
 
     def test_add_invalid_child_feature(self):
-        pass
-
-    def test_validate_bad_child_class_string(self):
-        pass
+        """
+        Try to add a Pipeline to Folder; feature.add has a runtime assertion so 
+        this should raise an AssertionError
+        """
+        self.assertRaises(AssertionError, self.folder1.add, self.pipeline)
 
     def test_share_collection_view_children(self):
         """
         If folder1 is shared, user2 should see mpa1, folder2 and mpa2
         """
-        pass
+        raise Exception("Feature sharing is not yet implemented!")
 
     def test_copy_feature_collection(self):
         """ 
         folder1 copied to folder1-copy
         make sure it contains mpa1-copy, mpa2-copy and folder2-copy
         """
-        pass
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
+        folder1_copy = self.folder1.copy(self.user1)
+        children = folder1_copy.feature_set(recurse=True)
+        self.assertEqual(len(children),3, "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
+        
+
+        
