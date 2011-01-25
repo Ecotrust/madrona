@@ -122,6 +122,11 @@ class Feature(models.Model):
     
         # Reassign User
         the_feature.user = user
+        
+        # Clear everything else 
+        the_feature.sharing_groups.clear()
+        the_feature.remove_from_collection()
+
         the_feature.save()
         return the_feature
 
@@ -278,6 +283,7 @@ class FeatureCollection(Feature):
         """
         feature_set = []
 
+        # If a single Feature is provided, make it into 1-item list
         if issubclass(feature_classes.__class__, Feature):
             feature_classes = [feature_classes]
 
@@ -301,9 +307,50 @@ class FeatureCollection(Feature):
                     object_id=self.pk
                 )
             )
+
             if len(feature_list) > 0:
                 feature_set.extend(feature_list)
 
-
         return feature_set
 
+    def copy(self, user=None):
+        """
+        Returns a copy of this feature collection, setting the user to the specified 
+        owner. Recursively copies all children.
+        """
+        original_feature_set = self.feature_set(recurse=False)
+
+        the_collection = self
+
+        # Make an inventory of all many-to-many fields in the original feature
+        m2m = {}
+        for f in the_collection._meta.many_to_many:
+            m2m[f.name] = the_collection.__getattribute__(f.name).all()
+
+        # makes a copy but relies on this strange implementation detail of 
+        # setting the pk & id to null 
+        the_collection.pk = None
+        the_collection.id = None
+        the_collection.save()
+
+        the_collection.name = the_collection.name + " (copy)"
+
+        # Restore the many-to-many fields
+        for fname in m2m.keys():
+            for obj in m2m[fname]:
+                the_collection.__getattribute__(fname).add(obj)
+    
+        # Reassign User
+        the_collection.user = user
+        
+        # Clear everything else 
+        the_collection.sharing_groups.clear()
+        the_collection.remove_from_collection()
+        the_collection.save()
+
+        for child in original_feature_set:
+            new_child = child.copy(user)
+            new_child.add_to_collection(the_collection)
+
+        the_collection.save()
+        return the_collection

@@ -3,6 +3,7 @@ from lingcod.sharing.models import ShareableContent, NotShareable
 from lingcod.sharing.utils import get_shareables
 from django.contrib.auth.models import User, Group, Permission
 from django.conf import settings
+from features import registered_models
 
 class ShareableGeoManager(models.GeoManager):
     def shared_with_user(self, user, filter_groups=None):
@@ -69,11 +70,6 @@ class ShareableGeoManager(models.GeoManager):
             contained_ids = []
             for sc in shared_containers:
                 contained = sc.__getattribute__(shared_content_type.container_set_property)
-                # MP TODO this doesn't work as it write to the db, 
-                # would be ideal to dynamically set sharing_groups on contained objects
-                #for x in contained:
-                #    for sg in sc.sharing_groups.all():
-                #        x.sharing_groups.add(sg)
                 contained_ids.extend([x.id for x in contained])
            
             return self.filter(

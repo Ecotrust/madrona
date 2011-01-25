@@ -776,6 +776,20 @@ class MpaForm(FeatureForm):
         model = TestMpa
 
 @register
+class TestArray(FeatureCollection):
+    class Options:
+        form = 'lingcod.features.tests.TestArrayForm'
+        share=True
+        valid_children = (
+            'lingcod.features.tests.TestMpa', 
+            'lingcod.features.tests.Pipeline', 
+            'lingcod.features.tests.RenewableEnergySite')
+
+class TestArrayForm(FeatureForm):
+    class Meta:
+        model = TestArray
+
+@register
 class Folder(FeatureCollection):
     
     def copy(self, user):
@@ -789,6 +803,7 @@ class Folder(FeatureCollection):
         share=True
         valid_children = (
             'lingcod.features.tests.TestMpa', 
+            'lingcod.features.tests.TestArray', 
             'lingcod.features.tests.Folder', 
             'lingcod.features.tests.RenewableEnergySite')
         links = (
@@ -809,6 +824,7 @@ class Folder(FeatureCollection):
 class FolderForm(FeatureForm):
     class Meta:
         model = Folder
+
 
 TYPE_CHOICES = (
     ('W', 'Wind'),
@@ -907,7 +923,7 @@ class CopyTest(TestCase):
         response = self.client.post(link.reverse([self.mpa]))
         self.assertRegexpMatches(response.content, r'(copy)')
         self.assertRegexpMatches(response['X-MarineMap-Select'], 
-            r'features_testmpa_\d')
+            r'features_testmpa_\d+')
     
     def test_copy_multiple_and_custom_copy_method(self):
         self.client.login(username='featuretest', password='pword')
@@ -1116,6 +1132,30 @@ class CollectionTest(TestCase):
         self.assertTrue(mpa5 in recursive_children)
         self.assertTrue(folder4 in recursive_children)
 
+    def test_potential_parents(self):
+        """
+            Folder (of which TestArray is a valid child but Pipeline is NOT)
+            TestArray (of which Pipeline is a valid child)
+            Therefore, Folder is also a potential parent of Pipeline
+            
+            folder1
+             |-my_array
+               |-self.pipeline
+               |-self.mpa1
+        """
+        pipeline_parents = Pipeline.get_options().get_potential_parents()
+        self.assertTrue(TestArray in pipeline_parents) 
+        self.assertTrue(self.folder1.__class__ in pipeline_parents)
+
+        my_array = TestArray(user=self.user1, name="My TestArray")
+        my_array.save()
+        my_array.add(self.pipeline)
+        my_array.add(self.mpa1)
+        self.assertTrue(self.pipeline in my_array.feature_set())
+
+        self.folder1.add(my_array)
+        self.assertTrue(my_array in self.folder1.feature_set())
+        self.assertTrue(self.pipeline in self.folder1.feature_set(recurse=True))
 
     def test_add_invalid_child_feature(self):
         """
@@ -1123,12 +1163,6 @@ class CollectionTest(TestCase):
         this should raise an AssertionError
         """
         self.assertRaises(AssertionError, self.folder1.add, self.pipeline)
-
-    def test_share_collection_view_children(self):
-        """
-        If folder1 is shared, user2 should see mpa1, folder2 and mpa2
-        """
-        raise Exception("Feature sharing is not yet implemented!")
 
     def test_copy_feature_collection(self):
         """ 
@@ -1139,8 +1173,47 @@ class CollectionTest(TestCase):
         self.folder2.add(self.mpa2)
         self.folder1.add(self.folder2)
         folder1_copy = self.folder1.copy(self.user1)
+        folder1_copy.save()
         children = folder1_copy.feature_set(recurse=True)
-        self.assertEqual(len(children),3, "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
+        self.assertEqual(len(children),3, 
+           "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
         
 
-        
+class FeatureSharingTest(TestCase):
+    
+    def setUp(self):
+        self.client = Client()
+
+        self.user1 = User.objects.create_user(
+            'user1', 'featuretest@marinemap.org', password='pword')
+        self.user2 = User.objects.create_user(
+            'user2', 'othertest@marinemap.org', password='pword')
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        self.user1.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+        shareables = get_shareables()
+        self.group1.permissions.add(shareables['testmpa'][1])
+        self.group1.permissions.add(shareables['folder'][1])
+
+        self.mpa1 = TestMpa(user=self.user1, name="My Mpa")
+        self.mpa1.save()
+        self.mpa2 = TestMpa(user=self.user1, name="My Mpa 2")
+        self.mpa2.save()
+        self.folder1 = Folder(user=self.user1, name="My Folder")
+        self.folder1.save()
+        self.folder2 = Folder(user=self.user1, name="My Folder2")
+        self.folder2.save()
+
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
+
+    # TODO : We need to test every possible sharing scenario 
+    #  basically need to repurpose the lingcod.sharing tests and add
+    #  tests for recursive collections
+    def test_share_collection_view_children(self):
+        """
+        If folder1 is shared, user2 should see mpa1, folder2 and mpa2
+        """
+        pass

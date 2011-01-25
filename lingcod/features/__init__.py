@@ -230,6 +230,32 @@ not a string path." % (name,))
 
         return valid_child_classes
 
+    def get_potential_parents(self):
+        """
+        It's not sufficient to look if this model is a valid_child of another
+        FeatureCollection; that collection could contain other collections 
+        that contain this model. 
+
+        Ex: Folder (only valid child is Array)
+            Array (only valid child is MPA)
+            Therefore, Folder is also a potential_parent of MPA
+        """
+        potential_parents = []
+        for model in get_collection_models(): 
+            opts = model.get_options()
+            valid_children = opts.get_valid_children()
+
+            if self._model in valid_children:
+                # This model is a valid child directly
+                potential_parents.append(model)
+            else:
+                for child in valid_children:
+                    if child in get_collection_models():
+                        opts = child.get_options()
+                        potential_parents.extend(opts.get_potential_parents())
+
+        return potential_parents
+
     def get_form_class(self):
         """
         Returns the form class for this Feature Class.
@@ -561,4 +587,20 @@ def contentype_sharing_handler(sender, instance, created, **kwargs):
 #def class_prepared_handler(sender,**kwargs):
 #    print '%r prepared' % sender
 
+def get_collection_models():
+    """
+    Utility function returning models for 
+    registered and valid FeatureCollections
+    """
+    from lingcod.features.models import FeatureCollection    
+    registered_collections = []
+    for model in registered_models:
+        if issubclass(model,FeatureCollection):
+            opts = model.get_options()
+            try:
+                assert len(opts.get_valid_children()) > 0
+                registered_collections.append(model)
+            except:
+                pass
+    return registered_collections
 
