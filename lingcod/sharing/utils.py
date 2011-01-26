@@ -229,7 +229,7 @@ def validate_sharing(model):
     Given a model class, will return True if the model has the prerequisites for sharing
     If not, an appropriate SharingError is raised
     """
-    logger.debug('Validated sharing setup for %s' % (model.__name__,) )
+    #logger.debug('Validated sharing setup for %s' % (model.__name__,) )
 
     # Test for fields: user, sharing_groups
     fkfields = [m.name for m in model._meta.fields if m.__class__.__name__ == 'ForeignKey']

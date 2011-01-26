@@ -126,13 +126,10 @@ not a string path." % (name,))
 
         self.enable_share = getattr(self._options, 'share', False)
         """
-        Enable sharing features. Requires the lingcod.share app.
+        Enable sharing features. Requires the lingcod.sharing app.
         """
         if self.enable_share:
             validate_sharing(self._model)
-
-        #TODO test for geom fields and enforce that 
-        #  geometry_final is the same type as geometry_original
 
         self.manipulators = [] 
         """
