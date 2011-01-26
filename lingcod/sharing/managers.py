@@ -3,7 +3,7 @@ from lingcod.sharing.models import ShareableContent, NotShareable
 from lingcod.sharing.utils import get_shareables
 from django.contrib.auth.models import User, Group, Permission
 from django.conf import settings
-from features import registered_models
+from lingcod.features import registered_models
 
 class ShareableGeoManager(models.GeoManager):
     def shared_with_user(self, user, filter_groups=None):

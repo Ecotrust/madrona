@@ -1,6 +1,8 @@
 from lingcod.common.test_settings_manager import SettingsTestCase as TestCase
 from lingcod.common import utils 
 from lingcod.features.tests import TestMpa as Mpa
+from lingcod.features.tests import TestArray as Array
+from lingcod.features.tests import Folder, Pipeline
 from lingcod.sharing.models import ShareableContent, SharingError, NotShareable
 from lingcod.sharing.utils import *
 from django.contrib.auth.models import User, Group, Permission
@@ -58,11 +60,26 @@ class SharingTestCase(TestCase):
         mpa3.save()
         self.mpa3_id = mpa3.id
 
-        # User1 adds mpa to an array
-        #array1 = SharingTestArray.objects.create( name='Test_Array_1', user=self.user1)
-        #array1.save()
-        #mpa1.add_to_array(array1)
-        #self.array1_id = array1.id
+        # Create a pipeline
+        pipeline1 = Pipeline(user=self.user1, name="My Pipeline")
+        pipeline1.save()
+        self.pipeline1_id = pipeline1.id
+
+        #    folder1
+        #     |-array1
+        #       |-pipeline1
+        #       |-mpa1
+
+        array1 = Array.objects.create( name='Test_Array_1', user=self.user1)
+        array1.save()
+        array1.add(mpa1)
+        array1.add(pipeline1)
+        self.array1_id = array1.id
+
+        folder1 = Folder.objects.create(user=self.user1, name="My Folder")
+        folder1.save()
+        folder1.add(array1)
+        self.folder1_id = folder1.id
 
     def test_user_sharing_groups(self):
         sgs = user_sharing_groups(self.user1)
@@ -112,7 +129,8 @@ class SharingTestCase(TestCase):
         self.assertEquals( viewable, True )
         # User3 should not see it since they're not part of Group1
         viewable, response = can_user_view(Mpa, self.mpa2_id, self.user3)
-        self.assertEquals( viewable, False )
+        self.assertEquals(response.status_code, 403)
+        self.assertEquals(viewable, False )
 
     def test_unshareable_shortcut(self):
         """ 
