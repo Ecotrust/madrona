@@ -1017,13 +1017,6 @@ class CollectionTest(TestCase):
             'user1', 'featuretest@marinemap.org', password='pword')
         self.user2 = User.objects.create_user(
             'user2', 'othertest@marinemap.org', password='pword')
-        self.group1 = Group.objects.create(name="Test Group 1")
-        self.group1.save()
-        self.user1.groups.add(self.group1)
-        self.user2.groups.add(self.group1)
-        shareables = get_shareables()
-        self.group1.permissions.add(shareables['testmpa'][1])
-        self.group1.permissions.add(shareables['folder'][1])
 
         self.mpa1 = TestMpa(user=self.user1, name="My Mpa")
         self.mpa1.save()
@@ -1035,6 +1028,8 @@ class CollectionTest(TestCase):
         self.folder2.save()
         self.pipeline = Pipeline(user=self.user1, name="My Pipeline")
         self.pipeline.save()
+        self.mpa3 = TestMpa(user=self.user2, name="User2s MPA")
+        self.mpa3.save()
 
     def test_add_remove_at_feature_level(self):
         self.mpa1.add_to_collection(self.folder1)
@@ -1045,6 +1040,8 @@ class CollectionTest(TestCase):
         self.assertEqual(self.mpa1.collection, None)
         self.assertTrue(self.mpa1 not in self.folder1.feature_set())
         
+        self.assertRaises(AssertionError, self.mpa3.add_to_collection, self.folder1)
+
     def test_add_remove_at_collection_level(self):
         self.folder1.add(self.mpa1)
         self.assertEqual(self.mpa1.collection, self.folder1)
@@ -1053,6 +1050,8 @@ class CollectionTest(TestCase):
         self.folder1.remove(self.mpa1)
         self.assertEqual(self.mpa1.collection, None)
         self.assertTrue(self.mpa1 not in self.folder1.feature_set())
+
+        self.assertRaises(AssertionError, self.folder1.add, self.mpa3)
 
     def test_feature_set(self):
         """
