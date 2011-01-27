@@ -858,6 +858,7 @@ class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
     diameter = models.FloatField(null=True)
     class Options:
+        share = True
         verbose_name = 'Pipeline'
         form = 'lingcod.features.tests.PipelineForm'
 

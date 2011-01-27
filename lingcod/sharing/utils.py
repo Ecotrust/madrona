@@ -204,7 +204,7 @@ def can_user_view(model_class, pk, user):
         except model_class.DoesNotExist:
             return False, HttpResponse("Access denied",status=403)
         except NotShareable:
-            return False, HttpResponse("Object is not shareable.", status=401) 
+            return False, HttpResponse("Object is not shareable.", status=500) 
         except:
             return False, HttpResponse("Object permissions cannot be determined using can_user_view.", status=500) 
 

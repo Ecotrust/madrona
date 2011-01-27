@@ -81,6 +81,28 @@ class SharingTestCase(TestCase):
         folder1.add(array1)
         self.folder1_id = folder1.id
 
+    def test_nested_folder_sharing(self):
+        folder1 = Folder.objects.get(id=self.folder1_id)
+        group1 = Group.objects.get(id=self.group1_id)
+
+        # Not shared yet
+        viewable, response = can_user_view(Pipeline, self.pipeline1_id, self.user2)
+        self.assertEquals( viewable, False)
+        viewable, response = can_user_view(Pipeline, self.pipeline1_id, self.user3)
+        self.assertEquals( viewable, False )
+
+        # Share folder1 with group1; now group1 should be able to see array1
+        share_object_with_group(folder1, group1) 
+        viewable, response = can_user_view(Array, self.array1_id, self.user2)
+        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        viewable, response = can_user_view(Array, self.array1_id, self.user3)
+        self.assertEquals( viewable, False )
+        # ... and group1 should be able to see pipeline
+        viewable, response = can_user_view(Pipeline, self.pipeline1_id, self.user2)
+        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        viewable, response = can_user_view(Pipeline, self.pipeline1_id, self.user3)
+        self.assertEquals( viewable, False )
+
     def test_user_sharing_groups(self):
         sgs = user_sharing_groups(self.user1)
         self.assertEquals(len(sgs),1)
