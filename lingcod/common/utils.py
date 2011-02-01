@@ -481,3 +481,23 @@ def asKml(geom):
 
     return kml
 
+def enable_sharing(group):
+    """
+    Give group permission to share models 
+    Permissions are attached to models but we want this perm to be 'global'
+    Fake it by attaching the perm to the Group model (from the auth app)
+    We check for this perm like: user1.has_perm("auth.can_share_features")
+    """
+    from django.contrib.auth.models import Permission
+    from django.contrib.contenttypes.models import ContentType
+
+    try:
+        p = Permission.objects.get(codename='can_share_features')
+    except Permission.DoesNotExist:
+        gct = ContentType.objects.get(name="group")
+        p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
+        p.save()
+
+    group.permissions.add(p)
+    group.save()
+    return True

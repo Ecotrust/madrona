@@ -2,14 +2,15 @@ from django.test import TestCase
 from lingcod.features import *
 from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from lingcod.features.forms import FeatureForm
-from lingcod.sharing.utils import get_shareables, share_object_with_group
-from lingcod.common.utils import kml_errors
+from lingcod.common.utils import kml_errors, enable_sharing
 import os
 import shutil
 from django.test.client import Client
 from django.contrib.auth.models import *
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib.gis.geos import GEOSGeometry 
+from django.conf import settings
 
 
 # used by some of the tests to temporarily create a template file
@@ -738,7 +739,6 @@ def viewshed_map(request, instance):
     return HttpResponse('image')
 
 def kml(request, instances):
-    print instances
     return HttpResponse('<kml />')
     
 # Lets use the following as a canonical example of how to use all the features
@@ -754,7 +754,6 @@ DESIGNATION_CHOICES = (
 class TestMpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
     class Options:
-        share = True
         verbose_name = 'Marine Protected Area'
         form = 'lingcod.features.tests.MpaForm'
         manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
@@ -779,7 +778,6 @@ class MpaForm(FeatureForm):
 class TestArray(FeatureCollection):
     class Options:
         form = 'lingcod.features.tests.TestArrayForm'
-        share=True
         valid_children = (
             'lingcod.features.tests.TestMpa', 
             'lingcod.features.tests.Pipeline', 
@@ -800,7 +798,6 @@ class Folder(FeatureCollection):
     
     class Options:
         form = 'lingcod.features.tests.FolderForm'
-        share=True
         valid_children = (
             'lingcod.features.tests.TestMpa', 
             'lingcod.features.tests.TestArray', 
@@ -858,7 +855,6 @@ class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
     diameter = models.FloatField(null=True)
     class Options:
-        share = True
         verbose_name = 'Pipeline'
         form = 'lingcod.features.tests.PipelineForm'
 
@@ -896,8 +892,7 @@ class CopyTest(TestCase):
         self.group1.save()
         self.user.groups.add(self.group1)
         self.other_user.groups.add(self.group1)
-        shareables = get_shareables()
-        self.group1.permissions.add(shareables['testmpa'][1])
+        enable_sharing(self.group1)
 
         self.mpa = TestMpa(user=self.user, name="My Mpa")
         self.folder = Folder(user=self.user, name="My Folder")
@@ -905,14 +900,14 @@ class CopyTest(TestCase):
         self.mpa.save()
     
     def test_login_required(self):
+        self.client.logout()
         for link in self.mpa.get_options().links:
             if link.title == 'Copy':
                 copy_link = link
                 break
         self.assertEqual(Link, getattr(link, '__class__', None))
         response = self.client.post(link.reverse([self.mpa]))
-        # commenting out until sharing is supported on feature classes
-        # self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 401, response)
             
     def test_copy(self):
         self.client.login(username='featuretest', password='pword')
@@ -941,7 +936,7 @@ class CopyTest(TestCase):
             r'features_testmpa_\d+ features_folder_\d+')
     
     def test_other_users_can_copy_if_shared(self):
-        share_object_with_group(self.mpa, self.group1) 
+        self.mpa.share_with(self.group1) 
         self.client.login(username='othertest', password='pword')
         for link in self.mpa.get_options().links:
             if link.title == 'Copy':
@@ -957,8 +952,6 @@ class CopyTest(TestCase):
 class SpatialTest(TestCase):
 
     def setUp(self):
-        from django.contrib.gis.geos import GEOSGeometry 
-        from django.conf import settings
         self.client = Client()
         self.user = User.objects.create_user(
             'featuretest', 'featuretest@marinemap.org', password='pword')
@@ -1178,3 +1171,204 @@ class CollectionTest(TestCase):
         self.assertEqual(len(children),3, 
            "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
         
+
+class SharingTestCase(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        # Create 3 users
+        self.password = 'iluvsharing'
+        self.user1 = User.objects.create_user('user1', 'test@marinemap.org', password=self.password)
+        self.user2 = User.objects.create_user('user2', 'test@marinemap.org', password=self.password)
+        self.user3 = User.objects.create_user('user3', 'test@marinemap.org', password=self.password)
+
+        # Create some groups
+        # Group 1 has user1 and user2 and can share
+        # Group 2 has user2 and user3 and has no sharing permissions
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        self.user1.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+
+        self.group2 = Group.objects.create(name="Test Group 2")
+        self.group2.save()
+        self.user2.groups.add(self.group2)
+        self.user3.groups.add(self.group2)
+
+        enable_sharing(self.group1)
+        
+        # Create some necessary objects
+        g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+
+        # Create three Mpas by different users
+        self.mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation='R', user=self.user1, geometry_final=g1)
+        self.mpa1.save()
+
+        self.mpa2 = TestMpa.objects.create( name='Test_MPA_2', designation='R', user=self.user2, geometry_final=g1)
+        self.mpa2.save()
+
+        self.mpa3 = TestMpa.objects.create( name='Test_MPA_3', designation='R', user=self.user3, geometry_final=g1)
+        self.mpa3.save()
+
+        # Create a pipeline
+        self.pipeline1 = Pipeline(user=self.user1, name="My Pipeline")
+        self.pipeline1.save()
+
+        #    folder1
+        #     |-array1
+        #       |-pipeline1
+        #       |-mpa1
+
+        self.array1 = TestArray.objects.create( name='Test_Array_1', user=self.user1)
+        self.array1.save()
+        self.array1.add(self.mpa1)
+        self.array1.add(self.pipeline1)
+
+        self.folder1 = Folder.objects.create(user=self.user1, name="My Folder")
+        self.folder1.save()
+        self.folder1.add(self.array1)
+
+    def test_nested_folder_sharing(self):
+        # Not shared yet
+        viewable, response = self.pipeline1.is_viewable(self.user2)
+        self.assertEquals( viewable, False)
+        viewable, response = self.pipeline1.is_viewable(self.user3)
+        self.assertEquals( viewable, False )
+
+        # Share folder1 with group1; now group1 should be able to see array1
+        self.folder1.share_with(self.group1)
+        viewable, response = self.array1.is_viewable(self.user2)
+        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        viewable, response = self.array1.is_viewable(self.user3)
+        self.assertEquals( viewable, False )
+        # ... and group1 should be able to see pipeline
+        viewable, response = self.pipeline1.is_viewable(self.user2)
+        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        viewable, response = self.pipeline1.is_viewable(self.user3)
+        self.assertEquals( viewable, False )
+
+    def test_user_sharing_groups(self):
+        sgs = user_sharing_groups(self.user1)
+        self.assertEquals(len(sgs),1)
+
+        sgs = user_sharing_groups(self.user2)
+        self.assertEquals(len(sgs),1)
+
+        sgs = user_sharing_groups(self.user3)
+        self.assertEquals(len(sgs),0)
+        
+    def test_nothing_shared(self):
+        """
+        Make sure nothing is shared yet
+        """
+        shared_mpas = TestMpa.objects.shared_with_user(self.user1)
+        self.assertEquals(len(shared_mpas),0)
+
+    def test_share_mpa_manager(self):
+        """
+        Make sure the basic sharing of mpas works 
+        via the object manager (for returning querysets)
+        """
+        # User2 shares their MPA2 with Group1
+        self.mpa2.share_with(self.group1)
+        # User1 should see it (since they're part of Group1)
+        shared_mpas = TestMpa.objects.shared_with_user(self.user1)
+        self.assertEquals(len(shared_mpas),1)
+        # User3 should not see it since they're not part of Group1
+        shared_mpas = TestMpa.objects.shared_with_user(self.user3)
+        self.assertEquals(len(shared_mpas),0)
+
+    def test_share_mpa_method(self):
+        """
+        Make sure the basic sharing of mpas works 
+        via the feature method (check viewability of particular instance)
+        """
+        # User2 shares their MPA2 with Group1
+        self.mpa2.share_with(self.group1)
+        # User 2 should be able to view it since they own it
+        viewable, response = self.mpa2.is_viewable(self.user2)
+        self.assertEquals( viewable, True )
+        # User1 should see it (since they're part of Group1)
+        viewable, response = self.mpa2.is_viewable(self.user1)
+        self.assertEquals( viewable, True )
+        # User3 should not see it since they're not part of Group1
+        viewable, response = self.mpa2.is_viewable(self.user3)
+        self.assertEquals(response.status_code, 403)
+        self.assertEquals(viewable, False )
+
+    def test_share_with_bad_group(self):
+        """
+        Make sure we can't share with a group which does not have permissions
+        """
+        # Would use assertRaises here but can't figure how to pass args to callable
+        # see http://www.mail-archive.com/django-users@googlegroups.com/msg46609.html
+        error_occured = False
+        try:
+            self.mpa2.share_with(self.group2) 
+        except:
+            error_occured = True
+        self.assertTrue(error_occured)
+
+    def test_share_by_bad_user(self):
+        """
+        Make sure user not belonging to the group can't share their objects
+        """
+        # User3 trys to share their MPA3 with Group1
+        error_occured = False
+        try:
+            self.mpa3.share_with(self.group1) 
+        except:
+            error_occured = True
+        self.assertTrue(error_occured)
+
+    def test_share_collection_manager(self):
+        """
+        Arrays are containers of MPAs so their child objects should also appear to be shared
+        Uses the class object manager
+        """
+        # User1 shares their array1 (which contains MPA1) with Group1
+        self.array1.share_with(self.group1) 
+        # User2 should see the mpa contained in array1 (since they're part of Group1)
+        shared_mpas = TestMpa.objects.shared_with_user(self.user2)
+        self.assertEquals(len(shared_mpas),1)
+        # User3 should not see it (since they're not part of Group1)
+        shared_mpas = TestMpa.objects.shared_with_user(self.user3)
+        self.assertEquals(len(shared_mpas),0)
+
+    def test_share_collection_method(self):
+        """
+        Arrays are containers of MPAs so their child objects should also appear to be shared
+        Uses the feature's is_viewable() method
+        """
+        # User1 shares their array1 (which contains MPA1) with Group1
+        self.array1.share_with(self.group1) 
+        # User 1 should see it since they own it
+        viewable, response = self.mpa1.is_viewable(self.user1)
+        self.assertEquals( viewable, True )
+        # User2 should see the mpa contained in array1 (since they're part of Group1)
+        viewable, response = self.mpa1.is_viewable(self.user2)
+        self.assertEquals( viewable, True )
+        # User3 should not see it (since they're not part of Group1)
+        viewable, response = self.mpa1.is_viewable(self.user3)
+        self.assertEquals( viewable, False )
+
+
+    def test_groups_users_sharing_with(self):
+        """
+        Test if we can get a list of groups and users who are sharing with a given user
+        """
+        # User1 shares their Mpa1 with Group1
+        self.mpa1.share_with(self.group1) 
+        # User1 should NOT see himself 
+        sw = groups_users_sharing_with(self.user1)
+        self.assertEquals(sw,None)
+        # User2 should see group1:user1 as a sharer
+        sw = groups_users_sharing_with(self.user2)
+        self.assertNotEquals(sw,None)
+        usernames = [x.username for x in sw['Test Group 1']['users']]
+        self.assertEquals(usernames, ['user1'])
+        # User3 should see nothing
+        sw = groups_users_sharing_with(self.user3)
+        self.assertEquals(sw, None)

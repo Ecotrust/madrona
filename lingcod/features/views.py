@@ -45,13 +45,13 @@ def get_object_for_viewing(request, klass, pk):
         return instance
 
     """
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
 
-    from lingcod.sharing.utils import can_user_view
-    viewable, response = can_user_view(klass, pk, request.user) 
+    obj = klass.objects.get(pk=pk)
+    viewable, response = obj.is_viewable(request.user) 
     if viewable:
-        return get_object_or_404(klass, pk=pk)
+        return obj
     else:
         return response
 

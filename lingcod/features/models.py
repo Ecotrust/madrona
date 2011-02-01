@@ -3,7 +3,8 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from lingcod.sharing.managers import ShareableGeoManager
+from django.http import HttpResponse
+from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import FeatureOptions
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
@@ -88,6 +89,65 @@ class Feature(models.Model):
         self.save()
         if collection:
             collection.save()
+
+    def share_with(self, groups, append=False):
+        """
+        Share this feature with the specified group/groups.
+        Owner must be a member of the group/groups.
+        Group must have 'can_share' permissions else an Exception is raised
+        """
+        if not append:
+            # Don't append to existing groups; Wipe the slate clean
+            # Note that this is the default behavior
+            self.sharing_groups.clear()
+
+        if groups is None or groups == []:
+            # Nothing to do here
+            return True
+            
+        if isinstance(groups,Group):
+             # Only a single group was provided, make a 1-item list
+             groups = [groups]
+
+        for group in groups:
+            assert isinstance(group, Group)
+            # Check that the group to be shared with has appropos permissions
+            assert group in self.user.groups.all()
+            try:
+                gp = group.permissions.get(codename='can_share_features')
+            except:
+                raise Exception("The group you are trying to share with "  
+                        "does not have can_share permission")
+
+            self.sharing_groups.add(group)
+
+        self.save()
+        return True
+
+    def is_viewable(self, user):
+        """ 
+        Is this feauture viewable by the specified user? 
+        Either needs to own it or have it shared with them.
+        returns : Viewable(boolean), HttpResponse
+        """
+        # First, is the user logged in?
+        if user.is_anonymous() or not user.is_authenticated():
+            return HttpResponse('You must be logged in', status=401)
+
+        # Does the user own it?
+        if self.user == user:
+            return True, HttpResponse("Object owned by user",status=202)
+        
+        # Next see if its shared with the user
+        try: 
+            # Instead having the sharing logic here, use the shared_with_user
+            # We need it to return querysets so no sense repeating that logic
+            obj = self.__class__.objects.shared_with_user(user).get(pk=self.pk)
+            return True, HttpResponse("Object shared with user", status=202)
+        except self.__class__.DoesNotExist:
+            return False, HttpResponse("Access denied", status=403)
+
+        return False, HttpResponse("Server Error in can_user_view", status=500) 
 
     def copy(self, user=None):
         """

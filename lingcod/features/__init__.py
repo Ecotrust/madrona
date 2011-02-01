@@ -10,7 +10,7 @@ from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
 from django.contrib.auth.models import Permission
 from lingcod.sharing.models import ShareableContent
-from lingcod.sharing.utils import get_shareables, validate_sharing, sharing_enable, sharing_disable
+from django.conf import settings
 import json
 
 registered_models = []
@@ -124,13 +124,6 @@ not a string path." % (name,))
             raise FeatureConfigurationError("valid_children Option is only \
                     for FeatureCollection classes" % m)
 
-        self.enable_share = getattr(self._options, 'share', False)
-        """
-        Enable sharing features. Requires the lingcod.sharing app.
-        """
-        if self.enable_share:
-            validate_sharing(self._model)
-
         self.manipulators = [] 
         """
         Required manipulators applied to user input geometries
@@ -148,7 +141,7 @@ not a string path." % (name,))
                 raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
                         (m, geom_field, manip.Options.supported_geom_fields))
             
-            logger.debug("Added required manipulator %s" % m)
+            #logger.debug("Added required manipulator %s" % m)
             self.manipulators.append(manip)
         
         self.optional_manipulators = []
@@ -172,7 +165,7 @@ not a string path." % (name,))
                 raise FeatureConfigurationError("%s is not set up properly; must have "
                         "Options.supported_geom_fields list." % m)
             
-            logger.debug("Added optional manipulator %s" % m)
+            #logger.debug("Added optional manipulator %s" % m)
             self.optional_manipulators.append(manip)
 
         self.enable_kml = True
@@ -541,13 +534,6 @@ def register(model):
     logger.debug('registering Feature %s' % (model.__name__,) )
     if model not in registered_models:
         registered_models.append(model)
-        try:
-            if options.enable_share:
-                sharing_enable(model)
-            else:
-                sharing_disable(model)
-        except ContentType.DoesNotExist:
-            pass # wait until ContentType is created and post_save handler will kick in
         for link in options.links:
             if link not in registered_links:
                 registered_links.append(link)
@@ -566,24 +552,6 @@ def workspace_json(*args):
             workspace['generic-links'].append(link.dict())
     return json.dumps(workspace, indent=2)
 
-@receiver(post_save, sender=ContentType)
-def contentype_sharing_handler(sender, instance, created, **kwargs):
-    """Because sharing involves setting up Permissions and ShareableContent
-    which reference the ContentTypes table, we have to wait until the 
-    ContentType is created (post_save signal) before we populate those tables. 
-    """
-    mc = instance.model_class()
-    if created and mc in registered_models: # it's a feature
-        logger.debug("Feature %r added to contenttypes" % instance)
-        if mc.get_options().enable_share: # it's a shareable feature
-            sharing_enable(mc)
-        else:
-            sharing_disable(mc)
-
-#@receiver(class_prepared)
-#def class_prepared_handler(sender,**kwargs):
-#    print '%r prepared' % sender
-
 def get_collection_models():
     """
     Utility function returning models for 
@@ -600,4 +568,51 @@ def get_collection_models():
             except:
                 pass
     return registered_collections
+
+def user_sharing_groups(user):
+    """
+    Returns a list of groups that user is member of and 
+    and group must have sharing permissions
+    """
+    try:
+        p = Permission.objects.get(codename='can_share_features')
+    except Permission.DoesNotExist:
+        return None
+
+    groups = user.groups.filter(permissions=p).distinct()
+    return groups
+
+def groups_users_sharing_with(user, include_public=False):
+    """
+    Get a dict of groups and users that are currently sharing items with a given user
+    If spatial_only is True, only models which inherit from the Feature class will be reflected here
+    returns something like {'our_group': {'group': <Group our_group>, 'users': [<user1>, <user2>,...]}, ... }
+    """
+    groups_sharing = {}
+
+    for model_class in registered_models:
+        shared_objects = model_class.objects.shared_with_user(user)
+        for group in user.groups.all():
+            # Unless overridden, public shares don't show up here
+            if group.name in settings.SHARING_TO_PUBLIC_GROUPS and not include_public:
+                continue
+            # User has to be staff to see these
+            if group.name in settings.SHARING_TO_STAFF_GROUPS and not user.is_staff:
+                continue
+            group_objects = shared_objects.filter(sharing_groups=group)
+            user_list = []
+            for gobj in group_objects:
+                if gobj.user not in user_list and gobj.user != user:
+                    user_list.append(gobj.user)
+            if len(user_list) > 0:
+                if group.name in groups_sharing.keys():
+                    for user in user_list:
+                        if user not in groups_sharing[group.name]['users']:
+                            groups_sharing[group.name]['users'].append(user)
+                else:
+                    groups_sharing[group.name]={'group':group, 'users': user_list}
+    if len(groups_sharing.keys()) > 0:
+        return groups_sharing
+    else:
+        return None
 
