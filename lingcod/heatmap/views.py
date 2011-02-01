@@ -1,19 +1,16 @@
 # Create your views here.
 from models import create_heatmap
-from lingcod.common.utils import get_array_class
 from lingcod.shapes.views import ShpResponder
 from lingcod.common import default_mimetypes as mimetypes
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
-from lingcod.sharing.utils import can_user_view
 import os
 
 def overlap_geotiff(array_id_list_str, user=None):
-    Array = get_array_class()
     array_set = Array.objects.filter(pk__in=array_id_list_str.split(','))
     if len(array_set) < 1:
         raise Http404
     for array in array_set:
-        viewable, response = can_user_view(Array, array.pk, user)
+        viewable, response = array.is_viewable(user)
         if user and not viewable:
             return response
     filenames = []

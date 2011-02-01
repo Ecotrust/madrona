@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.news.models import Entry
-from lingcod.common.utils import valid_browser
+from lingcod.common.utils import valid_browser, user_sharing_groups
 import datetime
 
 from django.conf import settings
@@ -74,7 +74,6 @@ def map(request, template_name='common/map.html'):
     #         pass
             
     # Check if the user is a member of any sharing groups (not including public shares)
-    from lingcod.sharing.utils import user_sharing_groups
     member_of_sharing_group = False
     user = request.user
     if user.is_authenticated() and len(user_sharing_groups(user)) > 0:

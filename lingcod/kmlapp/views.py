@@ -5,7 +5,6 @@ from django.template import Context
 from django.http import HttpResponse, Http404
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils 
-from lingcod.mpa.models import MpaDesignation
 from django.http import Http404
 from lingcod.common.utils import load_session, get_logger
 from django.contrib.gis.db import models
@@ -291,7 +290,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
     
-    from lingcod.sharing.utils import groups_users_sharing_with 
+    from lingcod.features import groups_users_sharing_with 
     sharing_with = groups_users_sharing_with(user)
 
     t = get_template('shared.kml')

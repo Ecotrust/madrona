@@ -147,7 +147,7 @@ class Feature(models.Model):
         except self.__class__.DoesNotExist:
             return False, HttpResponse("Access denied", status=403)
 
-        return False, HttpResponse("Server Error in can_user_view", status=500) 
+        return False, HttpResponse("Server Error in feature.is_viewable()", status=500) 
 
     def copy(self, user=None):
         """

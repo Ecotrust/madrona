@@ -192,39 +192,6 @@ def get_class(path):
     m = importlib.import_module(module)
     return m.__getattribute__(klass)
     
-def get_mpa_class():
-    try:
-        return get_class(settings.MPA_CLASS)
-    except:
-        raise Exception("Problem importing MPA class. Is MPA_CLASS defined correctly in your settings?")
-
-def get_array_class():
-    try:
-        return get_class(settings.ARRAY_CLASS)
-    except:
-        raise Exception("Problem importing Array class. Is ARRAY_CLASS defined correctly in your settings?")
-
-def get_spatial_class_names():
-    """
-    Create a list of spatial types which show up in kmltree
-    TODO: Currently just assumes that MPA and Arrays are the only kmltree-able models
-    """
-    mk = get_mpa_class()
-    ak = get_array_class()
-    return [mk._meta.object_name.lower(), ak._meta.object_name.lower()]
-    
-def get_mpa_form():
-    try:
-        return get_class(settings.MPA_FORM)
-    except:
-        raise Exception("Problem importing MPA form. Is MPA_FORM defined correctly in your settings?")
-        
-def get_array_form():
-    try:
-        return get_class(settings.ARRAY_FORM)
-    except:
-        raise Exception("Problem importing Array form. Is ARRAY_FORM defined correctly in your settings?")
-    
 def kml_errors(kmlstring):
     import feedvalidator
     from feedvalidator import compatibility

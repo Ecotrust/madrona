@@ -9,7 +9,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
 from django.contrib.auth.models import Permission
-from lingcod.sharing.models import ShareableContent
 from django.conf import settings
 import json
 

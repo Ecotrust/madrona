@@ -9,13 +9,12 @@ from django.test.client import Client
 from django.contrib.gis.geos import GEOSGeometry 
 from django.contrib.auth.models import *
 from lingcod.common import utils 
-from lingcod.mpa.models import MpaDesignation
-from lingcod.common.utils import kml_errors
+from lingcod.common.utils import kml_errors, enable_sharing
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
-
-Mpa = utils.get_mpa_class()
-MpaArray = utils.get_array_class()
+from lingcod.features.tests import TestMpa as Mpa
+from lingcod.features.tests import TestArray as MpaArray
+from django.contrib.auth.models import Group
 
 class KMLAppTest(TestCase):
     fixtures = ['example_data']
@@ -34,12 +33,9 @@ class KMLAppTest(TestCase):
         g2.transform(settings.GEOMETRY_DB_SRID)
         g3.transform(settings.GEOMETRY_DB_SRID)
 
-        smr = MpaDesignation.objects.create(name="Reserve of some sort", acronym="R")
-        smr.save()
-
-        mpa1 = Mpa.objects.create( name='Test_MPA_1', designation=smr, user=self.user, geometry_final=g1)
-        mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', designation=smr, user=self.user, geometry_final=g2)
-        mpa3 = Mpa.objects.create( name='Test_MPA_3', designation=smr, user=self.user, geometry_final=g3)
+        mpa1 = Mpa.objects.create( name='Test_MPA_1', user=self.user, geometry_final=g1)
+        mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', user=self.user, geometry_final=g2)
+        mpa3 = Mpa.objects.create( name='Test_MPA_3', user=self.user, geometry_final=g3)
         mpa1.save()
         mpa2.save()
         mpa3.save()
@@ -51,31 +47,17 @@ class KMLAppTest(TestCase):
         array1.add_mpa(mpa1)
         array1.add_mpa(mpa2)
 
-        # Register the mpas and arrays as shareable content types
-        from lingcod.sharing.models import ShareableContent
-        from lingcod.sharing.utils import get_shareables
-        mpa_ct = ContentType.objects.get_for_model(Mpa)
-        array_ct = ContentType.objects.get_for_model(MpaArray)
-        share_mpa = ShareableContent.objects.create(shared_content_type=mpa_ct, 
-                                                    container_content_type=array_ct,
-                                                    container_set_property='mpa_set')
-        share_array = ShareableContent.objects.create(shared_content_type=array_ct)
-
         # Then make the group with permissions
-        from django.contrib.auth.models import Group
         self.group1 = Group.objects.create(name="Test Group 1")
         self.group1.save()
-        shareables = get_shareables()
-        for modelname in shareables.iterkeys():
-            self.group1.permissions.add(shareables[modelname][1])
+        enable_sharing(self.group1)
 
         # Add users to group
         self.user.groups.add(self.group1)
         self.user2.groups.add(self.group1)
 
         # Share with common group
-        from lingcod.sharing.utils import share_object_with_groups
-        share_object_with_groups(array1, [self.group1.pk])
+        array1.share_with(self.group1)
 
         # Share with public
         public_group = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)[0]
