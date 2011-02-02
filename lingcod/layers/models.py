@@ -2,35 +2,42 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.features.managers import ShareableGeoManager
+from lingcod.features.models import Feature, FeatureForm
+from lingcod.features import register
 import os
 
-class PrivateLayerList(models.Model):
-    """Model for storing uploaded restricted-access kml files"""
-    creation_date = models.DateTimeField(auto_now=True) 
-    user = models.ForeignKey(User)
-    name = models.CharField(max_length=50,help_text="Layer name as it will appear in the KML tree.",default='')
+class PrivateLayerListForm(FeatureForm):
+    pass
+
+class PrivateSuperOverlayForm(FeatureForm):
+    pass
+
+@register
+class PrivateLayerList(Feature):
+    """
+    Model for storing uploaded restricted-access kml files
+    Owned by a single user, can be shared with any group(s) 
+    that the owner is a member of (assuming group has
+    can_share_features permissions)
+    """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
     kml = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
         KML file (not publically available). This file can use
         NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
 
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share layer with the following groups")
-    objects = ShareableGeoManager()
-
-    def __unicode__(self):
-        return "PrivateLayerList %s " % (self.name)
-
-    class Meta:
-        permissions = (
-            ("can_share_privatelayerlist", "Can share private layer list"),
-        )
+    class Options:
+        verbose_name = 'Private Layer List'
+        form = 'lingcod.layers.models.PrivateLayerListForm'
     
-class PrivateSuperOverlay(models.Model):
-    """Model for presenting restricted-access multi-file kml trees on disk"""
-    creation_date = models.DateTimeField(auto_now=True) 
-    user = models.ForeignKey(User)
-    name = models.CharField(max_length=50,help_text="Layer name as it will appear in the KML tree.",default='')
+@register
+class PrivateSuperOverlay(Feature):
+    """
+    Model for presenting restricted-access multi-file kml trees on disk
+    Owned by a single user, can be shared with any group(s) 
+    that the owner is a member of (assuming group has
+    can_share_features permissions)
+    """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
     base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="^doc.kml$", recursive=True, help_text="""
         Base KML file of the superoverlay. Must be called 'doc.kml'. This file (and all subsequent files in the tree) must use
@@ -38,22 +45,15 @@ class PrivateSuperOverlay(models.Model):
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
         if the user has proper permissions on the base kml.""")
 
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,verbose_name="Share layer with the following groups")
-    objects = ShareableGeoManager()
-
-    def __unicode__(self):
-        return "PrivateSuperOverlay %s " % (self.name)
+    class Options:
+        verbose_name = 'Private SuperOverlay'
+        form = 'lingcod.layers.models.PrivateSuperOverlayForm'
 
     def save(self, *args, **kwargs):
         if self.base_kml == os.path.join(settings.SUPEROVERLAY_ROOT, 'doc.kml'):
             raise Exception("We don't allow /doc.kml at the SUPEROVERLAY_ROOT dir... security risk.")
         else:
             super(PrivateSuperOverlay, self).save(*args, **kwargs)
-
-    class Meta:
-        permissions = (
-            ("can_share_privatesuperoverlay", "Can share private superoverlays"),
-        )
             
 class UserLayerList(models.Model):
     """Model used for storing uploaded kml files that list all public layers.

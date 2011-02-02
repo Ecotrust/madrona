@@ -79,13 +79,11 @@ def get_layerlist(request,session_key):
     urls = []
 
     layers = get_layers_for_user(user)
-    print layers
     for layer in layers:
         url = reverse('layers-private', kwargs={'pk': layer.pk, 'session_key': session_key})
         urls.append(url)
 
     layers = get_superoverlays_for_user(user)
-    print layers
     for layer in layers:
         url = reverse('layers-superoverlay-private', kwargs={'pk': layer.pk, 'session_key': session_key})
         urls.append(url)

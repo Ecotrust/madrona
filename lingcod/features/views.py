@@ -52,10 +52,11 @@ def get_object_for_viewing(request, klass, pk):
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
 
-    obj = klass.objects.get(pk=pk)
-    viewable, response = obj.is_viewable(request.user) 
+    instance = get_object_or_404(klass, pk=pk)
+
+    viewable, response = instance.is_viewable(request.user) 
     if viewable:
-        return obj
+        return instance
     else:
         return response
 
@@ -108,9 +109,10 @@ def handle_link(request, ids, link=None):
                 # users who can view the object can then make copies
                 inst = get_object_for_viewing(request, ct.model_class(), parts[2])
             else:
-                inst = get_object_for_editing(request, ct.model_class(), parts[2])                
+                inst = get_object_for_editing(request, ct.model_class(), parts[2])
         else:
             inst = get_object_for_viewing(request, ct.model_class(), parts[2])
+
         if isinstance(inst, HttpResponse):
             return inst
         else:

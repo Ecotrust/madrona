@@ -8,8 +8,7 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from django.core.files import File
 from lingcod.layers.models import PublicLayerList, PrivateLayerList, PrivateSuperOverlay
-from lingcod.sharing.models import ShareableContent
-from lingcod.sharing.utils import can_user_view, share_object_with_group, get_shareables
+from lingcod.common.utils import enable_sharing
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group
 from django.conf import settings
@@ -18,25 +17,17 @@ from django.conf.urls.defaults import *
 from django.core.urlresolvers import reverse
 import os
 
-urlpatterns = patterns('',
-    # Example:
-    (r'^layers/', include('lingcod.layers.urls')),
-)
+#urlpatterns = patterns('',
+#    # Example:
+#    (r'^layers/', include('lingcod.layers.urls')),
+#)
 
 class PrivateLayerListTest(TestCase):
-    urls = 'lingcod.layers.tests'
+    #urls = 'lingcod.layers.tests'
 
     def setUp(self):
         # kml file
         kml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures/public_layers.kml')
-
-        # Create shareable content types
-        ct = ContentType.objects.get_for_model(PrivateLayerList)
-        share = ShareableContent.objects.create(shared_content_type=ct)
-        share.save()
-        ct = ContentType.objects.get_for_model(PrivateSuperOverlay)
-        share = ShareableContent.objects.create(shared_content_type=ct)
-        share.save()
 
         # Create 3 users
         self.password = 'iluvsharing'
@@ -45,54 +36,49 @@ class PrivateLayerListTest(TestCase):
         self.user3 = User.objects.create_user('user3', 'test@marinemap.org', password=self.password)
        
         # Create some groups
-        # Group 1 has user1 and user2 and can share
-        group1 = Group.objects.create(name="Test Group 1")
-        group1.save()
-        self.group1_id = group1.id
-        self.user1.groups.add(group1)
-        self.user2.groups.add(group1)
-        shareables = get_shareables()
-        for modelname in shareables.iterkeys():
-            group1.permissions.add(shareables[modelname][1])
+        # Group 1 has user1 and user2 and can share features
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.group1.save()
+        self.user1.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+        enable_sharing(self.group1)
 
         path = os.path.dirname(os.path.abspath(__file__))
         f = File(open(kml_path))
         settings.MEDIA_URL = ''
         
         # User1 creates Layer1 and shares with Group1
-        layer1 = PrivateLayerList.objects.create(user=self.user1)
-        layer1.save()
-        layer1.kml.save('layer1.kml', f)
-        self.layer1_id = layer1.pk
-        share_object_with_group(layer1, group1)
+        self.layer1 = PrivateLayerList.objects.create(user=self.user1)
+        self.layer1.save()
+        self.layer1.kml.save('layer1.kml', f)
+        self.layer1.share_with(self.group1)
 
         # User2 creates Layer2 and doesnt share (the selfish bastard)
-        layer2 = PrivateLayerList.objects.create(user=self.user2)
-        layer2.save()
-        layer2.kml.save('layer2.kml', f)
-        self.layer2_id = layer2.pk
+        self.layer2 = PrivateLayerList.objects.create(user=self.user2)
+        self.layer2.save()
+        self.layer2.kml.save('layer2.kml', f)
 
     def test_permissions(self):
         # User 1 can view Layer 1
-        self.assertTrue(can_user_view(PrivateLayerList,self.layer1_id,self.user1)[0])
+        self.assertTrue(self.layer1.is_viewable(self.user1)[0])
 
         # User 2 can view Layer 1 (both members of shared group)
-        self.assertTrue(can_user_view(PrivateLayerList,self.layer1_id,self.user2)[0])
+        self.assertTrue(self.layer1.is_viewable(self.user2)[0])
 
         # User 3 can't view Layer 1
-        self.assertFalse(can_user_view(PrivateLayerList,self.layer1_id,self.user3)[0])
+        self.assertFalse(self.layer1.is_viewable(self.user3)[0])
         
         # User 1 can't view Layer 2 (User 2 hasnt shared it)
-        self.assertFalse(can_user_view(PrivateLayerList,self.layer2_id,self.user1)[0])
+        self.assertFalse(self.layer2.is_viewable(self.user1)[0])
 
         # User 2 can view Layer 2 (owns it)
-        self.assertTrue(can_user_view(PrivateLayerList,self.layer2_id,self.user2)[0])
+        self.assertTrue(self.layer2.is_viewable(self.user2)[0])
 
         # User 3 can't view Layer 2
-        self.assertFalse(can_user_view(PrivateLayerList,self.layer2_id,self.user3)[0])
+        self.assertFalse(self.layer2.is_viewable(self.user3)[0])
 
     def test_webservice(self):
-        url = reverse('layers-private', kwargs={'pk': self.layer1_id, 'session_key': 0})
+        url = PrivateLayerList.get_options().get_resource(self.layer1.pk)
 
         self.client.login(username=self.user1, password=self.password)
         response = self.client.get(url)
@@ -108,7 +94,7 @@ class PrivateLayerListTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
-        url = reverse('layers-private', kwargs={'pk': 982345, 'session_key': 0})
+        url = url.replace(str(self.layer1.pk),"123456789") # doesnt exist
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
         self.client.logout()
@@ -165,7 +151,7 @@ class PublicLayerListTest(TestCase):
         self.assertEqual(active[0].pk, new_active_layer.pk)
     
     def testLayerService(self):
-        urls = 'lingcod.layers.tests'
+        #urls = 'lingcod.layers.tests'
         # Should fail with a 404 when no layers are specified
         client = Client()
         l = PublicLayerList.objects.get(pk=1)
@@ -197,8 +183,3 @@ class PublicLayerListTest(TestCase):
         dr = os.path.dirname(layer.kml.file.name)
         cmd = 'rm -f %s/*.kml' % (dr, )
         os.system(cmd)
-        
-        
-# __test__ = {"doctest": """
-# """}
-
