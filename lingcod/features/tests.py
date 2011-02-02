@@ -1186,6 +1186,7 @@ class SharingTestCase(TestCase):
         # Create some groups
         # Group 1 has user1 and user2 and can share
         # Group 2 has user2 and user3 and has no sharing permissions
+        # Group 3 has user1 only and no sharing permissions
         self.group1 = Group.objects.create(name="Test Group 1")
         self.group1.save()
         self.user1.groups.add(self.group1)
@@ -1195,6 +1196,10 @@ class SharingTestCase(TestCase):
         self.group2.save()
         self.user2.groups.add(self.group2)
         self.user3.groups.add(self.group2)
+
+        self.group3 = Group.objects.create(name="Test Group 3")
+        self.group3.save()
+        self.user1.groups.add(self.group3)
 
         enable_sharing(self.group1)
         
@@ -1229,6 +1234,9 @@ class SharingTestCase(TestCase):
         self.folder1 = Folder.objects.create(user=self.user1, name="My Folder")
         self.folder1.save()
         self.folder1.add(self.array1)
+
+        self.folder1_share_url = self.folder1.get_options().get_share_form(self.folder1.pk)
+        self.folder1_resource_url = self.folder1.get_options().get_resource(self.folder1.pk)
 
     def test_nested_folder_sharing(self):
         # Not shared yet
@@ -1372,3 +1380,52 @@ class SharingTestCase(TestCase):
         # User3 should see nothing
         sw = groups_users_sharing_with(self.user3)
         self.assertEquals(sw, None)
+
+    def test_get_share_form_401(self):
+        # Need to log in
+        response = self.client.get(self.folder1_share_url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_get_share_form_403(self):
+        # Need to own the feature in order to share it
+        self.client.login(username=self.user3.username, password=self.password)
+        response = self.client.get(self.folder1_share_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_get_share_form(self):
+        self.client.login(username=self.user1.username, password=self.password)
+
+        # user1 should be able to share with Group 1 only
+        response = self.client.get(self.folder1_share_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertRegexpMatches(response.content, r'Test Group 1')
+        self.assertNotRegexpMatches(response.content, r'Test Group 2')
+        self.assertNotRegexpMatches(response.content, r'Test Group 3')
+
+        enable_sharing(self.group3)
+        # Now user1 should be able to share with Group 1 & 3
+        response = self.client.get(self.folder1_share_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertRegexpMatches(response.content, r'Test Group 1')
+        self.assertNotRegexpMatches(response.content, r'Test Group 2')
+        self.assertRegexpMatches(response.content, r'Test Group 3')
+
+    def test_post_share_form(self):
+        # user 2 tries to get resource for folder1, not shared yet
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.get(self.folder1_resource_url)
+        self.assertEqual(response.status_code, 403)
+ 
+        # user 1 shares it
+        self.client.logout()
+        self.client.login(username=self.user1.username, password=self.password)
+        response = self.client.post(self.folder1_share_url, {'sharing_groups': [self.group1.pk]})
+        self.assertEqual(response.status_code, 200, response.content)
+
+        # user2 tries again
+        self.client.logout()
+        self.client.login(username=self.user2.username, password=self.password)
+        response = self.client.get(self.folder1_resource_url)
+        self.assertEqual(response.status_code, 200)
+
+

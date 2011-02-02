@@ -307,6 +307,12 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         Class
         """
         return reverse('%s_update_form' % (self.slug, ), args=[pk])
+
+    def get_share_form(self, pk):
+        """
+        Given a primary key, returns path to a form for sharing a Feature inst
+        """
+        return reverse('%s_share_form' % (self.slug, ), args=[pk])
     
     def get_resource(self, pk):
         """

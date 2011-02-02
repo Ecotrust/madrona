@@ -3,7 +3,8 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.news.models import Entry
-from lingcod.common.utils import valid_browser, user_sharing_groups
+from lingcod.common.utils import valid_browser
+from lingcod.features import user_sharing_groups
 import datetime
 
 from django.conf import settings

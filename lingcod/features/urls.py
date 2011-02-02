@@ -19,6 +19,10 @@ for model in registered_models:
         url(r'%s/(?P<pk>\d+)/form/$' % (options.slug, ), 
             'form_resources', kwargs={'model': model}, 
             name='%s_update_form' % (options.slug,)),
+
+        url(r'%s/(?P<pk>\d+)/share/$' % (options.slug, ), 
+            'share_form', kwargs={'model': model}, 
+            name='%s_share_form' % (options.slug,)),
     )
 
 for link in registered_links:

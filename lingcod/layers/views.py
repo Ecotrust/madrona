@@ -9,7 +9,6 @@ import mimetypes as _mimetypes
 from django.conf import settings
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
-from lingcod.sharing.utils import can_user_view
 from django.core.urlresolvers import reverse
 
 def get_user_layers(request, session_key='0', input_username=None):
@@ -121,11 +120,11 @@ def get_private_layer(request, pk, session_key='0'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    viewable, response = can_user_view(PrivateLayerList, pk, user)
+    layer = PrivateLayerList.objects.get(pk=pk)
+    viewable, response = layer.is_viewable(user)
     if not viewable:
         return response
     else:
-        layer = PrivateLayerList.objects.get(pk=pk)
         response = HttpResponse(layer.kml.read(), status=200, mimetype=mimetypes.KML)
         response['Content-Disposition'] = 'attachment; filename=private_%s.kml' % pk
         return response
@@ -135,12 +134,11 @@ def get_private_superoverlay(request, pk, session_key='0'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    viewable, response = can_user_view(PrivateSuperOverlay, pk, user)
-    print user, viewable, response
+    layer = PrivateLayerList.objects.get(pk=pk)
+    viewable, response = layer.is_viewable(user)
     if not viewable:
         return response
     else:
-        layer = PrivateSuperOverlay.objects.get(pk=pk)
         response = HttpResponse(open(layer.base_kml,'rb').read(), status=200, mimetype=mimetypes.KML)
         response['Content-Disposition'] = 'attachment; filename=private_overlay_%s.kml' % pk
         return response
@@ -150,11 +148,8 @@ def get_relative_to_private_superoverlay(request, pk, path, session_key='0'):
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    viewable, response = can_user_view(PrivateSuperOverlay, pk, user)
-    if not viewable:
-        return response
-
-    layer = PrivateSuperOverlay.objects.get(pk=pk)
+    layer = PrivateLayerList.objects.get(pk=pk)
+    viewable, response = layer.is_viewable(user)
 
     # From django.views.static
     path = posixpath.normpath(urllib.unquote(path))

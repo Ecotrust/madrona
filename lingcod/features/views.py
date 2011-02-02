@@ -4,7 +4,11 @@ from django.template import RequestContext, Context
 from django.template import loader, TemplateDoesNotExist
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import Group
 from lingcod.features.models import Feature
+from lingcod.features import user_sharing_groups
+from lingcod.common.utils import get_logger
+logger = get_logger()
 
 def get_object_for_editing(request, klass, pk):
     """
@@ -449,5 +453,65 @@ def kml(request, instances):
     kml = t.render(Context({'instances': instances})) 
     return HttpResponse(kml, status=200)
 
+def share_form(request,model=None, pk=None):
+    """
+    Generic view for showing the sharing form for an object
 
+        POST:   Update the sharing status of an object
+        GET:    Provide an html form for selecting groups
+                to which the feature will be shared.
+    """
+    if model is None:
+        return HttpResponse('Model not specified in feature urls', status=500)
+    if pk is None:
+        return HttpResponse('Instance PK not specified', status=500)
+
+    obj = get_object_for_editing(request, model, pk)
+    if isinstance(obj, HttpResponse):
+        return obj
+    if not isinstance(obj, Feature):
+        return HttpResponse('Instance is not a Feature', status=500)
+
+    obj_type_verbose = obj._meta.verbose_name
+
+    if request.method == 'GET':
+        # Display the form
+        # Which groups is this object already shared to?
+        already_shared_groups = obj.sharing_groups.all()
+
+        # Get a list of user's groups that have sharing permissions 
+        groups = user_sharing_groups(request.user)
+        if not groups:
+            return HttpResponse("There are no groups to which you can share"
+                "your content at this time.", status=404)
+
+        return render_to_response('sharing/share_form.html', {'groups': groups,
+            'already_shared_groups': already_shared_groups, 'obj': obj,
+            'obj_type_verbose': obj_type_verbose,  'user':request.user, 
+            'MEDIA_URL': settings.MEDIA_URL}) 
+
+    elif request.method == 'POST':
+        group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]
+        groups = Group.objects.filter(pk__in=group_ids)
+
+        try:
+            obj.share_with(groups)
+            if len(group_ids) == 0:
+                restext = """<br/><p id='sharing_response'>The %s named %s is 
+                now unshared with all groups.
+                </p id='sharing_response'>""" % (obj_type_verbose, unicode(obj))
+            else:
+                restext = """<br/><p id='sharing_response'>The %s named %s is 
+                now shared with groups %s
+                </p id='sharing_response'>""" % (obj_type_verbose, unicode(obj), 
+                        ','.join([str(x) for x in group_ids]))
+            return HttpResponse(restext,status=200)
+        except Exception as e:
+            return HttpResponse(
+                    'Unable to share objects with those specified groups: %r.' % e, 
+                    status=500)
+
+    else:
+        return HttpResponse( "Received unexpected " + request.method + 
+                " request.", status=400 )
 

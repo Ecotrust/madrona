@@ -1,5 +1,5 @@
-from lingcod.mpa.models import Mpa as BaseMpa
-from lingcod.array.models import MpaArray as BaseMpaArray
+from lingcod.features.tests import TestMpa as BaseMpa
+from lingcod.features.tests import TestArray as BaseMpaArray
 
 class NcMpa(BaseMpa):
     pass
