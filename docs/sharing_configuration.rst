@@ -1,84 +1,105 @@
 .. _sharing_configuration:
 
-Sharing MPAs and Arrays between Users
+Sharing Features between Users
 ======================================
 
 Introduction
 ***************************
-The lingcod.sharing app is a django application that allows for the sharing of arbitrary django model instances between groups. The most common use case would be: A user creates an MPA and wants others to comment on it. This user is a member of several groups. They can choose to share (make available read-only) their MPA to any one of the groups which has MPA sharing permissions. 
+Users can create Features and FeatureCollections, perform analyses on them, etc. But the ability for the user to share these ideas to various groups is where the true collaborative value lies.
 
-.. note::
-    Though the lingcod.sharing app is configured to be a generic django-object sharing app,
-    we'll use the example of Marine Protected Areas (MPA) and Arrays as it is the primary use case 
-    and is the only one we've really implemented and tested on. 
+The most common use case would be: A user creates a Feature and wants others to comment on it. This user is a member of several groups. They can choose to share the Feature (i.e. to make the feature available read-only) to any one of the groups which has sharing permissions. If a user decides to organize their Features into FeatureCollections, those collections can be shared as well.
+
+The rules are as follows:
+    * Any user can create any type of Feature or FeatureCollection. 
+    * All Features and FeatureCollections are shareable.
+    * If a user belongs to a group or groups with sharing permissions, they can share any of their features to those groups.
+    * If a user organizes their features into collections and shares those collections, all features in the heirarchy are implictly shared.
 
 Out-of-the-box Setup
 *********************
-This will be the common situation: You've just installed lingcod and want to get a MarineMap instance running with sharing functionality on MPAs and Arrays. There are a few steps you need to take:
+By default, new users are not assigned to any groups nor are groups assigned sharing permissions. Adding a user to a group is currently not automated and requests for group memebership must be made directly to the site administrator.
 
-    * Make sure you have settings.SHARING_TO_PUBLIC_GROUPS and settings.SHARING_TO_STAFF_GROUPS defined. These should be lists of group names, by default ['Share with Public'] and ['Share with Staff'] respectively. Other groups will need to have the can_share_arrays and/or can_share_mpas permissions added manually as appropriate.
-    * MPAs and Arrays need to be registered as shareable content types. You can do this manually at /admin/sharing/shareablecontent or use the manage.py command below. Make sure you set Arrays as a container for MPAs with the mpa_set property linking them. 
-      
-To simplify these steps for the default case, use the following::
-      
-    python manage.py sharing_setup
+Groups can be given sharing permissions through the admin interface
 
-In MarineMap, authenticated users should now be able to share with all appropriate groups and see shapes shared with them. 
+    * Navigate to Home › Auth › Groups 
+    * Select the Group
+    * Add the 'auth | group | Can Share Features' permission
 
-Generic Setup
+Or through python::
+
+    from lingcod.common.utils import enable_sharing
+    from django.contrib.auth.models import Group
+
+    mygroup = Group.objects.get(name="My Group")
+    enable_sharing(mygroup)
+
+Collections
 **********************
-In order to make content shareable through the lingcod.sharing app, a number of requirements must be met in the django model.
- 
-    * model Meta must expose a can_share* permission
-    * model must have a 'user' field denoting ownership (Foreign Key to Users)
-    * model must have a 'sharing_groups' (ManyToMany field to Group)
-    * managers must implement the all_for_user() method (ie the model must have object = ShareableGeoManager() or manager which inherits it)
-    * model's content type is registered as a ShareableContent instance
+Consider the following heirarchy of Features/FeatureCollections::
 
-All but the last step are built into lingcod for MPAs and Arrays. Because content_types primary keys are not consistent across deployments, we can't really add fixtures for this. But it is simple enough to go into /admin/sharing/shareablecontent/ and add the MPA and array content types. 
+            folder1
+             |-array1
+               |-pipeline
+               |-mpa1
 
-Additionally,to make sharing functional, you must have one or more groups with the can_share* permission and have some users belonging to those groups.
-
-Containers
-**********************
-The sharing app also has the concept of sharing "containers" - shareable objects which imply that the objects "contained" within them are also implicitly shared. For example, MPAs belong to an Array container so that when an Array is shared, all MPAs contained by that Array appear as shared (whether the MPA objects themselves are individually shared or not).
-
-In order to so this, the container field in shareablecontent must point to the appropriate content_type AND a property on the container model which returns a queryset of all contained objects must be specified. For example, Arrays contain a property called 'mpa_set' which returns a queryset of all MPAs belonging to that array. The string 'mpa_set' must be specified in the shareablecontent in order to define the relationship between container and contained. Finally, the container content type must also be registered as shareablecontent. 
+If a user were to share folder1, array1, pipeline and mpa1 would all implicitly be shared as well. Even if mpa1 were explicitly unshared, it would still be viewable by group members by virtue of it's belonging to array1 (which in turn belongs to folder1 which is shared).
 
 Sharing UI
 ***********
-The sharing app provides a form and views for editing an object's sharing status. A GET request to /sharing/<content_type_id>/<object_pk> will give access to this form (assuming that content_type is shareable), while a POST request to the same URL with the groups parameter specified will attempt to share the object with the specified groups. Appropriate error messages and status response codes are used and will hopefully be helpful and smooth things over in the case of errors.   
+The sharing app provides a form and views for editing an object's sharing status. The url for a feature can be determined by::
+
+    url = Folder.get_options().get_share_form(folder1.pk)
+    # /features/folder/1/share/
+
+A GET request to this URL will give access to this form (assuming that a user with the appropriate permissions is logged in), while a POST request to the same URL with the sharing_groups parameter specified will attempt to share the object with the specified groups. Appropriate error messages and status response codes are used and will hopefully be helpful and smooth things over in the case of errors.   
 
 Using the sharing functionality
 ********************************
-Once the models have been configured for sharing, the application or project must implement the handling of the shared content. For instance, the default MarineMap interface implements atom links and UI components which allow sharing to be configured on each object and KML representations of shared objects. The sharing app provides a number of helpful hooks for implementing these types of functionality.
+This section describes the various components of the lingcod API related to sharing.
 
-    * The all_for_user() method on the shared object's manager allows you to get a set of objects that have been shared to the given user but are owned by other users. 
-    * The get_shareables() function which exposes all the objects in the current project which are shareable (ie meet all of the sharing requirements listed in Setup)
-    * The share_object_with_group() and share_object_with_groups() functions which provide a safe shortcut to the actual sharing
-    * The groups_users_sharing_with() function which returns the groups and users which are currently sharing objects with a given user. 
-    * The get_content_type_id() function which is just a conveinience shortcut for determining the content_type of a given model class. 
+First, there is the object manager which allows you to quickly obtain a queryset of all objects that have been shared with a user::
 
-You can look at the kmlapp.views.get_mpas_shared_by and kmlapp.views.create_shared_kml for an example of how sharing code can be used by another application. Also take a look at the views for mpa, array, rest and staticmap.
+    from myapp.models import MyFeature
+    features = MyFeature.objects.shared_with_user(user1)
 
-The most common use case will be to determine if an object is readable by a user. In other words, is the object owned by OR shared with a given user. You can use the can_user_view() utility function which returns two items: A boolean indicating if the user has read access and an appropriate HttpResponse object. It's up to the implementation whether or not you return the HttpResponse or not but the common scenario would be to check if the object were readable by the user and, if not, return the HttpResponse. For example::
+The groups_users_sharing_with() utility function returns the groups and users which are currently sharing feature instances with a given user::
 
-    from lingcod.sharing.utils import can_user_view
-    from lingcod.common.utils import get_mpa_class
+    from lingcod.features import groups_users_sharing_with
+    sharing_with_me = groups_users_sharing_with(user1)
+
+To find out which groups a user can potentially share with, use the user_sharing_groups() utility function::
+
+    from lingcod.features import user_sharing_groups
+    my_sharing_groups = user_sharing_groups(user1)
+
+A common use case will be to determine if an object is readable by a user. In other words, is the object owned by OR shared with a given user. You can use the is_viewable() Feature method which returns two items: A boolean indicating if the user has read access and an appropriate HttpResponse object. It's up to the implementation whether or not you return the HttpResponse or not but the common scenario would be to check if the object were readable by the user and, if not, return the HttpResponse. For example::
 
     def some_view(request, pk):
-        mpa_class = get_mpa_class()
-        viewable, response = can_user_view(mpa_class, pk, request.user)
+        feature1 = get_object_or_404(MyFeature, pk)
+
+        viewable, response = feature1.is_viewable(request.user)
         if not viewable:
             return response
         else:
             do_stuff()
 
+In order to control sharing of an object with a given group using python code, you can use the share_with Feature method::
+
+    feature1 = MyFeature.objects.create(name="Feature 1")
+    # By default this overrides all previous sharing groups
+    feature1.share_with(mygroup)
+    # You can choose to append it
+    feature1.share_with(mygroup, append=True)
+    # You can also pass a list of groups
+    feature1.share_with([group1,group2])
+    # To remove all sharing groups, pass None
+    feature1.share_with()
+
 
 Special Cases
 ******************
 
-The sharing app provides two special types of one-way sharing:
+The sharing app provides two groups which are handled differently in that the sharing is one-way:
     * Share with Public : Allows selected staff members the ability to make an object available to the public. This means everyone, including non-authenicated users, can view it but only the short list of staff members can actually make it available. 
     * Share with Staff : Allows selected users the ability to share objects with staff. Only staff can view the shared objects but any user in this type of group can submit something.
 
