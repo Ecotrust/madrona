@@ -40,6 +40,7 @@ class TestFeatureForm(FeatureForm):
     class Meta:
         model = TestGetFormClassFeature
 
+@register
 class TestGetFormClassFailFeature(Feature):
     class Options:
         form = 'lingcod.features.tests.TestForm'
@@ -48,70 +49,90 @@ class TestForm:
     class Meta:
         model = TestGetFormClassFeature
 
+@register
+class TestSlugFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+                
+@register
+class TestDefaultVerboseNameFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        
+@register 
+class TestCustomVerboseNameFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        verbose_name = 'vb-name'
+        
+@register
+class TestDefaultShowTemplateFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        
+@register
+class TestCustomShowTemplateFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        show_template = 'location/show.html'
+        
+@register
+class TestMissingDefaultShowFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        
+@register
+class TestMissingCustomShowFeature(Feature):
+    class Options:
+        form = 'lingcod.features.form.FeatureForm'
+        show_template = 'location/show.html'
 
 class FeatureOptionsTest(TestCase):
     
     def test_check_for_subclass(self):
-        class NotAFeature:
-            pass
-        
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
-            FeatureOptions(NotAFeature)
+            @register
+            class NotAFeature:
+                pass
+            NotAFeature.get_options()
     
     def test_check_for_inner_class(self):
-        class TestFeatureFails(Feature):
-            pass
-            
         with self.assertRaisesRegexp(FeatureConfigurationError,'not defined'):
-            TestFeatureFails.get_options()
-            
-    def test_must_have_form_class(self):
-        class TestFeatureNoForm(Feature):
-            class Options:
+            @register
+            class TestFeatureFails(Feature):
                 pass
+            TestFeatureFails.get_options()
 
+    def test_must_have_form_class(self):
         with self.assertRaisesRegexp(FeatureConfigurationError,'form'):
+            @register
+            class TestFeatureNoForm(Feature):
+                class Options:
+                    pass
             TestFeatureNoForm.get_options()
-    
-    def test_must_specify_form_as_string(self):
-        class TestFeature(Feature):
-            class Options:
-                form = FeatureForm
 
+    def test_must_specify_form_as_string(self):
         with self.assertRaisesRegexp(FeatureConfigurationError,'string'):
+            @register
+            class TestFeature(Feature):
+                class Options:
+                    form = FeatureForm
             TestFeature.get_options()
 
     def test_slug(self):
-        class TestSlugFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-                
         self.assertEqual(TestSlugFeature.get_options().slug, 'testslugfeature')
     
     def test_default_verbose_name(self):
-        class TestDefaultVerboseNameFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-        
         self.assertEqual(
             TestDefaultVerboseNameFeature.get_options().verbose_name, 
             'TestDefaultVerboseNameFeature')
     
     def test_custom_verbose_name(self):
-        class TestCustomVerboseNameFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-                verbose_name = 'vb-name'
-        
         self.assertEqual(
             TestCustomVerboseNameFeature.get_options().verbose_name, 
             'vb-name')
         
     def test_default_show_template(self):
-        class TestDefaultShowTemplateFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-        
         options = TestDefaultShowTemplateFeature.get_options()
         path = options.slug + '/show.html'
         delete_template(path)
@@ -122,11 +143,6 @@ class FeatureOptionsTest(TestCase):
         delete_template(path)
     
     def test_custom_show_template(self):
-        class TestCustomShowTemplateFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-                show_template = 'location/show.html'
-        
         options = TestCustomShowTemplateFeature.get_options()
         path = TestCustomShowTemplateFeature.Options.show_template
         delete_template(path)
@@ -135,30 +151,20 @@ class FeatureOptionsTest(TestCase):
             options.get_show_template().name, 
             path)
         delete_template(path)
-        
     
     def test_missing_default_show_template(self):
-        class TestMissingDefaultShowTemplateFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-        
-        options = TestMissingDefaultShowTemplateFeature.get_options()
+        options = TestMissingDefaultShowFeature.get_options()
         path = options.slug + '/show.html'
         self.assertEqual(
             options.get_show_template().name, 
             'features/show.html')
 
     def test_missing_custom_show_template(self):
-        class TestMissingCustomShowTemplateFeature(Feature):
-            class Options:
-                form = 'lingcod.features.form.FeatureForm'
-                show_template = 'location/show.html'
 
-        options = TestMissingCustomShowTemplateFeature.get_options()
+        options = TestMissingCustomShowFeature.get_options()
         self.assertEqual(
             options.get_show_template().name, 
             'features/show.html')
-
     
     def test_get_form_class(self):
         self.assertEqual(
@@ -177,7 +183,6 @@ class TestDeleteFeature(Feature):
         form = 'lingcod.features.form.FeatureForm'
         
 class DeleteTest(TestCase):
-
 
     def setUp(self):
         self.client = Client()
@@ -1149,6 +1154,12 @@ class CollectionTest(TestCase):
         self.folder1.add(my_array)
         self.assertTrue(my_array in self.folder1.feature_set())
         self.assertTrue(self.pipeline in self.folder1.feature_set(recurse=True))
+
+    def test_no_potential_parents(self):
+        shipwreck_parents = Shipwreck.get_options().get_potential_parents()
+        self.assertFalse(TestArray in shipwreck_parents) 
+        self.assertFalse(Folder in shipwreck_parents) 
+        self.assertEqual(len(shipwreck_parents), 0)
 
     def test_add_invalid_child_feature(self):
         """

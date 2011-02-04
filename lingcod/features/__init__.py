@@ -10,9 +10,11 @@ from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
 from django.contrib.auth.models import Permission
 from django.conf import settings
+from django.db.utils import DatabaseError
 import json
 
 registered_models = []
+registered_model_options = {}
 registered_links = []
 logger = get_logger()
 
@@ -230,21 +232,22 @@ not a string path." % (name,))
             Therefore, Folder is also a potential_parent of MPA
         """
         potential_parents = []
-        for model in get_collection_models(): 
+        direct_parents = []
+        collection_models = get_collection_models()
+        for model in collection_models: 
             opts = model.get_options()
             valid_children = opts.get_valid_children()
 
             if self._model in valid_children:
-                # This model is a valid child directly
+                direct_parents.append(model)
                 potential_parents.append(model)
-            else:
-                for child in valid_children:
-                    if child in get_collection_models():
-                        opts = child.get_options()
-                        potential_parents.extend(opts.get_potential_parents())
 
-        return potential_parents
-
+        for direct_parent in direct_parents:
+            if direct_parent != self._model: 
+                potential_parents.extend(direct_parent.get_options().get_potential_parents())
+            
+        return potential_parents 
+                
     def get_form_class(self):
         """
         Returns the form class for this Feature Class.
@@ -535,15 +538,19 @@ def edit_form(*args, **kwargs):
 
 
 def register(model):
-    options = model.get_options()
+    options = FeatureOptions(model)
     logger.debug('registering Feature %s' % (model.__name__,) )
     if model not in registered_models:
         registered_models.append(model)
+        registered_model_options[model.__name__] = options
         for link in options.links:
             if link not in registered_links:
                 registered_links.append(link)
     return model
             
+def get_model_options(model_name):
+    return registered_model_options[model_name]
+
 def workspace_json(*args):
     workspace = {
         'feature-classes': [],
@@ -587,6 +594,7 @@ def user_sharing_groups(user):
     groups = user.groups.filter(permissions=p).distinct()
     return groups
 
+from django.db import transaction
 def groups_users_sharing_with(user, include_public=False):
     """
     Get a dict of groups and users that are currently sharing items with a given user
@@ -609,6 +617,7 @@ def groups_users_sharing_with(user, include_public=False):
             for gobj in group_objects:
                 if gobj.user not in user_list and gobj.user != user:
                     user_list.append(gobj.user)
+
             if len(user_list) > 0:
                 if group.name in groups_sharing.keys():
                     for user in user_list:

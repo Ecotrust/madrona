@@ -6,7 +6,7 @@ from django.contrib.contenttypes import generic
 from django.http import HttpResponse
 from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
-from lingcod.features import FeatureOptions
+from lingcod.features import get_model_options
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
 from lingcod.common.utils import get_logger, get_class
 import re
@@ -62,7 +62,7 @@ class Feature(models.Model):
     
     @classmethod
     def get_options(klass):
-        return FeatureOptions(klass)
+        return get_model_options(klass.__name__)
     
     @classmethod
     def model_uid(klass):
