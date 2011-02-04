@@ -4,7 +4,7 @@ import os
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
-RELEASE = '1.9dev' # The next milestone
+RELEASE = '2.0dev' # The next milestone
 
 GEOMETRY_DB_SRID = 3310
 
