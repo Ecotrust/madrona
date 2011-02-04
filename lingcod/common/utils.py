@@ -448,7 +448,7 @@ def asKml(geom):
 
     return kml
 
-def enable_sharing(group):
+def enable_sharing(group=None):
     """
     Give group permission to share models 
     Permissions are attached to models but we want this perm to be 'global'
@@ -465,6 +465,7 @@ def enable_sharing(group):
         p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
         p.save()
 
-    group.permissions.add(p)
-    group.save()
+    if group:
+        group.permissions.add(p)
+        group.save()
     return True

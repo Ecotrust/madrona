@@ -8,10 +8,11 @@ from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import get_model_options
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
-from lingcod.common.utils import get_logger, get_class
+from lingcod.common.utils import get_logger, get_class, enable_sharing
 import re
 
 logger = get_logger()
+enable_sharing()
 
 class Feature(models.Model):
     """Model used for representing user-generated features
