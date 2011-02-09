@@ -595,6 +595,11 @@ def get_feature_models():
             registered_features.append(model)
     return registered_features
 
+def get_model_by_uid(uid):
+    for model in registered_models:
+        if model.model_uid() == uid:
+            return model
+
 def user_sharing_groups(user):
     """
     Returns a list of groups that user is member of and 

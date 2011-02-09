@@ -351,13 +351,13 @@ class FeatureCollection(Feature):
         features = self.feature_set()
         kmls = [x.kml for x in features]
         return """
-        <Folder>
+        <Folder id="%s">
           <name>%s</name>
           <visibility>1</visibility>
           <open>0</open>
           %s
         </Folder>
-        """ %  (self.name, ''.join(kmls))
+        """ %  (self.uid, self.name, ''.join(kmls))
 
     def feature_set(self, recurse=False, feature_classes=None):
         """

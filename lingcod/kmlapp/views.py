@@ -11,7 +11,8 @@ from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from lingcod.features import get_feature_models, get_collection_models
+from lingcod.features import get_feature_models, get_collection_models, get_model_by_uid
+from lingcod.features.models import FeatureCollection
 
 log = get_logger()
 
@@ -25,7 +26,7 @@ try:
 except:
     UNATTACHED_NAME = "Marine Protected Areas"
 
-def get_user_feature_data(user):
+def get_user_data(user):
     """
     Organizes user's Features and FeatureCollections.
     Only returns objects owned by user, not shared
@@ -49,6 +50,32 @@ def get_user_feature_data(user):
         toplevel_collections.extend(collections_top)
 
     return toplevel_features, toplevel_collections
+
+def get_feature_by_uid(uid):
+    applabel, model, id = uid.split('_')
+    model = get_model_by_uid("%s_%s" % (applabel,model))
+    instance = model.objects.get(pk=int(id))
+    return instance
+
+def get_user_data_for_collection(user, collection_uid):
+    collection = get_feature_by_uid(collection_uid)
+    assert isinstance(collection, FeatureCollection)
+
+    features = []
+    collections = []
+
+    # Why not user feature_set here? TODO
+    for fmodel in get_feature_models():
+        #This would be preferable but doesnt really work??
+        # unattached = fmodel.objects.filter(collection=None)
+        unattached = [x for x in fmodel.objects.filter(user=user) if x.collection == collection]
+        features.extend(unattached)
+        
+    for cmodel in get_collection_models():
+        collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection == collection]
+        collections.extend(collections_top)
+
+    return features, collections
 
 def get_public_arrays():
     """
@@ -229,8 +256,9 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 #TODO @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
-#def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
+def create_kml(request, input_username=None, input_collection_uid=None, 
+        input_shareuser=None, input_sharegroup=None, links=False, kmz=False,
+        session_key='0'):
     """
     Returns a KML/KMZ containing Feautures/FeatureCollections owned by user
     """
@@ -241,14 +269,10 @@ def create_kml(request, input_username=None, input_shareuser=None, input_sharegr
         log.warn("Failed: Input username from the URL is %r but the request.user.username is %r" % (input_username, user.username))
         return HttpResponse('Access denied', status=401)
 
-    organize_in_collections = True
     if input_username:
-        features, collections = get_user_feature_data(user)
-    elif input_array_id:
-        shapes, designations = get_array_mpa_data(user, input_array_id)
-        organize_in_array_folders = False
-    elif input_mpa_id:
-        shapes, designations = get_single_mpa_data(user, input_mpa_id)
+        features, collections = get_user_data(user)
+    elif input_collection_uid:
+        features, collections = get_user_data_for_collection(user, input_collection_uid)
     elif input_shareuser and input_sharegroup:
         shapes, designations = get_mpas_shared_by(input_shareuser, input_sharegroup, user)
     else:
@@ -257,7 +281,7 @@ def create_kml(request, input_username=None, input_shareuser=None, input_sharegr
     t = get_template('kmlapp/base.kml')
     kml = t.render(Context({'user': user, 'features': features, 'collections': collections,
         'use_network_links': links, 'request_path': request.path, 
-        'session_key': session_key, 'use_collections': organize_in_collections}))
+        'session_key': session_key}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
