@@ -77,7 +77,7 @@ def map(request, template_name='common/map.html'):
     # Check if the user is a member of any sharing groups (not including public shares)
     member_of_sharing_group = False
     user = request.user
-    if user.is_authenticated() and len(user_sharing_groups(user)) > 0:
+    if user.is_authenticated() and user_sharing_groups(user):
         member_of_sharing_group = True
     
     response = render_to_response(template_name, RequestContext(request,{

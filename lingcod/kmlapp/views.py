@@ -11,6 +11,7 @@ from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from lingcod.features import get_feature_models, get_collection_models
 
 log = get_logger()
 
@@ -24,36 +25,30 @@ try:
 except:
     UNATTACHED_NAME = "Marine Protected Areas"
 
-def get_user_mpa_data(user):
+def get_user_feature_data(user):
     """
-    Organizes user's MPAs into arrays and provides their designations.
-    Just basically a data structure manipulation on the queryset.
-    
+    Organizes user's Features and FeatureCollections.
     Only returns objects owned by user, not shared
-
-    The template expects something like:
-     {'array name + id': {'array': array_object, 'mpas': [mpa1, mpa2] } }
+    Returns only the features/collections at the top level,
+    nested child features will be handled later through
+    recursive calls to feature_set.
     """
-    Mpa = utils.get_mpa_class()
+    toplevel_features = []
+    toplevel_collections = []
 
-    mpas = Mpa.objects.filter(user=user).add_kml()
+    # is there a reason to do features vs collections seperately?
+    # Perhaps if we need to treat collections differently wrt network links
+    for fmodel in get_feature_models():
+        #This would be preferable but doesnt really work??
+        # unattached = fmodel.objects.filter(collection=None)
+        unattached = [x for x in fmodel.objects.filter(user=user) if x.collection is None]
+        toplevel_features.extend(unattached)
+        
+    for cmodel in get_collection_models():
+        collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection is None]
+        toplevel_collections.extend(collections_top)
 
-    unattached = utils.get_array_class()(name=UNATTACHED_NAME)
-    shapes = {UNATTACHED: {'array': unattached, 'mpas':[]} }
-    for mpa in mpas:
-        if not mpa.array:
-            shapes[UNATTACHED]['mpas'].append(mpa)
-        else:
-            array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
-            if array_nameid in shapes.keys():
-                shapes[array_nameid]['mpas'].append(mpa)
-            else:
-                shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
-    for array in utils.get_array_class().objects.empty().filter(user=user):
-        array_nameid = "%s_%d" % (array.name, array.id)
-        shapes[array_nameid] = {'array': array, 'mpas':[]}
-    designations = MpaDesignation.objects.all()
-    return shapes, designations
+    return toplevel_features, toplevel_collections
 
 def get_public_arrays():
     """
@@ -233,23 +228,22 @@ def create_kmz(kml, zippath):
 
 from django.views.decorators.cache import cache_control
 
-@cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
+#TODO @cache_control(no_cache=True)
+def create_kml(request, input_username=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
+#def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=None, input_shareuser=None, input_sharegroup=None, links=False, kmz=False, session_key='0'):
     """
-    Returns a KML/KMZ containing MPAs (organized into folders by array)
+    Returns a KML/KMZ containing Feautures/FeatureCollections owned by user
     """
     load_session(request, session_key)
     user = request.user
     if input_username and user.username != input_username:
-        log.debug("")
-        log.debug(request.get_full_path())
-        log.debug("Failed: Input username from the URL is %r but the request.user.username is %r" % (input_username, user.username))
-        log.debug("")
+        log.warn(request.get_full_path())
+        log.warn("Failed: Input username from the URL is %r but the request.user.username is %r" % (input_username, user.username))
         return HttpResponse('Access denied', status=401)
 
-    organize_in_array_folders = True
+    organize_in_collections = True
     if input_username:
-        shapes, designations = get_user_mpa_data(user)
+        features, collections = get_user_feature_data(user)
     elif input_array_id:
         shapes, designations = get_array_mpa_data(user, input_array_id)
         organize_in_array_folders = False
@@ -260,13 +254,10 @@ def create_kml(request, input_username=None, input_array_id=None, input_mpa_id=N
     else:
         raise Http404
 
-    # determine content types for sharing
-    mpa_ctid = ContentType.objects.get_for_model(utils.get_mpa_class()).id
-    array_ctid = ContentType.objects.get_for_model(utils.get_array_class()).id
-
-    t = get_template('placemarks.kml')
-    kml = t.render(Context({'user': user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': links, 'request_path': request.path, 
-        'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': organize_in_array_folders}))
+    t = get_template('kmlapp/base.kml')
+    kml = t.render(Context({'user': user, 'features': features, 'collections': collections,
+        'use_network_links': links, 'request_path': request.path, 
+        'session_key': session_key, 'use_collections': organize_in_collections}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'

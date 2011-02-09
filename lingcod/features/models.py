@@ -9,10 +9,10 @@ from lingcod.features.forms import FeatureForm
 from lingcod.features import get_model_options
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
 from lingcod.common.utils import get_logger, get_class, enable_sharing
+from lingcod.manipulators.manipulators import manipulatorsDict, NullManipulator
 import re
 
 logger = get_logger()
-enable_sharing()
 
 class Feature(models.Model):
     """Model used for representing user-generated features
@@ -211,8 +211,17 @@ class SpatialFeature(Feature):
         super(SpatialFeature, self).save(*args, **kwargs) # Call the "real" save() method
     
     @property
-    def kml(self):
+    def geom_kml(self):
         return asKml(self.geometry_final.transform(settings.GEOMETRY_CLIENT_SRID, clone=True))
+    
+    @property
+    def kml(self):
+        return """
+        <Placemark id="%s">
+            <name>%s</name>
+            %s 
+        </Placemark>
+        """ % (self.uid, self.name, self.geom_kml)
 
     @property
     def active_manipulators(self):
@@ -336,6 +345,19 @@ class FeatureCollection(Feature):
             self.save() # This updates the date_modified field of the collection
         else:
             raise Exception('Feature `%s` is not in Collection `%s`' % (f.name, self.name))
+
+    @property
+    def kml(self):
+        features = self.feature_set()
+        kmls = [x.kml for x in features]
+        return """
+        <Folder>
+          <name>%s</name>
+          <visibility>1</visibility>
+          <open>0</open>
+          %s
+        </Folder>
+        """ %  (self.name, ''.join(kmls))
 
     def feature_set(self, recurse=False, feature_classes=None):
         """

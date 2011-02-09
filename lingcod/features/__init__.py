@@ -1,6 +1,5 @@
 from django.conf.urls.defaults import *
-from lingcod.common.utils import get_logger
-from lingcod.common.utils import get_class
+from lingcod.common.utils import get_logger, get_class, enable_sharing
 from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist
 from lingcod.features.forms import FeatureForm
@@ -33,6 +32,9 @@ class FeatureOptions:
         
         # Import down here to avoid circular reference
         from lingcod.features.models import Feature, FeatureCollection    
+
+        # call this here to ensure that permsissions get created
+        #enable_sharing()
         
         if not issubclass(model, Feature):
             raise FeatureConfigurationError('Is not a subclass of \
@@ -581,6 +583,18 @@ def get_collection_models():
                 pass
     return registered_collections
 
+def get_feature_models():
+    """
+    Utility function returning models for 
+    registered and valid Features excluding Collections
+    """
+    from lingcod.features.models import Feature, FeatureCollection
+    registered_features = []
+    for model in registered_models:
+        if issubclass(model,Feature) and not issubclass(model,FeatureCollection):
+            registered_features.append(model)
+    return registered_features
+
 def user_sharing_groups(user):
     """
     Returns a list of groups that user is member of and 
@@ -594,7 +608,6 @@ def user_sharing_groups(user):
     groups = user.groups.filter(permissions=p).distinct()
     return groups
 
-from django.db import transaction
 def groups_users_sharing_with(user, include_public=False):
     """
     Get a dict of groups and users that are currently sharing items with a given user
