@@ -57,10 +57,32 @@ def get_feature_by_uid(uid):
     instance = model.objects.get(pk=int(id))
     return instance
 
-def get_user_data_for_collection(user, collection_uid):
-    collection = get_feature_by_uid(collection_uid)
-    assert isinstance(collection, FeatureCollection)
+def get_user_data_for_feature(user, uid):
+    f = get_feature_by_uid(uid)
 
+    features = []
+    collections = []
+
+    if isinstance(f, FeatureCollection):
+        for fmodel in get_feature_models():
+            unattached = [x for x in fmodel.objects.filter(user=user) if x.collection == f]
+            features.extend(unattached)
+            
+        for cmodel in get_collection_models():
+            collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection == f]
+            collections.extend(collections_top)
+    elif isinstance(f, Feature):
+        features.append(f)
+
+    return features, collections
+
+def get_public_data():
+    """
+    No login necessary, everyone sees these
+    Public groups defined in settings.SHARING_TO_PUBLIC_GROUPS
+    """
+    from django.conf import settings
+    public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
     features = []
     collections = []
 
@@ -68,140 +90,31 @@ def get_user_data_for_collection(user, collection_uid):
     for fmodel in get_feature_models():
         #This would be preferable but doesnt really work??
         # unattached = fmodel.objects.filter(collection=None)
-        unattached = [x for x in fmodel.objects.filter(user=user) if x.collection == collection]
+        unattached = [x for x in fmodel.objects.filter(sharing_groups__in=public_groups)]
         features.extend(unattached)
         
     for cmodel in get_collection_models():
-        collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection == collection]
+        collections_top = [x for x in cmodel.objects.filter(sharing_groups__in=public_groups)]
         collections.extend(collections_top)
 
     return features, collections
-
-def get_public_arrays():
-    """
-    Organizes MPAs belonging to a public arrays
-    No login necessary, everyone sees these
-    Public groups defined in settings.SHARING_TO_PUBLIC_GROUPS
-    """
-    from django.conf import settings
-    MpaArray = utils.get_array_class()
-    public_groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)
-    public_arrays = MpaArray.objects.filter(sharing_groups__in=public_groups)
-    shapes = {}
-    for pa in public_arrays:
-        array_nameid = "%s_%d" % (pa.name, pa.id)
-        shapes[array_nameid] = {'array': pa, 'mpas':pa.mpa_set.add_kml()}
-    designations = MpaDesignation.objects.all()
-    return shapes, designations
         
-
-def get_array_mpa_data(user, input_array_id):
-    """
-    Organizes MPAs belonging to a given array and provides their designations.
-    Just basically a data structure manipulation on the queryset.
-    Will return if user owns the array OR if array is shared with user
-    """
-    Mpa = utils.get_mpa_class()
-    MpaArray = utils.get_array_class()
-
-    try:
-        # Frst see if user owns it
-        if user.is_anonymous() or not user.is_authenticated():
-            raise MpaArray.DoesNotExist
-        else:
-            the_array = MpaArray.objects.get(id=input_array_id, user=user)
-    except MpaArray.DoesNotExist:
-        try: 
-            # ... then see if its shared with the user
-            the_array = MpaArray.objects.shared_with_user(user).get(id=input_array_id)
-        except MpaArray.DoesNotExist:
-            raise Http404
-
-    mpas = the_array.mpa_set.add_kml()
-    array_nameid = "%s_%d" % (the_array.name, the_array.id)
-    shapes = {array_nameid: {'array':the_array, 'mpas': []} }
-    for mpa in mpas:
-        if array_nameid in shapes.keys():
-            shapes[array_nameid]['mpas'].append(mpa)
-        else:
-            raise Http404
-    designations = MpaDesignation.objects.all()
-    return shapes, designations
-
-def get_single_mpa_data(user, input_mpa_id):
-    """
-    Creates data structure for a single MPA and its designation.
-    Just basically a data structure manipulation on the queryset.
-    Will return if user owns the mpa OR if mpa is shared with user
-    """
-    Mpa = utils.get_mpa_class()
-
-    try:
-        # Frst see if user owns it
-        if user.is_anonymous() or not user.is_authenticated():
-            raise Mpa.DoesNotExist
-
-        mpas = list(Mpa.objects.filter(id=input_mpa_id, user=user).add_kml())
-        if len(mpas)==0:
-            raise Mpa.DoesNotExist
-        else:
-            mpa = mpas[0]
-    except Mpa.DoesNotExist:
-        try: 
-            # ... then see if its shared with the user
-            mpas = list(Mpa.objects.shared_with_user(user).filter(id=input_mpa_id).add_kml())
-            if len(mpas)==0:
-                raise Mpa.DoesNotExist
-            else:
-                mpa = mpas[0]
-        except Mpa.DoesNotExist:
-            raise Http404
-
-    if mpa.array:
-        array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
-        shapes = {array_nameid: {'array':mpa.array, 'mpas': [mpa]} }
-    else:
-        unattached = utils.get_array_class()(name=UNATTACHED)
-        shapes = {UNATTACHED: {'array': unattached, 'mpas':[mpa]} }
-    designations = [mpa.designation]
-    return shapes, designations
-
-def get_mpas_shared_by(shareuser, sharegroup, user):
-    """
-    Creates data structure for a single MPA and its designation.
-    Just basically a data structure manipulation on the queryset.
-    """
-    Mpa = utils.get_mpa_class()
+def get_shared_data(shareuser, sharegroup, user):
     sg = Group.objects.get(pk=sharegroup)
     su = User.objects.get(pk=shareuser)
 
-    try: 
-        # The "right" way but array is a generic FK so this doesn't work
-        #mpas = Mpa.objects.shared_with_user(user).filter(
-        #        models.Q(sharing_groups=sg) |
-        #        models.Q(array__sharing_groups=sg)
-        #        )
-        mpas = Mpa.objects.shared_with_user(user,filter_groups=[sg]).filter(user=su).add_kml()
-    except Mpa.DoesNotExist:
-        raise Http404
+    features = []
+    collections = []
 
-    unattached = utils.get_array_class()(name=UNATTACHED_NAME)
-    shapes = {UNATTACHED: {'array': unattached, 'mpas':[]} }
-    for mpa in mpas:
-        # Does it belong to an array that is shared?
-        if mpa.array and sg in mpa.array.sharing_groups.all():
-            array_nameid = "%s_%d" % (mpa.array.name, mpa.array.id)
-            if array_nameid in shapes.keys():
-                shapes[array_nameid]['mpas'].append(mpa)
-            else:
-                shapes[array_nameid] = {'array': mpa.array, 'mpas':[mpa]}
-        # Or is it a lone MPA?
-        else:
-            shapes[UNATTACHED]['mpas'].append(mpa)
-    if len(shapes[UNATTACHED]['mpas']) == 0:
-        del shapes[UNATTACHED]
-    designations = MpaDesignation.objects.all()
-    return shapes, designations
+    for fmodel in get_feature_models():
+        unattached = [x for x in fmodel.objects.shared_with_user(user, filter_groups=[sg]).filter(user=su) if x.collection is None]
+        features.extend(unattached)
+        
+    for cmodel in get_collection_models():
+        collections_top = [x for x in cmodel.objects.shared_with_user(user, filter_groups=[sg]).filter(user=su) if x.collection is None]
+        collections.extend(collections_top)
+
+    return features, collections
 
 def create_kmz(kml, zippath):
     """
@@ -256,7 +169,7 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 #TODO @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_collection_uid=None, 
+def create_kml(request, input_username=None, input_uid=None, 
         input_shareuser=None, input_sharegroup=None, links=False, kmz=False,
         session_key='0'):
     """
@@ -271,17 +184,17 @@ def create_kml(request, input_username=None, input_collection_uid=None,
 
     if input_username:
         features, collections = get_user_data(user)
-    elif input_collection_uid:
-        features, collections = get_user_data_for_collection(user, input_collection_uid)
+    elif input_uid:
+        features, collections = get_user_data_for_feature(user, input_uid)
     elif input_shareuser and input_sharegroup:
-        shapes, designations = get_mpas_shared_by(input_shareuser, input_sharegroup, user)
+        features, collections = get_shared_data(input_shareuser, input_sharegroup, user)
     else:
         raise Http404
 
     t = get_template('kmlapp/base.kml')
     kml = t.render(Context({'user': user, 'features': features, 'collections': collections,
         'use_network_links': links, 'request_path': request.path, 
-        'session_key': session_key}))
+        'session_key': session_key, 'shareuser': input_shareuser, 'sharegroup': input_sharegroup}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
@@ -308,7 +221,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     from lingcod.features import groups_users_sharing_with 
     sharing_with = groups_users_sharing_with(user)
 
-    t = get_template('shared.kml')
+    t = get_template('kmlapp/shared.kml')
     kml = t.render(Context({'user': request.user, 'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
 
     response = HttpResponse()
@@ -331,15 +244,14 @@ def shared_public(request, kmz=False, session_key='0'):
     """
     load_session(request, session_key)
     user = request.user
-    shapes, designations = get_public_arrays()
+    features, collections = get_public_data()
 
     # determine content types for sharing
-    mpa_ctid = ContentType.objects.get_for_model(utils.get_mpa_class()).id
-    array_ctid = ContentType.objects.get_for_model(utils.get_array_class()).id
-
-    t = get_template('placemarks.kml')
-    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 'shapes': sorted(shapes.items()), 'designations': designations, 'use_network_links': True, 'request_path': request.path, 
-        'session_key': session_key, 'mpa_ctid': mpa_ctid, 'array_ctid': array_ctid, 'use_array_folders': False}))
+    t = get_template('kmlapp/base.kml')
+    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 
+        'features': features, 'collections': collections,
+        'use_network_links': True, 'request_path': request.path, 
+        'session_key': session_key}))
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'

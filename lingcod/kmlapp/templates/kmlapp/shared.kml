@@ -1,4 +1,4 @@
-{% extends "base.kml" %}
+{% extends "kmlapp/base.kml" %}
 {% load absurl %}
 {% block folders_and_placemarks %}
 
@@ -34,6 +34,5 @@
 
  </Folder>
 {% endfor %}
-
 
 {% endblock %}

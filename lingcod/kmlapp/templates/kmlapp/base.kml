@@ -11,13 +11,13 @@
 {% block folders_and_placemarks %}
 
   {% for collection in collections %}
-    {% if use_network_links %}
+    {% if use_network_links and not shareuser and not sharegroup %}
       <NetworkLink id="{{collection.uid}}">
         <name>{{collection.name}}</name>
         <visibility>1</visibility>
         <open>0</open>
         <Link>
-          <href>{% absurl kmlapp-collection-links-kmz input_collection_uid=collection.uid,session_key=session_key %}</href>
+          <href>{% absurl kmlapp-feature-links-kmz input_uid=collection.uid,session_key=session_key %}</href>
         </Link>
       </NetworkLink>
     {% else %}

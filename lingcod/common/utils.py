@@ -455,7 +455,7 @@ def enable_sharing(group=None):
     Fake it by attaching the perm to the Group model (from the auth app)
     We check for this perm like: user1.has_perm("auth.can_share_features")
     """
-    from django.contrib.auth.models import Permission
+    from django.contrib.auth.models import Permission, Group
     from django.contrib.contenttypes.models import ContentType
 
     try:
@@ -464,8 +464,20 @@ def enable_sharing(group=None):
         gct = ContentType.objects.get(name="group")
         p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
         p.save()
+ 
+    # Set up default sharing groups
+    for groupname in settings.SHARING_TO_PUBLIC_GROUPS:
+        g, created = Group.objects.get_or_create(name=groupname)
+        g.permissions.add(p)
+        g.save()
+    
+    for groupname in settings.SHARING_TO_STAFF_GROUPS:
+        g, created = Group.objects.get_or_create(name=groupname)
+        g.permissions.add(p)
+        g.save()
 
     if group:
+        # Set up specified group
         group.permissions.add(p)
         group.save()
     return True
