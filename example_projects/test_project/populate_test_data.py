@@ -50,7 +50,8 @@ def main():
     # geometry_final will be set with manipulator
     mpa2.save()
 
-    g1 = GEOSGeometry('SRID=4326;POLYGON((-122.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -122.42 34.37))')
+    g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+    print dir(g1)
     g1.transform(settings.GEOMETRY_DB_SRID)
     mpa3 = Mpa(user=user, name="Mpa3", geometry_orig=g1) 
     # geometry_final will be set with manipulator
@@ -96,7 +97,7 @@ def main():
     folder1.share_with(group2)
 
     ####
-    g1 = GEOSGeometry('SRID=4326;POLYGON((-122.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -122.42 34.37))')
+    g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.24 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
     g1.transform(settings.GEOMETRY_DB_SRID)
     mpa4 = Mpa(user=user2, name="Mpa4", geometry_orig=g1) 
     mpa4.save()

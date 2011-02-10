@@ -29,11 +29,7 @@ INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', )
 # the xml test runner to fail to output the xml
 EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
 
-
-MPA_CLASS = 'mlpa.models.NcMpa'
-ARRAY_CLASS = 'mlpa.models.NcMpaArray'
-MPA_FORM = 'mlpa.forms.MpaForm'
-ARRAY_FORM = 'mlpa.forms.ArrayForm'
+KML_EXTRUDE_HEIGHT = 700
 
 import os
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
