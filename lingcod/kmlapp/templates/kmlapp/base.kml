@@ -5,7 +5,10 @@
   <open>1</open>
   <visibility>1</visibility>
 
-  {% block style %}
+  {% block styledefs %}
+   {% for style in styles %}
+      {{style|safe}}
+   {% endfor %}
   {% endblock %}
 
 {% block folders_and_placemarks %}

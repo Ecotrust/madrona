@@ -216,12 +216,66 @@ class SpatialFeature(Feature):
     
     @property
     def kml(self):
+        """
+        The Feature's kml property MUST 
+          - return a string containing a valid KML placemark element
+          - the placemark must have id= [the feature's uid]
+          - if it references any style URLs, the corresponding Style element(s)
+            must be provided by the feature's .kml_style property
+        """
         return """
         <Placemark id="%s">
             <name>%s</name>
+            <styleUrl>#%s-default</styleUrl>
+            <ExtendedData>
+                <Data name="name"><value>%s</value></Data>
+                <Data name="user"><value>%s</value></Data>
+                <Data name="modified"><value>%s</value></Data>
+            </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, self.name, self.geom_kml)
+        """ % (self.uid, self.name, self.model_uid(), 
+               self.name, self.user, self.date_modified, 
+               self.geom_kml)
+
+    @property
+    def kml_style(self):
+        """
+        Must return a string with one or more KML Style elements
+        whose id's may be referenced by relative URL
+        from within the feature's .kml string
+        In any given KML document, each *unique* kml_style string will get included 
+        so don't worry if you have 10 million features with "blah-default" style...
+        only one will appear in the final document and all the placemarks can refer
+        to it.
+        """
+        return """
+        <Style id="%s-default">
+            <IconStyle>
+                <color>ffffffff</color>
+                <colorMode>normal</colorMode>
+                <scale>0.9</scale> 
+                <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
+            </IconStyle>
+            <BalloonStyle>
+                <bgColor>ffeeeeee</bgColor>
+                <text> <![CDATA[
+                    <font color="#1A3752"><strong>$[name]</strong></font><br />
+                    <font size=1>Created by $[user] on $[modified]</font>
+                ]]> </text>
+            </BalloonStyle>
+            <LabelStyle>
+                <color>ffffffff</color>
+                <scale>0.8</scale>
+            </LabelStyle>
+            <PolyStyle>
+                <color>778B1A55</color>
+            </PolyStyle>
+            <LineStyle>
+                <color>ffffffff</color>
+            </LineStyle>
+        </Style>
+        """ % (self.model_uid(),)
 
     @property
     def active_manipulators(self):
@@ -299,6 +353,8 @@ class PolygonFeature(SpatialFeature):
     def centroid_kml(self):
         geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
         return geom.kml
+ 
+    #TODO make default geom_kml a multi? 
 
     class Meta(Feature.Meta):
         abstract=True
@@ -358,6 +414,10 @@ class FeatureCollection(Feature):
           %s
         </Folder>
         """ %  (self.uid, self.name, ''.join(kmls))
+
+    @property
+    def kml_style(self):
+        return ""
 
     def feature_set(self, recurse=False, feature_classes=None):
         """

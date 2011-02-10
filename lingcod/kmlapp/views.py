@@ -13,6 +13,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from lingcod.features import get_feature_models, get_collection_models, get_model_by_uid
 from lingcod.features.models import FeatureCollection
+from sets import Set
 
 log = get_logger()
 
@@ -25,6 +26,13 @@ try:
     UNATTACHED_NAME = settings.KML_UNATTACHED_NAME
 except:
     UNATTACHED_NAME = "Marine Protected Areas"
+
+def get_styles(features, collections):
+    models = []
+    models.extend([f.kml_style for f in features])
+    models.extend([c.kml_style for c in collections])
+    set = Set(models)
+    return list(set)
 
 def get_user_data(user):
     """
@@ -213,9 +221,11 @@ def create_kml(request, input_username=None, input_uid=None,
     else:
         raise Http404
 
+    styles = get_styles(features,collections)
+
     t = get_template('kmlapp/base.kml')
     kml = t.render(Context({'user': user, 'features': features, 'collections': collections,
-        'use_network_links': links, 'request_path': request.path, 
+        'use_network_links': links, 'request_path': request.path, 'styles': styles, 
         'session_key': session_key, 'shareuser': input_shareuser, 'sharegroup': input_sharegroup}))
 
     response = HttpResponse()
@@ -268,10 +278,12 @@ def shared_public(request, kmz=False, session_key='0'):
     user = request.user
     features, collections = get_public_data()
 
+    styles = get_styles(features,collections)
+
     # determine content types for sharing
     t = get_template('kmlapp/base.kml')
     kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 
-        'features': features, 'collections': collections,
+        'features': features, 'collections': collections, 'styles': styles, 
         'use_network_links': True, 'request_path': request.path, 
         'session_key': session_key}))
 
