@@ -76,6 +76,28 @@ def get_user_data_for_feature(user, uid):
 
     return features, collections
 
+def get_data_for_feature(user, uid):
+    f = get_feature_by_uid(uid)
+    viewable, response = f.is_viewable(user)
+    if not viewable:
+        return [],[]
+
+    features = []
+    collections = []
+
+    if isinstance(f, FeatureCollection):
+        for fmodel in get_feature_models():
+            unattached = [x for x in fmodel.objects.all() if x.collection == f]
+            features.extend(unattached)
+            
+        for cmodel in get_collection_models():
+            collections_top = [x for x in cmodel.objects.all() if x.collection == f]
+            collections.extend(collections_top)
+    elif isinstance(f, Feature):
+        features.append(f)
+
+    return features, collections
+
 def get_public_data():
     """
     No login necessary, everyone sees these
