@@ -1,7 +1,7 @@
 .. _sharing_configuration:
 
-Sharing Features between Users
-======================================
+Sharing Features and Collections
+================================
 
 Introduction
 ***************************

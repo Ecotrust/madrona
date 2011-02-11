@@ -35,18 +35,22 @@ Lets walk through the basics of creating a simple Feature Class. The basic
 process involves:
 
   * Defining a subclass of ``PointFeature``, ``LineStringFeature``, 
-    ``PolygonFeature``, or ``3dModelFeature``, including the attributes to be
+    ``PolygonFeature``, including the attributes to be
     stored with it.
   * Creating an Options inner-class, and using it to specify a form to use 
     when creating or editing this Feature Class.
+  * Creating kml and kml_style properties that define it's KML representation
   * Specifying links to downloads or services related to the Feature Class.
   * Specifying any optional parameters on the Options inner-class
   * Creating a template to use when displaying this Feature Class' attributes
-  * Creating a kml template that can be used to represent it
   
-Look at this crap example::
+Look at this example::
 
-    @features.register
+    from lingcod.features import register
+    from lingcod.features.models import PolygonFeature
+    from lingcod.features.forms import FeatureForm
+
+    @register
     class Mpa(PolygonFeature):
         ext = models.CharField(max_length="12")
 
@@ -84,11 +88,15 @@ Look at this crap example::
                     models=(MpaArray, MlpaMpa)),
             )
 
+    class MpaForm(FeatureForm):
+        class Meta:
+            model = Mpa 
+
 Defining the Model
 ==================
 
 Must be a subclass of one of the ``Feature`` subclasses (``PointFeature``, 
-``PolygonFeature``, ``LineStringFeature``, ``3dModelFeature``)
+``PolygonFeature``, ``LineStringFeature``)
 
 Specifying a Form
 =================
@@ -118,27 +126,118 @@ Templates will be rendered with the following context:
 
 You can add to this list using the `show_context`_ Option property.
 
-Creating a KML Template
-=======================
+Customizing the KML Representation 
+==================================
 
-Create a template under ``{{slug}}/feature.kml`` that represents your feature,
-otherwise a default rendering will be used. The tag used must be a 
-`KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_,
-and have an ``id`` attribute populated with the value of ``instance.uid``.
+There are otherwise a default rendering will be used. 
+The Feature's kml representation is determined by 2 properties on the feature instance, 
+    * .kml
+    * .kml_style 
+      
+Reasonble default kml and kml_style properties are provided for all Feature types but most likely you'll need to override them to customize the look, feel and behavior of your application.
 
-KML templates are rendered with the same context as show templates.
+The `.kml` property MUST  
+    * Return a string containing a valid `KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_ element (most commonly a Placemark or Folder)
+    * The element must have an ``id`` attribute populated with the value of ``instance.uid``.
+    * If it references any style URLs, the corresponding `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ must be provided by the feature's .kml_style property
+
+The `.kml_style` property MUST
+    * Return a string containing one or more valid `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ which may be referenced by URL from the KML feature.
+    * Attempt to be reusable by all similar features; If your kml document contains multiple features, only the *unique* .kml_style strings will appear in the document. Refrain from creating a seperate style for each and every feature and try to group them into classes. 
+
+
+Below is an example of how one might use the kml properties to classify the kml represetation of features.::
+
+    @register
+    class Mpa(PolygonFeature):
+        designation = models.CharField(max_length=42)
+        ...
+
+        @property
+        def kml(self):
+            if self.designation == 'Marine Conservation Area':
+                color = "green"
+            else:
+                color = "blue"
+
+            return """
+            <Placemark id="%s">
+                <name>%s</name>
+                <styleUrl>#%s-default</styleUrl>
+                <styleUrl>#%s-%s</styleUrl>
+                <ExtendedData>
+                    <Data name="name"><value>%s</value></Data>
+                    <Data name="user"><value>%s</value></Data>
+                    <Data name="modified"><value>%s</value></Data>
+                </ExtendedData>
+                %s 
+            </Placemark>
+            """ % (self.uid, 
+                self.name, 
+                self.model_uid(),
+                self.model_uid(), color,
+                self.name, self.user, self.date_modified, 
+                self.geom_kml)
+
+        @property
+        def kml_style(self):
+            return """
+            <Style id="%s-default">
+                <BalloonStyle>
+                    <bgColor>ffeeeeee</bgColor>
+                    <text> <![CDATA[
+                        <font color="#1A3752"><strong>$[name]</strong></font><br />
+                        <font size=1>Created by $[user] on $[modified]</font>
+                    ]]> </text>
+                </BalloonStyle>
+                <LabelStyle>
+                    <color>ffffffff</color>
+                    <scale>0.8</scale>
+                </LabelStyle>
+            </Style>
+
+            <Style id="%s-green">
+                <PolyStyle>
+                    <color>ff0000c0</color>
+                </PolyStyle>
+            </Style>
+
+            <Style id="%s-blue">
+                <PolyStyle>
+                    <color>778B1A55</color>
+                </PolyStyle>
+            </Style>
+            """ % (self.model_uid(), self.model_uid(), self.model_uid())
+
 
 Beyond the Basics
 =================
 
-Enabling Sharing
-----------------
-
 Implementing a Custom Copy Method
 ---------------------------------
+ 
+Some default copying behavior is provided with the built-in feature.copy method. Unless you want to reimplement/change all that logic (and maybe your application requires it) you can call the Super() function and just override the necessary bits::
+
+    @register
+    class Folder(FeatureCollection):
+        
+        def copy(self, user):
+            copy = super(Folder, self).copy(user)
+            copy.name = copy.name.replace(' (copy)', '-Copy')
+            copy.save()
+            return copy
 
 Specifying Manipulators
 -----------------------
+
+You must specify a list of required manipulators; if no manipulators are required simply pass an empty list ``[]``. Optional manipulators can be specified as well::
+
+    @register
+    class TestMpa(PolygonFeature):
+        ...
+        class Options:
+            manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
+            optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToGraticuleManipulator' ]
 
 Etc
 ---
@@ -158,10 +257,6 @@ LineStringFeature
 PolygonFeature
 --------------
 
-3dModelFeature
---------------
-Subclass of PointFeature, but with orientation and a 3d model representing it.
-
 FeatureCollection Base Class
 ============================
 Subclasses of FeatureCollection have a one-to-many relationship with one or 
@@ -169,16 +264,14 @@ more Feature Classes. One could create a Marine Protected Area Network class
 that can only contain MPAs, or a Folder class that can contain any combination
 of FeatureClasses or even other Folders and FeatureCollections.
 
-.. code-block:: python
+One important note about the sharing behavior of FeatureCollections - If a user shares a 
+collection, all the features/collections contained within it are implicitly shared.
 
-    class Folder(FeatureCollection):
-        class Options:
-            # default options, can contain anything
-            pass
+.. code-block:: python
 
     class MPANetwork(FeatureCollection):
         class Options:
-            child_classes = ('mlpa.models.Mpa', )
+            valid_children = ('mlpa.models.Mpa', )
 
 
 The Options inner-class
@@ -223,10 +316,6 @@ The Options inner-class
 
     Specify a base context to use when rendering feature attributes.
 
-.. py:attribute:: shareable
-
-    Enabled by default, set to False to disable sharing functionality.
-
 .. py:attribute:: copy
 
     Enabled by default, set to False to disable copy functionality. Calls the
@@ -235,14 +324,13 @@ The Options inner-class
 
 .. py:attribute:: manipulators
 
-    fucking manipulators, 
-    `how do they work? <http://www.youtube.com/watch?v=_-agl0pOQfs>`_
-    Defaults to clipping features to the study region. Set to ``None`` to 
+    Defaults to clipping features to the study region. Set to ``[]`` to 
     disable.
 
-.. py:attribute:: kml_template
+.. py:attribute:: optional_manipulators
 
-    Specify a template to use. Defaults to ``{{slug}}/feature.kml``.
+    Optional list of manipulators that users can choose to apply to any digitized 
+    features. 
 
 .. py:attribute:: links
 
