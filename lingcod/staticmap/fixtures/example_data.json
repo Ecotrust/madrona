@@ -3,12 +3,12 @@
     "pk": 1, 
     "model": "staticmap.mapconfig", 
     "fields": {
-      "mapfile": "staticmap/norcal.xml", 
+      "mapfile": "staticmap/socal.xml", 
       "mapname": "default",
-      "default_x1": -125.466,
-      "default_y1": 38.78339,
-      "default_x2": -122.92,
-      "default_y2": 42.0874,
+      "default_x1": -121.466,
+      "default_y1": 32.78339,
+      "default_x2": -118.92,
+      "default_y2": 36.0874,
       "default_height": 800,
       "default_width": 616,
       "default_srid": 4326

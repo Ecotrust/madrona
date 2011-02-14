@@ -44,6 +44,7 @@ django-compress>=1.0.1
 django-maintenancemode>=0.9.2
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 -e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/src/#egg=feedvalidator
+-e hg+https://bitbucket.org/springmeyer/djmapnik#egg=djmapnik
 elementtree
 xlwt>=0.7.2
 networkx==1.1

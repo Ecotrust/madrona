@@ -11,7 +11,7 @@ from django.contrib.gis.db import models
 from django.core.exceptions import FieldError
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from lingcod.features import get_feature_models, get_collection_models, get_model_by_uid
+from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid
 from lingcod.features.models import FeatureCollection
 from sets import Set
 
@@ -58,12 +58,6 @@ def get_user_data(user):
         toplevel_collections.extend(collections_top)
 
     return toplevel_features, toplevel_collections
-
-def get_feature_by_uid(uid):
-    applabel, model, id = uid.split('_')
-    model = get_model_by_uid("%s_%s" % (applabel,model))
-    instance = model.objects.get(pk=int(id))
-    return instance
 
 def get_user_data_for_feature(user, uid):
     f = get_feature_by_uid(uid)

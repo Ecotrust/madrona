@@ -75,8 +75,7 @@ INSTALLED_APPS = (
     'lingcod.studyregion',
     'lingcod.simplefaq',
     'lingcod.help',
-    # Until we port to CMS branch, comment out staticmap
-    #'lingcod.staticmap',
+    'lingcod.staticmap',
     'lingcod.screencasts',
     'lingcod.news',
     'lingcod.manipulators',

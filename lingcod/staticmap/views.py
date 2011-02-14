@@ -1,45 +1,55 @@
+import mapnik
+import settings
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.db import connection
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils
-from lingcod.mpa.models import MpaDesignation
-from lingcod.sharing.utils import can_user_view
-import mapnik
-import settings
 from lingcod.staticmap.models import MapConfig
-
-mpa_class = utils.get_mpa_class()
+from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid, get_model_by_uid
+from lingcod.features.models import PointFeature, PolygonFeature, LineFeature
+from djmapnik.adapter import PostgisLayer 
 
 try:
     settings_dbname = settings.DATABASES['default']['NAME']
 except:
     settings_dbname = settings.DATABASE_NAME
 
-def get_mpas(request):
-    # get a list of the MPA ids to display
-    mpas = []
-    if 'mpas' in request.REQUEST: 
-        mpas = str(request.REQUEST['mpas']).split(',')
-        # make sure all given mpas are integers
-        mpas = [int(x) for x in mpas if x.isdigit()]
+feature_models = get_feature_models()
+collection_models = get_collection_models()
 
-    # If an array is specified, it's mpas are appended to the mpa list
-    if 'array' in request.REQUEST:
-        input_array_id = request.REQUEST['array']
-        # Find that array object and get all associated mpas
-        MpaArray = utils.get_array_class()
-        try: 
-            the_array = MpaArray.objects.get(id=input_array_id)
-        except:
-            raise Http404
+def get_features(request):
+    """ 
+    Returns list of tuples representing mapnik layers
+    Tuple => (model_class, [pks])
+    Note: currently just a single pk per 'layer' which is
+    incredibly inefficient but the best way to ensure 
+    proper layer ordering.
+        from mlpa.models import Mpa
+        from mlpa.models import Pipeline
+        from mlpa.models import Shipwreck
+        features = [ (Mpa, [49, 50]),
+                    (Pipeline, [32, 31]),
+                    (Shipwreck, [32, 31])
+                ]
+    """
+    features = [] # list of tuples => (model, [pks])
+    if 'uids' in request.REQUEST: 
+        uids = str(request.REQUEST['uids']).split(',')
+        for uid in uids:
+            applabel, model, pk = uid.split('_')
+            model = get_model_by_uid("%s_%s" % (applabel,model))
+            if model in collection_models:
+                collection = get_feature_by_uid(uid)
+                all_children = collection.feature_set(recurse=True)
+                children = [x for x in all_children if x.__class__ in feature_models]
+                for child in children:
+                    features.append((child.__class__,[child.pk]))
+            else:
+                features.append((model,[pk]))
 
-        mpaids = [x.id for x in the_array.mpa_set]
-        for mpaid in mpaids:
-            mpas.append(mpaid)
-            
-    return mpas
+    return features
 
 def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
     if not srid:
@@ -65,71 +75,6 @@ def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
         height_buffer = height * buffer
         
     return bbox[0]-width_buffer, bbox[1]-height_buffer, bbox[2]+width_buffer, bbox[3]+height_buffer
-
-def get_mpa_filter_string(mpas):
-    if len(mpas) < 1:
-        mpas = [0]
-    mpa_queries = ['[id] = %d' % x for x in mpas] 
-    mpa_filter_string = " or ".join(mpa_queries)
-    return mpa_filter_string
-
-def process_mapfile_text(mapfile, mpas):
-    # Replace local settings-specific variables using keywords in mapnik mapfile
-    # Uses ALL_CAPS keywords in the mapfile
-    xmltext = open(mapfile).read()
-
-    # construct filter and replace the MPA_FILTER tag
-    mpa_filter_string = get_mpa_filter_string(mpas)
-    xmltext = xmltext.replace("MPA_FILTER", mpa_filter_string)
-
-    # Assume MEDIA_ROOT and DATABASE_NAME are always defined
-    xmltext = xmltext.replace("MEDIA_ROOT",settings.MEDIA_ROOT)
-    xmltext = xmltext.replace("GEOMETRY_DB_SRID",str(settings.GEOMETRY_DB_SRID))
-    xmltext = xmltext.replace("GEOMETRY_CLIENT_SRID",str(settings.GEOMETRY_CLIENT_SRID))
-
-    # Replace table names for mpas and mpaarrays
-    xmltext = xmltext.replace("MM_MPA", str(mpa_class._meta.db_table))
-
-    # Offset variables are used to create a bounding box that shows the extent of the zoomed in area
-    try:
-        if settings.STATICMAP_OUTLINE_X_OFFSET is not None and settings.STATICMAP_OUTLINE_Y_OFFSET is not None:
-            xmltext = xmltext.replace("OUTLINE_X_OFFSET", str(settings.STATICMAP_OUTLINE_X_OFFSET))
-            xmltext = xmltext.replace("OUTLINE_Y_OFFSET", str(settings.STATICMAP_OUTLINE_Y_OFFSET))
-    except AttributeError:
-        pass
-    
-    # Deal with deprecated connection settings 
-    # (http://docs.djangoproject.com/en/dev/ref/settings/#deprecated-settings)
-    # Maintain compatibility with django pre-1.2
-    conn = connection.settings_dict
-    try:
-        DB_NAME = conn['NAME']
-        DB_USER = conn['USER']
-        DB_PASSWORD = conn['PASSWORD']
-        DB_HOST = conn['HOST']
-    except:
-        DB_NAME = conn['DATABASE_NAME']
-        DB_USER = conn['DATABASE_USER']
-        DB_PASSWORD = conn['DATABASE_PASSWORD']
-        DB_HOST = conn['DATABASE_HOST']
-
-    connection_string = ""
-    connection_string += "<Parameter name='dbname'>%s</Parameter>" % DB_NAME
-    connection_string += "<Parameter name='user'>%s</Parameter>" % DB_USER
-    connection_string += "<Parameter name='password'>%s</Parameter>" % DB_PASSWORD
-    connection_string += "<Parameter name='host'>%s</Parameter>" % DB_HOST
-
-    # if testing via django unit tests, close out the connection
-    if DB_NAME != settings_dbname:
-        connection_string += "<Parameter name='persist_connection'>false</Parameter>"
-
-    #it appears that ampersands are not allowed in well-formed xml
-    #throws the following runtime error: XML document not well formed: xmlParseEntityRef: no name
-    #hopefully this will account for those situations in which the db password (or something else) contains an ampersand
-    connection_string = connection_string.replace('&', '&amp;')
-        
-    xmltext = xmltext.replace("DATABASE_CONNECTION",connection_string)
-    return xmltext
 
 def get_designation_style(mpas):
     mpa_filter_string = get_mpa_filter_string(mpas)
@@ -167,48 +112,64 @@ def draw_to_response(m, draw, request):
 
 def show(request, map_name='default'):
     """Display a map with the study region geometry.  """
-    maps = get_object_or_404(MapConfig,mapname=map_name)
-    mapfile = str(maps.mapfile.path)
-     
+    map = get_object_or_404(MapConfig,mapname=map_name)
+    mapfile = str(map.mapfile.path)
+    
     # Grab the image dimensions
     try:
         width = int(request.REQUEST['width'])
         height = int(request.REQUEST['height'])
     except:
         # fall back on defaults
-        width, height = maps.default_width, maps.default_height
+        width, height = map.default_width, map.default_height
 
     # Create a blank image
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
+    mapnik.load_map(m, mapfile)
 
-    mpas = get_mpas(request)
+    # Construct styles
+    point_style = mapnik.Style()
+    r = mapnik.Rule()
+    r.symbols.append(mapnik.PointSymbolizer())
+    point_style.rules.append(r)
 
-    # Now that we have a list of requested mpas, lets make sure 
-    # that the user actually has permissions to view them all
-    # if any one fails, 403 or 404 will be raised
-    user = request.user
-    for pk in mpas:
-        viewable, response = can_user_view(mpa_class, pk, user)
-        if not viewable:
-            return response
-    
-    # Do the variable substitution
-    xmltext = process_mapfile_text(mapfile, mpas)
-    mapnik.load_map_from_string(m,xmltext)
+    polyline_style = mapnik.Style()
+    r = mapnik.Rule()
+    ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+    ps.fill_opacity = 0.5
+    r.symbols.append(ps)
+    ls = mapnik.LineSymbolizer(mapnik.Color('#444444'),1.0)
+    ls.stroke_opacity = 0.5
+    r.symbols.append(ls)
+    polyline_style.rules.append(r)
 
-    # Override the mpa_style according to MPA designations
-    s = get_designation_style(mpas)
-    m.append_style('mpa_style',s)
-     
+    m.append_style('default_polyline_style', polyline_style)
+    m.append_style('default_point_style', point_style)
+
+    # Create the mapnik layers
+    for model, pks in get_features(request):
+        adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name="geometry_final")
+        lyr = adapter.to_mapnik()
+        if issubclass(model,PointFeature):
+            lyr.styles.append('default_point_style')
+        elif issubclass(model,LineFeature):
+            lyr.styles.append('default_polyline_style')
+        elif issubclass(model,PolygonFeature):
+            lyr.styles.append('default_polyline_style')
+        else:
+            raise Exception("Must be point, line or polygon feature!!!")
+        m.layers.append(lyr)
+
     # Grab the bounding coordinates and set them if specified
     # first, assume default image extent
-    x1, y1 = maps.default_x1, maps.default_y1
-    x2, y2 = maps.default_x2, maps.default_y2
+    x1, y1 = map.default_x1, map.default_y1
+    x2, y2 = map.default_x2, map.default_y2
     
     if "autozoom" in request.REQUEST:
+        # TODO - not supported with CMS
         if request.REQUEST['autozoom'].lower() == 'true' and mpas and len(mpas)>0:
-            x1, y1, x2, y2 = auto_extent(mpas, maps.default_srid)
+            x1, y1, x2, y2 = auto_extent(mpas, map.default_srid)
     elif "bbox" in request.REQUEST:
         try:
             x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
