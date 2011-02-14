@@ -98,6 +98,16 @@ Defining the Model
 Must be a subclass of one of the ``Feature`` subclasses (``PointFeature``, 
 ``PolygonFeature``, ``LineStringFeature``)
 
+.. note::
+    *Keep the model name to under 30 characters in length*. 
+    When creating a Feature model, django will automatically add permissions with a verbose name (e.g. "Can share Your Model Name") 
+    which must be < 50 chars. Keeping the model name to around 30 chars or less will prevent SQL errors when creating the model. 
+
+.. note::
+    *When creating a model for your unit tests, define the model outside of your TestCase class*. 
+    Otherwise the feature class gets destroyed when the test finishes but it is never 'unregistered'
+    which can lead to very difficult SQL/ORM debugging problems later in the tests.
+
 Specifying a Form
 =================
 
