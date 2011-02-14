@@ -648,3 +648,8 @@ def groups_users_sharing_with(user, include_public=False):
     else:
         return None
 
+def get_feature_by_uid(uid):
+    applabel, model, id = uid.split('_')
+    model = get_model_by_uid("%s_%s" % (applabel,model))
+    instance = model.objects.get(pk=int(id))
+    return instance
