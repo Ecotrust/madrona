@@ -133,7 +133,11 @@ class Feature(models.Model):
         """
         # First, is the user logged in?
         if user.is_anonymous() or not user.is_authenticated():
-            return HttpResponse('You must be logged in', status=401)
+            try:
+                obj = self.__class__.objects.shared_with_user(user).get(pk=self.pk)
+                return True, HttpResponse("Object shared with public, viewable by anonymous user", status=202)
+            except self.__class__.DoesNotExist:
+                return False, HttpResponse('You must be logged in', status=401)
 
         # Does the user own it?
         if self.user == user:

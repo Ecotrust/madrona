@@ -59,25 +59,6 @@ def get_user_data(user):
 
     return toplevel_features, toplevel_collections
 
-def get_user_data_for_feature(user, uid):
-    f = get_feature_by_uid(uid)
-
-    features = []
-    collections = []
-
-    if isinstance(f, FeatureCollection):
-        for fmodel in get_feature_models():
-            unattached = [x for x in fmodel.objects.filter(user=user) if x.collection == f]
-            features.extend(unattached)
-            
-        for cmodel in get_collection_models():
-            collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection == f]
-            collections.extend(collections_top)
-    elif isinstance(f, Feature):
-        features.append(f)
-
-    return features, collections
-
 def get_data_for_feature(user, uid):
     f = get_feature_by_uid(uid)
     viewable, response = f.is_viewable(user)
@@ -209,7 +190,7 @@ def create_kml(request, input_username=None, input_uid=None,
     if input_username:
         features, collections = get_user_data(user)
     elif input_uid:
-        features, collections = get_user_data_for_feature(user, input_uid)
+        features, collections = get_data_for_feature(user, input_uid)
     elif input_shareuser and input_sharegroup:
         features, collections = get_shared_data(input_shareuser, input_sharegroup, user)
     else:
