@@ -21,10 +21,17 @@ class PrivateLayerList(Feature):
     can_share_features permissions)
     """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
-    kml = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
+    kml_file = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
         KML file (not publically available). This file can use
         NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
+
+    @property
+    def kml(self):
+        fh = self.kml_file.open()
+        kml_txt = fh.read()
+        fh.close()
+        return kml_txt
 
     class Options:
         verbose_name = 'Private Layer List'
@@ -44,6 +51,13 @@ class PrivateSuperOverlay(Feature):
         relative paths.  The user making the request only needs permissions for the base kml. 
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
         if the user has proper permissions on the base kml.""")
+
+    @property
+    def kml(self):
+        fh = self.base_kml.open()
+        kml_txt = fh.read()
+        fh.close()
+        return kml_txt
 
     class Options:
         verbose_name = 'Private SuperOverlay'
