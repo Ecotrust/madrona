@@ -645,7 +645,6 @@ def groups_users_sharing_with(user, include_public=False):
 
 def get_model_by_uid(muid):
     for model in registered_models:
-        print model.model_uid(), muid
         if model.model_uid() == muid:
             return model
     raise Exception("No model with model_uid == `%s`" % muid)
