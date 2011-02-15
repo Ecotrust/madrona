@@ -43,8 +43,17 @@ def get_features(request):
             log.debug("processing uid %s" % uid)
             applabel, modelname, pk = uid.split('_')
             model = get_model_by_uid("%s_%s" % (applabel,modelname))
+            feature = get_feature_by_uid(uid)
+
+            viewable, response = feature.is_viewable(request.user)
+            if not viewable:
+                continue
+
             if model in collection_models:
                 collection = get_feature_by_uid(uid)
+                viewable, response = collection.is_viewable(request.user)
+                if not viewable:
+                    continue
                 all_children = collection.feature_set(recurse=True)
                 children = [x for x in all_children if x.__class__ in feature_models]
                 for child in children:

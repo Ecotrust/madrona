@@ -595,11 +595,6 @@ def get_feature_models():
             registered_features.append(model)
     return registered_features
 
-def get_model_by_uid(uid):
-    for model in registered_models:
-        if model.model_uid() == uid:
-            return model
-
 def user_sharing_groups(user):
     """
     Returns a list of groups that user is member of and 
@@ -648,8 +643,16 @@ def groups_users_sharing_with(user, include_public=False):
     else:
         return None
 
+def get_model_by_uid(muid):
+    for model in registered_models:
+        print model.model_uid(), muid
+        if model.model_uid() == muid:
+            return model
+    raise Exception("No model with model_uid == `%s`" % muid)
+
 def get_feature_by_uid(uid):
-    applabel, model, id = uid.split('_')
-    model = get_model_by_uid("%s_%s" % (applabel,model))
+    applabel, modelname, id = uid.split('_')
+    id = int(id)
+    model = get_model_by_uid("%s_%s" % (applabel,modelname))
     instance = model.objects.get(pk=int(id))
     return instance
