@@ -33,19 +33,17 @@ class KMLAppTest(TestCase):
         g2.transform(settings.GEOMETRY_DB_SRID)
         g3.transform(settings.GEOMETRY_DB_SRID)
 
-        mpa1 = Mpa.objects.create( name='Test_MPA_1', user=self.user, geometry_final=g1)
-        mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', user=self.user, geometry_final=g2)
-        mpa3 = Mpa.objects.create( name='Test_MPA_3', user=self.user, geometry_final=g3)
-        mpa1.save()
-        mpa2.save()
-        mpa3.save()
-        self.test_mpa_id = mpa1.id
+        self.mpa1 = Mpa.objects.create( name='Test_MPA_1', user=self.user, geometry_final=g1)
+        self.mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', user=self.user, geometry_final=g2)
+        self.mpa3 = Mpa.objects.create( name='Test_MPA_3', user=self.user, geometry_final=g3)
+        self.mpa1.save()
+        self.mpa2.save()
+        self.mpa3.save()
 
-        array1 = MpaArray.objects.create( name='Test_Array_1', user=self.user)
-        array1.save()
-        self.test_array_id = array1.id
-        array1.add_mpa(mpa1)
-        array1.add_mpa(mpa2)
+        self.array1 = MpaArray.objects.create( name='Test_Array_1', user=self.user)
+        self.array1.save()
+        self.mpa1.add_to_collection(self.array1)
+        self.mpa2.add_to_collection(self.array1)
 
         # Then make the group with permissions
         self.group1 = Group.objects.create(name="Test Group 1")
@@ -57,13 +55,12 @@ class KMLAppTest(TestCase):
         self.user2.groups.add(self.group1)
 
         # Share with common group
-        array1.share_with(self.group1)
+        self.array1.share_with(self.group1)
 
         # Share with public
         public_group = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)[0]
-        for modelname in shareables.iterkeys():
-            public_group.permissions.add(shareables[modelname][1])
-        share_object_with_groups(array1, [public_group.pk])
+        self.user.groups.add(public_group)
+        self.array1.share_with(public_group)
 
     def test_nonauth_user_kml(self):
         """ 
@@ -113,14 +110,14 @@ class KMLAppTest(TestCase):
         Tests that Array can be represented as valid KML
         """
         self.client.login(username=self.user.username, password=self.password)
-        url = reverse('kmlapp-array-kml', kwargs={'session_key': '0', 'input_array_id': self.test_array_id})
+        url = reverse('kmlapp-feature-kml', kwargs={'session_key': '0', 'input_uid': self.array1.uid})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
 
         # test session_key in url method
-        url = reverse('kmlapp-array-kml', kwargs={'session_key': self.client.session.session_key, 'input_array_id': self.test_array_id})
+        url = reverse('kmlapp-feature-kml', kwargs={'session_key': self.client.session.session_key, 'input_uid': self.array1.uid})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
 
@@ -129,14 +126,14 @@ class KMLAppTest(TestCase):
         Tests that single MPA can be represented as valid KML
         """
         self.client.login(username=self.user.username, password=self.password)
-        url = reverse('kmlapp-mpa-kml', kwargs={'session_key': '0', 'input_mpa_id': self.test_mpa_id})
+        url = reverse('kmlapp-feature-kml', kwargs={'session_key': '0', 'input_uid': self.mpa1.uid })
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
 
         # test session_key in url method
-        url = reverse('kmlapp-mpa-kml', kwargs={'session_key': self.client.session.session_key, 'input_mpa_id': self.test_mpa_id})
+        url = reverse('kmlapp-feature-kml', kwargs={'session_key': self.client.session.session_key, 'input_uid': self.mpa1.uid})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
         
@@ -219,15 +216,9 @@ class KMLAppTest(TestCase):
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 401)
         
-    def test_nonexistant_mpa(self):
+    def test_nonexistant_feature(self):
         self.client.login(username=self.user.username, password=self.password)
-        url = reverse('kmlapp-mpa-kmz', kwargs={'session_key': self.client.session.session_key, 'input_mpa_id': '12345678910'})
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 404)
-
-    def test_nonexistant_array(self):
-        self.client.login(username=self.user.username, password=self.password)
-        url = reverse('kmlapp-array-kmz', kwargs={'session_key': self.client.session.session_key, 'input_array_id': '12345678910'})
+        url = reverse('kmlapp-feature-kmz', kwargs={'session_key': self.client.session.session_key, 'input_uid': 'blah_blah_12345678910'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 

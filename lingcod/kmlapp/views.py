@@ -12,7 +12,7 @@ from django.core.exceptions import FieldError
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid
-from lingcod.features.models import FeatureCollection
+from lingcod.features.models import FeatureCollection, Feature
 from sets import Set
 
 log = get_logger()
@@ -60,10 +60,14 @@ def get_user_data(user):
     return toplevel_features, toplevel_collections
 
 def get_data_for_feature(user, uid):
-    f = get_feature_by_uid(uid)
+    try:
+        f = get_feature_by_uid(uid)
+    except:
+        return False , HttpResponse("Feature %s does not exist" % uid, status=404)
+
     viewable, response = f.is_viewable(user)
     if not viewable:
-        return [],[]
+        return viewable, response
 
     features = []
     collections = []
@@ -195,6 +199,9 @@ def create_kml(request, input_username=None, input_uid=None,
         features, collections = get_shared_data(input_shareuser, input_sharegroup, user)
     else:
         raise Http404
+
+    if not features and isinstance(collections, HttpResponse):
+        return collections # We got an http error going on
 
     styles = get_styles(features,collections)
 
