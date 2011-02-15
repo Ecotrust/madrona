@@ -793,20 +793,20 @@ class TestArrayForm(FeatureForm):
         model = TestArray
 
 @register
-class Folder(FeatureCollection):
+class TestFolder(FeatureCollection):
     
     def copy(self, user):
-        copy = super(Folder, self).copy(user)
+        copy = super(TestFolder, self).copy(user)
         copy.name = copy.name.replace(' (copy)', '-Copy')
         copy.save()
         return copy
     
     class Options:
-        form = 'lingcod.features.tests.FolderForm'
+        form = 'lingcod.features.tests.TestFolderForm'
         valid_children = (
             'lingcod.features.tests.TestMpa', 
             'lingcod.features.tests.TestArray', 
-            'lingcod.features.tests.Folder', 
+            'lingcod.features.tests.TestFolder', 
             'lingcod.features.tests.RenewableEnergySite')
         links = (
             edit('Delete folder and contents',
@@ -823,9 +823,9 @@ class Folder(FeatureCollection):
             )
         )
 
-class FolderForm(FeatureForm):
+class TestFolderForm(FeatureForm):
     class Meta:
-        model = Folder
+        model = TestFolder
 
 
 TYPE_CHOICES = (
@@ -900,7 +900,7 @@ class CopyTest(TestCase):
         enable_sharing(self.group1)
 
         self.mpa = TestMpa(user=self.user, name="My Mpa")
-        self.folder = Folder(user=self.user, name="My Folder")
+        self.folder = TestFolder(user=self.user, name="My Folder")
         self.folder.save()
         self.mpa.save()
     
@@ -938,7 +938,7 @@ class CopyTest(TestCase):
         self.assertRegexpMatches(response.content, r'(copy)')
         self.assertRegexpMatches(response.content, r'Folder-Copy')
         self.assertRegexpMatches(response['X-MarineMap-Select'], 
-            r'features_testmpa_\d+ features_folder_\d+')
+            r'features_testmpa_\d+ features_testfolder_\d+')
     
     def test_other_users_can_copy_if_shared(self):
         self.mpa.share_with(self.group1) 
@@ -1021,9 +1021,9 @@ class CollectionTest(TestCase):
         self.mpa1.save()
         self.mpa2 = TestMpa(user=self.user1, name="My Mpa 2")
         self.mpa2.save()
-        self.folder1 = Folder(user=self.user1, name="My Folder")
+        self.folder1 = TestFolder(user=self.user1, name="My Folder")
         self.folder1.save()
-        self.folder2 = Folder(user=self.user1, name="My Folder2")
+        self.folder2 = TestFolder(user=self.user1, name="My Folder2")
         self.folder2.save()
         self.pipeline = Pipeline(user=self.user1, name="My Pipeline")
         self.pipeline.save()
@@ -1104,9 +1104,9 @@ class CollectionTest(TestCase):
         mpa4.save()
         mpa5 = TestMpa(user=self.user1, name="My Mpa 2")
         mpa5.save()
-        folder3 = Folder(user=self.user1, name="My Folder")
+        folder3 = TestFolder(user=self.user1, name="My Folder")
         folder3.save()
-        folder4 = Folder(user=self.user1, name="My Folder2")
+        folder4 = TestFolder(user=self.user1, name="My Folder2")
         folder4.save()
 
         self.folder1.add(self.mpa1)
@@ -1158,7 +1158,7 @@ class CollectionTest(TestCase):
     def test_no_potential_parents(self):
         shipwreck_parents = Shipwreck.get_options().get_potential_parents()
         self.assertFalse(TestArray in shipwreck_parents) 
-        self.assertFalse(Folder in shipwreck_parents) 
+        self.assertFalse(TestFolder in shipwreck_parents) 
         self.assertEqual(len(shipwreck_parents), 0)
 
     def test_add_invalid_child_feature(self):
@@ -1242,7 +1242,7 @@ class SharingTestCase(TestCase):
         self.array1.add(self.mpa1)
         self.array1.add(self.pipeline1)
 
-        self.folder1 = Folder.objects.create(user=self.user1, name="My Folder")
+        self.folder1 = TestFolder.objects.create(user=self.user1, name="My Folder")
         self.folder1.save()
         self.folder1.add(self.array1)
 

@@ -469,6 +469,7 @@ def share_form(request,model=None, pk=None):
         return HttpResponse('Instance PK not specified', status=500)
 
     obj = get_object_for_editing(request, model, pk)
+
     if isinstance(obj, HttpResponse):
         return obj
     if not isinstance(obj, Feature):
