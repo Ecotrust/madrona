@@ -10,6 +10,8 @@ from lingcod.staticmap.models import MapConfig
 from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid, get_model_by_uid
 from lingcod.features.models import PointFeature, PolygonFeature, LineFeature
 from djmapnik.adapter import PostgisLayer 
+from lingcod.common.utils import get_logger
+log = get_logger()
 
 try:
     settings_dbname = settings.DATABASES['default']['NAME']
@@ -38,8 +40,9 @@ def get_features(request):
     if 'uids' in request.REQUEST: 
         uids = str(request.REQUEST['uids']).split(',')
         for uid in uids:
-            applabel, model, pk = uid.split('_')
-            model = get_model_by_uid("%s_%s" % (applabel,model))
+            log.debug("processing uid %s" % uid)
+            applabel, modelname, pk = uid.split('_')
+            model = get_model_by_uid("%s_%s" % (applabel,modelname))
             if model in collection_models:
                 collection = get_feature_by_uid(uid)
                 all_children = collection.feature_set(recurse=True)
@@ -123,10 +126,16 @@ def show(request, map_name='default'):
         # fall back on defaults
         width, height = map.default_width, map.default_height
 
-    # Create a blank image
+    # Create a blank image and map
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
-    mapnik.load_map(m, mapfile)
+
+    # load_map is NOT thread safe (?)
+    # load_map_from_string appears to work
+    #mapnik.load_map(m, mapfile)
+    xmltext = open(mapfile).read()
+    mapnik.load_map_from_string(m, xmltext)
+    log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Construct styles
     point_style = mapnik.Style()

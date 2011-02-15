@@ -38,7 +38,7 @@
     <StyleName>land_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">./data/ca_or_stl</Parameter>
+        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/ca_or_stl</Parameter>
     </Datasource>
 </Layer>
 
@@ -46,7 +46,7 @@
     <StyleName>port_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">./data/world_ports</Parameter>
+        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/world_ports</Parameter>
     </Datasource>
 </Layer>
 
