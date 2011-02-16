@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'lingcod.unit_converter',
     'lingcod.openid',
     'lingcod.loadshp',
+    'lingcod.heatmap',
     'registration',
     'south',
     'lingcod.async',
