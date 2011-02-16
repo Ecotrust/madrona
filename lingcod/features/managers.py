@@ -14,6 +14,7 @@ class ShareableGeoManager(models.GeoManager):
         """
         app_name = self.model._meta.app_label
         model_name = self.model.__name__.lower()
+        perm = Permission.objects.get(codename='can_share_features')
 
         if user.is_anonymous() or not user.is_authenticated():
             # public users get special treatment -
@@ -71,7 +72,7 @@ class ShareableGeoManager(models.GeoManager):
            
             return self.filter(
                 models.Q(
-                    sharing_groups__permissions__codename='can_share_features', 
+                    sharing_groups__permissions=perm, 
                     sharing_groups__in=groups
                 ) | 
                 models.Q(
@@ -82,7 +83,7 @@ class ShareableGeoManager(models.GeoManager):
             # No containers, just a straight 'is it shared' query
             return self.filter(
                 models.Q(
-                    sharing_groups__permissions__codename='can_share_feaures', 
+                    sharing_groups__permissions=perm, 
                     sharing_groups__in=groups
                 )
             ).distinct()
