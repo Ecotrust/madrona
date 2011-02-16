@@ -34,8 +34,8 @@ def get_styles(features, collections):
     models = []
     models.extend([f.kml_style for f in features])
     models.extend([c.kml_style for c in collections])
-    set = set(models)
-    return list(set)
+    unique_set = set(models)
+    return list(unique_set)
 
 def get_user_data(user):
     """
