@@ -13,7 +13,10 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid
 from lingcod.features.models import FeatureCollection, Feature
-from sets import Set
+try:
+    set
+except NameError:
+    from sets import Set as set
 
 log = get_logger()
 
@@ -31,7 +34,7 @@ def get_styles(features, collections):
     models = []
     models.extend([f.kml_style for f in features])
     models.extend([c.kml_style for c in collections])
-    set = Set(models)
+    set = set(models)
     return list(set)
 
 def get_user_data(user):
