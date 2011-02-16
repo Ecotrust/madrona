@@ -23,7 +23,7 @@ def get_user_layers(request, session_key='0', input_username=None):
     
     #ALSO, how to handle a user being associated with more than one active layer?
     layer = get_object_or_404(UserLayerList, user=user.id, active=True)
-    return HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
+    return HttpResponse(layer.kml_file.read(), mimetype=mimetypes.KML)
 
 def get_networklink_private_layers(request, session_key):
     """
@@ -123,7 +123,7 @@ def get_private_layer(request, pk, session_key='0'):
     if not viewable:
         return response
     else:
-        response = HttpResponse(layer.kml.read(), status=200, mimetype=mimetypes.KML)
+        response = HttpResponse(layer.kml_file.read(), status=200, mimetype=mimetypes.KML)
         response['Content-Disposition'] = 'attachment; filename=private_%s.kml' % pk
         return response
 
@@ -206,6 +206,6 @@ def get_public_layers(request):
         layer = PublicLayerList.objects.filter(active=True)[0]
     except:
         raise Http404
-    response = HttpResponse(layer.kml.read(), mimetype=mimetypes.KML)
+    response = HttpResponse(layer.kml_file.read(), mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=public.kml'
     return response

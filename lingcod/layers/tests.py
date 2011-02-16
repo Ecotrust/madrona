@@ -26,7 +26,6 @@ class PrivateLayerListTest(TestCase):
     #urls = 'lingcod.layers.tests'
 
     def setUp(self):
-        # kml file
         kml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures/public_layers.kml')
 
         # Create 3 users
@@ -50,13 +49,15 @@ class PrivateLayerListTest(TestCase):
         # User1 creates Layer1 and shares with Group1
         self.layer1 = PrivateLayerList.objects.create(user=self.user1)
         self.layer1.save()
-        self.layer1.kml.save('layer1.kml', f)
+        self.layer1.kml_file.save('layer1.kml', f)
+        self.layer1.save()
         self.layer1.share_with(self.group1)
 
         # User2 creates Layer2 and doesnt share (the selfish bastard)
         self.layer2 = PrivateLayerList.objects.create(user=self.user2)
         self.layer2.save()
-        self.layer2.kml.save('layer2.kml', f)
+        self.layer2.kml_file.save('layer2.kml', f)
+        self.layer2.save()
 
     def test_permissions(self):
         # User 1 can view Layer 1
@@ -128,10 +129,10 @@ class PublicLayerListTest(TestCase):
 
         f = File(open(path + '/fixtures/public_layers.kml'))
         settings.MEDIA_URL = ''
-        layer.kml.save('kml-file.kml', f)
+        layer.kml_file.save('kml-file.kml', f)
         # 2 because the initial_data fixture loads one
         self.assertEquals(PublicLayerList.objects.count(), 2)
-        self.assertTrue(layer.kml.size > 0)
+        self.assertTrue(layer.kml_file.size > 0)
     
     def testOnlyOneActiveLayer(self):
         layer = PublicLayerList.objects.create(active=True)
@@ -167,7 +168,7 @@ class PublicLayerListTest(TestCase):
         path = os.path.dirname(os.path.abspath(__file__))
         f = File(open(path + '/fixtures/public_layers.kml'))
         settings.MEDIA_URL = ''
-        layer.kml.save('kml-file.kml', f)
+        layer.kml_file.save('kml-file.kml', f)
         self.assertEquals(PublicLayerList.objects.count(), 2)
         client = Client()
         response = client.get('/layers/public/')
@@ -179,7 +180,7 @@ class PublicLayerListTest(TestCase):
 
         f = File(open(path + '/fixtures/public_layers.kml'))
         settings.MEDIA_URL = ''
-        layer.kml.save('kml-file.kml', f)
-        dr = os.path.dirname(layer.kml.file.name)
+        layer.kml_file.save('kml-file.kml', f)
+        dr = os.path.dirname(layer.kml_file.file.name)
         cmd = 'rm -f %s/*.kml' % (dr, )
         os.system(cmd)

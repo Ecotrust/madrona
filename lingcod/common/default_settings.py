@@ -92,7 +92,6 @@ INSTALLED_APPS = (
     'lingcod.user_profile',
     'lingcod.unit_converter',
     'lingcod.openid',
-    'lingcod.features',
     'lingcod.loadshp',
     'registration',
     'south',
@@ -104,6 +103,7 @@ INSTALLED_APPS = (
 EXCLUDE_FROM_TESTS = [
     'ghettoq', 
     'south', 
+    'registration',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',

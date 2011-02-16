@@ -172,7 +172,6 @@ class GeometryOpsTest(TestCase):
     def test_askml(self):
         g = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
         kml = asKml(g)
-        print kml
         
     def test_simplify(self):
         # Note second coordinate in relation to the first, simplify will remove it if the tolerance is large enough

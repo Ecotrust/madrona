@@ -37,7 +37,6 @@ def map(request, template_name='common/map.html'):
                 last_checked = datetime.datetime.strptime(request.COOKIES['mm_last_checked_news'], timeformat)
                 try:
                     latest_news = Entry.objects.latest('modified_on').modified_on
-                    print latest_news
                     # if theres new news, show it and reset cookie
                     if last_checked < latest_news:
                         set_news_cookie = True
