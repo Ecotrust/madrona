@@ -9,7 +9,7 @@ class PrivateSuperOverlayAdmin(admin.ModelAdmin):
     pass
 
 class PublicLayerListAdmin(admin.ModelAdmin):
-    list_display = ('kml', 'active', 'creation_date',)
+    list_display = ('kml_file', 'active', 'creation_date',)
     
 admin.site.register(PublicLayerList, PublicLayerListAdmin)
 admin.site.register(PrivateLayerList, PrivateLayerListAdmin)
