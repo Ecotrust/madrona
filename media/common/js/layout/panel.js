@@ -206,30 +206,28 @@ lingcod.layout.SanitizedContent = function(html){
     var rscript = /<script(.|\s)*?\/script>/g;
     var rstyle = /<style(.|\s)*?\/style>/g;
     
+    var that = this;
+    
     // extract script tags. NOT intended to work for src="..."-type tags
-    var matches = html.match(rscript);
-    if(matches){
-        for(var i = 0; i<matches.length; i++){
-            var match = matches[i];
-            this.js.push(matches[i].replace(/<script(.|\s)*?>/, '')
-                .replace('</script>', ''));
+    html = html.replace(rscript, function(m){
+        if(m.indexOf('text/javascript+protovis') !== -1){
+            return m;
+        }else{
+            that.js.push(m.replace(
+                /<script(.|\s)*?>/, '').replace('</script>',''));
+            return '';
         }
-    }
+    });
     
     // extract style tags
-    var matches = html.match(rstyle);
-    if(matches){
-        for(var i = 0; i<matches.length; i++){
-            this.styles.push({
-                id: $(matches[i]).attr('id'),
-                style: matches[i].replace(/<style(.|\s)*?>/, '').replace('</style>', '')
-            });
-        }            
-    }
+    html = html.replace(rstyle, function(m){
+        that.styles.push({
+            id: $(m).attr('id'),
+            style: m.replace(/<style(.|\s)*?>/, '').replace('</style>', '')
+        });
+    });
     
-    // Set an instance variable to the html fragment with style and css
-    // tags removed
-    this.html = jQuery.trim(html.replace(rstyle, '').replace(rscript, ''));
+    this.html = jQuery.trim(html);
     return this;
 };
 
