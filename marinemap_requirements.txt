@@ -1,43 +1,38 @@
-########
+#############################################################################
 # pip requirements file for marinemap/lingcod
-# this should install all requirements for marinemap 
-# (eventually - for now this is EXPERIMENTAL)
 #
-# Highly recomended to use this with virtualenv
+# Automates the installation of most marinemap python dependencies
 # To begin you need pip, virtualenv, hg, svn
+#
+# Usage:
 # -----------------------------------------
-# # Create a virtualenv
-# cd ~
+# cd /usr/local
+# sudo pip install -r marinemap_requirements.txt
+# # OR if you want to upgrade existing installations
+# sudo pip install --upgrade -r marinemap_requirements.txt
+# # OR if you want to reference by URL
+# sudo pip install --upgrade -r http://marinemap.googlecode.com/hg/marinemap_requirements.txt
+# -----------------------------------------
+# 
+# You can also use this with virtualenv
+# -----------------------------------------
 # virtualenv MyMarineMap
-#
-# # Install all requirements
 # pip -E MyMarineMap install -r marinemap_requirements.txt
-#
-# # Activate virtual env
 # cd MyMarineMap
 # source bin/activate
-# # .... do stuff .....
 # deactivate
 # -----------------------------------------
 #
 # Note that there are several hairy requirements that aren't handled 
 # by this file; these must be installed globally the hard way:
 #
-# GDAL : just copy the gdal.pth file into your local site packages dir
-# Mapnik : just copy the entire mapnik dir into your local site packages dir
+# GDAL >= 1.6 : just copy the gdal.pth file into your local site packages dir
+# Mapnik == 0.7.1 : just copy the entire mapnik dir into your local site packages dir
 # PIL : symlink the PIL directory to site-packages dir
-# Postgis : set up according to the marinemap docs
-#
-#############
+# Postgis : set up according to the geodjango and marinemap docs
+#############################################################################
 
-# Lingcod itself
-# We dont want to install this explicity by default in case someone wants a newer version
-# -e hg+https://marinemap.googlecode.com/hg#egg=marinemap
-
-# Django/GeoDjango
 -e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
-
-# Dependencies
 BeautifulSoup>=3.1.0.1
 Sphinx>=0.6.3
 django-compress>=1.0.1
@@ -54,8 +49,6 @@ ghettoq>=0.4.1
 django-unittest-depth>=0.6
 python-openid>=2.2.5
 django-picklefield>=0.1.9
-
-# Maybe needed?? These aren't listed in the docs but seem useful/necessary
 python-cjson>=1.0.5
 epydoc>=3.0.1
 docutils>=0.5
@@ -63,14 +56,4 @@ South>=0.7
 psycopg2>=2.0.12
 wsgiref>=0.1.2
 numpy>=1.3.0
-#unittest-xml-reporting>=1.0.3
--e git+https://github.com/danielfm/unittest-xml-reporting.git#egg=unittest-xml-reporting
-
-# ------- Problems ----------- #
-# Mapnik?
-
-# GDAL ?
-
-# Postgis ? 
-
-# PIL ?
+unittest-xml-reporting>=1.0.3

@@ -33,23 +33,14 @@ You need the following installed on your system in order to start running
 MarineMap.
 
     * A working installation of `GeoDjango <http://geodjango.org>`_ (which has it's own set of dependencies including proj, gdal and postgres/postgis)
-    * `django-compress <http://code.google.com/p/django-compress/>`_ (requires CSSTidy, look @ the 1.2 release for binaries)
-    * `elementtree <http://effbot.org/zone/element-index.htm>`_
-    * `django-maintenancemode <http://pypi.python.org/pypi/django-maintenancemode>`_
-    * `sphinx <http://sphinx.pocoo.org/>`_ is used for generating documentation
     * `mapnik <http://mapnik.org/>`_ generates static maps for reports
-    * `feedvalidator <http://www.feedvalidator.org/docs/howto/install_and_run.html>`_ for testing KML
-    * `beautiful soup 3.0 <http://www.crummy.com/software/BeautifulSoup/>`_ is necessary for running tests. Be sure you have version >= 3.0
-    * `xlwt <http://pypi.python.org/pypi/xlwt/>`_ for handling Excel spreadsheets
-    * `django-registration <http://pypi.python.org/pypi/django-registration>`_ provides the user account managment and registration (Version 0.8+ is required - v0.7 wont work so don't use easy_install! Use `0.8alpha1 <http://bitbucket.org/ubernostrum/django-registration/downloads/django-registration-0.8-alpha-1.tar.gz>`_ instead.)
-    * `south <http://south.aeracode.org/>`_ for database schema migrations
-    * `networkx <http://networkx.lanl.gov/>`_ for graph networks in the spacing app
-    * `pip <http://pip.openplans.org/>`_ for package management (optional)
-    * `celery <http://celeryproject.org/>`_ for asynchronous task management (optional)
-    * `ghettoq <http://pypi.python.org/pypi/ghettoq/>`_ as a task queue for celery (optional)
+    * The version control systems git, mercurial and subversion
+    * The following python packages listed in `marinemap_requirements.txt <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_::  
+
+.. literalinclude:: ../marinemap_requirements.txt
 
 Most of the dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
-We have created a `pip requirements file <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_ which can be used to install most of the dependencies::
+We have created the `pip requirements file <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_ to automate the installation of most of the dependencies::
 
     cd /usr/local # Assuming you want to put stuff in /usr/local/src
     pip install -r http://marinemap.googlecode.com/hg/marinemap_requirements.txt    
