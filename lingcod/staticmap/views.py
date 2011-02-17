@@ -146,37 +146,14 @@ def show(request, map_name='default'):
     mapnik.load_map_from_string(m, xmltext)
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
-    # Construct styles
-    point_style = mapnik.Style()
-    r = mapnik.Rule()
-    r.symbols.append(mapnik.PointSymbolizer())
-    point_style.rules.append(r)
-
-    polyline_style = mapnik.Style()
-    r = mapnik.Rule()
-    ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
-    ps.fill_opacity = 0.5
-    r.symbols.append(ps)
-    ls = mapnik.LineSymbolizer(mapnik.Color('#444444'),1.0)
-    ls.stroke_opacity = 0.5
-    r.symbols.append(ls)
-    polyline_style.rules.append(r)
-
-    m.append_style('default_polyline_style', polyline_style)
-    m.append_style('default_point_style', point_style)
-
     # Create the mapnik layers
     for model, pks in get_features(request):
+        style = model.mapnik_style()
+        style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
+        m.append_style(style_name, style)
         adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name="geometry_final")
         lyr = adapter.to_mapnik()
-        if issubclass(model,PointFeature):
-            lyr.styles.append('default_point_style')
-        elif issubclass(model,LineFeature):
-            lyr.styles.append('default_polyline_style')
-        elif issubclass(model,PolygonFeature):
-            lyr.styles.append('default_polyline_style')
-        else:
-            raise Exception("Must be point, line or polygon feature!!!")
+        lyr.styles.append(style_name)
         m.layers.append(lyr)
 
     # Grab the bounding coordinates and set them if specified

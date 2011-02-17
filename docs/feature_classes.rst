@@ -219,6 +219,27 @@ Below is an example of how one might use the kml properties to classify the kml 
             </Style>
             """ % (self.model_uid(), self.model_uid(), self.model_uid())
 
+Customizing the Mapnik Rendering
+================================
+Each spatial feature type should provide a classmethod named `mapnik_style` which returns a mapnik Style object for that model. The Style object can contain rules for classification as well as symbolizers for controling the appearance of points, lines, polygons and labels::
+
+    class Mpa(PolygonFeature):
+        ....
+        @classmethod
+        def mapnik_style(self):
+            polygon_style = mapnik.Style()
+
+            ps = mapnik.PolygonSymbolizer(mapnik.Color('white'))
+            ps.fill_opacity = 0.5
+            ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
+            ls.stroke_opacity = 0.5
+
+            r = mapnik.Rule()
+            r.symbols.append(ps)
+            r.symbols.append(ls)
+            
+            polygon_style.rules.append(r)
+            return polygon_style
 
 Beyond the Basics
 =================

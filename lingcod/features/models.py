@@ -10,6 +10,7 @@ from lingcod.features import get_model_options
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
 from lingcod.common.utils import get_logger, get_class, enable_sharing
 from lingcod.manipulators.manipulators import manipulatorsDict, NullManipulator
+import mapnik
 import re
 
 logger = get_logger()
@@ -360,6 +361,19 @@ class PolygonFeature(SpatialFeature):
  
     #TODO make default geom_kml a multi? 
 
+    @classmethod
+    def mapnik_style(self):
+        polygon_style = mapnik.Style()
+        ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+        ps.fill_opacity = 0.5
+        ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
+        ls.stroke_opacity = 0.5
+        r = mapnik.Rule()
+        r.symbols.append(ps)
+        r.symbols.append(ls)
+        polygon_style.rules.append(r)
+        return polygon_style
+
     class Meta(Feature.Meta):
         abstract=True
 
@@ -371,6 +385,16 @@ class LineFeature(SpatialFeature):
             null=True, blank=True, verbose_name="Original LineString Geometry")
     geometry_final = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Final LineString Geometry")
+
+    @classmethod
+    def mapnik_style(self):
+        line_style = mapnik.Style()
+        ls = mapnik.LineSymbolizer(mapnik.Color('#444444'),1.5)
+        ls.stroke_opacity = 0.5
+        r = mapnik.Rule()
+        r.symbols.append(ls)
+        line_style.rules.append(r)
+        return line_style
 
     class Meta(Feature.Meta):
         abstract=True
@@ -384,6 +408,14 @@ class PointFeature(SpatialFeature):
     geometry_final = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Final Point Geometry")
     
+    @classmethod
+    def mapnik_style(self):
+        point_style = mapnik.Style()
+        r = mapnik.Rule()
+        r.symbols.append(mapnik.PointSymbolizer())
+        point_style.rules.append(r)
+        return point_style
+
     class Meta(Feature.Meta):
         abstract=True
 
