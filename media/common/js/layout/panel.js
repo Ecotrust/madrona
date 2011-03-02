@@ -225,6 +225,7 @@ lingcod.layout.SanitizedContent = function(html){
             id: $(m).attr('id'),
             style: m.replace(/<style(.|\s)*?>/, '').replace('</style>', '')
         });
+        return '';
     });
     
     this.html = jQuery.trim(html);
