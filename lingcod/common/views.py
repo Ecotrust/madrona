@@ -10,7 +10,7 @@ import datetime
 from django.conf import settings
 
 
-def map(request, template_name='common/map.html'):
+def map(request, template_name='common/map.html', extra_context={}):
     """
     Main application window
     Sets/Checks Cookies to determine if user needs to see the about or news panels
@@ -29,7 +29,9 @@ def map(request, template_name='common/map.html'):
     if not valid_browser(useragent) and enforce_supported:
         from lingcod.common import uaparser
         bp = uaparser.browser_platform(useragent)
-        return render_to_response('common/supported_browsers.html', {'useragent':useragent, 'browser_platform': bp.__repr__()})
+        context = {'useragent':useragent, 'browser_platform': bp.__repr__()}
+        context.update(extra_context)
+        return render_to_response('common/supported_browsers.html', context)
 
     if "mm_already_viewed" in request.COOKIES:
         if "mm_last_checked_news" in request.COOKIES:
@@ -79,13 +81,15 @@ def map(request, template_name='common/map.html'):
     if user.is_authenticated() and user_sharing_groups(user):
         member_of_sharing_group = True
     
-    response = render_to_response(template_name, RequestContext(request,{
+    context = RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         'member_of_sharing_group': member_of_sharing_group,
         #'user_layers': user_layers,
-        }))
+    })
+    context.update(extra_context)
+    response = render_to_response(template_name, context)
     
     if set_news_cookie:
         now = datetime.datetime.strftime(datetime.datetime.now(), timeformat)
