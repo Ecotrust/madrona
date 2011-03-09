@@ -26,6 +26,18 @@ def LargestPolyFromMulti(geom):
     else:
         largest_geom = geom
     return largest_geom  
+
+def LargestLineFromMulti(geom): 
+    """ takes a line or a multiline geometry and returns only the longest line geometry"""
+    if geom.num_geom > 1:
+        largest_length = 0.0
+        for g in geom: # find the largest polygon in the multi polygon 
+            if g.length > largest_length:
+                largest_geom = g
+                largest_length = g.length
+    else:
+        largest_geom = geom
+    return largest_geom  
    
 def angle(pnt1,pnt2,pnt3):
     """
