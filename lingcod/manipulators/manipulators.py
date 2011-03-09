@@ -2,7 +2,7 @@ from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing, fr
 from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
-from lingcod.common.utils import LargestPolyFromMulti
+from lingcod.common.utils import LargestPolyFromMulti, LargestLineFromMulti
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
@@ -423,18 +423,21 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while intersecting geometries: " + e.message)  
         
-        #if there was no overlap (intersection was empty)
-        if clipped_shape.area == 0:
+        out_geom = None
+        if target_shape.geom_type == 'Polygon' and clipped_shape.area > 0:
+            out_geom = LargestPolyFromMulti(clipped_shape)
+        elif target_shape.geom_type == 'LineString' and clipped_shape.length > 0:
+            out_geom = LargestLineFromMulti(clipped_shape)
+        elif target_shape.geom_type == 'Point' and not clipped_shape.empty:
+            out_geom = clipped_shape
+
+        if out_geom is None:
             message = "clipped geometry is empty (there was no intersection/overlap with study region)"
             status_html = self.do_template("2")
             raise self.HaltManipulations(message, status_html)
-            
-        #if there was overlap
-        largest_poly = LargestPolyFromMulti(clipped_shape)
-        #message = "target_shape was clipped to study region"
+
         status_html = self.do_template("0")
-        #return self.result(largest_poly, target_shape, status_html, message)
-        return self.result(largest_poly, status_html)
+        return self.result(out_geom, status_html)
         
         
     class Options:
