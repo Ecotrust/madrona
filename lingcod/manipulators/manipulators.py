@@ -639,9 +639,10 @@ def get_manipulators_for_model(model):
     required = []
     display_names = {}
     descriptions = {}
+    options = model.get_options()
 
     # required manipulators
-    for manipulator in model.Options.manipulators:
+    for manipulator in options.manipulators:
         required.append(manipulator.Options.name)
 
         try:
@@ -655,21 +656,18 @@ def get_manipulators_for_model(model):
             pass
 
     # optional manipulators
-    try:
-        optional = []
-        for manipulator in model.Options.optional_manipulators:
-            optional.append(manipulator.Options.name)
-            try:
-                display_names[manipulator.Options.name] = manipulator.Options.display_name
-            except AttributeError:
-                pass
+    optional = []
+    for manipulator in options.optional_manipulators:
+        optional.append(manipulator.Options.name)
+        try:
+            display_names[manipulator.Options.name] = manipulator.Options.display_name
+        except AttributeError:
+            pass
 
-            try:
-                descriptions[manipulator.Options.name] = manipulator.Options.description
-            except AttributeError:
-                pass
-    except:
-        optional = None
+        try:
+            descriptions[manipulator.Options.name] = manipulator.Options.description
+        except AttributeError:
+            pass
 
     manip = {'manipulators': required}
     if optional:
@@ -689,7 +687,8 @@ def get_manipulators_for_model(model):
     except AttributeError:
         pass
 
-    manip['loadshp_url'] = reverse('loadshp-single')
+    if 'loadshp' in manip['geometry_input_methods']:
+        manip['loadshp_url'] = reverse('loadshp-single')
     manip['url'] = url
     manip['display_names'] = display_names
     manip['descriptions'] = descriptions

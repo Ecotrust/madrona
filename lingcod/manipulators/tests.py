@@ -182,12 +182,12 @@ class TestPolyForm(FeatureForm):
 class TestOptmanip(PolygonFeature):
     type = models.CharField(max_length=1)
     class Options:
-        verbose_name = 'Test Optional Manipulators'
+        verbose_name = 'Feature to Test Optional Manipulators'
         form = 'lingcod.manipulators.tests.TestOptmanipForm'
         optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
         manipulators = []
 class TestOptmanipForm(FeatureForm):
-    class Meta:
+    class Meta(FeatureForm.Meta):
         model = TestOptmanip
 
 @register
@@ -277,8 +277,38 @@ class FeaturesManipulatorTest(TestCase):
         self.assertEqual(g, feature.geometry_final)
 
     def test_optional_manip_form(self):
-        pass
+        # TestPoly should NOT have any optional manipulators defined
+        options = TestPoly.get_options()
+        response = self.client.get(options.get_create_form())
+        self.assertEqual(response.status_code, 200)
+        self.assertNotRegexpMatches(response.content, r'optional_manipulators')
+
+        # get the form and confirm that it allows cliptostudyregion as optional manip
+        options = TestOptmanip.get_options()
+        response = self.client.get(options.get_create_form())
+        self.assertEqual(response.status_code, 200)
+        self.assertRegexpMatches(response.content, r'optional_manipulators')
+        self.assertRegexpMatches(response.content, r'ClipToStudyRegion')
 
     def test_optional_manip(self):
-        pass
+        # partial polygon
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.234 34.46, -120.152 34.454, -120.162 34.547, -120.234 34.46))')
+        g.transform(settings.GEOMETRY_DB_SRID)
 
+        orig_geom = '-120.234,34.46,700 -120.152,34.454,700 -120.162,34.547,700 -120.234,34.46,700'
+        clip_geom = "-120.154031278,34.472909502,700 -120.152,34.454,700 -120.234,34.46,700 "\
+                "-120.2251468,34.4707108689,700 -120.218519204,34.4709073104,700 -120.217006684,34.4706784357,700 "\
+                "-120.21271897,34.4708157272,700 -120.208662028,34.4704036177,700 -120.203517908,34.4704151237,700 "\
+                "-120.19793129,34.4707738014,700 -120.186931614,34.4698275471,700 -120.1839447,34.4706171748,700 "\
+                "-120.177446368,34.4709301328,700 -120.168699263,34.4697474322,700 -120.165655133,34.4711589807,700 "\
+                "-120.159605021,34.4716395135,700 -120.158477785,34.4722310096,700 -120.154031278,34.472909502,700"
+
+        # Next, POST to manipulators url with no manipulators specified; should get original geom back
+        response = self.client.post('/manipulators//', {'target_shape': display_kml(g)})
+        self.assertTrue(orig_geom in response.content)
+        self.assertFalse(clip_geom in response.content)
+
+        # Next, POST to manipulators url with ClipToStudyRegionManipulator specified; should get clipped geom back
+        response = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': display_kml(g)})
+        self.assertTrue(orig_geom in response.content)
+        self.assertTrue(clip_geom in response.content)
