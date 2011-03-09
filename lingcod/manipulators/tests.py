@@ -6,6 +6,10 @@ from django.contrib.gis.geos import *
 from lingcod.studyregion.models import StudyRegion
 from django.core import serializers 
 from manipulators import *      
+from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from lingcod.features.forms import FeatureForm
+from lingcod.features import register
+from django.contrib.auth.models import User
 
 urlpatterns = patterns('',
     (r'/manipulators/', include('lingcod.manipulators.urls')),
@@ -163,3 +167,118 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(response0.status_code, 200)
        
     
+@register
+class TestPoly(PolygonFeature):
+    type = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'Test Poly'
+        form = 'lingcod.manipulators.tests.TestPolyForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestPolyForm(FeatureForm):
+    class Meta:
+        model = TestPoly
+
+@register
+class TestOptmanip(PolygonFeature):
+    type = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'Test Optional Manipulators'
+        form = 'lingcod.manipulators.tests.TestOptmanipForm'
+        optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+        manipulators = []
+class TestOptmanipForm(FeatureForm):
+    class Meta:
+        model = TestOptmanip
+
+@register
+class TestLine(LineFeature):
+    type = models.CharField(max_length=1)
+    diameter = models.FloatField(null=True)
+    class Options:
+        verbose_name = 'TestLine'
+        form = 'lingcod.manipulators.tests.TestLineForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestLineForm(FeatureForm):
+    class Meta:
+        model = TestLine
+
+@register
+class TestPoint(PointFeature):
+    incident = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'TestPoint'
+        form = 'lingcod.manipulators.tests.TestPointForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestPointForm(FeatureForm):
+    class Meta:
+        model = TestPoint
+
+class FeaturesManipulatorTest(TestCase):
+    fixtures = ['example_data']
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@marinemap.org', password='pword')
+        self.client.login(username='featuretest', password='pword')
+
+    def test_point_outside(self):
+        from lingcod.manipulators.manipulators import ClipToStudyRegionManipulator as csrm
+        with self.assertRaisesRegexp(csrm.HaltManipulations, 'empty'):
+            g = GEOSGeometry('SRID=4326;POINT(-100.45 14.32)')
+            g.transform(settings.GEOMETRY_DB_SRID)
+            feature = TestPoint(user=self.user, name="Outside Region", geometry_orig=g)
+            feature.save()
+
+    def test_studyregion_point(self):
+        g = GEOSGeometry('SRID=4326;POINT(-119.82 34.404)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoint(user=self.user, name="Nearby Wreck", geometry_orig=g)
+        feature.save()
+        self.assertEqual(g, feature.geometry_final)
+
+    def test_studyregion_line_allin(self):
+        # all in
+        g = GEOSGeometry('SRID=4326;LINESTRING(-120.234 34.46, -120.152 34.454)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestLine(user=self.user, name="My Pipeline", geometry_orig=g)
+        feature.save()
+        # floating point imprecission .. can't do this
+        # self.assertTrue(g.equals(feature.geometry_final))
+        self.assertAlmostEquals(g[1][0], feature.geometry_final[1][0])
+        self.assertAlmostEquals(g[1][1], feature.geometry_final[1][1])
+
+    def test_studyregion_line_partial(self):
+        # partial 
+        g = GEOSGeometry('SRID=4326;LINESTRING(-120.234 34.46, -120.162 34.547)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestLine(user=self.user, name="My Pipeline", geometry_orig=g)
+        feature.save()
+        clip = GEOSGeometry('SRID=3310;LINESTRING (-21492.0524731723162404 -395103.6204170039854944, -20676.0969509799033403 -393916.9388333586975932)')
+        self.assertAlmostEquals(clip[1][0], feature.geometry_final[1][0])
+        self.assertAlmostEquals(clip[1][1], feature.geometry_final[1][1])
+
+    def test_studyregion_poly_allin(self):
+        # all in
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.161 34.441, -120.144 34.458, -120.186 34.455, -120.161 34.441))') 
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature.save()
+        self.assertAlmostEquals(g.area, feature.geometry_final.area, 2)
+        
+    def test_studyregion_poly_partial(self):
+        #partial
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.234 34.46, -120.152 34.454, -120.162 34.547, -120.234 34.46))')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature.save()
+        print g
+        print feature.geometry_final
+        self.assertEqual(g, feature.geometry_final)
+
+    def test_optional_manip_form(self):
+        pass
+
+    def test_optional_manip(self):
+        pass
+
