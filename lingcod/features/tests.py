@@ -311,7 +311,7 @@ class CreateTest(TestCase):
         old_count = CreateTestFeature.objects.count()
         self.client.login(username='featuretest', password='pword')
         response = self.client.post(self.create_url, {'name': "My Test"})
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 201,response.content)
         self.assertTrue(old_count < CreateTestFeature.objects.count())
         inst = CreateTestFeature.objects.get(name='My Test')
         self.assertTrue(

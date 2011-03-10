@@ -25,6 +25,11 @@ class ShapeInput(forms.HiddenInput):
             
 class FeatureForm(ModelForm):
     user = forms.ModelChoiceField(User.objects.all(),widget=forms.HiddenInput())
+    class Meta:
+        exclude = ('sharing_groups','content_type','object_id',)
+
+class SpatialFeatureForm(ModelForm):
+    user = forms.ModelChoiceField(User.objects.all(),widget=forms.HiddenInput())
     geometry_orig = forms.CharField(widget=ShapeInput())
     geometry_final = forms.CharField(widget=ShapeInput(), required=False)
     manipulators = forms.CharField(widget=forms.HiddenInput(), required=False)
