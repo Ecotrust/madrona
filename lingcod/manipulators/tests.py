@@ -272,9 +272,7 @@ class FeaturesManipulatorTest(TestCase):
         g.transform(settings.GEOMETRY_DB_SRID)
         feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
         feature.save()
-        print g
-        print feature.geometry_final
-        self.assertEqual(g, feature.geometry_final)
+        self.assertNotAlmostEquals(g.area, feature.geometry_final.area)
 
     def test_optional_manip_form(self):
         # TestPoly should NOT have any optional manipulators defined
