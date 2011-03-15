@@ -296,6 +296,20 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 if link.rel not in link_rels['link-relations'].keys():
                     link_rels['link-relations'][link.rel] = []
                 link_rels['link-relations'][link.rel].append(link.dict())
+        if self._model in get_collection_models():
+            link_rels['collection'] = {
+                'classes': [x.model_uid() for x in self.get_valid_children()],
+                'remove': { 
+                    'uri-template': 'TBD' 
+                        #reverse("%s_update_form" % (self.slug, ), 
+                        #args=[14]).replace('14', '{id}')
+                },
+                'add': { 
+                    'uri-template': 'TBD' 
+                        #reverse("%s_update_form" % (self.slug, ), 
+                        #args=[14]).replace('14', '{id}')
+                }
+            }
         return link_rels
     
     def json(self):

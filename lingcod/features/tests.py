@@ -884,7 +884,6 @@ class JsonSerializationTest(TestCase):
     def setUp(self):
         self.json = workspace_json()
         self.dict = json.loads(self.json)
-        print self.json
 
     def test_normal_features(self):
         fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'Shipwreck'][0]
@@ -915,7 +914,11 @@ class JsonSerializationTest(TestCase):
             fcdict['link-relations']['related']
 
     def test_collections(self):
-        pass
+        fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'TestArray'][0]
+        self.assertTrue(fcdict['collection'])
+        self.assertTrue(fcdict['collection']['add'])
+        self.assertTrue(fcdict['collection']['remove'])
+        self.assertEquals(len(fcdict['collection']['classes']), 3)
 
         
 class CopyTest(TestCase):
