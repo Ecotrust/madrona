@@ -183,6 +183,8 @@
                     '</ul>'
                 ].join(''));
                 
+                
+                $('#selection select').html('');
                 jQuery.each(workspace.actions.getByRel('create'), function(i, action){
                     $('#create').append([
                         '<li>',
