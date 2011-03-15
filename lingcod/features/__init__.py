@@ -284,10 +284,11 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'create': {
                     'uri-template': reverse("%s_create_form" % (self.slug, ))
                 },
-                'update': {
-                    'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                'edit': [
+                    { 'uri-template': reverse("%s_update_form" % (self.slug, ), 
                         args=[14]).replace('14', '{id}')
-                }
+                    },
+                ]
             }
         }
         for link in self.links:
@@ -558,12 +559,21 @@ def workspace_json(*args):
         'feature-classes': [],
         'generic-links': []
     }
-    for model in args:
-        workspace['feature-classes'].append(model.get_options().dict())
-    for link in registered_links:
-        # See if the generic links are relavent to this list
-        if link.generic and [i for i in args if i in link.models]:
-            workspace['generic-links'].append(link.dict())
+    if not args:
+        # Workspace doc gets ALL feature classes and registered links
+        for model in registered_models:
+            workspace['feature-classes'].append(model.get_options().dict())
+        for link in registered_links:
+            if link.generic: 
+                workspace['generic-links'].append(link.dict())
+    else:
+        # Workspace doc only reflects specified feature class models
+        for model in args:
+            workspace['feature-classes'].append(model.get_options().dict())
+        for link in registered_links:
+            # See if the generic links are relavent to this list
+            if link.generic and [i for i in args if i in link.models]:
+                workspace['generic-links'].append(link.dict())
     return json.dumps(workspace, indent=2)
 
 def get_collection_models():

@@ -881,8 +881,42 @@ class ShipwreckForm(FeatureForm):
 
 class JsonSerializationTest(TestCase):
     
-    def test_workspace(self):
+    def setUp(self):
+        self.json = workspace_json()
+        self.dict = json.loads(self.json)
+        print self.json
+
+    def test_normal_features(self):
+        fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'Shipwreck'][0]
+        for lr in ['self','create','edit']:
+            self.assertTrue(fcdict['link-relations'][lr])
+        with self.assertRaises(KeyError):
+            fcdict['link-relations']['alternate']
+        with self.assertRaises(KeyError):
+            fcdict['link-relations']['related']
+         
+    def test_generic(self):
+        linkdict = [x for x in self.dict['generic-links'] if x['title'] == 'Generic Link'][0]
+        for f in ["features_genericlinkstestfeature", "features_othergenericlinkstestfeature"]:
+            self.assertTrue(f in linkdict['models'])
+        self.assertFalse("features_shipwreck" in linkdict['models'])
+
+    def test_custom_features(self):
+        fcdict = [x for x in self.dict['feature-classes'] if x['id'] == 'features_testmpa'][0]
+        for lr in ['self','create','edit', 'related']:
+            self.assertTrue(fcdict['link-relations'][lr])
+        with self.assertRaises(KeyError):
+            fcdict['link-relations']['alternate']
+
+        fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'LinkTestFeature'][0]
+        for lr in ['self','create','edit', 'alternate']:
+            self.assertTrue(fcdict['link-relations'][lr])
+        with self.assertRaises(KeyError):
+            fcdict['link-relations']['related']
+
+    def test_collections(self):
         pass
+
         
 class CopyTest(TestCase):
     
