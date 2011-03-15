@@ -123,9 +123,21 @@ not a string path." % (name,))
         """
         valid child classes for the feature container
         """
-        if self.valid_children and not issubclass(self._model, FeatureCollection):
-            raise FeatureConfigurationError("valid_children Option is only \
+        if self.valid_children:
+            if issubclass(self._model, FeatureCollection):
+                # Enable the remove and add links
+                self.links.insert(0, edit('Remove', 
+                    'lingcod.features.views.remove_from_collection', 
+                    select='multiple single',
+                    edits_original=True))
+                self.links.insert(0, edit('Add', 
+                    'lingcod.features.views.add_to_collection', 
+                    select='multiple single',
+                    edits_original=True))
+            else:
+                raise FeatureConfigurationError("valid_children Option only \
                     for FeatureCollection classes" % m)
+
 
         self.manipulators = [] 
         """
@@ -175,7 +187,6 @@ not a string path." % (name,))
         """
         Enable kml visualization of features.  Defaults to True.
         """
-
         # Add a kml link by default
         if self.enable_kml:
             self.links.insert(0,alternate('KML',
@@ -300,16 +311,6 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         if self._model in get_collection_models():
             link_rels['collection'] = {
                 'classes': [x.model_uid() for x in self.get_valid_children()],
-                'remove': { 
-                    'uri-template': 'TBD' 
-                        #reverse("%s_update_form" % (self.slug, ), 
-                        #args=[14]).replace('14', '{id}')
-                },
-                'add': { 
-                    'uri-template': 'TBD' 
-                        #reverse("%s_update_form" % (self.slug, ), 
-                        #args=[14]).replace('14', '{id}')
-                }
             }
         return link_rels
     

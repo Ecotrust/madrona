@@ -916,8 +916,6 @@ class JsonSerializationTest(TestCase):
     def test_collections(self):
         fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'TestArray'][0]
         self.assertTrue(fcdict['collection'])
-        self.assertTrue(fcdict['collection']['add'])
-        self.assertTrue(fcdict['collection']['remove'])
         self.assertEquals(len(fcdict['collection']['classes']), 3)
 
         
