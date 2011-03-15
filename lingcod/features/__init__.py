@@ -123,9 +123,21 @@ not a string path." % (name,))
         """
         valid child classes for the feature container
         """
-        if self.valid_children and not issubclass(self._model, FeatureCollection):
-            raise FeatureConfigurationError("valid_children Option is only \
+        if self.valid_children:
+            if issubclass(self._model, FeatureCollection):
+                # Enable the remove and add links
+                self.links.insert(0, edit('Remove', 
+                    'lingcod.features.views.remove_from_collection', 
+                    select='multiple single',
+                    edits_original=True))
+                self.links.insert(0, edit('Add', 
+                    'lingcod.features.views.add_to_collection', 
+                    select='multiple single',
+                    edits_original=True))
+            else:
+                raise FeatureConfigurationError("valid_children Option only \
                     for FeatureCollection classes" % m)
+
 
         self.manipulators = [] 
         """
@@ -175,7 +187,6 @@ not a string path." % (name,))
         """
         Enable kml visualization of features.  Defaults to True.
         """
-
         # Add a kml link by default
         if self.enable_kml:
             self.links.insert(0,alternate('KML',
@@ -284,10 +295,12 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'create': {
                     'uri-template': reverse("%s_create_form" % (self.slug, ))
                 },
-                'update': {
-                    'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                'edit': [
+                    { 'title': 'edit',
+                      'uri-template': reverse("%s_update_form" % (self.slug, ), 
                         args=[14]).replace('14', '{id}')
-                }
+                    },
+                ]
             }
         }
         for link in self.links:
@@ -295,6 +308,10 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 if link.rel not in link_rels['link-relations'].keys():
                     link_rels['link-relations'][link.rel] = []
                 link_rels['link-relations'][link.rel].append(link.dict())
+        if self._model in get_collection_models():
+            link_rels['collection'] = {
+                'classes': [x.model_uid() for x in self.get_valid_children()],
+            }
         return link_rels
     
     def json(self):
@@ -558,12 +575,21 @@ def workspace_json(*args):
         'feature-classes': [],
         'generic-links': []
     }
-    for model in args:
-        workspace['feature-classes'].append(model.get_options().dict())
-    for link in registered_links:
-        # See if the generic links are relavent to this list
-        if link.generic and [i for i in args if i in link.models]:
-            workspace['generic-links'].append(link.dict())
+    if not args:
+        # Workspace doc gets ALL feature classes and registered links
+        for model in registered_models:
+            workspace['feature-classes'].append(model.get_options().dict())
+        for link in registered_links:
+            if link.generic: 
+                workspace['generic-links'].append(link.dict())
+    else:
+        # Workspace doc only reflects specified feature class models
+        for model in args:
+            workspace['feature-classes'].append(model.get_options().dict())
+        for link in registered_links:
+            # See if the generic links are relavent to this list
+            if link.generic and [i for i in args if i in link.models]:
+                workspace['generic-links'].append(link.dict())
     return json.dumps(workspace, indent=2)
 
 def get_collection_models():

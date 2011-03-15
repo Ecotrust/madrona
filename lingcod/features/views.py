@@ -518,3 +518,32 @@ def share_form(request,model=None, pk=None):
         return HttpResponse( "Received unexpected " + request.method + 
                 " request.", status=400 )
 
+def add_to_collection(request, instances, collection_model, collection_pk):
+    config = model.get_options()
+    collection_instance = get_object_for_editing(request, 
+            collection_model, collection_pk)
+    if isinstance(collection_instance, HttpResponse):
+        return instance
+
+    if request.method == 'POST':
+        for instance in instances:
+            instance.add_to_collection(collection_instance)
+        return HttpResponse("Added instances %r to collection %r" % 
+                (instance, collection_instance), status=200)
+    else:
+        return HttpResponse("Invalid http method.", status=405)
+    
+def remove_from_collection(request, instances, collection_model, collection_pk):
+    config = model.get_options()
+    collection_instance = get_object_for_editing(request, 
+            collection_model, collection_pk)
+    if isinstance(collection_instance, HttpResponse):
+        return instance
+        
+    if request.method == 'POST':
+        for instance in instances:
+            instance.remove_from_collection(collection_instance)
+        return HttpResponse("Remove instances %r from collection %r" % 
+                (instance, collection_instance), status=200)
+    else:
+        return HttpResponse("Invalid http method.", status=405)
