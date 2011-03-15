@@ -285,7 +285,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                     'uri-template': reverse("%s_create_form" % (self.slug, ))
                 },
                 'edit': [
-                    { 'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                    { 'title': 'edit',
+                      'uri-template': reverse("%s_update_form" % (self.slug, ), 
                         args=[14]).replace('14', '{id}')
                     },
                 ]
