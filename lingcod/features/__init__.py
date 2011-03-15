@@ -123,19 +123,8 @@ not a string path." % (name,))
         """
         valid child classes for the feature container
         """
-        if self.valid_children:
-            if issubclass(self._model, FeatureCollection):
-                # Enable the remove and add links
-                self.links.insert(0, edit('Remove', 
-                    'lingcod.features.views.remove_from_collection', 
-                    select='multiple single',
-                    edits_original=True))
-                self.links.insert(0, edit('Add', 
-                    'lingcod.features.views.add_to_collection', 
-                    select='multiple single',
-                    edits_original=True))
-            else:
-                raise FeatureConfigurationError("valid_children Option only \
+        if self.valid_children and not issubclass(self._model, FeatureCollection):
+            raise FeatureConfigurationError("valid_children Option only \
                     for FeatureCollection classes" % m)
 
 
@@ -311,6 +300,15 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         if self._model in get_collection_models():
             link_rels['collection'] = {
                 'classes': [x.model_uid() for x in self.get_valid_children()],
+                'remove': {
+                    'uri-template': reverse("%s_remove_features" % (self.slug, ), 
+                        kwargs={'collection_pk':14,'ids':'xx'}).replace('14', '{collection_id}').replace('xx','{ids+}')
+                },
+                'add': {
+                    'uri-template': reverse("%s_add_features" % (self.slug, ), 
+                        kwargs={'collection_pk':14,'ids':'xx'}).replace('14', '{collection_id}').replace('xx','{ids+}')
+                }
+
             }
         return link_rels
     
