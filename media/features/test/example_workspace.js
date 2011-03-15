@@ -36,6 +36,7 @@ var doc = {
     {
       "link-relations": {
         "self": {
+          "title": 'Attributes',
           "uri-template": "/features/shipwreck/{id}/"
         }, 
         "create": {
@@ -43,7 +44,7 @@ var doc = {
         }, 
         "edit": [
             {
-              "title": "Edit",
+              "title": "Attributes and Geometry",
               "uri-template": "/features/shipwreck/{id}/form/"
             }
         ]
@@ -54,6 +55,8 @@ var doc = {
     {
       "link-relations": {
         "self": {
+        "title": 'Attributes',
+            
           "uri-template": "/features/mpa/{id}/"
         }, 
         "create": {
@@ -61,7 +64,7 @@ var doc = {
         }, 
         "edit": [
             {
-              "title": "Edit",
+              "title": "Attributes and Geometry",
               "uri-template": "/features/mpa/{id}/form/"
             }
         ]
@@ -72,6 +75,8 @@ var doc = {
     {
       "link-relations": {
         "self": {
+            "title": 'Attributes',
+            
           "uri-template": "/features/array/{id}/"
         }, 
         "create": {
@@ -79,7 +84,7 @@ var doc = {
         }, 
         "edit": [
             {
-              "title": "Edit",
+              "title": "Attributes and Geometry",
               "uri-template": "/features/array/{id}/form/"
             }
         ]
@@ -90,6 +95,8 @@ var doc = {
     {
       "link-relations": {
         "self": {
+            "title": 'Attributes',
+            
           "uri-template": "/features/pipeline/{id}/"
         }, 
         "create": {
@@ -97,7 +104,7 @@ var doc = {
         }, 
         "edit": [
             {
-              "title": "Edit",
+              "title": "Attributes and Geometry",
               "uri-template": "/features/pipeline/{id}/form/"
             }
         ]

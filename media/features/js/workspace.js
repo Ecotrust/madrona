@@ -12,16 +12,12 @@ lingcod.features.workspace = (function(){
     function extractActions(doc){
         // list of actions to return
         var actions = [];
-        // we're also going to keep a hash keyed by rel+title for lookups
-        var existing = {};
+        
         // First grab feature-specific links
         jQuery.each(doc['feature-classes'], function(i, klass){
             jQuery.each(klass['link-relations'], function(linkrel, links){
                 if(links instanceof Array){
                     jQuery.each(links, function(i, link){
-                        if(!link.rel){
-                            link.rel = linkrel;
-                        }
                         if(link.title){
                             var action = getOrCreateAction(link, actions)
                             action.addLink(link);                    
@@ -29,10 +25,13 @@ lingcod.features.workspace = (function(){
                             throw('invalid link with no title');
                         }                        
                     });
+                }else{
+                    var action = getOrCreateAction(links, actions);
+                    action.addLink(links);     
                 }
-                // else do nothing, special type of link
             });
         });
+        
         // Then grab generic links
         jQuery.each(doc['generic-links'], function(i, link){
             if(link.title){
@@ -41,20 +40,66 @@ lingcod.features.workspace = (function(){
             }else{
                 throw('invalid link with no title');
             }
-        })
+        });
+        
+        // Then grab links by name
+        jQuery.each(doc['feature-classes'], function(i, klass){
+            var rels = klass['link-relations'];
+            // self link, required.
+            var self = rels['self'];
+            if(typeof self === 'undefined' || self instanceof Array){
+                throw('undefined or invalid self link for '+klass.title);
+            }else{
+                self.rel = 'self';
+                var action = getOrCreateAction(self, actions);
+            }
+        });
+        
         return actions;
     }
     
+    // 
+    // getOrCreateAction
+    // 
+    // Looks in the given actions list to see if there is an action matching
+    // the given link's rel and title attributes. If it can't be found, 
+    // creates and appends one. Then adds the link to the actions links via 
+    // action.addLink
     function getOrCreateAction(link, actions){
-        var key = link.rel+link.title;
-        var action = actions[key];
-        if(typeof action !== 'object'){
-            // Is a new named action
-            var action = actions[key] = new Action(
-                link.title, link.rel);
-            actions.push(action);
+        var action = new Action(
+            link.title, link.rel);
+        for(var i = 0; i < actions.length; i++){
+            if(actions[i].id === action.id){
+                return actions[i];
+            }
         }
+        actions.push(action);
         return action;
+    }
+    
+    function extractFeatureClasses(doc){
+        var classes = [];
+        jQuery.each(doc['feature-classes'], function(i, klass){
+            if(typeof klass['link-relations']['self'] === 'undefined' || 
+                self instanceof Array){
+                throw('feature class '+klass.title+
+                    ' has missing or improperly configured self link.');
+            }
+            // Make sure each link has the right link rel associated
+            jQuery.each(klass['link-relations'], function(linkrel, items){
+                if(items instanceof Array){
+                    jQuery.each(items, function(i, link){
+                        link.rel = linkrel;
+                        link.featureClass = klass;
+                    });
+                }else{
+                    items.rel = linkrel;
+                    items.featureClass = klass;
+                }
+            });
+            classes.push(klass);
+        });
+        return classes;
     }
     
     //
@@ -67,10 +112,56 @@ lingcod.features.workspace = (function(){
         // apply defaults to options
         var options = jQuery.extend(options || {}, defaults);
         
-        that.feature_classes = doc.feature_classes;
+        var getById = function(id){
+            for(var i = 0; i < that.featureClasses.all.length; i++){
+                if(that.featureClasses.all[i].id === id){
+                    return that.featureClasses.all[i];
+                }
+            }
+            return false;
+        };
+        
+        that.featureClasses = {
+            all: extractFeatureClasses(doc),
+            getById: getById
+        };
+        
+        function getByRel(rel){
+            var actions = [];
+            for(var i = 0; i < that.actions.all.length; i++){
+                if(that.actions.all[i].rel === rel){
+                    actions.push(that.actions.all[i]);
+                }
+            }
+            return actions;
+        }
+        
+        function getByTitle(title){
+            var actions = [];
+            for(var i = 0; i < that.actions.all.length; i++){
+                if(that.actions.all[i].title === title){
+                    actions.push(that.actions.all[i]);
+                }
+            }
+            return actions;
+        }
+        
+        function getById(id){
+            for(var i = 0; i < that.actions.all.length; i++){
+                if(that.actions.all[i].id === id){
+                    return that.actions.all[i];
+                }
+            }
+            return false;
+        }
         
         // List of actions, derived from links within server-side workspace
-        that.actions = extractActions(doc);
+        that.actions = {
+            all: extractActions(doc),
+            getByRel: getByRel,
+            getByTitle: getByTitle,
+            getById: getById
+        }
         
         // Useful for testing
         that.doc = doc;
@@ -86,12 +177,23 @@ lingcod.features.workspace = (function(){
         shareInEditLinks: false
     }
     
+    var id_counter = 0;
+    
     function Action(title, rel){
         // exported public api
         var that = {};
         
         that.title = title;
         that.rel = rel;
+        if(that.rel === 'self'){
+            that.id = that.rel;
+        }else if(that.rel === 'create'){
+            that.id = that.rel + id_counter;
+            id_counter++;
+        }else{
+            that.id = that.rel + '_' + that.title;
+        }
+        
         // links 
         that.links = [];
         
@@ -101,6 +203,9 @@ lingcod.features.workspace = (function(){
                     link.rel);
             }else{
                 that.links.push(link);                
+            }
+            if(link.rel === 'create'){
+                that.title = link.featureClass.title;
             }
         }
         

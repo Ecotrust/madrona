@@ -6,16 +6,107 @@
         <script src="js/workspace.js" type="text/javascript" charset="utf-8"></script>
         <script src="test/example_workspace.js" type="text/javascript" charset="utf-8"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css" media="screen">
+        
+            #menus a.self {
+                float:left;
+                margin:5px;
+                padding:5px;
+            }
+            
+            #menus ul {
+                float:left;
+                margin:5px;
+                padding:5px;
+            }
+            
+            #menus ul li {
+                list-style: none;
+                text-indent: 10px;
+            }
+            
+            #menus h3 {
+                margin:0;
+                padding:0;
+            }
+        </style>
         <script type="text/javascript" charset="utf-8">
             
             var workspace;
             
             $(document).ready(function(){
                 workspace = lingcod.features.workspace(doc);
+                populateMenus(workspace);
             });
+            
+            function populateMenus(workspace){
+                
+                jQuery.each(workspace.actions.getByRel('create'), function(i, action){
+                    $('#create').append([
+                        '<li>',
+                            '<a data-action-id="', action.id, '" href="#">',
+                                action.title,
+                            '</a>',
+                        '</li>'
+                    ].join(''));
+                });
+                
+                var self = workspace.actions.getByRel('self');
+                if(self.length){
+                    self = self[0];
+                    $('<a class="self" href="#">'+self.title+'</a>').insertAfter('#create');
+                }
+                
+                jQuery.each(workspace.actions.getByRel('edit'), function(i, action){
+                    $('#edit').append([
+                        '<li>',
+                            '<a data-action-id="', action.id, '" href="#">',
+                                action.title,
+                            '</a>',
+                        '</li>'
+                    ].join(''));
+                });
+
+                jQuery.each(workspace.actions.getByRel('alternate'), function(i, action){
+                    $([
+                        '<li>',
+                            '<a data-action-id="', action.id, '" href="#">',
+                                action.title,
+                            '</a>',
+                        '</li>'
+                    ].join('')).insertAfter('.subcategory');
+                });
+                
+                jQuery.each(workspace.actions.getByRel('related'), function(i, action){
+                    $([
+                        '<li>',
+                            '<a data-action-id="', action.id, '" href="#">',
+                                action.title,
+                            '</a>',
+                        '</li>'
+                    ].join('')).insertAfter('#export h3');
+                });
+                
+                var share = workspace.actions.getByRel('share');
+                if(share.length){
+                    share = share[0]
+                    $('<a class="self" href="#">'+share.title+'</a>').insertAfter('#export');
+                }
+            }
         </script>
     </head>
     <body>
-        
+        <div id="menus">
+            <ul id="create">
+                <h3>Create new</h3>
+            </ul>
+            <ul id="edit">
+                <h3>Edit</h3>
+            </ul>
+            <ul id="export">
+                <h3>Downloads</h3>
+                <li class="subcategory">export as...</li>
+            </ul>
+        </div>
     </body>
 </html>
