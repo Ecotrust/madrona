@@ -1,5 +1,22 @@
 lingcod.features.workspace = (function(){
     
+    function ucase(string){
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function idsToUniqueClasses(uids){
+        var klasses = [];
+        var existing = {};
+        jQuery.each(uids, function(i, v){
+            var klass = v.replace(/_\d$/, '');
+            if(!existing[klass]){
+                klasses.push(klass);
+                existing[klass] = true;
+            }
+        });
+        return klasses;
+    }
+    
     // 
     // extractActions
     // 
@@ -19,6 +36,7 @@ lingcod.features.workspace = (function(){
                 if(links instanceof Array){
                     jQuery.each(links, function(i, link){
                         if(link.title){
+                            link.title = ucase(link.title);
                             var action = getOrCreateAction(link, actions)
                             action.addLink(link);                    
                         }else{
@@ -35,6 +53,7 @@ lingcod.features.workspace = (function(){
         // Then grab generic links
         jQuery.each(doc['generic-links'], function(i, link){
             if(link.title){
+                link.title = ucase(link.title);
                 var action = getOrCreateAction(link, actions)
                 action.addLink(link);                    
             }else{
@@ -91,10 +110,12 @@ lingcod.features.workspace = (function(){
                     jQuery.each(items, function(i, link){
                         link.rel = linkrel;
                         link.featureClass = klass;
+                        link.models = [klass.id];
                     });
                 }else{
                     items.rel = linkrel;
                     items.featureClass = klass;
+                    items.models = [klass.id];
                 }
             });
             classes.push(klass);
@@ -146,7 +167,7 @@ lingcod.features.workspace = (function(){
             return actions;
         }
         
-        function getById(id){
+        function getActionById(id){
             for(var i = 0; i < that.actions.all.length; i++){
                 if(that.actions.all[i].id === id){
                     return that.actions.all[i];
@@ -160,7 +181,28 @@ lingcod.features.workspace = (function(){
             all: extractActions(doc),
             getByRel: getByRel,
             getByTitle: getByTitle,
-            getById: getById
+            getById: getActionById,
+            each: function(callback){
+                jQuery.each(that.actions.all, function(i, v){callback(v)});
+            }
+        }
+        
+        // Gets all actions that should be accessible with the current 
+        // selection. selection argument should be an array of client ids, ie
+        // ['mlpa_mpa_1', 'folder_2']
+        that.getActiveActions = function(selection){
+            if(!selection.length){
+                return [];
+            }
+            var multiple = selection.length > 1;
+            var klasses = idsToUniqueClasses(selection);
+            var actions = [];
+            that.actions.each(function(action){
+                if(action.active(klasses, multiple)){
+                    actions.push(action);
+                }                
+            });
+            return actions;
         }
         
         // Useful for testing
@@ -205,8 +247,46 @@ lingcod.features.workspace = (function(){
                 that.links.push(link);                
             }
             if(link.rel === 'create'){
-                that.title = link.featureClass.title;
+                that.title = ucase(link.featureClass.title);
             }
+        }
+        
+        that.active = function(selected, multiple){
+            var valid_link = false;
+            for(var j = 0; j < that.links.length; j++){
+                var link = that.links[j];
+                for(var i = 0; i < selected.length; i++){
+                    if(jQuery.inArray(selected[i], link.models) === -1){
+                        valid_link = false;
+                        break;
+                    }
+                    if(multiple){
+                        if(!link.select || jQuery.inArray('multiple', link.select.split(' ')) === -1){
+                            valid_link = false;
+                            break;                            
+                        }
+                    }
+                    valid_link = link;
+                }
+                if(valid_link){
+                    return valid_link;
+                }
+            };
+            return false;
+        }
+        
+        that.getUrl = function(selected){
+            if(that.links[0].rel === 'create'){
+                return that.links[0]['uri-template'];
+            }
+            var multiple = selected.length > 1;
+            var link = that.active(idsToUniqueClasses(selected), multiple);
+            var uri = link['uri-template'];
+            var repl = '{id}';
+            if(uri.indexOf(repl) === -1){
+                repl = '{id+}';
+            }
+            return uri.replace(repl, selected.join(','));
         }
         
         // return public api

@@ -290,7 +290,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
             'link-relations': {
                 'self': {
                     'uri-template': reverse("%s_resource" % (self.slug, ), 
-                        args=[14]).replace('14', '{id}')
+                        args=[14]).replace('14', '{id}'),
+                    'title': 'Attributes'
                 },
                 'create': {
                     'uri-template': reverse("%s_create_form" % (self.slug, ))

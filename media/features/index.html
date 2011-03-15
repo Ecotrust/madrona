@@ -6,61 +6,208 @@
         <script src="js/workspace.js" type="text/javascript" charset="utf-8"></script>
         <script src="test/example_workspace.js" type="text/javascript" charset="utf-8"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="ace-0.1.6/src/ace.js" type="text/javascript" charset="utf-8"></script>
         <style type="text/css" media="screen">
-        
+
+            html, body {
+                font-family:sans-serif;
+                font-size:0.9em;
+                background-color:#226081;
+                height:100%;
+                padding:0;
+                margin:0;
+            }
+            
+            #menus {
+                margin-left:720px;
+            }
+
             #menus a.self {
                 float:left;
                 margin:5px;
                 padding:5px;
             }
             
-            #menus ul {
+            #menus a {
+                color:#205499;
+                text-decoration:none;
+            }
+            
+            #menus a:hover {
+                text-decoration:underline;
+            }
+            
+            #menus a.disabled {
+                color:#999;
+            }
+            
+            #menus a.disabled:hover {
+                text-decoration:none;
+                cursor: default;
+            }
+            
+            h3:before {
+                content: '> ';
+            }
+            
+            #refresh {
+                float:right;
+                margin-right:10px;
+                font-size:0.8em;
+                color:#53993A;
+            }
+            
+            #menus ul, a.self {
                 float:left;
                 margin:5px;
-                padding:5px;
+                padding:5px 15px;
+                background-color:white;
+                -moz-box-shadow: 3px 3px 4px #000; /* FF3.5+ */
+                -webkit-box-shadow: 3px 3px 4px #000; /* Saf3.0+, Chrome */
+                box-shadow: 3px 3px 4px #000; /* Opera 10.5, IE 9.0 */
+                filter:  progid:DXImageTransform.Microsoft.dropshadow(OffX=3px, OffY=3px, Color='#000'); /* IE6,IE7 */
+                -ms-filter: "progid:DXImageTransform.Microsoft.dropshadow(OffX=3px, OffY=3px, Color='#000')"; /* IE8 */
             }
             
             #menus ul li {
                 list-style: none;
-                text-indent: 10px;
+                text-indent: 20px;
             }
             
             #menus h3 {
                 margin:0;
+                padding:0;
+                margin-left:6px;
+            }
+            
+            pre#editor {
+                margin:10px;
+                margin-left:-10px;
+                padding:0;
+                width:100%;
+                height:80%;
+                background-color:white;
+            }
+            
+            #settings {
+                position:fixed;
+                width:680px;
+                height:100%;
+                overflow-y:auto;
+                float:left;
+                background-color:white;
+                padding:10px;
+                -moz-box-shadow: 0px 0px 4px #000; /* FF3.5+ */
+                -webkit-box-shadow: 0px 0px 4px #000; /* Saf3.0+, Chrome */
+                box-shadow: 0px 0px 4px #000; /* Opera 10.5, IE 9.0 */
+                filter:  progid:DXImageTransform.Microsoft.dropshadow(OffX=0px, OffY=0px, Color='#000'); /* IE6,IE7 */
+                -ms-filter: "progid:DXImageTransform.Microsoft.dropshadow(OffX=0px, OffY=0px, Color='#000')"; /* IE8 */
+            }
+            
+            .subcategory {
+                color:#AEAEAE;
+            }
+            
+            #selection {
+                float:left;
+                margin-top:40px;
+                margin-left:725px;
+                width:400px;
+                background-color:white;
+            }
+            
+            #selection select {
+                width:380px;
+                margin:10px;
+                height:300px;
+            }
+            
+            #selection h2 {
+                margin:5px 10px;
                 padding:0;
             }
         </style>
         <script type="text/javascript" charset="utf-8">
             
             var workspace;
+            var editor;
             
             $(document).ready(function(){
-                workspace = lingcod.features.workspace(doc);
-                populateMenus(workspace);
+                editor = ace.edit("editor");
+                refreshWorkspace();
+                $('#refresh').click(function(e){
+                    e.preventDefault();
+                    refreshWorkspace();
+                });
+                
+                $('#selection select').live('change', function(){
+                    var selected = $(this).val();
+                    var validActions = workspace.getActiveActions(selected || []);
+                    $('#edit a, #export a, a.self').addClass('disabled');
+                    jQuery.each(validActions, function(i, action){
+                        $('a[data-action-id='+action.id+']').removeClass('disabled');
+                    });
+                });
+                
+                $('#menus a:not(.disabled, .create)').live('click', function(){
+                    var action_id = $(this).data('action-id');
+                    var action = workspace.actions.getById(action_id);
+                    alert(action.getUrl($('#selection select').val()));
+                });
+                
+                $('a.create').click(function(){
+                    var action_id = $(this).data('action-id');
+                    var action = workspace.actions.getById(action_id);
+                    alert(action.getUrl());                    
+                });
             });
             
+            function refreshWorkspace(){
+                var doc = eval('('+editor.getSession().getValue()+')');
+                workspace = lingcod.features.workspace(doc);
+                populateMenus(workspace);
+            }
+
             function populateMenus(workspace){
+                
+                $('#menus').html([
+                    '<ul id="create">',
+                        '<h3>Create new</h3>',
+                    '</ul>',
+                    '<ul id="edit">',
+                        '<h3>Edit</h3>',
+                    '</ul>',
+                    '<ul id="export">',
+                        '<h3>Downloads</h3>',
+                        '<li class="subcategory">export as...</li>',
+                    '</ul>'
+                ].join(''));
                 
                 jQuery.each(workspace.actions.getByRel('create'), function(i, action){
                     $('#create').append([
                         '<li>',
-                            '<a data-action-id="', action.id, '" href="#">',
+                            '<a class="create" data-action-id="', action.id, '" href="#">',
                                 action.title,
                             '</a>',
                         '</li>'
                     ].join(''));
+                    
+                    var pks = [1, 2, 3];
+                    jQuery.each(pks, function(i, v){
+                        $('#selection select').append('<option value="'+action.links[0].featureClass.id+'_'+v+'">'+action.links[0].featureClass.title+'_'+v+'</option>');
+                    });
                 });
                 
                 var self = workspace.actions.getByRel('self');
                 if(self.length){
                     self = self[0];
-                    $('<a class="self" href="#">'+self.title+'</a>').insertAfter('#create');
+                    $('<a data-action-id="'+self.id+'" class="self disabled" href="#">'+self.title+'</a>').insertAfter('#create');
                 }
                 
                 jQuery.each(workspace.actions.getByRel('edit'), function(i, action){
                     $('#edit').append([
                         '<li>',
-                            '<a data-action-id="', action.id, '" href="#">',
+                            '<a class="disabled" data-action-id="', action.id, '" href="#">',
                                 action.title,
                             '</a>',
                         '</li>'
@@ -70,7 +217,7 @@
                 jQuery.each(workspace.actions.getByRel('alternate'), function(i, action){
                     $([
                         '<li>',
-                            '<a data-action-id="', action.id, '" href="#">',
+                            '<a class="disabled" data-action-id="', action.id, '" href="#">',
                                 action.title,
                             '</a>',
                         '</li>'
@@ -80,7 +227,7 @@
                 jQuery.each(workspace.actions.getByRel('related'), function(i, action){
                     $([
                         '<li>',
-                            '<a data-action-id="', action.id, '" href="#">',
+                            '<a class="disabled" data-action-id="', action.id, '" href="#">',
                                 action.title,
                             '</a>',
                         '</li>'
@@ -90,23 +237,192 @@
                 var share = workspace.actions.getByRel('share');
                 if(share.length){
                     share = share[0]
-                    $('<a class="self" href="#">'+share.title+'</a>').insertAfter('#export');
+                    $('<a class="self disabled" href="#">'+share.title+'</a>').insertAfter('#export');
                 }
             }
         </script>
     </head>
     <body>
+        <div id="settings">
+            <h1>Workspace <a id="refresh" href="#">refresh  &#x267B;</a></h1>
+            <pre id="editor">
+{
+  "generic-links": [
+    {
+      "title": "Copy", 
+      "models": [
+        "layers_privatelayerlist", 
+        "layers_privatesuperoverlay", 
+        "mlpa_mpa", 
+        "mlpa_array", 
+        "mlpa_shipwreck", 
+        "mlpa_pipeline", 
+        "mlpa_folder"
+      ], 
+      "uri-template": "/features/generic-links/links/copy/{id+}/", 
+      "rel": "edit", 
+      "method": "POST", 
+      "select": "multiple single"
+    }, 
+    {
+      "models": [
+        "layers_privatelayerlist", 
+        "layers_privatesuperoverlay", 
+        "mlpa_mpa", 
+        "mlpa_array", 
+        "mlpa_shipwreck", 
+        "mlpa_pipeline", 
+        "mlpa_folder"
+      ], 
+      "uri-template": "/features/generic-links/links/kml/{id+}/", 
+      "select": "multiple single", 
+      "rel": "alternate", 
+      "title": "KML"
+    }, 
+    {
+      "title": "Remove", 
+      "models": [
+        "mlpa_array", 
+        "mlpa_folder"
+      ], 
+      "uri-template": "/features/generic-links/links/remove/{id+}/", 
+      "rel": "edit", 
+      "method": "POST", 
+      "select": "multiple single"
+    }, 
+    {
+      "title": "Add", 
+      "models": [
+        "mlpa_array", 
+        "mlpa_folder"
+      ], 
+      "uri-template": "/features/generic-links/links/add/{id+}/", 
+      "rel": "edit", 
+      "method": "POST", 
+      "select": "multiple single"
+    }
+  ], 
+  "feature-classes": [
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/shipwreck/{id}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/shipwreck/{id}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/shipwreck/form/"
+        }
+      }, 
+      "id": "mlpa_shipwreck", 
+      "title": "Shipwreck"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/mpa/{id}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/mpa/{id}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/mpa/form/"
+        }
+      }, 
+      "id": "mlpa_mpa", 
+      "title": "Marine Protected Area"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/array/{id}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/array/{id}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/array/form/"
+        }
+      }, 
+      "id": "mlpa_array", 
+      "collection": {
+        "classes": [
+          "mlpa_mpa"
+        ]
+      }, 
+      "title": "Array"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/pipeline/{id}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/pipeline/{id}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/pipeline/form/"
+        }
+      }, 
+      "id": "mlpa_pipeline", 
+      "title": "Pipeline"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/folder/{id}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/folder/{id}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/folder/form/"
+        }
+      }, 
+      "id": "mlpa_folder", 
+      "collection": {
+        "classes": [
+          "mlpa_mpa", 
+          "mlpa_array", 
+          "mlpa_pipeline", 
+          "mlpa_shipwreck", 
+          "mlpa_folder"
+        ]
+      }, 
+      "title": "Folder"
+    }
+  ]
+}
+            </pre>
+        </div>
         <div id="menus">
-            <ul id="create">
-                <h3>Create new</h3>
-            </ul>
-            <ul id="edit">
-                <h3>Edit</h3>
-            </ul>
-            <ul id="export">
-                <h3>Downloads</h3>
-                <li class="subcategory">export as...</li>
-            </ul>
+        </div>
+        <br style="clear:float;">
+        <div id="selection">
+            <h2>Selection</h2>
+            <select multiple>
+            </select>
         </div>
     </body>
 </html>
