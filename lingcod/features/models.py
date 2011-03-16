@@ -59,7 +59,7 @@ class Feature(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('%s_resource' % (self.get_options().slug, ), (), {
-            'pk': self.pk
+            'uid': self.uid
         })
     
     @classmethod

@@ -9,12 +9,13 @@ from lingcod.features.models import Feature
 from lingcod.features import user_sharing_groups
 from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
-from lingcod.features import workspace_json
+from lingcod.features import workspace_json, get_feature_by_uid
 logger = get_logger()
 
-def get_object_for_editing(request, klass, pk):
+def get_object_for_editing(request, uid, target_klass=None):
     """
-    Return the specified instance of klass by it's pk for editing.
+    Return the specified instance by uid for editing.
+    If a target_klass is provided, uid will be checked for consistency.
     If the request has no logged-in user, a 401 Response will be returned. If 
     the item is not found, a 404 Response will be returned. If the user is 
     not authorized to edit the item (not the owner or a staff user), a 403 Not
@@ -22,12 +23,22 @@ def get_object_for_editing(request, klass, pk):
     
     usage:
 
-    instance = get_object_for_editing(request, Mpa, 12)
+    instance = get_object_for_editing(request, 'mlpa_mpa_12', target_klass=Mpa)
     if isinstance(instance, HttpResponse):
         return instance
 
     """
-    instance = get_object_or_404(klass, pk=pk)
+    if target_klass and not target_klass.model_uid() in uid:
+        return HttpResponse("Target class %s doesn't match the provided uid %s" % 
+                            (target_klass, uid),
+                            status=401)
+    try:
+        instance = get_feature_by_uid(uid)
+    except ValueError:
+        return HttpResponse("Uid not valid: %s" % uid, status=401)
+    except:
+        return HttpResponse("Feature not found - %s" % uid, status=404)
+
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
     # Check that user owns the object or is staff
@@ -36,9 +47,10 @@ def get_object_for_editing(request, klass, pk):
             'You do not have permission to modify this object.')
     return instance
 
-def get_object_for_viewing(request, klass, pk):
+def get_object_for_viewing(request, uid, target_klass=None):
     """
-    Returns the specified instance of klass by it's pk for viewing.
+    Return the specified instance by uid for viewing.
+    If a target_klass is provided, uid will be checked for consistency.
     If the request has no authenticated user, a 401 Response will be returned.
     If the item is not found, a 404 Response will be returned. If the user is 
     not authorized to view the item (not the owner or part of a group the item
@@ -46,15 +58,21 @@ def get_object_for_viewing(request, klass, pk):
 
     usage:
 
-    instance = get_object_for_viewing(request, Mpa, 12)
+    instance = get_object_for_viewing(request, 'mlpa_mpa_12', target_klass=Mpa)
     if isinstance(instance, HttpResponse):
         return instance
 
     """
-    if not request.user.is_authenticated():
-        return HttpResponse('You must be logged in.', status=401)
-
-    instance = get_object_or_404(klass, pk=pk)
+    if target_klass and not target_klass.model_uid() in uid:
+        return HttpResponse("Target class %s doesn't match the provided uid %s" % 
+                            (target_klass, uid),
+                            status=401)
+    try:
+        instance = get_feature_by_uid(uid)
+    except ValueError:
+        return HttpResponse("Uid not valid: %s" % uid, status=401)
+    except:
+        return HttpResponse("Feature not found - %s" % uid, status=404)
 
     viewable, response = instance.is_viewable(request.user) 
     if viewable:
@@ -64,7 +82,7 @@ def get_object_for_viewing(request, klass, pk):
 
 # RESTful Generic Views
 
-def handle_link(request, ids, link=None):
+def handle_link(request, uids, link=None):
     """
     Handles all requests to views setup via features.register using Link 
     objects.
@@ -85,23 +103,21 @@ def handle_link(request, ids, link=None):
     """
     if link is None:
         raise Exception('handle_link configured without link kwarg!')
-    ids = ids.split(',')
+    uids = uids.split(',')
     # check that the number of instances matches the link.select property
-    if len(ids) > 1 and link.select is 'single':
+    if len(uids) > 1 and link.select is 'single':
         # too many
         return HttpResponse(
             'Not Supported Error: Requested %s for multiple instances' % (
             link.title, ), status=400)
     singles = ('single', 'multiple single', 'single multiple')
-    if len(ids) is 1 and link.select not in singles:
+    if len(uids) is 1 and link.select not in singles:
         # not enough
         return HttpResponse(
             'Not Supported Error: Requested %s for single instance' % (
             link.title, ), status=400)
     instances = []
-    for id in ids:
-        parts = id.split('_')
-        ct = ContentType.objects.get(app_label=parts[0], model=parts[1])
+    for uid in uids:
         if link.rel == 'edit':
             if link.method.lower() == 'post' and request.method == 'GET':
                 resp = HttpResponse('Invalid Method', status=405)
@@ -109,11 +125,11 @@ def handle_link(request, ids, link=None):
                 return resp
             if link.edits_original is False:
                 # users who can view the object can then make copies
-                inst = get_object_for_viewing(request, ct.model_class(), parts[2])
+                inst = get_object_for_viewing(request, uid)
             else:
-                inst = get_object_for_editing(request, ct.model_class(), parts[2])
+                inst = get_object_for_editing(request, uid)
         else:
-            inst = get_object_for_viewing(request, ct.model_class(), parts[2])
+            inst = get_object_for_viewing(request, uid)
 
         if isinstance(inst, HttpResponse):
             return inst
@@ -132,7 +148,7 @@ generic link only supports requests for feature classes %s' % (
     else:
         return link.view(request, instances, **link.extra_kwargs)
     
-def delete(request, model=None, pk=None):
+def delete(request, model=None, uid=None):
     """
     When calling, provide the request object, reference to the resource
     class, and the primary key of the object to delete.
@@ -148,9 +164,9 @@ def delete(request, model=None, pk=None):
     if model is None:
         return HttpResponse('Model not specified in feature urls', status=500)
     if request.method == 'DELETE':
-        if model is None or pk is None:
+        if model is None or uid is None:
             raise Exception('delete view not configured properly.')
-        instance = get_object_for_editing(request, model, pk)
+        instance = get_object_for_editing(request, uid, target_klass=model) 
         if isinstance(instance, HttpResponse):
             # get_object_for_editing is trying to return a 404, 401, or 403
             return instance
@@ -184,7 +200,6 @@ def create(request, model, action):
             form = form_class(values, request.FILES, label_suffix='')
         else:
             form = form_class(values, label_suffix='')
-        # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
             m.save()
@@ -234,11 +249,11 @@ def create_form(request, model, action=None):
     else:
         return HttpResponse('Invalid http method', status=405)
 
-def update_form(request, model, pk):
+def update_form(request, model, uid):
     """
     Returns a form for editing features
     """
-    instance = get_object_for_editing(request, model, pk)
+    instance = get_object_for_editing(request, uid, target_klass=model)
     if isinstance(instance, HttpResponse):
         # get_object_for_editing is trying to return a 404, 401, or 403
         return instance
@@ -269,7 +284,7 @@ def update_form(request, model, pk):
     else:
         return HttpResponse('Invalid http method', status=405)        
 
-def update(request, model, pk):
+def update(request, model, uid):
     """
         When calling, provide the request object, a model class, and the
         primary key of the instance to be updated.
@@ -282,11 +297,11 @@ def update(request, model, pk):
                 400: Form validation error. Present form back to user.
                 401: Not logged in.
                 403: Forbidden. User is not staff or does not own object.
-                404: Instance for pk not found.
+                404: Instance for uid not found.
                 5xx: Server error.
     """
     config = model.get_options()
-    instance = get_object_for_editing(request, model, pk)
+    instance = get_object_for_editing(request, uid, target_klass=model)
     if isinstance(instance, HttpResponse):
         # get_object_for_editing is trying to return a 404, 401, or 403
         return instance
@@ -311,7 +326,6 @@ def update(request, model, pk):
                 values, request.FILES, instance=instance, label_suffix='')
         else:
             form = form_class(values, instance=instance, label_suffix='')
-        # form.fields['user'] = request.user.pk
         if form.is_valid():
             m = form.save()
             m.save()
@@ -335,7 +349,7 @@ def update(request, model, pk):
         but it was much easier to implement as POST :)""", status=405)
         
     
-def resource(request, model=None, pk=None):
+def resource(request, model=None, uid=None):
     """
     Provides a resource for a django model that can be utilized by the 
     lingcod.features client module.
@@ -358,9 +372,9 @@ def resource(request, model=None, pk=None):
         return HttpResponse('Model not specified in feature urls', status=500)
     config = model.get_options()
     if request.method == 'DELETE':
-        return delete(request, model, pk)
+        return delete(request, model, uid)
     elif request.method == 'GET':
-        instance = get_object_for_viewing(request, model, pk)
+        instance = get_object_for_viewing(request, uid, target_klass=model)
         if isinstance(instance, HttpResponse):
             # Object is not viewable so we return httpresponse
             # should contain the appropriate error code
@@ -377,18 +391,18 @@ def resource(request, model=None, pk=None):
 
         return HttpResponse(t.render(RequestContext(request, context)))
     elif request.method == 'POST':
-        return update(request, model, pk)
+        return update(request, model, uid)
         
-def form_resources(request, model=None, pk=None):
+def form_resources(request, model=None, uid=None):
     if model is None:
         return HttpResponse('Model not specified in feature urls', status=500)
     if request.method == 'POST':
-        if pk is None:
+        if uid is None:
             return create(request, model, request.build_absolute_uri())
         else:
             return HttpResponse('Invalid http method', status=405)        
     elif request.method == 'GET':
-        if pk is None:
+        if uid is None:
             # Get the create form
             return create_form(
                 request, 
@@ -396,7 +410,7 @@ def form_resources(request, model=None, pk=None):
                 action=request.build_absolute_uri())
         else:
             # get the update form
-            return update_form(request, model, pk)
+            return update_form(request, model, uid)
     else:
         return HttpResponse('Invalid http method', status=405)        
 
@@ -457,7 +471,7 @@ def kml(request, instances):
     kml = t.render(Context({'instances': instances})) 
     return HttpResponse(kml, status=200)
 
-def share_form(request,model=None, pk=None):
+def share_form(request,model=None, uid=None):
     """
     Generic view for showing the sharing form for an object
 
@@ -467,10 +481,10 @@ def share_form(request,model=None, pk=None):
     """
     if model is None:
         return HttpResponse('Model not specified in feature urls', status=500)
-    if pk is None:
-        return HttpResponse('Instance PK not specified', status=500)
+    if uid is None:
+        return HttpResponse('Instance UID not specified', status=500)
 
-    obj = get_object_for_editing(request, model, pk)
+    obj = get_object_for_editing(request, uid, target_klass=model)
 
     if isinstance(obj, HttpResponse):
         return obj
@@ -520,57 +534,48 @@ def share_form(request,model=None, pk=None):
         return HttpResponse( "Received unexpected " + request.method + 
                 " request.", status=400 )
 
-def add_to_collection(request, ids, collection_model, collection_pk):
+def manage_collection(request, action, uids, collection_model, collection_uid):
     config = model.get_options()
-    collection_instance = get_object_for_editing(request, 
-            collection_model, collection_pk)
-    if isinstance(collection_instance, HttpResponse):
-        return instance
-
-    if request.method == 'POST':
-        instances = []
-        for id in ids:
-            parts = id.split('_')
-            ct = ContentType.objects.get(app_label=parts[0], model=parts[1])
-            inst = get_object_for_editing(request, ct.model_class(), parts[2])
-
-            if isinstance(inst, HttpResponse):
-                return inst
-            else:
-                instances.append(inst)
-
-        for instance in instances:
-            instance.add_to_collection(collection_instance)
-
-        return HttpResponse("Added instances %r to collection %r" % 
-                (instance, collection_instance), status=200)
-    else:
-        return HttpResponse("Invalid http method.", status=405)
-    
-def remove_from_collection(request, ids, collection_model, collection_pk):
-    config = model.get_options()
-    collection_instance = get_object_for_editing(request, 
-            collection_model, collection_pk)
+    collection_instance = get_object_for_editing(request, collection_uid,
+            target_klass=collection_model)
     if isinstance(collection_instance, HttpResponse):
         return instance
         
     if request.method == 'POST':
+        uids = uids.split(',')
+        # check that the number of instances matches the link.select property
+        if len(uids) > 1 and link.select is 'single':
+            # too many
+            return HttpResponse(
+                'Not Supported Error: Requested %s for multiple instances' % (
+                link.title, ), status=400)
+        singles = ('single', 'multiple single', 'single multiple')
+        if len(uids) is 1 and link.select not in singles:
+            # not enough
+            return HttpResponse(
+                'Not Supported Error: Requested %s for single instance' % (
+                link.title, ), status=400)
         instances = []
-        for id in ids:
-            parts = id.split('_')
-            ct = ContentType.objects.get(app_label=parts[0], model=parts[1])
-            inst = get_object_for_editing(request, ct.model_class(), parts[2])
+        for uid in uids:
+            inst = get_object_for_editing(request, uid)
 
             if isinstance(inst, HttpResponse):
                 return inst
             else:
                 instances.append(inst)
 
-        for instance in instances:
-            instance.remove_from_collection(collection_instance)
-
-        return HttpResponse("Remove instances %r from collection %r" % 
-                (instance, collection_instance), status=200)
+        if action == 'remove':
+            for instance in instances:
+                instance.remove_from_collection(collection_instance)
+            return HttpResponse("Removed instances %r from collection %r" % 
+                    (instance, collection_instance), status=200)
+        elif action == 'add':
+            for instance in instances:
+                instance.add_to_collection(collection_instance)
+            return HttpResponse("Added instances %r to collection %r" % 
+                    (instance, collection_instance), status=200)
+        else:
+            return HttpResponse("Invalid action %s." % action, status=500)
     else:
         return HttpResponse("Invalid http method.", status=405)
 

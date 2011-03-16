@@ -273,14 +273,14 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         Returns a json representation of this feature class configuration
         that can be used to specify client behavior
         """
+        placeholder = "%s_%d" % (self._model.model_uid(), 14)
         link_rels = {
             'id': self._model.model_uid(),
             'title': self.verbose_name,
             'link-relations': {
                 'self': {
                     'uri-template': reverse("%s_resource" % (self.slug, ), 
-                        args=[14]).replace('14', '{id}'),
-                    'title': 'Attributes'
+                        args=[placeholder]).replace(placeholder, '{uid}')
                 },
                 'create': {
                     'uri-template': reverse("%s_create_form" % (self.slug, ))
@@ -288,7 +288,7 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'edit': [
                     { 'title': 'edit',
                       'uri-template': reverse("%s_update_form" % (self.slug, ), 
-                        args=[14]).replace('14', '{id}')
+                        args=[placeholder]).replace(placeholder, '{uid}')
                     },
                 ]
             }
@@ -303,11 +303,11 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'classes': [x.model_uid() for x in self.get_valid_children()],
                 'remove': {
                     'uri-template': reverse("%s_remove_features" % (self.slug, ), 
-                        kwargs={'collection_pk':14,'ids':'xx'}).replace('14', '{collection_id}').replace('xx','{ids+}')
+                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uids+}')
                 },
                 'add': {
                     'uri-template': reverse("%s_add_features" % (self.slug, ), 
-                        kwargs={'collection_pk':14,'ids':'xx'}).replace('14', '{collection_id}').replace('xx','{ids+}')
+                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uids+}')
                 }
 
             }
@@ -327,20 +327,20 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         Given a primary key, returns the path to a form for updating a Feature
         Class
         """
-        return reverse('%s_update_form' % (self.slug, ), args=[pk])
+        return reverse('%s_update_form' % (self.slug, ), args=['%s_%d' % (self._model.model_uid(), pk)])
 
     def get_share_form(self, pk):
         """
         Given a primary key, returns path to a form for sharing a Feature inst
         """
-        return reverse('%s_share_form' % (self.slug, ), args=[pk])
+        return reverse('%s_share_form' % (self.slug, ), args=['%s_%d' % (self._model.model_uid(), pk)])
     
     def get_resource(self, pk):
         """
         Returns the primary url for a feature. This url supports GET, POST, 
         and DELETE operations.
         """
-        return reverse('%s_resource' % (self.slug, ), args=[pk])
+        return reverse('%s_resource' % (self.slug, ), args=['%s_%d' % (self._model.model_uid(), pk)])
 
 class Link:
     def __init__(self, rel, title, view, method='GET', select='single', 
@@ -492,8 +492,8 @@ self.title, ))
         """
         if not isinstance(instances,tuple) and not isinstance(instances,list):
             instances = [instances]
-        ids = ','.join([instance.uid for instance in instances])
-        return reverse(self.url_name, kwargs={'ids': ids})
+        uids = ','.join([instance.uid for instance in instances])
+        return reverse(self.url_name, kwargs={'uids': uids})
     
     def __str__(self):
         return self.title
@@ -507,7 +507,7 @@ self.title, ))
             'title': self.title,
             'select': self.select,
             'uri-template': reverse(self.url_name, 
-                kwargs={'ids': 'idplaceholder'}).replace(
+                kwargs={'uids': 'idplaceholder'}).replace(
                     'idplaceholder', '{id+}')
         }
         if self.rel == 'edit':

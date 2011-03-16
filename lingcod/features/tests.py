@@ -1450,7 +1450,8 @@ class SharingTestCase(TestCase):
 
         # user1 should be able to share with Group 1 only
         response = self.client.get(self.folder1_share_url)
-        self.assertEqual(response.status_code, 200)
+        print self.folder1_share_url
+        self.assertEqual(response.status_code, 200, response.content)
         self.assertRegexpMatches(response.content, r'Test Group 1')
         self.assertNotRegexpMatches(response.content, r'Test Group 2')
         self.assertNotRegexpMatches(response.content, r'Test Group 3')
