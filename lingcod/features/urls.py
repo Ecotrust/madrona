@@ -44,3 +44,7 @@ for link in registered_links:
         url(path, 'handle_link', kwargs={'link': link}, 
             name=link.url_name)
     )
+
+urlpatterns += patterns('lingcod.features.views',
+    url(r'^workspace.json', 'workspace', name='workspace-json'),)
+

@@ -8,6 +8,8 @@ from django.contrib.auth.models import Group
 from lingcod.features.models import Feature
 from lingcod.features import user_sharing_groups
 from lingcod.common.utils import get_logger
+from lingcod.common import default_mimetypes as mimetypes
+from lingcod.features import workspace_json
 logger = get_logger()
 
 def get_object_for_editing(request, klass, pk):
@@ -571,3 +573,8 @@ def remove_from_collection(request, ids, collection_model, collection_pk):
                 (instance, collection_instance), status=200)
     else:
         return HttpResponse("Invalid http method.", status=405)
+
+def workspace(request):
+    res = HttpResponse(workspace_json(), status=200)
+    res['Content-Type'] = mimetypes.JSON 
+    return res
