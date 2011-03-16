@@ -303,11 +303,11 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'classes': [x.model_uid() for x in self.get_valid_children()],
                 'remove': {
                     'uri-template': reverse("%s_remove_features" % (self.slug, ), 
-                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uids+}')
+                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uid+}')
                 },
                 'add': {
                     'uri-template': reverse("%s_add_features" % (self.slug, ), 
-                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uids+}')
+                        kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uid+}')
                 }
 
             }
@@ -508,7 +508,7 @@ self.title, ))
             'select': self.select,
             'uri-template': reverse(self.url_name, 
                 kwargs={'uids': 'idplaceholder'}).replace(
-                    'idplaceholder', '{id+}')
+                    'idplaceholder', '{uid+}')
         }
         if self.rel == 'edit':
             d['method'] = self.method
