@@ -918,6 +918,13 @@ class JsonSerializationTest(TestCase):
         self.assertTrue(fcdict['collection'])
         self.assertEquals(len(fcdict['collection']['classes']), 3)
 
+    def test_url(self):
+        url = '/features/workspace.json'
+        client = Client()
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, self.json)
+        
         
 class CopyTest(TestCase):
     

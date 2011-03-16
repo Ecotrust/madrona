@@ -1,6 +1,7 @@
 {% load absurl absolute_media_url %}<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document>
+  <atom:link title="workspace" href="{% url workspace-json %}" />
   <name>{% block docname %}MarineMap Features and Collections{% endblock %}</name>
   <open>1</open>
   <visibility>1</visibility>

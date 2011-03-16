@@ -575,6 +575,9 @@ def remove_from_collection(request, ids, collection_model, collection_pk):
         return HttpResponse("Invalid http method.", status=405)
 
 def workspace(request):
-    res = HttpResponse(workspace_json(), status=200)
-    res['Content-Type'] = mimetypes.JSON 
-    return res
+    if request.method == 'GET':
+        res = HttpResponse(workspace_json(), status=200)
+        res['Content-Type'] = mimetypes.JSON 
+        return res
+    else:
+        return HttpResponse("Invalid http method.", status=405)
