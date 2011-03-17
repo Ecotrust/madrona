@@ -241,6 +241,25 @@ class DeleteTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
         
+    def test_delete_collection(self):
+        """
+        Users can delete collections that belong to them
+        Any features in the collection will also be deleted
+        """
+        pk = self.test_instance.pk
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 1)
+        folder = TestFolder(user=self.user, name="My Folder")
+        folder.save()
+        folder_pk = folder.pk
+        self.test_instance.add_to_collection(folder)
+        self.assertEqual(TestFolder.objects.filter(pk=folder_pk).count(), 1)
+        self.assertTrue(self.test_instance in folder.feature_set())
+        url = folder.get_absolute_url()
+        self.client.login(username='featuretest', password='pword')
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(TestFolder.objects.filter(pk=folder_pk).count(), 0)
+        self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
 
 @register
 class CreateFormTestFeature(Feature):
@@ -807,6 +826,7 @@ class TestFolder(FeatureCollection):
             'lingcod.features.tests.TestMpa', 
             'lingcod.features.tests.TestArray', 
             'lingcod.features.tests.TestFolder', 
+            'lingcod.features.tests.TestDeleteFeature', 
             'lingcod.features.tests.RenewableEnergySite')
         links = (
             edit('Delete folder and contents',
@@ -1450,7 +1470,6 @@ class SharingTestCase(TestCase):
 
         # user1 should be able to share with Group 1 only
         response = self.client.get(self.folder1_share_url)
-        print self.folder1_share_url
         self.assertEqual(response.status_code, 200, response.content)
         self.assertRegexpMatches(response.content, r'Test Group 1')
         self.assertNotRegexpMatches(response.content, r'Test Group 2')

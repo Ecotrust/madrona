@@ -534,3 +534,9 @@ class FeatureCollection(Feature):
 
         the_collection.save()
         return the_collection
+
+    def delete(self, *args, **kwargs):
+        # Delete all features in the set
+        for feature in self.feature_set(recurse=False):
+            feature.delete()
+        super(FeatureCollection, self).delete(*args, **kwargs)
