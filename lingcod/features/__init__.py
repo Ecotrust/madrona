@@ -119,6 +119,13 @@ not a string path." % (name,))
                 select='multiple single',
                 edits_original=False))
         
+        # Add a multi-delete generic link
+        self.links.insert(0, edit('Multi-Delete', 
+            'lingcod.features.views.multi_delete', 
+            select='multiple single',
+            method='DELETE',
+            edits_original=True))
+
         self.valid_children = getattr(self._options, 'valid_children', None)
         """
         valid child classes for the feature container

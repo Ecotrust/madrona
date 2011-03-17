@@ -176,6 +176,21 @@ def delete(request, model=None, uid=None):
         return HttpResponse('DELETE http method must be used to delete', 
             status=405)
 
+def multi_delete(request, instances):
+    """ 
+    Generic view to delete multiple instances 
+    """
+    deleted = []
+    if request.method == 'DELETE':
+        for instance in instances:
+            instance.delete()
+            deleted.append(instance.uid)
+        return HttpResponse("Deleted %s" % ', '.join(deleted), status=200)
+    else:
+        return HttpResponse('DELETE http method must be used to delete', 
+                status=405)
+    
+
 def create(request, model, action):
     """
     When calling, provide the request object and a ModelForm class
