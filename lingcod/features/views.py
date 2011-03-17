@@ -183,9 +183,10 @@ def multi_delete(request, instances):
     deleted = []
     if request.method == 'DELETE':
         for instance in instances:
+            uid = instance.uid
             instance.delete()
-            deleted.append(instance.uid)
-        return HttpResponse("Deleted %s" % ', '.join(deleted), status=200)
+            deleted.append(uid)
+        return HttpResponse("Deleted %d features" % len(deleted), status=200)
     else:
         return HttpResponse('DELETE http method must be used to delete', 
                 status=405)

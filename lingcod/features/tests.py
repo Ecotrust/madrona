@@ -261,6 +261,20 @@ class DeleteTest(TestCase):
         self.assertEqual(TestFolder.objects.filter(pk=folder_pk).count(), 0)
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
 
+    def test_multi_delete(self):
+        self.test_instance2 = TestDeleteFeature(user=self.user, name="My Name2")
+        self.test_instance2.save()
+        self.assertEqual(TestDeleteFeature.objects.all().count(), 2)
+        uids = [self.test_instance.uid, self.test_instance2.uid]
+        link = [link for link in GenericLinksTestFeature.get_options().links 
+                      if link.title == 'Multi-Delete'][0]
+        url = link.reverse([self.test_instance, self.test_instance2])
+        self.client.login(username='featuretest', password='pword')
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(TestDeleteFeature.objects.all().count(), 0)
+
+
 @register
 class CreateFormTestFeature(Feature):
     class Options:
