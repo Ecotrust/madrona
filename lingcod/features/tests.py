@@ -586,8 +586,8 @@ class LinkTest(TestCase):
     
     def test_get_links(self):
         links = LinkTestFeature.get_options().links
-        link = links[2]
-        link2 = links[3]
+        link = links[3]
+        link2 = links[4]
         self.assertIsInstance(link, Link)
         self.assertEqual('Single Select View', link.title)
         self.assertEqual('single', link.select)
@@ -596,8 +596,8 @@ class LinkTest(TestCase):
     def test_links_registered(self):
         options = LinkTestFeature.get_options()
         links = options.links
-        link = links[2]
-        link2 = links[3]
+        link = links[3]
+        link2 = links[4]
         # Check to see that the Feature Class was registered at all
         self.client.login(username='featuretest', password='pword')
         response = self.client.get(self.options.get_create_form())
@@ -614,12 +614,12 @@ class LinkTest(TestCase):
         """Should not be able to perform editing actions without login.
         """
         links = self.options.links
-        response = self.client.post(links[4].reverse(self.test_instance))
+        response = self.client.post(links[5].reverse(self.test_instance))
         self.assertEqual(response.status_code, 401,response.content)
-        response = self.client.get(links[5].reverse(self.test_instance))
+        response = self.client.get(links[6].reverse(self.test_instance))
         self.assertEqual(response.status_code, 401)
         self.client.login(username='featuretest', password='pword')
-        response = self.client.get(links[5].reverse(self.test_instance))
+        response = self.client.get(links[6].reverse(self.test_instance))
         self.assertEqual(response.status_code, 200)        
     
     def test_cant_GET_edit_links(self):
@@ -627,7 +627,7 @@ class LinkTest(TestCase):
         """
         links = self.options.links
         self.client.login(username='featuretest', password='pword')
-        response = self.client.get(links[4].reverse(self.test_instance))
+        response = self.client.get(links[5].reverse(self.test_instance))
         self.assertEqual(response.status_code, 405,response.content)
         self.assertEqual(response['Allow'], 'POST')
         
@@ -636,7 +636,7 @@ class LinkTest(TestCase):
         """
         links = self.options.links
         self.client.login(username='other', password='pword')
-        response = self.client.get(links[5].reverse(self.test_instance))
+        response = self.client.get(links[6].reverse(self.test_instance))
         self.assertEqual(response.status_code, 403)        
         
     
@@ -650,7 +650,7 @@ class LinkTest(TestCase):
             name="Other User's feature")
         inst.save()
         response = self.client.get(
-            links[5].reverse([inst, self.test_instance]))
+            links[6].reverse([inst, self.test_instance]))
         self.assertEqual(response.status_code, 403, response.content)
         
     def test_404_response(self):
@@ -659,7 +659,7 @@ class LinkTest(TestCase):
         inst = LinkTestFeature(user=self.user, 
             name="feature")
         inst.save()
-        path = links[5].reverse([inst, self.test_instance])
+        path = links[6].reverse([inst, self.test_instance])
         inst.delete()
         response = self.client.get(path)
         self.assertEqual(response.status_code, 404)
@@ -736,16 +736,16 @@ class GenericLinksTest(TestCase):
     def test_generic_links_reused_by_create_link(self):
         """Test that the calls to lingcod.features.create_link return 
         references to generic links when appropriate."""
-        self.assertEqual(GenericLinksTestFeature.get_options().links[2], 
-            OtherGenericLinksTestFeature.get_options().links[2])
+        self.assertEqual(GenericLinksTestFeature.get_options().links[3], 
+            OtherGenericLinksTestFeature.get_options().links[3])
         self.assertNotEqual(
-            OtherGenericLinksTestFeature.get_options().links[2],
-            LastGenericLinksTestFeature.get_options().links[2])
+            OtherGenericLinksTestFeature.get_options().links[3],
+            LastGenericLinksTestFeature.get_options().links[3])
             
     def test_generic_links_work(self):
         """Test that a generic view can recieve a request related to more than
         one feature class."""
-        link = GenericLinksTestFeature.get_options().links[2]
+        link = GenericLinksTestFeature.get_options().links[3]
         path = link.reverse([self.generic_instance, self.other_instance])
         self.client.login(username='featuretest', password='pword')
         response = self.client.get(path)
@@ -756,7 +756,7 @@ class GenericLinksTest(TestCase):
     def test_generic_links_deny_unconfigured_models(self):
         """Generic links shouldn't work for any model, only those that have 
         the link configured in their Options class."""
-        link = GenericLinksTestFeature.get_options().links[2]
+        link = GenericLinksTestFeature.get_options().links[3]
         path = link.reverse([self.generic_instance, self.last_instance])
         self.client.login(username='featuretest', password='pword')
         response = self.client.get(path)
