@@ -595,9 +595,12 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
     else:
         return HttpResponse("Invalid http method.", status=405)
 
-def workspace(request):
+def workspace(request, is_owner):
+    user = request.user
     if request.method == 'GET':
-        res = HttpResponse(workspace_json(), status=200)
+        if user.is_anonymous() and is_owner:
+            return HttpResponse("Anonymous user can't access workspace as owner", status=403)
+        res = HttpResponse(workspace_json(user, is_owner), status=200)
         res['Content-Type'] = mimetypes.JSON 
         return res
     else:

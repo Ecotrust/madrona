@@ -46,5 +46,7 @@ for link in registered_links:
     )
 
 urlpatterns += patterns('lingcod.features.views',
-    url(r'^workspace.json', 'workspace', name='workspace-json'),)
+    url(r'^workspace-owner.json', 'workspace', kwargs={"is_owner": True}, name='workspace-owner-json'),
+    url(r'^workspace-shared.json', 'workspace', kwargs={"is_owner": False}, name='workspace-shared-json'),
+)
 

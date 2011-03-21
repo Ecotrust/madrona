@@ -800,11 +800,22 @@ class TestMpa(PolygonFeature):
             related('Habitat Spreadsheet',
                 'lingcod.features.tests.habitat_spreadsheet',
                 select='single',
-                type='application/xls'
+                type='application/xls',
+                limit_to_groups=['SuperSpecialTestGroup']
+            ),
+            alternate('Export KML for Owner',
+                'lingcod.features.tests.kml',
+                select='multiple single',
+                must_own=True
             ),
             alternate('Export KML',
                 'lingcod.features.tests.kml',
                 select='multiple single'
+            ),
+            alternate('Export Misc for Owner',
+                'lingcod.features.tests.kml',
+                select='multiple single',
+                must_own=True
             )
         )
         
@@ -850,6 +861,11 @@ class TestFolder(FeatureCollection):
                 Are you sure you want to delete this folder and it's contents? 
                 This action cannot be undone.
                 """
+            ),
+            alternate('Export KML for Owner',
+                'lingcod.features.tests.kml',
+                select='multiple single',
+                must_own=True
             ),
             alternate('Export KML',
                 'lingcod.features.tests.kml',
@@ -916,8 +932,12 @@ class ShipwreckForm(FeatureForm):
 class JsonSerializationTest(TestCase):
     
     def setUp(self):
-        self.json = workspace_json()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@marinemap.org', password='pword')
+        self.json = workspace_json(user=self.user,is_owner=True)
+        self.json_shared = workspace_json(user=self.user,is_owner=False)
         self.dict = json.loads(self.json)
+        self.dict_shared = json.loads(self.json_shared)
 
     def test_normal_features(self):
         fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'Shipwreck'][0]
@@ -936,10 +956,8 @@ class JsonSerializationTest(TestCase):
 
     def test_custom_features(self):
         fcdict = [x for x in self.dict['feature-classes'] if x['id'] == 'features_testmpa'][0]
-        for lr in ['self','create','edit', 'related']:
+        for lr in ['self','create','edit','alternate']:
             self.assertTrue(fcdict['link-relations'][lr])
-        with self.assertRaises(KeyError):
-            fcdict['link-relations']['alternate']
 
         fcdict = [x for x in self.dict['feature-classes'] if x['title'] == 'LinkTestFeature'][0]
         for lr in ['self','create','edit', 'alternate']:
@@ -952,13 +970,75 @@ class JsonSerializationTest(TestCase):
         self.assertTrue(fcdict['collection'])
         self.assertEquals(len(fcdict['collection']['classes']), 3)
 
-    def test_url(self):
-        url = '/features/workspace.json'
+    def test_must_own_builtin(self):
+        """ For "builtin" edit links, 
+        they shouldn't show up when using workspace-shared """
+        fcdict = [x for x in self.dict['feature-classes'] 
+                     if x['id'] == 'features_testmpa'][0]
+        self.assertEquals(fcdict['link-relations']['edit'][0]['title'], 'edit')
+        fcdict_shared = [x for x in self.dict_shared['feature-classes'] 
+                            if x['id'] == 'features_testmpa'][0]
+        with self.assertRaises(KeyError):
+            fcdict_shared['link-relations']['edit']
+
+    def test_must_own_generic(self):
+        """ For generic links with must_own=True, 
+        they shouldn't show up when using workspace-shared """
+        # Owner dict should have the must_own generic link
+        linkdict = [x for x in self.dict['generic-links'] if x['title'] == 'Export KML for Owner'][0]
+        self.assertTrue('features_testmpa' in linkdict['models'])
+        self.assertTrue('features_testfolder' in linkdict['models'])
+
+        # ... shared dict should NOT have the must_own generic link
+        self.assertEquals(len([x for x in self.dict_shared['generic-links'] 
+                                  if x['title'] == 'Export KML for Owner']),0)
+
+    def test_must_own_custom(self):
+        """ For custom links with must_own=True, 
+        they shouldn't show up when using workspace-shared """
+        fcdict = [x for x in self.dict['feature-classes'] 
+                     if x['id'] == 'features_testmpa'][0]
+        #print json.dumps(fcdict, indent=2)
+        self.assertEquals(fcdict['link-relations']['alternate'][0]['title'], 'Export Misc for Owner')
+        fcdict_shared = [x for x in self.dict_shared['feature-classes'] 
+                            if x['id'] == 'features_testmpa'][0]
+        with self.assertRaises(KeyError):
+            fcdict_shared['link-relations']['alternate'][0]['title']
+
+    def test_limit_to_groups(self):
+        self.assertEquals(len(self.user.groups.filter(name="SuperSpecialTestGroup")),0)
+       
+        dict_pre = json.loads(workspace_json(self.user, True))
+        fcdict = [x for x in dict_pre['feature-classes'] 
+                     if x['id'] == 'features_testmpa'][0]
+        with self.assertRaises(KeyError):
+            fcdict['link-relations']['related'][0]['title']
+
+        special_group, created = Group.objects.get_or_create(name="SuperSpecialTestGroup")
+        self.user.groups.add(special_group)
+        self.user.save()
+        self.assertEquals(len(self.user.groups.filter(name="SuperSpecialTestGroup")),1)
+
+        dict_post = json.loads(workspace_json(self.user, True))
+        fcdict = [x for x in dict_post['feature-classes'] 
+                     if x['id'] == 'features_testmpa'][0]
+        self.assertEquals(fcdict['link-relations']['related'][0]['title'], 'Habitat Spreadsheet')
+
+    def test_owner_url(self):
         client = Client()
+        client.login(username='featuretest', password='pword')
+        url = '/features/workspace-owner.json'
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, self.json)
-        
+
+    def test_shared_url(self):
+        client = Client()
+        client.login(username='featuretest', password='pword')
+        url = '/features/workspace-shared.json'
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, self.json_shared)
         
 class CopyTest(TestCase):
     

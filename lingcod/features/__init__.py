@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from django.conf import settings
 from django.db.utils import DatabaseError
 import json
@@ -35,7 +35,7 @@ class FeatureOptions:
 
         # call this here to ensure that permsissions get created
         #enable_sharing()
-        
+       
         if not issubclass(model, Feature):
             raise FeatureConfigurationError('Is not a subclass of \
 lingcod.features.models.Feature')
@@ -275,7 +275,7 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
 
         return klass
     
-    def dict(self):
+    def dict(self,user,is_owner):
         """
         Returns a json representation of this feature class configuration
         that can be used to specify client behavior
@@ -289,23 +289,28 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                     'uri-template': reverse("%s_resource" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}')
                 },
-                'create': {
+            }
+        }
+
+        if is_owner:
+            lr = link_rels['link-relations']
+            lr['create'] = {
                     'uri-template': reverse("%s_create_form" % (self.slug, ))
-                },
-                'edit': [
+            }
+
+            lr['edit'] = [
                     { 'title': 'edit',
                       'uri-template': reverse("%s_update_form" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}')
-                    },
-                ]
-            }
-        }
+                    } ]
+
         for link in self.links:
-            if not link.generic:
+            if not link.generic and link.can_user_view(user, is_owner):
                 if link.rel not in link_rels['link-relations'].keys():
                     link_rels['link-relations'][link.rel] = []
-                link_rels['link-relations'][link.rel].append(link.dict())
-        if self._model in get_collection_models():
+                link_rels['link-relations'][link.rel].append(link.dict(user,is_owner))
+
+        if self._model in get_collection_models() and is_owner:
             link_rels['collection'] = {
                 'classes': [x.model_uid() for x in self.get_valid_children()],
                 'remove': {
@@ -352,7 +357,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
 class Link:
     def __init__(self, rel, title, view, method='GET', select='single', 
         type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
-        confirm=False, edits_original=None):
+        confirm=False, edits_original=None, must_own=False, 
+        limit_to_groups=None):
         
         self.rel = rel
         """Type of link - alternate, related, edit, or edit_form.
@@ -423,6 +429,23 @@ invalid path to view %s' % (title, view))
         This will allow users who do not own the instance(s) but can view them
         perform the action.
         """
+
+        self.must_own = must_own
+        if self.edits_original:
+            self.must_own = True
+        """
+        Whether this link should be accessible to non-owners.
+        Default link behavior is False; i.e. Link can be used for shared features
+        as well as for user-owned features. 
+        If edits_original is true, this implies must_own = True as well.
+        """
+
+        self.limit_to_groups = limit_to_groups
+        """
+        Allows you to specify groups (a list of group names) 
+        that should have access to the link.
+        Default is None; i.e. All users have link access regardless of group membership
+        """
         
         if self.models is None:
             self.models = []
@@ -471,6 +494,26 @@ self.title, ))
 with a valid view. View must take a second argument named instances.' % (
 self.title, ))
             
+    def can_user_view(self, user, is_owner):
+        """
+        Returns True/False depending on whether user can view the link. 
+        """
+        if self.limit_to_groups:
+            # We rely on the auth Group model ensuring unique group names
+            user_groupnames = [x.name for x in user.groups.all()]
+            match = False
+            for groupname in self.limit_to_groups:
+                if groupname in user_groupnames:
+                    match = True
+                    break
+            if not match:
+                return False
+
+        if self.must_own and not is_owner:
+            return False
+
+        return True
+
     @property
     def url_name(self):
         """
@@ -508,7 +551,7 @@ self.title, ))
     def __unicode__(self):
         return str(self)
     
-    def dict(self):
+    def dict(self,user,is_owner):
         d = {
             'rel': self.rel,
             'title': self.title,
@@ -532,7 +575,7 @@ def create_link(rel, *args, **kwargs):
     nargs.extend(args)
     link = Link(*nargs, **kwargs)
     must_match = ('rel', 'title', 'view', 'extra_kwargs', 'method', 'slug', 
-        'select')
+        'select', 'must_own')
     for registered_link in registered_links:
         matches = True
         for key in must_match:
@@ -576,26 +619,28 @@ def register(model):
 def get_model_options(model_name):
     return registered_model_options[model_name]
 
-def workspace_json(*args):
+def workspace_json(user, is_owner, models=None):
     workspace = {
         'feature-classes': [],
         'generic-links': []
     }
-    if not args:
+    if not models:
         # Workspace doc gets ALL feature classes and registered links
         for model in registered_models:
-            workspace['feature-classes'].append(model.get_options().dict())
+            workspace['feature-classes'].append(model.get_options().dict(user, is_owner))
         for link in registered_links:
-            if link.generic: 
-                workspace['generic-links'].append(link.dict())
+            if link.generic and link.can_user_view(user, is_owner): 
+                workspace['generic-links'].append(link.dict(user, is_owner))
     else:
         # Workspace doc only reflects specified feature class models
-        for model in args:
-            workspace['feature-classes'].append(model.get_options().dict())
+        for model in models:
+            workspace['feature-classes'].append(model.get_options().dict(user, is_owner))
         for link in registered_links:
             # See if the generic links are relavent to this list
-            if link.generic and [i for i in args if i in link.models]:
-                workspace['generic-links'].append(link.dict())
+            if link.generic and \
+               [i for i in args if i in link.models] and \
+               link.can_user_view(user, is_owner):
+                    workspace['generic-links'].append(link.dict(user, is_owner))
     return json.dumps(workspace, indent=2)
 
 def get_collection_models():
