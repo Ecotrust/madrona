@@ -25,6 +25,7 @@
         <Link>
           <href>{% absurl kmlapp-feature-links-kmz input_uid=collection.uid,session_key=session_key %}</href>
         </Link>
+        <styleUrl>#{{collection.kml_style_id}}</styleUrl>
       </NetworkLink>
     {% else %}
       {{ collection.kml|safe }}

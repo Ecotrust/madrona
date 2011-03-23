@@ -15,6 +15,11 @@ import re
 
 logger = get_logger()
 
+# Need this to get the absolute url to media 
+from django.contrib.sites.models import Site
+site = Site.objects.all()[0]
+absolute_media_url = 'http://%s%s' % (site.domain, settings.MEDIA_URL)
+
 class Feature(models.Model):
     """Model used for representing user-generated features
 
@@ -252,7 +257,7 @@ class SpatialFeature(Feature):
         In any given KML document, each *unique* kml_style string will get included 
         so don't worry if you have 10 million features with "blah-default" style...
         only one will appear in the final document and all the placemarks can refer
-        to it.
+        to it. BEST TO TREAT THIS LIKE A CLASS METHOD - no instance specific vars.
         """
         return """
         <Style id="%s-default">
@@ -279,8 +284,18 @@ class SpatialFeature(Feature):
             <LineStyle>
                 <color>ffffffff</color>
             </LineStyle>
+            <ListStyle>
+                <ItemIcon>
+                    <href>%s/kmltree/dist/images/sprites/kml.png</href>
+                    <!-- TODO: KMLTree currently doesn't support icon pallettes -->
+                    <gx:x>-525</gx:x>
+                    <gx:y>0</gx:y>
+                    <gx:w>16</gx:w>
+                    <gx:h>16</gx:h>
+                </ItemIcon>
+            </ListStyle>
         </Style>
-        """ % (self.model_uid(),)
+        """ % (self.model_uid(), absolute_media_url)
 
     @property
     def active_manipulators(self):
@@ -453,7 +468,31 @@ class FeatureCollection(Feature):
 
     @property
     def kml_style(self):
-        return ""
+        return """
+        <Style id="%(model_uid)s-default">
+            <ListStyle>
+                <ItemIcon id="%(model_uid)s_open">
+                    <state>open</state>
+                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
+                    <!-- TODO: KMLTree currently doesn't support icon pallettes -->
+                    <gx:x>-21</gx:x>
+                    <gx:y>0</gx:y>
+                    <gx:w>16</gx:w>
+                    <gx:h>16</gx:h>
+                </ItemIcon>
+                <!-- TODO: KMLTree currently can't handle multi ItemIcons by state,
+                           tries to concatenate them into a single URL. 
+                <ItemIcon id="%(model_uid)s_closed">
+                    <state>closed</state>
+                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
+                </ItemIcon> -->
+            </ListStyle>
+        </Style>
+        """ % {'model_uid': self.model_uid(), 'media_url': absolute_media_url}
+
+    @property
+    def kml_style_id(self):
+        return "%s-default" % self.model_uid()
 
     def feature_set(self, recurse=False, feature_classes=None):
         """
