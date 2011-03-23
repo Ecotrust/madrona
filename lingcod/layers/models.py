@@ -3,44 +3,39 @@ from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.models import Feature, FeatureForm
-from lingcod.features import register
+from django.core.urlresolvers import reverse
 import os
 
-class PrivateLayerListForm(FeatureForm):
-    pass
-
-class PrivateSuperOverlayForm(FeatureForm):
-    pass
-
-@register
 class PrivateLayerList(Feature):
     """
-    Model for storing uploaded restricted-access kml files
+    Abstract Model for storing uploaded restricted-access kml files
     Owned by a single user, can be shared with any group(s) 
     that the owner is a member of (assuming group has
     can_share_features permissions)
     """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
     kml_file = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
-        KML file (not publically available). This file can use
-        NetworkLinks pointing to remote kml datasets or WMS servers.
+        KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
 
     @property
     def kml(self):
-        fh = self.kml_file.open()
-        kml_txt = fh.read()
-        fh.close()
-        return kml_txt
+        return ""
 
-    class Options:
-        verbose_name = 'Private Layer List'
-        form = 'lingcod.layers.models.PrivateLayerListForm'
-    
-@register
+    @property
+    def kml_full(self):
+        return self.kml_file.read()
+
+    @property
+    def kml_style(self):
+        return ""
+
+    class Meta:
+        abstract=True
+
 class PrivateSuperOverlay(Feature):
     """
-    Model for presenting restricted-access multi-file kml trees on disk
+    Abstract Model for presenting restricted-access multi-file kml trees on disk
     Owned by a single user, can be shared with any group(s) 
     that the owner is a member of (assuming group has
     can_share_features permissions)
@@ -54,14 +49,18 @@ class PrivateSuperOverlay(Feature):
 
     @property
     def kml(self):
-        fh = self.base_kml.open()
-        kml_txt = fh.read()
-        fh.close()
-        return kml_txt
+        return ""
 
-    class Options:
-        verbose_name = 'Private SuperOverlay'
-        form = 'lingcod.layers.models.PrivateSuperOverlayForm'
+    @property
+    def kml_full(self):
+        return self.base_kml.read()
+
+    @property
+    def kml_style(self):
+        return ""
+
+    class Meta:
+        abstract=True
 
     def save(self, *args, **kwargs):
         if self.base_kml == os.path.join(settings.SUPEROVERLAY_ROOT, 'doc.kml'):

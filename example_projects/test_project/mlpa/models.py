@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from lingcod.features import register
 from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay 
 from lingcod.features.forms import FeatureForm
 
 DESIGNATION_CHOICES = (
@@ -74,4 +75,14 @@ class Folder(FeatureCollection):
 class FolderForm(FeatureForm):
     class Meta:
         model = Folder
+
+###########################
+@register
+class UserKml(PrivateLayerList):
+    class Options:
+        form = 'mlpa.models.UserKmlForm'
+
+class UserKmlForm(FeatureForm):
+    class Meta(FeatureForm.Meta):
+        model = UserKml
 

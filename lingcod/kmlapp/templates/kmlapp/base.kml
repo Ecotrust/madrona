@@ -33,9 +33,21 @@
   {% endfor %}
 
   {% for feature in features %}
-  {{ feature.kml|safe }}
+  <!-- {{feature.uid}} -->
+  {% if feature.kml_full %}
+  <NetworkLink id="{{feature.uid}}"> 
+    <name>{{feature.name}}</name> 
+    <visibility>1</visibility> 
+    <open>0</open> 
+    <Link> 
+      <href>{% absurl kml-file uid=feature.uid,session_key=session_key %}</href> 
+    </Link> 
+  </NetworkLink> 
+  {% else %}
+    {{ feature.kml|safe }}
+  {% endif %}
   {% endfor %}
-{% endblock %}
 
+{% endblock %}
 </Document>
 </kml>

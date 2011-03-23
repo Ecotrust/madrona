@@ -10,6 +10,23 @@ from django.conf import settings
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 from django.core.urlresolvers import reverse
+from lingcod.features.views import get_object_for_viewing
+
+def get_kml_file(request, uid, session_key='0', input_username=None):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    elif input_username and user.username != input_username:
+        return HttpResponse('Access denied', status=401)
+    
+    instance = get_object_for_viewing(request, uid)
+    if isinstance(instance, HttpResponse):
+        return instance
+
+    response = HttpResponse(instance.kml_full)
+    response['Content-Type'] = mimetypes.KML
+    return response
 
 def get_user_layers(request, session_key='0', input_username=None):
     """Returns uploaded kml from the :class:`UserLayerList <lingcod.layers.models.UserLayerList>`.

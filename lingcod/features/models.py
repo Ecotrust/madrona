@@ -15,10 +15,16 @@ import re
 
 logger = get_logger()
 
-# Need this to get the absolute url to media 
-from django.contrib.sites.models import Site
-site = Site.objects.all()[0]
-absolute_media_url = 'http://%s%s' % (site.domain, settings.MEDIA_URL)
+def get_absolute_media_url():
+    # Need this to get the absolute url to media 
+    # TODO : There has GOT to be a better way to do this besides querying the DB
+    try:
+        from django.contrib.sites.models import Site
+        site = Site.objects.all()[0]
+        absolute_media_url = 'http://%s%s' % (site.domain, settings.MEDIA_URL)
+    except:
+        absolute_media_url = 'http://localhost:8000/%s' % (settings.MEDIA_URL,)
+    return absolute_media_url
 
 class Feature(models.Model):
     """Model used for representing user-generated features
@@ -259,6 +265,7 @@ class SpatialFeature(Feature):
         only one will appear in the final document and all the placemarks can refer
         to it. BEST TO TREAT THIS LIKE A CLASS METHOD - no instance specific vars.
         """
+
         return """
         <Style id="%s-default">
             <IconStyle>
@@ -295,7 +302,7 @@ class SpatialFeature(Feature):
                 </ItemIcon>
             </ListStyle>
         </Style>
-        """ % (self.model_uid(), absolute_media_url)
+        """ % (self.model_uid(), get_absolute_media_url())
 
     @property
     def active_manipulators(self):
@@ -488,7 +495,7 @@ class FeatureCollection(Feature):
                 </ItemIcon> -->
             </ListStyle>
         </Style>
-        """ % {'model_uid': self.model_uid(), 'media_url': absolute_media_url}
+        """ % {'model_uid': self.model_uid(), 'media_url': get_absolute_media_url()}
 
     @property
     def kml_style_id(self):
