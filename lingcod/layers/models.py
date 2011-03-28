@@ -26,10 +26,6 @@ class PrivateLayerList(Feature):
     def kml_full(self):
         return self.kml_file.read()
 
-    @property
-    def kml_style(self):
-        return ""
-
     class Meta:
         abstract=True
 
@@ -54,10 +50,6 @@ class PrivateSuperOverlay(Feature):
     @property
     def kml_full(self):
         return self.base_kml.read()
-
-    @property
-    def kml_style(self):
-        return ""
 
     class Meta:
         abstract=True
