@@ -23,7 +23,7 @@ def client_os(user_agent):
         regex += '(?P<version_token>[\w .]+)'
         regex += '; '
     # Linux i686
-    regex += '(?P<platform_token>[\w .]+)'
+    regex += '(?P<platform_token>[\w ._]+)'
     # anything else
     regex += '; .*'
 
@@ -40,8 +40,13 @@ def client_os(user_agent):
         else:
             platform = None
     else:
-        full_platform = None
-        platform = None
+        # Total hack to avoid dealing with regex nightmares
+        if 'mac' in user_agent.lower():
+            full_platform = "Intel Mac 10.6"
+            platform = 'Mac'
+        else:
+            full_platform = None
+            platform = None
 
     return {
         'full_platform': full_platform,

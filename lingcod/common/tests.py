@@ -78,7 +78,7 @@ class BrowserUserAgentTest(TestCase):
         for ua in self.supported_uastring_examples:
             if not valid_browser(ua):
                 print "UAPARSER SAYS NOT SUPPORTED ....." , ua
-            self.assertEquals(valid_browser(ua),True)
+            self.assertEquals(valid_browser(ua),True, "*** uaparser says that '%s' is not supported. " % ua)
 
     def test_unsupported_browsers(self):
         from lingcod.common.utils import valid_browser 
