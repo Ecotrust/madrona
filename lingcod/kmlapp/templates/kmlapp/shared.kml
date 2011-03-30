@@ -1,7 +1,7 @@
 {% extends "kmlapp/base.kml" %}
 {% load absurl %}
 {% block workspace_json %}
-  <atom:link title="workspace-shared" href="{% url workspace-shared-json %}" />
+  <atom:link title="workspace-shared" rel="workspace" href="{% url workspace-shared-json %}" />
 {% endblock %}
 {% block folders_and_placemarks %}
 
