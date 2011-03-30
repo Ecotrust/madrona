@@ -282,9 +282,9 @@ lingcod.features.workspace = (function(){
             var multiple = selected.length > 1;
             var link = that.active(idsToUniqueClasses(selected), multiple);
             var uri = link['uri-template'];
-            var repl = '{id}';
+            var repl = '{uid}';
             if(uri.indexOf(repl) === -1){
-                repl = '{id+}';
+                repl = '{uid+}';
             }
             return uri.replace(repl, selected.join(','));
         }

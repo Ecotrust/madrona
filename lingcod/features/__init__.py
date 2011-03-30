@@ -120,7 +120,7 @@ not a string path." % (name,))
                 edits_original=False))
         
         # Add a multi-delete generic link
-        self.links.insert(0, edit('Multi-Delete', 
+        self.links.insert(0, edit('Delete', 
             'lingcod.features.views.multi_delete', 
             select='multiple single',
             method='DELETE',
@@ -287,7 +287,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
             'link-relations': {
                 'self': {
                     'uri-template': reverse("%s_resource" % (self.slug, ), 
-                        args=[placeholder]).replace(placeholder, '{uid}')
+                        args=[placeholder]).replace(placeholder, '{uid}'),
+                    'title': 'Attributes',
                 },
             }
         }

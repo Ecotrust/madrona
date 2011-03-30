@@ -193,10 +193,12 @@
                             '</a>',
                         '</li>'
                     ].join(''));
-                    
+                });
+                
+                jQuery.each(workspace.featureClasses.all, function(i, klass){
                     var pks = [1, 2, 3];
                     jQuery.each(pks, function(i, v){
-                        $('#selection select').append('<option value="'+action.links[0].featureClass.id+'_'+v+'">'+action.links[0].featureClass.title+'_'+v+'</option>');
+                        $('#selection select').append('<option value="'+klass.id+'_'+v+'">'+klass.title+'_'+v+'</option>');
                     });
                 });
                 
@@ -253,55 +255,46 @@
     {
       "title": "Copy", 
       "models": [
-        "layers_privatelayerlist", 
-        "layers_privatesuperoverlay", 
         "mlpa_mpa", 
         "mlpa_array", 
         "mlpa_shipwreck", 
         "mlpa_pipeline", 
-        "mlpa_folder"
+        "mlpa_folder", 
+        "mlpa_userkml"
       ], 
-      "uri-template": "/features/generic-links/links/copy/{id+}/", 
+      "uri-template": "/features/generic-links/links/copy/{uid+}/", 
       "rel": "edit", 
       "method": "POST", 
       "select": "multiple single"
     }, 
     {
+      "title": "Delete", 
       "models": [
-        "layers_privatelayerlist", 
-        "layers_privatesuperoverlay", 
         "mlpa_mpa", 
         "mlpa_array", 
         "mlpa_shipwreck", 
         "mlpa_pipeline", 
-        "mlpa_folder"
+        "mlpa_folder", 
+        "mlpa_userkml"
       ], 
-      "uri-template": "/features/generic-links/links/kml/{id+}/", 
+      "uri-template": "/features/generic-links/links/delete/{uid+}/", 
+      "rel": "edit", 
+      "method": "DELETE", 
+      "select": "multiple single"
+    }, 
+    {
+      "models": [
+        "mlpa_mpa", 
+        "mlpa_array", 
+        "mlpa_shipwreck", 
+        "mlpa_pipeline", 
+        "mlpa_folder", 
+        "mlpa_userkml"
+      ], 
+      "uri-template": "/features/generic-links/links/kml/{uid+}/", 
       "select": "multiple single", 
       "rel": "alternate", 
       "title": "KML"
-    }, 
-    {
-      "title": "Remove", 
-      "models": [
-        "mlpa_array", 
-        "mlpa_folder"
-      ], 
-      "uri-template": "/features/generic-links/links/remove/{id+}/", 
-      "rel": "edit", 
-      "method": "POST", 
-      "select": "multiple single"
-    }, 
-    {
-      "title": "Add", 
-      "models": [
-        "mlpa_array", 
-        "mlpa_folder"
-      ], 
-      "uri-template": "/features/generic-links/links/add/{id+}/", 
-      "rel": "edit", 
-      "method": "POST", 
-      "select": "multiple single"
     }
   ], 
   "feature-classes": [
@@ -309,31 +302,12 @@
       "link-relations": {
         "edit": [
           {
-            "uri-template": "/features/shipwreck/{id}/form/", 
+            "uri-template": "/features/mpa/{uid}/form/", 
             "title": "edit"
           }
         ], 
         "self": {
-          "uri-template": "/features/shipwreck/{id}/", 
-          "title": "Attributes"
-        }, 
-        "create": {
-          "uri-template": "/features/shipwreck/form/"
-        }
-      }, 
-      "id": "mlpa_shipwreck", 
-      "title": "Shipwreck"
-    }, 
-    {
-      "link-relations": {
-        "edit": [
-          {
-            "uri-template": "/features/mpa/{id}/form/", 
-            "title": "edit"
-          }
-        ], 
-        "self": {
-          "uri-template": "/features/mpa/{id}/", 
+          "uri-template": "/features/mpa/{uid}/", 
           "title": "Attributes"
         }, 
         "create": {
@@ -347,12 +321,12 @@
       "link-relations": {
         "edit": [
           {
-            "uri-template": "/features/array/{id}/form/", 
+            "uri-template": "/features/array/{uid}/form/", 
             "title": "edit"
           }
         ], 
         "self": {
-          "uri-template": "/features/array/{id}/", 
+          "uri-template": "/features/array/{uid}/", 
           "title": "Attributes"
         }, 
         "create": {
@@ -361,9 +335,15 @@
       }, 
       "id": "mlpa_array", 
       "collection": {
+        "add": {
+          "uri-template": "/features/array/{collection_uid}/add/{uid+}"
+        }, 
         "classes": [
           "mlpa_mpa"
-        ]
+        ], 
+        "remove": {
+          "uri-template": "/features/array/{collection_uid}/remove/{uid+}"
+        }
       }, 
       "title": "Array"
     }, 
@@ -371,12 +351,31 @@
       "link-relations": {
         "edit": [
           {
-            "uri-template": "/features/pipeline/{id}/form/", 
+            "uri-template": "/features/shipwreck/{uid}/form/", 
             "title": "edit"
           }
         ], 
         "self": {
-          "uri-template": "/features/pipeline/{id}/", 
+          "uri-template": "/features/shipwreck/{uid}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/shipwreck/form/"
+        }
+      }, 
+      "id": "mlpa_shipwreck", 
+      "title": "Shipwreck"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/pipeline/{uid}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/pipeline/{uid}/", 
           "title": "Attributes"
         }, 
         "create": {
@@ -390,12 +389,12 @@
       "link-relations": {
         "edit": [
           {
-            "uri-template": "/features/folder/{id}/form/", 
+            "uri-template": "/features/folder/{uid}/form/", 
             "title": "edit"
           }
         ], 
         "self": {
-          "uri-template": "/features/folder/{id}/", 
+          "uri-template": "/features/folder/{uid}/", 
           "title": "Attributes"
         }, 
         "create": {
@@ -404,15 +403,40 @@
       }, 
       "id": "mlpa_folder", 
       "collection": {
+        "add": {
+          "uri-template": "/features/folder/{collection_uid}/add/{uid+}"
+        }, 
         "classes": [
           "mlpa_mpa", 
           "mlpa_array", 
           "mlpa_pipeline", 
           "mlpa_shipwreck", 
           "mlpa_folder"
-        ]
+        ], 
+        "remove": {
+          "uri-template": "/features/folder/{collection_uid}/remove/{uid+}"
+        }
       }, 
       "title": "Folder"
+    }, 
+    {
+      "link-relations": {
+        "edit": [
+          {
+            "uri-template": "/features/userkml/{uid}/form/", 
+            "title": "edit"
+          }
+        ], 
+        "self": {
+          "uri-template": "/features/userkml/{uid}/", 
+          "title": "Attributes"
+        }, 
+        "create": {
+          "uri-template": "/features/userkml/form/"
+        }
+      }, 
+      "id": "mlpa_userkml", 
+      "title": "UserKml"
     }
   ]
 }
