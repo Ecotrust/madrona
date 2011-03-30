@@ -64,15 +64,26 @@ If you create a new mapnik xml map, you'll need to register it with your django 
 
 To access your new map, hit http://your.domain.com/staticmap/yourmapname
 
-Variable Substitution
-**********************
-While it is certainly possible to hardcode paths to MEDIA_ROOT and postgres database connections, this limits the portability of the code. By using KEYWORDS in the mapnik mapfile, these variables can be infered by the staticmap code depending on the current environment. Currently, staticmap supports the following KEYWORD substitutions::
+Accessing maps by URL
+*********************
+The staticmap can be accessed by url template tags::
 
-  MEDIA_ROOT - the media dir from settings.py
-  GEOMETRY_DB_SRID - the geometry column SRS ID from settings.py
-  DATABASE_CONNECTION - takes the place of all postgis Parameter tag set defining postgresql database connections
-  MPA_FILTER - filter for dynamic MPA lists, use this keyword in the Style > Rule > Filter for MPAs 
+    <img align="top" src="{% url staticmap-show 'default' %}">
+
+The staticmap view also takes several parameters to configure the map
+
+  * `uids` : a comma-seperated list of feature uids. If the feature uid is a feature collection, staticmap will attempt to draw all features contained in that collection.
+  
+  * `width` and `height` : Dimensions of the output image (in pixels)
+
+  * `bbox` : a comma-seperated list of four floating point values representing the geographic extent of the output map (ie minx,miny,maxx,maxy)
+
+  * `autozoom` : set to 'True' if you need the map to automatically set the geographic extent according to the selected features.
+
+  * `show_extent` : set to 'True' if you need to show a box indicating the extent of selected features. Useful for overview maps.
 
 
+You could incorporate these into a django template as follows::
 
+    <img align="top" src="{% url staticmap-show 'default' %}?uids={{ feature.uid }}&amp;width=154&amp;height=200&amp;show_extent=True">
 

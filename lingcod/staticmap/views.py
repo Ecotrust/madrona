@@ -59,19 +59,28 @@ def get_features(request):
                 for child in children:
                     features.append((child.__class__,[child.pk]))
             else:
-                features.append((model,[pk]))
+                features.append((model,[int(pk)]))
 
     return features
 
-def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
+def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
     if not srid:
         srid = settings.GEOMETRY_CLIENT_SRID # Assume latlong if none
-    # would be nice to just do a transform().extent() but this doesnt work - geodjango bug
-    ugeom = mpa_class.objects.filter(pk__in=mpa_ids).unionagg().transform(srid,clone=True)
-    bbox = ugeom.extent
     
-    width = bbox[2]-bbox[0]
-    height = bbox[3]-bbox[1]
+    minx = 361.0
+    miny = 361.0
+    maxx = -361.0
+    maxy = -361.0
+    for model, pks in features:
+        ugeom = model.objects.filter(pk__in=pks).unionagg().transform(srid,clone=True)
+        bbox = ugeom.extent
+        if bbox[0] < minx: minx = bbox[0]
+        if bbox[1] < miny: miny = bbox[1]
+        if bbox[2] > maxx: maxx = bbox[2]
+        if bbox[3] > maxy: maxy = bbox[3]
+    
+    width = maxx - minx
+    height = maxy - miny  
     buffer = .15
     
     # If the following settings variables are not defined (or set to None), then the original method
@@ -86,7 +95,7 @@ def auto_extent(mpa_ids,srid=settings.GEOMETRY_CLIENT_SRID):
         width_buffer = width * buffer
         height_buffer = height * buffer
         
-    return bbox[0]-width_buffer, bbox[1]-height_buffer, bbox[2]+width_buffer, bbox[3]+height_buffer
+    return minx-width_buffer, miny-height_buffer, maxx+width_buffer, maxy+height_buffer
 
 def get_designation_style(mpas):
     mpa_filter_string = get_mpa_filter_string(mpas)
@@ -147,7 +156,8 @@ def show(request, map_name='default'):
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Create the mapnik layers
-    for model, pks in get_features(request):
+    features = get_features(request)
+    for model, pks in features:
         style = model.mapnik_style()
         style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
         m.append_style(style_name, style)
@@ -162,9 +172,8 @@ def show(request, map_name='default'):
     x2, y2 = map.default_x2, map.default_y2
     
     if "autozoom" in request.REQUEST:
-        # TODO - not supported with CMS
-        if request.REQUEST['autozoom'].lower() == 'true' and mpas and len(mpas)>0:
-            x1, y1, x2, y2 = auto_extent(mpas, map.default_srid)
+        if request.REQUEST['autozoom'].lower() == 'true' and features and len(features)>0:
+            x1, y1, x2, y2 = auto_extent(features, map.default_srid)
     elif "bbox" in request.REQUEST:
         try:
             x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
@@ -172,9 +181,39 @@ def show(request, map_name='default'):
             pass
 
     bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
-    m.zoom_to_box(bbox)
+
+    if "show_extent" in request.REQUEST:
+        # Shows a bounding box for the extent of all specified features
+        # Useful for overview maps
+        if request.REQUEST['show_extent'].lower() == 'true' and features and len(features)>0:
+            x1, y1, x2, y2 = auto_extent(features, map.default_srid)
+
+            ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+            ps.fill_opacity = 0.8
+            ls = mapnik.LineSymbolizer(mapnik.Color('#ff0000'),2.0)
+            r = mapnik.Rule()
+            r.symbols.append(ps)
+            r.symbols.append(ls)
+            extent_style = mapnik.Style()
+            extent_style.rules.append(r)
+            m.append_style('extent_style', extent_style)
+            lyr = mapnik.Layer("Features Extent")
+            bbox_sql = """
+            (select 1 as id, st_setsrid(st_makebox2d(st_point(%s,%s),st_point(%s,%s)), %s) as geometry_final) as aoi
+            """ % (x1,y1,x2,y2,map.default_srid)
+            lyr.datasource = mapnik.PostGIS(host=connection.settings_dict['HOST'],
+                    user=connection.settings_dict['USER'],
+                    password=connection.settings_dict['PASSWORD'],
+                    dbname=connection.settings_dict['NAME'], 
+                    table=bbox_sql,
+                    geometry_field='geometry_final',
+                    estimate_extent='False',
+                    extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
+            lyr.styles.append('extent_style')
+            m.layers.append(lyr)
     
     # Render image and send out the response
+    m.zoom_to_box(bbox)
     response = draw_to_response(m, draw, request)
 
     # if testing via django unit tests, close out the connection
