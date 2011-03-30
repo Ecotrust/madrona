@@ -8,6 +8,8 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from django.core.files import File
 from lingcod.layers.models import PublicLayerList, PrivateLayerList, PrivateSuperOverlay
+from lingcod.features.forms import FeatureForm
+from lingcod.features import register
 from lingcod.common.utils import enable_sharing
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group
@@ -21,6 +23,15 @@ import os
 #    # Example:
 #    (r'^layers/', include('lingcod.layers.urls')),
 #)
+
+@register
+class TestUserKml(PrivateLayerList):
+    class Options:
+        form = 'lingcod.layers.tests.TestUserKmlForm'
+
+class TestUserKmlForm(FeatureForm):
+    class Meta(FeatureForm.Meta):
+        model = TestUserKml
 
 class PrivateLayerListTest(TestCase):
     #urls = 'lingcod.layers.tests'
@@ -47,14 +58,14 @@ class PrivateLayerListTest(TestCase):
         settings.MEDIA_URL = ''
         
         # User1 creates Layer1 and shares with Group1
-        self.layer1 = PrivateLayerList.objects.create(user=self.user1)
+        self.layer1 = TestUserKml.objects.create(user=self.user1)
         self.layer1.save()
         self.layer1.kml_file.save('layer1.kml', f)
         self.layer1.save()
         self.layer1.share_with(self.group1)
 
         # User2 creates Layer2 and doesnt share (the selfish bastard)
-        self.layer2 = PrivateLayerList.objects.create(user=self.user2)
+        self.layer2 = TestUserKml.objects.create(user=self.user2)
         self.layer2.save()
         self.layer2.kml_file.save('layer2.kml', f)
         self.layer2.save()
@@ -79,7 +90,7 @@ class PrivateLayerListTest(TestCase):
         self.assertFalse(self.layer2.is_viewable(self.user3)[0])
 
     def test_webservice(self):
-        url = PrivateLayerList.get_options().get_resource(self.layer1.pk)
+        url = TestUserKml.get_options().get_resource(self.layer1.pk)
 
         self.client.login(username=self.user1, password=self.password)
         response = self.client.get(url)
@@ -99,22 +110,6 @@ class PrivateLayerListTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
         self.client.logout()
-
-    def test_webservice_multi(self):
-
-        self.client.login(username=self.user2, password=self.password)
-        url = reverse('layers-all-for-user', kwargs={'session_key': 0})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-        returned_urls = response.content.split(',') # TODO the parsing will change
-        self.assertEqual(len(returned_urls),2) # the one shared and the one he owns
-        for rurl in returned_urls:
-            response = self.client.get(rurl.strip())
-            self.assertEqual(response.status_code, 200)
-
-        self.client.logout()
-
 
 
 class PublicLayerListTest(TestCase):
