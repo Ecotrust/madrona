@@ -233,15 +233,10 @@ var lingcod = (function(){
             for(var i=0;i<options.myshapes.length; i++){
                 var url = options.myshapes[i].url;
                 var callback = options.myshapes[i]['callback'];
-                var editor = lingcod.rest.kmlEditor({
-                    ge: ge,
+                var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#myshapestree',
-                    div: '#map',
-                    url: options.myshapes[i].url,
-                    client: that.client,
-                    shared: false,
-                    allow_copy: options.allow_copy
+                    url: options.myshapes[i].url
                 });
                 if(callback){
                     $(editor).bind('kmlLoaded', function(event, e, kmlObject){
@@ -282,15 +277,10 @@ var lingcod = (function(){
 
         if(options.sharedshapes){
             for(var i=0;i<options.sharedshapes.length; i++){
-                var editor = lingcod.rest.kmlEditor({
-                    ge: ge,
+                var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#sharedshapestree',
-                    div: '#map',
-                    url: options.sharedshapes[i],
-                    client: that.client,
-                    shared: true,
-                    allow_copy: options.allow_copy
+                    url: options.sharedshapes[i]
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
                     $('#sidebar').tabs('select', "#MyShapes");

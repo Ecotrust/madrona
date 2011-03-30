@@ -52,4 +52,7 @@
     <file path="common/js/graphics.js" />
     <file path="common/js/ui/table.js" />
 	<file path="geographic_report/js/geographicReport.js" />
+	<file path="features/features.js" />
+	<file path="features/js/workspace.js" />
+	<file path="features/js/kmlEditor.js" />	
 </javascripts>
