@@ -149,6 +149,7 @@ class Feature(models.Model):
                 obj = self.__class__.objects.shared_with_user(user).get(pk=self.pk)
                 return True, HttpResponse("Object shared with public, viewable by anonymous user", status=202)
             except self.__class__.DoesNotExist:
+                # Unless the object is publicly shared, we won't give away anything
                 return False, HttpResponse('You must be logged in', status=401)
 
         # Does the user own it?
@@ -478,7 +479,7 @@ class FeatureCollection(Feature):
         return """
         <Style id="%(model_uid)s-default">
             <ListStyle>
-                <ItemIcon id="%(model_uid)s_open">
+                <ItemIcon>
                     <state>open</state>
                     <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
                     <!-- TODO: KMLTree currently doesn't support icon pallettes -->
@@ -489,7 +490,7 @@ class FeatureCollection(Feature):
                 </ItemIcon>
                 <!-- TODO: KMLTree currently can't handle multi ItemIcons by state,
                            tries to concatenate them into a single URL. 
-                <ItemIcon id="%(model_uid)s_closed">
+                <ItemIcon>
                     <state>closed</state>
                     <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
                 </ItemIcon> -->

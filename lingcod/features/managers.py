@@ -4,7 +4,7 @@ from django.conf import settings
 from lingcod.features import registered_models
 
 class ShareableGeoManager(models.GeoManager):
-    def shared_with_user(self, user, filter_groups=None):
+    def shared_with_user(self, user, filter_groups=None, exclude_models=None):
         """
         Returns a queryset containing any objects that have been 
         shared with a group the user belongs to.
@@ -56,13 +56,19 @@ class ShareableGeoManager(models.GeoManager):
             contained_ids = []
             for collection_model in potential_parents:
                 # Avoid infinite recursion
-                if collection_model == self.model:
+                if exclude_models and collection_model in exclude_models:
                     continue
+                
+                exclude_models = None
+                if collection_model == self.model:
+                    # On the next recurisive go-round, avoid infinite recursion
+                    exclude_models = [self.model]
+
                 # Get container objects shared with user
                 if filter_groups:
-                    shared_containers = collection_model.objects.shared_with_user(user,filter_groups=filter_groups)
+                    shared_containers = collection_model.objects.shared_with_user(user,filter_groups=filter_groups,exclude_models=exclude_models)
                 else:
-                    shared_containers = collection_model.objects.shared_with_user(user)
+                    shared_containers = collection_model.objects.shared_with_user(user,exclude_models=exclude_models)
 
                 # Create list of contained object ids
                 for sc in shared_containers:
