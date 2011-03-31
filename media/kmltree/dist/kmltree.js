@@ -124,6 +124,10 @@ var kmltreeManager = (function(){
     that._clearEverythingButMe = _clearEverythingButMe;
         
     var ownsUrl = function(doc, url){
+        if(!doc){
+            // In case the tree failed to load
+            return false;
+        }
         if(doc.getUrl() === url){
             return true;
         }
@@ -953,7 +957,8 @@ var kmltree = (function(){
         var destroyed = false;
         var internalState = {};
         var selectData = [];
-
+        that.url = opts.url;
+        
         function clearSelectData(){
             selectData = [];
         }
@@ -983,8 +988,8 @@ var kmltree = (function(){
             }
         }
 
-        if(parseFloat(ge.getPluginVersion()) < 5.2){
-            alert('kmltree requires a google earth plugin version >= 5.2');
+        if(parseFloat(ge.getApiVersion()) < 1.005){
+            alert('kmltree requires a google earth plugin version >= 1.005');
         }
                 
         if(!opts.url || !opts.gex || !opts.element || !opts.mapElement){
