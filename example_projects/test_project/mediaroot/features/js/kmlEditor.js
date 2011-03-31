@@ -45,7 +45,7 @@ lingcod.features.kmlEditor = (function(){
             '<div class="kmlEditor">',
                 '<h1 class="name"></h1>',
                 '<div class="toolbar"></div>',
-                '<div class="kmllist"></div>',
+                '<div class="kmllist kmlEditor"></div>',
             '</div>'
         ].join(''));
         
@@ -166,16 +166,6 @@ lingcod.features.kmlEditor = (function(){
                     alert('error loading workspace document');
                 }
             });
-            // while(create_menu.getItemCount() > 0){
-            //     create_menu.removeItemAt(0);
-            // }
-            // for(var key in configs){
-            //     var config = configs[key];
-            //     var item = new goog.ui.MenuItem(config.title);
-            //     create_menu.addItem(item);
-            //     item.mm_data = config;
-            // }
-            // that.kmlEl.addClass('kmlEditor');
             // var a = that.kmlEl.find('> .marinemap-tree-category > a');
             // that.kmlEl.find('> .marinemap-tree-category > span.badges').remove();
             // that.el.find('h1').text(a.text());        

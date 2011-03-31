@@ -14,7 +14,7 @@ class PrivateLayerList(Feature):
     can_share_features permissions)
     """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
-    kml_file = models.FileField(upload_to='upload/private-kml-layers/', help_text="""
+    kml_file = models.FileField(upload_to='upload/private-kml-layers/%Y/%m/%d', help_text="""
         KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
 
@@ -23,8 +23,16 @@ class PrivateLayerList(Feature):
         return ""
 
     @property
+    def kml_style(self):
+        return ""
+
+    @property
     def kml_full(self):
-        return self.kml_file.read()
+        try:
+            f = self.kml_file.read()
+            return f
+        except:
+            return """<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>"""
 
     class Meta:
         abstract=True
@@ -45,6 +53,10 @@ class PrivateSuperOverlay(Feature):
 
     @property
     def kml(self):
+        return ""
+
+    @property
+    def kml_style(self):
         return ""
 
     @property
