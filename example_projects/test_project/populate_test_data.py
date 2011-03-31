@@ -13,7 +13,7 @@ from django.contrib.auth.models import User, Group
 from lingcod.common.utils import enable_sharing
 
 def main():
-    user = User.objects.get(username='perry')
+    user = User.objects.get(username='cburt')
 
     for model in [Shipwreck, Pipeline, Mpa, Folder, Array]:
         a = model.objects.all()

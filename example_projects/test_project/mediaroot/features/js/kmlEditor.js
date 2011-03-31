@@ -39,6 +39,8 @@ lingcod.features.kmlEditor = (function(){
         var download_menu;
         var edit_button;
         var edit_menu;
+        var menus = [];
+        var buttons = [];
         
         // Create html skeleton for the editor, toolbar menu, and tree
         that.el = $([
@@ -54,6 +56,7 @@ lingcod.features.kmlEditor = (function(){
         // Setup toolbar as much as possible before workspace is loaded
         tbar = new goog.ui.Toolbar();
         // tbar.setEnabled(false);
+        window.tbar = tbar;
         
         // add refresh button
         refresh_button = new goog.ui.ToolbarButton('Refresh');
@@ -62,6 +65,7 @@ lingcod.features.kmlEditor = (function(){
             refresh();
         });
         tbar.addChild(refresh_button, true);
+        buttons.push(refresh_button);
         
         tbar.addChild(new goog.ui.ToolbarSeparator(), true);
         
@@ -69,6 +73,7 @@ lingcod.features.kmlEditor = (function(){
         create_menu = new goog.ui.Menu();
         create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
         create_button.setVisible(false);
+        menus.push(create_menu);
         tbar.addChild(create_button, true);
         
         // Add attributes button
@@ -150,6 +155,8 @@ lingcod.features.kmlEditor = (function(){
             // tbar.setEnabled(true);
             create_button.setEnabled(false);
         });
+
+        $(tree).bind('select', onSelect);
         
         function onKmlLoad(e, kmlObject){
             var kml = $($.parseXML(kmlObject.getKml()));
@@ -263,6 +270,49 @@ lingcod.features.kmlEditor = (function(){
                 button.setVisible(true);
             }
         }
+        
+        function onSelect(e, selectData){
+            if(selectData.length !== 1){
+                attr.setEnabled(false);
+            }else{
+                attr.setEnabled(true);                
+            }
+            selectData = jQuery.map(selectData, function(d){
+                return d.kmlObject;
+            });
+            var i = tbar.getChildCount();
+            while(i){
+                i--;
+                if(child === attr || child === refresh_button){
+                    continue;
+                }
+                var child = tbar.getChildAt(i);
+                if(child instanceof goog.ui.ToolbarMenuButton){
+                    var menu = child.getMenu();
+                    var enabled = false;
+                    var j = menu.getChildCount();
+                    while(j != 0){
+                        j--;
+                        var item = menu.getChildAt(j);
+                        if(item.link){
+                            var active = item.link.active(selectData);
+                            if(active){
+                                enabled = true;
+                                item.setEnabled(true);
+                            }else{
+                                item.setEnabled(false);                                
+                            }
+                        }
+                    }
+                    child.setEnabled(enabled);
+                }
+            }
+        }
+        
+        // Public API methods
+        // ##################
+        
+        that.clearSelection = tree.clearSelection;
                 
         return that;
     }

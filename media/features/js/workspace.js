@@ -256,7 +256,11 @@ lingcod.features.workspace = (function(){
             for(var j = 0; j < that.links.length; j++){
                 var link = that.links[j];
                 for(var i = 0; i < selected.length; i++){
-                    if(jQuery.inArray(selected[i], link.models) === -1){
+                    var model = selected[i];
+                    if(model.getType){
+                        model = lingcod.features.model(model);
+                    }
+                    if(jQuery.inArray(model, link.models) === -1){
                         valid_link = false;
                         break;
                     }
