@@ -13,7 +13,6 @@ class PrivateLayerList(Feature):
     that the owner is a member of (assuming group has
     can_share_features permissions)
     """
-    priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
     kml_file = models.FileField(upload_to='upload/private-kml-layers/%Y/%m/%d', help_text="""
         KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
@@ -37,34 +36,19 @@ class PrivateLayerList(Feature):
     class Meta:
         abstract=True
 
-class PrivateSuperOverlay(Feature):
+class PrivateSuperOverlay(models.Model):
     """
-    Abstract Model for presenting restricted-access multi-file kml trees on disk
-    Owned by a single user, can be shared with any group(s) 
-    that the owner is a member of (assuming group has
-    can_share_features permissions)
+    For presenting restricted-access multi-file kml trees on disk
+    Note that this is NOT a Feature so it doesn't have any of the sharing API
+    Sharing and permissions must be implemented one-off in the views- still TODO
     """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
+    name = models.CharField(verbose_name="Name", max_length="255",unique=True)
     base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="^doc.kml$", recursive=True, help_text="""
         Base KML file of the superoverlay. Must be called 'doc.kml'. This file (and all subsequent files in the tree) must use
         relative paths.  The user making the request only needs permissions for the base kml. 
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
         if the user has proper permissions on the base kml.""")
-
-    @property
-    def kml(self):
-        return ""
-
-    @property
-    def kml_style(self):
-        return ""
-
-    @property
-    def kml_full(self):
-        return self.base_kml.read()
-
-    class Meta:
-        abstract=True
 
     def save(self, *args, **kwargs):
         if self.base_kml == os.path.join(settings.SUPEROVERLAY_ROOT, 'doc.kml'):

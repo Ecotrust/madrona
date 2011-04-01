@@ -11,6 +11,7 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 from django.core.urlresolvers import reverse
 from lingcod.features.views import get_object_for_viewing
+from django.contrib.models import Group
 
 def get_kml_file(request, uid, session_key='0', input_username=None):
     load_session(request, session_key)
@@ -27,18 +28,40 @@ def get_kml_file(request, uid, session_key='0', input_username=None):
     response['Content-Type'] = mimetypes.KML
     return response
 
+def is_superoverlay_viewable(layer, user):
+    """
+    Since superoverlays are not Features, they get their own sharing scheme
+    For now, this is a setting; a dict with superoverlay name and list of groups:
+
+    SUPEROVERLAY_GROUPS = {'my_super_overlay': ['RSG Members','My Office Mates']}
+    """
+    if user.is_anonymous() or not user.is_authenticated():
+        return False, HttpResponse('You must be logged in', status=401)
+
+    try:
+        perms = settings.SUPEROVERLAY_GROUPS
+    except AttributeError:
+        return False, HttpResponse('No SUPEROVERLAY_GROUPS defined in settings', status=500)
+
+    overlay_groups = [Group.objects.get(name=x) for x in perms[layername]]
+    for user_group in user.groups.all():
+        if user_group in overlay_groups:
+            return True, HttpResponse('User %s has permission to view %s' % (user.username, layer.name))
+
+    return False, HttpResponse('Access denied', status=403)
+
 def get_private_superoverlay(request, pk, session_key='0'):
     load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     layer = PrivateLayerList.objects.get(pk=pk)
-    viewable, response = layer.is_viewable(user)
+    viewable, response = is_superoverlay_viewable(layer, user)
     if not viewable:
         return response
     else:
         response = HttpResponse(open(layer.base_kml,'rb').read(), status=200, mimetype=mimetypes.KML)
-        response['Content-Disposition'] = 'attachment; filename=private_overlay_%s.kml' % pk
+        response['Content-Disposition'] = 'attachment; filename=superoverlay_%s.kml' % pk
         return response
 
 def get_relative_to_private_superoverlay(request, pk, path, session_key='0'):
@@ -47,7 +70,9 @@ def get_relative_to_private_superoverlay(request, pk, path, session_key='0'):
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
     layer = PrivateLayerList.objects.get(pk=pk)
-    viewable, response = layer.is_viewable(user)
+    viewable, response = is_superoverlay_viewable(layer, user)
+    if not viewable:
+        return response
 
     # From django.views.static
     path = posixpath.normpath(urllib.unquote(path))
