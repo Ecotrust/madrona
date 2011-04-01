@@ -11,7 +11,7 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 from django.core.urlresolvers import reverse
 from lingcod.features.views import get_object_for_viewing
-from django.contrib.models import Group
+from django.contrib.auth.models import Group
 
 def get_kml_file(request, uid, session_key='0', input_username=None):
     load_session(request, session_key)

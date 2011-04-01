@@ -40,7 +40,10 @@ class PrivateSuperOverlay(models.Model):
     """
     For presenting restricted-access multi-file kml trees on disk
     Note that this is NOT a Feature so it doesn't have any of the sharing API
-    Sharing and permissions must be implemented one-off in the views- still TODO
+    Sharing and permissions must be implemented one-off in the views,
+    For now, this is a setting; a dict with superoverlay name and list of groups:
+
+    SUPEROVERLAY_GROUPS = {'my_super_overlay': ['RSG Members','My Office Mates']}
     """
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
     name = models.CharField(verbose_name="Name", max_length="255",unique=True)
