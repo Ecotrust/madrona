@@ -493,3 +493,60 @@ def enable_sharing(group=None):
         group.permissions.add(p)
         group.save()
     return True
+
+
+'''
+Returns a path to desired resource (image file)
+Called from within pisaDocument via link_callback parameter (from pdf_report)
+'''    
+def fetch_resources(uri, rel):
+    import os
+    import settings
+    import datetime
+    import random
+    import tempfile
+    import urllib2
+    from django.test.client import Client
+
+    if uri.startswith('http'):
+        # An external address assumed to require no authentication
+        req = urllib2.Request(uri)
+        response = urllib2.urlopen(req)
+        content = response.read()
+    elif 'staticmap' in uri:
+        # A staticmap url .. gets special treatment due to permissions
+        from lingcod.staticmap.temp_save import img_from_params
+        params = get_params_from_uri(uri)
+        content = img_from_params(params, None)
+    else:
+        # An internal address assumed; use the django test client
+        client = Client()
+        response = client.get(uri)
+        content = response.content
+        # alternate way
+        # path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+
+    randnum = random.randint(0, 1000000000)
+    timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+    filename = 'resource_%s_%s.tmp' % (timestamp,randnum)
+    pathname = os.path.join(tempfile.gettempdir(),filename)
+    fh = open(pathname,'wb')
+    fh.write(content)
+    fh.close()
+    return pathname
+
+'''
+Returns a dictionary representation of the parameters attached to the given uri
+Called by fetch_resources
+'''    
+def get_params_from_uri(uri):
+    from urlparse import urlparse
+    results = urlparse(uri)
+    params = {}
+    if results.query == '':
+        return params
+    params_list = results.query.split('&')
+    for param in params_list:
+        pair = param.split('=')
+        params[pair[0]] = pair[1]
+    return params

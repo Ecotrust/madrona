@@ -21,7 +21,7 @@ except:
 feature_models = get_feature_models()
 collection_models = get_collection_models()
 
-def get_features(request):
+def get_features(uids,user):
     """ 
     Returns list of tuples representing mapnik layers
     Tuple => (model_class, [pks])
@@ -37,29 +37,29 @@ def get_features(request):
                 ]
     """
     features = [] # list of tuples => (model, [pks])
-    if 'uids' in request.REQUEST: 
-        uids = str(request.REQUEST['uids']).split(',')
-        for uid in uids:
-            log.debug("processing uid %s" % uid)
-            applabel, modelname, pk = uid.split('_')
-            model = get_model_by_uid("%s_%s" % (applabel,modelname))
-            feature = get_feature_by_uid(uid)
+    for uid in uids:
+        log.debug("processing uid %s" % uid)
+        applabel, modelname, pk = uid.split('_')
+        model = get_model_by_uid("%s_%s" % (applabel,modelname))
+        feature = get_feature_by_uid(uid)
 
-            viewable, response = feature.is_viewable(request.user)
+        if user:
+            viewable, response = feature.is_viewable(user)
             if not viewable:
                 continue
 
-            if model in collection_models:
-                collection = get_feature_by_uid(uid)
-                viewable, response = collection.is_viewable(request.user)
+        if model in collection_models:
+            collection = get_feature_by_uid(uid)
+            if user:
+                viewable, response = collection.is_viewable(user)
                 if not viewable:
                     continue
-                all_children = collection.feature_set(recurse=True)
-                children = [x for x in all_children if x.__class__ in feature_models]
-                for child in children:
-                    features.append((child.__class__,[child.pk]))
-            else:
-                features.append((model,[int(pk)]))
+            all_children = collection.feature_set(recurse=True)
+            children = [x for x in all_children if x.__class__ in feature_models]
+            for child in children:
+                features.append((child.__class__,[child.pk]))
+        else:
+            features.append((model,[int(pk)]))
 
     return features
 
@@ -120,22 +120,8 @@ def get_designation_style(mpas):
     s.rules.append(r)
     return s
 
-def draw_to_response(m, draw, request):
-    mapnik.render(m, draw)
-    img = draw.tostring('png')
-    response = HttpResponse()
-    response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
-    if 'attachment' in request.REQUEST and request.REQUEST['attachment'].lower() == 'true':
-        response['Content-Disposition'] = 'attachment; filename=marinemap.png'
-    response.write(img)
-    return response
 
-def show(request, map_name='default'):
-    """Display a map with the study region geometry.  """
-    map = get_object_or_404(MapConfig,mapname=map_name)
-    mapfile = str(map.mapfile.path)
-    
+def show(request, map_name="default"):
     # Grab the image dimensions
     try:
         width = int(request.REQUEST['width'])
@@ -144,6 +130,47 @@ def show(request, map_name='default'):
         # fall back on defaults
         width, height = map.default_width, map.default_height
 
+    if 'uids' in request.REQUEST: 
+        uids = str(request.REQUEST['uids']).split(',')
+    else:
+        uids = []
+
+    if "autozoom" in request.REQUEST and request.REQUEST['autozoom'].lower() == 'true':
+        autozoom = True
+    else:
+        autozoom = False
+
+    if "bbox" in request.REQUEST:
+        bbox = request.REQUEST['bbox']
+    else:
+        bbox = None
+
+    if "show_extent" in request.REQUEST and request.REQUEST['show_extent'].lower() == 'true':
+        show_extent = True
+    else:
+        show_extent = False
+
+    img = draw_map(uids, request.user, width, height, autozoom, bbox, show_extent, map_name)
+
+    if 'attachment' in request.REQUEST and request.REQUEST['attachment'].lower() == 'true':
+        attach = True
+    else:
+        attach = False
+
+    response = HttpResponse()
+    response['Content-length'] = len(img)
+    response['Content-Type'] = 'image/png' 
+    if attach:
+        response['Content-Disposition'] = 'attachment; filename=marinemap.png'
+    response.write(img)
+
+    return response
+
+def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=False, map_name='default'):
+    """Display a map with the study region geometry.  """
+    map = get_object_or_404(MapConfig,mapname=map_name)
+    mapfile = str(map.mapfile.path)
+    
     # Create a blank image and map
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
@@ -156,7 +183,7 @@ def show(request, map_name='default'):
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Create the mapnik layers
-    features = get_features(request)
+    features = get_features(uids,user)
     for model, pks in features:
         style = model.mapnik_style()
         style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
@@ -171,54 +198,55 @@ def show(request, map_name='default'):
     x1, y1 = map.default_x1, map.default_y1
     x2, y2 = map.default_x2, map.default_y2
     
-    if "autozoom" in request.REQUEST:
-        if request.REQUEST['autozoom'].lower() == 'true' and features and len(features)>0:
-            x1, y1, x2, y2 = auto_extent(features, map.default_srid)
-    elif "bbox" in request.REQUEST:
+    if autozoom and features and len(features)>0:
+        x1, y1, x2, y2 = auto_extent(features, map.default_srid)
+    if bbox:
         try:
-            x1, y1, x2, y2 = [float(x) for x in str(request.REQUEST['bbox']).split(',')]
+            x1, y1, x2, y2 = [float(x) for x in bbox.split(',')]
         except:
             pass
 
     bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
 
-    if "show_extent" in request.REQUEST:
+    if show_extent and features and len(features)>0:
         # Shows a bounding box for the extent of all specified features
         # Useful for overview maps
-        if request.REQUEST['show_extent'].lower() == 'true' and features and len(features)>0:
-            x1, y1, x2, y2 = auto_extent(features, map.default_srid)
+        x1, y1, x2, y2 = auto_extent(features, map.default_srid)
 
-            ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
-            ps.fill_opacity = 0.8
-            ls = mapnik.LineSymbolizer(mapnik.Color('#ff0000'),2.0)
-            r = mapnik.Rule()
-            r.symbols.append(ps)
-            r.symbols.append(ls)
-            extent_style = mapnik.Style()
-            extent_style.rules.append(r)
-            m.append_style('extent_style', extent_style)
-            lyr = mapnik.Layer("Features Extent")
-            bbox_sql = """
-            (select 1 as id, st_setsrid(st_makebox2d(st_point(%s,%s),st_point(%s,%s)), %s) as geometry_final) as aoi
-            """ % (x1,y1,x2,y2,map.default_srid)
-            lyr.datasource = mapnik.PostGIS(host=connection.settings_dict['HOST'],
-                    user=connection.settings_dict['USER'],
-                    password=connection.settings_dict['PASSWORD'],
-                    dbname=connection.settings_dict['NAME'], 
-                    table=bbox_sql,
-                    geometry_field='geometry_final',
-                    estimate_extent='False',
-                    extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
-            lyr.styles.append('extent_style')
-            m.layers.append(lyr)
+        ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+        ps.fill_opacity = 0.8
+        ls = mapnik.LineSymbolizer(mapnik.Color('#ff0000'),2.0)
+        r = mapnik.Rule()
+        r.symbols.append(ps)
+        r.symbols.append(ls)
+        extent_style = mapnik.Style()
+        extent_style.rules.append(r)
+        m.append_style('extent_style', extent_style)
+        lyr = mapnik.Layer("Features Extent")
+        bbox_sql = """
+        (select 1 as id, st_setsrid(st_makebox2d(st_point(%s,%s),st_point(%s,%s)), %s) as geometry_final) as aoi
+        """ % (x1,y1,x2,y2,map.default_srid)
+        lyr.datasource = mapnik.PostGIS(host=connection.settings_dict['HOST'],
+                user=connection.settings_dict['USER'],
+                password=connection.settings_dict['PASSWORD'],
+                dbname=connection.settings_dict['NAME'], 
+                table=bbox_sql,
+                geometry_field='geometry_final',
+                estimate_extent='False',
+                extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
+        lyr.styles.append('extent_style')
+        m.layers.append(lyr)
     
     # Render image and send out the response
     m.zoom_to_box(bbox)
-    response = draw_to_response(m, draw, request)
+
+    mapnik.render(m, draw)
+    img = draw.tostring('png')
 
     # if testing via django unit tests, close out the connection
     conn = connection.settings_dict
     if conn['NAME'] != settings_dbname:
         del m
 
-    return response
+    return img
+

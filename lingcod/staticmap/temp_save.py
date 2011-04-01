@@ -1,99 +1,29 @@
-from django.shortcuts import get_object_or_404
-import mapnik
-from lingcod.staticmap.models import MapConfig
-from views import process_mapfile_text, get_designation_style, auto_extent
+from views import draw_map
 
 '''
-Create map image and save in a temporary location
-Return path to temporary location
+Create map image from a parameter dict
 '''    
-def save_to_temp(params, map_name='default'):
-    """Saves a map with the study region geometry.  """
-    maps = get_object_or_404(MapConfig,mapname=map_name)
-    mapfile = str(maps.mapfile.path)
-     
-    # Grab the image dimensions
-    width, height = get_dimensions(maps, params)
+def img_from_params(params, user=None):
+    opts = ['uids', 'width', 'height', 'autozoom', 'bbox', 'show_extent']
 
-    # Create a blank image
-    draw = mapnik.Image(width,height)
-    m = mapnik.Map(width,height)
+    class X:
+        pass
+    x = X()
 
-    mpas = [int(params['mpas'])]
-    
-    # Do the variable substitution
-    xmltext = process_mapfile_text(mapfile, mpas)
-    mapnik.load_map_from_string(m,xmltext)
-
-    # Override the mpa_style according to MPA designations
-    s = get_designation_style(mpas)
-    m.append_style('mpa_style',s)
-     
-    # Grab the bounding coordinates 
-    x1, y1, x2, y2 = get_bounding_coords(maps, params, mpas)
-
-    bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
-    m.zoom_to_box(bbox)
-    
-    # Render image 
-    mapnik.render(m, draw)
-    img = draw.tostring('png')
-
-    #generate image in temporary location and return path
-    filename = generate_filename(mpas)
-    pathname = write_to_temp(filename, img)
-    return pathname
-    
-'''
-Called by save_to_temp
-'''    
-def get_dimensions(maps, params):
-    try:
-        width = int(params['width'])
-        height = int(params['height'])
-    except:
-        # fall back on defaults
-        width, height = maps.default_width, maps.default_height
-    return width, height
-    
-'''
-Called by save_to_temp
-'''    
-def get_bounding_coords(maps, params, mpas):
-    # first, assume default image extent
-    x1, y1 = maps.default_x1, maps.default_y1
-    x2, y2 = maps.default_x2, maps.default_y2
-    
-    if "autozoom" in params.keys():
-        if params['autozoom'].lower() == 'true' and mpas and len(mpas)>0:
-            x1, y1, x2, y2 = auto_extent(mpas, maps.default_srid)
-    elif "bbox" in params.keys():
+    for opt in opts:
         try:
-            x1, y1, x2, y2 = [float(x) for x in str(params['bbox']).split(',')]
+            setattr(x,opt,params[opt])
         except:
-            pass
-    return x1, y1, x2, y2
-    
-'''
-Called by save_to_temp
-'''    
-def generate_filename(mpas):
-    import datetime
-    import random
-    randnum = random.randint(0, 1000000000)
-    timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
-    filename = 'mpa'+str(mpas[0])+'_'+timestamp+'_'+str(randnum)+'.png'
-    return filename
-        
-'''
-Called by save_to_temp
-'''    
-def write_to_temp(filename, img):  
-    import tempfile
-    import os
-    pathname = os.path.join(tempfile.gettempdir(),filename)
-    temp = open(pathname, 'wb')
-    temp.write(img)
-    temp.close()  
-    return pathname
-    
+            setattr(x,opt,False)
+
+    try: 
+        x.map_name = params[map_name]
+    except:
+        x.map_name = 'default'
+
+    # Note:: with user set to None, no perms checking happens 
+    # so anything that calls this better make sure
+    # that request.user has permissions to view uids!!
+    img = draw_map(x.uids.split(','), user, int(x.width), int(x.height), x.autozoom, x.bbox, x.show_extent, x.map_name)
+    return img
+     
