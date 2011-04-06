@@ -41,6 +41,7 @@ lingcod.features.kmlEditor = (function(){
         var edit_menu;
         var menus = [];
         var buttons = [];
+        var selection;
         
         // Create html skeleton for the editor, toolbar menu, and tree
         that.el = $([
@@ -56,13 +57,12 @@ lingcod.features.kmlEditor = (function(){
         // Setup toolbar as much as possible before workspace is loaded
         tbar = new goog.ui.Toolbar();
         // tbar.setEnabled(false);
-        window.tbar = tbar;
         
         // add refresh button
         refresh_button = new goog.ui.ToolbarButton('Refresh');
         refresh_button.setEnabled(false);
         goog.events.listen(refresh_button, 'action', function(e) {
-            refresh();
+            that.refresh();
         });
         tbar.addChild(refresh_button, true);
         buttons.push(refresh_button);
@@ -76,14 +76,14 @@ lingcod.features.kmlEditor = (function(){
         menus.push(create_menu);
         tbar.addChild(create_button, true);
         
+        goog.events.listen(create_menu, 'action', onAction);
+        
         // Add attributes button
         attr = new goog.ui.ToolbarButton('');
         attr.setEnabled(false);
         attr.setVisible(false);
         attr.setTooltip("Show the selected feature's attributes");
-        goog.events.listen(attr, 'action', function(e) {
-            // options.client.show(lookup(that.selected));
-        });
+        goog.events.listen(attr, 'action', onAction);
         tbar.addChild(attr, true);
 
         // Add edit menu
@@ -93,6 +93,9 @@ lingcod.features.kmlEditor = (function(){
         edit_button.setVisible(false);
         tbar.addChild(edit_button, true);
         
+        goog.events.listen(edit_menu, 'action', onAction);
+        
+        
         // Add Downloads/export menu
         download_menu = new goog.ui.Menu();
         download_button = new goog.ui.ToolbarMenuButton('Download', download_menu);
@@ -100,11 +103,9 @@ lingcod.features.kmlEditor = (function(){
         download_button.setVisible(false);
         tbar.addChild(download_button, true);
         
-        
-        
+        goog.events.listen(download_menu, 'action', onAction);
         
         // goog.events.listen(create_menu, 'action', function(e) {
-        //     console.log(e.target.link);
         //     tree.clearSelection();
         //     options.client.create(e.target.mm_data, {
         //         success: function(location){
@@ -185,6 +186,7 @@ lingcod.features.kmlEditor = (function(){
             populateCreateMenu(create_menu, create_button, that.workspace);
             populateEditMenu(edit_menu, edit_button, that.workspace);
             populateDownloadMenu(download_menu, download_button, that.workspace);
+            attr.action = that.workspace.actions.getByRel('self')[0];
             attr.setCaption(that.workspace.actions.getByRel('self')[0].title);
             attr.setVisible(true);
             refresh_button.setEnabled(true);
@@ -194,17 +196,17 @@ lingcod.features.kmlEditor = (function(){
             while(menu.getItemCount() > 0){
                 menu.removeItemAt(0);
             }
-            var createLinks = workspace.actions.getByRel('create');
-            // If there are no links, disable the menu
-            if(createLinks.length < 1){
+            var createActions = workspace.actions.getByRel('create');
+            // If there are no actions, disable the menu
+            if(createActions.length < 1){
                 button.setEnabled(false);
                 button.setVisible(false);
             }else{
                 button.setVisible(true);
                 // button.setEnabled(true);
-                jQuery.each(createLinks, function(i, link){
-                    var item = new goog.ui.MenuItem(link.title);
-                    item.link = link;
+                jQuery.each(createActions, function(i, action){
+                    var item = new goog.ui.MenuItem(action.title);
+                    item.action = action;
                     menu.addItem(item);
                 });              
             }   
@@ -214,16 +216,16 @@ lingcod.features.kmlEditor = (function(){
             while(menu.getItemCount() > 0){
                 menu.removeItemAt(0);
             }
-            var links = workspace.actions.getByRel('edit');
-            // If there are no links, disable the menu
-            if(links.length < 1){
+            var actions = workspace.actions.getByRel('edit');
+            // If there are no actions, disable the menu
+            if(actions.length < 1){
                 button.setEnabled(false);
                 button.setVisible(false);
             }else{
-                jQuery.each(links, function(i, link){
-                    var item = new goog.ui.MenuItem(link.title);
+                jQuery.each(actions, function(i, action){
+                    var item = new goog.ui.MenuItem(action.title);
                     item.setEnabled(false);
-                    item.link = link;
+                    item.action = action;
                     menu.addItem(item);
                 });
                 // button.setEnabled(true);
@@ -235,16 +237,16 @@ lingcod.features.kmlEditor = (function(){
             while(menu.getItemCount() > 0){
                 menu.removeItemAt(0);
             }
-            var links = workspace.actions.getByRel('related');
-            // If there are no links, disable the menu
-            if(links.length < 1){
+            var actions = workspace.actions.getByRel('related');
+            // If there are no actions, disable the menu
+            if(actions.length < 1){
                 button.setEnabled(false);
                 button.setVisible(false);
             }else{
-                jQuery.each(links, function(i, link){
-                    var item = new goog.ui.MenuItem(link.title);
+                jQuery.each(actions, function(i, action){
+                    var item = new goog.ui.MenuItem(action.title);
                     item.setEnabled(false);
-                    item.link = link;
+                    item.action = action;
                     menu.addItem(item);
                 });
                 // button.setEnabled(true);
@@ -254,16 +256,16 @@ lingcod.features.kmlEditor = (function(){
             var as = new goog.ui.MenuItem('as file type...');
             menu.addItem(as);
             as.setEnabled(false);
-            var links = workspace.actions.getByRel('alternate');
-            // If there are no links, disable the menu
-            if(links.length < 1){
+            var actions = workspace.actions.getByRel('alternate');
+            // If there are no actions, disable the menu
+            if(actions.length < 1){
                 button.setEnabled(false);
                 button.setVisible(false);
             }else{
-                jQuery.each(links, function(i, link){
-                    var item = new goog.ui.MenuItem(link.title);
+                jQuery.each(actions, function(i, action){
+                    var item = new goog.ui.MenuItem(action.title);
                     item.setEnabled(false);
-                    item.link = link;
+                    item.action = action;
                     menu.addItem(item);
                 });
                 // button.setEnabled(true);
@@ -280,6 +282,10 @@ lingcod.features.kmlEditor = (function(){
             selectData = jQuery.map(selectData, function(d){
                 return d.kmlObject;
             });
+            selection = jQuery.map(selectData, function(d){
+                return d.getId();
+            });
+            selection
             var i = tbar.getChildCount();
             while(i){
                 i--;
@@ -294,8 +300,8 @@ lingcod.features.kmlEditor = (function(){
                     while(j != 0){
                         j--;
                         var item = menu.getChildAt(j);
-                        if(item.link){
-                            var active = item.link.active(selectData);
+                        if(item.action){
+                            var active = item.action.active(selectData);
                             if(active){
                                 enabled = true;
                                 item.setEnabled(true);
@@ -309,10 +315,43 @@ lingcod.features.kmlEditor = (function(){
             }
         }
         
+        function onAction(e){
+            var action = e.target.action;
+            console.log(action);
+            if(action.rel === 'create'){
+                tree.clearSelection();
+                alert('open create form at '+action.links[0]['uri-template']);
+                return;
+            }
+            var link = action.getLink(selection);
+            var url = action.getUrl(selection);
+            console.log(link);
+            if(link.method === 'GET'){
+                
+            }else if(link.method === 'DELETE'){
+                alert('action rel='+action.rel+', '+ url);
+            }else if(link.method === 'POST'){
+                alert('action rel='+action.rel+', '+ url);                
+            }else{
+                alert('invalid link method "'+link.method+'"');
+            }
+        }
+        
         // Public API methods
         // ##################
         
         that.clearSelection = tree.clearSelection;
+        
+        that.refresh = function(callback){
+            tbar.setEnabled(false);
+            var cback = function(e, kmlObject){
+                tbar.setEnabled(true);
+                create_button.setEnabled(true);
+                callback(e, kmlObject);
+            }
+            $(tree).one('kmlLoaded', cback);
+            tree.refresh(true);
+        };
                 
         return that;
     }
