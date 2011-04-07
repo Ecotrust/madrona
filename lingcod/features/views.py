@@ -10,6 +10,7 @@ from lingcod.features import user_sharing_groups
 from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.features import workspace_json, get_feature_by_uid
+from django.template.defaultfilters import slugify
 logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -484,8 +485,11 @@ def kml(request, instances):
     """
     kml = ''
     t = loader.get_template('kml/placemarks.kml')
-    kml = t.render(Context({'instances': instances})) 
-    return HttpResponse(kml, status=200)
+    kml = t.render(Context({'instances': instances}))
+    filename = '_'.join([slugify(i.name) for i in instances])
+    response = HttpResponse(kml, status=200, mimetype='application/vnd.google-earth.kml+xml')
+    response['Content-Disposition'] = 'attachment; filename=%s.kml' % (filename, )
+    return response
 
 def share_form(request,model=None, uid=None):
     """
