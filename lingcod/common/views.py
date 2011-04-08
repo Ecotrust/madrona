@@ -5,6 +5,8 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.news.models import Entry
 from lingcod.common.utils import valid_browser
 from lingcod.features import user_sharing_groups
+from lingcod.studyregion.models import StudyRegion
+from lingcod.layers.models import PublicLayerList
 import datetime
 
 from django.conf import settings
@@ -86,6 +88,8 @@ def map(request, template_name='common/map.html', extra_context={}):
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         'member_of_sharing_group': member_of_sharing_group,
+        'is_studyregion': StudyRegion.objects.count() > 0,
+        'is_public_layers': PublicLayerList.objects.filter(active=True).count() > 0,
         #'user_layers': user_layers,
     })
     context.update(extra_context)
