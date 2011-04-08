@@ -8,7 +8,7 @@ lingcod.features.workspace = (function(){
         var klasses = [];
         var existing = {};
         jQuery.each(uids, function(i, v){
-            var klass = v.replace(/_\d$/, '');
+            var klass = v.replace(/_\d+$/, '');
             if(!existing[klass]){
                 klasses.push(klass);
                 existing[klass] = true;
@@ -255,6 +255,7 @@ lingcod.features.workspace = (function(){
         }
         
         that.active = function(selected){
+            window.action = that;
             var valid_link = false;
             for(var j = 0; j < that.links.length; j++){
                 var link = that.links[j];
