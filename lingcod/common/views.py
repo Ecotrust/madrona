@@ -29,7 +29,9 @@ def map(request, template_name='common/map.html', extra_context={}):
     if not valid_browser(useragent) and enforce_supported:
         from lingcod.common import uaparser
         bp = uaparser.browser_platform(useragent)
-        context = {'useragent':useragent, 'browser_platform': bp.__repr__()}
+        context = {'useragent':useragent, 
+                'browser_platform': bp.__repr__(), 
+                'redirect_url': settings.LOGIN_REDIRECT_URL}
         context.update(extra_context)
         return render_to_response('common/supported_browsers.html', context)
 
