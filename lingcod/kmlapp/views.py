@@ -209,9 +209,19 @@ def create_kml(request, input_username=None, input_uid=None,
     styles = get_styles(features,collections)
 
     t = get_template('kmlapp/base.kml')
-    kml = t.render(Context({'user': user, 'features': features, 'collections': collections,
-        'use_network_links': links, 'request_path': request.path, 'styles': styles, 
-        'session_key': session_key, 'shareuser': input_shareuser, 'sharegroup': input_sharegroup}))
+    context = Context({
+                'user': user, 
+                'features': features, 
+                'collections': collections,
+                'use_network_links': links, 
+                'request_path': request.path, 
+                'styles': styles,
+                'session_key': session_key,
+                'shareuser': input_shareuser,
+                'sharegroup': input_sharegroup,
+                'feature_id': input_uid,
+                })
+    kml = t.render(context)
 
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'

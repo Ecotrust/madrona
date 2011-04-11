@@ -249,9 +249,12 @@ lingcod.features.workspace = (function(){
             if(link.rel === 'create'){
                 that.title = ucase(link.featureClass.title);
             }
+            if(typeof link.method === 'undefined'){
+                link.method = 'GET';
+            }
         }
         
-        that.active = function(selected, multiple){
+        that.active = function(selected){
             var valid_link = false;
             for(var j = 0; j < that.links.length; j++){
                 var link = that.links[j];
@@ -264,7 +267,7 @@ lingcod.features.workspace = (function(){
                         valid_link = false;
                         break;
                     }
-                    if(multiple){
+                    if(selected.length > 1){
                         if(!link.select || jQuery.inArray('multiple', link.select.split(' ')) === -1){
                             valid_link = false;
                             break;                            
@@ -280,17 +283,20 @@ lingcod.features.workspace = (function(){
         }
         
         that.getUrl = function(selected){
-            if(that.links[0].rel === 'create'){
-                return that.links[0]['uri-template'];
-            }
-            var multiple = selected.length > 1;
-            var link = that.active(idsToUniqueClasses(selected), multiple);
+            var link = that.getLink(selected);
             var uri = link['uri-template'];
             var repl = '{uid}';
             if(uri.indexOf(repl) === -1){
                 repl = '{uid+}';
             }
             return uri.replace(repl, selected.join(','));
+        }
+        
+        that.getLink = function(selected){
+            if(that.links[0].rel === 'create'){
+                return that.links[0]['uri-template'];
+            }
+            return that.active(idsToUniqueClasses(selected));            
         }
         
         // return public api
