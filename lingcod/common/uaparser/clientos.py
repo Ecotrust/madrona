@@ -44,6 +44,9 @@ def client_os(user_agent):
         if 'mac' in user_agent.lower():
             full_platform = "Intel Mac 10.6"
             platform = 'Mac'
+        elif 'windows' in user_agent.lower():
+            full_platform = "Windows"
+            platform = 'Windows'
         else:
             full_platform = None
             platform = None
