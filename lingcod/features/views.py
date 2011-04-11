@@ -10,6 +10,7 @@ from lingcod.features import user_sharing_groups
 from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.features import workspace_json, get_feature_by_uid
+from django.template.defaultfilters import slugify
 logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -219,7 +220,14 @@ def create(request, model, action):
         if form.is_valid():
             m = form.save()
             m.save()
-            response = HttpResponse('created', status=201)
+            response = HttpResponse("""{
+                "status": 201,
+                "Location": "%s",
+                "X-MarineMap-Select": "%s",
+                "X-MarineMap-Show": "%s"
+            }""" % (m.get_absolute_url(), m.uid, m.uid), status=201)
+            response['X-MarineMap-Select'] = m.uid
+            response['X-MarineMap-Show'] = m.uid
             response['Location'] = m.get_absolute_url()
             return response
         else:
@@ -345,7 +353,14 @@ def update(request, model, uid):
         if form.is_valid():
             m = form.save()
             m.save()
-            return HttpResponse('updated ' + m.name, status=200)
+            response = HttpResponse("""{
+                "status": 200,
+                "X-MarineMap-Select": "%s",
+                "X-MarineMap-Show": "%s"
+            }""" % (m.uid, m.uid), status=200)
+            response['X-MarineMap-Select'] = m.uid
+            response['X-MarineMap-Show'] = m.uid
+            return response
         else:
             context = config.form_context
             context.update({
@@ -464,9 +479,14 @@ Feature instance.' % (instance.__class__.__name__, ))
         copies.append(copy)
     links = ', '.join(['<a href="%s">%s</a>' % (
         i.get_absolute_url(), i.name) for i in copies])
-    res = HttpResponse("Created %s" % (links, ), status=201)
-    res['X-MarineMap-Select'] = ' '.join([i.uid for i in copies])
-    return res
+
+    uids = ' '.join([i.uid for i in copies])
+    response = HttpResponse("""{
+        "status": 201,
+        "X-MarineMap-Select": "%s",
+    }""" % (uids, ), status=201)
+    response['X-MarineMap-Select'] = uids
+    return response
 
 def kml(request, instances):
     """
@@ -484,8 +504,11 @@ def kml(request, instances):
     """
     kml = ''
     t = loader.get_template('kml/placemarks.kml')
-    kml = t.render(Context({'instances': instances})) 
-    return HttpResponse(kml, status=200)
+    kml = t.render(Context({'instances': instances}))
+    filename = '_'.join([slugify(i.name) for i in instances])
+    response = HttpResponse(kml, status=200, mimetype='application/vnd.google-earth.kml+xml')
+    response['Content-Disposition'] = 'attachment; filename=%s.kml' % (filename, )
+    return response
 
 def share_form(request,model=None, uid=None):
     """

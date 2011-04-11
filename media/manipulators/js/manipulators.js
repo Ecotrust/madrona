@@ -406,18 +406,27 @@ lingcod.Manipulator.prototype.editExistingShape_ = function(){
     this.addNewShape_(kml);
     this.gex_.util.flyToObject(this.shape_, {
         boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
-    this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
+    this.edit_();
     this.enterEditingState_();
     
 }
 
 lingcod.Manipulator.prototype.clearShape_ = function(){
     if(this.shape_ && this.shape_.getParentNode()){
-        this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
+        this.endEdit_();
         gex.dom.removeObject(this.shape_);
         this.shape_ = false;
     }
 }
+
+lingcod.Manipulator.prototype.edit_ = function(){
+    this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
+}
+
+lingcod.Manipulator.prototype.endEdit_ = function(){
+    this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
+}
+
 
 lingcod.Manipulator.prototype.destroy = function(){
     this.clearShape_();

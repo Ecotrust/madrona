@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from lingcod.features import register
 from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay 
-from lingcod.features.forms import FeatureForm
+from lingcod.features.forms import FeatureForm, SpatialFeatureForm
 
 DESIGNATION_CHOICES = (
     ('R', 'Reserve'), 
@@ -19,8 +19,8 @@ class Mpa(PolygonFeature):
         form = 'mlpa.models.MpaForm'
         manipulators = []
         
-class MpaForm(FeatureForm):
-    class Meta:
+class MpaForm(SpatialFeatureForm):
+    class Meta(SpatialFeatureForm.Meta):
         model = Mpa
 
 ###########################
@@ -31,7 +31,7 @@ class Array(FeatureCollection):
         valid_children = ( 'mlpa.models.Mpa', )
 
 class ArrayForm(FeatureForm):
-    class Meta:
+    class Meta(FeatureForm.Meta):
         model = Array
 
 ###########################
@@ -42,8 +42,8 @@ class Shipwreck(PointFeature):
         verbose_name = 'Shipwreck'
         form = 'mlpa.models.ShipwreckForm'
 
-class ShipwreckForm(FeatureForm):
-    class Meta:
+class ShipwreckForm(SpatialFeatureForm):
+    class Meta(SpatialFeatureForm.Meta):
         model = Shipwreck
 
 ###########################
@@ -55,8 +55,8 @@ class Pipeline(LineFeature):
         verbose_name = 'Pipeline'
         form = 'mlpa.models.PipelineForm'
 
-class PipelineForm(FeatureForm):
-    class Meta:
+class PipelineForm(SpatialFeatureForm):
+    class Meta(SpatialFeatureForm.Meta):
         model = Pipeline
 
 ###########################
@@ -73,7 +73,7 @@ class Folder(FeatureCollection):
         )
 
 class FolderForm(FeatureForm):
-    class Meta:
+    class Meta(FeatureForm.Meta):
         model = Folder
 
 ###########################

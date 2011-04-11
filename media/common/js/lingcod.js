@@ -236,7 +236,8 @@ var lingcod = (function(){
                 var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#myshapestree',
-                    url: options.myshapes[i].url
+                    url: options.myshapes[i].url,
+                    panel: panel
                 });
                 if(callback){
                     $(editor).bind('kmlLoaded', function(event, e, kmlObject){
@@ -280,7 +281,8 @@ var lingcod = (function(){
                 var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#sharedshapestree',
-                    url: options.sharedshapes[i]
+                    url: options.sharedshapes[i],
+                    panel: panel
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
                     $('#sidebar').tabs('select', "#MyShapes");
@@ -307,8 +309,41 @@ var lingcod = (function(){
             }
         };
         
+        var onEditorEdit = function(e, data, status, xhr, context){
+            // myshapes panel is the only one that needs refreshing
+            var editor = editors[0];
+            var info = jQuery.parseJSON(data);
+            var select = info['X-MarineMap-Select'];
+            var show = info['X-MarineMap-Show'];
+            // var select = xhr.getResponseHeader('X-MarineMap-Select');
+            $(editor.tree).one('kmlLoaded', function(){
+                if(select){
+                    select = select.split(' ');
+                    var nodes = [];
+                    for(var i = 0; i < select.length; i++){
+                        var id = select[i];
+                        var ns = editor.tree.getNodesById(id);
+                        nodes.push(ns[0]);
+                    }
+                    editor.tree.selectNodes($(nodes));
+                }
+                // Not sure why a timeout helps here, but otherwise the 
+                // dblclick event wont trigger
+                setTimeout(function(){
+                    if(show){
+                        var node = editor.tree.getNodesById(show);
+                        if(node.length){
+                            $(node).trigger('dblclick');
+                        }
+                    }                    
+                }, 20);
+            });
+            editor.refresh();
+        }
+        
         for(var i=0;i<editors.length;i++){
             $(editors[i]).bind('select', onEditorSelect);
+            $(editors[i]).bind('edit', onEditorEdit);
         };
         
         $('#sidebar, #meta-navigation').click(function(e){

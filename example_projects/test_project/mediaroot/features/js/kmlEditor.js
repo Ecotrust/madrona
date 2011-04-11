@@ -6,8 +6,8 @@ lingcod.features.kmlEditor = (function(){
     // ##############
     
     function checkOptions(opts){
-        if(!opts || !opts.url || !opts.appendTo || !opts.gex){
-            throw('kmlEditor needs url, appendTo, and gex options');
+        if(!opts || !opts.url || !opts.appendTo || !opts.gex || !opts.panel){
+            throw('kmlEditor needs url, appendTo, panel and gex options');
         }
         return opts;
     }
@@ -25,8 +25,10 @@ lingcod.features.kmlEditor = (function(){
         that.workspace;
         that.tree;
         that.el;
+        that.panel = options.panel;
         
         // private vars
+        var panel = that.panel;
         var tbar;
         var create_menu;
         var refresh_button;
@@ -180,7 +182,10 @@ lingcod.features.kmlEditor = (function(){
             // a.hide();
         }
         
-        function onWorkspaceLoad(data, textStatus){            
+        function onWorkspaceLoad(data, textStatus){
+            if(selection){
+                return;
+            }   
             // tbar.setEnabled(true);
             that.workspace = lingcod.features.workspace(data);
             populateCreateMenu(create_menu, create_button, that.workspace);
@@ -274,6 +279,7 @@ lingcod.features.kmlEditor = (function(){
         }
         
         function onSelect(e, selectData){
+            console.log('onSelect', e, selectData);
             if(selectData.length !== 1){
                 attr.setEnabled(false);
             }else{
@@ -313,28 +319,110 @@ lingcod.features.kmlEditor = (function(){
                     child.setEnabled(enabled);
                 }
             }
+            console.log('at the end');
         }
         
+        // Responds to click on any MenuItem. Each MenuItem has an action 
+        // attribute referencing an action from the workspace document. This
+        // even listener performs the first component of that action, such as:
+        // 
+        //      rel = alternate || related
+        //          opens the link in a new tab
+        // 
+        //      rel = self
+        //          opens the link in the sidebar
+        // 
+        //      rel = edit && method = GET
+        //          opens the link (likely a form) in the sidebar
+        //
+        //      rel = edit && ( method = DELETE || method = POST )
+        //          performs the specified non-idempotent method on the link
+        // 
+        // This listener IS NOT responsible for handling the consequent 
+        // changes related to non-idempotent actions. For those, onChange must
+        // be called to do things such as refresh a kmlEditor instance, select
+        // a feature, and/or open new sidebar content.
         function onAction(e){
             var action = e.target.action;
-            console.log(action);
             if(action.rel === 'create'){
                 tree.clearSelection();
                 alert('open create form at '+action.links[0]['uri-template']);
                 return;
             }
+            // Get the specific link from this action, whether generic or not, 
+            // that applies to the current selection. Note selection is a 
+            // private instance variable set by the onSelect handler
             var link = action.getLink(selection);
+            // First check if the user even wants to perform the action before
+            // proceeding if a confirm message is provided.
+            if(link.confirm){
+                if(!confirm(link.confirm)){
+                    return;
+                }
+            }
+            // Compile the uri-template against the current selection
             var url = action.getUrl(selection);
-            console.log(link);
+            // Set default panel options. panel is an instance var
+            var panelOpts = {
+                loading_msg: 'Loading ' + action.title,
+                showClose: true
+            };
             if(link.method === 'GET'){
-                
-            }else if(link.method === 'DELETE'){
-                alert('action rel='+action.rel+', '+ url);
-            }else if(link.method === 'POST'){
-                alert('action rel='+action.rel+', '+ url);                
+                // Self and edit links are the only links opened in the 
+                // sidebar
+                if(action.rel === 'self'){
+                    panel.showUrl(url, panelOpts);
+                }else if(action.rel in {alternate: 1, related: 1}){
+                    // Open all alternate and related links in a new tab. It 
+                    // is up to the server to set the Content-Type and
+                    // Content-Disposition headers for correct handling by the 
+                    // browser
+                    window.open(url, '_blank');
+                }else{
+                    // likely an edit form. It will be up to the panel 
+                    // component to appropriately handle forms.
+                    panel.showUrl(url, panelOpts);
+                }
+            }else if(link.method === 'DELETE' || link.method === 'POST'){
+                tree.clearSelection();
+                spin('Performing action');
+                $.ajax({
+                    url: url,
+                    type: link.method,
+                    dataType: 'text',
+                    error: onError,
+                    success: onChange,
+                    context: {
+                        action: action,
+                        link: link
+                    }
+                });
             }else{
                 alert('invalid link method "'+link.method+'"');
             }
+        }
+        
+        function onError(xhr, status, errorThrown){
+            alert('failed to perform '+
+                this.action.title+' action.\n'+status+'\n'+errorThrown);
+            unspin();
+        }
+        
+        function onChange(data, status, xhr){
+            unspin();
+            // It's now up to lingcod.js to determine which editor needs to 
+            // perform a refresh, selection, etc
+            $(that).trigger('edit', [data, status, xhr, this]);
+        }
+        
+        function spin(msg){
+            tbar.setEnabled(false);
+            tree.showLoading(msg);
+        }
+        
+        function unspin(){
+            tbar.setEnabled(true);
+            tree.hideLoading();
         }
         
         // Public API methods

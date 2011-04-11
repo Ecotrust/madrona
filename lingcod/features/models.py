@@ -242,6 +242,7 @@ class SpatialFeature(Feature):
         """
         return """
         <Placemark id="%s">
+            <visibility>0</visibility>
             <name>%s</name>
             <styleUrl>#%s-default</styleUrl>
             <ExtendedData>
@@ -468,7 +469,7 @@ class FeatureCollection(Feature):
         return """
         <Folder id="%s">
           <name>%s</name>
-          <visibility>1</visibility>
+          <visibility>0</visibility>
           <open>0</open>
           %s
         </Folder>

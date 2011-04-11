@@ -119,12 +119,17 @@ not a string path." % (name,))
                 select='multiple single',
                 edits_original=False))
         
+        confirm = "Are you sure you want to delete this feature and it's contents?"
+            
         # Add a multi-delete generic link
         self.links.insert(0, edit('Delete', 
             'lingcod.features.views.multi_delete', 
             select='multiple single',
             method='DELETE',
-            edits_original=True))
+            edits_original=True,
+            confirm=confirm,
+        ))
+            
 
         self.valid_children = getattr(self._options, 'valid_children', None)
         """
@@ -133,7 +138,6 @@ not a string path." % (name,))
         if self.valid_children and not issubclass(self._model, FeatureCollection):
             raise FeatureConfigurationError("valid_children Option only \
                     for FeatureCollection classes" % m)
-
 
         self.manipulators = [] 
         """
@@ -565,6 +569,8 @@ self.title, ))
             d['method'] = self.method
         if len(self.models) > 1:
             d['models'] = [m.model_uid() for m in self.models]
+        if self.confirm:
+            d['confirm'] = self.confirm
         return d
     
     def json(self):

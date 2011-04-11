@@ -180,7 +180,7 @@ def create_kmz(kml, zippath):
 
 from django.views.decorators.cache import cache_control
 
-#TODO @cache_control(no_cache=True)
+@cache_control(no_cache=True)
 def create_kml(request, input_username=None, input_uid=None, 
         input_shareuser=None, input_sharegroup=None, links=False, kmz=False,
         session_key='0'):
@@ -222,7 +222,6 @@ def create_kml(request, input_username=None, input_uid=None,
                 'feature_id': input_uid,
                 })
     kml = t.render(context)
-
     response = HttpResponse()
     response['Content-Disposition'] = 'attachment'
     if kmz:
@@ -232,7 +231,7 @@ def create_kml(request, input_username=None, input_uid=None,
     else:
         response['Content-Type'] = mimetypes.KML
         response.write(kml)
-        
+    response.write('\n')
     return response
 
 @cache_control(no_cache=True)
