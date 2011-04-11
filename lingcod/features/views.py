@@ -220,7 +220,14 @@ def create(request, model, action):
         if form.is_valid():
             m = form.save()
             m.save()
-            response = HttpResponse('created', status=201)
+            response = HttpResponse("""{
+                "status": 201,
+                "Location": "%s",
+                "X-MarineMap-Select": "%s",
+                "X-MarineMap-Show": "%s"
+            }""" % (m.get_absolute_url(), m.uid, m.uid), status=201)
+            response['X-MarineMap-Select'] = m.uid
+            response['X-MarineMap-Show'] = m.uid
             response['Location'] = m.get_absolute_url()
             return response
         else:
@@ -346,7 +353,14 @@ def update(request, model, uid):
         if form.is_valid():
             m = form.save()
             m.save()
-            return HttpResponse('updated ' + m.name, status=200)
+            response = HttpResponse("""{
+                "status": 200,
+                "X-MarineMap-Select": "%s",
+                "X-MarineMap-Show": "%s"
+            }""" % (m.uid, m.uid), status=200)
+            response['X-MarineMap-Select'] = m.uid
+            response['X-MarineMap-Show'] = m.uid
+            return response
         else:
             context = config.form_context
             context.update({
@@ -465,9 +479,14 @@ Feature instance.' % (instance.__class__.__name__, ))
         copies.append(copy)
     links = ', '.join(['<a href="%s">%s</a>' % (
         i.get_absolute_url(), i.name) for i in copies])
-    res = HttpResponse("Created %s" % (links, ), status=201)
-    res['X-MarineMap-Select'] = ' '.join([i.uid for i in copies])
-    return res
+
+    uids = ' '.join([i.uid for i in copies])
+    response = HttpResponse("""{
+        "status": 201,
+        "X-MarineMap-Select": "%s",
+    }""" % (uids, ), status=201)
+    response['X-MarineMap-Select'] = uids
+    return response
 
 def kml(request, instances):
     """

@@ -310,10 +310,12 @@ var lingcod = (function(){
         };
         
         var onEditorEdit = function(e, data, status, xhr, context){
-            console.log('onEditorEdit', e, data, status, xhr, context);
             // myshapes panel is the only one that needs refreshing
             var editor = editors[0];
-            var select = xhr.getResponseHeader('X-MarineMap-Select');
+            var info = jQuery.parseJSON(data);
+            var select = info['X-MarineMap-Select'];
+            var show = info['X-MarineMap-Show'];
+            // var select = xhr.getResponseHeader('X-MarineMap-Select');
             $(editor.tree).one('kmlLoaded', function(){
                 if(select){
                     select = select.split(' ');
@@ -324,7 +326,17 @@ var lingcod = (function(){
                         nodes.push(ns[0]);
                     }
                     editor.tree.selectNodes($(nodes));
-                }                
+                }
+                // Not sure why a timeout helps here, but otherwise the 
+                // dblclick event wont trigger
+                setTimeout(function(){
+                    if(show){
+                        var node = editor.tree.getNodesById(show);
+                        if(node.length){
+                            $(node).trigger('dblclick');
+                        }
+                    }                    
+                }, 20);
             });
             editor.refresh();
         }
