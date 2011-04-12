@@ -275,7 +275,7 @@ def shared_public(request, kmz=False, session_key='0'):
     styles = get_styles(features,collections)
 
     # determine content types for sharing
-    t = get_template('kmlapp/base.kml')
+    t = get_template('kmlapp/public.kml')
     kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 
         'features': features, 'collections': collections, 'styles': styles, 
         'use_network_links': True, 'request_path': request.path, 

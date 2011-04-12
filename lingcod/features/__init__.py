@@ -326,7 +326,8 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
         for link in self.links:
             if not link.generic and link.can_user_view(user, is_owner):
                 if link.rel not in link_rels['link-relations'].keys():
-                    link_rels['link-relations'][link.rel] = []
+                    if not (user.is_anonymous() and link.rel == 'edit'):
+                        link_rels['link-relations'][link.rel] = []
                 link_rels['link-relations'][link.rel].append(link.dict(user,is_owner))
 
         if self._model in get_collection_models() and is_owner:
@@ -650,7 +651,8 @@ def workspace_json(user, is_owner, models=None):
         for model in registered_models:
             workspace['feature-classes'].append(model.get_options().dict(user, is_owner))
         for link in registered_links:
-            if link.generic and link.can_user_view(user, is_owner): 
+            if link.generic and link.can_user_view(user, is_owner) \
+                    and not (user.is_anonymous() and link.rel == 'edit'):
                 workspace['generic-links'].append(link.dict(user, is_owner))
     else:
         # Workspace doc only reflects specified feature class models
@@ -660,7 +662,8 @@ def workspace_json(user, is_owner, models=None):
             # See if the generic links are relavent to this list
             if link.generic and \
                [i for i in args if i in link.models] and \
-               link.can_user_view(user, is_owner):
+               link.can_user_view(user, is_owner) and \
+               not (user.is_anonymous() and link.rel == 'edit'):
                     workspace['generic-links'].append(link.dict(user, is_owner))
     return json.dumps(workspace, indent=2)
 
