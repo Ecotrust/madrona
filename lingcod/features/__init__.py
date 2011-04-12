@@ -121,6 +121,16 @@ not a string path." % (name,))
         
         confirm = "Are you sure you want to delete this feature and it's contents?"
             
+        # Add a multi-share generic link
+        # TODO when the share_form view takes multiple instances
+        #  we can make sharing a generic link 
+        #self.links.insert(0, edit('Share', 
+        #    'lingcod.features.views.share_form', 
+        #    select='multiple single',
+        #    method='POST',
+        #    edits_original=True,
+        #))
+
         # Add a multi-delete generic link
         self.links.insert(0, edit('Delete', 
             'lingcod.features.views.multi_delete', 
@@ -304,8 +314,12 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
             }
 
             lr['edit'] = [
-                    { 'title': 'edit',
+                    { 'title': 'Edit',
                       'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                        args=[placeholder]).replace(placeholder, '{uid}')
+                    },
+                    { 'title': 'Share',
+                      'uri-template': reverse("%s_share_form" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}')
                     } ]
 
