@@ -10,6 +10,16 @@ from lingcod.manipulators.manipulators import display_kml
 
 class ShapeInput(forms.HiddenInput):
     def render(self, name, value, attrs=None):
+        from lingcod.features.models import PolygonFeature, PointFeature, LineFeature
+        model = self.form_instance.Meta.model
+        print model
+        print issubclass(model, LineFeature)
+        if issubclass(model, PolygonFeature):
+            type = 'polygon'
+        elif issubclass(model, LineFeature):
+            type = 'linestring'
+        else:
+            type = 'point'
         kml = ''
         if name == 'geometry_final':
             output = super(ShapeInput, self).render(name, '', attrs)
@@ -21,11 +31,11 @@ class ShapeInput(forms.HiddenInput):
             geo.srid = GEOMETRY_DB_SRID
             kml = display_kml(geo)
         return mark_safe("""
-        <script id="%s_kml" type="application/vnd.google-earth.kml+xml">
+        <script class="%s" id="%s_kml" type="application/vnd.google-earth.kml+xml">
         %s
         </script>
         %s
-        """ % (name, kml, output))
+        """ % (type, name, kml, output))
             
 class FeatureForm(ModelForm):
     user = forms.ModelChoiceField(User.objects.all(),widget=forms.HiddenInput())
@@ -39,3 +49,8 @@ class SpatialFeatureForm(FeatureForm):
 
     class Meta:
         exclude = ('sharing_groups','content_type','object_id',)
+
+    def __init__(self, *args, **kwargs):
+        super(SpatialFeatureForm, self).__init__(*args, **kwargs)
+        self.fields['geometry_final'].widget.form_instance = self
+        self.fields['geometry_orig'].widget.form_instance = self

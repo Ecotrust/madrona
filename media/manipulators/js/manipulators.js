@@ -123,6 +123,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
         }
     });
     
+    this.type = $('#geometry_orig_kml').attr('class');
     // Figure out if there is an existing shape in the form, or if a new one
     // needs to be drawn
     if(this.form_.find('#id_geometry_orig').val()){
@@ -152,7 +153,12 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = true;
     this.addNewShape_();
-    var bounds = this.shape_.getGeometry().getOuterBoundary();
+    var bounds;
+    if(this.type === 'polygon'){
+        bounds = this.shape_.getGeometry().getOuterBoundary();        
+    }else{
+        bounds = this.shape_.getGeometry();
+    }
     var self = this;
     this.gex_.edit.drawLineString(bounds, {
         bounce: false,
@@ -239,20 +245,32 @@ lingcod.Manipulator.prototype.addNewShape_ = function(kml){
         this.shape_ = this.gex_.pluginInstance.parseKml(kml);
         this.gex_.pluginInstance.getFeatures().appendChild(this.shape_);
     }else{
-        this.shape_ = this.gex_.dom.addPlacemark({
+        var popts = {
             visibility: true,
-            polygon: [],
             style: {
                 line: { width: 2, color: 'ffffffff' },
                 poly: { color: '8000ff00' }
-            }
-        });
+            }            
+        }
+        if(this.type === 'polygon'){
+            popts['polygon'] = [];
+        }else if(this.type === 'linestring'){
+            popts['lineString'] = [];
+        }else{
+            // point
+            popts['point'] = [];
+        }
+        this.shape_ = this.gex_.dom.addPlacemark(popts);
         this.setZ(this.shape_, this.altitude);
     }
     return this.shape_;
 }
 
 lingcod.Manipulator.prototype.setZ = function(kmlObject, z){
+    if(this.type !== 'polygon'){
+        // only polygons need z set
+        return kmlObject;
+    }
     var geo = kmlObject.getGeometry();
     geo.setAltitudeMode(ge.ALTITUDE_ABSOLUTE);
     geo.setExtrude(true);
@@ -420,14 +438,14 @@ lingcod.Manipulator.prototype.clearShape_ = function(){
 }
 
 lingcod.Manipulator.prototype.edit_ = function(){
-    switch(this.shape_.getGeometry().getType()){
-        case 'KmlPolygon':
+    switch(this.type){
+        case 'polygon':
             this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
             break;
-        case 'KmlLineString':
+        case 'linestring':
             this.gex_.edit.editLineString(this.shape_.getGeometry());
             break;
-        case 'KmlPoint':
+        case 'point':
             this.gex_.edit.makeDraggable(this.shape_);
             break;
         default:
@@ -436,14 +454,14 @@ lingcod.Manipulator.prototype.edit_ = function(){
 }
 
 lingcod.Manipulator.prototype.endEdit_ = function(){
-    switch(this.shape_.getGeometry().getType()){
-        case 'KmlPolygon':
+    switch(this.type){
+        case 'polygon':
             this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
             break;
-        case 'KmlLineString':
+        case 'linestring':
             this.gex_.edit.endEditLineString(this.shape_.getGeometry());
             break;
-        case 'KmlPoint':
+        case 'point':
             this.gex_.edit.endDraggable(this.shape_);
             break;
         default:

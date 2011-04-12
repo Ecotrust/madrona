@@ -172,7 +172,7 @@ def delete(request, model=None, uid=None):
             # get_object_for_editing is trying to return a 404, 401, or 403
             return instance
         instance.delete()
-        return HttpResponse('Deleted.')
+        return HttpResponse('{"status": 200}')
     else:
         return HttpResponse('DELETE http method must be used to delete', 
             status=405)
@@ -187,7 +187,7 @@ def multi_delete(request, instances):
             uid = instance.uid
             instance.delete()
             deleted.append(uid)
-        return HttpResponse("Deleted %d features" % len(deleted), status=200)
+        return HttpResponse('{"status": 200}')
     else:
         return HttpResponse('DELETE http method must be used to delete', 
                 status=405)
@@ -483,7 +483,7 @@ Feature instance.' % (instance.__class__.__name__, ))
     uids = ' '.join([i.uid for i in copies])
     response = HttpResponse("""{
         "status": 201,
-        "X-MarineMap-Select": "%s",
+        "X-MarineMap-Select": "%s"
     }""" % (uids, ), status=201)
     response['X-MarineMap-Select'] = uids
     return response
