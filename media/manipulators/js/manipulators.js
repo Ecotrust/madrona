@@ -420,11 +420,35 @@ lingcod.Manipulator.prototype.clearShape_ = function(){
 }
 
 lingcod.Manipulator.prototype.edit_ = function(){
-    this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
+    switch(this.shape_.getGeometry().getType()){
+        case 'KmlPolygon':
+            this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
+            break;
+        case 'KmlLineString':
+            this.gex_.edit.editLineString(this.shape_.getGeometry());
+            break;
+        case 'KmlPoint':
+            this.gex_.edit.makeDraggable(this.shape_);
+            break;
+        default:
+            alert('Unrecognized geometry type');
+    }
 }
 
 lingcod.Manipulator.prototype.endEdit_ = function(){
-    this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
+    switch(this.shape_.getGeometry().getType()){
+        case 'KmlPolygon':
+            this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
+            break;
+        case 'KmlLineString':
+            this.gex_.edit.endEditLineString(this.shape_.getGeometry());
+            break;
+        case 'KmlPoint':
+            this.gex_.edit.endDraggable(this.shape_);
+            break;
+        default:
+            alert('Unrecognized geometry type');
+    }
 }
 
 

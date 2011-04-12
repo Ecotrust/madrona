@@ -1,4 +1,4 @@
-from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing, fromstr
+from django.contrib.gis.geos import GEOSGeometry, Polygon, LineString, Point, LinearRing, fromstr
 from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
@@ -75,7 +75,31 @@ def parsekmlpoly(kmlstring):
             lra.append((float(a[0]), float(a[1])))
     lr = LinearRing(lra)
     poly = Polygon(lr)
-    return poly 
+    return poly
+    
+def parsekmllinestring(kmlstring):
+    e = fromstring(kmlstring)
+    coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}LineString/{http://www.opengis.net/kml/2.2}coordinates').text
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    lra = []
+    for yxz in coords.split(' '):
+        a = yxz.split(',')
+        if len(a) > 1:
+            lra.append((float(a[0]), float(a[1])))
+    linestring = LineString(lra)
+    return linestring
+    
+def parsekmlpoint(kmlstring):
+    pass
+
+def parsekml(shape):
+    if shape.find('Polygon') is not -1:
+        return parsekmlpoly(shape)
+    elif shape.find('LineString') is not -1:
+        return parsekmllinestring(shape)
+    else:
+        # point
+        return parsekmlpoint(shape)
 
 def iskml(string):
     return (string.rfind('kml') != -1)
@@ -118,7 +142,7 @@ class BaseManipulator(object):
     def target_to_valid_geom(self, shape):
         try:
             if iskml(shape):
-                target = parsekmlpoly(shape)
+                target = parsekml(shape)
             else:
                 target = GEOSGeometry(shape)
         except Exception, e:
