@@ -160,19 +160,28 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
         bounds = this.shape_.getGeometry();
     }
     var self = this;
-    this.gex_.edit.drawLineString(bounds, {
-        bounce: false,
-        finishCallback: function(){
-            self.finishedEditingCallback_();
-        },
-        drawCallback: function(i){
-            var coords = bounds.getCoordinates();
-            var coord = coords.get(i);
-            coord.setAltitude(self.altitude);
-            coords.set(i, coord);
-        },
-        ensureCounterClockwise: false
-    });
+    if(this.type === 'point'){
+        this.gex_.edit.place(this.shape_, {
+            bounce: false,
+            dropCallback: function(){
+                self.finishedEditingCallback_();
+            }
+        });
+    }else{
+        this.gex_.edit.drawLineString(bounds, {
+            bounce: false,
+            finishCallback: function(){
+                self.finishedEditingCallback_();
+            },
+            drawCallback: function(i){
+                var coords = bounds.getCoordinates();
+                var coord = coords.get(i);
+                coord.setAltitude(self.altitude);
+                coords.set(i, coord);
+            },
+            ensureCounterClockwise: false
+        });       
+    }
 }
 
 lingcod.Manipulator.prototype.loadShapeForm_ = function(){
@@ -241,28 +250,32 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
 
 lingcod.Manipulator.prototype.addNewShape_ = function(kml){
     this.clearShape_();
+    var geom;
     if(kml){
         this.shape_ = this.gex_.pluginInstance.parseKml(kml);
-        this.gex_.pluginInstance.getFeatures().appendChild(this.shape_);
-    }else{
-        var popts = {
-            visibility: true,
-            style: {
-                line: { width: 2, color: 'ffffffff' },
-                poly: { color: '8000ff00' }
-            }            
-        }
-        if(this.type === 'polygon'){
-            popts['polygon'] = [];
-        }else if(this.type === 'linestring'){
-            popts['lineString'] = [];
-        }else{
-            // point
-            popts['point'] = [];
-        }
-        this.shape_ = this.gex_.dom.addPlacemark(popts);
-        this.setZ(this.shape_, this.altitude);
+        geom = this.shape_.getGeometry();
     }
+    var popts = {
+        visibility: true,
+        style: {
+            line: { width: 2, color: '#FF0' },
+            poly: { color: '#FF0', opacity: 0.5 },
+            icon: {
+                stockIcon: 'shapes/cross-hairs',
+                color: '#FF0'
+            }
+        }            
+    }
+    if(this.type === 'polygon'){
+        popts['polygon'] = geom || [];
+    }else if(this.type === 'linestring'){
+        popts['lineString'] = geom || [];
+    }else{
+        // point
+        popts['point'] = geom || [0, 0];
+    }
+    this.shape_ = this.gex_.dom.addPlacemark(popts);
+    this.setZ(this.shape_, this.altitude);
     return this.shape_;
 }
 
@@ -289,15 +302,19 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
     this.process(this.shape_.getKml(), this.manipulators_url, function(data){
         if(data.success === '1'){
             var kmlObject = self.addNewShape_(data.final_shape_kml);
-            self.gex_.util.flyToObject(kmlObject, {
-                boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
+            if(self.type != 'point'){
+                self.gex_.util.flyToObject(kmlObject, {
+                    boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});                
+            }
             self.setGeometryFields_(data.user_shape, data.submitted, data.final_shape, data.final_shape_kml);
             self.enterManipulatedState_(data.html, true);            
         }else{
             self.setGeometryFields_('', data.submitted, '', '');
             self.addNewShape_(data.submitted);
-            self.gex_.util.flyToObject(self.shape_, {
-                boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
+            if(self.type != 'point'){
+                self.gex_.util.flyToObject(self.shape_, {
+                    boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
+            }
             self.enterManipulatedState_(data.html, false);
         }
     });
@@ -338,6 +355,14 @@ lingcod.Manipulator.prototype.isInvalidGeometry = function(){
 lingcod.Manipulator.prototype.enterNewState_ = function(){
     this.hideStates_();
     // this.is_defining_shape_ = true;
+    if(this.type === 'point'){
+        this.render_target_.find('div.new p.poly').hide();
+        this.render_target_.find('div.new p.point').show();        
+    }else{
+        // poly or linestring
+        this.render_target_.find('div.new p.poly').show();
+        this.render_target_.find('div.new p.point').hide();
+    }
     this.render_target_.find('div.new').show();
     this.render_target_.find('a.draw_shape').removeClass('disabled');
     this.render_target_.find('a.load_shape').removeClass('disabled');
@@ -356,6 +381,14 @@ lingcod.Manipulator.prototype.enterEditingState_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = false;
     this.render_target_.find('.done_editing').removeClass('disabled');
+    if(this.type === 'point'){
+        this.render_target_.find('div.editing p.poly').hide();
+        this.render_target_.find('div.editing p.point').show();        
+    }else{
+        // poly or linestring
+        this.render_target_.find('div.editing p.poly').show();
+        this.render_target_.find('div.editing p.point').hide();
+    }
     this.render_target_.find('div.editing').show();
     if(this.optional_manipulators){
         this.render_target_.find('div.manipulators').show();
@@ -367,6 +400,14 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     this.hideStates_();
     this.is_defining_shape = false;
     this.render_target_.find('div.edit .edit_shape').removeClass('disabled');
+    if(this.type === 'point'){
+        this.render_target_.find('div.edit p.poly').hide();
+        this.render_target_.find('div.edit p.point').show();        
+    }else{
+        // poly or linestring
+        this.render_target_.find('div.edit p.poly').show();
+        this.render_target_.find('div.edit p.point').hide();
+    }
     this.render_target_.find('div.edit').show();
     var kml = jQuery.trim($('#geometry_final_kml').html());
     if(!kml){
@@ -374,16 +415,20 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
         this.process(kml, this.manipulators_url, function(data){
             if(data.success === '1'){
                 var kmlObject = self.addNewShape_(data.final_shape_kml);
-                self.gex_.util.flyToObject(kmlObject, {
-                    boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
+                if(self.type != 'point'){
+                    self.gex_.util.flyToObject(kmlObject, {
+                        boundsFallback: true, aspectRatio: $(self.div).width() / $(self.div).height()});
+                }
             }else{
                 // do nothing
             }
         });
     }
     this.addNewShape_(kml);
-    this.gex_.util.flyToObject(this.shape_, {
-        boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+    if(this.type != 'point'){
+        this.gex_.util.flyToObject(this.shape_, {
+            boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+    }
     var self = this;
 }
 
@@ -422,8 +467,10 @@ lingcod.Manipulator.prototype.process = function(kml, url, callback){
 lingcod.Manipulator.prototype.editExistingShape_ = function(){
     var kml = jQuery.trim($('#geometry_orig_kml').html());
     this.addNewShape_(kml);
-    this.gex_.util.flyToObject(this.shape_, {
-        boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});
+    if(this.type != 'point'){
+        this.gex_.util.flyToObject(this.shape_, {
+            boundsFallback: true, aspectRatio: $(this.div).width() / $(this.div).height()});        
+    }
     this.edit_();
     this.enterEditingState_();
     
@@ -446,7 +493,7 @@ lingcod.Manipulator.prototype.edit_ = function(){
             this.gex_.edit.editLineString(this.shape_.getGeometry());
             break;
         case 'point':
-            this.gex_.edit.makeDraggable(this.shape_);
+            this.gex_.edit.makeDraggable(this.shape_, {bounce: false});
             break;
         default:
             alert('Unrecognized geometry type');

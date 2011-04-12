@@ -44,6 +44,10 @@ lingcod.features.kmlEditor = (function(){
         var menus = [];
         var buttons = [];
         var selection;
+        // Keep track of previously selected items turned off for editing, in
+        // case the user chooses to cancel
+        var previousSelection;
+        var selectedKmlObjects;
         
         // Create html skeleton for the editor, toolbar menu, and tree
         that.el = $([
@@ -268,10 +272,10 @@ lingcod.features.kmlEditor = (function(){
             selectData = jQuery.map(selectData, function(d){
                 return d.kmlObject;
             });
+            selectedKmlObjects = selectData;
             selection = jQuery.map(selectData, function(d){
                 return d.getId();
             });
-            selection
             var i = tbar.getChildCount();
             while(i){
                 i--;
@@ -322,6 +326,7 @@ lingcod.features.kmlEditor = (function(){
         // be called to do things such as refresh a kmlEditor instance, select
         // a feature, and/or open new sidebar content.
         function onAction(e){
+            previouslySelected = [];
             var action = e.target.action;
             if(action.rel === 'create'){
                 tree.clearSelection();
@@ -384,7 +389,12 @@ lingcod.features.kmlEditor = (function(){
                         url: url,
                         type: 'GET',
                         success: function(data, status){
-                            // kmlObject.setVisibility(false);
+                            if(action.title === 'Edit'){
+                                previouslySelected = selectedKmlObjects;
+                                for(var i = 0; i < selectedKmlObjects.length; i++){
+                                    selectedKmlObjects[i].setVisibility(false);
+                                }
+                            }
                             tree.clearSelection();
                             panel.stopSpinning();
                             if(status === 'success'){
@@ -546,6 +556,9 @@ lingcod.features.kmlEditor = (function(){
                 form.trigger('submit');
             });
             el.find('.cancel_button').click(function(){
+                for(var i = 0; i < previouslySelected.length; i++){
+                    previouslySelected[i].setVisibility(true);
+                }
                 if(manipulator){
                     manipulator.destroy();
                 }

@@ -90,7 +90,17 @@ def parsekmllinestring(kmlstring):
     return linestring
     
 def parsekmlpoint(kmlstring):
-    pass
+    e = fromstring(kmlstring)
+    coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Point/{http://www.opengis.net/kml/2.2}coordinates').text
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    lra = []
+    for yxz in coords.split(' '):
+        a = yxz.split(',')
+        if len(a) > 1:
+            lra.append((float(a[0]), float(a[1])))
+    point = Point(lra[0])
+    return point
+    
 
 def parsekml(shape):
     if shape.find('Polygon') is not -1:

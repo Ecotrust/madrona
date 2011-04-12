@@ -184,11 +184,19 @@
         <div class="panel">
             <div class="new" style="display:none;">
                 {% block shapeDefinitionPanelNewShape %}
-                <p>
+                <p class="poly">
                     To begin defining a shape, press the button below and 
                     click on the map where you would like to place a vertex. 
                     When finished, double click the last vertex of your shape.
-                </p>                    
+                </p>
+                <p class="point" style="display:none;">
+                    Click on the map where you would like to place this point 
+                    feature.
+                </p>
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
+                </p>        
                 {% endblock shapeDefinitionPanelNewShape %}
                 <a href="#" class="draw_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/pencil.png">Draw Shape</span></a>                
                 <a href="#" class="load_shape button" onclick="this.blur(); return false;" style="display:none;"><span><img src="{{MEDIA_URL}}common/images/upload_icon.gif">Load Shape</span></a>                
@@ -196,22 +204,38 @@
             </div>
             <div class="edit" style="display:none;">
                 {% block shapeDefinitionPanelEditShape %}
-                <p>
+                <p class="poly">
                     To edit this shape, press the button below and drag its 
                     handles.
-                </p>                    
+                </p>
+                <p class="point" style="display:none;">
+                    To edit this point feature, press the button below and 
+                    drag it to a new location.
+                </p>                      
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
+                </p>
                 {% endblock shapeDefinitionPanelEditShape %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
             <div class="editing" style="display:none;">
                 {% block editingShape %}
-                <p>
+                <p class="poly">
                     Drag the handles of the shape to edit. You can add 
                     vertices to the shape by dragging the handle shown at the
                     midpoint of a line. <strong>To remove a vertex, double-click on 
                     it.</strong>
                     <br />
                     When you are done, click on the button below.
+                </p>
+                <p class="point">
+                    To edit this point feature, press the button below and 
+                    drag it to a new location.
+                </p>
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
                 </p>
                 <a href="#" class="done_editing button" onclick="this.blur(); return false;"><span>Done Editing</span></a>                
                 {% endblock editingShape %}
