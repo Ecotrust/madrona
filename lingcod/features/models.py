@@ -81,6 +81,16 @@ class Feature(models.Model):
     def model_uid(klass):
         ct = ContentType.objects.get_for_model(klass)
         return "%s_%s" % (ct.app_label, ct.model)
+
+    @property
+    def hash(self):
+        """
+        For caching. This string represents a hash of all 
+        attributes that may influence reporting results. 
+        i.e. if this property changes, reports for the feature get rerun. 
+        """
+        important = "%s%s" % (self.date_modified, self.uid)
+        return important.__hash__()
         
     @property
     def uid(self):
