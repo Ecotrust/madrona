@@ -328,28 +328,11 @@ lingcod.features.kmlEditor = (function(){
         function onAction(e){
             previouslySelected = [];
             var action = e.target.action;
-            if(action.rel === 'create'){
-                tree.clearSelection();
-                panel.spin('Retrieving form');
-                $.ajax({
-                    cache: false,
-                    url: action.links[0]['uri-template'],
-                    type: 'GET',
-                    success: function(data, status){
-                        panel.stopSpinning();
-                        if(status === 'success'){
-                            setupForm(data);
-                        }else{
-                            alert('Could not retrieve form. Your computer was unable to contact the server.');
-                        }
-                    },
-                    error: function(e, b){
-                        panel.stopSpinning();
-                        alert('Could not retrieve form. Your computer was unable to contact the server.');
-                    }
-                });
-                return;
-            }
+            // Set default panel options. panel is an instance var
+            var panelOpts = {
+                loading_msg: 'Loading ' + action.title,
+                showClose: true
+            };
             // Get the specific link from this action, whether generic or not, 
             // that applies to the current selection. Note selection is a 
             // private instance variable set by the onSelect handler
@@ -363,11 +346,7 @@ lingcod.features.kmlEditor = (function(){
             }
             // Compile the uri-template against the current selection
             var url = action.getUrl(selection);
-            // Set default panel options. panel is an instance var
-            var panelOpts = {
-                loading_msg: 'Loading ' + action.title,
-                showClose: true
-            };
+
             console.log(action, url);
             if(link.method === 'GET'){
                 // Self and edit links are the only links opened in the 
@@ -381,35 +360,48 @@ lingcod.features.kmlEditor = (function(){
                     // browser
                     window.open(url, '_blank');
                 }else{
-                    console.log('edit');
+                    if(action.rel==='create'){
+                        tree.clearSelection();
+                    }
                     // likely an edit form. It will be up to the panel 
                     // component to appropriately handle forms.
-                    // panel.showUrl(url, panelOpts);
-                    panel.spin('Retrieving form');
-                    $.ajax({
-                        cache: false,
-                        url: url,
-                        type: 'GET',
-                        success: function(data, status){
-                            if(action.title === 'Edit'){
-                                previouslySelected = selectedKmlObjects;
-                                for(var i = 0; i < selectedKmlObjects.length; i++){
-                                    selectedKmlObjects[i].setVisibility(false);
-                                }
-                            }
-                            // tree.clearSelection();
-                            panel.stopSpinning();
-                            if(status === 'success'){
-                                setupForm(data);
-                            }else{
-                                alert('Could not retrieve form. Your computer was unable to contact the server.');
-                            }
-                        },
-                        error: function(e, b){
-                            panel.stopSpinning();
-                            alert('Could not retrieve form. Your computer was unable to contact the server.');
-                        }
-                    });
+                    panelOpts['showCloseButton'] = false;
+                    panelOpts['success'] = function(){
+                        lingcod.setupForm = function(){
+                            alert('error:setupForm called after clearing?');
+                        };
+                    }
+                    // set a setupForm function that can be called by content
+                    // of the panel
+                    lingcod.setupForm = function(form){
+                        setupForm(form);
+                    }
+                    panel.showUrl(url, panelOpts);
+                    // panel.spin('Retrieving form');
+                    // $.ajax({
+                    //     cache: false,
+                    //     url: url,
+                    //     type: 'GET',
+                    //     success: function(data, status){
+                    //         if(action.title === 'Edit'){
+                    //             previouslySelected = selectedKmlObjects;
+                    //             for(var i = 0; i < selectedKmlObjects.length; i++){
+                    //                 selectedKmlObjects[i].setVisibility(false);
+                    //             }
+                    //         }
+                    //         // tree.clearSelection();
+                    //         panel.stopSpinning();
+                    //         if(status === 'success'){
+                    //             setupForm(data);
+                    //         }else{
+                    //             alert('Could not retrieve form. Your computer was unable to contact the server.');
+                    //         }
+                    //     },
+                    //     error: function(e, b){
+                    //         panel.stopSpinning();
+                    //         alert('Could not retrieve form. Your computer was unable to contact the server.');
+                    //     }
+                    // });
                     return;
                     
                 }
@@ -436,67 +428,40 @@ lingcod.features.kmlEditor = (function(){
             setupForm();
         }
         
-        function setupForm(text, options){
+        function setupForm(form, options){
+            console.log(form);
             options = options || {};
-            var content = $([
-                '<div>',
-                    '<div class="tabs">',
-                        '<ul>',
-                            '<li>',
-                                '<a href="#PanelGeometry">',
-                                    '<span>Geometry</span>',
-                                '</a>',
-                            '</li>',
-                            '<li>',
-                                '<a href="#PanelAttributes">',
-                                    '<span>Attributes</span>',
-                                '</a>',
-                            '</li>',
-                        '</ul>',
-                        '<div id="PanelGeometry"></div>',
-                        '<div id="PanelAttributes"></div>',
-                        '<br class="clear" />',
-                        '<div class="form_controls">',
-                            '<a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>',
-                            '<a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>',
-                            '<br class="clear" />',
-                        '</div>',
-                    '</div>'
-                // '</div>'
-            ].join(''));
-            var html = $(text);
-            var h1 = html.find('h1');
-            h1.remove();
-            content.prepend(h1);
-            html.find('input[type=submit]').hide();
-            var form = html.find('form');
-            content.find('#PanelAttributes').append(html);
-            panel.addContent(content);
-            // TODO
             var el = panel.getEl();
-            var tabs = content.find('.tabs').tabs();
-            tabs.bind('tabsshow', function(e){
-                var div = $(this).parent().parent().parent();
-                // scroll to 1, then 0 for the benefit of dumb firefox
-                div.scrollTop(1);
-                div.scrollTop(0);
-            });
-            // so this is how it might work:
-            // var manipulations_needed = manipulators.needed(form);
-            var manipulator = new lingcod.Manipulator(gex, html.find('form'), $('#PanelGeometry'), $('#map_container'));
-            $(manipulator).bind('processing', function(){
-                panel.spin('Processing your shape');
-            });
-            $(manipulator).bind('doneprocessing', function(){
-                panel.stopSpinning();            
-            });
-            if(manipulator && manipulator.needed){
-                tabs.tabs('select', '#PanelGeometry');
-            }else{
-                manipulator = false;
-                tabs.tabs('select', '#PanelAttributes');
-                tabs.tabs('disable', 0);
-                tabs.find('> .ui-tabs-nav').hide();            
+            el.find('.close').hide();
+            el.find('input[type=submit]').hide();
+            var manipulator;
+            if($('#PanelGeometry').length){
+                var tabs = el.find('.tabs');
+                console.log('tabs', el, tabs);
+                tabs.bind('tabsshow', function(e){
+                    console.log('tabsshow');
+                    var div = $(this).parent().parent().parent();
+                    // scroll to 1, then 0 for the benefit of dumb firefox
+                    div.scrollTop(1);
+                    div.scrollTop(0);
+                });
+                // so this is how it might work:
+                // var manipulations_needed = manipulators.needed(form);
+                var manipulator = new lingcod.Manipulator(gex, form, $('#PanelGeometry'), $('#map_container'));
+                $(manipulator).bind('processing', function(){
+                    panel.spin('Processing your shape');
+                });
+                $(manipulator).bind('doneprocessing', function(){
+                    panel.stopSpinning();            
+                });
+                if(manipulator && manipulator.needed){
+                    tabs.tabs('select', '#PanelGeometry');
+                }else{
+                    manipulator = false;
+                    tabs.tabs('select', '#PanelAttributes');
+                    tabs.tabs('disable', 0);
+                    tabs.find('> .ui-tabs-nav').hide();            
+                }                
             }
 
             opts = {

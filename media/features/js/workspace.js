@@ -284,6 +284,9 @@ lingcod.features.workspace = (function(){
         }
         
         that.getUrl = function(selected){
+            if(that.rel === 'create'){
+                return that.links[0]['uri-template'];
+            }
             var link = that.getLink(selected);
             var uri = link['uri-template'];
             var repl = '{uid}';
@@ -295,7 +298,7 @@ lingcod.features.workspace = (function(){
         
         that.getLink = function(selected){
             if(that.links[0].rel === 'create'){
-                return that.links[0]['uri-template'];
+                return that.links[0];
             }
             return that.active(idsToUniqueClasses(selected));            
         }

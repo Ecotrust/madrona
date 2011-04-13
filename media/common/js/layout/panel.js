@@ -212,6 +212,8 @@ lingcod.layout.SanitizedContent = function(html){
     html = html.replace(rscript, function(m){
         if(m.indexOf('text/javascript+protovis') !== -1){
             return m;
+        }else if(m.indexOf('application/vnd.google-earth.kml+xml')){
+            return m;
         }else{
             that.js.push(m.replace(
                 /<script(.|\s)*?>/, '').replace('</script>',''));
