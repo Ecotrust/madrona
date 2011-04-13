@@ -368,6 +368,7 @@ lingcod.features.kmlEditor = (function(){
                 loading_msg: 'Loading ' + action.title,
                 showClose: true
             };
+            console.log(action, url);
             if(link.method === 'GET'){
                 // Self and edit links are the only links opened in the 
                 // sidebar
@@ -380,6 +381,7 @@ lingcod.features.kmlEditor = (function(){
                     // browser
                     window.open(url, '_blank');
                 }else{
+                    console.log('edit');
                     // likely an edit form. It will be up to the panel 
                     // component to appropriately handle forms.
                     // panel.showUrl(url, panelOpts);
@@ -395,7 +397,7 @@ lingcod.features.kmlEditor = (function(){
                                     selectedKmlObjects[i].setVisibility(false);
                                 }
                             }
-                            tree.clearSelection();
+                            // tree.clearSelection();
                             panel.stopSpinning();
                             if(status === 'success'){
                                 setupForm(data);
@@ -556,6 +558,7 @@ lingcod.features.kmlEditor = (function(){
                 form.trigger('submit');
             });
             el.find('.cancel_button').click(function(){
+                console.log('cancel');
                 for(var i = 0; i < previouslySelected.length; i++){
                     previouslySelected[i].setVisibility(true);
                 }

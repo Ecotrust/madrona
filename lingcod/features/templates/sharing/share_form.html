@@ -18,13 +18,15 @@
             members.toggle(300);
             return false;
         });
+        
+        lingcod.setupForm($('#share'));
     });
 </script>
 <div>
     {% load order_by %}
     {% if groups %}
         <p> Share <strong>{{ obj }}</strong> with the following groups</p>
-        <form action="" method="POST">
+        <form id="share" action="" method="POST">
             {% for group in groups %}
     				<ul class="groups">
     					<li class="group">
