@@ -8,18 +8,16 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils
 from lingcod.staticmap.models import MapConfig
 from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid, get_model_by_uid
-from lingcod.features.models import PointFeature, PolygonFeature, LineFeature
+from lingcod.features.models import SpatialFeature, PointFeature, PolygonFeature, LineFeature
 from djmapnik.adapter import PostgisLayer 
 from lingcod.common.utils import get_logger
+from django.template.defaultfilters import slugify
 log = get_logger()
 
 try:
     settings_dbname = settings.DATABASES['default']['NAME']
 except:
     settings_dbname = settings.DATABASE_NAME
-
-feature_models = get_feature_models()
-collection_models = get_collection_models()
 
 def get_features(uids,user):
     """ 
@@ -36,8 +34,12 @@ def get_features(uids,user):
                     (Shipwreck, [32, 31])
                 ]
     """
+    feature_models = get_feature_models()
+    collection_models = get_collection_models()
     features = [] # list of tuples => (model, [pks])
+    print uids
     for uid in uids:
+        print "   ", uid
         log.debug("processing uid %s" % uid)
         applabel, modelname, pk = uid.split('_')
         model = get_model_by_uid("%s_%s" % (applabel,modelname))
@@ -48,8 +50,12 @@ def get_features(uids,user):
             if not viewable:
                 continue
 
+        print model
+        print collection_models
+        print "IS it a collection???"
         if model in collection_models:
             collection = get_feature_by_uid(uid)
+            print "It's a collection ... "
             if user:
                 viewable, response = collection.is_viewable(user)
                 if not viewable:
@@ -120,6 +126,26 @@ def get_designation_style(mpas):
     s.rules.append(r)
     return s
 
+def staticmap_link(request, instances, map_name="default"):
+    """
+    Generic link version of the staticmap view
+    """
+    width, height = None, None
+    uids = [i.uid for i in instances]
+    filename = '_'.join([slugify(i.name) for i in instances])
+    autozoom = False
+    bbox = None
+    show_extent = False
+
+    img = draw_map(uids, request.user, width, height, autozoom, bbox, show_extent, map_name)
+
+    response = HttpResponse()
+    response['Content-length'] = len(img)
+    response['Content-Type'] = 'image/png' 
+    response['Content-Disposition'] = 'attachment; filename=%s.png' % filename
+    response.write(img)
+    return response
+
 
 def show(request, map_name="default"):
     # Grab the image dimensions
@@ -128,7 +154,7 @@ def show(request, map_name="default"):
         height = int(request.REQUEST['height'])
     except:
         # fall back on defaults
-        width, height = map.default_width, map.default_height
+        width, height = None, None
 
     if 'uids' in request.REQUEST: 
         uids = str(request.REQUEST['uids']).split(',')
@@ -169,6 +195,10 @@ def show(request, map_name="default"):
 def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=False, map_name='default'):
     """Display a map with the study region geometry.  """
     map = get_object_or_404(MapConfig,mapname=map_name)
+    if not width:
+        width = map.default_width
+    if not height: 
+        height = map.default_height
     mapfile = str(map.mapfile.path)
     
     # Create a blank image and map
@@ -183,15 +213,21 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Create the mapnik layers
+    print '\n'*5
     features = get_features(uids,user)
+    print 
+    print features
     for model, pks in features:
-        style = model.mapnik_style()
-        style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
-        m.append_style(style_name, style)
-        adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name="geometry_final")
-        lyr = adapter.to_mapnik()
-        lyr.styles.append(style_name)
-        m.layers.append(lyr)
+        if issubclass(model, SpatialFeature):
+            style = model.mapnik_style()
+            style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
+            m.append_style(style_name, style)
+            adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name="geometry_final")
+            lyr = adapter.to_mapnik()
+            lyr.styles.append(style_name)
+            m.layers.append(lyr)
+    print features
+    print '\n'*5
 
     # Grab the bounding coordinates and set them if specified
     # first, assume default image extent
