@@ -209,6 +209,9 @@ not a string path." % (name,))
             self.links.insert(0,alternate('KML',
                 'lingcod.features.views.kml',
                 select='multiple single'))
+            self.links.insert(0,alternate('KMZ',
+                'lingcod.features.views.kmz',
+                select='multiple single'))
 
         for link in self.links:
             if self._model not in link.models:

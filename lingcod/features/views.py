@@ -489,25 +489,64 @@ Feature instance.' % (instance.__class__.__name__, ))
     return response
 
 def kml(request, instances):
+    return kml_core(request, instances, kmz=False)
+
+def kmz(request, instances):
+    return kml_core(request, instances, kmz=True)
+
+def kml_core(request, instances, kmz):
     """
     Generic view for KML representation of feature classes. 
     Can be overridden in options but this provided a default.
-
-    TODO (a lot)
-     - permissions/sharing
-     - assert features are proper type
-     - override templates
-     - organize into folders
-     - session keys
-     - kml vs kmz
-     - network linked and other data structure minutia
     """
-    kml = ''
-    t = loader.get_template('kml/placemarks.kml')
-    kml = t.render(Context({'instances': instances}))
+    from lingcod.kmlapp.views import get_data_for_feature, get_styles, create_kmz 
+    from django.template.loader import get_template
+    from lingcod.common import default_mimetypes as mimetypes
+
+    user = request.user
+    session_key = '0'
+
+    # Get features, collection from instances
+    features = []
+    collections = []
+    for instance in instances:
+        f, c = get_data_for_feature(user,instance.uid)
+        print instance,f,c
+        features.extend(f)
+        collections.extend(c)
+
+    if not features and isinstance(collections, HttpResponse):
+        return collections # We got an http error going on
+
+    styles = get_styles(features,collections)
+
+    t = get_template('kmlapp/base.kml')
+    context = Context({
+                'user': user, 
+                'features': features, 
+                'collections': collections,
+                'use_network_links': False, 
+                'request_path': request.path, 
+                'styles': styles,
+                'session_key': session_key,
+                'shareuser': None,
+                'sharegroup': None,
+                'feature_id': None,
+                })
+    kml = t.render(context)
+    response = HttpResponse()
     filename = '_'.join([slugify(i.name) for i in instances])
-    response = HttpResponse(kml, status=200, mimetype='application/vnd.google-earth.kml+xml')
-    response['Content-Disposition'] = 'attachment; filename=%s.kml' % (filename, )
+
+    if kmz:
+        kmz = create_kmz(kml, 'mpa/doc.kml')
+        response['Content-Type'] = mimetypes.KMZ
+        response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
+        response.write(kmz)
+    else:
+        response['Content-Type'] = mimetypes.KML
+        response['Content-Disposition'] = 'attachment; filename=%s.kml' % filename
+        response.write(kml)
+        response.write('\n')
     return response
 
 def share_form(request,model=None, uid=None):
