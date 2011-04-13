@@ -37,9 +37,7 @@ def get_features(uids,user):
     feature_models = get_feature_models()
     collection_models = get_collection_models()
     features = [] # list of tuples => (model, [pks])
-    print uids
     for uid in uids:
-        print "   ", uid
         log.debug("processing uid %s" % uid)
         applabel, modelname, pk = uid.split('_')
         model = get_model_by_uid("%s_%s" % (applabel,modelname))
@@ -50,12 +48,8 @@ def get_features(uids,user):
             if not viewable:
                 continue
 
-        print model
-        print collection_models
-        print "IS it a collection???"
         if model in collection_models:
             collection = get_feature_by_uid(uid)
-            print "It's a collection ... "
             if user:
                 viewable, response = collection.is_viewable(user)
                 if not viewable:
@@ -213,10 +207,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Create the mapnik layers
-    print '\n'*5
     features = get_features(uids,user)
-    print 
-    print features
     for model, pks in features:
         if issubclass(model, SpatialFeature):
             style = model.mapnik_style()
@@ -226,8 +217,6 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
             lyr = adapter.to_mapnik()
             lyr.styles.append(style_name)
             m.layers.append(lyr)
-    print features
-    print '\n'*5
 
     # Grab the bounding coordinates and set them if specified
     # first, assume default image extent
