@@ -312,6 +312,7 @@ var lingcod = (function(){
         var onEditorEdit = function(e, data, status, xhr, context){
             // myshapes panel is the only one that needs refreshing
             var editor = editors[0];
+            $('a[href=#MyShapes]').click();
             var info = jQuery.parseJSON(data);
             var select = info['X-MarineMap-Select'];
             var show = info['X-MarineMap-Show'];

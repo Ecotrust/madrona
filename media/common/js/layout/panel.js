@@ -83,9 +83,7 @@ lingcod.panel = function(options){
             loader.destroy();
         }
         $(el[0]).scrollTop(1).scrollTop(0);
-        if(options.showCloseButton === false){
-            el.find('a.close').hide();
-        }
+        el.find('a.close').hide();
         if(!that.options.hideOnly){
             el.hide();
             that.shown = false;
@@ -137,12 +135,27 @@ lingcod.panel = function(options){
             target: el.find('.content'),
             beforeCallbacks: function(){
                 that.stopSpinning();
-                el.find('a.close').show();
+                el.find('a.close').show();                    
                 that.show();
             }
         }, options));
         loader.load();
     };
+    
+    that.showText = function(text, options){
+        loader = lingcod.contentLoader($.extend({}, {
+            text: text,
+            activeTabs: options.syncTabs ? getActiveTabs(el) : false,
+            error: options.error,
+            behaviors: applyBehaviors,
+            target: el.find('.content'),
+            beforeCallbacks: function(){
+                el.find('a.close').show();                    
+                that.show();
+            }
+        }, options));
+        loader.load();
+    }
     
     // Applies default behaviors for sidebar content that are defined by css
     // classes and html tags such as datagrids, links that open in the same 
@@ -180,9 +193,7 @@ lingcod.panel = function(options){
         el.hide();
         that.shown = false;
         $(that).trigger('panelhide', that);
-        if(options.showCloseButton === false){
-            el.find('a.close').hide();
-        }
+        // }
         $(that).trigger('panelhide');
     }
                 
@@ -338,8 +349,8 @@ lingcod.contentLoader = (function(){
     
     return function(options){
         
-        if(!options.url || !options.target){
-            throw('lingcod.contentLoader: must specify a url and target');
+        if(!options.target &&(!options.url || !options.text)){
+            throw('lingcod.contentLoader: must specify a target, and a url or text option.');
         }
         
         options.error = options.error || function(){ 
@@ -503,37 +514,47 @@ lingcod.contentLoader = (function(){
             fireCallbacks('destroy', $(jQuery.merge(options.target.toArray(), options.target.find('.tabs, .ui-tabs-nav li a').toArray())));            
         };
 
-        that.load = function(){
-            $.ajax({
-                url: options.url,
-                dataFilter: dataFilter,
-                error: options.error,
-                success: function(data, status, xhr){
-                    staging.html(data);
-                    if(options.behaviors){
-                        options.behaviors(staging);
-                    }
-                    enableTabs(staging);
-                    attachCallbacks(staging);
-                    followTabs(staging, function(){
-                        // move staged content to target
-                        options.target.html('');
-                        var contents = staging.children();
-                        contents.detach();
-                        options.target.append(contents);
-                        // fire callbacks
-                        options.beforeCallbacks();
-                        still_staging = false;
-                        fireCallbacks(['show', 'unhide'], staging);
-                        fireCallbacks(['show', 'unhide'], contents.find('.ui-tabs-selected a'));
-                        options.target.data('mm:callbacks', staging.data('mm:callbacks'));
-                        options.afterCallbacks();
-                        options.success();
-                        staging.remove();
-                    });
-                }
+
+        var processText = function(data){
+            staging.html(data);
+            if(options.behaviors){
+                options.behaviors(staging);
+            }
+            enableTabs(staging);
+            attachCallbacks(staging);
+            followTabs(staging, function(){
+                // move staged content to target
+                options.target.html('');
+                var contents = staging.children();
+                contents.detach();
+                options.target.append(contents);
+                // fire callbacks
+                options.beforeCallbacks();
+                still_staging = false;
+                fireCallbacks(['show', 'unhide'], staging);
+                fireCallbacks(['show', 'unhide'], contents.find('.ui-tabs-selected a'));
+                options.target.data('mm:callbacks', staging.data('mm:callbacks'));
+                options.afterCallbacks();
+                options.success();
+                staging.remove();
             });
+        }
+
+        that.load = function(){
+            if(options.text){
+                processText(dataFilter(options.text));
+            }else{
+                $.ajax({
+                    url: options.url,
+                    dataFilter: dataFilter,
+                    error: options.error,
+                    success: function(data, status, xhr){
+                        processText(data);
+                    }
+                });                
+            }
         };
+        
         return that;
     };
     

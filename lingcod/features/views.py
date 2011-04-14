@@ -13,6 +13,7 @@ from lingcod.features import workspace_json, get_feature_by_uid
 from django.template.defaultfilters import slugify
 logger = get_logger()
 from lingcod.features.models import SpatialFeature
+from django.core.urlresolvers import reverse
 
 def get_object_for_editing(request, uid, target_klass=None):
     """
@@ -590,7 +591,8 @@ def share_form(request,model=None, uid=None):
         return render_to_response('sharing/share_form.html', {'groups': groups,
             'already_shared_groups': already_shared_groups, 'obj': obj,
             'obj_type_verbose': obj_type_verbose,  'user':request.user, 
-            'MEDIA_URL': settings.MEDIA_URL}) 
+            'MEDIA_URL': settings.MEDIA_URL,
+            'action': request.build_absolute_uri()}) 
 
     elif request.method == 'POST':
         group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]
@@ -598,16 +600,12 @@ def share_form(request,model=None, uid=None):
 
         try:
             obj.share_with(groups)
-            if len(group_ids) == 0:
-                restext = """<br/><p id='sharing_response'>The %s named %s is 
-                now unshared with all groups.
-                </p id='sharing_response'>""" % (obj_type_verbose, unicode(obj))
-            else:
-                restext = """<br/><p id='sharing_response'>The %s named %s is 
-                now shared with groups %s
-                </p id='sharing_response'>""" % (obj_type_verbose, unicode(obj), 
-                        ','.join([str(x) for x in group_ids]))
-            return HttpResponse(restext,status=200)
+            response = HttpResponse("""{
+                "status": 200,
+                "X-MarineMap-Select": "%s"
+            }""" % (obj.uid, ), status=200)
+            response['X-MarineMap-Select'] = obj.uid
+            return response
         except Exception as e:
             return HttpResponse(
                     'Unable to share objects with those specified groups: %r.' % e, 
