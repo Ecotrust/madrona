@@ -2096,9 +2096,11 @@ var kmltree = (function(){
                 }
             }
             if(!dontOpen){
-                kmltreeManager.pauseListeners(function(){
-                    kmltreeManager._openBalloon(kmlObject, that);
-                });                
+                if(kmlObject.getType() === 'KmlPlacemark' || kmlObject.getDescription()){
+                    kmltreeManager.pauseListeners(function(){
+                        kmltreeManager._openBalloon(kmlObject, that);
+                    });                    
+                }
             }
             $(that).trigger('click', [node[0], kmlObject]);
         });
