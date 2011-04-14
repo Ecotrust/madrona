@@ -347,7 +347,6 @@ lingcod.features.kmlEditor = (function(){
             // Compile the uri-template against the current selection
             var url = action.getUrl(selection);
 
-            console.log(action, url);
             if(link.method === 'GET'){
                 // Self and edit links are the only links opened in the 
                 // sidebar
@@ -376,32 +375,8 @@ lingcod.features.kmlEditor = (function(){
                     lingcod.setupForm = function(form){
                         setupForm(form);
                     }
+                    panelOpts['loading_msg'] = 'Loading form';
                     panel.showUrl(url, panelOpts);
-                    // panel.spin('Retrieving form');
-                    // $.ajax({
-                    //     cache: false,
-                    //     url: url,
-                    //     type: 'GET',
-                    //     success: function(data, status){
-                    //         if(action.title === 'Edit'){
-                    //             previouslySelected = selectedKmlObjects;
-                    //             for(var i = 0; i < selectedKmlObjects.length; i++){
-                    //                 selectedKmlObjects[i].setVisibility(false);
-                    //             }
-                    //         }
-                    //         // tree.clearSelection();
-                    //         panel.stopSpinning();
-                    //         if(status === 'success'){
-                    //             setupForm(data);
-                    //         }else{
-                    //             alert('Could not retrieve form. Your computer was unable to contact the server.');
-                    //         }
-                    //     },
-                    //     error: function(e, b){
-                    //         panel.stopSpinning();
-                    //         alert('Could not retrieve form. Your computer was unable to contact the server.');
-                    //     }
-                    // });
                     return;
                     
                 }
@@ -423,23 +398,20 @@ lingcod.features.kmlEditor = (function(){
                 alert('invalid link method "'+link.method+'"');
             }
         }
-        
-        function onFormOpen(){
-            setupForm();
-        }
-        
+                
         function setupForm(form, options){
-            console.log(form);
             options = options || {};
             var el = panel.getEl();
             el.find('.close').hide();
             el.find('input[type=submit]').hide();
             var manipulator;
             if($('#PanelGeometry').length){
+                if(selectedKmlObjects.length){
+                    selectedKmlObjects[0].setVisibility(0);
+                    previouslySelected = selectedKmlObjects[0];                    
+                }
                 var tabs = el.find('.tabs');
-                console.log('tabs', el, tabs);
                 tabs.bind('tabsshow', function(e){
-                    console.log('tabsshow');
                     var div = $(this).parent().parent().parent();
                     // scroll to 1, then 0 for the benefit of dumb firefox
                     div.scrollTop(1);
@@ -499,14 +471,31 @@ lingcod.features.kmlEditor = (function(){
                     return true;
                 },
                 success: function(text, status, req, formel){
-                    panel.close();
-                    panel.stopSpinning();
                     $(that).trigger('doneSaving');
                     if(text.match('<form')){
                         // Validation error
-                        options['validation_error'] = true;
-                        setupForm(text, options);
+                        // Set default panel options. panel is an instance var
+                        var panelOpts = {
+                            loading_msg: 'Loading ' + action.title,
+                            showClose: true
+                        };
+                        panelOpts['showCloseButton'] = false;
+                        panelOpts['success'] = function(){
+                            lingcod.setupForm = function(){
+                                alert('error:setupForm called after clearing?');
+                            };
+                        }
+                        // set a setupForm function that can be called by content
+                        // of the panel
+                        lingcod.setupForm = function(form){
+                            setupForm(form);
+                        }
+                        panel.close();
+                        panel.stopSpinning();
+                        panel.showText(text, panelOpts);
                     }else{
+                        panel.close();
+                        panel.stopSpinning();
                         var info = jQuery.parseJSON(text);
                         if(info['status'] != 200 && info['status'] != 201){
                             unspin();
@@ -523,9 +512,8 @@ lingcod.features.kmlEditor = (function(){
                 form.trigger('submit');
             });
             el.find('.cancel_button').click(function(){
-                console.log('cancel');
-                for(var i = 0; i < previouslySelected.length; i++){
-                    previouslySelected[i].setVisibility(true);
+                if(previouslySelected){
+                    previouslySelected.setVisibility(true);                    
                 }
                 if(manipulator){
                     manipulator.destroy();
@@ -535,18 +523,16 @@ lingcod.features.kmlEditor = (function(){
                     options.cancel();
                 }
             });
-            if(options.validation_error){
+            if(tabs && tabs.length && $('.errorlist').length){
                 tabs.tabs('select', '#PanelAttributes');
             }
             panel.show();
-            $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);
+            if($('#PanelAttributes').length){
+                $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);                
+            }
 
             $(that).trigger('form_shown', [panel, null]);
         };
-        
-        function onFormOpenError(){
-            alert('Failed to open form.');
-        }
         
         function onError(xhr, status, errorThrown){
             alert('failed to perform '+
@@ -558,6 +544,11 @@ lingcod.features.kmlEditor = (function(){
             unspin();
             // It's now up to lingcod.js to determine which editor needs to 
             // perform a refresh, selection, etc
+            // Delegating to lingcod.js should give us more flexibility. There
+            // is no way to tell kmlEditor whether it is the shared component
+            // or the myshapes component. the original design was intended to
+            // support flexible numbers of kmleditors to be defined so this
+            // wouldn't make much sense. anyhoo...
             $(that).trigger('edit', [data, status, xhr, this]);
         }
         
