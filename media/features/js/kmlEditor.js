@@ -429,7 +429,7 @@ lingcod.features.kmlEditor = (function(){
         }
         
         function setupForm(form, options){
-            console.log(form);
+            console.log('form', form, 'form');
             options = options || {};
             var el = panel.getEl();
             el.find('.close').hide();
@@ -499,13 +499,32 @@ lingcod.features.kmlEditor = (function(){
                     return true;
                 },
                 success: function(text, status, req, formel){
+                    console.log('success');
+                    return;
                     panel.close();
                     panel.stopSpinning();
                     $(that).trigger('doneSaving');
                     if(text.match('<form')){
+                        console.log('got it, but validation error');
                         // Validation error
-                        options['validation_error'] = true;
-                        setupForm(text, options);
+                        // Set default panel options. panel is an instance var
+                        var panelOpts = {
+                            loading_msg: 'Loading ' + action.title,
+                            showClose: true
+                        };
+                        panelOpts['showCloseButton'] = false;
+                        panelOpts['success'] = function(){
+                            lingcod.setupForm = function(){
+                                alert('error:setupForm called after clearing?');
+                            };
+                        }
+                        // set a setupForm function that can be called by content
+                        // of the panel
+                        lingcod.setupForm = function(form){
+                            setupForm(form);
+                        }
+                        console.log(panelOpts);
+                        panel.showText(text, panelOpts);
                     }else{
                         var info = jQuery.parseJSON(text);
                         if(info['status'] != 200 && info['status'] != 201){
@@ -535,11 +554,13 @@ lingcod.features.kmlEditor = (function(){
                     options.cancel();
                 }
             });
-            if(options.validation_error){
+            if(tabs && tabs.length && $('.errorlist').length){
                 tabs.tabs('select', '#PanelAttributes');
             }
             panel.show();
-            $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);
+            if($('#PanelAttributes').length){
+                $('#PanelAttributes').parent().parent().parent().parent().scrollTop(1).scrollTop(0);                
+            }
 
             $(that).trigger('form_shown', [panel, null]);
         };

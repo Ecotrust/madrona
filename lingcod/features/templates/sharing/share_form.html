@@ -26,7 +26,7 @@
     {% load order_by %}
     {% if groups %}
         <p> Share <strong>{{ obj }}</strong> with the following groups</p>
-        <form id="share" action="" method="POST">
+        <form id="share" action="{{action}}" method="POST">
             {% for group in groups %}
     				<ul class="groups">
     					<li class="group">
@@ -48,4 +48,10 @@
     {% else %}
         <label> Can't share <em>{{ obj_type_verbose }}</em> named <strong>{{ obj }}</strong>. You don't belong to any groups with appropriate permissions to share that object.  </div>
     {% endif %}
+    <br class="clear" />
+    <div class="form_controls">
+        <a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>
+        <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+        <br class="clear" />
+    </div>
 </div>

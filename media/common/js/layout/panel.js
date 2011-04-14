@@ -137,12 +137,34 @@ lingcod.panel = function(options){
             target: el.find('.content'),
             beforeCallbacks: function(){
                 that.stopSpinning();
-                el.find('a.close').show();
+                if(options.showCloseButton){
+                    el.find('a.close').show();                    
+                }
                 that.show();
             }
         }, options));
         loader.load();
     };
+    
+    that.showText = function(text, options){
+        console.log('showText');
+        return;
+        $(that).trigger('panelloading');        
+        loader = lingcod.contentLoader($.extend({}, {
+            text: text,
+            activeTabs: options.syncTabs ? getActiveTabs(el) : false,
+            error: options.error,
+            behaviors: applyBehaviors,
+            target: el.find('.content'),
+            beforeCallbacks: function(){
+                if(options.showCloseButton){
+                    el.find('a.close').show();                    
+                }
+                that.show();
+            }
+        }, options));
+        loader.load();
+    }
     
     // Applies default behaviors for sidebar content that are defined by css
     // classes and html tags such as datagrids, links that open in the same 
