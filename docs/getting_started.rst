@@ -32,10 +32,15 @@ Dependencies
 You need the following installed on your system in order to start running
 MarineMap.
 
-    * A working installation of `GeoDjango <http://geodjango.org>`_ (which has it's own set of dependencies including proj, gdal and postgres/postgis)
-    * `mapnik <http://mapnik.org/>`_ generates static maps for reports
-    * The version control systems git, mercurial and subversion
-    * The following python packages listed in `marinemap_requirements.txt <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_::  
+#. `GeoDjango <http://geodjango.org>`_ : GeoDjango has it's own set of dependencies including proj, GDAL and postgis. Please refer to the `GeoDjango installation docs <http://docs.djangoproject.com/en/dev/ref/contrib/gis/install/>`_ for details.
+
+.. note::
+    MarineMap development tends to follow django trunk. It may work on the 
+    point releases but it's safer to just track django with subversion.
+  
+2. `Mapnik <http://mapnik.org/>`_ : Used for generating static maps for reports. Please refer to the Mapnik docs. We highly recomend sticking with version 0.7.1.
+#. The version control systems mercurial and subversion
+#. The following python packages listed in `marinemap_requirements.txt <http://marinemap.googlecode.com/hg/marinemap_requirements.txt>`_::  
 
 .. literalinclude:: ../marinemap_requirements.txt
 
@@ -45,11 +50,6 @@ We have created the `pip requirements file <http://marinemap.googlecode.com/hg/m
     cd /usr/local # Assuming you want to put stuff in /usr/local/src
     pip install -r http://marinemap.googlecode.com/hg/marinemap_requirements.txt    
 
-Some dependencies are a bit trickier and take additional installtion steps. Specifically geodjango, postgis and mapnik are not easily installed so refer to the links above. 
-
-.. note::
-    MarineMap development tends to follow django trunk. It may work on the 
-    point releases but it's safer to just start from source.
 
 Project Structure
 *****************
@@ -110,9 +110,13 @@ uncomment the following line::
 Alter ``SECRET_Key`` to make it unique. Next uncomment and alter the following
 lines as needed to allow this application to connect to your local database::
 
-    # DATABASE_NAME = 'simple_example'
-    # DATABASE_USER = 'postgres'
-    # DATABASE_PASSWORD = 'my-secret-password'
+    #DATABASES = {
+    #    'default': {
+    #        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+    #        'NAME': 'example',
+    #        'USER': 'postgres',
+    #    }
+    #}
     
 handling media
 --------------
@@ -122,7 +126,7 @@ Because a MarineMap instance is split between lingcod (core functionality) and t
     cd ~/src/marinemap/example_projects/test_project/
     echo "MEDIA_ROOT='/tmp/test_media'" >> settings_local.py
 
-Then use the 'install_media' management command to merge all the media files into the MEDIA_ROOT directory::
+Then use the 'install_media' management command to merge all the media files into the MEDIA_ROOT directory.:: 
 
     python manage.py install_media
 
@@ -136,7 +140,7 @@ database be created from a template with all the PostGIS functions installed. On
 is to set up postgis in the default postgres database called template1::
 
    #run as postgres superuser
-   POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib
+   POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib/postgis-1.5
    createlang -d template1 plpgsql # Adding PLPGSQL language support.
    psql -d template1 -f $POSTGIS_SQL_PATH/postgis.sql # Loading the PostGIS SQL routines
    psql -d template1 -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
@@ -145,7 +149,7 @@ is to set up postgis in the default postgres database called template1::
 
 Once the template is spatially enabled, create your project database::
 
-   createdb simple_example -U postgres
+   createdb example -U postgres
 
 To setup the database schema and populate with some initial data, run the 
 django syncdb command from within the ``example-projects/test_project`` directory::
@@ -169,7 +173,7 @@ verify and run the dev server
 
 Confirm that everything is working as expected by running the tests::
     
-    python /usr/local/src/marinemap/run_tests.py
+    python /usr/local/src/marinemap/utils/run_tests.py
     
 .. note::
 
@@ -183,7 +187,7 @@ If everything looks good, turn on the dev server::
     
     python manage.py runserver
     
-Hit http://localhost:8000/admin/ in a browser and use the authentication
+Go to http://localhost:8000/admin/ in a browser and use the authentication
 credentials specified when syncdb was run.
 
 At http://localhost:8000/ the interface should render with sample data.

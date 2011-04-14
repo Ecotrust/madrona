@@ -1,7 +1,7 @@
 .. _kml_configuration:
 
-KML Representation of MPAs and Arrays
-======================================
+KML Representation of Features and Collections
+==============================================
 
 .. note::
     Certain aspects of KML require absolute URLs and thus require configuring 

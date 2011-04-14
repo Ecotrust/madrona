@@ -16,8 +16,9 @@ import re
 logger = get_logger()
 
 def get_absolute_media_url():
-    # Need this to get the absolute url to media 
-    # TODO : There has GOT to be a better way to do this besides querying the DB
+    """
+    Used to determine the absolute url to media 
+    """
     try:
         from django.contrib.sites.models import Site
         site = Site.objects.all()[0]
@@ -39,7 +40,6 @@ class Feature(models.Model):
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
-                                        
         ======================  ==============================================
     """   
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related")
@@ -75,10 +75,16 @@ class Feature(models.Model):
     
     @classmethod
     def get_options(klass):
+        """
+        Returns model class Options object
+        """
         return get_model_options(klass.__name__)
     
     @classmethod
     def model_uid(klass):
+        """
+        class method providing the uid for the model class.
+        """
         ct = ContentType.objects.get_for_model(klass)
         return "%s_%s" % (ct.app_label, ct.model)
 
@@ -94,12 +100,18 @@ class Feature(models.Model):
         
     @property
     def uid(self):
+        """
+        Unique identifier for this feature.
+        """
         if not self.pk:
             raise Exception(
                 'Trying to get uid for feature class that is not yet saved!')
         return "%s_%s" % (self.model_uid(), self.pk, )
     
     def add_to_collection(self, collection):
+        """
+        Add feature to specified FeatureCollection
+        """
         assert issubclass(collection.__class__, FeatureCollection)
         assert self.__class__ in collection.get_options().get_valid_children()
         assert self.user == collection.user
@@ -107,6 +119,9 @@ class Feature(models.Model):
         self.save()
 
     def remove_from_collection(self):
+        """
+        Remove feature from FeatureCollection
+        """
         collection = self.collection
         self.collection = None
         self.save()
@@ -224,6 +239,21 @@ class SpatialFeature(Feature):
     Abstract Model used for representing user-generated geometry features. 
     Inherits from Feature and adds geometry-related methods/properties
     common to all geometry types.
+
+        ======================  ==============================================
+        Attribute               Description
+        ======================  ==============================================
+        ``user``                Creator
+
+        ``name``                Name of the object
+                                
+        ``date_created``        When it was created
+
+        ``date_modified``       When it was last updated.
+        
+        ``manipulators``        List of manipulators to be applied when geom
+                                is saved.
+        ======================  ==============================================
     """   
     manipulators = models.TextField(verbose_name="Manipulator List", null=True,
             blank=True, help_text='csv list of manipulators to be applied')
@@ -239,11 +269,23 @@ class SpatialFeature(Feature):
     
     @property
     def geom_kml(self):
+        """
+        Basic KML representation of the feature geometry
+        """
         return asKml(self.geometry_final.transform(settings.GEOMETRY_CLIENT_SRID, clone=True))
     
+    @classmethod
+    def mapnik_style(self):
+        """
+        Mapnik style object containing rules for symbolizing features in staticmap
+        """
+        style = mapnik.Style()
+        return style
+
     @property
     def kml(self):
         """
+        Fully-styled KML placemark representation of the feature.
         The Feature's kml property MUST 
           - return a string containing a valid KML placemark element
           - the placemark must have id= [the feature's uid]
@@ -381,7 +423,26 @@ class SpatialFeature(Feature):
 
 class PolygonFeature(SpatialFeature):
     """
-    Model used for representing user-generated polygon features. 
+    Model used for representing user-generated polygon features. Inherits from SpatialFeature.
+
+        ======================  ==============================================
+        Attribute               Description
+        ======================  ==============================================
+        ``user``                Creator
+
+        ``name``                Name of the object
+                                
+        ``date_created``        When it was created
+
+        ``date_modified``       When it was last updated.
+        
+        ``manipulators``        List of manipulators to be applied when geom
+                                is saved.
+
+        ``geometry_original``   Original geometry as input by the user.
+
+        ``geometry_final``      Geometry after manipulators are applied.
+        ======================  ==============================================
     """   
     geometry_orig = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,
             null=True, blank=True, verbose_name="Original Polygon Geometry")
@@ -390,11 +451,12 @@ class PolygonFeature(SpatialFeature):
     
     @property
     def centroid_kml(self):
+        """
+        KML geometry representation of the centroid of the polygon
+        """
         geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
         return geom.kml
  
-    #TODO make default geom_kml a multi? 
-
     @classmethod
     def mapnik_style(self):
         polygon_style = mapnik.Style()
@@ -413,7 +475,26 @@ class PolygonFeature(SpatialFeature):
 
 class LineFeature(SpatialFeature):
     """
-    Model used for representing user-generated linestring features. 
+    Model used for representing user-generated linestring features. Inherits from SpatialFeature.
+
+        ======================  ==============================================
+        Attribute               Description
+        ======================  ==============================================
+        ``user``                Creator
+
+        ``name``                Name of the object
+                                
+        ``date_created``        When it was created
+
+        ``date_modified``       When it was last updated.
+        
+        ``manipulators``        List of manipulators to be applied when geom
+                                is saved.
+
+        ``geometry_original``   Original geometry as input by the user.
+
+        ``geometry_final``      Geometry after manipulators are applied.
+        ======================  ==============================================
     """   
     geometry_orig = models.LineStringField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Original LineString Geometry")
@@ -435,7 +516,26 @@ class LineFeature(SpatialFeature):
 
 class PointFeature(SpatialFeature):
     """
-    Model used for representing user-generated point features. 
+    Model used for representing user-generated point features. Inherits from SpatialFeature.
+
+        ======================  ==============================================
+        Attribute               Description
+        ======================  ==============================================
+        ``user``                Creator
+
+        ``name``                Name of the object
+                                
+        ``date_created``        When it was created
+
+        ``date_modified``       When it was last updated.
+        
+        ``manipulators``        List of manipulators to be applied when geom
+                                is saved.
+
+        ``geometry_original``   Original geometry as input by the user.
+
+        ``geometry_final``      Geometry after manipulators are applied.
+        ======================  ==============================================
     """   
     geometry_orig = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Original Point Geometry")
@@ -594,7 +694,9 @@ class FeatureCollection(Feature):
         return the_collection
 
     def delete(self, *args, **kwargs):
-        # Delete all features in the set
+        """
+        Delete all features in the set
+        """
         for feature in self.feature_set(recurse=False):
             feature.delete()
         super(FeatureCollection, self).delete(*args, **kwargs)

@@ -98,7 +98,6 @@ def get_public_data():
     features = []
     collections = []
 
-    # Why not user feature_set here? TODO
     for fmodel in get_feature_models():
         #This would be preferable but doesnt really work??
         # unattached = fmodel.objects.filter(collection=None)

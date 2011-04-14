@@ -193,7 +193,7 @@ SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'simple_example',
+        'NAME': 'example',
         'USER': 'postgres',
      }
 }

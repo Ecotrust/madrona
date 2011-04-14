@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django.contrib.gis.geos import fromstr
-from settings import GEOMETRY_CLIENT_SRID, GEOMETRY_DB_SRID
+from django.conf import settings 
 from lingcod.manipulators.manipulators import display_kml
 
 class ShapeInput(forms.HiddenInput):
@@ -28,7 +28,7 @@ class ShapeInput(forms.HiddenInput):
         print output
         if value:
             geo = fromstr(value)
-            geo.srid = GEOMETRY_DB_SRID
+            geo.srid = settings.GEOMETRY_DB_SRID
             kml = display_kml(geo)
         return mark_safe("""
         <script class="%s" id="%s_kml" type="application/vnd.google-earth.kml+xml">

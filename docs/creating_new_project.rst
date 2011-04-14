@@ -44,9 +44,13 @@ First, while we appreciate django-admin's attempt at an initial settings.py file
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    DATABASE_ENGINE = 'postgresql_psycopg2'
-    DATABASE_NAME = 'oregon'
-    DATABASE_USER = 'postgres'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'oregon',
+            'USER': 'postgres',
+        }
+    }
 
     TIME_ZONE = 'America/Vancouver'
     LANGUAGE_CODE = 'en-us'
@@ -59,12 +63,12 @@ First, while we appreciate django-admin's attempt at an initial settings.py file
 
     TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
-    INSTALLED_APPS += ( 'mlpa', )
+    INSTALLED_APPS += ( 'omm', )
 
-Notice the final line; Here we install an app called 'mlpa' that will hold the project specific models, views and templates. Let's go ahead and create that app and configure it for edit and create custom features.
+Notice the final line; Here we install an app called 'omm' that will hold the project specific models, views and templates. Let's go ahead and create that app and configure it for edit and create custom features.
 
 Creating Features and FeatureCollections
----------------------------------------
+----------------------------------------
 
 Lingcod is designed without any hardcoded feature types (though we do provide plenty of examples!). `Features` are the geographic entities that users can create, edit, share and analyze. Each custom type of feature can be set up with it's own attributes, it's own behavior and it's own relationships with other features. `FeatureCollections` are a special type of Feature that allows you to organize Features into logical sets or even nested hierarchies; they are analagous to directories in your operating system except that you can define their behavior and their relationships with other features. 
 
@@ -74,87 +78,71 @@ Let's start with a simple example. Let's say we want to develop a collaborative 
 First we *must* create the app to hold our custom features::
 
     cd oregon
-    python manage.py startapp mlpa
+    python manage.py startapp omm
     
 Here we should see the following directory structure created for us::
 
-    mlpa
+    omm
     |-- __init__.py
     |-- models.py
     |-- tests.py
     `-- views.py
 
-We can ignore the tests and views for now; for now we'll focus on creating the Mpa and Folder models. Open mlpa/models.py and add::
+We can ignore the tests and views for now; for now we'll focus on creating the Mpa and Folder models. Open omm/models.py and add::
 
     from lingcod.features.models import PolygonFeature, FeatureCollection
-    from lingcod.features.forms import FeatureForm
+    from lingcod.features.forms import SpatialFeatureForm
     from lingcod.features import *
 
     @register
     class Mpa(PolygonFeature):
-        designation = models.CharField()
         class Options:
-            verbose_name = 'Marine Protected Area'
-            form = 'oregon.mlpa.models.MpaForm'
+            form = 'oregon.omm.models.MpaForm'
 
-    class MpaForm(FeatureForm):
-        class Meta:
+    class MpaForm(SpatialFeatureForm):
+        class Meta(SpatialFeatureForm.Meta):
             model = Mpa
 
-The above is a barebones MPA feature inherited from the `PolygonFeature` base class. We've given it a `designation` attribute, and a minimal set of Options including a form (mandatory) and a nice human-readable `verbose_name`. Finally the @register decorator at the top of the class is required to register `MPA` with lingcod. From here we might want to expand on the configuration a bit, adding manipulators and custom links to the Options::
+The above is a barebones MPA feature inherited from the `PolygonFeature` base class. This means that all the basic attributes are included by default. A form for creating and editing Mpas is also provided; again inheriting from a `SpatialFeatureForm` base class so the default behavior takes very few lines of code. The only additional information required is the Options class with a form property specifying the full python path to the associated Form (mandatory). Finally the @register decorator at the top of the class is required to register `Mpa` Features with lingcod. 
+
+While this is the bare minimum to create a feature, it's not a very interesting example. From here we might want to expand on the configuration a bit, adding manipulators, attributes, verbose name, and custom links to the Options::
 
     @register
     class Mpa(PolygonFeature):
         designation = models.CharField()
         class Options:
             verbose_name = 'Marine Protected Area'
-            form = 'lingcod.features.tests.MpaForm'
-            manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
+            form = 'oregon.omm.models.MpaForm'
+            manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegion' ]
             optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToGraticuleManipulator' ]
             links = (
                 related('Habitat Spreadsheet',
-                    'lingcod.features.tests.habitat_spreadsheet',
+                    'oregon.omm.views.habitat_spreadsheet',
                     select='single',
                     type='application/xls'
                 ),
-                alternate('Export KML',
-                    'lingcod.features.tests.kml',
-                    select='multiple single'
-                )
             )
 
-Similarly, for the `Folder` collections, we can inherit from FeatureCollection and specify a custom `copy` method and a `valid_children` Option to configure which Feature types can be placed in a folder.:: 
+.. note::
+    
+    The above `Mpa` feature has a custom link for a Habitat Spreadsheet; the oregon.omm.views.habitat_spreadsheet view would need to be written for this to function properly. For more info see documentation on Creating Link Views TODO.
+
+Similarly, we could group Mpas into collections called Arrays. We can inherit from the base `FeatureCollection` and specify the mandatory `valid_children` Option to configure which feature types can be placed in a folder.:: 
 
     @register
-    class Folder(FeatureCollection):
-        
-        def copy(self, user):
-            copy = super(Folder, self).copy(user)
-            copy.name = copy.name.replace(' (copy)', '-Copy')
-            copy.save()
-            return copy
-        
+    class Array(FeatureCollection):
         class Options:
-            form = 'lingcod.features.tests.FolderForm'
+            form = 'lingcod.features.tests.ArrayForm'
             valid_children = (
-                'oregon.mlpa.models.Mpa', 
-                'oregon.mlpa.models.Folder', 
-            links = (
-                edit('Delete folder and contents',
-                    'lingcod.features.tests.delete_w_contents',
-                    select='single multiple',
-                    confirm="""
-                    Are you sure you want to delete this folder and it's contents? 
-                    This action cannot be undone.
-                    """
-                ),
+                'oregon.omm.models.Mpa', 
+                'oregon.omm.models.Array', 
             )
 
-    class FolderForm(FeatureForm):
+    class ArrayForm(FeatureForm):
         class Meta:
-            model = Folder
+            model = Array
 
-Now we defined the key aspects of our application's behavior. One of our goals is to make the customization and configuration of lingcod as easy as possible - and its almost entirely driven by the model configurations you see above. There are only a few other things you need to do in order to get a fullly functional application. 
+With few lines of code, we've defined the features and aspects of our application's behavior. One of our goals is to make the customization and configuration of lingcod as easy as possible - and its almost entirely driven by the model configurations you see above. There are few other things you need to do in order to get a fullly functional application. 
 
 Urls
 ----
@@ -181,7 +169,8 @@ Next we'll create a new postgis-enabled database for this project and use django
 
 Study Region
 -------------
-Every project needs to define a :ref:`study region<study_region>`. This is a (multi)polygon shape which defines where
+Every project should define a :ref:`study region<study_region>` if the ClipToStudyRegion manipulator will be used.
+The study region is a (multi)polygon shape which defines where
 shapes can be created. Because new shapes are clipped to this study region boundary, it is highly
 recomended to give this step great consideration up front; changing the study region boundary at a
 later date is MUCH more complicated. 
@@ -203,12 +192,12 @@ Next, we'll use some custom lingcod management commands to load up our carefully
     python manage.py create_study_region --name oregon_coast data/oregon_study_region.shp
     python manage.py change_study_region 1
 
-Migrating our MLPA app
-----------------------
-We need to put our mlpa app under migration which ensures that future changes to the MLPA models' schema get reflected in the database::
+Migrating our `omm` app
+-----------------------
+We need to put our omm app under migration which ensures that future changes to the models' schema get reflected in the database::
 
-    python manage.py schemamigration --initial mlpa
-    python manage.py migrate mlpa --fake
+    python manage.py schemamigration --initial omm
+    python manage.py migrate omm --fake
 
 Static Media
 ------------
@@ -228,6 +217,7 @@ Deployment
 For now, we'll just test our new project using django's built-in development server. First we need to set up the sites framework so that our domain is accurate
 for any absolute urls created by our MarineMap project. Then run the dev server to test it::
 
+    python manage.py enable_sharing
     python manage.py site_setup_for_dev
     python manage.py runserver
 
@@ -247,10 +237,11 @@ needed:
 .. toctree::
    :maxdepth: 1
    
+   feature_classes
    study_region
+   deployment
    layers
    managing_users
-   marine_protected_areas
    static_map_configuration
    sharing_configuration
    kml_configuration

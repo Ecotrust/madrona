@@ -11,7 +11,6 @@ Apps
    spacing
    layers
    static_map_configuration
-   rest
    raster_stats
    news
    async_app

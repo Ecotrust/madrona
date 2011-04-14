@@ -270,23 +270,39 @@ You must specify a list of required manipulators; if no manipulators are require
             manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
             optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToGraticuleManipulator' ]
 
-Etc
----
-
 Base Classes
 ************
 
-Spatial Types
-=============
+Feature
+=======
+.. autoclass:: lingcod.features.models.Feature
+    :members:
+    :exclude-members: __init__
+
+Spatial Feature
+===============
+.. autoclass:: lingcod.features.models.SpatialFeature
+    :members:
+    :exclude-members: __init__
 
 PointFeature
 ------------
+.. autoclass:: lingcod.features.models.PointFeature
+    :members:
+    :exclude-members: __init__
 
 LineStringFeature
 -----------------
+.. autoclass:: lingcod.features.models.LineFeature
+    :members:
+    :exclude-members: __init__
 
 PolygonFeature
 --------------
+.. autoclass:: lingcod.features.models.PolygonFeature
+    :members:
+    :no-undoc-members:
+    :exclude-members: __init__
 
 FeatureCollection Base Class
 ============================
@@ -304,6 +320,9 @@ collection, all the features/collections contained within it are implicitly shar
         class Options:
             valid_children = ('mlpa.models.Mpa', )
 
+.. autoclass:: lingcod.features.models.FeatureCollection
+    :members:
+    :exclude-members: __init__, url_name, parent_slug, reverse, json
 
 The Options inner-class
 ***********************
@@ -425,7 +444,6 @@ The features app will handle requests
 Generic views will handle cases where a user is not authorized to view or edit
 a feature, requests related to features that cannot be found, and improperly 
 configured views. 
-
 
 link properties
 ---------------
