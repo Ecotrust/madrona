@@ -235,7 +235,8 @@ class FeaturesManipulatorTest(TestCase):
         g.transform(settings.GEOMETRY_DB_SRID)
         feature = TestPoint(user=self.user, name="Nearby Wreck", geometry_orig=g)
         feature.save()
-        self.assertEqual(g, feature.geometry_final)
+        self.assertAlmostEquals(g[0], feature.geometry_final[0])
+        self.assertAlmostEquals(g[1], feature.geometry_final[1])
 
     def test_studyregion_line_allin(self):
         # all in

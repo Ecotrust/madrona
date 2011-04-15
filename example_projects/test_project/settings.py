@@ -34,6 +34,8 @@ KML_EXTRUDE_HEIGHT = 700
 import os
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
 
+POSTGIS_TEMPLATE='template1'
+
 try:
     from settings_local import *
 except:
