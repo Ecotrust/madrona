@@ -42,7 +42,7 @@
     <Link> 
       <href>{% absurl kml-file uid=feature.uid,session_key=session_key %}</href> 
     </Link> 
-    <styleUrl>#{{collection.kml_style_id}}</styleUrl>
+    <styleUrl>#{{feature.kml_style_id}}</styleUrl>
   </NetworkLink> 
   {% else %}
     {{ feature.kml|safe }}

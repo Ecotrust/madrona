@@ -592,22 +592,25 @@ class FeatureCollection(Feature):
             <ListStyle>
                 <ItemIcon>
                     <state>open</state>
-                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
-                    <!-- TODO: KMLTree currently doesn't support icon pallettes -->
-                    <gx:x>-21</gx:x>
-                    <gx:y>0</gx:y>
-                    <gx:w>16</gx:w>
-                    <gx:h>16</gx:h>
+                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href> 
                 </ItemIcon>
-                <!-- TODO: KMLTree currently can't handle multi ItemIcons by state,
-                           tries to concatenate them into a single URL. 
-                <ItemIcon>
-                    <state>closed</state>
-                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
-                </ItemIcon> -->
             </ListStyle>
         </Style>
         """ % {'model_uid': self.model_uid(), 'media_url': get_absolute_media_url()}
+#                    <!-- TODO: KMLTree currently doesn't support icon pallettes -->
+#                    <gx:x>-21</gx:x>
+#                    <gx:y>0</gx:y>
+#                    <gx:w>16</gx:w>
+#                    <gx:h>16</gx:h>
+#                </ItemIcon>
+#
+#                <!-- TODO: KMLTree currently can't handle multi ItemIcons by state,
+#                           tries to concatenate them into a single URL. 
+#                <ItemIcon>
+#                    <state>closed</state>
+#                    <href>%(media_url)s/kmltree/dist/images/sprites/kml.png</href>
+#                </ItemIcon> -->
+
 
     @property
     def kml_style_id(self):
