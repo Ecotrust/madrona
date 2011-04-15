@@ -79,7 +79,12 @@ class Feature(models.Model):
         Returns model class Options object
         """
         return get_model_options(klass.__name__)
+
     
+    @property
+    def options(self):
+        return get_model_options(self.__class__.__name__)
+
     @classmethod
     def model_uid(klass):
         """

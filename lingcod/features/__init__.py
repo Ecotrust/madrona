@@ -232,6 +232,16 @@ not a string path." % (name,))
             t = loader.get_template('features/show.html')
         return t
     
+    def get_link(self,linkname):
+        """
+        Returns the FeatureLink with the specified name
+        """
+        try:
+            link = [x for x in self.links if x.title == linkname][0]
+            return link
+        except:
+            raise Exception("%r has no link named %s" % (self._model, linkname))
+
     def get_valid_children(self):
         if not self.valid_children:
             raise FeatureConfigurationError(
