@@ -316,6 +316,7 @@ var lingcod = (function(){
             var info = jQuery.parseJSON(data);
             var select = info['X-MarineMap-Select'];
             var show = info['X-MarineMap-Show'];
+            var untoggle = info['X-MarineMap-UnToggle'];
             // var select = xhr.getResponseHeader('X-MarineMap-Select');
             $(editor.tree).one('kmlLoaded', function(){
                 if(select){
@@ -331,12 +332,20 @@ var lingcod = (function(){
                 // Not sure why a timeout helps here, but otherwise the 
                 // dblclick event wont trigger
                 setTimeout(function(){
+                    if(untoggle){
+                        untoggle = untoggle.split(' ');
+                        for(var i = 0; i < untoggle.length; i++){
+                            var id = untoggle[i];
+                            var ns = editor.tree.getNodesById(id);
+                            $(ns[0]).find('> .toggler').click();
+                        }
+                    }
                     if(show){
                         var node = editor.tree.getNodesById(show);
                         if(node.length){
                             $(node).trigger('dblclick');
                         }
-                    }                    
+                    }
                 }, 20);
             });
             editor.refresh();

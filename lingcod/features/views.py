@@ -477,6 +477,7 @@ def copy(request, instances):
     X-MarineMap-Select response header.
     """
     copies = []
+    copied_uids = ' '.join([i.uid for i in instances])
     for instance in instances:
         copy = instance.copy(request.user)
         if not copy or not isinstance(copy, Feature):
@@ -489,9 +490,11 @@ Feature instance.' % (instance.__class__.__name__, ))
     uids = ' '.join([i.uid for i in copies])
     response = HttpResponse("""{
         "status": 201,
-        "X-MarineMap-Select": "%s"
-    }""" % (uids, ), status=201)
+        "X-MarineMap-Select": "%s",
+        "X-MarineMap-UnToggle": "%s"
+    }""" % (uids, copied_uids), status=201)
     response['X-MarineMap-Select'] = uids
+    response['X-MarineMap-UnToggle'] = copied_uids
     return response
 
 def kml(request, instances):

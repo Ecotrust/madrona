@@ -333,6 +333,11 @@ lingcod.features.kmlEditor = (function(){
                 loading_msg: 'Loading ' + action.title,
                 showClose: true
             };
+            if(!selection || selection.length === 0){
+                // In some cases dblclicking a feature on the map results in
+                // an empty selection. Oddly only in firefox so far.
+                return;
+            }
             // Get the specific link from this action, whether generic or not, 
             // that applies to the current selection. Note selection is a 
             // private instance variable set by the onSelect handler
