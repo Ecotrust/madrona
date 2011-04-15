@@ -383,9 +383,9 @@ class SpatialFeature(Feature):
         except AttributeError:
             manipulator_list = [] 
 
-        required = self.__class__.get_options().manipulators
+        required = self.options.manipulators
         try:
-            optional = self.__class__.get_options().optional_manipulators
+            optional = self.options.optional_manipulators
         except AttributeError:
             optional = []
 
