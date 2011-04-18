@@ -382,6 +382,30 @@ var lingcod = (function(){
             e.preventDefault();
         });
 
+        $('#signin').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Sign In Form';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.signin_url, opts);
+            e.preventDefault();
+        });
+
+        $('#profile').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading User Profile';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.profile_url, opts);
+            e.preventDefault();
+        });
+
+        $('#register').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Registration Form';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.registration_url, opts);
+            e.preventDefault();
+        });
+
         // for showing the news or about panels if they haven't been viewed 
         // yet (that determination is done with cookies in the django view)
         if(options.show_panel){
@@ -391,6 +415,8 @@ var lingcod = (function(){
                 panel.showUrl(that.options.about_url, opts);
             }else if(options.show_panel == 'news' && that.options.news_url){
                 panel.showUrl(that.options.news_url, opts);
+            }else if(options.show_panel == 'signin' && that.options.signin_url){
+                panel.showUrl(that.options.signin_url, opts);
             }
         }
 

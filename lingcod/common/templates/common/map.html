@@ -11,7 +11,10 @@
         var options = {
             media_url: "{{MEDIA_URL}}",
             news_url: '{% url news-main %}',
-            about_url: '{% url news-about %}'
+            about_url: '{% url news-about %}',
+            {% if user.is_authenticated %}profile_url: '{% url user_profile-form user.username %}',{% endif %}
+            registration_url: '{% url registration_register %}',
+            signin_url: '{% url user_signin %}'
         };
         
         // Used to identify whether the about or news panel should be shown
@@ -67,11 +70,12 @@
             {% block meta_navigation_list_insert %}{% endblock %}
             <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
-            <li><a href="{% url user_profile-form user.username %}">my profile</a> | </li>
+            <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>
             {% else %}
-            <li><a href="{% url registration_register %}">register</a> | </li>
-            <li><a href="{% url user_signin %}">sign in</a></li>
+            <li><a href="#" id="register">register</a> | </li>
+            <!-- <li><a href="{% url user_signin %}" id="signin">sign in</a></li> -->
+            <li><a href="#" id="signin">sign in</a></li>
             {% endif %}                
             {% endblock metanavigation %}
             {% block meta_navigation_list_append %}{% endblock %}
