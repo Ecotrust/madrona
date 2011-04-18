@@ -48,6 +48,7 @@ lingcod.features.kmlEditor = (function(){
         // case the user chooses to cancel
         var previousSelection;
         var selectedKmlObjects;
+        var selectedNodes;
         
         // Create html skeleton for the editor, toolbar menu, and tree
         that.el = $([
@@ -119,7 +120,10 @@ lingcod.features.kmlEditor = (function(){
             restoreState: true,
             supportItemIcon: true,
             multipleSelect: true,
-            selectable: true
+            selectable: true,
+            classname: function(kmlObject){
+                return lingcod.features.model(kmlObject) || '';
+            }
         });
         
         that.tree = tree;
@@ -129,6 +133,10 @@ lingcod.features.kmlEditor = (function(){
         
         $(tree).bind('kmlLoaded', function(event, kmlObject){
             $(that).trigger('kmlLoaded', [event, kmlObject]);
+        });
+        
+        $(tree).bind('networklinkload', function(e, node, kmlObject){
+            enableDragDrop(node);
         });
         
         $(tree).bind('dblclick', function(e, kmlObject){
@@ -151,6 +159,9 @@ lingcod.features.kmlEditor = (function(){
             var link = kml.find('[nodename=atom:link][rel=workspace]');
             if(link.length < 1){
                 alert('kml file did not have workspace document link');
+            }
+            if(that.workspace){
+                return;
             }
             $.ajax({
                 url: link.attr('href'),
@@ -180,6 +191,7 @@ lingcod.features.kmlEditor = (function(){
             attr.setCaption(that.workspace.actions.getByRel('self')[0].title);
             attr.setVisible(true);
             refresh_button.setEnabled(true);
+            enableDragDrop();
         }
         
         function populateCreateMenu(menu, button, workspace){
@@ -269,6 +281,9 @@ lingcod.features.kmlEditor = (function(){
             }else{
                 attr.setEnabled(true);                
             }
+            selectedNodes = $(jQuery.map(selectData, function(d){
+                return d.node[0];
+            }));
             selectData = jQuery.map(selectData, function(d){
                 return d.kmlObject;
             });
@@ -333,6 +348,11 @@ lingcod.features.kmlEditor = (function(){
                 loading_msg: 'Loading ' + action.title,
                 showClose: true
             };
+            if(!selection || selection.length === 0){
+                // In some cases dblclicking a feature on the map results in
+                // an empty selection. Oddly only in firefox so far.
+                return;
+            }
             // Get the specific link from this action, whether generic or not, 
             // that applies to the current selection. Note selection is a 
             // private instance variable set by the onSelect handler
@@ -560,6 +580,65 @@ lingcod.features.kmlEditor = (function(){
         function unspin(){
             tbar.setEnabled(true);
             tree.hideLoading();
+        }
+        
+        function enableDragDrop(node){
+            if(!that.workspace){
+                return;
+            }
+            node = node || kmlEl;
+            
+            // Setup collections as droppable
+            jQuery.each(that.workspace.collections, function(i, feature){
+                node.find('li.'+feature.id)
+                    .droppable({
+                        accept: function(target){
+                            var feature_type = $(this).data('feature');
+                            var passes = true;
+                            var selector = jQuery.map(feature_type.accepts, function(a){return '.'+a}).join(', ');
+                            selectedNodes.each(function(){
+                                passes = passes && $(this).is(selector);
+                            });
+                            return passes;
+                        },
+                        activeClass: '.ui-state-highlight',
+                        hoverClass: 'drophover',
+                        tolerance: 'pointer',
+                        drop: onDrop,
+                        greedy: true
+                    })
+                    .data('feature', feature);
+            });
+            
+            // setup features that can be added to collections as draggable
+            node.find(
+                jQuery.map(that.workspace.collectables, function(f){
+                    return 'li.'+f}).join(', '))
+                .draggable({
+                    helper: function(e){
+                        var li = $(e.target).parent();
+                        if(!li.hasClass('kmltree-selected')){
+                            tree.clearSelection();
+                            tree.selectNodes(li);
+                        }
+                        var helper = $('<ul class="mm-drag-helper"></ul>');
+                        $(document.body).append(helper);
+                        $(selectedNodes).clone().appendTo(helper);
+                        helper.blur();
+                        return helper;
+                    },
+                    containment: that.el,
+                    scroll:true,
+                    revert:'invalid',
+                    handle: 'span.name, span.icon',
+                    delay: 150,
+                    scroll: true,
+                    greedy: true
+                })            
+        }
+        
+        function onDrop(event, ui){
+            console.log(event.target, ui.draggable);
         }
         
         // Public API methods

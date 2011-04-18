@@ -118,6 +118,10 @@ lingcod.features.workspace = (function(){
                     items.models = [klass.id];
                 }
             });
+            klass['is_collection'] = ('collection' in klass);
+            if(klass.is_collection){
+                klass['accepts'] =  klass['collection']['classes'];
+            }
             classes.push(klass);
         });
         return classes;
@@ -186,6 +190,24 @@ lingcod.features.workspace = (function(){
                 jQuery.each(that.actions.all, function(i, v){callback(v)});
             }
         }
+        
+        var collectables = {};
+        that.collections = [];
+        
+        jQuery.each(that.featureClasses.all, function(i, f){
+            if(f['collection']){
+                that.collections.push(f);
+                jQuery.each(f['collection']['classes'], function(j, k){
+                    collectables[k] = true;
+                });
+            }
+        });
+        
+        that.collectables = [];
+        for(var uid in collectables){
+            that.collectables.push(uid);
+        }
+        
         
         // Gets all actions that should be accessible with the current 
         // selection. selection argument should be an array of client ids, ie

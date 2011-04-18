@@ -442,3 +442,36 @@ p.download_layer a {
     padding-left:20px;
     background: transparent url(../images/kml_document_icon.png) no-repeat top left;
 }
+
+.mm-drag-helper {
+    cursor:pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color:#4F84E9;
+    border:solid 2px #486AAD;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3+, Chrome */
+    border-radius: 5px; /* Opera 10.5, IE 9 */
+    padding:5px 10px;
+    padding-right:20px;
+}
+
+.mm-drag-helper li > span.name {
+    color:white !important;
+}
+
+.mm-drag-helper li > .toggler, .mm-drag-helper li > .expander {
+    display:none;
+}
+
+.mm-drag-helper > li > ul {
+    display:none;
+}
+
+.mm-drag-helper li {
+    padding-right:5px;
+    text-indent: none;
+/*    margin-left:5px;*/
+}

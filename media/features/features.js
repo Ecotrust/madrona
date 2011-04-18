@@ -4,5 +4,14 @@ if(typeof lingcod == 'undefined'){
 lingcod.features = {};
 
 lingcod.features.model = function(kmlObject){
-    return kmlObject.getId().match(/(\w+)_\d/)[1];
+    var id = kmlObject.getId();
+    if(!id){
+        return false;
+    }
+    var matches = id.match(/(\w+)_\d+/);
+    if(matches.length){
+        return matches[1];
+    }else{
+        return false;
+    }
 };
