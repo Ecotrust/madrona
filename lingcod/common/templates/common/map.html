@@ -108,7 +108,7 @@
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
-            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared With Me{% else %}MPA Proposals{% endif %}</span></a></li>
+            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared With Me{% else %}Public Proposals{% endif %}</span></a></li>
             {% endblock tabs %}
         </ul>
         {% block tabscontents %}
