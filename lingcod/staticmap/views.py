@@ -1,4 +1,7 @@
-import mapnik
+try:
+	import mapnik
+except:
+	import mapnik2 as mapnik
 import settings
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext

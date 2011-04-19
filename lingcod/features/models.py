@@ -10,7 +10,10 @@ from lingcod.features import get_model_options
 from lingcod.common.utils import asKml, clean_geometry, ensure_clean
 from lingcod.common.utils import get_logger, get_class, enable_sharing
 from lingcod.manipulators.manipulators import manipulatorsDict, NullManipulator
-import mapnik
+try:
+	import mapnik
+except:
+	import mapnik2 as mapnik
 import re
 
 logger = get_logger()
