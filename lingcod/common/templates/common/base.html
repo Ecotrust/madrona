@@ -10,10 +10,20 @@
     
 	<script type="text/javascript" src="http://www.google.com/jsapi?key={{api_key}}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="{{MEDIA_URL}}closure/closure-compiled.js" type="text/javascript" charset="utf-8"></script>
     <script src="{{MEDIA_URL}}kmltree/dist/kmltree.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="{{MEDIA_URL}}kmltree/dist/kmltree.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script> 
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script> 
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.mouse.js"></script> 
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.slider.js"></script> 
+    <link type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.slider.css" rel="stylesheet" /> 
+    <link type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.core.css" rel="stylesheet" /> 
+    <!-- TODO ... this theme.css conflicts with tabs.css and screws up the UI -->
+    <link type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.theme.css" rel="stylesheet" /> 
+
     {% load compressed %}
     {% compressed_css 'application' %}
     {% compressed_js 'application' %}

@@ -1,0 +1,25 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Inputs"><span>Inputs</span></a></li>
+            <li><a href="#Outputs"><span>Outputs</span></a></li>
+        </ul>
+        <div id="Inputs">
+            <ul>
+                {% for field, value in instance.inputs.items %}
+                <li><h4>{{field}}</h4><p>{{value}}</p></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="Outputs">
+            <ul>
+                {% for field, value in instance.outputs.items %}
+                <li><h4>{{field}}</h4><p>{{value}}</p></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock panel %}
