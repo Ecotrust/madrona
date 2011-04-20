@@ -142,7 +142,9 @@ lingcod.features.kmlEditor = (function(){
         });
         
         $(tree).bind('dblclick', function(e, kmlObject){
-            attr.dispatchEvent('action');
+            if(that.workspace){
+                attr.dispatchEvent('action');                
+            }
         });
         
         $(tree).bind('kmlLoadError', function(){
@@ -280,6 +282,9 @@ lingcod.features.kmlEditor = (function(){
         }
         
         function onSelect(e, selectData){
+            if(!that.workspace){
+                return;
+            }
             if(selectData.length !== 1){
                 attr.setEnabled(false);
             }else{
