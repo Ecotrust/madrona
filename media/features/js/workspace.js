@@ -121,6 +121,26 @@ lingcod.features.workspace = (function(){
             klass['is_collection'] = ('collection' in klass);
             if(klass.is_collection){
                 klass['accepts'] =  klass['collection']['classes'];
+                klass['buildAddUrl'] = function(collection_id, ids){
+                    var uri = klass['collection']['add']['uri-template'];
+                    var repl = '{collection_uid}';
+                    uri = uri.replace(repl, collection_id);
+                    var repl = '{uid}';
+                    if(uri.indexOf(repl) === -1){
+                        repl = '{uid+}';
+                    }
+                    return uri.replace(repl, ids.join(','));
+                }
+                klass['buildRemoveUrl'] = function(collection_id, ids){
+                    var uri = klass['collection']['remove']['uri-template'];
+                    var repl = '{collection_uid}';
+                    uri = uri.replace(repl, collection_id);
+                    var repl = '{uid}';
+                    if(uri.indexOf(repl) === -1){
+                        repl = '{uid+}';
+                    }
+                    return uri.replace(repl, ids.join(','));
+                }
             }
             classes.push(klass);
         });
