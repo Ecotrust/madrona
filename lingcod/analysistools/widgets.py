@@ -38,6 +38,7 @@ class SliderWidget(forms.TextInput):
         lingcod.onShow( function() {
             // Create the sliderbar
             $('#%(slider_id)s').slider({
+                range: 'min',
                 min : %(min)s, 
                 max : %(max)s,
                 %(step)s
@@ -63,3 +64,5 @@ class SliderWidget(forms.TextInput):
                 'step' : self.get_step()}
         
         return mark_safe(field+slider)
+
+
