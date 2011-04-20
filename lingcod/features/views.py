@@ -663,6 +663,8 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
     else:
         return HttpResponse("Invalid http method.", status=405)
 
+from django.views.decorators.cache import cache_page
+@cache_page()
 def workspace(request, is_owner):
     user = request.user
     if request.method == 'GET':

@@ -203,3 +203,11 @@ DATABASES = {
 # Used to set ownership of MEDIA_ROOT 
 # None = MEDIA_ROOT is owned by whoever runs the install_media command
 WSGI_USER = None
+
+CACHES = {
+    'default': {
+        #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        #'LOCATION': '/tmp/django-cache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
