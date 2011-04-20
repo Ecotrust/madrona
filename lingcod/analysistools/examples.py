@@ -100,11 +100,17 @@ class BufferPoint(Analysis):
 #        exclude=exclude_fieldnames)
 
 class BufferPointsForm(FeatureForm):
-    input_lat = forms.FloatField(max_value=90, min_value=-90, label="Latitude")
-    input_lon = forms.FloatField(max_value=180, min_value=-180, label="Longitude")
-    input_buffer_distance = forms.FloatField(widget=SliderWidget(min=10, max=10000),
+    input_lat = forms.FloatField(max_value=90, min_value=-90, 
+            widget=SliderWidget(min=-90,max=90,step=0.00001,image='analysistools/img/lat.gif'),
+            label="Latitude")
+    input_lon = forms.FloatField(max_value=180, min_value=-180, 
+            widget=SliderWidget(min=-180,max=180,step=0.00001,image='analysistools/img/lon.gif'),
+            label="Longitude")
+    input_buffer_distance = forms.FloatField(
+            widget=SliderWidget(min=10, max=50000,step=1,
+                image = 'analysistools/img/buffer.png' ),
             label = "Buffer Distance (m)",
-            min_value=0.0001, max_value=10000)
+            min_value=0.0001, max_value=50000)
 
     class Meta(FeatureForm.Meta):
         # TODO put all this in AnalysisForm and inherit

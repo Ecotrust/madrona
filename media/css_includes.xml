@@ -19,6 +19,6 @@
     <file path="common/css/forms.css" />
     <file path="common/css/closure-fixes.css" />
     <file path="common/css/table.css" />
-    <file path="common/css/jquery-widgets.css" />
     <file path="geographic_report/css/geographic_report.css" />
+    <file path="common/css/jquery-widgets.css" />
 </stylesheets>
