@@ -102,7 +102,7 @@ class BufferPoint(Analysis):
 class BufferPointsForm(FeatureForm):
     input_lat = forms.FloatField(max_value=90, min_value=-90, label="Latitude")
     input_lon = forms.FloatField(max_value=180, min_value=-180, label="Longitude")
-    input_buffer_distance = forms.FloatField(widget=SliderWidget(min=0.0001, max=10000),
+    input_buffer_distance = forms.FloatField(widget=SliderWidget(min=10, max=10000),
             label = "Buffer Distance (m)",
             min_value=0.0001, max_value=10000)
 

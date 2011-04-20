@@ -409,7 +409,8 @@ def forceRHR(polygon):
     interior rings = counter-clockwise
     """
     assert polygon.geom_type == 'Polygon'
-    assert not polygon.empty
+    if polygon.empty:
+        return poly
     exterior = True
     rings = []
     for ring in polygon:
