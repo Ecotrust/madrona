@@ -619,7 +619,7 @@ def share_form(request,model=None, uid=None):
                 " request.", status=400 )
 
 def manage_collection(request, action, uids, collection_model, collection_uid):
-    config = model.get_options()
+    config = collection_model.get_options()
     collection_instance = get_object_for_editing(request, collection_uid,
             target_klass=collection_model)
     if isinstance(collection_instance, HttpResponse):
@@ -627,18 +627,6 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
         
     if request.method == 'POST':
         uids = uids.split(',')
-        # check that the number of instances matches the link.select property
-        if len(uids) > 1 and link.select is 'single':
-            # too many
-            return HttpResponse(
-                'Not Supported Error: Requested %s for multiple instances' % (
-                link.title, ), status=400)
-        singles = ('single', 'multiple single', 'single multiple')
-        if len(uids) is 1 and link.select not in singles:
-            # not enough
-            return HttpResponse(
-                'Not Supported Error: Requested %s for single instance' % (
-                link.title, ), status=400)
         instances = []
         for uid in uids:
             inst = get_object_for_editing(request, uid)
@@ -650,16 +638,21 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
 
         if action == 'remove':
             for instance in instances:
-                instance.remove_from_collection(collection_instance)
-            return HttpResponse("Removed instances %r from collection %r" % 
-                    (instance, collection_instance), status=200)
+                instance.remove_from_collection()
         elif action == 'add':
             for instance in instances:
                 instance.add_to_collection(collection_instance)
-            return HttpResponse("Added instances %r to collection %r" % 
-                    (instance, collection_instance), status=200)
         else:
             return HttpResponse("Invalid action %s." % action, status=500)
+        
+        response = HttpResponse("""{
+            "status": 200,
+            "X-MarineMap-Select": "%s",
+            "X-MarineMap-Parent-Hint": "%s"
+        }""" % (' '.join(uids), collection_instance.uid), status=200)
+        response['X-MarineMap-Select'] = ' '.join(uids)
+        response["X-MarineMap-Parent-Hint"] = ' '.join(uids)
+        return response
     else:
         return HttpResponse("Invalid http method.", status=405)
 

@@ -29,11 +29,11 @@ for model in registered_models:
 for model in get_collection_models():
     options = model.get_options()
     urlpatterns += patterns('lingcod.features.views',
-        url(r'^%s/(?P<collection_uid>\d+)/remove/(?P<uids>[\w_,]+)$' % (options.slug, ), 
+        url(r'^%s/(?P<collection_uid>[\w_]+)/remove/(?P<uids>[\w_,]+)$' % (options.slug, ), 
             'manage_collection', kwargs={'collection_model': model, 'action': 'remove'}, 
             name='%s_remove_features' % (options.slug,)),
 
-        url(r'^%s/(?P<collection_uid>\d+)/add/(?P<uids>[\w_,]+)$' % (options.slug, ), 
+        url(r'^%s/(?P<collection_uid>[\w_]+)/add/(?P<uids>[\w_,]+)$' % (options.slug, ), 
             'manage_collection', kwargs={'collection_model': model, 'action': 'add'}, 
             name='%s_add_features' % (options.slug,)),
     )
