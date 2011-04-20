@@ -49,6 +49,7 @@ lingcod.features.kmlEditor = (function(){
         var previousSelection;
         var selectedKmlObjects;
         var selectedNodes;
+        var dragDropSelection;
         
         // Create html skeleton for the editor, toolbar menu, and tree
         that.el = $([
@@ -121,6 +122,7 @@ lingcod.features.kmlEditor = (function(){
             supportItemIcon: true,
             multipleSelect: true,
             selectable: true,
+            displayDocumentRoot: true,
             classname: function(kmlObject){
                 return lingcod.features.model(kmlObject) || '';
             }
@@ -163,6 +165,7 @@ lingcod.features.kmlEditor = (function(){
             if(that.workspace){
                 return;
             }
+            spin('fetching workspace');
             $.ajax({
                 url: link.attr('href'),
                 dataType: 'json',
@@ -179,6 +182,7 @@ lingcod.features.kmlEditor = (function(){
         }
         
         function onWorkspaceLoad(data, textStatus){
+            unspin();
             if(selection){
                 return;
             }   
@@ -348,7 +352,7 @@ lingcod.features.kmlEditor = (function(){
                 loading_msg: 'Loading ' + action.title,
                 showClose: true
             };
-            if(!selection || selection.length === 0){
+            if(action.rel !== 'create' && (!selection || selection.length === 0)){
                 // In some cases dblclicking a feature on the map results in
                 // an empty selection. Oddly only in firefox so far.
                 return;
@@ -377,7 +381,7 @@ lingcod.features.kmlEditor = (function(){
                     // is up to the server to set the Content-Type and
                     // Content-Disposition headers for correct handling by the 
                     // browser
-                    window.open(url, '_blank');
+                    window.open(url);
                 }else{
                     if(action.rel==='create'){
                         tree.clearSelection();
@@ -519,6 +523,7 @@ lingcod.features.kmlEditor = (function(){
                         var info = jQuery.parseJSON(text);
                         if(info['status'] != 200 && info['status'] != 201){
                             unspin();
+                            tree.refresh();
                             alert('There was an error saving your feature.');
                         }else{
                             onChange(text, status, req);
@@ -533,7 +538,13 @@ lingcod.features.kmlEditor = (function(){
             });
             el.find('.cancel_button').click(function(){
                 if(previouslySelected){
-                    previouslySelected.setVisibility(true);                    
+                    if(jQuery.isArray(previouslySelected)){
+                        jQuery.each(previouslySelected, function(i,kmlObject){
+                            kmlObject.setVisibility(true);                    
+                        });
+                    }else{
+                        previouslySelected.setVisibility(true);                    
+                    }
                 }
                 if(manipulator){
                     manipulator.destroy();
@@ -557,9 +568,17 @@ lingcod.features.kmlEditor = (function(){
         function onError(xhr, status, errorThrown){
             alert('failed to perform '+
                 this.action.title+' action.\n'+status+'\n'+errorThrown);
+            // tree.refresh();
             unspin();
         }
         
+        var to_concat = [
+            'X-MarineMap-Select', 
+            'X-MarineMap-Toggle', 
+            'X-MarineMap-Untoggle', 
+            'X-MarineMap-Parent-Hint'
+        ];
+
         function onChange(data, status, xhr){
             unspin();
             // It's now up to lingcod.js to determine which editor needs to 
@@ -595,13 +614,15 @@ lingcod.features.kmlEditor = (function(){
                         accept: function(target){
                             var feature_type = $(this).data('feature');
                             var passes = true;
-                            var selector = jQuery.map(feature_type.accepts, function(a){return '.'+a}).join(', ');
-                            selectedNodes.each(function(){
+                            var selector = jQuery.map(
+                                feature_type.accepts, function(a){
+                                    return '.'+a}).join(', ');
+                            jQuery.each(dragDropSelection, function(){
                                 passes = passes && $(this).is(selector);
                             });
                             return passes;
                         },
-                        activeClass: '.ui-state-highlight',
+                        activeClass: 'ui-state-highlight',
                         hoverClass: 'drophover',
                         tolerance: 'pointer',
                         drop: onDrop,
@@ -617,28 +638,180 @@ lingcod.features.kmlEditor = (function(){
                 .draggable({
                     helper: function(e){
                         var li = $(e.target).parent();
-                        if(!li.hasClass('kmltree-selected')){
+                        var alreadySelected = li.hasClass('kmltree-selected');
+                        var helper = $('<ul class="mm-drag-helper"></ul>');
+                        $(document.body).append(helper);
+                        dragDropSelection = $(alreadySelected ? 
+                            selectedNodes : $(e.target).parent());
+                        dragDropSelection.clone().appendTo(helper);
+                        helper.blur();
+                        if(!alreadySelected){
                             tree.clearSelection();
                             tree.selectNodes(li);
                         }
-                        var helper = $('<ul class="mm-drag-helper"></ul>');
-                        $(document.body).append(helper);
-                        $(selectedNodes).clone().appendTo(helper);
-                        helper.blur();
                         return helper;
                     },
-                    containment: that.el,
+                    // containment: that.el,
                     scroll:true,
                     revert:'invalid',
                     handle: 'span.name, span.icon',
                     delay: 150,
                     scroll: true,
                     greedy: true
-                })            
+                });
+            
+            jQuery.each(that.workspace.featureClasses.all, function(i, f){
+                node.find('li.'+f.id).data('feature', f);
+            });
+                
+            if(node.hasClass('kmlEditor')){
+                // setup content panel as drop zone for removing items from a 
+                // collection
+                node.find('li:first > span, li:first > div').droppable({
+                    activeClass: 'ui-state-highlight',
+                    hoverClass: 'drophover',
+                    tolerance: 'pointer',
+                    drop: onDrop,
+                    greedy: true
+                });
+            }
         }
         
         function onDrop(event, ui){
-            console.log(event.target, ui.draggable);
+            // After a drop event, this handler determines what items in the
+            // dragDropSelection need to be moved, fires off all necessary
+            // POST requests, and sets up the event to fire when those 
+            // operations are completed.
+            
+            $('.mm-drag-helper').hide();
+            
+            var destination = $(event.target);
+            if(destination.is('span, div')){
+                destination = destination.parent();
+            }
+                        
+            // Grab all collections that the current selections already belong
+            // to. 
+            // 
+            // This info is needed to remove features from that collection if 
+            // they are being dragged to the root folder, but also to ensure
+            // items aren't being dragged right into their current collection.
+            // Remember, in some cases a multiple selection might include some
+            // features that already belong to the target collection, and some
+            // that do not.
+            
+            var parentCollections = {};
+            
+            // accessing dragDropSelection from instance var because jqueryui
+            // doesn't support multi-select+drag&drop. That's handled in 
+            // enableDragDrop
+            jQuery.each(dragDropSelection, function(i, node){
+                var parent = $(node).parent().parent();
+                if(parent.hasClass('kmltree-item') && parent !== kmlEl){
+                    var id = $(parent).data('id');
+                    if(id in parentCollections){
+                        parentCollections[id].children.push(
+                            $(node).data('id'));
+                    }else{
+                        parentCollections[id] = {
+                            id: id,
+                            node: parent,
+                            feature: $(parent).data('feature'),
+                            children: [$(node).data('id')]
+                        }
+                    }
+                }else{
+                    if('none' in parentCollections){
+                        parentCollections['none']['children'].push(
+                            $(node).data('id'));
+                    }else{
+                        parentCollections['none'] = {
+                            node: destination,
+                            children: [$(node).data('id')]}
+                    }
+                }
+            });
+            
+            // Clear this out to avoid errors later
+            dragDropSelection = [];
+            
+            // transfer those into a plain array
+            var parents = [];
+            for(var key in parentCollections){
+                parents.push(parentCollections[key]);
+            }
+            
+            // cull parentCollections that are equal to the destination
+            parents = jQuery.map(parents, function(parent){
+                if(destination[0] === parent['node'][0]){
+                    // cull
+                    return null;
+                }else{
+                    return parent;
+                }
+            });
+            
+            spin('Moving selected features');
+            
+            // Will hold all xhr request instances, and later use $.when to
+            // assign callbacks for when they are _all_ finished
+            requests = [];
+            jQuery.each(parents, function(i, parent){
+                var url;
+                if(!$(destination).data('feature')){
+                    // destination is base folder
+                    // removing items from their collections
+                    url = parent.feature.buildRemoveUrl(
+                        parent.id, parent.children);
+                }else{
+                    // adding items to a destination collection
+                    var collection = $(destination).data('feature');
+                    url = collection.buildAddUrl(
+                        $(destination).data('id'), parent.children);
+                }
+                requests.push(jQuery.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'text',
+                    context: {
+                        action: {
+                            title: 'move items'
+                        }
+                    }
+                }));
+            });
+            // Setup listeners for when _all_ requests are completed
+            jQuery.when.apply(that, requests).then(function(){
+                unspin();
+                if(requests.length === 0){
+                    return;
+                }
+                // success
+                // Need to merge their json responses
+                var info = {};
+                jQuery.each(requests, function(i, xhr){
+                    window.txt = xhr.responseText;
+                    try{
+                        var resp = jQuery.parseJSON(xhr.responseText);                      
+                    }catch(e){
+                        alert('Problem parsing server response');
+                    }
+                    jQuery.each(to_concat, function(i, key){
+                        if(key in resp && resp[key].length){
+                            if(key in info){
+                                info[key] = info[key] + ' ' + resp[key];
+                            }else{
+                                info[key] = resp[key];
+                            }                            
+                        }
+                    });
+                });
+                onChange(info);
+            }, function(){
+                // error
+                alert('error moving features');
+                unspin();
+            });
         }
         
         // Public API methods
@@ -649,6 +822,7 @@ lingcod.features.kmlEditor = (function(){
         that.refresh = function(callback){
             tbar.setEnabled(false);
             var cback = function(e, kmlObject){
+                enableDragDrop(kmlEl);
                 tbar.setEnabled(true);
                 create_button.setEnabled(true);
                 callback(e, kmlObject);

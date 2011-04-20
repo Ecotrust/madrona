@@ -308,26 +308,51 @@ var lingcod = (function(){
                 }
             }
         };
-        
+                
         var onEditorEdit = function(e, data, status, xhr, context){
             // myshapes panel is the only one that needs refreshing
             var editor = editors[0];
             $('a[href=#MyShapes]').click();
-            var info = jQuery.parseJSON(data);
+            var info = typeof data === 'object' ? data:jQuery.parseJSON(data);
             var select = info['X-MarineMap-Select'];
             var show = info['X-MarineMap-Show'];
             var untoggle = info['X-MarineMap-UnToggle'];
+            var hint = info['X-MarineMap-Parent-Hint'];
             // var select = xhr.getResponseHeader('X-MarineMap-Select');
             $(editor.tree).one('kmlLoaded', function(){
                 if(select){
+                    editor.tree.clearSelection();
                     select = select.split(' ');
                     var nodes = [];
                     for(var i = 0; i < select.length; i++){
                         var id = select[i];
                         var ns = editor.tree.getNodesById(id);
-                        nodes.push(ns[0]);
+                        if(ns.length){
+                            nodes.push(ns[0]);
+                        }
                     }
-                    editor.tree.selectNodes($(nodes));
+                    if(nodes.length){
+                        editor.tree.selectNodes($(nodes));                        
+                    }else{
+                        // only supports one hint for now. TODO? Not needed?
+                        var nl = editor.tree.getNodesById(hint.split(' ')[0]);
+                        if(nl.length){
+                            $(editor.tree).one('networklinkload', function(){
+                                var nodes = [];
+                                for(var i = 0; i < select.length; i++){
+                                    var id = select[i];
+                                    var ns = editor.tree.getNodesById(id);
+                                    if(ns.length){
+                                        nodes.push(ns[0]);
+                                    }
+                                }
+                                if(nodes.length){
+                                    editor.tree.selectNodes($(nodes));                        
+                                };
+                            });
+                            editor.tree.openNetworkLink(nl);
+                        }
+                    }
                 }
                 // Not sure why a timeout helps here, but otherwise the 
                 // dblclick event wont trigger
