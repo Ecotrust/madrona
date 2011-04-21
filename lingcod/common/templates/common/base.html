@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="{{MEDIA_URL}}kmltree/dist/kmltree.css" 
         type="text/css" media="screen" title="no title" charset="utf-8">
     
+        <link rel="stylesheet" href="{% url feature-tree-css %}"  
+        type="text/css" media="screen" charset="utf-8">
+
     {% load compressed %}
     {% compressed_css 'application' %}
     {% compressed_js 'application' %}

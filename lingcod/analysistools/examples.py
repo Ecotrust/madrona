@@ -91,6 +91,12 @@ class BufferPoint(Analysis):
         form = 'lingcod.analysistools.models.BufferPointsForm'
         show_template = 'analysis/show.html'
 
+    @classmethod
+    def css(klass):
+        return """ li.%s > .icon { 
+        background: url('%s/analysistools/img/buffer-16x16.png') no-repeat 0 0 transparent ! important; 
+        } """ % (klass.model_uid(), settings.MEDIA_URL)
+
 #from django.forms.models import modelform_factory
 #exclude_fieldnames = list(FeatureForm.Meta.exclude)
 #for f in BufferPoint.output_fields():

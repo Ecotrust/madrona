@@ -83,6 +83,17 @@ class Feature(models.Model):
         """
         return get_model_options(klass.__name__)
 
+    @classmethod
+    def css(klass):
+        """
+        Blank for now but use to override the default kmltree icon
+
+        Ex:
+            return "" li.%s > .icon { 
+            background: url("%s/feature.png") no-repeat scroll 0 0 transparent ! important; 
+            } "" % (klass.model_uid(), settings.MEDIA_URL)
+        """
+        return ''
     
     @property
     def options(self):

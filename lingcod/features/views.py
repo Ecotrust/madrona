@@ -657,7 +657,7 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
         return HttpResponse("Invalid http method.", status=405)
 
 from django.views.decorators.cache import cache_page
-@cache_page()
+@cache_page(60 * 60)
 def workspace(request, is_owner):
     user = request.user
     if request.method == 'GET':
@@ -665,6 +665,25 @@ def workspace(request, is_owner):
             return HttpResponse("Anonymous user can't access workspace as owner", status=403)
         res = HttpResponse(workspace_json(user, is_owner), status=200)
         res['Content-Type'] = mimetypes.JSON 
+        return res
+    else:
+        return HttpResponse("Invalid http method.", status=405)
+
+@cache_page(60 * 60)
+def feature_tree_css(request):
+    from lingcod.features import registered_models
+    if request.method == 'GET':
+        styles = []
+        for model in registered_models:
+            try:
+                css = model.css()
+                styles.append(css)
+            except:
+                logger.ERROR("Something is wrong with %s.css() class method" % model)
+                pass
+
+        res = HttpResponse('\n'.join(styles), status=200)
+        res['Content-Type'] = 'text/css' 
         return res
     else:
         return HttpResponse("Invalid http method.", status=405)

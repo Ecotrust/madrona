@@ -21,6 +21,12 @@ class PrivateLayerList(Feature):
     def kml(self):
         return "<!-- no kml representation, use network link to kml-file url -->"
 
+    @classmethod
+    def css(klass):
+        return """ li.%s > .icon { 
+        background: url('%scommon/images/kml_document_icon.png') no-repeat 0 0 ! important; 
+        } """ % (klass.model_uid(), settings.MEDIA_URL)
+
     @property
     def kml_style(self):
         return """
