@@ -11,9 +11,10 @@ from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.features import workspace_json, get_feature_by_uid
 from django.template.defaultfilters import slugify
-logger = get_logger()
 from lingcod.features.models import SpatialFeature
 from django.core.urlresolvers import reverse
+from django.views.decorators.cache import cache_page
+logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):
     """
@@ -656,7 +657,6 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
     else:
         return HttpResponse("Invalid http method.", status=405)
 
-from django.views.decorators.cache import cache_page
 @cache_page(60 * 60)
 def workspace(request, is_owner):
     user = request.user

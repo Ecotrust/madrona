@@ -97,6 +97,12 @@ not a string path." % (name,))
         templates to view information about instances of this feature class.
         """
         
+        self.icon_url = getattr(self._options, 'icon_url', None)
+        """
+        Optional; URL to 16x16 icon to use in kmltree
+        Use full URL or relative to MEDIA_URL
+        """
+
         self.links = []
         """
         Links associated with this class.

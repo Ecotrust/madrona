@@ -86,14 +86,18 @@ class Feature(models.Model):
     @classmethod
     def css(klass):
         """
-        Blank for now but use to override the default kmltree icon
-
-        Ex:
-            return "" li.%s > .icon { 
-            background: url("%s/feature.png") no-repeat scroll 0 0 transparent ! important; 
-            } "" % (klass.model_uid(), settings.MEDIA_URL)
+        Specifies the CSS for representing features in kmltree, specifically the icon
+        Works one of two ways:
+        1. Use the icon_url Option and this default css() classmethod 
+        2. Override the css() classmethod for more complex cases
         """
-        return ''
+        url = klass.get_options().icon_url
+        if url:
+            if not url.startswith("/") and not url.startswith("http://"):
+                url = settings.MEDIA_URL + url
+            return """ li.%s > .icon { 
+            background: url("%s") no-repeat scroll 0 0 transparent ! important; 
+            } """ % (klass.model_uid(), url)
     
     @property
     def options(self):
