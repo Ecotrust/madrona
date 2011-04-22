@@ -103,6 +103,3 @@ class Analysis(Feature):
 
     class Meta:
         abstract = True
-
-# TODO just for testing
-from examples import *

@@ -97,6 +97,7 @@ class Feature(models.Model):
                 url = settings.MEDIA_URL + url
             return """ li.%s > .icon { 
             background: url("%s") no-repeat scroll 0 0 transparent ! important; 
+            display:inline ! important;
             } """ % (klass.model_uid(), url)
     
     @property
