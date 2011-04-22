@@ -75,7 +75,7 @@ class Feature(models.Model):
         return ('%s_resource' % (self.get_options().slug, ), (), {
             'uid': self.uid
         })
-    
+
     @classmethod
     def get_options(klass):
         """
@@ -130,6 +130,31 @@ class Feature(models.Model):
             raise Exception(
                 'Trying to get uid for feature class that is not yet saved!')
         return "%s_%s" % (self.model_uid(), self.pk, )
+
+    @property
+    def kml_safe(self):
+        """
+        A safety valve for kmlapp...
+        If one feature's .kml  property fails, 
+        it won't bring down the entire request.
+        This property is never to be overridden!
+        """
+        try:
+            return self.kml
+        except Exception as e:
+            try:
+                logger.error("%s .kml property is failing: \n\n%s\n\n" % (self.uid,e.message))
+            except:
+                # just in case logging or the uid property are fubar
+                print ".kml is failing on something"
+            # Create a fallback KML placemark so it doesn't just disappear
+            return """
+            <Placemark id="%s">
+                <visibility>0</visibility>
+                <name>%s (INVALID KML)</name>
+            </Placemark>
+            """ % (self.uid, self.name)
+
     
     def add_to_collection(self, collection):
         """
