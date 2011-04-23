@@ -588,9 +588,6 @@ def share_form(request,model=None, uid=None):
 
         # Get a list of user's groups that have sharing permissions 
         groups = user_sharing_groups(request.user)
-        if not groups:
-            return HttpResponse("There are no groups to which you can share"
-                "your content at this time.", status=404)
 
         return render_to_response('sharing/share_form.html', {'groups': groups,
             'already_shared_groups': already_shared_groups, 'obj': obj,
