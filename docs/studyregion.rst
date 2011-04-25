@@ -1,4 +1,4 @@
-.. _study_region:
+.. _studyregion:
 
 The Study Region
 ================

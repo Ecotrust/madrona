@@ -1,4 +1,4 @@
-.. _kml_configuration:
+.. _kmlapp:
 
 KML Representation of Features and Collections
 ==============================================
@@ -37,9 +37,3 @@ There are three primary ways to access KML representations of MPAs:
 All three can be retrieved as a zipped KMZ file by accessing the service with .kmz instead of .kml
 
 There is one additional way to access user MPAs which uses Network Links for each array to increase performance (rather than putting all MPA placemarks into a single file). This service can be accessed as both a kml or kmz. The URL for this service would be something like http://example.com/kml/username/user_mpa_links.kml . 
-
-
-
-
-
-

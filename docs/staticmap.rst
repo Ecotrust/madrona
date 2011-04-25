@@ -1,4 +1,4 @@
-.. _static_map_configuration:
+.. _staticmap:
 
 Static Map Data Layers
 =======================

@@ -169,7 +169,7 @@ Next we'll create a new postgis-enabled database for this project and use django
 
 Study Region
 -------------
-Every project should define a :ref:`study region<study_region>` if the ClipToStudyRegion manipulator will be used.
+Every project should define a :ref:`study region<studyregion>` if the ClipToStudyRegion manipulator will be used.
 The study region is a (multi)polygon shape which defines where
 shapes can be created. Because new shapes are clipped to this study region boundary, it is highly
 recomended to give this step great consideration up front; changing the study region boundary at a
@@ -227,7 +227,7 @@ Our Oregon MarineMap project should now be accessible at http://localhost:8000/
 Next steps
 ----------
 MarineMap has fixtures containing test data that is installed on database 
-setup like an example :ref:`Study Region <study_region>` and :ref:`layers`. This makes
+setup like an example :ref:`Study Region <studyregion>` and :ref:`layers`. This makes
 it easy to verify the installation and learn how the tool works. For use in an 
 actual planning session these default datasets will need to be replaced.
 
@@ -237,12 +237,12 @@ needed:
 .. toctree::
    :maxdepth: 1
    
-   feature_classes
-   study_region
+   features
+   studyregion
    deployment
    layers
    managing_users
-   static_map_configuration
+   staticmap
    sharing_configuration
    kml_configuration
    template_customization

@@ -1,4 +1,4 @@
-.. _async_app:
+.. _async:
 
 Async App
 =========

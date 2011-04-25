@@ -17,3 +17,4 @@ Topics
    async_task_queue
    workspace_specification
    export
+   sharing_configuration
