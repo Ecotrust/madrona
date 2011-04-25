@@ -12,7 +12,7 @@ import datetime
 from django.conf import settings
 
 
-def map(request, template_name='common/map.html', extra_context={}):
+def map(request, template_name='common/map_ext.html', extra_context={}):
     """
     Main application window
     Sets/Checks Cookies to determine if user needs to see the about or news panels
