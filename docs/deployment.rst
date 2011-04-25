@@ -141,6 +141,7 @@ Configuration
         access_log /var/log/nginx/app.access.log;
         error_log /var/log/nginx/app.error.log info;
         keepalive_timeout 5;
+        client_max_body_size 20M; # file upload size
         root /var/www/;
         
         location /media/admin {
