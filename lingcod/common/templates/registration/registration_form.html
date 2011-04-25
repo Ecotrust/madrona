@@ -1,8 +1,7 @@
-{% extends "registration/reg_base.html" %}
-
+{#% extends "registration/reg_base.html" %#}
+{% extends 'common/panel.html' %}
 {% block title %}Register to Use MarineMap{% endblock %}
-
-{% block content %}
+{% block panel %}
 
 <p> By registering, you can create and analyze your own shapes, share information and collaborate with others.</p>
 <form action="{% url registration_register %}" method="post">
@@ -10,5 +9,5 @@
     <input type="submit" value="Submit" />
 </form>
 
-{% endblock %}
+{% endblock panel %}
 

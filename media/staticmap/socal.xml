@@ -8,27 +8,16 @@
     </PolygonSymbolizer>
     <LineSymbolizer>
         <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
-        <CssParameter name="stroke-width">0.1</CssParameter>
+        <CssParameter name="stroke-width">0.6</CssParameter>
     </LineSymbolizer>
 </Rule>
 </Style>
 
-<!-- NOTE that mpa_style is overridden in staticmap
-<Style name="mpa_style">
-<Rule>
-    <PolygonSymbolizer>
-        <CssParameter name="fill">rgb(150,0,0)</CssParameter>
-    </PolygonSymbolizer>
-    <LineSymbolizer>
-        <CssParameter name="stroke">rgb(255,255,0)</CssParameter>
-        <CssParameter name="stroke-width">0.2</CssParameter>
-    </LineSymbolizer>
-    <Filter> MPA_FILTER </Filter>
-</Rule>
-</Style> -->
-
 <Style name="region_style">
 <Rule>
+    <PolygonSymbolizer>
+        <CssParameter name="fill">steelblue</CssParameter>
+    </PolygonSymbolizer>
     <LineSymbolizer>
         <CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
         <CssParameter name="stroke-width">1</CssParameter>
@@ -49,28 +38,7 @@
     <StyleName>land_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">MEDIA_ROOT/staticmap/data/socal_gshhs</Parameter>
-    </Datasource>
-</Layer>
-
-<Layer name="studyregion" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
-    <StyleName>region_style</StyleName>
-    <Datasource>
-      <Parameter name="type">postgis</Parameter>
-      <Parameter name="table">(select geometry, name from mm_study_region) as region</Parameter>
-      DATABASE_CONNECTION
-    </Datasource>
-</Layer>
-
-<Layer name="mpa" status="on" srs="+init=epsg:GEOMETRY_DB_SRID">
-    <!-- NOTE that the 'mpa_style' is overridden by staticmap to provide styling accd to designation -->
-    <StyleName>mpa_style</StyleName>
-    <Datasource>
-      <Parameter name="type">postgis</Parameter>
-      <Parameter name="geometry_field">geometry_final</Parameter>
-      <!-- NOTE that the subselect for mpa MUST have all these fields for filtering purposes -->
-      <Parameter name="table">(select id, geometry_final, name, designation_id from MM_MPA) as mpa</Parameter>
-      DATABASE_CONNECTION
+        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/ca_or_stl</Parameter>
     </Datasource>
 </Layer>
 
@@ -78,10 +46,8 @@
     <StyleName>port_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">MEDIA_ROOT/staticmap/data/world_ports</Parameter>
+        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/world_ports</Parameter>
     </Datasource>
 </Layer>
-
-
 
 </Map>

@@ -111,7 +111,7 @@ def respond_with_template(status_html, submitted, final_shape, success="1"):
         final_shape_kml = display_kml(final_shape)
     else:
         final_shape_kml = ''
-    user_shape = parsekmlpoly(submitted)
+    user_shape = parsekml(submitted)
     user_shape.srid = settings.GEOMETRY_CLIENT_SRID
     user_shape.transform(settings.GEOMETRY_DB_SRID)
 

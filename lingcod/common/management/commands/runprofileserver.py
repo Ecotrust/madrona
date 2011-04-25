@@ -71,7 +71,7 @@ class Command(BaseCommand):
                         if "media" not in profname:
                             stats = hotshot.stats.load(profname)
                             stats.sort_stats('time', 'calls')
-                            stats.print_stats(10)
+                            stats.print_stats(20)
                         print " * Complete hotshot.stats output at %s" % profname
                         print
                         return response 

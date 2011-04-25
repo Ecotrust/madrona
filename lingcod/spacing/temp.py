@@ -1,6 +1,9 @@
 from spacing.models import *
 import matplotlib.pyplot as plt
-import mapnik
+try:
+	import mapnik
+except:
+	import mapnik2 as mapnik
 
 p1 = TestPoint.objects.get(name='p1')
 p2 = TestPoint.objects.get(name='p2')

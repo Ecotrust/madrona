@@ -14,9 +14,13 @@
 # GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg' 
 
 # You'll want to specify any database connection info here:
-# DATABASE_NAME = 'simple_example'
-# DATABASE_USER = 'postgres'
-# DATABASE_PASSWORD = 'my-secret-password'
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'example',
+#        'USER': 'postgres',
+#    }
+#}
 
 # Uncomment this line to cause MarineMap to go into maintenance mode
 # It will not be accessible without logging in as staff

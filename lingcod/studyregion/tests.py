@@ -8,6 +8,7 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase, Client
 from lingcod.studyregion.models import StudyRegion
 from django.conf.urls.defaults import *
+from django.conf import settings
 
 urlpatterns = patterns('',
     # Example:
@@ -77,6 +78,7 @@ class StudyRegionTest(TestCase):
 
         
     def testExternalKmlStyle(self):
+        settings.DEBUG = True
         response = self.client.get('/media/studyregion/styles.kml', {})
         self.assertEquals(response.status_code, 200)
 

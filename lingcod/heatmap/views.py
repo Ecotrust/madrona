@@ -1,33 +1,42 @@
 # Create your views here.
-from models import create_heatmap
-from lingcod.common.utils import get_array_class
+from lingcod.heatmap.models import create_heatmap
 from lingcod.shapes.views import ShpResponder
 from lingcod.common import default_mimetypes as mimetypes
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
-from lingcod.sharing.utils import can_user_view
+from lingcod.features import get_feature_by_uid, get_collection_models
+from lingcod.features.models import PolygonFeature
 import os
 
-def overlap_geotiff(array_id_list_str, user=None):
-    Array = get_array_class()
-    array_set = Array.objects.filter(pk__in=array_id_list_str.split(','))
-    if len(array_set) < 1:
+def overlap_geotiff(collection_uids, user=None):
+    collections = [get_feature_by_uid(x) for x in collection_uids.split(',')]
+    collections = [x for x in collections if x.__class__ in get_collection_models()]
+    if len(collections) < 1:
         raise Http404
-    for array in array_set:
-        viewable, response = can_user_view(Array, array.pk, user)
+
+    filenames = []
+    for collection in collections:
+        viewable, response = collection.is_viewable(user)
         if user and not viewable:
             return response
-    filenames = []
-    for array in array_set:
-        responder = ShpResponder(array.shapefile_export_query_set)
-        fn = responder('return_file_not_response')
-        filenames.append(fn)
+
+        fs = collection.feature_set(recurse=True)
+        poly_fs = [x for x in fs if isinstance(x,PolygonFeature)]
+        unique_types = list(set([x.__class__ for x in poly_fs]))
+        for model in unique_types:
+            responder = ShpResponder(model.objects.filter(pk__in=[x.pk for x in poly_fs if x.__class__ == model]))
+            responder.geo_field = 'geometry_final'
+            fn = responder('return_file_not_response')
+            filenames.append(fn)
+
     temp_geotiff = create_heatmap(filenames)
     return temp_geotiff
     
-def overlap_geotiff_response(request, array_id_list_str):
+def overlap_geotiff_response(request, collection_uids):
     import cStringIO
     buff = cStringIO.StringIO()
-    temp_geotiff = overlap_geotiff(array_id_list_str, request.user)
+    temp_geotiff = overlap_geotiff(collection_uids, request.user)
+    if isinstance(temp_geotiff, HttpResponse):
+        return temp_geotiff
     rfile = open(temp_geotiff,'rb')
     buff.write(rfile.read())
     buff.flush()
@@ -39,15 +48,17 @@ def overlap_geotiff_response(request, array_id_list_str):
     response.write(stream)
     return response
 
-def overlap_kmz_response(request, array_id_list_str):
+def overlap_kmz_response(request, collection_uids):
     import cStringIO
     import shutil
     import tempfile
 
     buff = cStringIO.StringIO()
-    temp_geotiff = overlap_geotiff(array_id_list_str, request.user)
+    temp_geotiff = overlap_geotiff(collection_uids, request.user)
+    if isinstance(temp_geotiff, HttpResponse):
+        return response
     
-    tempdir = os.path.join(tempfile.gettempdir(),str(array_id_list_str.__hash__()))
+    tempdir = os.path.join(tempfile.gettempdir(),str(collection_uids.__hash__()))
     if os.path.exists(tempdir):
         shutil.rmtree(tempdir)
     os.mkdir(tempdir)

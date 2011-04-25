@@ -4,7 +4,7 @@ import os
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
-RELEASE = '1.9dev' # The next milestone
+RELEASE = '3.0dev' # The next milestone
 
 GEOMETRY_DB_SRID = 3310
 
@@ -54,6 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
@@ -79,11 +80,8 @@ INSTALLED_APPS = (
     'lingcod.screencasts',
     'lingcod.news',
     'lingcod.manipulators',
-    'lingcod.array',
-    'lingcod.mpa',
-    'lingcod.sharing',
     'lingcod.kmlapp',
-    'lingcod.rest',
+    'lingcod.features',
     'lingcod.intersection',
     'lingcod.replication',
     'lingcod.bioregions',
@@ -96,16 +94,19 @@ INSTALLED_APPS = (
     'lingcod.unit_converter',
     'lingcod.openid',
     'lingcod.loadshp',
+    'lingcod.heatmap', 
+    #'lingcod.analysistools',
     'registration',
     'south',
     'lingcod.async',
     'djcelery', 
-    'ghettoq', 
+    'ghettoq',
 )
 
 EXCLUDE_FROM_TESTS = [
     'ghettoq', 
     'south', 
+    'registration',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
@@ -130,7 +131,8 @@ LOGIN_REDIRECT_URL = '/'
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # KML SETTINGS
-KML_SIMPLIFY_TOLERANCE = 20
+KML_SIMPLIFY_TOLERANCE = 20 # meters
+KML_SIMPLIFY_TOLERANCE_DEGREES = 0.0002 # Very roughly ~ 20 meters
 KML_EXTRUDE_HEIGHT = 100
 
 # SHARING SETTINGS
@@ -139,7 +141,7 @@ SHARING_TO_STAFF_GROUPS = ['Share with Staff']
 
 # TEMPLATE SETTINGS
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -185,10 +187,27 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
 
 OPENID_ENABLED = False
+LOG_FILE = None # write log to stdout
 
 SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'example',
+        'USER': 'postgres',
+     }
+}
 
 # UNIX username which owns the wsgi process.
 # Used to set ownership of MEDIA_ROOT 
 # None = MEDIA_ROOT is owned by whoever runs the install_media command
 WSGI_USER = None
+
+CACHES = {
+    'default': {
+        #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        #'LOCATION': '/tmp/django-cache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
