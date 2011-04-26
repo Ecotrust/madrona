@@ -1,7 +1,7 @@
 .. _raster_stats:
 
-Raster Statistics App
-=======================
+`lingcod.raster_stats`: Raster Statistics
+=========================================
 The `lingcod.raster_stats` app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection. 
 
 The app uses an optional caching mechanism so that any geometry/raster combination only needs to be run once. 

@@ -1,2 +1,2 @@
-data_distributor
+`lingcod.data_distributor`
 =================================

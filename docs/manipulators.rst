@@ -1,7 +1,7 @@
 .. _manipulators:
 
-Manipulators
-============
+`lingcod.manipulators`: Manipulators
+====================================
 
 What is a Manipulator?
 **********************

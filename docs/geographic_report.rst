@@ -1,2 +1,2 @@
-geographic_report
+`lingcod.geographic_report`
 =================================

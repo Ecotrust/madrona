@@ -1,2 +1,2 @@
-bioeconomic_model
+`lingcod.bioeconomic_model`
 =================================

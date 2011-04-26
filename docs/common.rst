@@ -1,2 +1,2 @@
-common
+`lingcod.common`: Misc Goodies
 =================================

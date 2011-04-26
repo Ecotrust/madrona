@@ -1,7 +1,7 @@
 .. _studyregion:
 
-The Study Region
-================
+`lingcod.studyregion`: The Study Region
+=======================================
 
 What is the Study Region?
 *************************

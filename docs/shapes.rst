@@ -1,2 +1,2 @@
-shapes
+`lingcod.shapes`: Shapefile tools
 =================================

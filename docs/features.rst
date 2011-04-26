@@ -1,5 +1,5 @@
-The Features App
-################
+`lingcod.features`: Spatial Content Management  
+##############################################
 
 The ``lingcod.features`` app works along with other MarineMap apps to create a 
 system that is best described as a content management system for user-designed

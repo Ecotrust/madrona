@@ -1,7 +1,7 @@
 .. _async:
 
-Async App
-=========
+`lingcod.async`: Asyncronous Processing
+======================================
 
 MarineMap includes a strategy for runnning lengthy processes in the background.  
 To implement this strategy we use `Celery <http://celeryproject.org/>`_ as our distributed 

@@ -1,7 +1,7 @@
 .. _layers:
 
-Data Layers
-===========
+`lingcod.layers`: KML Data Layers
+=================================
 This document outlines how KML base data layers are handled in MarineMap. 
 
 Adding Public KML Datasets

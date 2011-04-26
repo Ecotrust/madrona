@@ -1,7 +1,10 @@
 .. _kmlapp:
 
-KML Representation of Features and Collections
-==============================================
+`lingcod.kmlapp`: KML Representation of Features and Collections
+================================================================
+
+.. note::
+    Why call it `kmlapp` instead of simply `kml`? That namespace conflicts with the python bindings for libkml. 
 
 .. note::
     Certain aspects of KML require absolute URLs and thus require configuring 

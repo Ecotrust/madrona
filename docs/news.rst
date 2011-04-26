@@ -1,4 +1,4 @@
 .. _news:
 
-The News App
-============
+`lingcod.news`: Display news items, announcements, etc
+======================================================

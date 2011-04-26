@@ -1,2 +1,2 @@
-group_management
+`lingcod.group_management`
 =================================

@@ -1,2 +1,2 @@
-pg_spacing
+`lingcod.pg_spacing`
 =================================

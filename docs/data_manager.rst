@@ -1,2 +1,2 @@
-data_manager
+`lingcod.data_manager`
 =================================

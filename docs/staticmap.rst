@@ -1,7 +1,7 @@
 .. _staticmap:
 
-Static Map Data Layers
-=======================
+`lingcod.staticmap`: Static Map Data Layers
+===========================================
 
 Default Datasets
 **********************

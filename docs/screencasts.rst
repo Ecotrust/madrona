@@ -1,2 +1,2 @@
-screencasts
+`lingcod.screencasts`
 =================================

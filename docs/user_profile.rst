@@ -1,2 +1,2 @@
-user_profile
+`lingcod.user_profile`
 =================================

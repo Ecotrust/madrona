@@ -1,6 +1,6 @@
 .. _loadshp:
 
-Load Shapefile (loadshp) App
+`lingcod.loadshp`: Load Shapefile (loadshp) App
 ============================
 The `lingcod.loadshp` app provides a mechanism to upload shapefiles, validate their contents and convert to KML. This can be used by the marinemap application to allow uploading shapefiles in lieu of digitizing a shape (useful in cases where a complex boundary may have already been developed outside of MarineMap).
 

@@ -1,2 +1,2 @@
-analysistools
+`lingcod.analysistools`
 =================================

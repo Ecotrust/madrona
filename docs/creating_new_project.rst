@@ -192,8 +192,8 @@ Next, we'll use some custom lingcod management commands to load up our carefully
     python manage.py create_study_region --name oregon_coast data/oregon_study_region.shp
     python manage.py change_study_region 1
 
-Migrating our `omm` app
------------------------
+Migrating App Schema
+--------------------
 We need to put our omm app under migration which ensures that future changes to the models' schema get reflected in the database::
 
     python manage.py schemamigration --initial omm
@@ -211,8 +211,8 @@ The install_media command will then take all files from lingcod media and oregon
 
 This step also compresses all js and css using the django-compress app to ensure that your js and css are single compact files to maximize performance. 
 
-Deployment
-----------
+Deployment for Testing
+----------------------
 
 For now, we'll just test our new project using django's built-in development server. First we need to set up the sites framework so that our domain is accurate
 for any absolute urls created by our MarineMap project. Then run the dev server to test it::

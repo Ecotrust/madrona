@@ -4,8 +4,8 @@ Topics
    :maxdepth: 1
    
    deployment
+   sharing_configuration
    managing_users
-   manipulators
    reports
    sidebar
    templatetags
@@ -17,4 +17,3 @@ Topics
    async_task_queue
    workspace_specification
    export
-   sharing_configuration

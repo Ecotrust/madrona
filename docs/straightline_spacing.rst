@@ -1,2 +1,2 @@
-straightline_spacing
+`lingcod.straightline_spacing`
 =================================

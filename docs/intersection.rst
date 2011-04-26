@@ -1,7 +1,7 @@
 .. _intersection:
 
-The Intersection App
-====================
+`lingcod.intersection`: The Intersection App
+============================================
 
 Introduction
 ************

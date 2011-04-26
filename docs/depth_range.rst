@@ -1,2 +1,2 @@
-depth_range
+`lingcod.depth_range`
 =================================
