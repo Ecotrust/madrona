@@ -569,3 +569,27 @@ def get_params_from_uri(uri):
         pair = param.split('=')
         params[pair[0]] = pair[1]
     return params
+
+def is_text(s):
+    """
+    Tests a string to see if it's binary
+    borrowed from http://code.activestate.com/recipes/173220-test-if-a-file-or-string-is-text-or-binary/
+    """
+    import string
+    text_characters = "".join(map(chr, range(32, 127)) + list("\n\r\t\b"))
+    _null_trans = string.maketrans("", "")
+
+    if "\0" in s:
+        return False
+    if not s:
+        return True 
+
+    # Get the non-text characters (maps a character to itself then
+    # use the 'remove' option to get rid of the text characters.)
+    t = s.translate(_null_trans, text_characters)
+
+    # If more than 30% non-text characters, then
+    # this is considered a binary file
+    if float(len(t))/len(s) > 0.30:
+        return False
+    return True

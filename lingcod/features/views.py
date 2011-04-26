@@ -514,14 +514,48 @@ def kml_core(request, instances, kmz):
     from lingcod.common import default_mimetypes as mimetypes
 
     user = request.user
-    session_key = '0'
+    try:
+        session_key = request.COOKIES['sessionid']
+    except:
+        session_key = 0
 
     # Get features, collection from instances
     features = []
     collections = []
+
+    # If there is only a single instance with a kml_full property,
+    # just return the contents verbatim
+    if len(instances) == 1:
+        from lingcod.common.utils import is_text
+        filename = slugify(instances[0].name)
+        try:
+            kml = instances[0].kml_full
+            response = HttpResponse()
+            if is_text(kml) and kmz:
+                # kml_full is text, but they want as KMZ
+                kmz = create_kmz(kml, 'mpa/doc.kml')
+                response['Content-Type'] = mimetypes.KMZ
+                response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
+                response.write(kmz)
+                return response
+            elif is_text(kml) and not kmz:
+                # kml_full is text, they just want kml
+                response['Content-Type'] = mimetypes.KML
+                response['Content-Disposition'] = 'attachment; filename=%s.kml' % filename
+                response.write(kml)
+                return response
+            else:
+                # If the kml_full returns binary, always return kmz
+                # even if they asked for kml
+                response['Content-Type'] = mimetypes.KMZ
+                response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
+                response.write(kml) # actually its kmz but whatevs
+                return response
+        except AttributeError:
+            pass
+
     for instance in instances:
         f, c = get_data_for_feature(user,instance.uid)
-        print instance,f,c
         features.extend(f)
         collections.extend(c)
 
