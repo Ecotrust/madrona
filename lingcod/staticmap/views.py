@@ -11,7 +11,7 @@ from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common import utils
 from lingcod.staticmap.models import MapConfig
 from lingcod.features import get_feature_models, get_collection_models, get_feature_by_uid, get_model_by_uid
-from lingcod.features.models import SpatialFeature, PointFeature, PolygonFeature, LineFeature
+from lingcod.features.models import FeatureCollection, SpatialFeature, PointFeature, PolygonFeature, LineFeature
 from djmapnik.adapter import PostgisLayer 
 from lingcod.common.utils import get_logger
 from django.template.defaultfilters import slugify
@@ -21,6 +21,19 @@ try:
     settings_dbname = settings.DATABASES['default']['NAME']
 except:
     settings_dbname = settings.DATABASE_NAME
+
+def default_style():
+    default_style = mapnik.Style()
+    ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+    ps.fill_opacity = 0.5
+    ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
+    ls.stroke_opacity = 0.5
+    r = mapnik.Rule()
+    r.symbols.append(ps)
+    r.symbols.append(ls)
+    r.symbols.append(mapnik.PointSymbolizer())
+    default_style.rules.append(r)
+    return default_style
 
 def get_features(uids,user):
     """ 
@@ -212,11 +225,19 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     # Create the mapnik layers
     features = get_features(uids,user)
     for model, pks in features:
-        if issubclass(model, SpatialFeature):
-            style = model.mapnik_style()
+        try:
+            geomfield = model.mapnik_geomfield()
+        except AttributeError:
+            geomfield = 'geometry_final'
+
+        if not issubclass(model, FeatureCollection):
+            try:
+                style = model.mapnik_style()
+            except AttributeError:
+                style = default_style()
             style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
             m.append_style(style_name, style)
-            adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name="geometry_final")
+            adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield)
             lyr = adapter.to_mapnik()
             lyr.styles.append(style_name)
             m.layers.append(lyr)
