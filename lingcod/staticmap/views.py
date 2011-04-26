@@ -40,11 +40,8 @@ def get_features(uids,user):
     Returns list of tuples representing mapnik layers
     Tuple => (model_class, [pks])
     Note: currently just a single pk per 'layer' which is
-    incredibly inefficient but the best way to ensure 
-    proper layer ordering.
-        from mlpa.models import Mpa
-        from mlpa.models import Pipeline
-        from mlpa.models import Shipwreck
+    incredibly inefficient but the only way to ensure 
+    proper layer ordering (??).
         features = [ (Mpa, [49, 50]),
                     (Pipeline, [32, 31]),
                     (Shipwreck, [32, 31])
@@ -80,20 +77,26 @@ def get_features(uids,user):
     return features
 
 def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
-    if not srid:
-        srid = settings.GEOMETRY_CLIENT_SRID # Assume latlong if none
-    
-    minx = 361.0
-    miny = 361.0
-    maxx = -361.0
-    maxy = -361.0
+    """
+    Given a set of staticmap features,
+    returns the bounding box required to zoom into those features.
+    Includes a configurable edge buffer
+    """
+    minx = 99999999.0
+    miny = 99999999.0
+    maxx = -99999999.0
+    maxy = -99999999.0
     for model, pks in features:
-        ugeom = model.objects.filter(pk__in=pks).unionagg().transform(srid,clone=True)
-        bbox = ugeom.extent
-        if bbox[0] < minx: minx = bbox[0]
-        if bbox[1] < miny: miny = bbox[1]
-        if bbox[2] > maxx: maxx = bbox[2]
-        if bbox[3] > maxy: maxy = bbox[3]
+        try:
+            ugeom = model.objects.filter(pk__in=pks).collect().transform(srid,clone=True)
+            bbox = ugeom.extent
+            if bbox[0] < minx: minx = bbox[0]
+            if bbox[1] < miny: miny = bbox[1]
+            if bbox[2] > maxx: maxx = bbox[2]
+            if bbox[3] > maxy: maxy = bbox[3]
+        except TypeError as e:
+            log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e)) 
+            pass
     
     width = maxx - minx
     height = maxy - miny  
@@ -113,28 +116,6 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         
     return minx-width_buffer, miny-height_buffer, maxx+width_buffer, maxy+height_buffer
 
-def get_designation_style(mpas):
-    mpa_filter_string = get_mpa_filter_string(mpas)
-    # Override the mpa_style according to MPA designations
-    s = mapnik.Style()
-    designations = MpaDesignation.objects.all()
-    for d in designations:
-        r = mapnik.Rule()
-        fill = utils.hex8_to_rgba(d.poly_fill_color)
-        outl = utils.hex8_to_rgba(d.poly_outline_color)
-        r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (fill[0],fill[1],fill[2]))))
-        r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(%d,%d,%d)' % (outl[0],outl[1],outl[2])),0.8))
-        r.filter = mapnik.Filter("[designation_id] = %d and (%s)" % (d.id, mpa_filter_string)) 
-        s.rules.append(r)
-    # And for null designations
-    r = mapnik.Rule()
-    #the following colors may be overridden in mapfile's mpa_style section
-    r.symbols.append(mapnik.PolygonSymbolizer(mapnik.Color('rgb(150,0,0)'))) 
-    r.symbols.append(mapnik.LineSymbolizer(mapnik.Color('rgb(255,255,0)'),0.2))
-    if len(designations) > 0:
-        r.filter = mapnik.Filter("[designation_id] = '' and (%s)" % mpa_filter_string)
-    s.rules.append(r)
-    return s
 
 def staticmap_link(request, instances, map_name="default"):
     """
@@ -143,7 +124,7 @@ def staticmap_link(request, instances, map_name="default"):
     width, height = None, None
     uids = [i.uid for i in instances]
     filename = '_'.join([slugify(i.name) for i in instances])
-    autozoom = False
+    autozoom = True
     bbox = None
     show_extent = False
 
@@ -229,6 +210,9 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
             geomfield = model.mapnik_geomfield()
         except AttributeError:
             geomfield = 'geometry_final'
+        
+        if geomfield not in [str(x.name) for x in model._meta.fields]:
+            continue
 
         if not issubclass(model, FeatureCollection):
             try:
@@ -247,7 +231,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     x1, y1 = map.default_x1, map.default_y1
     x2, y2 = map.default_x2, map.default_y2
     
-    if autozoom and features and len(features)>0:
+    if not bbox and autozoom and features and len(features)>0:
         x1, y1, x2, y2 = auto_extent(features, map.default_srid)
     if bbox:
         try:
