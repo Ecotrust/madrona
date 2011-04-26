@@ -15,15 +15,34 @@ class Analysis(Feature):
 
     @property
     def kml(self):
+        """ 
+        We don't do kml, use kml_full instead to get netlink representation
+        """
+        return ""
+
+    @property
+    def kml_full(self):
         if self.done:
-            return self.kml_done
+            kml = """<kml xmlns="http://www.opengis.net/kml/2.2">
+            <Document>
+            %s
+            </Document>
+            </kml>
+            """ % (self.kml_done)
         else:
-            return self.kml_working
+            kml = """<kml xmlns="http://www.opengis.net/kml/2.2">
+            <Document>
+            %s
+            </Document>
+            </kml>
+            """ % (self.kml_working)
+
+        return kml 
 
     @property
     def kml_done(self):
         """
-        Translate the model outputs to KML
+        Translate the model outputs to KML Placemark or Folder
         """
         return """
         <Placemark id="%s">
@@ -35,7 +54,7 @@ class Analysis(Feature):
     @property
     def kml_working(self):
         """
-        Translate the model outputs to KML
+        Translate the model outputs to KML Placemark or Folder
         """
         return """
         <Placemark id="%s">
