@@ -15,29 +15,12 @@ class Analysis(Feature):
 
     @property
     def kml(self):
-        """ 
-        We don't do kml, use kml_full instead to get netlink representation
-        """
-        return ""
-
-    @property
-    def kml_full(self):
+        # Note: if you want network links, return None here and
+        # use kml_full instead (kml_done wrapped in a full kml Document)
         if self.done:
-            kml = """<kml xmlns="http://www.opengis.net/kml/2.2">
-            <Document>
-            %s
-            </Document>
-            </kml>
-            """ % (self.kml_done)
+            return self.kml_done
         else:
-            kml = """<kml xmlns="http://www.opengis.net/kml/2.2">
-            <Document>
-            %s
-            </Document>
-            </kml>
-            """ % (self.kml_working)
-
-        return kml 
+            return self.kml_working
 
     @property
     def kml_done(self):
