@@ -450,12 +450,13 @@ def forceLHR(polygon):
     poly = Polygon(*rings)
     return poly
 
-def asKml(geom):
+def asKml(geom, altitudeMode=None):
     """
     Performs three critical functions for creating suitable KML geometries:
      - simplifies the geoms (lines, polygons only)
      - forces left-hand rule orientation
-     - extrudes the shape to 3 dimensions (polygon only)
+     - sets the altitudeMode shape 
+       (usually one of: absolute, clampToGround, relativeToGround)
     """
     if geom.geom_type in ['Polygon','LineString']:
         geom = geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
@@ -465,8 +466,14 @@ def asKml(geom):
         
     kml = geom.kml
 
-    if geom.geom_type == 'Polygon':
-        kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>absolute</altitudeMode><extrude>1</extrude>')
+    if not altitudeMode:
+        try:
+            altitudeMode = settings.KML_ALTITUDEMODE_DEFAULT
+        except:
+            altitudeMode = None
+
+    if altitudeMode and geom.geom_type == 'Polygon':
+        kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>%s</altitudeMode><extrude>1</extrude>' % altitudeMode)
         # The GEOSGeometry.kml() method always adds a z dim = 0
         kml = kml.replace(',0', ',%s' % settings.KML_EXTRUDE_HEIGHT)
 

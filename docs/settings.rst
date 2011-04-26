@@ -92,6 +92,10 @@ MarineMap Settings
 ``KML_EXTRUDE_HEIGHT``
     KML output is extruded to produce 3D shapes; This setting determines the height in meters. Defaults to ``100``.
 
+.. _KML_ALTITUDEMODE_DEFAULT:
+``KML_ALTITUDEMODE_DEFAULT``
+    Sets the default KML altitudeMode (usually one of: `absolute`, `clampToGround`, `relativeToGround`). 
+
 .. _SHARING_TO_PUBLIC_GROUPS:
 ``SHARING_TO_PUBLIC_GROUPS``
     List of groups which have the ability to make arrays publically viewable. Defaults to ``['Share with Public']``
