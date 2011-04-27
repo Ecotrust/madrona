@@ -8,6 +8,4 @@ class ShapeForm(UserForm):
     def as_p(self, *args, **kwargs):
         # return False
         output = super(ShapeForm, self).as_p(*args, **kwargs)
-        # print "what?"
-        print dir(self)
         return output

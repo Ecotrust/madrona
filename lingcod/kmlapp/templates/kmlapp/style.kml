@@ -1,4 +1,0 @@
-{% extends "kmlapp/base.kml" %}
-{% block style %}
-
-{% endblock %}

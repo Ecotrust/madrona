@@ -993,7 +993,6 @@ class JsonSerializationTest(TestCase):
         they shouldn't show up when using workspace-shared """
         fcdict = [x for x in self.dict['feature-classes'] 
                      if x['id'] == 'features_testmpa'][0]
-        #print json.dumps(fcdict, indent=2)
         self.assertEquals(fcdict['link-relations']['alternate'][0]['title'], 'Export Misc for Owner')
         fcdict_shared = [x for x in self.dict_shared['feature-classes'] 
                             if x['id'] == 'features_testmpa'][0]

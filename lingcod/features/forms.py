@@ -12,8 +12,6 @@ class ShapeInput(forms.HiddenInput):
     def render(self, name, value, attrs=None):
         from lingcod.features.models import PolygonFeature, PointFeature, LineFeature
         model = self.form_instance.Meta.model
-        print model
-        print issubclass(model, LineFeature)
         if issubclass(model, PolygonFeature):
             type = 'polygon'
         elif issubclass(model, LineFeature):
@@ -25,7 +23,6 @@ class ShapeInput(forms.HiddenInput):
             output = super(ShapeInput, self).render(name, '', attrs)
         else:
             output = super(ShapeInput, self).render(name, value, attrs)
-        print output
         if value:
             geo = fromstr(value)
             geo.srid = settings.GEOMETRY_DB_SRID

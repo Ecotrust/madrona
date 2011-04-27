@@ -136,110 +136,33 @@ Templates will be rendered with the following context:
 
 You can add to this list using the `show_context`_ Option property.
 
-Customizing the KML Representation 
-==================================
+Customizing the Output Styling and KML Representation 
+=====================================================
 
-There are otherwise a default rendering will be used. 
-The Feature's kml representation is determined by 2 properties on the feature instance, 
-    * .kml
-    * .kml_style 
-      
-Reasonble default kml and kml_style properties are provided for all Feature types but most likely you'll need to override them to customize the look, feel and behavior of your application.
+There are three primary visual representations of Features: KML, the KMLTree and static maps. 
+While the base Feature classes define reasonable default styling, it's likely that you'll need to customize the look and feel for your implementation.
 
-The `.kml` property MUST  
-    * Return a string containing a valid `KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_ element (most commonly a Placemark or Folder)
-    * The element must have an ``id`` attribute populated with the value of ``instance.uid``.
-    * If it references any style URLs, the corresponding `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ must be provided by the feature's .kml_style property
+  * :ref:`Customizing the styling of the KML <kmlapp>`
+  * :ref:`Customizing the Mapnik static map rendering <staticmap>`
 
-The `.kml_style` property MUST
-    * Return a string containing one or more valid `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ which may be referenced by URL from the KML feature.
-    * Attempt to be reusable by all similar features; If your kml document contains multiple features, only the *unique* .kml_style strings will appear in the document. Refrain from creating a seperate style for each and every feature and try to group them into classes. 
+Customizing the styling of the KMLTree
+--------------------------------------
+You can use css to style the representation of the Features in the KMLTree, specifically the small icon to the left of the Feature name. There are two mechanisms to do this. 
 
+First you can specify an ``icon_url`` in the Options. This can be an absolute http URL or relative to the MEDIA_ROOT directory.
 
-Below is an example of how one might use the kml properties to classify the kml represetation of features.::
+If you need more control over styling icons (such as specifying multiple styles or using scrolling sprites) you can use raw css by overriding the Feature.css() classmethod. For example::
 
-    @register
-    class Mpa(PolygonFeature):
-        designation = models.CharField(max_length=42)
-        ...
-
-        @property
-        def kml(self):
-            if self.designation == 'Marine Conservation Area':
-                color = "green"
-            else:
-                color = "blue"
-
-            return """
-            <Placemark id="%s">
-                <name>%s</name>
-                <styleUrl>#%s-default</styleUrl>
-                <styleUrl>#%s-%s</styleUrl>
-                <ExtendedData>
-                    <Data name="name"><value>%s</value></Data>
-                    <Data name="user"><value>%s</value></Data>
-                    <Data name="modified"><value>%s</value></Data>
-                </ExtendedData>
-                %s 
-            </Placemark>
-            """ % (self.uid, 
-                self.name, 
-                self.model_uid(),
-                self.model_uid(), color,
-                self.name, self.user, self.date_modified, 
-                self.geom_kml)
-
-        @property
-        def kml_style(self):
-            return """
-            <Style id="%s-default">
-                <BalloonStyle>
-                    <bgColor>ffeeeeee</bgColor>
-                    <text> <![CDATA[
-                        <font color="#1A3752"><strong>$[name]</strong></font><br />
-                        <font size=1>Created by $[user] on $[modified]</font>
-                    ]]> </text>
-                </BalloonStyle>
-                <LabelStyle>
-                    <color>ffffffff</color>
-                    <scale>0.8</scale>
-                </LabelStyle>
-            </Style>
-
-            <Style id="%s-green">
-                <PolyStyle>
-                    <color>ff0000c0</color>
-                </PolyStyle>
-            </Style>
-
-            <Style id="%s-blue">
-                <PolyStyle>
-                    <color>778B1A55</color>
-                </PolyStyle>
-            </Style>
-            """ % (self.model_uid(), self.model_uid(), self.model_uid())
-
-Customizing the Mapnik Rendering
-================================
-Each spatial feature type should provide a classmethod named `mapnik_style` which returns a mapnik Style object for that model. The Style object can contain rules for classification as well as symbolizers for controling the appearance of points, lines, polygons and labels::
-
-    class Mpa(PolygonFeature):
-        ....
-        @classmethod
-        def mapnik_style(self):
-            polygon_style = mapnik.Style()
-
-            ps = mapnik.PolygonSymbolizer(mapnik.Color('white'))
-            ps.fill_opacity = 0.5
-            ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
-            ls.stroke_opacity = 0.5
-
-            r = mapnik.Rule()
-            r.symbols.append(ps)
-            r.symbols.append(ls)
-            
-            polygon_style.rules.append(r)
-            return polygon_style
+    @classmethod
+    def css(klass):
+        return """ 
+        li.KmlDocument > .icon { 
+          background: url('%(media)s/sprites/kml.png?1302821411') no-repeat -566px 0px ! important;
+        }
+        li.%(uid)s > .icon { 
+          background: url('%(media)s/sprites/kml.png?1302821411') no-repeat 0px 0px ! important;
+        } 
+        """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }
 
 Beyond the Basics
 =================

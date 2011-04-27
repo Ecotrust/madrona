@@ -12,31 +12,105 @@
     You can do this by setting the domain name of your server
     through the admin tool (e.g. http://localhost:8000/admin/sites/site/1/).
 
-Simple Styling Parameters
-***************************
-The classification of MPAs is based on their "MPA Designation" (e.g. State Marine Park, State Marine Conservation Area, etc.). Each MPA Designation has an associated fill color and border color that can be configured through the admin interface. 
 
-The colors are given in 8 digit HEX codes. These differ significantly from the typical 6 digit codes where each 2-digit chunk represents red, green, blue. Instead, the 8 digit code uses a "transparency, blue, green, red" order.  
+Customizing the KML Representation 
+**********************************
 
-This classification and styling system is also used by the static map tool. 
+The Feature's kml representation is determined by several properties on the feature instance, 
+    * .kml
+    * .kml_style 
+      
+Reasonble default kml and kml_style properties are provided for all Feature types but most likely you'll need to override them to customize the look, feel and behavior of your application.
+
+The `.kml` property MUST  
+    * Return a string containing a valid `KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_ element (most commonly a Placemark or Folder)
+    * The element must have an ``id`` attribute populated with the value of ``instance.uid``.
+    * If it references any style URLs, the corresponding `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ must be provided by the feature's .kml_style property
+
+The `.kml_style` property MUST
+    * Return a string containing one or more valid `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ which may be referenced by URL from the KML feature.
+    * Attempt to be reusable by all similar features; If your kml document contains multiple features, only the *unique* .kml_style strings will appear in the document. Refrain from creating a seperate style for each and every feature and try to group them into classes. 
+
+
+Below is an example of how one might use the kml properties to classify the kml represetation of features.::
+
+    @register
+    class Mpa(PolygonFeature):
+        designation = models.CharField(max_length=42)
+        ...
+
+        @property
+        def kml(self):
+            if self.designation == 'Marine Conservation Area':
+                color = "green"
+            else:
+                color = "blue"
+
+            return """
+            <Placemark id="%s">
+                <name>%s</name>
+                <styleUrl>#%s-default</styleUrl>
+                <styleUrl>#%s-%s</styleUrl>
+                <ExtendedData>
+                    <Data name="name"><value>%s</value></Data>
+                    <Data name="user"><value>%s</value></Data>
+                    <Data name="modified"><value>%s</value></Data>
+                </ExtendedData>
+                %s 
+            </Placemark>
+            """ % (self.uid, 
+                self.name, 
+                self.model_uid(),
+                self.model_uid(), color,
+                self.name, self.user, self.date_modified, 
+                self.geom_kml)
+
+        @property
+        def kml_style(self):
+            return """
+            <Style id="%s-default">
+                <BalloonStyle>
+                    <bgColor>ffeeeeee</bgColor>
+                    <text> <![CDATA[
+                        <font color="#1A3752"><strong>$[name]</strong></font><br />
+                        <font size=1>Created by $[user] on $[modified]</font>
+                    ]]> </text>
+                </BalloonStyle>
+                <LabelStyle>
+                    <color>ffffffff</color>
+                    <scale>0.8</scale>
+                </LabelStyle>
+            </Style>
+
+            <Style id="%s-green">
+                <PolyStyle>
+                    <color>ff0000c0</color>
+                </PolyStyle>
+            </Style>
+
+            <Style id="%s-blue">
+                <PolyStyle>
+                    <color>778B1A55</color>
+                </PolyStyle>
+            </Style>
+            """ % (self.model_uid(), self.model_uid(), self.model_uid())
+
+There is also the special case where the Feature may need to be represented by a full KML Document rather than a fragment containing KML Features. For example, the representation of a `User Uploaded KML` would be the contents of the unaltered file itself; we'd want use a network link to point to the full KML Document. To acheive this, we can specify an optional `kml_full` property which should return a complete, valid KML Document::
+
+    @property
+    def kml_full(self):
+        try:
+            f = self.kml_file.read()
+            return f
+        except:
+            return """<kml xmlns="http://www.opengis.net/kml/2.2"><Document><!-- empty --></Document></kml>"""
+
+By default, Feature Collections are represented by network links for performance reasons. (Reduced file size, faster loading.)
 
 KML Templates
 **********************
 The layout of the KML document is configured using the django templating system. You can override some or all of these templates by placing your customized versions in a TEMPLATE_DIR that is loaded before the kmlapp/templates directory (See `Loading Templates <http://docs.djangoproject.com/en/dev/ref/templates/api/#loading-templates>`_ in the django docs).
 
-  * base.kml configures the overall top-level structure of the KML document. You won't need to chance much in this file other than the docname. 
-  * style.kml configures the style definition for each MPA designation including the symbology and the html to be displayed in the popup balloon. 
-  * placemark.kml organizes the MPAs into folders by Array, sets the extended data elements of the MPA and outputs the placemark geometries.
-  * placemark_links.kml is similar to placemark.kml but, instead of creating a folder containing all MPAs in each array, it uses network links to the KML representations of each array (allowing for faster loading, caching, etc)
-
-Service Options
-**********************
-There are three primary ways to access KML representations of MPAs:
-
-  * All MPAs belonging to a user. (e.g. http://example.com/kml/username/user_mpa.kml)
-  * All MPAs belonging to a given array. (e.g. http://example.com/kml/1/array.kml)
-  * Individual MPAs. (e.g. http://example.com/kml/1/mpa.kml)
-
-All three can be retrieved as a zipped KMZ file by accessing the service with .kmz instead of .kml
-
-There is one additional way to access user MPAs which uses Network Links for each array to increase performance (rather than putting all MPA placemarks into a single file). This service can be accessed as both a kml or kmz. The URL for this service would be something like http://example.com/kml/username/user_mpa_links.kml . 
+  * `kmlapp/base.kml` configures the overall top-level structure of the KML document. 
+  * `kmlapp/public.kml` is a minor extension of the base.kml for unauthenticated users.
+  * `kmlapp/shared.kml` configures the structure of the shared features; organized by group and user. 
