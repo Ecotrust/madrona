@@ -113,3 +113,8 @@ div.field ul label {
 div.manipulated.error h3 {
     color:#A30000;
 }
+
+li.optional_manipulator > span {
+    font-size:14px;
+    margin-left: 5px; 
+}
