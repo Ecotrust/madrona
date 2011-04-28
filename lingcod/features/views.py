@@ -708,7 +708,8 @@ def feature_tree_css(request):
         for model in registered_models:
             try:
                 css = model.css()
-                styles.append(css)
+                if css:
+                    styles.append(css)
             except:
                 logger.ERROR("Something is wrong with %s.css() class method" % model)
                 pass
