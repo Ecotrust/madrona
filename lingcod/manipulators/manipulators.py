@@ -730,6 +730,7 @@ def get_manipulators_for_model(model):
 
     if 'loadshp' in manip['geometry_input_methods']:
         manip['loadshp_url'] = reverse('loadshp-single')
+
     manip['url'] = url
     manip['display_names'] = display_names
     manip['descriptions'] = descriptions

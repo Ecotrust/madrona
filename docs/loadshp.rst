@@ -13,7 +13,7 @@ In order to enable the loadshp functionality, add the following to your model Op
 
     class Options:
         ...
-        geometry_input_methods = ['load_shp']
+        geometry_input_methods = ['loadshp']
 
 When the "Create New Shape" panel is displayed, this will be passed as a json variable which will trigger the display/activation of the appropriate html and javascript. 
 

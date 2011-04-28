@@ -32,7 +32,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     // Do we expose any geometry input methods other than digitize?
     $.each(json.geometry_input_methods, function(index, value){
             // disable for Internet Exploder
-            if (value == 'load_shp' && !$.browser.msie) {
+            if (value == 'loadshp' && !$.browser.msie) {
                 self.render_target_.find('.load_shape').show();
                 self.loadshp_url = json.loadshp_url;
             }
@@ -188,6 +188,9 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = true;
 	var self = this;
+    if (typeof(self.loadshp_url) == 'undefined') {
+        console.log("loadshp_url is undefined");
+    }
     $.ajax({
         url: self.loadshp_url, 
         type: 'GET',
