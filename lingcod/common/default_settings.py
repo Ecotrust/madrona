@@ -6,20 +6,16 @@ import os
 
 RELEASE = '3.0dev' # The next milestone
 
+LANGUAGE_CODE = 'en-us'
+SITE_ID = 1
+USE_I18N = False
+
 GEOMETRY_DB_SRID = 3310
-
 GEOMETRY_CLIENT_SRID = 4326
-
 DISPLAY_LENGTH_UNITS = 'mi' # Choices can be found in django.contrib.gis.measure.Distance.UNITS  Most common will be mi, m, km, nm, ft
 DISPLAY_AREA_UNITS = 'sq_mi' # Choices can be found in django.contrib.gis.measure.Area.UNITS  Most common will be sq_mi, sq_m, sq_km, sq_nm, sq_ft
 
 GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
-
-# Define the models which will represent the MPA and Array child classes
-MPA_CLASS = None
-ARRAY_CLASS = None
-MPA_FORM = None
-ARRAY_FORM = None
 
 from lingcod.common import assets
 
