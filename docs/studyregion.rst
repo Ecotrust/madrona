@@ -40,6 +40,14 @@ MarineMap is designed to make this process work as smoothly as possible, but
 the steps to change a Study Region must be followed exactly to avoid any 
 problems.
 
+Manipulators
+-------------
+Every project should define a study region if the ClipToStudyRegion manipulator will be used.
+The study region is a (multi)polygon shape which defines where
+shapes can be created. If the ClipToStudyRegion manipulator is used on a feature, new shapes are clipped to this boundary. It is highly
+recomended to create/choose your study region with great consideration up front; changing the study region at a
+later date is MUCH more complicated as all the user shapes will need to be re-clipped. Fortunately MarineMap stores the original geometry as well as the "manipulated" version so such clipping will never destroy the original digitized shape.
+
 
 Create a New Study Region
 -------------------------
