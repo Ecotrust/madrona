@@ -343,7 +343,7 @@ class SpatialFeature(Feature):
         """
         return """
         <Placemark id="%s">
-            <visibility>0</visibility>
+            <visibility>1</visibility>
             <name>%s</name>
             <styleUrl>#%s-default</styleUrl>
             <ExtendedData>
