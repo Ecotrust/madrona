@@ -294,7 +294,12 @@ lingcod.features.kmlEditor = (function(){
                 return d.node[0];
             }));
             selectData = jQuery.map(selectData, function(d){
-                return d.kmlObject;
+                var orig = $(d.node).data('original-networklink');
+                if(orig){
+                    return orig
+                }else{
+                    return d.kmlObject;                    
+                }
             });
             selectedKmlObjects = selectData;
             selection = jQuery.map(selectData, function(d){
@@ -380,6 +385,7 @@ lingcod.features.kmlEditor = (function(){
                 // Self and edit links are the only links opened in the 
                 // sidebar
                 if(action.rel === 'self'){
+                    console.log('show panel');
                     panel.showUrl(url, panelOpts);
                 }else if(action.rel in {alternate: 1, related: 1}){
                     // Open all alternate and related links in a new tab. It 

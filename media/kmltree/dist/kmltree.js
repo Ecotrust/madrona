@@ -1944,7 +1944,7 @@ var kmltree = (function(){
                     docs.push(kmlObject);
                     rememberNetworkLink(node, NetworkLink);
                     $(node).trigger('loaded', [node, kmlObject]);
-                    $(that).trigger('networklinkload', [node, kmlObject]);                        
+                    $(that).trigger('networklinkload', [node, kmlObject, NetworkLink]);                        
                 });
             }
         };
@@ -1956,6 +1956,7 @@ var kmltree = (function(){
         var rememberNetworkLink = function(node, networkLink){
             $(node).attr(
                 'data-rememberedLink', rememberedLinks.length.toString());
+            $(node).data('original-networklink', networkLink);
             rememberedLinks.push(networkLink);
         };
         
