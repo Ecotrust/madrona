@@ -385,7 +385,6 @@ lingcod.features.kmlEditor = (function(){
                 // Self and edit links are the only links opened in the 
                 // sidebar
                 if(action.rel === 'self'){
-                    console.log('show panel');
                     panel.showUrl(url, panelOpts);
                 }else if(action.rel in {alternate: 1, related: 1}){
                     // Open all alternate and related links in a new tab. It 
