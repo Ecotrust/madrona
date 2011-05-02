@@ -137,7 +137,8 @@ lingcod.features.kmlEditor = (function(){
             $(that).trigger('kmlLoaded', [event, kmlObject]);
         });
         
-        $(tree).bind('networklinkload', function(e, node, kmlObject){
+        $(tree).bind('networklinkload', function(e, node, kmlObject, old){
+            $(node).addClass(old);
             enableDragDrop(node);
         });
         
