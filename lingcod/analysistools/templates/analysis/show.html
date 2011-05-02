@@ -17,7 +17,7 @@
         <div id="Outputs">
             <ul>
                 {% for field, value in instance.outputs.items %}
-                <li><h4>{{field}}</h4><p>{{value}}</p></li>
+                <li><h4>{{field}}</h4><p>{{ value|truncatewords:50 }}</p></li>
                 {% endfor %}
             </ul>
         </div>
