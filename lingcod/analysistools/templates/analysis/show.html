@@ -2,6 +2,9 @@
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
     <h1>{{instance.name}}</h1>
+{% if not instance.done %}
+<h4>{{ instance.status_html|safe }}</h4>
+{% else %}
     <div class="tabs">
         <ul>
             <li><a href="#Inputs"><span>Inputs</span></a></li>
@@ -22,4 +25,5 @@
             </ul>
         </div>
     </div>
+{% endif %}
 {% endblock panel %}

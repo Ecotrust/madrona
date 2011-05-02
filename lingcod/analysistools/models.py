@@ -80,6 +80,13 @@ class Analysis(Feature):
         return odict
 
     @property
+    def status_html(self):
+        if self.done:
+            return "<p>All done</p>"
+        else:
+            return "<p>Not done yet; output fields are still blank"
+
+    @property
     def done(self):
         """
         If it's asynchronously processed, this is the definitive

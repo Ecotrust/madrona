@@ -92,6 +92,15 @@ def process_is_running(polling_url=None, task_id=None):
     else:
         return False
         
+#returns boolean based on whether process is in cache and marked as PENDING
+# i.e. it has been sent to the queue but processing has not yet begun
+def process_is_pending(polling_url=None, task_id=None):
+    result = __get_asyncresult(polling_url, task_id)
+    if result is not None and result.status == 'PENDING': 
+        return True
+    else:
+        return False
+
 #returns boolean value based on result=='SUCCESS' from celery table
 def process_is_complete(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)

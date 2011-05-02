@@ -1,4 +1,5 @@
 import os
+os.environ["CELERY_LOADER"] = "django"
 
 # !!!!!!!!!!!!!!!!!!!!!!!
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
@@ -86,7 +87,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'djcelery', 
-    'ghettoq',
+    'djkombu',
     ##### Optional Apps ####
     #'lingcod.intersection',
     #'lingcod.replication',
@@ -108,7 +109,6 @@ INSTALLED_APPS = (
 )
 
 EXCLUDE_FROM_TESTS = [
-    'ghettoq', 
     'south', 
     'registration',
     'django.contrib.auth',
@@ -178,10 +178,14 @@ USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
 
-#Celery and Ghetto settings (for server-side asynchronous process handling)
-CARROT_BACKEND = "ghettoq.taproot.Database"
+#Celery and djkombu settings (for server-side asynchronous process handling)
+CARROT_BACKEND = "django"
 CELERY_RESULT_BACKEND = "database"
 CELERY_TRACK_STARTED = True
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+# Make sure to add any modules containing tasks
+#CELERY_IMPORT = ('myapp.tasks',)
+
 import djcelery
 djcelery.setup_loader()
 
