@@ -221,10 +221,9 @@ def create(request, model, action):
         else:
             form = form_class(values, label_suffix='')
         if form.is_valid():
-            m = form.save()
-            # Calling save on the instance seems redundant?
-            # It certainly results in double pre/post save signals
-            # m.save()
+            m = form.save(commit=False)
+            m.save()
+            form.save_m2m()
             response = HttpResponse("""{
                 "status": 201,
                 "Location": "%s",
@@ -359,10 +358,9 @@ def update(request, model, uid):
         else:
             form = form_class(values, instance=instance, label_suffix='')
         if form.is_valid():
-            m = form.save()
-            # Calling save on the instance seems redundant?
-            # It certainly results in double pre/post save signals
-            # m.save()
+            m = form.save(commit=False)
+            m.save()
+            form.save_m2m()
             response = HttpResponse("""{
                 "status": 200,
                 "X-MarineMap-Select": "%s",
