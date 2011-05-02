@@ -710,6 +710,34 @@ def feature_tree_css(request):
 
 def to_response(status=200, select=None, show=None, parent=None, 
     untoggle=None, location=None):
+    """Will return an appropriately structured response that the client can 
+    interpret to carry out the following actions:
+    
+        select
+            Accepts a list of features. Tells the client to select these 
+            features in the user interface after an editing operation
+        
+        show
+            Accepts a single feature. Client will show that feature's 
+            attribute window in the sidebar
+        
+        untoggle
+            Accepts a list of features. Useful for toggling the visibility of
+            original features that are being copied so there are not multiple
+            overlapping copies on the map
+        
+        parent
+            Gives a hint to the client that the edited feature falls within a
+            particular FeatureCollection. Without this hint the client may not
+            in all cases be able to perform select and show behaviors.
+            
+    These behaviors are intended to be specified to the client using 
+    X-MarineMap- style headers in the response. Unfortunately, we have to post
+    some forms via an iframe in order to upload files. This makes it 
+    impossible to get the response headers on the client end. This function
+    therefor currently also returns all headers in a json structure in the 
+    response body.
+    """
     headers = {
         "status": status,
         "Location": location,
