@@ -11,9 +11,10 @@ from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.features import workspace_json, get_feature_by_uid
 from django.template.defaultfilters import slugify
-from lingcod.features.models import SpatialFeature
+from lingcod.features.models import SpatialFeature, Feature
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
+from django.utils import simplejson
 logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -224,16 +225,12 @@ def create(request, model, action):
             m = form.save(commit=False)
             m.save()
             form.save_m2m()
-            response = HttpResponse("""{
-                "status": 201,
-                "Location": "%s",
-                "X-MarineMap-Select": "%s",
-                "X-MarineMap-Show": "%s"
-            }""" % (m.get_absolute_url(), m.uid, m.uid), status=201)
-            response['X-MarineMap-Select'] = m.uid
-            response['X-MarineMap-Show'] = m.uid
-            response['Location'] = m.get_absolute_url()
-            return response
+            return to_response(
+                status=201, 
+                location=m.get_absolute_url(),
+                select=m.uid,
+                show=m.uid
+            )
         else:
             context = config.form_context
             context.update({
@@ -361,14 +358,12 @@ def update(request, model, uid):
             m = form.save(commit=False)
             m.save()
             form.save_m2m()
-            response = HttpResponse("""{
-                "status": 200,
-                "X-MarineMap-Select": "%s",
-                "X-MarineMap-Show": "%s"
-            }""" % (m.uid, m.uid), status=200)
-            response['X-MarineMap-Select'] = m.uid
-            response['X-MarineMap-Show'] = m.uid
-            return response
+            return to_response(
+                status=200,
+                select=m.uid,
+                show=m.uid,
+                parent=m.collection,
+            )
         else:
             context = config.form_context
             context.update({
@@ -455,7 +450,6 @@ def form_resources(request, model=None, uid=None):
         return HttpResponse('Invalid http method', status=405)        
 
 from lingcod.manipulators.manipulators import get_manipulators_for_model
-from django.utils import simplejson
 
 # TODO: Refactor this so that it is part of Feature.Options.edit_context
 def decorate_with_manipulators(extra_context, form_class):
@@ -480,24 +474,20 @@ def copy(request, instances):
     X-MarineMap-Select response header.
     """
     copies = []
-    copied_uids = ' '.join([i.uid for i in instances])
+    # setting this here because somehow the copies and instances vars get 
+    # confused
+    untoggle = ' '.join([i.uid for i in instances])
     for instance in instances:
         copy = instance.copy(request.user)
         if not copy or not isinstance(copy, Feature):
             raise Exception('copy method on feature class %s did not return \
 Feature instance.' % (instance.__class__.__name__, ))
         copies.append(copy)
-    links = ', '.join(['<a href="%s">%s</a>' % (
-        i.get_absolute_url(), i.name) for i in copies])
-
-    uids = ' '.join([i.uid for i in copies])
-    response = HttpResponse("""{
-        "status": 201,
-        "X-MarineMap-Select": "%s",
-        "X-MarineMap-UnToggle": "%s"
-    }""" % (uids, copied_uids), status=201)
-    response['X-MarineMap-Select'] = uids
-    response['X-MarineMap-UnToggle'] = copied_uids
+    return to_response(
+        status=200,
+        select=copies,
+        untoggle=untoggle,
+    )
     return response
 
 def kml(request, instances):
@@ -637,12 +627,11 @@ def share_form(request,model=None, uid=None):
 
         try:
             obj.share_with(groups)
-            response = HttpResponse("""{
-                "status": 200,
-                "X-MarineMap-Select": "%s"
-            }""" % (obj.uid, ), status=200)
-            response['X-MarineMap-Select'] = obj.uid
-            return response
+            return to_response(
+                status=200,
+                select=obj,
+                parent=obj.collection,
+            )
         except Exception as e:
             return HttpResponse(
                     'Unable to share objects with those specified groups: %r.' % e, 
@@ -679,14 +668,11 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
         else:
             return HttpResponse("Invalid action %s." % action, status=500)
         
-        response = HttpResponse("""{
-            "status": 200,
-            "X-MarineMap-Select": "%s",
-            "X-MarineMap-Parent-Hint": "%s"
-        }""" % (' '.join(uids), collection_instance.uid), status=200)
-        response['X-MarineMap-Select'] = ' '.join(uids)
-        response["X-MarineMap-Parent-Hint"] = ' '.join(uids)
-        return response
+        return to_response(
+            status=200,
+            select=instances,
+            parent=collection_instance,
+        )
     else:
         return HttpResponse("Invalid http method.", status=405)
 
@@ -721,3 +707,30 @@ def feature_tree_css(request):
         return res
     else:
         return HttpResponse("Invalid http method.", status=405)
+
+def to_response(status=200, select=None, show=None, parent=None, 
+    untoggle=None, location=None):
+    headers = {
+        "status": status,
+        "Location": location,
+        "X-MarineMap-Select": to_csv(select),
+        "X-MarineMap-Parent-Hint": to_csv(parent),
+        "X-MarineMap-Show": to_csv(show),
+        "X-MarineMap-UnToggle": to_csv(untoggle),
+    }
+    headers = dict((k,v) for k,v in headers.items() if v != '' and v != None)
+    response = HttpResponse(simplejson.dumps(headers), status=status)
+    for k,v in headers.items():
+        if k != 'status' and k != 'Location':
+            response[k] = v
+    return response
+    
+def to_csv(features):
+    if not features or isinstance(features, unicode):
+        return features
+    elif isinstance(features, Feature):
+        return features.uid
+    elif len(features) != 0:
+        return ' '.join([f.uid for f in features])
+    else:
+        return features
