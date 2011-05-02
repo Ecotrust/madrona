@@ -222,7 +222,9 @@ def create(request, model, action):
             form = form_class(values, label_suffix='')
         if form.is_valid():
             m = form.save()
-            m.save()
+            # Calling save on the instance seems redundant?
+            # It certainly results in double pre/post save signals
+            # m.save()
             response = HttpResponse("""{
                 "status": 201,
                 "Location": "%s",
@@ -358,7 +360,9 @@ def update(request, model, uid):
             form = form_class(values, instance=instance, label_suffix='')
         if form.is_valid():
             m = form.save()
-            m.save()
+            # Calling save on the instance seems redundant?
+            # It certainly results in double pre/post save signals
+            # m.save()
             response = HttpResponse("""{
                 "status": 200,
                 "X-MarineMap-Select": "%s",

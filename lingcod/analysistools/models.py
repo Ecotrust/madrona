@@ -99,9 +99,18 @@ class Analysis(Feature):
         """
         pass
 
+    def clear_output_fields(self):
+        """
+        Reset button; Sets all output fields to None
+        """
+        for f in self.output_fields():
+            self.__dict__[f.attname] = None
+
     def save(self, *args, **kwargs):
+        self.clear_output_fields() # get rid of old outputs
+        super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
         self.run()
-        super(Feature, self).save(*args, **kwargs) # Call the "real" save() method
+        super(Analysis, self).save(*args, **kwargs) 
 
     class Meta:
         abstract = True
