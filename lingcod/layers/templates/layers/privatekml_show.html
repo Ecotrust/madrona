@@ -1,0 +1,26 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    {% if instance.collection %}
+        <p>part of the <a class="myshapes-link" href="{{instance.collection.get_absolute_url}}">{{instance.collection.name}}</a> collection.</p>
+    {% endif %}
+    <div class="ui-tabs-nav"></div>
+        <div id="Attributes">
+            <ul class="metadata">
+              {% if instance.user.first_name and instance.user.last_name %} 
+                <li class="creator">Uploaded By {{instance.user.first_name}} {{instance.user.last_name}}</li>
+              {% else %}
+                <li class="creator">Uploaded By {{instance.user.username}}</li>
+              {% endif %}
+                <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
+                <br class="clear" />
+            </ul>
+            <h2>Description</h2>
+            <p>{{instance.description}}</p>
+            <h2>Filename</h2>
+            <p>{{instance.basename}}</p>
+            <h2>Other Information</h2>
+            <p><strong>KML ID:</strong> {{instance.pk}}</p>
+        </div>
+{% endblock panel %}
