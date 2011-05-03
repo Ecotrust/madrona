@@ -16,6 +16,14 @@ class PrivateLayerList(Feature):
     kml_file = models.FileField(upload_to='upload/private-kml-layers/%Y/%m/%d', help_text="""
         KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.
     """, blank=False, max_length=510)
+    description = models.TextField(default="", null=True, blank=True)
+
+    @property
+    def basename(self):
+        """
+        Name of the file itself without the path
+        """
+        return os.path.basename(self.kml_file.path)
 
     @property
     def kml(self):
