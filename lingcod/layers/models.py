@@ -54,9 +54,10 @@ class PrivateLayerList(Feature):
 
     @property
     def kml_full(self):
+        from django.utils.encoding import smart_unicode
         try:
             f = self.kml_file.read()
-            return f
+            return smart_unicode(f)
         except:
             return """<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>"""
 

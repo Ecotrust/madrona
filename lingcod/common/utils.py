@@ -576,6 +576,8 @@ def is_text(s):
     borrowed from http://code.activestate.com/recipes/173220-test-if-a-file-or-string-is-text-or-binary/
     """
     import string
+    from django.utils.encoding import smart_str
+    s = smart_str(s)
     text_characters = "".join(map(chr, range(32, 127)) + list("\n\r\t\b"))
     _null_trans = string.maketrans("", "")
 
