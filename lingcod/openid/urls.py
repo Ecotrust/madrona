@@ -23,7 +23,7 @@ from lingcod.openid import views as oid_views
 from registration import views as reg_views
 from registration.views import activate
 from registration.views import register
-
+from lingcod.common.registration_backend.forms import MarineMapRegistrationForm
 
 urlpatterns = patterns('',
     # django registration activate
@@ -59,7 +59,8 @@ urlpatterns = patterns('',
     url(
         r'^signup/$',
         reg_views.register,
-        {'backend': 'registration.backends.default.DefaultBackend'},
+        {'backend': 'registration.backends.default.DefaultBackend', 
+         'form_class': MarineMapRegistrationForm},
         name='registration_register'
     ),
     url(r'^signup/complete/$',direct_to_template, 
