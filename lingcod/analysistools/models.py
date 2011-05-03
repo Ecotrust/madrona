@@ -87,6 +87,14 @@ class Analysis(Feature):
             return "<p>Not done yet; output fields are still blank"
 
     @property
+    def progress(self):
+        """
+        How many sub-tasks completed out of a total
+        e.g. (3,6) means 3 out of 6 pieces are complete so progress bar can show 50%
+        """
+        return (1,1)
+
+    @property
     def done(self):
         """
         If it's asynchronously processed, this is the definitive

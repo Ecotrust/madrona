@@ -3,7 +3,58 @@
 {% block panel %}
     <h1>{{instance.name}}</h1>
 {% if not instance.done %}
-<h4>{{ instance.status_html|safe }}</h4>
+{% block progress %}
+<h3 id="in_progess"> Analysis in progress... </h3>
+<h4 id="progress_html">{{ instance.status_html|safe }}</h4>
+<div id="progressbar"></div> 
+<br/>
+
+<style>
+.ui-progressbar { height:2em; text-align: left; background-color:#ddd; }
+.ui-progressbar .ui-progressbar-value {background-color: #aaa; margin: -1px; height:100%; border-radius: 4px 4px 4px 4px;}
+</style>
+
+<script>
+// Update progress bar
+lingcod.onShow(function(){
+    $(function() {
+        $( "#progressbar" ).progressbar({
+            value: 0 
+        });
+    });
+
+    var delay = 2000; // ms
+    function update_progress_info() {
+        $.getJSON('{% url analysis-progress instance.uid %}' , function(data, status){
+            if (data) {
+                var progress = parseInt(data.complete) / parseInt(data.total);
+                var progress_html = data.html;
+                $('#progressbar').progressbar( "option", "value", progress*100 );
+                $('#progress_html').html(progress_html);
+            }
+            if (progress < 1.0) {
+                $('in_progress').hide();
+                window.setTimeout(update_progress_info, delay);
+            }
+        });
+    };
+    update_progress_info();
+    //window.setTimeout(update_progress_info, delay);
+});
+</script>
+    <div class="tabs">
+        <ul>
+            <li><a href="#Inputs"><span>Inputs</span></a></li>
+        </ul>
+        <div id="Inputs">
+            <ul>
+                {% for field, value in instance.inputs.items %}
+                <li><h4>{{field}}</h4><p>{{value}}</p></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock progress %}
 {% else %}
     <div class="tabs">
         <ul>
