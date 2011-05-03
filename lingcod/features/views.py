@@ -677,7 +677,7 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
         return HttpResponse("Invalid http method.", status=405)
 
 @cache_page(60 * 60)
-def workspace(request, is_owner):
+def workspace(request, username, is_owner):
     user = request.user
     if request.method == 'GET':
         if user.is_anonymous() and is_owner:
