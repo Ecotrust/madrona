@@ -147,11 +147,13 @@ not a string path." % (name,))
         ))
 
         # Add a staticmap generic link
-        self.links.insert(0, alternate('PNG Image', 
-            'lingcod.staticmap.views.staticmap_link', 
-            select='multiple single',
-            method='GET',
-        ))
+        export_png = getattr(self._options, 'export_png', True)
+        if export_png:
+            self.links.insert(0, alternate('PNG Image', 
+                'lingcod.staticmap.views.staticmap_link', 
+                select='multiple single',
+                method='GET',
+            ))
             
 
         self.valid_children = getattr(self._options, 'valid_children', None)
