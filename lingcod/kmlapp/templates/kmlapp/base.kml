@@ -2,7 +2,11 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document{% if feature_id %} id="{{feature_id}}"{% endif %}>
   {% block workspace-json %}
-  <atom:link title="workspace-owner" rel="workspace" href="{% url workspace-owner-json %}" />
+	{% if user.is_anonymous %}
+  <atom:link title="workspace" rel="workspace" href="{% url workspace-public-json %}" />
+	{% else %}
+  <atom:link title="workspace" rel="workspace" href="{% url workspace-owner-json user.username %}" />
+	{% endif %}
   {% endblock %}
   <name>{% block docname %}MarineMap Features and Collections{% endblock %}</name>
   <open>1</open>

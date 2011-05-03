@@ -1,7 +1,11 @@
 {% extends "kmlapp/base.kml" %}
 {% load absurl %}
 {% block workspace-json %}
-  <atom:link title="workspace-shared" rel="workspace" href="{% url workspace-shared-json %}" />
+	{% if user.is_anonymous %}
+<atom:link title="workspace" rel="workspace" href="{% url workspace-public-json %}" />
+	{% else %}
+<atom:link title="workspace" rel="workspace" href="{% url workspace-shared-json user.username %}" />
+	{% endif %}
 {% endblock %}
 {% block folders_and_placemarks %}
 
