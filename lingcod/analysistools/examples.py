@@ -48,10 +48,8 @@ class BufferPoint(Analysis):
             </MultiGeometry>
         </Placemark>
         """ % (self.uid, self.name, self.model_uid(),
-            asKml(self.output_point_geom.transform(
-                    settings.GEOMETRY_CLIENT_SRID, clone=True)),
-            asKml(self.output_poly_geom.transform(
-                    settings.GEOMETRY_CLIENT_SRID, clone=True)))
+            asKml(self.output_point_geom),
+            asKml(self.output_poly_geom))
 
     @property 
     def kml_working(self):

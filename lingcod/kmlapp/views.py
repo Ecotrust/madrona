@@ -129,11 +129,20 @@ def get_shared_data(shareuser, sharegroup, user):
     collections = []
 
     for fmodel in get_feature_models():
-        unattached = [x for x in fmodel.objects.shared_with_user(user, filter_groups=[sg]).filter(user=su) if x.collection is None]
+        # Find top level features shared with user
+        # top-level == not belonging to any collections
+        # have to use content_type and object_id fields to determine
+        unattached = list(
+                fmodel.objects.shared_with_user(user,filter_groups=[sg])
+                 .filter(user=su, content_type=None,object_id=None)
+        )
         features.extend(unattached)
         
     for cmodel in get_collection_models():
-        collections_top = [x for x in cmodel.objects.shared_with_user(user, filter_groups=[sg]).filter(user=su) if x.collection is None]
+        collections_top = list(
+                cmodel.objects.shared_with_user(user,filter_groups=[sg])
+                 .filter(user=su, content_type=None,object_id=None)
+        )
         collections.extend(collections_top)
 
     return features, collections

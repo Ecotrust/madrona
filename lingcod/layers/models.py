@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.features.managers import ShareableGeoManager
-from lingcod.features.models import Feature, FeatureForm, get_absolute_media_url
+from lingcod.features.models import Feature, FeatureForm
 from django.core.urlresolvers import reverse
 import os
 
@@ -39,14 +39,8 @@ class PrivateLayerList(Feature):
     def kml_style(self):
         return """
         <Style id="%(model_uid)s-default">
-            <ListStyle>
-                <ItemIcon>
-                    <state>open</state>
-                    <href>%(media_url)s/layers/kml.png</href> 
-                </ItemIcon>
-            </ListStyle>
         </Style>
-        """ % {'model_uid': self.model_uid(), 'media_url': get_absolute_media_url()}
+        """ % {'model_uid': self.model_uid()}
 
     @property
     def kml_style_id(self):

@@ -3,6 +3,7 @@ from django.contrib.gis.geos import Point, LinearRing, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
+from django.core.cache import cache
 import zipfile
 
 #from django.db import transaction
@@ -450,7 +451,7 @@ def forceLHR(polygon):
     poly = Polygon(*rings)
     return poly
 
-def asKml(geom, altitudeMode=None):
+def asKml(input_geom, altitudeMode=None):
     """
     Performs three critical functions for creating suitable KML geometries:
      - simplifies the geoms (lines, polygons only)
@@ -458,6 +459,16 @@ def asKml(geom, altitudeMode=None):
      - sets the altitudeMode shape 
        (usually one of: absolute, clampToGround, relativeToGround)
     """
+    key = "asKml_%s_%s" % (input_geom.wkt.__hash__(), altitudeMode)
+    try:
+        cached_result = cache.get(key)
+        if cached_result: 
+            return cached_result
+    except:
+        pass
+
+    geom = input_geom.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+
     if geom.geom_type in ['Polygon','LineString']:
         geom = geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
 
@@ -477,6 +488,7 @@ def asKml(geom, altitudeMode=None):
         # The GEOSGeometry.kml() method always adds a z dim = 0
         kml = kml.replace(',0', ',%s' % settings.KML_EXTRUDE_HEIGHT)
 
+    cache.set(key, kml)
     return kml
 
 def enable_sharing(group=None):

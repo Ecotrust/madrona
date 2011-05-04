@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.conf import settings
-from lingcod.features.models import Feature, FeatureForm, get_absolute_media_url
+from lingcod.features.models import Feature, FeatureForm
 from lingcod.common.utils import get_class
 from lingcod.features import register
 from django.contrib.gis.geos import GEOSGeometry 
