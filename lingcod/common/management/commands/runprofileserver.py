@@ -70,8 +70,8 @@ class Command(BaseCommand):
                         print "==============================================="
                         if "media" not in profname:
                             stats = hotshot.stats.load(profname)
-                            stats.sort_stats('time', 'calls')
-                            stats.print_stats(20)
+                            stats.sort_stats('cumulative', 'time', 'calls')
+                            stats.print_stats('lingcod',20)
                         print " * Complete hotshot.stats output at %s" % profname
                         print
                         return response 
