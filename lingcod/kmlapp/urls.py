@@ -22,9 +22,9 @@ urlpatterns = patterns('lingcod.kmlapp.views',
         'create_kml', {'links': True, 'kmz': True}, name='kmlapp-feature-links-kmz'),
 
     url(r'^shared_by/(?P<session_key>\w+)/group-(?P<input_sharegroup>\d+)_sharedby-(?P<input_shareuser>\d+).kml$', 
-        'create_kml', {'links': True}, name='kmlapp-sharedby-kml'),
+        'create_kml', {'links': False}, name='kmlapp-sharedby-kml'),
     url(r'^shared_by/(?P<session_key>\w+)/group-(?P<input_sharegroup>\d+)_sharedby-(?P<input_shareuser>\d+).kmz$', 
-        'create_kml', {'links': True, 'kmz': True}, name='kmlapp-sharedby-kmz'),
+        'create_kml', {'links': False, 'kmz': True}, name='kmlapp-sharedby-kmz'),
 
     url(r'^public/(?P<session_key>\w+)/public.kml$', 
         'shared_public', name='kmlapp-publicshared-kml'),

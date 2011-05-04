@@ -30,10 +30,21 @@ try:
 except:
     UNATTACHED_NAME = "Marine Protected Areas"
 
-def get_styles(features, collections):
+def get_styles(features, collections, links=True):
+    """
+    Based on which features and collection are provided,
+    the styles for all features are determined here
+    """
     models = []
     models.extend([f.kml_style for f in features])
     models.extend([c.kml_style for c in collections])
+    if not links:
+        # Collections will be represented by Folders, not NetworkLinks
+        # So every feature n the entire tree will be in this KML Doc
+        # We need to recurse down to determine what's in there
+        for c in collections:
+            children = c.feature_set(recurse=True)
+            models.extend([child.kml_style for child in children])
     unique_set = set(models)
     return list(unique_set)
 
@@ -205,7 +216,7 @@ def create_kml(request, input_username=None, input_uid=None,
     if not features and isinstance(collections, HttpResponse):
         return collections # We got an http error going on
 
-    styles = get_styles(features,collections)
+    styles = get_styles(features,collections,links)
 
     t = get_template('kmlapp/base.kml')
     context = Context({
