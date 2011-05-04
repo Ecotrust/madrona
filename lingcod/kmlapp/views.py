@@ -232,16 +232,12 @@ def create_kml(request, input_username=None, input_uid=None,
                 'feature_id': input_uid,
                 })
     kml = t.render(context)
-    response = HttpResponse()
-    response['Content-Disposition'] = 'attachment'
+    mime = mimetypes.KML
     if kmz:
-        kmz = create_kmz(kml, 'mpa/doc.kml')
-        response['Content-Type'] = mimetypes.KMZ
-        response.write(kmz)
-    else:
-        response['Content-Type'] = mimetypes.KML
-        response.write(kml)
-    response.write('\n')
+        mime = mimetypes.KMZ
+        kml = create_kmz(kml, 'mpa/doc.kml')
+    response = HttpResponse(kml, mimetype=mime)
+    response['Content-Disposition'] = 'attachment'    
     return response
 
 @cache_control(no_cache=True)
@@ -260,16 +256,12 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     t = get_template('kmlapp/shared.kml')
     kml = t.render(Context({'user': request.user, 'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
 
-    response = HttpResponse()
-    response['Content-Disposition'] = 'attachment'
+    mime = mimetypes.KML
     if kmz:
-        kmz = create_kmz(kml, 'mpa/doc.kml')
-        response['Content-Type'] = mimetypes.KMZ
-        response.write(kmz)
-    else:
-        response['Content-Type'] = mimetypes.KML
-        response.write(kml)
-        
+        mime = mimetypes.KMZ
+        kml = create_kmz(kml, 'mpa/doc.kml')
+    response = HttpResponse(kml, mimetype=mime)
+    response['Content-Disposition'] = 'attachment'    
     return response
 
 def shared_public(request, kmz=False, session_key='0'):
@@ -291,14 +283,10 @@ def shared_public(request, kmz=False, session_key='0'):
         'use_network_links': True, 'request_path': request.path, 
         'session_key': session_key}))
 
-    response = HttpResponse()
-    response['Content-Disposition'] = 'attachment'
+    mime = mimetypes.KML
     if kmz:
-        kmz = create_kmz(kml, 'mpa/doc.kml')
-        response['Content-Type'] = mimetypes.KMZ
-        response.write(kmz)
-    else:
-        response['Content-Type'] = mimetypes.KML
-        response.write(kml)
-        
+        mime = mimetypes.KMZ
+        kml = create_kmz(kml, 'mpa/doc.kml')
+    response = HttpResponse(kml, mimetype=mime)
+    response['Content-Disposition'] = 'attachment'
     return response
