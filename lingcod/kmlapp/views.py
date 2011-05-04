@@ -59,16 +59,12 @@ def get_user_data(user):
     toplevel_features = []
     toplevel_collections = []
 
-    # is there a reason to do features vs collections seperately?
-    # Perhaps if we need to treat collections differently wrt network links
     for fmodel in get_feature_models():
-        #This would be preferable but doesnt really work??
-        # unattached = fmodel.objects.filter(collection=None)
-        unattached = [x for x in fmodel.objects.filter(user=user) if x.collection is None]
+        unattached = list(fmodel.objects.filter(user=user, content_type=None, object_id=None))
         toplevel_features.extend(unattached)
         
     for cmodel in get_collection_models():
-        collections_top = [x for x in cmodel.objects.filter(user=user) if x.collection is None]
+        collections_top = list(cmodel.objects.filter(user=user, content_type=None, object_id=None))
         toplevel_collections.extend(collections_top)
 
     return toplevel_features, toplevel_collections
@@ -86,13 +82,16 @@ def get_data_for_feature(user, uid):
     features = []
     collections = []
 
+
     if isinstance(f, FeatureCollection):
+        obj_id = f.pk
+        ct = ContentType.objects.get_for_model(f.__class__)
         for fmodel in get_feature_models():
-            unattached = [x for x in fmodel.objects.all() if x.collection == f]
+            unattached = list(fmodel.objects.filter(content_type=ct,object_id=obj_id))
             features.extend(unattached)
             
         for cmodel in get_collection_models():
-            collections_top = [x for x in cmodel.objects.all() if x.collection == f]
+            collections_top = list(cmodel.objects.filter(content_type=ct,object_id=obj_id))
             collections.extend(collections_top)
     elif isinstance(f, Feature):
         features.append(f)
@@ -110,13 +109,11 @@ def get_public_data():
     collections = []
 
     for fmodel in get_feature_models():
-        #This would be preferable but doesnt really work??
-        # unattached = fmodel.objects.filter(collection=None)
-        unattached = [x for x in fmodel.objects.filter(sharing_groups__in=public_groups)]
+        unattached = list(fmodel.objects.filter(sharing_groups__in=public_groups))
         features.extend(unattached)
         
     for cmodel in get_collection_models():
-        collections_top = [x for x in cmodel.objects.filter(sharing_groups__in=public_groups)]
+        collections_top = list(cmodel.objects.filter(sharing_groups__in=public_groups))
         collections.extend(collections_top)
 
     return features, collections
