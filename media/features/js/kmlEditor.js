@@ -296,10 +296,10 @@ lingcod.features.kmlEditor = (function(){
             }));
             selectData = jQuery.map(selectData, function(d){
                 var orig = $(d.node).data('original-networklink');
-                if(orig){
+                if(typeof orig !== 'undefined'){
                     return orig
                 }else{
-                    return d.kmlObject;                    
+                    return d.kmlObject;
                 }
             });
             selectedKmlObjects = selectData;
