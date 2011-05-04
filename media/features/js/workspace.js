@@ -297,13 +297,12 @@ lingcod.features.workspace = (function(){
         }
         
         that.active = function(selected){
-            window.action = that;
             var valid_link = false;
             for(var j = 0; j < that.links.length; j++){
                 var link = that.links[j];
                 for(var i = 0; i < selected.length; i++){
                     var model = selected[i];
-                    if(model.getType){
+                    if(typeof model['getType'] === 'function'){
                         model = lingcod.features.model(model);
                     }
                     if(jQuery.inArray(model, link.models) === -1){
