@@ -82,6 +82,10 @@ First, let's create the app to hold our custom features::
 
     python manage.py startapp omm
     
+.. note::
+
+   Don't use underscores _ in your app name; Underscores are used as a delimiter for certain internal naming conventions so using them in the app name will lead to errors. 
+
 Here we should see the following directory structure created for us::
 
     omm
@@ -99,6 +103,10 @@ We can ignore the tests and views for now; for now we'll focus on creating the M
     class Mpa(PolygonFeature):
         class Options:
             form = 'oregon.omm.forms.MpaForm'
+
+.. note::
+
+   The python convention is to name your model classes using CapsCase. Just don't use underscores _ in the feature class name.
 
 Next create a file to hold the forms called ``forms.py``::
 
@@ -244,6 +252,7 @@ needed:
    deployment
    layers
    managing_users
+   migration
    manipulators
    staticmap
    sharing_configuration
