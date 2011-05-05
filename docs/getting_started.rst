@@ -147,6 +147,10 @@ is to set up postgis in the default postgres database called template1::
    psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
    psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
 
+Next we'll need to install a postgresql stored procedure for geometry handling::
+
+    psql -d template1 -U postgres -f /usr/local/src/marinemap/lingcod/common/cleangeometry.sql
+
 Once the template is spatially enabled, create your project database::
 
    createdb example -U postgres
