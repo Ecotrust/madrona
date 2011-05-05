@@ -29,6 +29,9 @@
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
 .ui-corner-all { -moz-border-radius: 4px/*{cornerRadius}*/; -webkit-border-radius: 4px/*{cornerRadius}*/; border-radius: 4px/*{cornerRadius}*/; }
 
+.ui-progressbar { height:2em; text-align: left; background-color:#ddd; }
+.ui-progressbar .ui-progressbar-value {background-color: #aaa; margin: -1px; height:100%; border-radius: 4px 4px 4px 4px;}
+
 .form-image { padding: 5px; width: 32px; height:32px; }
 .slider { width: 250px; }
 .slidervalue { width: 70px ! important;}
