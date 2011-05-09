@@ -26,16 +26,22 @@ Any number of manipulative actions can be assigned to an MPA.
 
 Typically, when a shape is drawn, a series of manipulations is executed on that 
 shape.  Which manipulators are executed, and the order in which those manipulators 
-are executed are determined by an assignment in the Options class for a given model.  
-Within the Model, the Options class should contain a line similar to the following:
+are executed are determined by an assignment in the Options class for a given model. 
+To specify one or more mandatory manipultors, provide a list of strings containing 
+python paths to the desired manipulator classes (strings are used to avoid any 
+potential circular imports).  Within the Model, the Options class should contain 
+a line similar to the following:
 
 .. code-block:: python 
 
     class Options:
-        manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator ]
+        manipulators = [ 
+           'lingcod.manipulators.maniplators.ClipToStudyRegionManipulator' , 
+           'lingcod.manipulators.maniplators.EastWestManipulator' , 
+        ]
  
 In the above example from the ``simple_app/models.py`` file, we can see that 2 manipulators 
-are listed for the Mpa model, ``ClipToStudyRegionManipulator``, and ``EastWestManipulator``.  
+are listed for the Mpa model, ``ClipToStudyRegionManipulator``, and ``EastWestManipulator``.
 
 
 The first of these is a predefined manipulator, the second is more of a sample 
@@ -50,7 +56,7 @@ in the desired sequence, to ``Options.manipulators`` within the model that conta
 .. code-block:: python 
 
     class Options:
-        manipulators = [ YourManipulator1, YourManipulator2 ]
+        manipulators = [ 'yourproject.yourapp.YourManipulator1' ]
 ..
 
 
@@ -187,8 +193,8 @@ In this case we can specify `optional_manipulators` in the MPA model Options.
 .. code-block:: python 
 
     class Options:
-        manipulators = [ ClipToStudyRegionManipulator, ]
-        optional_manipulators = [ EastWestManipulator, ]
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator', ]
+        optional_manipulators = ['lingcod.manipulators.manipulators.EastWestManipulator', ]
 
 On the user-interface side, when a user creates or edits a shape, there will be a form with checkboxes allowing them to select from these optional manipulators. 
 
@@ -203,7 +209,10 @@ If there are no required manipulators, you must still provide an empty list for 
 
     class Options:
         manipulators = []
-        optional_manipulators = [ ClipToStudyRegionManipulator, EastWestManipulator, ]
+        optional_manipulators = [ 
+           'lingcod.manipulators.maniplators.ClipToStudyRegionManipulator' , 
+           'lingcod.manipulators.maniplators.EastWestManipulator' , 
+        ]
 
 If the user doesn't select any other optional manipulators and there are none required, a special case is triggered. We can't allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the `NullManipulator` is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should *not* appear in either your manipulators or optional_manipulators lists. 
 
