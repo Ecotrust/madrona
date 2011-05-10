@@ -60,6 +60,8 @@
 
 {% block body %}
     <div id="meta-navigation">
+      
+      <span class="pagetitle">{% block pagetitle %}{% endblock pagetitle %}</span>
         <ul>
             {% block metanavigation %}
             {% if user.is_authenticated %}
@@ -97,10 +99,12 @@
         </li>
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
     </ul>
+    {% block toggle %}
     <div id="sidebar-toggler">
         &nbsp;
     </div>
     <a id="show-sidebar" href="#">show sidebar</a>
+    {% endblock toggle %}
     <div id="sidebar">
         <div id="sidebar-mask"><span class="loadingMsg"></span></div>
         <ul>

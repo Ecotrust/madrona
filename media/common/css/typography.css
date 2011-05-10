@@ -44,3 +44,11 @@ h3 {
     font-size:12px;
     font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
 }
+
+.pagetitle {
+    position:absolute; 
+    left:525px; 
+    top:12px; 
+    font-size: 120%; 
+    color:white;
+}
