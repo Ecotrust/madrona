@@ -355,7 +355,7 @@ def get_logger(caller_name=None):
         fh = open(settings.LOG_FILE,'w')
         logfile = settings.LOG_FILE
     except:
-        # print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
         logfile = None
 
     try:
