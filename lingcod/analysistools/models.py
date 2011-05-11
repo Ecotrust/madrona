@@ -121,10 +121,11 @@ class Analysis(Feature):
         for f in self.output_fields():
             self.__dict__[f.attname] = None
 
-    def save(self, *args, **kwargs):
-        self.clear_output_fields() # get rid of old outputs
-        super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
-        self.run()
+    def save(self, rerun=True, *args, **kwargs):
+        if rerun:
+            self.clear_output_fields() # get rid of old outputs
+            super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
+            self.run()
         super(Analysis, self).save(*args, **kwargs) 
 
     class Meta:

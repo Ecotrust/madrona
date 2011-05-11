@@ -58,6 +58,9 @@ class Feature(models.Model):
     class Meta:
         abstract=True
 
+    def save(self, rerun=True, *args, **kwargs):
+        super(Feature, self).save(*args, **kwargs) # Call the "real" save() method
+
     @models.permalink
     def get_absolute_url(self):
         return ('%s_resource' % (self.get_options().slug, ), (), {
@@ -153,7 +156,7 @@ class Feature(models.Model):
         assert self.__class__ in collection.get_options().get_valid_children()
         assert self.user == collection.user
         self.collection = collection
-        self.save()
+        self.save(rerun=False)
 
     def remove_from_collection(self):
         """
@@ -161,9 +164,9 @@ class Feature(models.Model):
         """
         collection = self.collection
         self.collection = None
-        self.save()
+        self.save(rerun=False)
         if collection:
-            collection.save()
+            collection.save(rerun=True)
 
     def share_with(self, groups, append=False):
         """
@@ -196,7 +199,7 @@ class Feature(models.Model):
 
             self.sharing_groups.add(group)
 
-        self.save()
+        self.save(rerun=False)
         return True
 
     def is_viewable(self, user):
@@ -252,7 +255,7 @@ class Feature(models.Model):
         # http://blog.elsdoerfer.name/2008/09/09/making-a-copy-of-a-model-instance
         the_feature.pk = None
         the_feature.id = None
-        the_feature.save()
+        the_feature.save(rerun=False)
 
         the_feature.name = the_feature.name + " (copy)"
 
@@ -268,7 +271,7 @@ class Feature(models.Model):
         the_feature.sharing_groups.clear()
         the_feature.remove_from_collection()
 
-        the_feature.save()
+        the_feature.save(rerun=False)
         return the_feature
 
 class SpatialFeature(Feature):
@@ -598,6 +601,9 @@ class FeatureCollection(Feature):
             self.save() # This updates the date_modified field of the collection
         else:
             raise Exception('Feature `%s` is not in Collection `%s`' % (f.name, self.name))
+
+    def save(self, rerun=True, *args, **kwargs):
+        super(FeatureCollection, self).save(*args, **kwargs) # Call the "real" save() method
 
     @property
     def kml(self):
