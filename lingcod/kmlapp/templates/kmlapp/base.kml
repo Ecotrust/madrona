@@ -8,7 +8,7 @@
   <atom:link title="workspace" rel="workspace" href="{% url workspace-owner-json user.username %}" />
 	{% endif %}
   {% endblock %}
-  <name>{% block docname %}MarineMap Features and Collections{% endblock %}</name>
+  <name>{% block docname %}Features and Collections{% endblock %}</name>
   <open>1</open>
   <visibility>1</visibility>
 
