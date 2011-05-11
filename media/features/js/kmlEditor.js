@@ -511,7 +511,10 @@ lingcod.features.kmlEditor = (function(){
                         // Validation error
                         // Set default panel options. panel is an instance var
                         var panelOpts = {
-                            loading_msg: 'Loading ' + action.title,
+                            loading_msg: 'Loading form', 
+                            // loading_msg: 'Loading ' + action.title, 
+                            // ^^^ action.title was causing js error and stalling the app 
+                            // when a form was returned with validation errors
                             showClose: true
                         };
                         panelOpts['showCloseButton'] = false;
