@@ -50,6 +50,8 @@ MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'lingcod.common.middleware.IgnoreCsrfMiddleware', 
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
