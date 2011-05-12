@@ -507,7 +507,7 @@ lingcod.features.kmlEditor = (function(){
                 },
                 success: function(text, status, req, formel){
                     $(that).trigger('doneSaving');
-                    if(text.match('<form')){
+                    if(text.match('<form') || text.match('<FORM')){ // for ie8
                         // Validation error
                         // Set default panel options. panel is an instance var
                         var panelOpts = {
@@ -545,6 +545,11 @@ lingcod.features.kmlEditor = (function(){
                     }
                 }
             };
+            var a = $(form).attr('action');
+            if(a[a.length - 1] !== '/'){
+                // For the benefit of IE
+                $(form).attr('action', a + '/');
+            }
             $(form).ajaxForm(opts);
 
             el.find('.submit_button').click(function(){
@@ -804,7 +809,6 @@ lingcod.features.kmlEditor = (function(){
                 // Need to merge their json responses
                 var info = {};
                 jQuery.each(requests, function(i, xhr){
-                    window.txt = xhr.responseText;
                     try{
                         var resp = jQuery.parseJSON(xhr.responseText);                      
                     }catch(e){

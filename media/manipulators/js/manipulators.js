@@ -1,5 +1,4 @@
 lingcod.Manipulator = function(gex, form, render_target, div){
-    
     this.altitude = 100;
     var json = false;
     var data = form.find('.json').html();

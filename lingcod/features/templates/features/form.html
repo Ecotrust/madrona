@@ -47,8 +47,8 @@
                 {% for hidden in form.hidden_fields %}
                 <div style="display:none;">
                     {{ hidden.errors }}
+                    {{ hidden }}
                 </div>
-                {{ hidden }}
                 {% endfor %}
                 {% endif %}
 

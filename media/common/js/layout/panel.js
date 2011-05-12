@@ -214,8 +214,8 @@ lingcod.layout.SanitizedContent = function(html){
     this.styles = [];
     this.html;
     
-    var rscript = /<script(.|\s)*?\/script>/g;
-    var rstyle = /<style(.|\s)*?\/style>/g;
+    var rscript = /<script(.|\s)*?\/script>/ig;
+    var rstyle = /<style(.|\s)*?\/style>/ig;
     
     var that = this;
     
@@ -223,23 +223,42 @@ lingcod.layout.SanitizedContent = function(html){
     html = html.replace(rscript, function(m){
         if(m.indexOf('text/javascript+protovis') !== -1){
             return m;
-        }else if(m.indexOf('application/vnd.google-earth.kml+xml')){
+        }else if(m.indexOf('application/vnd.google-earth.kml+xml') !== -1){
             return m;
         }else{
             that.js.push(m.replace(
-                /<script(.|\s)*?>/, '').replace('</script>',''));
+                /<script(.|\s)*?>/i, '').replace(/<\/script>/i,''));
             return '';
         }
     });
+    
     
     // extract style tags
     html = html.replace(rstyle, function(m){
         that.styles.push({
             id: $(m).attr('id'),
-            style: m.replace(/<style(.|\s)*?>/, '').replace('</style>', '')
+            style: m.replace(/<style(.|\s)*?>/i, '').replace(/<\/style>/i, '')
         });
         return '';
     });
+    
+    if($.browser.msie && $.browser.version === "8.0" && html.match('<FORM') && html.match('.errorlist')){
+        // html coming from the iframe with validation errors is going to be 
+        // mangled. This took forever to figure out, and is an ugly ugly hack.
+        // This can be removed once we stop using iframes to submit forms
+        var dom = $('<div>' + html + '</div>');
+        if(dom.find('form div.json').length === 0){
+            // IE jumbled where items should be in the dom
+            var attrs = $(dom.children()[0].childNodes[1].childNodes[2]);
+            var form = attrs.find('form');
+            form.append(attrs.children().slice(1, -1));
+            // remove trailing form end tag
+            $(attrs.children()[1]).detach();
+        }
+        var el = $('<div>');
+        el.append(dom);
+        html = el.html();
+    }
     
     this.html = jQuery.trim(html);
     return this;
@@ -412,7 +431,7 @@ lingcod.contentLoader = (function(){
         var enableTabs = function(el){
             var tabs = el.find('div.tabs');
             if(tabs.length){
-                tabs.tabs({
+                var t = tabs.tabs({
                     'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
                     ajaxOptions: {
                         error: function(){

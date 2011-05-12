@@ -302,7 +302,7 @@ lingcod.features.workspace = (function(){
                 var link = that.links[j];
                 for(var i = 0; i < selected.length; i++){
                     var model = selected[i];
-                    if(typeof model['getType'] === 'function'){
+                    if(typeof model['getType'] !== 'undefined'){
                         model = lingcod.features.model(model);
                     }
                     if(jQuery.inArray(model, link.models) === -1){
