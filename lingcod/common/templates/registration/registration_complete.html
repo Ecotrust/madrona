@@ -1,9 +1,11 @@
 {% extends "registration/reg_base.html" %}
+{% load appname %}
 
-{% block title %}Thanks for registering{% endblock %}
+{% block title %}Thanks for registering at {% appname %}{% endblock %}
 
 {% block content %}
 
 <p>You will receive an email shortly with instructions on how to activate your account.</p>
+<p>If you do not receive an email within a few minutes, please contact us at {% help_email %}</p>
 
 {% endblock %}

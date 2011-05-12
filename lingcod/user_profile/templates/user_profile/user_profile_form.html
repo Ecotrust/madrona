@@ -2,14 +2,13 @@
 {% extends 'common/panel.html' %}
 {% load order_by %}
 
-{% block title %}MarineMap User Profile{% endblock title %}
+{% block title %}User Profile{% endblock title %}
 
 {% block panel %}
 <style>
 .group {padding:0;margin:0;text-indent:none;font-size:12px;}
 .groups {padding:0;margin:0;text-indent:none;}
 </style>
-
 
 <h2> Personal Info </h2>
 <form action="{% url user_profile-form profile.user.username%}" method="post">

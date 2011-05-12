@@ -6,6 +6,7 @@ os.environ["CELERY_LOADER"] = "django"
 # !!!!!!!!!!!!!!!!!!!!!!
 
 RELEASE = '3.0dev' # The next milestone
+APP_NAME = 'MarineMap'
 
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -222,3 +223,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+HELP_EMAIL = 'help@marinemap.org'
+

@@ -6,10 +6,10 @@
 		You've got some errors:
 		<ul>
 		{% for error in missing_errors %}
-			<li>There are no features associated with the '{{error.fieldmap}}' fieldmap of the <a href="/marinemap/admin/intersection/organizationscheme/{{error.scheme_pk}}">{{error.scheme}}</a> organization scheme.</li>
+			<li>There are no features associated with the '{{error.fieldmap}}' fieldmap of the <a href="/admin/intersection/organizationscheme/{{error.scheme_pk}}">{{error.scheme}}</a> organization scheme.</li>
 		{% endfor %}
 		{% for error in mismatch_errors %}
-			<li>There is an output unit and/or feature type mismatch in the '{{error.fieldmap}}' fieldmap of the <a href="/marinemap/admin/intersection/organizationscheme/{{error.scheme_pk}}">{{error.scheme}}</a> organization scheme.</li>
+			<li>There is an output unit and/or feature type mismatch in the '{{error.fieldmap}}' fieldmap of the <a href="/admin/intersection/organizationscheme/{{error.scheme_pk}}">{{error.scheme}}</a> organization scheme.</li>
 		{% endfor %}
 		</ul>
 		You should <a href='/admin/intersection/organizationscheme/'>go fix it</a>.
