@@ -1,5 +1,6 @@
 {# extends "authopenid/base.html" #}
 {% extends 'common/panel.html' %}
+{% load appname %}
 {% block title %}Sign In{% endblock title %}
 
 {% block panel %}
@@ -34,7 +35,7 @@
 <form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
-        <legend><strong>Sign In To MarineMap</strong></legend> 
+        <legend><strong>Sign In To {% appname %}</strong></legend> 
 		<div class="form-row"><label for="id_username">Username</label><br />{{ form2.username }}</div>
 		<div class="form-row"><label for="id_password">Password</label><br />{{ form2.password }}</div>
         <div class="submit-row"><input type="submit" name="blogin" value="Sign in"> </div>

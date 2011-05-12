@@ -1,8 +1,9 @@
 {% extends "common/map.html" %}
+{% load appname %}
 {% block sharedshapes %}{% endblock sharedshapes %}
 {% block myshapes %}{% endblock myshapes %}
 {% block metanavigation %}
-<li><a href="#" id="about">about marinemap</a>
+<li><a href="#" id="about">about {% appname %}</a>
 {% endblock metanavigation %}
 {% block tabs %}
 {% endblock tabs %}
