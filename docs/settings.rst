@@ -124,6 +124,14 @@ MarineMap Settings
 ``STARSPAN_BIN``
     Location of the starspan executable. Used with the `lingcod.raster_stats` app. (Optional; defaults to `starspan`)
 
+.. _HELP_EMAIL:
+``HELP_EMAIL``
+    Email address used in templates for users to contact in case of problems. defaults to help@marinemap.org
+
+.. _APP_NAME:
+``APP_NAME``
+    Name of the application to be used in templates as the title. defaults to 'MarineMap'
+
 3rd Party App Settings
 ----------------------
 
@@ -207,3 +215,6 @@ Django Settings
 ``LOGIN_REDIRECT_URL``
     Set to the map view at the root ( ``/`` )
 
+.. _CACHES:
+``CACHES``
+    see the `django docs <http://docs.djangoproject.com/en/dev/ref/settings/#caches>`_ for details on cache setup. defaults to local memory caching.
