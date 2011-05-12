@@ -88,7 +88,12 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
     maxy = -99999999.0
     for model, pks in features:
         try:
-            ugeom = model.objects.filter(pk__in=pks).collect().transform(srid,clone=True)
+            geomfield = model.mapnik_geomfield()
+        except AttributeError:
+            geomfield = 'geometry_final'
+
+        try:
+            ugeom = model.objects.filter(pk__in=pks).collect(field_name=geomfield).transform(srid,clone=True)
             bbox = ugeom.extent
             if bbox[0] < minx: minx = bbox[0]
             if bbox[1] < miny: miny = bbox[1]
@@ -101,6 +106,18 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
     width = maxx - minx
     height = maxy - miny  
     buffer = .15
+    # if width and height are 0 (such as for a point geom)
+    # we need to take a stab a reasonable value
+    if width == 0:
+        if bbox[2] <= 180.1:
+            width = 0.1
+        else: 
+            width = 1000
+    if height == 0:
+        if bbox[3] <= 90.1:
+            height = 0.1
+        else: 
+            height = 1000
     
     # If the following settings variables are not defined (or set to None), then the original method
     # for determining width_buffer and heigh_buffer is used
