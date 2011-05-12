@@ -220,13 +220,6 @@ var lingcod = (function(){
             
         setupSidebarLinkHandler(panel);
         
-        that.client = lingcod.rest.client(gex, panel);
-                
-        // Allows projects to add a callback to run after any form is shown
-        if(typeof options.form_shown === 'function'){
-            $(that.client).bind('form_shown', options.form_shown);
-        }
-        
         var editors = [];
         
         if(options.myshapes){
@@ -472,12 +465,12 @@ var lingcod = (function(){
             resize();
         });
         
-        $(window).bind('beforeunload', function(){
+        window.onbeforeunload = function(){
             setCameraToLocalStorage();
             saveEarthOptionsToLocalStore();
             setStore('selectedTab', 
                 $('#sidebar > ul > .ui-tabs-selected a').attr('href'));
-        });
+        }
     };
     
     var studyRegionLoaded = function(kmlObject, node){
