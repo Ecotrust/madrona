@@ -60,109 +60,109 @@ h4.kmltree-title {
   cursor: pointer; }
 
 .expander {
-  background: url("images/sprites/kml.png?1304453449") repeat -105px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -105px 0px;
   width: 16px;
   height: 16px;
   margin-left: -17px; }
   .expander:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -84px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -84px 0px;
     width: 16px;
     height: 16px; }
   .expander:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -63px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -63px 0px;
     width: 16px;
     height: 16px; }
 
 li.open > .expander {
-  background: url("images/sprites/kml.png?1304453449") repeat -42px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -42px 0px;
   width: 16px;
   height: 16px; }
   li.open > .expander:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -21px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -21px 0px;
     width: 16px;
     height: 16px; }
   li.open > .expander:active {
-    background: url("images/sprites/kml.png?1304453449") repeat 0px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat 0px 0px;
     width: 16px;
     height: 16px; }
 
 .toggler {
   margin-right: 4px;
-  background: url("images/sprites/kml.png?1304453449") repeat -567px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -567px 0px;
   width: 16px;
   height: 16px; }
   .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -546px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -546px 0px;
     width: 16px;
     height: 16px; }
   .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -504px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -504px 0px;
     width: 16px;
     height: 16px; }
 
 li.checkOffOnly > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -525px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -525px 0px;
   width: 16px;
   height: 16px; }
 
 li.visible > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -168px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -168px 0px;
   width: 16px;
   height: 16px; }
   li.visible > .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -147px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -147px 0px;
     width: 16px;
     height: 16px; }
   li.visible > .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -126px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -126px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > ul > li > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -357px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -357px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > ul > li > .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -336px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -336px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > ul > li > .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -315px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -315px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > ul > li.visible > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -420px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -420px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > ul > li.visible > .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -399px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -399px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > ul > li.visible > .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -378px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -378px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -357px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -357px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder > .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -336px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -336px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder > .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -315px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -315px 0px;
     width: 16px;
     height: 16px; }
 li.radioFolder.visible > .toggler {
-  background: url("images/sprites/kml.png?1304453449") repeat -420px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -420px 0px;
   width: 16px;
   height: 16px; }
   li.radioFolder.visible > .toggler:hover {
-    background: url("images/sprites/kml.png?1304453449") repeat -399px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -399px 0px;
     width: 16px;
     height: 16px; }
   li.radioFolder.visible > .toggler:active {
-    background: url("images/sprites/kml.png?1304453449") repeat -378px 0px;
+    background: url("images/sprites/kml.png?1305232828") repeat -378px 0px;
     width: 16px;
     height: 16px; }
 li.KmlPlacemark > .expander, li.KmlPhotoOverlay > .expander, li.KmlGroundOverlay > .expander, li.KmlTour > .expander {
@@ -185,20 +185,20 @@ li.KmlFolder > .icon, li.KmlNetworkLink > .icon, li.KmlTour > .icon, li.KmlPhoto
   display: none; }
 
 li.KmlFolder > .icon, li.KmlDocument > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -231px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -231px 0px;
   width: 16px;
   height: 16px; }
 li.KmlFolder.open > .icon, li.KmlDocument.open > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -210px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -210px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -231px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -231px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink.loading > .icon {
   position: relative;
-  background: url("images/sprites/kml.png?1304453449") repeat -273px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -273px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink.loading > .icon > .nlSpinner {
@@ -214,29 +214,29 @@ li.KmlNetworkLink.loading > .expander {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
   filter: alpha(opacity="30"); }
 li.KmlNetworkLink.error > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -189px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -189px 0px;
   width: 16px;
   height: 16px; }
 li.KmlNetworkLink.error > .expander {
   display: none; }
 li.KmlTour > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -483px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -483px 0px;
   width: 16px;
   height: 16px; }
 li.KmlPhotoOverlay > .icon, li.KmlGroundOverlay > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -462px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -462px 0px;
   width: 16px;
   height: 16px; }
 li.KmlScreenOverlay > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -441px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -441px 0px;
   width: 16px;
   height: 16px; }
 li.KmlPolygon > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -294px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -294px 0px;
   width: 16px;
   height: 16px; }
 li.KmlLineString > .icon, li.KmlMultiGeometry > .icon {
-  background: url("images/sprites/kml.png?1304453449") repeat -252px 0px;
+  background: url("images/sprites/kml.png?1305232828") repeat -252px 0px;
   width: 16px;
   height: 16px; }
 li.customIcon > .icon {
