@@ -33,6 +33,7 @@ class RasterDataset(models.Model):
 class ZonalStatsCache(models.Model):
     geom_hash = models.CharField(max_length=255)
     raster = models.ForeignKey('RasterDataset')
+    sum = models.FloatField(null=True, blank=True)
     avg = models.FloatField(null=True, blank=True)
     min = models.FloatField(null=True, blank=True)
     max = models.FloatField(null=True, blank=True)
