@@ -203,7 +203,8 @@ Django Settings
 .. _MEDIA_URL:
 
 ``MEDIA_URL``
-    defaults to /media/
+    This should be a full absolute path to the media directory (e.g. "http://northcoast.marinemap.org/media/"). Defaults to /media/; application will work with a relative path but there may be some minor js errors to contend with.
+
 
 .. _LOGIN_URL:
 
