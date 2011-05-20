@@ -557,7 +557,7 @@ def kml_core(request, instances, kmz):
         else:
             features.append(instance)
 
-    styles = get_styles(features,collections)
+    styles = get_styles(features,collections,links=False)
 
     t = get_template('kmlapp/base.kml')
     context = Context({
