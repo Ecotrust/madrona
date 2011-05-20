@@ -424,6 +424,14 @@ var lingcod = (function(){
             e.preventDefault();
         });
 
+        $('#help').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Help Page';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.help_url, opts);
+            e.preventDefault();
+        });
+
         // for showing the news or about panels if they haven't been viewed 
         // yet (that determination is done with cookies in the django view)
         if(options.show_panel){

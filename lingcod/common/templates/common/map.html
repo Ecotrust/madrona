@@ -15,6 +15,7 @@
             about_url: '{% url news-about %}',
             {% if user.is_authenticated %}profile_url: '{% url user_profile-form user.username %}',{% endif %}
             registration_url: '{% url registration_register %}',
+            help_url: '{% url help-main %}',
             signin_url: '{% url user_signin %}'
         };
         
@@ -71,7 +72,7 @@
             <li><a href="#" id="news">news</a> | </li>
             <li><a href="#" id="about">about {% appname %}</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
-            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
+            <li><a href="#" id="help">help</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>
