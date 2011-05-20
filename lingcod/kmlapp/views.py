@@ -20,16 +20,6 @@ except NameError:
 
 log = get_logger()
 
-# This is the dict key used for mpas without an array
-# Since it's sorted alphabetically by key, this string
-# determines where the 'Unattached' MPA folder will appear
-UNATTACHED = "zzzzzzz"
-# This is the nice name as it will appear on screen
-try:
-    UNATTACHED_NAME = settings.KML_UNATTACHED_NAME
-except:
-    UNATTACHED_NAME = "Marine Protected Areas"
-
 def get_styles(features, collections, links=True):
     """
     Based on which features and collection are provided,
