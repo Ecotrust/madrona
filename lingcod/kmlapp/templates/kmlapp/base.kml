@@ -32,7 +32,7 @@
         <styleUrl>#{{collection.kml_style_id}}</styleUrl>
       </NetworkLink>
     {% else %}
-      {{ collection.kml|safe }}
+      {{ collection.kml_safe|safe }}
     {% endif %}
   {% endfor %}
 
