@@ -526,7 +526,7 @@ def kml_core(request, instances, kmz):
             response = HttpResponse()
             if is_text(kml) and kmz:
                 # kml_full is text, but they want as KMZ
-                kmz = create_kmz(kml, 'mpa/doc.kml')
+                kmz = create_kmz(kml, 'mm/doc.kml')
                 response['Content-Type'] = mimetypes.KMZ
                 response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
                 response.write(kmz)
@@ -577,7 +577,7 @@ def kml_core(request, instances, kmz):
     filename = '_'.join([slugify(i.name) for i in instances])
 
     if kmz:
-        kmz = create_kmz(kml, 'mpa/doc.kml')
+        kmz = create_kmz(kml, 'mm/doc.kml')
         response['Content-Type'] = mimetypes.KMZ
         response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
         response.write(kmz)

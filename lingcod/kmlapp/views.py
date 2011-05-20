@@ -231,7 +231,7 @@ def create_kml(request, input_username=None, input_uid=None,
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
-        kml = create_kmz(kml, 'mpa/doc.kml')
+        kml = create_kmz(kml, 'mm/doc.kml')
     response = HttpResponse(kml, mimetype=mime)
     response['Content-Disposition'] = 'attachment'    
     return response
@@ -255,7 +255,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
-        kml = create_kmz(kml, 'mpa/doc.kml')
+        kml = create_kmz(kml, 'mm/doc.kml')
     response = HttpResponse(kml, mimetype=mime)
     response['Content-Disposition'] = 'attachment'    
     return response
@@ -282,7 +282,7 @@ def shared_public(request, kmz=False, session_key='0'):
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
-        kml = create_kmz(kml, 'mpa/doc.kml')
+        kml = create_kmz(kml, 'mm/doc.kml')
     response = HttpResponse(kml, mimetype=mime)
     response['Content-Disposition'] = 'attachment'
     return response
