@@ -501,9 +501,10 @@ def kml_core(request, instances, kmz):
     Generic view for KML representation of feature classes. 
     Can be overridden in options but this provided a default.
     """
-    from lingcod.kmlapp.views import get_data_for_feature, get_styles, create_kmz 
+    from lingcod.kmlapp.views import get_styles, create_kmz 
     from django.template.loader import get_template
     from lingcod.common import default_mimetypes as mimetypes
+    from lingcod.features.models import FeatureCollection
 
     user = request.user
     try:
@@ -547,12 +548,14 @@ def kml_core(request, instances, kmz):
             pass
 
     for instance in instances:
-        f, c = get_data_for_feature(user,instance.uid)
-        features.extend(f)
-        collections.extend(c)
-
-    if not features and isinstance(collections, HttpResponse):
-        return collections # We got an http error going on
+        viewable, response = instance.is_viewable(user)
+        if not viewable:
+            return viewable, response
+        
+        if isinstance(instance, FeatureCollection):
+            collections.append(instance)
+        else:
+            features.append(instance)
 
     styles = get_styles(features,collections)
 
