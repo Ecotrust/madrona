@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.http import HttpResponse
+from django.utils.html import escape
 from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.forms import FeatureForm
 from lingcod.features import get_model_options
@@ -145,7 +146,7 @@ class Feature(models.Model):
                 <visibility>0</visibility>
                 <name>%s (INVALID KML)</name>
             </Placemark>
-            """ % (self.uid, self.name)
+            """ % (self.uid, escape(self.name))
 
     
     def add_to_collection(self, collection):
@@ -344,8 +345,8 @@ class SpatialFeature(Feature):
             </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
-               self.name, self.user, self.date_modified, 
+        """ % (self.uid, escape(self.name), self.model_uid(), 
+               escape(self.name), self.user, self.date_modified, 
                self.geom_kml)
 
     @property
@@ -616,7 +617,7 @@ class FeatureCollection(Feature):
           <open>0</open>
           %s
         </Folder>
-        """ %  (self.uid, self.name, ''.join(kmls))
+        """ %  (self.uid, escape(self.name), ''.join(kmls))
 
     @property
     def kml_style(self):
