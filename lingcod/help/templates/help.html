@@ -33,7 +33,7 @@
 
 <h2>Frequently Asked Questions</h2>
 <hr/>
-<div style='width:600px; border: 1px dotted #BBBBBB; padding: 5px'>
+<div style='border: 1px dotted #BBBBBB; padding: 5px'>
 {% for group in faqs_by_group %}
 <h3><a href='#group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
     <ul>
@@ -44,7 +44,7 @@
 {% endfor %}
 </div>
 <br/>
-<div style='width: 600px;'>
+<div>
 {% for group in faqs_by_group %}
 <h3><a name='group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
     <div style='padding-left: 25px'>
