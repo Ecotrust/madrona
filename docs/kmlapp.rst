@@ -24,6 +24,7 @@ Reasonble default kml and kml_style properties are provided for all Feature type
 
 The `.kml` property MUST  
     * Return a string containing a valid `KML Feature <http://code.google.com/apis/kml/documentation/kmlreference.html#feature>`_ element (most commonly a Placemark or Folder)
+    * Encode/escape any strings containing html entities that not part of the KML document structure. For instance, the name attribute of the feature might contain an ampersand which, if left unescaped, might create invalid kml. Use the ``django.utils.html.escape`` function.
     * The element must have an ``id`` attribute populated with the value of ``instance.uid``.
     * If it references any style URLs, the corresponding `Style element(s) <http://code.google.com/apis/kml/documentation/kmlreference.html#style>`_ must be provided by the feature's .kml_style property
 
