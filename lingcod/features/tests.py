@@ -1021,7 +1021,7 @@ class JsonSerializationTest(TestCase):
     def test_owner_url(self):
         client = Client()
         client.login(username='featuretest', password='pword')
-        url = '/features/workspace-owner.json'
+        url = '/features/featuretest/workspace-owner.json'
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, self.json)
@@ -1029,7 +1029,7 @@ class JsonSerializationTest(TestCase):
     def test_shared_url(self):
         client = Client()
         client.login(username='featuretest', password='pword')
-        url = '/features/workspace-shared.json'
+        url = '/features/featuretest/workspace-shared.json'
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, self.json_shared)
