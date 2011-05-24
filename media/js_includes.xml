@@ -32,6 +32,8 @@
     <test path="common/js/test/map/geocoder.js" />
     <file path="common/js/lib/json2.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
+    <file path="common/js/jquery/jquery.localscroll-1.2.7-min.js" />
+    <file path="common/js/jquery/jquery.scrollTo-1.4.2-min.js" />
     <file path="common/js/tools/formats.js" />
     <file path="manipulators/js/manipulators.js" />
     <test path="manipulators/js/test/manipulators.js" />
