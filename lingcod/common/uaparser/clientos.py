@@ -23,7 +23,7 @@ def client_os(user_agent):
         regex += '(?P<version_token>[\w .]+)'
         regex += '; '
     # Linux i686
-    regex += '(?P<platform_token>[\w .]+)'
+    regex += '(?P<platform_token>[\w ._]+)'
     # anything else
     regex += '; .*'
 
