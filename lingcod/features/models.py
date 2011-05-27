@@ -146,7 +146,7 @@ class Feature(models.Model):
                 <visibility>0</visibility>
                 <name>%s (INVALID KML)</name>
             </Placemark>
-            """ % (self.uid, escape(self.name))
+            """ % (self.uid, self.name)
 
     
     def add_to_collection(self, collection):
@@ -345,8 +345,8 @@ class SpatialFeature(Feature):
             </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), 
-               escape(self.name), self.user, self.date_modified, 
+        """ % (self.uid, self.name, self.model_uid(), 
+               self.name, self.user, self.date_modified, 
                self.geom_kml)
 
     @property
@@ -617,7 +617,7 @@ class FeatureCollection(Feature):
           <open>0</open>
           %s
         </Folder>
-        """ %  (self.uid, escape(self.name), ''.join(kmls))
+        """ %  (self.uid, self.name, ''.join(kmls))
 
     @property
     def kml_style(self):

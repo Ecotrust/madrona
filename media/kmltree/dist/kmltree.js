@@ -849,6 +849,10 @@ var kmltree = (function(){
                     $(item.node).bind('loaded', function(e, node, kmlObject){
                         self.nodeLoadedCallback(e, node, kmlObject)
                     });
+                    // This handler could be a bit smarter?
+                    $(item.node).bind('error', function(e, node, kmlObject){
+                        self.nodeLoadedCallback(e, node, kmlObject)
+                    });
                     this.opts['tree'].openNetworkLink(item.node);
                     item.loading = true;
                 }
@@ -1934,6 +1938,8 @@ var kmltree = (function(){
                         node.addClass('error');
                         // setModified(node, 'visibility', false);
                         $(that).trigger('kmlLoadError', [kmlObject]);
+                        $(node).trigger('error', [node, kmlObject]);
+                        node.removeClass('loading');
                         node.removeClass('open');
                         return;
                     }
