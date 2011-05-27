@@ -11,7 +11,7 @@ from lingcod.common.utils import get_logger
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.features import workspace_json, get_feature_by_uid
 from django.template.defaultfilters import slugify
-from lingcod.features.models import SpatialFeature, Feature
+from lingcod.features.models import SpatialFeature, Feature, FeatureCollection
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
 from django.utils import simplejson
@@ -240,6 +240,7 @@ def create(request, model, action):
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
                 'is_spatial': issubclass(model, SpatialFeature),
+                'is_collection': issubclass(model, FeatureCollection),
             })
             context = decorate_with_manipulators(context, form_class)
             c = RequestContext(request, context)
@@ -270,6 +271,7 @@ def create_form(request, model, action=None):
             'is_ajax': request.is_ajax(),
             'MEDIA_URL': settings.MEDIA_URL,
             'is_spatial': issubclass(model, SpatialFeature),
+            'is_collection': issubclass(model, FeatureCollection),
         })
         context = decorate_with_manipulators(context, form_class)
         return render_to_response(config.form_template, context)
@@ -306,6 +308,7 @@ def update_form(request, model, uid):
             'is_ajax': request.is_ajax(),
             'MEDIA_URL': settings.MEDIA_URL,
             'is_spatial': issubclass(model, SpatialFeature),
+            'is_collection': issubclass(model, FeatureCollection),
         })
         context = decorate_with_manipulators(context, form_class)
         return render_to_response(config.form_template, context)
@@ -373,6 +376,7 @@ def update(request, model, uid):
                 'is_ajax': request.is_ajax(),
                 'MEDIA_URL': settings.MEDIA_URL,
                 'is_spatial': issubclass(model, SpatialFeature),
+                'is_collection': issubclass(model, FeatureCollection),
             })
             context = decorate_with_manipulators(context, form_class)
             c = RequestContext(request, context)

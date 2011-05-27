@@ -64,7 +64,14 @@
             {% endfor %}
             <p><input type="submit" value="submit"></p>
             </form>
-
+            {% if is_collection %}
+              <div class="draghint">
+                <h5>Hint</h5>
+                <img src="{{MEDIA_URL}}common/images/dragdrophint.png" />
+                To add features to this collection, simply drag and drop features in and out of it from the sidebar after saving.
+                <br style="clear:both;" />
+              </div>
+            {% endif %}
 {% if is_spatial %}
     
         </div>
