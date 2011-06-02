@@ -46,24 +46,30 @@ class SliderWidget(forms.TextInput):
         <div class="slider" id="%(slider_id)s"></div>
         <script type="text/javascript">
         lingcod.onShow( function() {
+            var field = $('#%(field_id)s');
+            var slidy = $('#%(slider_id)s');
             // Create the sliderbar
-            $('#%(slider_id)s').slider({
+            slidy.slider({
                 range: 'min',
                 min : %(min)s, 
                 max : %(max)s,
                 %(step)s
                 change : function(event, ui) {
                     // When the slider changes, set the value of the field
-                    $('#%(field_id)s').val($('#%(slider_id)s').slider('value'));
+                    field.val(slidy.slider('value'));
+                },
+                slide : function(event, ui) {
+                    // When the slider slides, set the value of the field
+                    field.val(slidy.slider('value'));
                 }
             });
            
             // Initialize the slider bar to the current value
-            $('#%(slider_id)s').slider("value", $('#%(field_id)s').val() ); 
+            slidy.slider("value", field.val() ); 
 
             // If the field changes, change the slider bar
-            $('#%(field_id)s').change( function (){
-                $('#%(slider_id)s').slider("value", $('#%(field_id)s').val())
+            field.change( function (){
+                slidy.slider("value", field.val())
             }); 
         });
         </script>
