@@ -120,6 +120,7 @@
         {% block tabscontents %}
         {% if user.is_authenticated %}
         <div id="MyShapes">
+            {% block before_myshapes %}{% endblock before_myshapes %}
             <div style="font-size:1em;" id="myshapestree"></div>
         </div>            
         {% endif %}
@@ -133,6 +134,7 @@
     </div>
     <div id="tools">
         <h1>Tools</h1>
+        {% block flyto %}
         <form id="flyToLocation" method="GET">
             <input type="text" name="flyto_location" value="">
             <a id="flytogo" href="#" class="button" onclick="this.blur(); return false;"><span>Fly Here</span></a>
@@ -140,6 +142,7 @@
             <input type="submit" style="display:none;" />
             <br style="clear:both;" />
         </form>
+        {% endblock flyto %}
         <hr />
         <div id="measurement_tools" class="tool">
             <a id="measure_distance" href="#" class="button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/ruler.png">Measure Distance</span></a>
