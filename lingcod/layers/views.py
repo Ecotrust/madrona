@@ -12,6 +12,7 @@ from lingcod.common.utils import load_session
 from django.core.urlresolvers import reverse
 from lingcod.features.views import get_object_for_viewing
 from django.contrib.auth.models import Group
+from lingcod.common.utils import is_text
 
 def get_kml_file(request, uid, session_key='0', input_username=None):
     load_session(request, session_key)
@@ -24,8 +25,12 @@ def get_kml_file(request, uid, session_key='0', input_username=None):
     if isinstance(instance, HttpResponse):
         return instance
 
-    response = HttpResponse(instance.kml_full)
-    response['Content-Type'] = mimetypes.KML
+    full = instance.kml_full
+    response = HttpResponse(full)
+    if is_text(full):
+        response['Content-Type'] = mimetypes.KML
+    else:
+        response['Content-Type'] = mimetypes.KMZ
     return response
 
 def is_superoverlay_viewable(layer, user):

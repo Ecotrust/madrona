@@ -3,8 +3,12 @@ from django.conf import settings
 from django.contrib.auth.models import User, Group
 from lingcod.features.managers import ShareableGeoManager
 from lingcod.features.models import Feature, FeatureForm
+from lingcod.common.utils import get_logger
 from django.core.urlresolvers import reverse
+from django.utils.encoding import DjangoUnicodeDecodeError
 import os
+
+logger = get_logger()
 
 class PrivateLayerList(Feature):
     """
@@ -49,10 +53,14 @@ class PrivateLayerList(Feature):
     @property
     def kml_full(self):
         from django.utils.encoding import smart_unicode
+        f = self.kml_file.read()
         try:
-            f = self.kml_file.read()
             return smart_unicode(f)
+        except DjangoUnicodeDecodeError:
+            # probably a binary kmz
+            return f
         except:
+            logger.warn("%s.kml_full is failing .. returning an empty kml doc" % self)
             return """<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>"""
 
     class Meta:
