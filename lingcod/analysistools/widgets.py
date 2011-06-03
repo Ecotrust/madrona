@@ -82,3 +82,73 @@ class SliderWidget(forms.TextInput):
         return mark_safe(image_html+field+slider)
 
 
+class SimplePoint(forms.TextInput):
+    def render(self, name, value, attrs=None, title="Point"):
+        output = super(SimplePointInput, self).render(name, value, attrs)
+        set_text = "Set"
+        new_text = "New"
+        if value:
+            geo = fromstr(value)
+            set_text = "Reset"
+            new_text = "Reset"
+            print geo
+        return mark_safe("""
+        <div>
+            <a id="do_grabpoint" class="button" href="#">
+                <span>Click to %s Starting Point</span>
+            </a>
+            <span style="display:none"> 
+            %s 
+            </span>
+        </div>
+        <script type="text/javascript">
+        var shape;
+
+        lingcod.beforeDestroy( function() {
+            if(shape && shape.getParentNode()){
+                gex.dom.removeObject(shape);
+            }
+        });
+
+        lingcod.onShow( function() {
+            function shape_to_wkt(shape) {
+                var lat = shape.getGeometry().getLatitude();
+                var lon = shape.getGeometry().getLongitude();
+                var wkt = "POINT(" + lon + " " + lat + ")";
+                return wkt;
+            }
+
+            $('#do_grabpoint').click( function () {
+                if(!$(this).hasClass('disabled')){
+                    if(shape && shape.getParentNode()){
+                        gex.dom.removeObject(shape);
+                    }
+                    $(this).addClass('disabled');
+                    var button = $(this);
+                    button.html('<span>Click map to set placemark</span>');
+
+                    var popts = {
+                        visibility: true,
+                        name: '%s %s',
+                        style: { icon: { color: '#FF0' } }            
+                    }
+                    popts['point'] = [0,0]; 
+                    shape = gex.dom.addPlacemark(popts);
+                    gex.edit.place(shape, {
+                        bounce: false,
+                        dropCallback: function(){
+                            $('#id_%s').val(shape_to_wkt(shape));
+                            button.html('<span>Drag Placemark to Reset</span>');
+                            gex.edit.makeDraggable(shape, {
+                                bounce: false, 
+                                dropCallback: function () {
+                                    $('#id_%s').val(shape_to_wkt(shape));
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        </script>
+        """ % (set_text,output,new_text,title,name,name))

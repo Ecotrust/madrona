@@ -14,10 +14,13 @@
 # GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg' 
 
 # You'll want to specify any database connection info here:
-# DATABASE_NAME = 'simple_example'
-# DATABASE_USER = 'postgres'
-# DATABASE_PASSWORD = 'my-secret-password'
-
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'example',
+#        'USER': 'postgres',
+#    }
+#}
 
 # Uncomment this line to cause MarineMap to go into maintenance mode
 # It will not be accessible without logging in as staff
@@ -30,4 +33,16 @@
 #TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
 # ID of Wave to be used in demo of the conversation tab
-WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
+# WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
+
+# Location where Ecotrust Fishing Data layers can be found
+# This path is used by lingcod.layers.views to handle requests initiated via EcotrustDataLayers.kml
+# GIS_DATA_ROOT = 'U:/dev/ecotrust_data_layers/SocioEconomicFishingNC/display/'
+
+# Settings for AWS media handling 
+#AWS_USE_S3_MEDIA = False  # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET, AWS_MEDIA_SUBDIR and MEDIA_URL
+#AWS_ACCESS_KEY = '...'
+#AWS_SECRET_KEY = '...'
+#AWS_MEDIA_BUCKET = 'marinemap-bucket'
+#MEDIA_URL = 'http://blah.cloudfront.net/'
+
