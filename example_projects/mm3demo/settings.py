@@ -36,6 +36,7 @@ MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'
 POSTGIS_TEMPLATE='template1'
 APP_NAME = "MarineMap 3.0 Demo"
 
+KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
 try:
     from settings_local import *
 except:

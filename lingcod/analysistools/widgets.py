@@ -2,6 +2,7 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
 from django.conf import settings
+from django.contrib.gis.geos import fromstr
 
 class SliderWidget(forms.TextInput):
     """
@@ -83,8 +84,13 @@ class SliderWidget(forms.TextInput):
 
 
 class SimplePoint(forms.TextInput):
-    def render(self, name, value, attrs=None, title="Point"):
-        output = super(SimplePointInput, self).render(name, value, attrs)
+
+    def __init__(self, title='Point', attrs=None):
+        super(SimplePoint, self).__init__(attrs)
+        self.title = title
+
+    def render(self, name, value, attrs=None):
+        output = super(SimplePoint, self).render(name, value, attrs)
         set_text = "Set"
         new_text = "New"
         if value:
@@ -101,6 +107,7 @@ class SimplePoint(forms.TextInput):
             %s 
             </span>
         </div>
+        <br/><br/>
         <script type="text/javascript">
         var shape;
 
@@ -114,7 +121,7 @@ class SimplePoint(forms.TextInput):
             function shape_to_wkt(shape) {
                 var lat = shape.getGeometry().getLatitude();
                 var lon = shape.getGeometry().getLongitude();
-                var wkt = "POINT(" + lon + " " + lat + ")";
+                var wkt = "SRID=4326;POINT(" + lon + " " + lat + ")";
                 return wkt;
             }
 
@@ -151,4 +158,4 @@ class SimplePoint(forms.TextInput):
             });
         });
         </script>
-        """ % (set_text,output,new_text,title,name,name))
+        """ % (set_text,output,new_text,self.title,name,name))

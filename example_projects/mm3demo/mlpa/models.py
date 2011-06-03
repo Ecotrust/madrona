@@ -6,7 +6,9 @@ from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay
 from lingcod.features.forms import FeatureForm, SpatialFeatureForm
 from lingcod.analysistools.models import Analysis
 from lingcod.analysistools.widgets import SimplePoint, SliderWidget
+from lingcod.common.utils import asKml
 from django.conf import settings
+from django.utils.html import escape
 
 DESIGNATION_CHOICES = (
     ('R', 'Horizontal Axis'), 
@@ -82,7 +84,7 @@ class UserKmlForm(FeatureForm):
 ############################
 @register
 class PinnipedSite(Analysis):
-    input_point = models.PointField(srid=settings.GEOMETRY_DB_SRID, verbose_name='Pinniped Haulout Location')
+    input_point = models.PointField(srid=4326, verbose_name='Pinniped Haulout Location')
     input_buffer_distance = models.FloatField(verbose_name="Buffer Distance (m)")
 
     # All output fields should be allowed to be Null/Blank
@@ -97,7 +99,8 @@ class PinnipedSite(Analysis):
 
     def run(self):
         try:
-            self.output_poly_geom = self.input_point.buffer(self.input_buffer_distance)
+            g = self.input_point.transform(settings.GEOMETRY_DB_SRID, clone=True)
+            self.output_poly_geom = g.buffer(self.input_buffer_distance)
             self.output_area = self.output_poly_geom.area
         except:
             return False
@@ -118,7 +121,7 @@ class PinnipedSite(Analysis):
             </MultiGeometry>
         </Placemark>
         """ % (self.kml_style, self.uid, escape(self.name), self.model_uid(),
-            asKml(self.output_point_geom.transform(
+            asKml(self.input_point.transform(
                     settings.GEOMETRY_CLIENT_SRID, clone=True)),
             asKml(self.output_poly_geom.transform(
                     settings.GEOMETRY_CLIENT_SRID, clone=True)))
@@ -165,13 +168,13 @@ class PinnipedSite(Analysis):
 
 
 class PinnipedSiteForm(FeatureForm):
-    input_point = forms.CharField(widget=SimplePoint(),
+    input_point = forms.CharField(widget=SimplePoint(title="Pinniped Haulout Site"),
             label="Pinniped Haulout Location")
     input_buffer_distance = forms.FloatField(
-            widget=SliderWidget(min=10, max=50000,step=1,
+            widget=SliderWidget(min=10, max=5000,step=1,
                 image = 'analysistools/img/buffer.png' ),
             label = "Buffer Distance (m)",
-            min_value=0.0001, max_value=50000)
+            min_value=10, max_value=5000)
 
     class Meta(FeatureForm.Meta):
         # TODO put all this in AnalysisForm and inherit
