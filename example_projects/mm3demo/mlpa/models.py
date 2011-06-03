@@ -1,8 +1,12 @@
 from django.contrib.gis.db import models
+from django import forms
 from lingcod.features import register
 from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay 
 from lingcod.features.forms import FeatureForm, SpatialFeatureForm
+from lingcod.analysistools.models import Analysis
+from lingcod.analysistools.widgets import SimplePoint, SliderWidget
+from django.conf import settings
 
 DESIGNATION_CHOICES = (
     ('R', 'Horizontal Axis'), 
@@ -77,7 +81,7 @@ class UserKmlForm(FeatureForm):
 
 ############################
 @register
-class PinnepedSite(Analysis):
+class PinnipedSite(Analysis):
     input_point = models.PointField(srid=settings.GEOMETRY_DB_SRID, verbose_name='Pinniped Haulout Location')
     input_buffer_distance = models.FloatField(verbose_name="Buffer Distance (m)")
 

@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'test_project',
+        'NAME': 'demo',
         'USER': 'postgres',
      }
 }
@@ -16,10 +16,9 @@ LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
 
-SECRET_KEY = '=knpq2es_kedoi-j1es=$o02nc*v$^=^8zs*&s@@nij@zev%m2'
-WAVE_ID = 'wavesandbox.com!q43w5q3w45taesrfgs' # Your Google Wave Account - may not be needed
+SECRET_KEY = '%$gy=knpq2essdfsfsdf_kedoi-j1es=$o02nc*v$^=^8zs*&s@@nij@zev%m2'
 
-ROOT_URLCONF = 'test_project.urls'
+ROOT_URLCONF = 'mm3demo.urls'
 
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
