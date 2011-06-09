@@ -214,7 +214,7 @@ def create_kml(request, input_username=None, input_uid=None,
 
     styles = get_styles(features,collections,links)
 
-    t = get_template('kmlapp/base.kml')
+    t = get_template('kmlapp/myshapes.kml')
     context = Context({
                 'user': user, 
                 'features': features, 
