@@ -7,7 +7,7 @@
     <NetworkLink>
         <name>{{kml.name}}</name>
         <open>0</open>
-        <visibility>1</visibility>
+        <visibility>0</visibility>
         <Link> <href>{% absurl layers-privatekml pk=kml.pk session_key=session_key %}</href> </Link>
     </NetworkLink>
     {% endfor %}
