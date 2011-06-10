@@ -32,7 +32,11 @@ class Command(BaseCommand):
 
             for kml in kmls:
                 basename = os.path.basename(kml).split('.')[0]
-                pkml = PrivateKml.objects.create(name=d+"_"+basename,base_kml=kml)
-                if groupname:
-                    pkml.sharing_groups.add(g)
-                print "Created %s from %s" % (pkml,kml)
+                privatekml_name = d+'_'+basename
+                try:
+                    pkml = PrivateKml.objects.create(name=privatekml_name[:99],base_kml=kml)
+                    if groupname:
+                        pkml.sharing_groups.add(g)
+                    print "Created %s from %s" % (pkml,kml)
+                except:
+                    print "couldn't create privatekml from %s" % s
