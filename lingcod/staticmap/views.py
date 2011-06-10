@@ -141,7 +141,7 @@ def staticmap_link(request, instances, map_name="default"):
     width, height = None, None
     uids = [i.uid for i in instances]
     filename = '_'.join([slugify(i.name) for i in instances])
-    autozoom = True
+    autozoom = settings.STATICMAP_AUTOZOOM
     bbox = None
     show_extent = False
 
