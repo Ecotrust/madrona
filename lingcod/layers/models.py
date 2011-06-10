@@ -10,12 +10,15 @@ import os
 
 logger = get_logger()
 
-class PrivateLayerList(Feature):
+class UserUploadedKml(Feature):
     """
     Abstract Model for storing uploaded restricted-access kml files
+
     Owned by a single user, can be shared with any group(s) 
     that the owner is a member of (assuming group has
     can_share_features permissions)
+
+    These are features and will show up in the MyShapes/SharedShapes panels
     """
     kml_file = models.FileField(upload_to='upload/private-kml-layers/%Y/%m/%d', help_text="""
         KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.
@@ -66,29 +69,39 @@ class PrivateLayerList(Feature):
     class Meta:
         abstract=True
 
-class PrivateSuperOverlay(models.Model):
+class PrivateKml(models.Model):
     """
-    For presenting restricted-access multi-file kml trees on disk
-    Note that this is NOT a Feature so it doesn't have any of the sharing API
-    Sharing and permissions must be implemented one-off in the views,
-    For now, this is a setting; a dict with superoverlay name and list of groups:
+    For presenting restricted-access KML datasets that don't belong to a particular user
+    These can be either:
+     * multi-file kml trees on disk (ie superoverlays)
+     * single kml/kmz files 
 
-    SUPEROVERLAY_GROUPS = {'my_super_overlay': ['RSG Members','My Office Mates']}
+    Note that this is NOT a Feature so it doesn't have any of the sharing API, wont show in myshapes, etc
+
+    Admin must upload data to server and place in settings.PRIVATE_KML_ROOT
+
+    VERY IMPORTANT SECURITY CONSIDERATIONS...
+     * PRIVATE_KML_ROOT should not be web accessible!
+     * Each PrivateKml should have it's own subdirectory in PRIVATE_KML_ROOT!
+       THIS IS IMPORTANT; Every file in and below the base kml's directory path is accessible 
+       if the user has proper permissions on the base kml.
+
+    Sharing and permissions must be implemented one-off in the views using the
+    sharing_groups many-to-many field. 
     """
-    priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",default=0.0)
+    priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",
+            default=0.0)
     name = models.CharField(verbose_name="Name", max_length="255",unique=True)
-    base_kml = models.FilePathField(path=settings.SUPEROVERLAY_ROOT, match="^doc.kml$", recursive=True, help_text="""
-        Base KML file of the superoverlay. Must be called 'doc.kml'. This file (and all subsequent files in the tree) must use
-        relative paths.  The user making the request only needs permissions for the base kml. 
+    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,
+            verbose_name="Share layer with the following groups")
+    base_kml = models.FilePathField(path=settings.PRIVATE_KML_ROOT, match=".kml$", 
+        recursive=True, 
+        help_text="""
+        Path to KML file.
+        If a superoverlay tree, use relative paths.  
+        The user making the request only needs permissions for the base kml. 
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
         if the user has proper permissions on the base kml.""")
-
-    def save(self, *args, **kwargs):
-        if self.base_kml == os.path.join(settings.SUPEROVERLAY_ROOT, 'doc.kml'):
-            raise Exception("We don't allow /doc.kml at the SUPEROVERLAY_ROOT dir... security risk.")
-        else:
-            super(PrivateSuperOverlay, self).save(*args, **kwargs)
-
 
 class PublicLayerList(models.Model):
     """Model used for storing uploaded kml files that list all public layers.
@@ -134,3 +147,12 @@ class PublicLayerList(models.Model):
             # There can be only one!
             PublicLayerList.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
             
+
+
+class PrivateLayerList(UserUploadedKml):
+    """
+    Note: This is just a wrapper to avoid breaking 
+    old code that relies on this class name
+    """
+    class Meta:
+        abstract=True

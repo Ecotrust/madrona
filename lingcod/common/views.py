@@ -6,7 +6,8 @@ from lingcod.news.models import Entry
 from lingcod.common.utils import valid_browser
 from lingcod.features import user_sharing_groups
 from lingcod.studyregion.models import StudyRegion
-from lingcod.layers.models import PublicLayerList
+from lingcod.layers.models import PublicLayerList, PrivateKml
+from lingcod.layers.views import has_privatekml
 import datetime
 
 from django.conf import settings
@@ -92,8 +93,10 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'member_of_sharing_group': member_of_sharing_group,
         'is_studyregion': StudyRegion.objects.count() > 0,
         'is_public_layers': PublicLayerList.objects.filter(active=True).count() > 0,
+        'is_privatekml': has_privatekml(user),
         #'user_layers': user_layers,
     })
+
     context.update(extra_context)
     response = render_to_response(template_name, context)
     

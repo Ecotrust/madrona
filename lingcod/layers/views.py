@@ -1,4 +1,6 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
+from django.http import HttpResponse, Http404
+#, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
+from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from models import *
 import os
@@ -7,6 +9,7 @@ import posixpath
 import urllib
 import mimetypes as _mimetypes
 from django.conf import settings
+from django.template.loader import get_template
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.common.utils import load_session
 from django.core.urlresolvers import reverse
@@ -33,35 +36,57 @@ def get_kml_file(request, uid, session_key='0', input_username=None):
         response['Content-Type'] = mimetypes.KMZ
     return response
 
-def is_superoverlay_viewable(layer, user):
+def is_privatekml_viewable(layer, user):
     """
-    Since superoverlays are not Features, they get their own sharing scheme
-    For now, this is a setting; a dict with superoverlay name and list of groups:
-
-    SUPEROVERLAY_GROUPS = {'my_super_overlay': ['RSG Members','My Office Mates']}
+    Since privatekmls are not Features, they get their own sharing scheme
     """
     if user.is_anonymous() or not user.is_authenticated():
         return False, HttpResponse('You must be logged in', status=401)
 
-    try:
-        perms = settings.SUPEROVERLAY_GROUPS
-    except AttributeError:
-        return False, HttpResponse('No SUPEROVERLAY_GROUPS defined in settings', status=500)
-
-    overlay_groups = [Group.objects.get(name=x) for x in perms[layername]]
     for user_group in user.groups.all():
-        if user_group in overlay_groups:
+        if user_group in layer.sharing_groups.all():
             return True, HttpResponse('User %s has permission to view %s' % (user.username, layer.name))
 
     return False, HttpResponse('Access denied', status=403)
 
-def get_private_superoverlay(request, pk, session_key='0'):
+def get_privatekml_list(request, session_key='0'):
     load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    layer = PrivateLayerList.objects.get(pk=pk)
-    viewable, response = is_superoverlay_viewable(layer, user)
+    all_kmls = PrivateKml.objects.all()
+    accessible_kmls = []
+    for kml in all_kmls:
+        viewable, response = is_privatekml_viewable(kml, user)
+        if viewable:
+            accessible_kmls.append(kml)
+
+    t = get_template('layers/private.kml')
+    kml = t.render(RequestContext( request, {'session_key': session_key, 
+                                             'kmls': accessible_kmls}))
+    response = HttpResponse(kml, mimetype=mimetypes.KML)
+    response['Content-Disposition'] = 'filename=privatekmls_%s.kml' % user.username
+    return response
+
+def has_privatekml(user):
+    all_kmls = PrivateKml.objects.all()
+    accessible_kmls = []
+    for kml in all_kmls:
+        viewable, response = is_privatekml_viewable(kml, user)
+        if viewable:
+            accessible_kmls.append(kml)
+    if len(accessible_kmls) >= 1:
+        return True
+    else:
+        return False
+
+def get_privatekml(request, pk, session_key='0'):
+    load_session(request, session_key)
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated():
+        return HttpResponse('You must be logged in', status=401)
+    layer = PrivateKml.objects.get(pk=pk)
+    viewable, response = is_privatekml_viewable(layer, user)
     if not viewable:
         return response
     else:
@@ -69,13 +94,13 @@ def get_private_superoverlay(request, pk, session_key='0'):
         response['Content-Disposition'] = 'attachment; filename=superoverlay_%s.kml' % pk
         return response
 
-def get_relative_to_private_superoverlay(request, pk, path, session_key='0'):
+def get_relative_to_privatekml(request, pk, path, session_key='0'):
     load_session(request, session_key)
     user = request.user
     if user.is_anonymous() or not user.is_authenticated():
         return HttpResponse('You must be logged in', status=401)
-    layer = PrivateLayerList.objects.get(pk=pk)
-    viewable, response = is_superoverlay_viewable(layer, user)
+    layer = PrivateKml.objects.get(pk=pk)
+    viewable, response = is_privatekml_viewable(layer, user)
     if not viewable:
         return response
 
@@ -154,12 +179,3 @@ def get_networklink_protected_layers(request, session_key):
     response['Content-Disposition'] = 'attachment; filename=private_links.kml'
     return response
 
-def get_superoverlays_for_user(user, staff_only=False):
-    shared_overlays = PrivateSuperOverlay.objects.shared_with_user(user).order_by('-priority')
-    owned_overlays = PrivateSuperOverlay.objects.filter(user=user).order_by('-priority')
-    layers = []
-    for lyr in itertools.chain(shared_overlays, owned_overlays):
-        if lyr not in layers:
-            if not staff_only or (staff_only and lyr.user.is_staff):
-                layers.append(lyr)
-    return layers

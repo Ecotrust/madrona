@@ -25,15 +25,16 @@
         {% endif %}
 
         {% block layersConfig %}
-        // setup which kml files are shown in the data layers panel
-        
-        {% if is_studyregion %}
-        lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
-        {% endif %}
-
-        {% if is_public_layers %}        
-        lingcod.addLayer('{% url public-data-layers %}');            
-        {% endif %}
+            // setup which kml files are shown in the data layers panel
+            {% if is_studyregion %}
+                lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
+            {% endif %}
+            {% if is_public_layers %}        
+                lingcod.addLayer('{% url public-data-layers %}');            
+            {% endif %}
+            {% if user.is_authenticated and is_privatekml %}
+                lingcod.addLayer('{% url layers-privatekml-list session_key=session_key %}');            
+            {% endif %}
         {% endblock layersConfig %}
 
         {% block sharedshapes %}

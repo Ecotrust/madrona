@@ -201,7 +201,7 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
 OPENID_ENABLED = False
 LOG_FILE = None # write log to stdout
 
-SUPEROVERLAY_ROOT = '/mnt/EBS_superoverlays/display'
+PRIVATE_KML_ROOT = '/mnt/EBS_superoverlays/display'
 
 DATABASES = {
     'default': {
