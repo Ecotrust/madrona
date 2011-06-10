@@ -31,7 +31,8 @@ class Command(BaseCommand):
                 continue
 
             for kml in kmls:
-                pkml = PrivateKml.objects.create(name=d,base_kml=kml)
+                basename = os.path.basename(kml).split('.')[0]
+                pkml = PrivateKml.objects.create(name=d+"_"+basename,base_kml=kml)
                 if groupname:
                     pkml.sharing_groups.add(g)
                 print "Created %s from %s" % (pkml,kml)
