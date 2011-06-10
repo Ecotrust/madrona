@@ -94,7 +94,7 @@ class PrivateKml(models.Model):
     name = models.CharField(verbose_name="Name", max_length="255",unique=True)
     sharing_groups = models.ManyToManyField(Group,blank=True,null=True,
             verbose_name="Share layer with the following groups")
-    base_kml = models.FilePathField(path=settings.PRIVATE_KML_ROOT, match=".kml$", 
+    base_kml = models.FilePathField(path=settings.PRIVATE_KML_ROOT, match="\.km.$", 
         recursive=True, max_length=255,
         help_text="""
         Path to KML file.
