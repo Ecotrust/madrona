@@ -546,9 +546,11 @@ lingcod.features.kmlEditor = (function(){
                 }
             };
             var a = $(form).attr('action');
-            if(a[a.length - 1] !== '/'){
-                // For the benefit of IE
-                $(form).attr('action', a + '/');
+            if(typeof a !== 'undefined') {
+                if(a[a.length - 1] !== '/'){
+                    // For the benefit of IE
+                    $(form).attr('action', a + '/');
+                }
             }
             $(form).ajaxForm(opts);
 
