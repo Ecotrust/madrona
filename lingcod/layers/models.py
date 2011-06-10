@@ -95,7 +95,7 @@ class PrivateKml(models.Model):
     sharing_groups = models.ManyToManyField(Group,blank=True,null=True,
             verbose_name="Share layer with the following groups")
     base_kml = models.FilePathField(path=settings.PRIVATE_KML_ROOT, match=".kml$", 
-        recursive=True, 
+        recursive=True, max_length=255,
         help_text="""
         Path to KML file.
         If a superoverlay tree, use relative paths.  
