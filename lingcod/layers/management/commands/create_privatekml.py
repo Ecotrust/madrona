@@ -25,7 +25,7 @@ class Command(BaseCommand):
                     settings.PRIVATE_KML_ROOT)
         for d in os.listdir(settings.PRIVATE_KML_ROOT):
             path = os.path.join(settings.PRIVATE_KML_ROOT,d)
-            kmls = glob.glob(os.path.join(path,'*.km*'))
+            kmls = glob.glob(os.path.join(path,'*.km[z,l]'))
             if len(kmls) == 0:
                 print "No KML/KMZ found in %s" % path
                 continue
@@ -33,11 +33,12 @@ class Command(BaseCommand):
             for kml in kmls:
                 basename = os.path.basename(kml).split('.')[0]
                 privatekml_name = d+'_'+basename
+                print "Creating", privatekml_name
                 try:
                     pkml = PrivateKml.objects.create(name=privatekml_name[:99],base_kml=kml)
                     if groupname:
                         pkml.sharing_groups.add(g)
-                    print "Created %s from %s" % (pkml,kml)
+                    print " created %s from %s" % (pkml,kml)
                 except Exception as e:
-                    print "couldn't create privatekml from %s" % kml
+                    print " couldn't create privatekml from %s" % kml
                     print "  ", e
