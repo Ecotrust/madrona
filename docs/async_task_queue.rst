@@ -8,21 +8,25 @@ http://ask.github.com/celery/getting-started/introduction.html
 
 Installation
 ------------
-The requirements are easy_installable since we;re using ghettoq instead of the more powerful but complicated RabbitMQ::
+The requirements are easy_installable since we're using ghettoq instead of the more powerful but complicated RabbitMQ::
 
-    sudo pip install ghettoq
     sudo pip install django-celery
+    sudo pip install djkombu
 
 Settings
 --------
 In the simplest case, we can just add the apps and point them to use the current django db settings::
 
-    CARROT_BACKEND = "ghettoq.taproot.Database" 
-    CELERY_RESULT_BACKEND = 'database'
+    INSTALLED_APPS += ( 'djcelery', 'djkombu' )
+    CARROT_BACKEND = "django"
+    CELERY_RESULT_BACKEND = "database"
     CELERY_TRACK_STARTED = True
-    INSTALLED_APPS += ( 'celery', 'ghettoq' )
+    BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 
-After that, make sure to run `python manage.py syncdb`
+    #Make sure to add any modules containing tasks other than app.tasks
+    CELERY_IMPORT = ('myapp.other_tasks',)
+
+After that, make sure to run `python manage.py syncdb` to create the necessary tables
 
 Writing your tasks
 ------------------

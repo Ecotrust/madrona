@@ -1,13 +1,15 @@
-{% extends "authopenid/base.html" %}
-{% load i18n %}
+{# extends "authopenid/base.html" #}
+{% extends 'common/panel.html' %}
+{% load appname %}
+{% block title %}Sign In{% endblock title %}
 
-{% block content %}
+{% block panel %}
 {% if msg %}
 <br />
 	<p class="warning">{{ msg }}</p>
 {% endif %}
 {% if form2.errors %}
-<div class="errors"><p>{% trans "Please correct errors below:" %}<br />
+<div class="errors"><p>Please correct errors below:<br />
 	{% if form2.username.errors %} 
 		<span class="error">USERNAME errors {{ form2.username.errors|join:", " }}</span>
         <br/>
@@ -28,21 +30,21 @@
 <br>
 {% endif %}
 
-<div class="login">
+<div class="login" style="margin-top:25px">
 
 <form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
-        <legend>{% trans "Sign In To MarineMap" %}</legend> 
-		<div class="form-row"><label for="id_username">{% trans "Username:" %}</label><br />{{ form2.username }}</div>
-		<div class="form-row"><label for="id_password">{% trans "Password" %}</label><br />{{ form2.password }}</div>
-        <div class="submit-row"><input type="submit" name="blogin" value="{% trans "Sign in" %}"> </div>
+        <legend><strong>Sign In To {% appname %}</strong></legend> 
+		<div class="form-row"><label for="id_username">Username</label><br />{{ form2.username }}</div>
+		<div class="form-row"><label for="id_password">Password</label><br />{{ form2.password }}</div>
+        <div class="submit-row"><input type="submit" name="blogin" value="Sign in"> </div>
 	</fieldset>	
 </form>
 
-<p><a href="{% url auth_password_reset %}">Forgot your password?</a></p>
+<p><a class="panel_link" href="{% url auth_password_reset %}">Forgot your password?</a></p>
 </div>	
-{% endblock %}
+{% endblock panel %}
 
 
 

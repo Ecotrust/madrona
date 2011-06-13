@@ -7,16 +7,8 @@
     like Google's ajaxlibs
 -->
 <javascripts>
-	<!-- JQUERY UI Stuff -->
-	<!-- <file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.core.js" />
-	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.widget.js" />
-	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.mouse.js" />
-	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.draggable.js" />
-	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.droppable.js" />
-	<file path="common/js/lib/jquery-ui-1.8rc1/ui/jquery.ui.tabs.js" /> -->
-	<!-- END JQUERY UI Stuff -->
-	<file path="common/js/lib/geo-0.2.pack.js" />
-    <file path="common/js/lib/extensions-0-1.2.1.pack.js" />
+  <!-- <file path="common/js/lib/geo-0.2.pack.js" /> -->
+    <file path="common/js/lib/extensions.js" />
     <file path="common/js/lib/jquery.form.js" />
     <file path="common/js/lingcod.js" />
     <file path="common/js/lib/tmpl.js" />
@@ -40,16 +32,15 @@
     <test path="common/js/test/map/geocoder.js" />
     <file path="common/js/lib/json2.js" />
     <file path="common/js/jquery/jquery-callback-1.2.js" />
+    <file path="common/js/jquery/jquery.localscroll-1.2.7-min.js" />
+    <file path="common/js/jquery/jquery.scrollTo-1.4.2-min.js" />
     <file path="common/js/tools/formats.js" />
     <file path="manipulators/js/manipulators.js" />
     <test path="manipulators/js/test/manipulators.js" />
-    <file path="mpa/js/mpa_creator.js" />
-    <file path="mpa/js/mpa_loader.js" />
-    <file path="mpa/js/mpa_saver.js" />
-    <file path="rest/javascript/rest.js" />
-    <file path="rest/javascript/kmlEditor.js" />
-    <test path="rest/javascript/test.js" />
     <file path="common/js/graphics.js" />
     <file path="common/js/ui/table.js" />
 	<file path="geographic_report/js/geographicReport.js" />
+	<file path="features/features.js" />
+	<file path="features/js/workspace.js" />
+	<file path="features/js/kmlEditor.js" />	
 </javascripts>

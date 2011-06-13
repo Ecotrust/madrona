@@ -14,3 +14,7 @@ goog.require('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.ToolbarToggleButton');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Select');
+
+// To rebuild the required closure library dependencies from closure lib's 
+// trunk, download the source and run a command like this:
+// python calcdeps.py -i ~/Working/marinemap/media/closure/dependencies.js -p ../../../closure-library-read-only/ -o compiled > ~/Working/marinemap/media/closure/closure-compiled.js -c compiler.jar

@@ -1,0 +1,45 @@
+{% extends "kmlapp/base.kml" %}
+{% load absurl %}
+{% block workspace-json %}
+	{% if user.is_anonymous %}
+<atom:link title="workspace" rel="workspace" href="{% url workspace-public-json %}" />
+	{% else %}
+<atom:link title="workspace" rel="workspace" href="{% url workspace-shared-json user.username %}" />
+	{% endif %}
+{% endblock %}
+{% block folders_and_placemarks %}
+
+    <NetworkLink>
+    <name>Public Proposals</name>
+    <open>0</open>
+    <visibility>0</visibility>
+    <Link>
+    <href>{% absurl kmlapp-publicshared-kmz session_key %}</href>
+    </Link>
+    </NetworkLink>
+
+{% for key, group_user in groups_users.items %}
+ <Folder>
+  <name>{{group_user.group.name}}</name>
+  <visibility>0</visibility>
+  <open>0</open>
+
+  {% for user in group_user.users %}
+      <NetworkLink>
+       {% if user.first_name and user.last_name %}
+        <name>{{user.first_name}} {{user.last_name}}</name>
+       {% else %}
+        <name>{{user.username}}</name>
+       {% endif %}
+        <open>0</open>
+        <visibility>0</visibility>
+        <Link>
+         <href>{% absurl kmlapp-sharedby-kmz input_shareuser=user.id input_sharegroup=group_user.group.id session_key=session_key %}</href>
+        </Link>
+      </NetworkLink>
+  {% endfor %}
+
+ </Folder>
+{% endfor %}
+
+{% endblock %}

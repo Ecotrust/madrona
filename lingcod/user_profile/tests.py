@@ -36,6 +36,5 @@ class UserProfileTest(TestCase):
         self.assertEquals(response.status_code, 302, response)
 
         joe = User.objects.get(pk=self.user1.pk)
-        self.assertEquals(joe.last_name, 'Rando')
         joepro = UserProfile.objects.get(user=joe)
         self.assertEquals(joepro.about, 'Joe Rando is a man of few words')

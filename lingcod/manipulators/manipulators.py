@@ -1,8 +1,8 @@
-from django.contrib.gis.geos import GEOSGeometry, Polygon, Point, LinearRing, fromstr
+from django.contrib.gis.geos import GEOSGeometry, Polygon, LineString, Point, LinearRing, fromstr
 from django import forms
 from lingcod.studyregion.models import *
 from django.conf import settings
-from lingcod.common.utils import LargestPolyFromMulti
+from lingcod.common.utils import LargestPolyFromMulti, LargestLineFromMulti
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
@@ -29,10 +29,24 @@ def simplify(geom):
 
 def display_kml(geom):
     geom = simplify(geom)
-    coords = []
-    for coord in geom.shell.coords:
-        coords.append(','.join([str(coord[0]), str(coord[1]), str(settings.KML_EXTRUDE_HEIGHT)]))
-    coords = ' '.join(coords)
+    if hasattr(geom, 'shell'):
+        coords = []
+        for coord in geom.shell.coords:
+            coords.append(','.join([str(coord[0]), str(coord[1]), str(settings.KML_EXTRUDE_HEIGHT)]))
+        coords = ' '.join(coords)
+        geom_kml = """<Polygon>
+            <extrude>1</extrude>
+            <altitudeMode>absolute</altitudeMode>
+            <outerBoundaryIs>
+                <LinearRing>
+                <coordinates>%s</coordinates>
+                </LinearRing>
+            </outerBoundaryIs>
+        </Polygon>
+        """ % (coords, )
+    else:
+        geom_kml = geom.kml
+    
     return """<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
     <Placemark>
@@ -45,17 +59,10 @@ def display_kml(geom):
                 <color>8000ff00</color>
             </PolyStyle>
         </Style>
-        <Polygon>
-            <extrude>1</extrude>
-            <altitudeMode>absolute</altitudeMode>
-            <outerBoundaryIs>
-                <LinearRing>
-                <coordinates>%s</coordinates>
-                </LinearRing>
-            </outerBoundaryIs>
-        </Polygon>
+        %s
     </Placemark>
-</kml>""" % (coords, )
+</kml>""" % (geom_kml, )
+    
 
 def parsekmlpoly(kmlstring):
     e = fromstring(kmlstring)
@@ -68,7 +75,41 @@ def parsekmlpoly(kmlstring):
             lra.append((float(a[0]), float(a[1])))
     lr = LinearRing(lra)
     poly = Polygon(lr)
-    return poly 
+    return poly
+    
+def parsekmllinestring(kmlstring):
+    e = fromstring(kmlstring)
+    coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}LineString/{http://www.opengis.net/kml/2.2}coordinates').text
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    lra = []
+    for yxz in coords.split(' '):
+        a = yxz.split(',')
+        if len(a) > 1:
+            lra.append((float(a[0]), float(a[1])))
+    linestring = LineString(lra)
+    return linestring
+    
+def parsekmlpoint(kmlstring):
+    e = fromstring(kmlstring)
+    coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Point/{http://www.opengis.net/kml/2.2}coordinates').text
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    lra = []
+    for yxz in coords.split(' '):
+        a = yxz.split(',')
+        if len(a) > 1:
+            lra.append((float(a[0]), float(a[1])))
+    point = Point(lra[0])
+    return point
+    
+
+def parsekml(shape):
+    if shape.find('Polygon') is not -1:
+        return parsekmlpoly(shape)
+    elif shape.find('LineString') is not -1:
+        return parsekmllinestring(shape)
+    else:
+        # point
+        return parsekmlpoint(shape)
 
 def iskml(string):
     return (string.rfind('kml') != -1)
@@ -111,7 +152,7 @@ class BaseManipulator(object):
     def target_to_valid_geom(self, shape):
         try:
             if iskml(shape):
-                target = parsekmlpoly(shape)
+                target = parsekml(shape)
             else:
                 target = GEOSGeometry(shape)
         except Exception, e:
@@ -423,24 +464,28 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while intersecting geometries: " + e.message)  
         
-        #if there was no overlap (intersection was empty)
-        if clipped_shape.area == 0:
+        out_geom = None
+        if target_shape.geom_type == 'Polygon' and clipped_shape.area > 0:
+            out_geom = LargestPolyFromMulti(clipped_shape)
+        elif target_shape.geom_type == 'LineString' and clipped_shape.length > 0:
+            out_geom = LargestLineFromMulti(clipped_shape)
+        elif target_shape.geom_type == 'Point' and not clipped_shape.empty:
+            out_geom = clipped_shape
+
+        if out_geom is None:
             message = "clipped geometry is empty (there was no intersection/overlap with study region)"
             status_html = self.do_template("2")
             raise self.HaltManipulations(message, status_html)
-            
-        #if there was overlap
-        largest_poly = LargestPolyFromMulti(clipped_shape)
-        #message = "target_shape was clipped to study region"
+
         status_html = self.do_template("0")
-        #return self.result(largest_poly, target_shape, status_html, message)
-        return self.result(largest_poly, status_html)
+        return self.result(out_geom, status_html)
         
         
     class Options:
         name = 'ClipToStudyRegion'
-        #display_name = "Study Region"
-        #description = "Clip your shape to the study region"
+        supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
+        display_name = "Study Region"
+        description = "Clip your shape to the study region"
         html_templates = {
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
@@ -593,6 +638,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
         
     class Options:
         name = 'ClipToGraticule'
+        supported_geom_fields = ['PolygonField', 'LineStringField']
         html_templates = {
             '0':'manipulators/graticule.html', 
             '2':'manipulators/no_graticule_overlap.html',
@@ -616,6 +662,7 @@ class NullManipulator(BaseManipulator):
 
     class Options(BaseManipulator.Options):
         name = 'NullManipulator'
+        supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
         html_templates = {
             '0':'manipulators/valid.html', 
         }
@@ -633,9 +680,10 @@ def get_manipulators_for_model(model):
     required = []
     display_names = {}
     descriptions = {}
+    options = model.get_options()
 
     # required manipulators
-    for manipulator in model.Options.manipulators:
+    for manipulator in options.manipulators:
         required.append(manipulator.Options.name)
 
         try:
@@ -649,21 +697,18 @@ def get_manipulators_for_model(model):
             pass
 
     # optional manipulators
-    try:
-        optional = []
-        for manipulator in model.Options.optional_manipulators:
-            optional.append(manipulator.Options.name)
-            try:
-                display_names[manipulator.Options.name] = manipulator.Options.display_name
-            except AttributeError:
-                pass
+    optional = []
+    for manipulator in options.optional_manipulators:
+        optional.append(manipulator.Options.name)
+        try:
+            display_names[manipulator.Options.name] = manipulator.Options.display_name
+        except AttributeError:
+            pass
 
-            try:
-                descriptions[manipulator.Options.name] = manipulator.Options.description
-            except AttributeError:
-                pass
-    except:
-        optional = None
+        try:
+            descriptions[manipulator.Options.name] = manipulator.Options.description
+        except AttributeError:
+            pass
 
     manip = {'manipulators': required}
     if optional:
@@ -683,7 +728,9 @@ def get_manipulators_for_model(model):
     except AttributeError:
         pass
 
-    manip['loadshp_url'] = reverse('loadshp-single')
+    if 'loadshp' in manip['geometry_input_methods']:
+        manip['loadshp_url'] = reverse('loadshp-single')
+
     manip['url'] = url
     manip['display_names'] = display_names
     manip['descriptions'] = descriptions

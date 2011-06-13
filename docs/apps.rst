@@ -1,21 +1,48 @@
-Apps
-****
+Core Apps
+*********
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   study_region
-   intersection
-   spacing
-   layers
-   marine_protected_areas
-   arrays
-   static_map_configuration
-   kml_configuration
-   sharing_configuration
-   rest
-   raster_stats
-   news
-   async_app
-   openid
-   loadshp
+    async
+    common
+    features
+    google-analytics
+    help
+    kmlapp
+    layers
+    loadshp
+    manipulators
+    news
+    openid
+    screencasts
+    shapes
+    simplefaq
+    staticmap
+    studyregion
+    unit_converter
+    user_profile
+
+Optional Apps
+*************
+
+.. toctree::
+    :maxdepth: 2
+
+    analysistools
+    bioeconomic_model
+    bioregions
+    data_distributor
+    data_manager
+    depth_range
+    geographic_report
+    group_management
+    heatmap
+    intersection
+    pg_spacing
+    raster_stats
+    replication
+    spacing
+    straightline_spacing
+    wave
+    xyquery

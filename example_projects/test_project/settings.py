@@ -3,9 +3,13 @@ from lingcod.common.default_settings import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DATABASE_ENGINE = 'postgresql_psycopg2'
-DATABASE_NAME = 'test_project'
-DATABASE_USER = 'postgres'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'test_project',
+        'USER': 'postgres',
+     }
+}
 
 TIME_ZONE = 'America/Vancouver'
 LANGUAGE_CODE = 'en-us'
@@ -25,14 +29,12 @@ INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', )
 # the xml test runner to fail to output the xml
 EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
 
-
-MPA_CLASS = 'mlpa.models.Mpa'
-ARRAY_CLASS = 'mlpa.models.MpaArray'
-MPA_FORM = 'mlpa.forms.MpaForm'
-ARRAY_FORM = 'mlpa.forms.ArrayForm'
+KML_EXTRUDE_HEIGHT = 700
 
 import os
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
+
+POSTGIS_TEMPLATE='template1'
 
 try:
     from settings_local import *

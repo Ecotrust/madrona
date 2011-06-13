@@ -1,7 +1,8 @@
 {% extends "registration/reg_base.html" %}
 {% load order_by %}
+{% load appname %}
 
-{% block title %}Request MarineMap group membership{% endblock %}
+{% block title %}Request {%appname%} group membership{% endblock %}
 
 {% block content %}
 <style>
@@ -23,7 +24,7 @@
 				</ul>
                 <input type="submit" value="Submit"/>
     </form>
-    <p style="font-size:75%">Though we will make every effort to expedite the process, the group membership process takes up to 7 days - you may still use MarineMap during this time but sharing and collaborating with these groups may be delayed pending approval.</p> 
+    <p style="font-size:75%">Though we will make every effort to expedite the process, the group membership process takes up to 7 days - you may still use {%appname%} during this time but sharing and collaborating with these groups may be delayed pending approval.</p> 
 {% else %}
     <p> There are no eligible groups at this time.  </p>
 {% endif %}

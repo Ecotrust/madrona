@@ -1,1 +1,1 @@
-[{"pk": 1, "model": "layers.publiclayerlist", "fields": {"active": true, "kml": "layers/uploaded-kml/publicDataLayers.kmz", "creation_date": "2009-08-17 08:55:04"}}]
+[{"pk": 1, "model": "layers.publiclayerlist", "fields": {"active": true, "kml_file": "layers/uploaded-kml/publicDataLayers.kmz", "creation_date": "2009-08-17 08:55:04"}}]

@@ -1,11 +1,25 @@
 .. _layers:
 
-Data Layers
-===========
+`lingcod.layers`: KML Data Layers
+=================================
+This document outlines how KML base data layers are handled in MarineMap. 
 
-Adding Public Datasets
-**********************
-Public datasets used by MarineMap are managed using a single KML file. This
+There are two categories of KML layers to consider:
+
+* **User Uploaded KMLs** are controlled by the user through the web interface. These act as ``Features`` and can be shared, managed through the MarineMap application, put into folders, etc. These will show up in the "My Shapes" and "Shared with Me" Tabs.
+  
+* **Admin Managed KMLs** are managed by the site administrators on the server or through the admin site. They cannot be managed through the MarineMap application front-end, only viewed. Data can be uploaded directly onto the server with sftp. They aren't treated like features, they don't use the sharing API or have any of the built in functionality of ``Features``. They'll only show up in the data layers panel or wherever you choose to put them in your site template.
+
+  Of these, there are two sub-types of admin-managed KMLs:
+
+  * **Private KMLs** can be single KMLs or superoverlay trees which are only available to select groups. 
+
+  * **Public Layer Lists** is a single KML file that is used to represent all publically-available data layers.
+  
+
+Adding Public KML Datasets
+***************************
+Public datasets, accessible to all users, are managed using a single KML file. This
 file uses ``NetworkLinks`` to refer to other datasets that can be hosted
 anywhere else on the web.
 
@@ -33,30 +47,14 @@ changes is as follows.
 This makes it easy to roll back to a previous version of the layer list as
 needed.
 
-Adding Private Datasets
-***********************
+Adding Restricted-Access KML Datasets
+*************************************
 
-Private datasets allow you to create and add additional layers with access control. You can choose to keep the layers entirely private or share them with select user groups.
+Private KMLs allow you to create and add additional layers with access control. You can choose to keep the layers entirely private or share them with select user groups.
 
-Once you have the kml or kmz file created, go into the admin tool and choose **Private layer lists**. You can add as many layers as you wish but make sure you choose your username from the dropdown menu! This should be done automatically but is terribly difficult to implement for some reason; we are stuck manually assigning it. Also make sure you give it an appropriate name and a priority number. Finally, select one or more groups if you wish to share the layer with other user groups (if not, just leave it blank and it will be your own personal data layer).
 
-In order to enable sharing within a group, you must grant the group the following permission::
-
-    layers | private layer list | Can share private layers
-
-To add the private layers to your marinemap site,add the following to your layerConfig block in the map template:: 
-
-    lingcod.addLayer('{% url private-data-layers session_key=session_key %}');            
-
-This will show up as a kml file with network links to all private layers accessible to the user (owned by them and shared with them via user groups).
-
-For admin types: If you're installing a new system, you need to make sure that :class:`PrivateLayerList <lingcod.layers.models.PrivateLayerList>` is set configured for use with the sharing app. The easiest way to do this is to run the `manage.py layers_sharing` command.
-
-Adding Private SuperOverlays
-****************************
-
-Overview
---------
+Adding Restricted-Access KML SuperOverlays
+-------------------------------------------
 SuperOverlays are multi-file KML heirarchies for displaying things like tiled rasters (created using the gdal2tiles utility for example). The key distinctions between a normal private dataset and a private superoverlay is that a) superoverlays must exist on disk (cant be uploaded via admin) and b) they allow authorized users to access *any* file in or below the directory of the base kml file. 
 
 For example, consider this directory structure::
@@ -67,7 +65,7 @@ For example, consider this directory structure::
      - level1
        - doc.kml
 
-If you create a PrivateLayerList with the kml set to `rockfish/doc.kml` you can access the base kml itself using the normal URL (assume pk=1, session_key=0)::
+If you create a PrivateKML with the kml set to `rockfish/doc.kml` you can access the base kml itself using the normal URL (assume pk=1, session_key=0)::
     
     http://localhost:8000/layers/overlay/1/0/
 
@@ -78,39 +76,21 @@ Or any path relative to this URL to access files in or below that directory::
 
 The appended paths are sanitized according to the algorithm in django.views.static which ensures that only file at or below the base directory can be accessed. *If a user has access to the base kml, they also have access to every file at or below that directory level!* This has important security implications and it's highly recomended that you put each superoverlay in its own folder as a result. 
 
-Setting up a superoverlay
--------------------------
-1. Create a directory for superoverlays and set `settings.SUPEROVERLAY_ROOT`
-#. Create the superoverlay. Must use relative paths and have a doc.kml which will serve as the base kml file. 
-#. Transfer the superoverlay data directory to SUPEROVERLAY_ROOT
-#. Set up layers sharing : `manage.py layers_sharing`
-#. For each group that wishes to share superoveralys, they need this permission added::
+Setting up private KMLs
+-----------------------
+1. Create a directory for private KMLS and set `settings.PRIVATE_KML_ROOT`
+#. Transfer the data to PRIVATE_KML_ROOT. For best results, it's highly recomended that each dataset get it's own subdirectory, especially if you are dealing with superoverlays.
 
-    layers | private super overlay | Can share private super overlays
+#. Using the Admin interface, add the privatekml. The .kml/.kmz files should appear in the dropdown
+#. Alternatively, you can run a management command to auto-create private kml entries and share them with a group. This is based on the exisiting contents of PRIVATE_KML_ROOT. You'll probaby want to tweak the PrivateKml entries via admin later but this provides a decent starting point.::
 
-#. Using the Admin interface, add the private super overlay. The doc.kml file should appear in the dropdown
-#. The superoverlay will now be included in the private data layers list (assuming this is added to the map):: 
+    python manage.py create_privatekml GroupName
 
-    lingcod.addLayer('{% url private-data-layers session_key=session_key %}');            
+#. The private will now be included in the private data layers list (assuming this is added to the map):: 
+
+    lingcod.addLayer('{% url layers_privatekml_list session_key=session_key %}');            
    
-#. Alternatively, you can access the layer directly through a reverse url lookup like so::
+#. Alternatively, you can access each PrivateKml directly through a reverse url lookup like so::
 
-    {% url layers-superoverlay-private pk=1 session_key=session_key %}            
+    {% url layers-privatekml pk=1 session_key=session_key %}            
 
-Legends
-*******
-
-Metadata
-********
-
-Temporal Data
-*************
-
-Tours
-*****
-
-Tools for Creating KML
-**********************
-
-Sources for Existing KML
-************************

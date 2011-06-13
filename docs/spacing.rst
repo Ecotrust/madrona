@@ -1,7 +1,7 @@
 .. _spacing:
 
-The Spacing App
-====================
+`lingcod.spacing`: The Spacing App
+==================================
 
 Introduction
 ************

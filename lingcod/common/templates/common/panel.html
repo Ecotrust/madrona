@@ -6,6 +6,24 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>{% block title %}title not set. use block title.{% endblock %}</title>
     {% block head %}{% endblock %}
+	<style type="text/css" media="screen">
+		ul.errorlist li {
+			background-color:#C54035;
+			padding:5px;
+			color:white;
+		}
+	</style>
+    <script type="text/javascript" charset="utf-8">
+        if(typeof lingcod === 'undefined'){
+            window.lingcod = {
+                setupForm: function(){},
+                onShow: function(){},
+                onHide: function(){},
+                onUnhide: function(){},
+                beforeDestroy: function(){}
+            }
+        }
+    </script>
   </head>
   <body>    
 {% endif %}

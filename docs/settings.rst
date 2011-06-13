@@ -92,6 +92,10 @@ MarineMap Settings
 ``KML_EXTRUDE_HEIGHT``
     KML output is extruded to produce 3D shapes; This setting determines the height in meters. Defaults to ``100``.
 
+.. _KML_ALTITUDEMODE_DEFAULT:
+``KML_ALTITUDEMODE_DEFAULT``
+    Sets the default KML altitudeMode (usually one of: `absolute`, `clampToGround`, `relativeToGround`). 
+
 .. _SHARING_TO_PUBLIC_GROUPS:
 ``SHARING_TO_PUBLIC_GROUPS``
     List of groups which have the ability to make arrays publically viewable. Defaults to ``['Share with Public']``
@@ -119,6 +123,14 @@ MarineMap Settings
 .. _STARSPAN_BIN:
 ``STARSPAN_BIN``
     Location of the starspan executable. Used with the `lingcod.raster_stats` app. (Optional; defaults to `starspan`)
+
+.. _HELP_EMAIL:
+``HELP_EMAIL``
+    Email address used in templates for users to contact in case of problems. defaults to help@marinemap.org
+
+.. _APP_NAME:
+``APP_NAME``
+    Name of the application to be used in templates as the title. defaults to 'MarineMap'
 
 3rd Party App Settings
 ----------------------
@@ -191,7 +203,8 @@ Django Settings
 .. _MEDIA_URL:
 
 ``MEDIA_URL``
-    defaults to /media/
+    This should be a full absolute path to the media directory (e.g. "http://northcoast.marinemap.org/media/"). Defaults to /media/; application will work with a relative path but there may be some minor js errors to contend with.
+
 
 .. _LOGIN_URL:
 
@@ -203,3 +216,6 @@ Django Settings
 ``LOGIN_REDIRECT_URL``
     Set to the map view at the root ( ``/`` )
 
+.. _CACHES:
+``CACHES``
+    see the `django docs <http://docs.djangoproject.com/en/dev/ref/settings/#caches>`_ for details on cache setup. defaults to local memory caching.

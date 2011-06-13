@@ -113,3 +113,26 @@ div.field ul label {
 div.manipulated.error h3 {
     color:#A30000;
 }
+
+li.optional_manipulator > span {
+    font-size:14px;
+    margin-left: 5px; 
+}
+
+div.draghint {
+    color:#305665;
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+div.draghint img {
+    float:left;
+    margin-right:10px;
+}
+
+div.draghint h5 {
+    font-size:14px;
+    margin:0;
+    padding:5px 0;
+}

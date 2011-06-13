@@ -83,9 +83,7 @@ lingcod.panel = function(options){
             loader.destroy();
         }
         $(el[0]).scrollTop(1).scrollTop(0);
-        if(options.showCloseButton === false){
-            el.find('a.close').hide();
-        }
+        el.find('a.close').hide();
         if(!that.options.hideOnly){
             el.hide();
             that.shown = false;
@@ -137,12 +135,27 @@ lingcod.panel = function(options){
             target: el.find('.content'),
             beforeCallbacks: function(){
                 that.stopSpinning();
-                el.find('a.close').show();
+                el.find('a.close').show();                    
                 that.show();
             }
         }, options));
         loader.load();
     };
+    
+    that.showText = function(text, options){
+        loader = lingcod.contentLoader($.extend({}, {
+            text: text,
+            activeTabs: options.syncTabs ? getActiveTabs(el) : false,
+            error: options.error,
+            behaviors: applyBehaviors,
+            target: el.find('.content'),
+            beforeCallbacks: function(){
+                el.find('a.close').show();                    
+                that.show();
+            }
+        }, options));
+        loader.load();
+    }
     
     // Applies default behaviors for sidebar content that are defined by css
     // classes and html tags such as datagrids, links that open in the same 
@@ -180,9 +193,7 @@ lingcod.panel = function(options){
         el.hide();
         that.shown = false;
         $(that).trigger('panelhide', that);
-        if(options.showCloseButton === false){
-            el.find('a.close').hide();
-        }
+        // }
         $(that).trigger('panelhide');
     }
                 
@@ -203,33 +214,53 @@ lingcod.layout.SanitizedContent = function(html){
     this.styles = [];
     this.html;
     
-    var rscript = /<script(.|\s)*?\/script>/g;
-    var rstyle = /<style(.|\s)*?\/style>/g;
+    var rscript = /<script(.|\s)*?\/script>/ig;
+    var rstyle = /<style(.|\s)*?\/style>/ig;
+    
+    var that = this;
     
     // extract script tags. NOT intended to work for src="..."-type tags
-    var matches = html.match(rscript);
-    if(matches){
-        for(var i = 0; i<matches.length; i++){
-            var match = matches[i];
-            this.js.push(matches[i].replace(/<script(.|\s)*?>/, '')
-                .replace('</script>', ''));
+    html = html.replace(rscript, function(m){
+        if(m.indexOf('text/javascript+protovis') !== -1){
+            return m;
+        }else if(m.indexOf('application/vnd.google-earth.kml+xml') !== -1){
+            return m;
+        }else{
+            that.js.push(m.replace(
+                /<script(.|\s)*?>/i, '').replace(/<\/script>/i,''));
+            return '';
         }
-    }
+    });
+    
     
     // extract style tags
-    var matches = html.match(rstyle);
-    if(matches){
-        for(var i = 0; i<matches.length; i++){
-            this.styles.push({
-                id: $(matches[i]).attr('id'),
-                style: matches[i].replace(/<style(.|\s)*?>/, '').replace('</style>', '')
-            });
-        }            
+    html = html.replace(rstyle, function(m){
+        that.styles.push({
+            id: $(m).attr('id'),
+            style: m.replace(/<style(.|\s)*?>/i, '').replace(/<\/style>/i, '')
+        });
+        return '';
+    });
+    
+    if($.browser.msie && $.browser.version === "8.0" && html.match('<FORM') && html.match('.errorlist')){
+        // html coming from the iframe with validation errors is going to be 
+        // mangled. This took forever to figure out, and is an ugly ugly hack.
+        // This can be removed once we stop using iframes to submit forms
+        var dom = $('<div>' + html + '</div>');
+        if(dom.find('form div.json').length === 0){
+            // IE jumbled where items should be in the dom
+            var attrs = $(dom.children()[0].childNodes[1].childNodes[2]);
+            var form = attrs.find('form');
+            form.append(attrs.children().slice(1, -1));
+            // remove trailing form end tag
+            $(attrs.children()[1]).detach();
+        }
+        var el = $('<div>');
+        el.append(dom);
+        html = el.html();
     }
     
-    // Set an instance variable to the html fragment with style and css
-    // tags removed
-    this.html = jQuery.trim(html.replace(rstyle, '').replace(rscript, ''));
+    this.html = jQuery.trim(html);
     return this;
 };
 
@@ -337,8 +368,8 @@ lingcod.contentLoader = (function(){
     
     return function(options){
         
-        if(!options.url || !options.target){
-            throw('lingcod.contentLoader: must specify a url and target');
+        if(!options.target &&(!options.url || !options.text)){
+            throw('lingcod.contentLoader: must specify a target, and a url or text option.');
         }
         
         options.error = options.error || function(){ 
@@ -400,7 +431,7 @@ lingcod.contentLoader = (function(){
         var enableTabs = function(el){
             var tabs = el.find('div.tabs');
             if(tabs.length){
-                tabs.tabs({
+                var t = tabs.tabs({
                     'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
                     ajaxOptions: {
                         error: function(){
@@ -502,37 +533,47 @@ lingcod.contentLoader = (function(){
             fireCallbacks('destroy', $(jQuery.merge(options.target.toArray(), options.target.find('.tabs, .ui-tabs-nav li a').toArray())));            
         };
 
-        that.load = function(){
-            $.ajax({
-                url: options.url,
-                dataFilter: dataFilter,
-                error: options.error,
-                success: function(data, status, xhr){
-                    staging.html(data);
-                    if(options.behaviors){
-                        options.behaviors(staging);
-                    }
-                    enableTabs(staging);
-                    attachCallbacks(staging);
-                    followTabs(staging, function(){
-                        // move staged content to target
-                        options.target.html('');
-                        var contents = staging.children();
-                        contents.detach();
-                        options.target.append(contents);
-                        // fire callbacks
-                        options.beforeCallbacks();
-                        still_staging = false;
-                        fireCallbacks(['show', 'unhide'], staging);
-                        fireCallbacks(['show', 'unhide'], contents.find('.ui-tabs-selected a'));
-                        options.target.data('mm:callbacks', staging.data('mm:callbacks'));
-                        options.afterCallbacks();
-                        options.success();
-                        staging.remove();
-                    });
-                }
+
+        var processText = function(data){
+            staging.html(data);
+            if(options.behaviors){
+                options.behaviors(staging);
+            }
+            enableTabs(staging);
+            attachCallbacks(staging);
+            followTabs(staging, function(){
+                // move staged content to target
+                options.target.html('');
+                var contents = staging.children();
+                contents.detach();
+                options.target.append(contents);
+                // fire callbacks
+                options.beforeCallbacks();
+                still_staging = false;
+                fireCallbacks(['show', 'unhide'], staging);
+                fireCallbacks(['show', 'unhide'], contents.find('.ui-tabs-selected a'));
+                options.target.data('mm:callbacks', staging.data('mm:callbacks'));
+                options.afterCallbacks();
+                options.success();
+                staging.remove();
             });
+        }
+
+        that.load = function(){
+            if(options.text){
+                processText(dataFilter(options.text));
+            }else{
+                $.ajax({
+                    url: options.url,
+                    dataFilter: dataFilter,
+                    error: options.error,
+                    success: function(data, status, xhr){
+                        processText(data);
+                    }
+                });                
+            }
         };
+        
         return that;
     };
     

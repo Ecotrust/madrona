@@ -6,8 +6,7 @@ import sys
 import numpy
 import tempfile
 from osgeo import gdal, osr
-
-SR_EXTENT = StudyRegion.objects.current().geometry.extent
+    
 CELL_SIZE = 50
 
 def readArray(input):
@@ -49,10 +48,12 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     dst_ds = None
     return outfile
     
-def create_raster_from_matrix(matrix,outfile,extent=SR_EXTENT,cellsize=CELL_SIZE,format='GTiff',srid=settings.GEOMETRY_DB_SRID):
+def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,format='GTiff',srid=settings.GEOMETRY_DB_SRID):
     """
     Creates a raster dataset with all 1s where there are shapes in the shapefile.
     """
+    if extent is None:
+        extent = StudyRegion.objects.current().geometry.extent
     srs = osr.SpatialReference()
     srs.ImportFromEPSG(srid)
     ydist = extent[3] - extent[1]
@@ -84,7 +85,9 @@ def create_raster_from_matrix(matrix,outfile,extent=SR_EXTENT,cellsize=CELL_SIZE
     dst_ds = None
     return outfile
 
-def shapefile_to_matrix(shapefile,cellsize=CELL_SIZE,extent=SR_EXTENT):
+def shapefile_to_matrix(shapefile,cellsize=CELL_SIZE,extent=None):
+    if extent is None:
+        extent = StudyRegion.objects.current().geometry.extent
     tf = tempfile.mktemp()
     rast = create_blank_raster(extent,cellsize,tf,'GTiff')
     layer_arg = '-l ' + os.path.basename(shapefile).split(os.path.extsep)[0]

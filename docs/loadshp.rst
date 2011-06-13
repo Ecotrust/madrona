@@ -1,6 +1,6 @@
 .. _loadshp:
 
-Load Shapefile (loadshp) App
+`lingcod.loadshp`: Load Shapefile (loadshp) App
 ============================
 The `lingcod.loadshp` app provides a mechanism to upload shapefiles, validate their contents and convert to KML. This can be used by the marinemap application to allow uploading shapefiles in lieu of digitizing a shape (useful in cases where a complex boundary may have already been developed outside of MarineMap).
 
@@ -13,7 +13,7 @@ In order to enable the loadshp functionality, add the following to your model Op
 
     class Options:
         ...
-        geometry_input_methods = ['load_shp']
+        geometry_input_methods = ['loadshp']
 
 When the "Create New Shape" panel is displayed, this will be passed as a json variable which will trigger the display/activation of the appropriate html and javascript. 
 

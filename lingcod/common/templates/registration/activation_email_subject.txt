@@ -1,1 +1,2 @@
-Welcome to MarineMap. Action needed to activate your account.
+{% load appname %}
+Welcome to {% appname %}. Action needed to activate your account.

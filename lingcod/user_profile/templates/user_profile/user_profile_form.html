@@ -1,21 +1,21 @@
-{% extends "registration/reg_base.html" %}
+{#% extends "registration/reg_base.html" %#}
+{% extends 'common/panel.html' %}
 {% load order_by %}
 
-{% block title %}MarineMap User Profile{% endblock %}
+{% block title %}User Profile{% endblock title %}
 
-{% block content %}
+{% block panel %}
 <style>
 .group {padding:0;margin:0;text-indent:none;font-size:12px;}
 .groups {padding:0;margin:0;text-indent:none;}
 </style>
-
 
 <h2> Personal Info </h2>
 <form action="{% url user_profile-form profile.user.username%}" method="post">
     <p><label>Username:</label> <input type="text" readonly value="{{ profile.user.username }}" /> </p>
     {{ uform.as_p }}
     {{ pform.as_p }}
-    <p><label>Password:</label> <a href="{% url auth_password_change %}">Change password</a></p>
+    <p><label>Password:</label> <a class="panel_link" href="{% url auth_password_change %}">Change password</a></p>
     <input type="submit" value="Submit Changes" />
 </form>
 
@@ -54,4 +54,4 @@
 
 
 
-{% endblock %}
+{% endblock panel %}

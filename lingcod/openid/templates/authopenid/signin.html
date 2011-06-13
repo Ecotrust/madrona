@@ -1,5 +1,6 @@
 {% extends "authopenid/base.html" %}
 {% load i18n %}
+{% load appname %}
 
 {% block content %}
 {% if msg %}
@@ -27,14 +28,14 @@
 </div>
 <br>
 {% endif %}
-<h2>Sign into MarineMap</h2>
+<h2>Sign into {% appname %}</h2>
 <!-- EVENTUALLY link to reg 
 <p> <a href="{% url registration_register %}">Register</a> | <a href="{% url user_signin %}">Log-In</a></p> -->
 
 <div class="login">
 
 <form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
-    <p class="explain">If you only have an account with this site and dont wish to use any other MarineMap sites, use this method. </p>
+    <p class="explain">If you only have an account with this site and dont wish to use any other related sites, use this method. </p>
 
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
@@ -46,7 +47,7 @@
 </form>
 
 <form id="openid_form" name="openid_form" action="{% url user_signin %}" method="post">
-    <p class="explain">If you have a third-part account, use this method to log into this site and all supported MarineMap sites. </p>
+    <p class="explain">If you have a third-part account, use this method to log into this site and all supported sites. </p>
     <input type="hidden" name="action" value="verify" />
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>

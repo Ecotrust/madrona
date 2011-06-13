@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from models import UserProfile
-from forms import UserForm, UserProfileForm
+from lingcod.features.forms import FeatureForm as UserForm
+from forms import UserProfileForm
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from lingcod.openid.models import UserAssociation
@@ -24,7 +25,6 @@ def profile_form(request,username,use_openid=False):
     if request.method == 'GET':
         uform = UserForm(instance=user)
         pform = UserProfileForm(instance=user_profile)
-        print use_openid
         return render_to_response('user_profile/user_profile_form.html', 
                 {'profile': user_profile, 'assoc': user_assoc, 'uform': uform, 'pform': pform, 
                     'group_request_email': settings.GROUP_REQUEST_EMAIL, 'use_openid': use_openid, 'MEDIA_URL':settings.MEDIA_URL}) 

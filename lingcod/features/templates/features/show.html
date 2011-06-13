@@ -1,0 +1,23 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    <p class="unconfigured">
+        {% if instance.Rest.show_template %}
+            You are seeing this simplified attributes page because a template
+            could not be found for this Feature Class at
+            <code>{{template}}</code>. Create a template or 
+            specify a correct path with the <code>show_template</code> Rest 
+            configuration property.
+        {% else %}
+        You are seeing this simplified attributes page because a template has
+        not been configured for use with this Feature Class. To replace this 
+        page with a more useful one, create a template at 
+        <code>{{template}}</code>
+        {% endif %}
+        <br>
+        See the 
+        <a href="http://documentation.marinemap.org/feature_classes.html">
+        Feature Class documentation</a> for more information.
+    </p>
+{% endblock panel %}

@@ -2,6 +2,11 @@
 import sys
 import os
 
+#If you're using mod_wsgi to deploy your Django application 
+# you need to include the following in your .wsgi module:
+#import os
+#os.environ["CELERY_LOADER"] = "django"
+
 sys.stdout = sys.stderr
 
 # If django is not already in python site-directories

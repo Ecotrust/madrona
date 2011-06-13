@@ -61,19 +61,19 @@ class Command(BaseCommand):
                 import hotshot.stats
                 def make_profiler_handler(inner_handler): 
                     def handler(environ, start_response):
+                        print "==============================================="
                         path = environ['PATH_INFO'].strip("/").replace('/', '.')
                         fd, profname = tempfile.mkstemp('.prof', '%s.%3f' % (path, time.time()))
                         os.close(fd)
                         prof = hotshot.Profile(profname)
                         response = prof.runcall(inner_handler, environ, start_response) 
                         # Output to stdout
-                        print "==============================================="
                         if "media" not in profname:
                             stats = hotshot.stats.load(profname)
-                            stats.sort_stats('time', 'calls')
-                            stats.print_stats(10)
+                            stats.sort_stats('cumulative', 'time', 'calls')
+                            stats.print_stats('lingcod',20)
                         print " * Complete hotshot.stats output at %s" % profname
-                        print
+                        print "==============================================="
                         return response 
                     return handler
                 # END 

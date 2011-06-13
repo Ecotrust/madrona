@@ -1,0 +1,58 @@
+{% load absurl absolute_media_url %}<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://marinemap.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document{% if feature_id %} id="{{feature_id}}"{% endif %}>
+  {% block workspace-json %}
+	{% if user.is_anonymous %}
+  <atom:link title="workspace" rel="workspace" href="{% url workspace-public-json %}" />
+	{% else %}
+  <atom:link title="workspace" rel="workspace" href="{% url workspace-owner-json user.username %}" />
+	{% endif %}
+  {% endblock %}
+  <name>{% block docname %}Features and Collections{% endblock %}</name>
+  <open>1</open>
+  <visibility>1</visibility>
+
+  {% block styledefs %}
+   {% for style in styles %}
+      {{style|safe}}
+   {% endfor %}
+  {% endblock %}
+
+{% block folders_and_placemarks %}
+
+  {% for collection in collections %}
+    {% if use_network_links %}
+      <NetworkLink id="{{collection.uid}}">
+        <name>{{collection.name}}</name>
+        <visibility>1</visibility>
+        <open>0</open>
+        <Link>
+          <href>{% absurl kmlapp-feature-links-kmz input_uid=collection.uid,session_key=session_key %}</href>
+        </Link>
+        <styleUrl>#{{collection.kml_style_id}}</styleUrl>
+      </NetworkLink>
+    {% else %}
+      {{ collection.kml_safe|safe }}
+    {% endif %}
+  {% endfor %}
+
+  {% for feature in features %}
+  <!-- {{feature.uid}} -->
+  {% if feature.kml_full %}
+  <NetworkLink id="{{feature.uid}}"> 
+    <name>{{feature.name}}</name> 
+    <visibility>1</visibility> 
+    <open>0</open> 
+    <Link> 
+      <href>{% absurl kml-file uid=feature.uid,session_key=session_key %}</href> 
+    </Link> 
+    <styleUrl>#{{feature.kml_style_id}}</styleUrl>
+  </NetworkLink> 
+  {% else %}
+    {{ feature.kml_safe|safe }}
+  {% endif %}
+  {% endfor %}
+
+{% endblock %}
+</Document>
+</kml>

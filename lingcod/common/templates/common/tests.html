@@ -6,36 +6,13 @@
 	<link rel="stylesheet" href="{{MEDIA_URL}}common/js/lib/qunit/qunit.css" type="text/css" media="screen">
 	<script type="text/javascript" src="{{MEDIA_URL}}common/js/lib/qunit/qunit.js"></script>
 	<script type="text/javascript" src="{{MEDIA_URL}}common/js/test/qunit_extensions.js"></script>
-    {% load compressed mpa_uid array_uid %}
+    {% load compressed %}
     {% compressed_js 'tests' %}
     <script type="text/javascript" charset="utf-8">
         google.load("earth", "1");
 		
 		var DEFAULT_USERNAME = 'integration_tester';
         var DEFAULT_PASSWORD = 'password';
-		//'{% mpa_uid %}',
-	    {% block array_test_script %}
-
-		lingcod.rest.testInterface('arrays and mpas', '{% url kmlapp-user-kml input_username='integration_tester',session_key='0' %}', {
-		    '{% array_uid %}': {
-		        form_values: {
-		            name: 'My Array Name'
-		        },
-		        invalid_form_values: {
-		            name: ''
-		        }
-		    },
-		    '{% mpa_uid %}': {
-		        form_values: {
-		            name: 'My MPA Name'
-		        },
-		        invalid_form_values: {
-		            name: ''
-		        }
-		    }
-		});
-		
-	    {% endblock array_test_script %}
 		
 		{% block test_script %}{% endblock test_script %}
 
@@ -55,7 +32,7 @@
     </style>
 {% endblock %}
 {% block body %}
-	<h1 id="qunit-header">MarineMap Client Test Suite</h1>
+<h1 id="qunit-header">lingcod Client Test Suite</h1>
 	<h2 id="qunit-banner"></h2>
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>

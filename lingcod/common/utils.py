@@ -3,6 +3,7 @@ from django.contrib.gis.geos import Point, LinearRing, fromstr
 from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
+from django.core.cache import cache
 import zipfile
 
 #from django.db import transaction
@@ -23,6 +24,18 @@ def LargestPolyFromMulti(geom):
             if g.area > largest_area:
                 largest_geom = g
                 largest_area = g.area
+    else:
+        largest_geom = geom
+    return largest_geom  
+
+def LargestLineFromMulti(geom): 
+    """ takes a line or a multiline geometry and returns only the longest line geometry"""
+    if geom.num_geom > 1:
+        largest_length = 0.0
+        for g in geom: # find the largest polygon in the multi polygon 
+            if g.length > largest_length:
+                largest_geom = g
+                largest_length = g.length
     else:
         largest_geom = geom
     return largest_geom  
@@ -114,7 +127,7 @@ def clean_geometry(geom):
     # sometimes, clean returns a multipolygon
     geometry = LargestPolyFromMulti(newgeom)
 
-    if not geometry.valid or geometry.num_coords < 2:
+    if not geometry.valid or (geometry.geom_type != 'Point' and geometry.num_coords < 2):
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
     else:
         return geometry
@@ -192,39 +205,6 @@ def get_class(path):
     m = importlib.import_module(module)
     return m.__getattribute__(klass)
     
-def get_mpa_class():
-    try:
-        return get_class(settings.MPA_CLASS)
-    except:
-        raise Exception("Problem importing MPA class. Is MPA_CLASS defined correctly in your settings?")
-
-def get_array_class():
-    try:
-        return get_class(settings.ARRAY_CLASS)
-    except:
-        raise Exception("Problem importing Array class. Is ARRAY_CLASS defined correctly in your settings?")
-
-def get_spatial_class_names():
-    """
-    Create a list of spatial types which show up in kmltree
-    TODO: Currently just assumes that MPA and Arrays are the only kmltree-able models
-    """
-    mk = get_mpa_class()
-    ak = get_array_class()
-    return [mk._meta.object_name.lower(), ak._meta.object_name.lower()]
-    
-def get_mpa_form():
-    try:
-        return get_class(settings.MPA_FORM)
-    except:
-        raise Exception("Problem importing MPA form. Is MPA_FORM defined correctly in your settings?")
-        
-def get_array_form():
-    try:
-        return get_class(settings.ARRAY_FORM)
-    except:
-        raise Exception("Problem importing Array form. Is ARRAY_FORM defined correctly in your settings?")
-    
 def kml_errors(kmlstring):
     import feedvalidator
     from feedvalidator import compatibility
@@ -244,12 +224,20 @@ def kml_errors(kmlstring):
     # or space-delimited Icon states
     # so we ignore all related events
     events = [x for x in events if not (
-                (isinstance(x,feedvalidator.logging.UndefinedElement) and x.params['element']==u'ExtendedData') or
-                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.update_form') or
-                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) and x.params['value']==u'marinemap.create_form') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://marinemap.org') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) and x.params['namespace']==u'http://www.google.com/kml/ext/2.2') or
-                (isinstance(x,feedvalidator.logging.InvalidItemIconState) and x.params['element']==u'state' and ' ' in x.params['value']) 
+                (isinstance(x,feedvalidator.logging.UndefinedElement) 
+                    and x.params['element']==u'ExtendedData') or
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                    and x.params['value']==u'marinemap.update_form') or
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                    and x.params['value']==u'marinemap.create_form') or
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) 
+                    and x.params['namespace']==u'http://marinemap.org') or
+                (isinstance(x,feedvalidator.logging.UnknownNamespace) 
+                    and x.params['namespace']==u'http://www.google.com/kml/ext/2.2') or
+                (isinstance(x,feedvalidator.logging.InvalidItemIconState) 
+                    and x.params['element']==u'state' and ' ' in x.params['value']) or
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                    and x.params['element']==u'atom:link' and 'workspace' in x.params['value'])
                 )]
 
     from feedvalidator.formatter.text_plain import Formatter
@@ -367,15 +355,18 @@ def get_logger(caller_name=None):
         fh = open(settings.LOG_FILE,'w')
         logfile = settings.LOG_FILE
     except:
-        # print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
         logfile = None
 
-    if settings.DEBUG:
-        level = logging.DEBUG
-    else:
-        level = logging.WARNING 
+    try:
+        level = settings.LOG_LEVEL
+    except AttributeError:
+        if settings.DEBUG:
+            level = logging.DEBUG
+        else:
+            level = logging.WARNING 
     
-    format = '    %(asctime)s %(name)s %(levelname)s %(message)s'
+    format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     if logfile:
         logging.basicConfig(level=level, format=format, filename=logfile)
     else:
@@ -393,3 +384,226 @@ def get_logger(caller_name=None):
         logger.addHandler(strm_out)
 
     return logger
+
+
+def isCCW(ring):
+    """
+    Determines if a LinearRing is oriented counter-clockwise or not
+    """
+    area = 0.0
+    for i in range(0,len(ring)-1):
+        p1 = ring[i]
+        p2 = ring[i+1]
+        area += (p1[1] * p2[0]) - (p1[0] * p2[1])
+
+    if area > 0:
+        return False
+    else:
+        return True
+
+
+from django.contrib.gis.geos import Polygon
+def forceRHR(polygon):
+    """
+    reverses rings so that polygon follows the Right-hand rule
+    exterior ring = clockwise
+    interior rings = counter-clockwise
+    """
+    assert polygon.geom_type == 'Polygon'
+    if polygon.empty:
+        return poly
+    exterior = True
+    rings = []
+    for ring in polygon:
+        assert ring.ring # Must be a linear ring at this point
+        if exterior:
+            if isCCW(ring):
+                ring.reverse()
+            exterior = False
+        else:
+            if not isCCW(ring):
+                ring.reverse()
+        rings.append(ring)
+    poly = Polygon(*rings)
+    return poly
+
+def forceLHR(polygon):
+    """
+    reverses rings so that geometry complies with the LEFT-hand rule
+    Google Earth KML requires this oddity
+    exterior ring = counter-clockwise
+    interior rings = clockwise
+    """
+    assert polygon.geom_type == 'Polygon'
+    assert not polygon.empty
+    exterior = True
+    rings = []
+    for ring in polygon:
+        assert ring.ring # Must be a linear ring at this point
+        if exterior:
+            if not isCCW(ring):
+                ring.reverse()
+            exterior = False
+        else:
+            if isCCW(ring):
+                ring.reverse()
+        rings.append(ring)
+    poly = Polygon(*rings)
+    return poly
+
+def asKml(input_geom, altitudeMode=None):
+    """
+    Performs three critical functions for creating suitable KML geometries:
+     - simplifies the geoms (lines, polygons only)
+     - forces left-hand rule orientation
+     - sets the altitudeMode shape 
+       (usually one of: absolute, clampToGround, relativeToGround)
+    """
+    key = "asKml_%s_%s" % (input_geom.wkt.__hash__(), altitudeMode)
+    try:
+        cached_result = cache.get(key)
+        if cached_result: 
+            return cached_result
+    except:
+        pass
+
+    geom = input_geom.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+
+    if geom.geom_type in ['Polygon','LineString']:
+        geom = geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
+
+    if geom.geom_type == 'Polygon':
+        geom = forceLHR(geom)
+        
+    kml = geom.kml
+
+    if not altitudeMode:
+        try:
+            altitudeMode = settings.KML_ALTITUDEMODE_DEFAULT
+        except:
+            altitudeMode = None
+
+    if altitudeMode and geom.geom_type == 'Polygon':
+        kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>%s</altitudeMode><extrude>1</extrude>' % altitudeMode)
+        # The GEOSGeometry.kml() method always adds a z dim = 0
+        kml = kml.replace(',0', ',%s' % settings.KML_EXTRUDE_HEIGHT)
+
+    cache.set(key, kml)
+    return kml
+
+def enable_sharing(group=None):
+    """
+    Give group permission to share models 
+    Permissions are attached to models but we want this perm to be 'global'
+    Fake it by attaching the perm to the Group model (from the auth app)
+    We check for this perm like: user1.has_perm("auth.can_share_features")
+    """
+    from django.contrib.auth.models import Permission, Group
+    from django.contrib.contenttypes.models import ContentType
+
+    try:
+        p = Permission.objects.get(codename='can_share_features')
+    except Permission.DoesNotExist:
+        gct = ContentType.objects.get(name="group")
+        p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
+        p.save()
+ 
+    # Set up default sharing groups
+    for groupname in settings.SHARING_TO_PUBLIC_GROUPS:
+        g, created = Group.objects.get_or_create(name=groupname)
+        g.permissions.add(p)
+        g.save()
+    
+    for groupname in settings.SHARING_TO_STAFF_GROUPS:
+        g, created = Group.objects.get_or_create(name=groupname)
+        g.permissions.add(p)
+        g.save()
+
+    if group:
+        # Set up specified group
+        group.permissions.add(p)
+        group.save()
+    return True
+
+
+'''
+Returns a path to desired resource (image file)
+Called from within pisaDocument via link_callback parameter (from pdf_report)
+'''    
+def fetch_resources(uri, rel):
+    import os
+    import settings
+    import datetime
+    import random
+    import tempfile
+    import urllib2
+    from django.test.client import Client
+
+    if uri.startswith('http'):
+        # An external address assumed to require no authentication
+        req = urllib2.Request(uri)
+        response = urllib2.urlopen(req)
+        content = response.read()
+    elif 'staticmap' in uri:
+        # A staticmap url .. gets special treatment due to permissions
+        from lingcod.staticmap.temp_save import img_from_params
+        params = get_params_from_uri(uri)
+        content = img_from_params(params, None)
+    else:
+        # An internal address assumed; use the django test client
+        client = Client()
+        response = client.get(uri)
+        content = response.content
+        # alternate way
+        # path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+
+    randnum = random.randint(0, 1000000000)
+    timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+    filename = 'resource_%s_%s.tmp' % (timestamp,randnum)
+    pathname = os.path.join(tempfile.gettempdir(),filename)
+    fh = open(pathname,'wb')
+    fh.write(content)
+    fh.close()
+    return pathname
+
+'''
+Returns a dictionary representation of the parameters attached to the given uri
+Called by fetch_resources
+'''    
+def get_params_from_uri(uri):
+    from urlparse import urlparse
+    results = urlparse(uri)
+    params = {}
+    if results.query == '':
+        return params
+    params_list = results.query.split('&')
+    for param in params_list:
+        pair = param.split('=')
+        params[pair[0]] = pair[1]
+    return params
+
+def is_text(s):
+    """
+    Tests a string to see if it's binary
+    borrowed from http://code.activestate.com/recipes/173220-test-if-a-file-or-string-is-text-or-binary/
+    """
+    import string
+    from django.utils.encoding import smart_str
+    s = smart_str(s)
+    text_characters = "".join(map(chr, range(32, 127)) + list("\n\r\t\b"))
+    _null_trans = string.maketrans("", "")
+
+    if "\0" in s:
+        return False
+    if not s:
+        return True 
+
+    # Get the non-text characters (maps a character to itself then
+    # use the 'remove' option to get rid of the text characters.)
+    t = s.translate(_null_trans, text_characters)
+
+    # If more than 30% non-text characters, then
+    # this is considered a binary file
+    if float(len(t))/len(s) > 0.30:
+        return False
+    return True

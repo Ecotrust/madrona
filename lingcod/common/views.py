@@ -4,12 +4,16 @@ from django.shortcuts import get_object_or_404, render_to_response
 from lingcod.common import default_mimetypes as mimetypes
 from lingcod.news.models import Entry
 from lingcod.common.utils import valid_browser
+from lingcod.features import user_sharing_groups
+from lingcod.studyregion.models import StudyRegion
+from lingcod.layers.models import PublicLayerList, PrivateKml
+from lingcod.layers.views import has_privatekml
 import datetime
 
 from django.conf import settings
 
 
-def map(request, template_name='common/map.html'):
+def map(request, template_name='common/map_ext.html', extra_context={}):
     """
     Main application window
     Sets/Checks Cookies to determine if user needs to see the about or news panels
@@ -28,7 +32,11 @@ def map(request, template_name='common/map.html'):
     if not valid_browser(useragent) and enforce_supported:
         from lingcod.common import uaparser
         bp = uaparser.browser_platform(useragent)
-        return render_to_response('common/supported_browsers.html', {'useragent':useragent, 'browser_platform': bp.__repr__()})
+        context = {'useragent':useragent, 
+                'browser_platform': bp.__repr__(), 
+                'redirect_url': settings.LOGIN_REDIRECT_URL}
+        context.update(extra_context)
+        return render_to_response('common/supported_browsers.html', context)
 
     if "mm_already_viewed" in request.COOKIES:
         if "mm_last_checked_news" in request.COOKIES:
@@ -36,7 +44,6 @@ def map(request, template_name='common/map.html'):
                 last_checked = datetime.datetime.strptime(request.COOKIES['mm_last_checked_news'], timeformat)
                 try:
                     latest_news = Entry.objects.latest('modified_on').modified_on
-                    print latest_news
                     # if theres new news, show it and reset cookie
                     if last_checked < latest_news:
                         set_news_cookie = True
@@ -74,19 +81,24 @@ def map(request, template_name='common/map.html'):
     #         pass
             
     # Check if the user is a member of any sharing groups (not including public shares)
-    from lingcod.sharing.utils import user_sharing_groups
     member_of_sharing_group = False
     user = request.user
-    if user.is_authenticated() and len(user_sharing_groups(user)) > 0:
+    if user.is_authenticated() and user_sharing_groups(user):
         member_of_sharing_group = True
     
-    response = render_to_response(template_name, RequestContext(request,{
+    context = RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         'member_of_sharing_group': member_of_sharing_group,
+        'is_studyregion': StudyRegion.objects.count() > 0,
+        'is_public_layers': PublicLayerList.objects.filter(active=True).count() > 0,
+        'is_privatekml': has_privatekml(user),
         #'user_layers': user_layers,
-        }))
+    })
+
+    context.update(extra_context)
+    response = render_to_response(template_name, context)
     
     if set_news_cookie:
         now = datetime.datetime.strftime(datetime.datetime.now(), timeformat)

@@ -1,14 +1,15 @@
+{% load appname %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>{% block title %}MarineMap Decision Support Tool{% endblock %}</title>
+    <title>{% block title %}{% appname %}{% endblock %}</title>
     {% load compressed %}
     {% compressed_css 'application' %}
 </head>
 <body style="padding:10px;">
-    <h1> Your current browser is not supported by MarineMap. </h1>
+    <h1> Your current browser is not supported by {% appname %}. </h1>
     <h2> There are a number of freely available web browsers that provide optimal performance </h2>
 
     <div>
@@ -42,7 +43,7 @@
         </ul>
     </div>
 
-    <p>We see that you are using {{browser_platform}}; you can <a href="/?supported=false">try MarineMap</a> with the understanding that it is not officially supported.</>
+    <p>We see that you are using {{browser_platform}}; you can <a href="{{redirect_url}}?supported=false">try {% appname %}</a> with the understanding that it is not officially supported.</>
     </body>
 </html>
 

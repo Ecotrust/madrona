@@ -1,4 +1,5 @@
+{% load appname %}
 <h3>Internal Error</h3>
 <p>We are terribly sorry.  An internal error has occurred.  The following internal message was returned:</p>
 <p>{{ INTERNAL_MESSAGE }}</p>
-<br/>Please contact help@marinemap.org with the contents of the above message, and a description of the context in which the error occurred. </p>
+<br/>Please contact {% help_email %} with the contents of the above message, and a description of the context in which the error occurred. </p>

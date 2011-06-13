@@ -1,7 +1,7 @@
 .. _openid:
 
-OpenID Authentication
-======================
+`lingcod.openid`: Authentication System
+=======================================
 
 Overview
 ********

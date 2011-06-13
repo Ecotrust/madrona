@@ -1,5 +1,5 @@
 {% extends "common/base.html" %}
-
+{% load appname %}
 {% block head %}
     <script type="text/javascript">
 
@@ -12,7 +12,11 @@
         var options = {
             media_url: "{{MEDIA_URL}}",
             news_url: '{% url news-main %}',
-            about_url: '{% url news-about %}'
+            about_url: '{% url news-about %}',
+            {% if user.is_authenticated %}profile_url: '{% url user_profile-form user.username %}',{% endif %}
+            registration_url: '{% url registration_register %}',
+            help_url: '{% url help-main %}',
+            signin_url: '{% url user_signin %}'
         };
         
         // Used to identify whether the about or news panel should be shown
@@ -21,12 +25,16 @@
         {% endif %}
 
         {% block layersConfig %}
-        // setup which kml files are shown in the data layers panel
-        lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});
-        lingcod.addLayer('{% url public-data-layers %}');            
-        {% if user.is_authenticated %}
-        lingcod.addLayer('{% url private-data-layers session_key=session_key %}');            
-        {% endif %}
+            // setup which kml files are shown in the data layers panel
+            {% if is_studyregion %}
+                lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
+            {% endif %}
+            {% if is_public_layers %}        
+                lingcod.addLayer('{% url public-data-layers %}');            
+            {% endif %}
+            {% if user.is_authenticated and is_privatekml %}
+                lingcod.addLayer('{% url layers-privatekml-list session_key=session_key %}');            
+            {% endif %}
         {% endblock layersConfig %}
 
         {% block sharedshapes %}
@@ -55,21 +63,24 @@
 
 {% block body %}
     <div id="meta-navigation">
+      
+      <span class="pagetitle">{% block pagetitle %}{% endblock pagetitle %}</span>
         <ul>
             {% block metanavigation %}
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>
             {% endif %}
             <li><a href="#" id="news">news</a> | </li>
-            <li><a href="#" id="about">about marinemap</a> | </li>
+            <li><a href="#" id="about">about {% appname %}</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
-            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
+            <li><a href="#" id="help">help</a> | </li>
             {% if user.is_authenticated %}
-            <li><a href="{% url user_profile-form user.username %}">my profile</a> | </li>
+            <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>
             {% else %}
-            <li><a href="{% url registration_register %}">register</a> | </li>
-            <li><a href="{% url user_signin %}">sign in</a></li>
+            <li><a href="#" id="register">register</a> | </li>
+            <!-- <li><a href="{% url user_signin %}" id="signin">sign in</a></li> -->
+            <li><a href="#" id="signin">sign in</a></li>
             {% endif %}                
             {% endblock metanavigation %}
             {% block meta_navigation_list_append %}{% endblock %}
@@ -91,10 +102,12 @@
         </li>
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
     </ul>
+    {% block toggle %}
     <div id="sidebar-toggler">
         &nbsp;
     </div>
     <a id="show-sidebar" href="#">show sidebar</a>
+    {% endblock toggle %}
     <div id="sidebar">
         <div id="sidebar-mask"><span class="loadingMsg"></span></div>
         <ul>
@@ -102,12 +115,13 @@
             {% if user.is_authenticated %}
             <li><a href="#MyShapes"><span>My Shapes</span></a></li>                
             {% endif %}
-            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared With Me{% else %}MPA Proposals{% endif %}</span></a></li>
+            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared With Me{% else %}Public Proposals{% endif %}</span></a></li>
             {% endblock tabs %}
         </ul>
         {% block tabscontents %}
         {% if user.is_authenticated %}
         <div id="MyShapes">
+            {% block before_myshapes %}{% endblock before_myshapes %}
             <div style="font-size:1em;" id="myshapestree"></div>
         </div>            
         {% endif %}
@@ -121,6 +135,7 @@
     </div>
     <div id="tools">
         <h1>Tools</h1>
+        {% block flyto %}
         <form id="flyToLocation" method="GET">
             <input type="text" name="flyto_location" value="">
             <a id="flytogo" href="#" class="button" onclick="this.blur(); return false;"><span>Fly Here</span></a>
@@ -128,6 +143,7 @@
             <input type="submit" style="display:none;" />
             <br style="clear:both;" />
         </form>
+        {% endblock flyto %}
         <hr />
         <div id="measurement_tools" class="tool">
             <a id="measure_distance" href="#" class="button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/ruler.png">Measure Distance</span></a>
@@ -182,11 +198,19 @@
         <div class="panel">
             <div class="new" style="display:none;">
                 {% block shapeDefinitionPanelNewShape %}
-                <p>
+                <p class="poly">
                     To begin defining a shape, press the button below and 
                     click on the map where you would like to place a vertex. 
                     When finished, double click the last vertex of your shape.
-                </p>                    
+                </p>
+                <p class="point" style="display:none;">
+                    Click on the map where you would like to place this point 
+                    feature.
+                </p>
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
+                </p>        
                 {% endblock shapeDefinitionPanelNewShape %}
                 <a href="#" class="draw_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/pencil.png">Draw Shape</span></a>                
                 <a href="#" class="load_shape button" onclick="this.blur(); return false;" style="display:none;"><span><img src="{{MEDIA_URL}}common/images/upload_icon.gif">Load Shape</span></a>                
@@ -194,22 +218,38 @@
             </div>
             <div class="edit" style="display:none;">
                 {% block shapeDefinitionPanelEditShape %}
-                <p>
+                <p class="poly">
                     To edit this shape, press the button below and drag its 
                     handles.
-                </p>                    
+                </p>
+                <p class="point" style="display:none;">
+                    To edit this point feature, press the button below and 
+                    drag it to a new location.
+                </p>                      
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
+                </p>
                 {% endblock shapeDefinitionPanelEditShape %}
                 <a href="#" class="edit_shape button" onclick="this.blur(); return false;"><span><img src="{{MEDIA_URL}}common/images/silk/shape_handles.png">Edit Shape</span></a>                
             </div>
             <div class="editing" style="display:none;">
                 {% block editingShape %}
-                <p>
+                <p class="poly">
                     Drag the handles of the shape to edit. You can add 
                     vertices to the shape by dragging the handle shown at the
                     midpoint of a line. <strong>To remove a vertex, double-click on 
                     it.</strong>
                     <br />
                     When you are done, click on the button below.
+                </p>
+                <p class="point">
+                    To edit this point feature, press the button below and 
+                    drag it to a new location.
+                </p>
+                <p>
+                    If you feel you need more accuracy, try disabling 
+                    3d Terrain from the tools menu.
                 </p>
                 <a href="#" class="done_editing button" onclick="this.blur(); return false;"><span>Done Editing</span></a>                
                 {% endblock editingShape %}
@@ -227,7 +267,7 @@
             <div id="manipulators_server_error" style="display:none;">
                 <h3>Server Error</h3>
                 <p>There was a server error processing your shape. You can try editing this shape again by pressing the "Edit Shape" button, or the "Cancel" button below. The problem may be specific to the region you are drawing within.</p>
-                <p>Please contact an administrator at help@marinemap.org if the problem persists.</p>
+                <p>Please contact an administrator at {% help_email %} if the problem persists.</p>
             </div>
         </div>
         {% endblock shapeDefinitionPanel %}

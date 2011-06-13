@@ -1,65 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-{% load analytics %}
-<html lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>{% block title %}MarineMap Help{% endblock %}</title>
-    {% block head %}
-    <link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
-    {% endblock %}
-</head>
-<body>
-{% analytics %}
-{% block body %}
-<img src="http://marinemap.org/mm_logo_only.gif"/>
+{% extends 'common/panel.html' %}
+{% load appname %}
+{% block title %}{% appname %} Help{% endblock %}
 
-<!--------------------- SCREENCASTS -------------------->
-<h2>Movie Tutorials</h2>
-<hr/>
-<div style="margin-bottom:106px;">
-{% for screencast in screencast_list %}
+{% block panel %}
 
-<p class="screencast-link" style="margin-bottom:85px;">
-<a href="{% url screencasts-show-youtube-video screencast.pk %}" target="_blank">
-        <img src="{{screencast.image.url}}" height="160" align="left" />
-			<span>{{screencast.title}}</span>
-			<br />
-			{{screencast.description}}
-	</a>
-</p>
-{% endfor %}
-</div>
+<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
 
-<!---------------------FAQS -------------------->
-<h2>Frequently Asked Questions</h2>
-<hr/>
-<div style='width:600px; border: 1px dotted #BBBBBB; padding: 5px'>
-{% for group in faqs_by_group %}
-<h3><a href='#group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
-    <ul>
-    {% for faq in group.group_faqs %}
-        <li><a href='#faq_{{ faq.id }}'>{{ faq.question }}</a></li>
-    {% endfor %}
-    </ul>
-{% endfor %}
-</div>
+<style type="text/css">
+    .tabs { font-size: 1.0em; }
+    .help_back { font-size: 0.8em; }
+</style>
+
+<div id="helptop"></div>
 <br/>
-<div style='width: 600px;'>
-{% for group in faqs_by_group %}
-<h3><a name='group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
-    <div style='padding-left: 25px'>
-    {% for faq in group.group_faqs %}
-        <h4><a name='faq_{{ faq.id }}'>Q. {{ faq.question }}</a></h4>
-        <p>A. {{ faq.answer|safe }} </p>
-    {% endfor %}
+<div class="tabs">
+    <ul>
+        <li><a href="#movies"><span>Movie Tutorials</span></a></li>
+        <li><a href="#faq"><span>Frequently Asked Questions</span></a></li>
+    </ul>
+    <div id="movies">
+        {% for screencast in screencast_list %}
+        <p class="screencast-link" style="margin-bottom:85px;">
+        <a href="{% url screencasts-show-youtube-video screencast.pk %}" target="_blank">
+            <img src="{{screencast.image.url}}" height="160" align="left" />
+            <span>{{screencast.title}}</span>
+            <br />
+            {{screencast.description}}
+        </a>
+        </p>
+        {% endfor %}
     </div>
-{% endfor %}
-</div>    
+    <div id="faq">
+        <div>
+        {% for group in faqs_by_group %}
+            <h3><a href='#group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
+            <ul>
+            {% for faq in group.group_faqs %}
+                <li><a href='#faq_{{ faq.id }}'>{{ faq.question }}</a></li>
+            {% endfor %}
+            </ul>
+        {% endfor %}
+        </div>
 
-{% endblock %}
+        <br/>
 
-</body>
-</html>
+        <div>
+        {% for group in faqs_by_group %}
+        <h3><a name='group_{{ group.group_obj.id }}'>{{ group.group_obj.faq_group_name }}</a></h3>
+            <div style='padding-left: 25px'>
+            {% for faq in group.group_faqs %}
+                <h3><a name='faq_{{ faq.id }}'>Q. {{ faq.question }}</a></h3>
+                <p>A. {{ faq.answer|safe }} <a class="help_back" href="#helptop">&lt;&lt;back</a></p>
+            {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
 
+<script type="text/javascript">
+        lingcod.onShow(function(){
+                $('#faq').localScroll({
+                    target:'.marinemap-panel'
+                });
+        });
+</script>
+
+{% endblock panel %}

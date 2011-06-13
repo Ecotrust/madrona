@@ -98,17 +98,10 @@ See the COPYING file for details.
   line-height: normal;
 }
 
-/* Disabled styles. */
-.goog-toolbar-button-disabled {
-  opacity: 0.3;
-  -moz-opacity: 0.3;
-  filter: alpha(opacity=30);
-}
-
 .goog-toolbar-button-disabled .goog-toolbar-button-outer-box,
 .goog-toolbar-button-disabled .goog-toolbar-button-inner-box {
   /* Disabled text/border color trumps everything else. */
-  color: #333 !important;
+  color: #C3C3C3 !important;
   border-color: #999 !important;
 }
 
@@ -271,17 +264,21 @@ See the COPYING file for details.
 }
 
 /* Disabled styles. */
-.goog-toolbar-menu-button-disabled {
+/*.goog-toolbar-menu-button-disabled {
   opacity: 0.3;
   -moz-opacity: 0.3;
   filter: alpha(opacity=30);
 }
-
+*/
 .goog-toolbar-menu-button-disabled .goog-toolbar-menu-button-outer-box,
 .goog-toolbar-menu-button-disabled .goog-toolbar-menu-button-inner-box {
   /* Disabled text/border color trumps everything else. */
-  color: #333 !important;
+  color: #C3C3C3 !important;
   border-color: #999 !important;
+}
+
+.goog-toolbar-menu-button-disabled .goog-toolbar-menu-button-dropdown {
+    background-image:none;
 }
 
 /* Pre-IE7 IE hack; ignored by IE7 and all non-IE browsers. */

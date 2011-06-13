@@ -335,10 +335,6 @@ div.field textarea {
     width:440px;
 }
 
-.drophover {
-    background-color:#FFF188 !important;
-}
-
 #data-spinner {
     position:absolute;
     top:17px;
@@ -441,4 +437,52 @@ p.download_layer a {
     padding-bottom:5px;
     padding-left:20px;
     background: transparent url(../images/kml_document_icon.png) no-repeat top left;
+}
+
+.mm-drag-helper {
+    cursor:pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background:none;
+    border:none;
+    opacity: 0.9;
+    -moz-opacity: 0.9;
+    filter:alpha(opacity=90);
+/*    background-color:#4F84E9;
+    border:solid 2px #486AAD;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3+, Chrome */
+    border-radius: 5px; /* Opera 10.5, IE 9 */
+    padding:5px 10px;
+    padding-right:20px;
+*/}
+
+.mm-drag-helper li > span.name {
+/*    color:white !important;*/
+}
+
+.mm-drag-helper li > .toggler, .mm-drag-helper li > .expander {
+    display:none;
+}
+
+.mm-drag-helper > li > ul {
+    display:none;
+}
+
+.mm-drag-helper li {
+    padding-right:5px;
+    text-indent: none;
+/*    margin-left:5px;*/
+}
+
+.drophover {
+    background-color:#6190F5 !important;
+}
+
+#MyShapes.drophover {
+    background-color:#6190F5 !important;
+/*    border:solid blue 1px;*/
+/*    border-top:none;*/
 }

@@ -6,10 +6,34 @@ from django.contrib.gis.geos import *
 from lingcod.studyregion.models import StudyRegion
 from django.core import serializers 
 from manipulators import *      
+from lingcod.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from lingcod.features.forms import FeatureForm
+from lingcod.features import register
+from django.contrib.auth.models import User
 
 urlpatterns = patterns('',
     (r'/manipulators/', include('lingcod.manipulators.urls')),
 )
+
+# set up some test manipulators
+class TestManipulator(BaseManipulator):
+    """ 
+    This manipulator does nothing but ensure the geometry is clean. 
+    """
+    def __init__(self, target_shape, **kwargs):
+        self.target_shape = target_shape
+
+    def manipulate(self): 
+        target_shape = self.target_to_valid_geom(self.target_shape)
+        status_html = self.do_template("0")
+        return self.result(target_shape, status_html)
+
+    class Options(BaseManipulator.Options):
+        name = 'TestManipulator'
+        supported_geom_fields = ['PolygonField']
+        html_templates = { '0':'manipulators/valid.html', }
+
+manipulatorsDict[TestManipulator.Options.name] = TestManipulator        
 
 class ManipulatorsTest(TestCase):
     fixtures = ['manipulators_test_data']
@@ -143,3 +167,147 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(response0.status_code, 200)
        
     
+@register
+class TestPoly(PolygonFeature):
+    type = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'Test Poly'
+        form = 'lingcod.manipulators.tests.TestPolyForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestPolyForm(FeatureForm):
+    class Meta:
+        model = TestPoly
+
+@register
+class TestOptmanip(PolygonFeature):
+    type = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'Feature to Test Optional Manipulators'
+        form = 'lingcod.manipulators.tests.TestOptmanipForm'
+        optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+        manipulators = []
+class TestOptmanipForm(FeatureForm):
+    class Meta(FeatureForm.Meta):
+        model = TestOptmanip
+
+@register
+class TestLine(LineFeature):
+    type = models.CharField(max_length=1)
+    diameter = models.FloatField(null=True)
+    class Options:
+        verbose_name = 'TestLine'
+        form = 'lingcod.manipulators.tests.TestLineForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestLineForm(FeatureForm):
+    class Meta:
+        model = TestLine
+
+@register
+class TestPoint(PointFeature):
+    incident = models.CharField(max_length=1)
+    class Options:
+        verbose_name = 'TestPoint'
+        form = 'lingcod.manipulators.tests.TestPointForm'
+        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator' ]
+class TestPointForm(FeatureForm):
+    class Meta:
+        model = TestPoint
+
+class FeaturesManipulatorTest(TestCase):
+    fixtures = ['example_data']
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@marinemap.org', password='pword')
+        self.client.login(username='featuretest', password='pword')
+
+    def test_point_outside(self):
+        from lingcod.manipulators.manipulators import ClipToStudyRegionManipulator as csrm
+        with self.assertRaisesRegexp(csrm.HaltManipulations, 'empty'):
+            g = GEOSGeometry('SRID=4326;POINT(-100.45 14.32)')
+            g.transform(settings.GEOMETRY_DB_SRID)
+            feature = TestPoint(user=self.user, name="Outside Region", geometry_orig=g)
+            feature.save()
+
+    def test_studyregion_point(self):
+        g = GEOSGeometry('SRID=4326;POINT(-119.82 34.404)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoint(user=self.user, name="Nearby Wreck", geometry_orig=g)
+        feature.save()
+        self.assertAlmostEquals(g[0], feature.geometry_final[0])
+        self.assertAlmostEquals(g[1], feature.geometry_final[1])
+
+    def test_studyregion_line_allin(self):
+        # all in
+        g = GEOSGeometry('SRID=4326;LINESTRING(-120.234 34.46, -120.152 34.454)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestLine(user=self.user, name="My Pipeline", geometry_orig=g)
+        feature.save()
+        # floating point imprecission .. can't do this
+        # self.assertTrue(g.equals(feature.geometry_final))
+        self.assertAlmostEquals(g[1][0], feature.geometry_final[1][0])
+        self.assertAlmostEquals(g[1][1], feature.geometry_final[1][1])
+
+    def test_studyregion_line_partial(self):
+        # partial 
+        g = GEOSGeometry('SRID=4326;LINESTRING(-120.234 34.46, -120.162 34.547)')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestLine(user=self.user, name="My Pipeline", geometry_orig=g)
+        feature.save()
+        clip = GEOSGeometry('SRID=3310;LINESTRING (-21492.0524731723162404 -395103.6204170039854944, -20676.0969509799033403 -393916.9388333586975932)')
+        self.assertAlmostEquals(clip[1][0], feature.geometry_final[1][0])
+        self.assertAlmostEquals(clip[1][1], feature.geometry_final[1][1])
+
+    def test_studyregion_poly_allin(self):
+        # all in
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.161 34.441, -120.144 34.458, -120.186 34.455, -120.161 34.441))') 
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature.save()
+        self.assertAlmostEquals(g.area, feature.geometry_final.area, 2)
+        
+    def test_studyregion_poly_partial(self):
+        #partial
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.234 34.46, -120.152 34.454, -120.162 34.547, -120.234 34.46))')
+        g.transform(settings.GEOMETRY_DB_SRID)
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature.save()
+        self.assertNotAlmostEquals(g.area, feature.geometry_final.area)
+
+    def test_optional_manip_form(self):
+        # TestPoly should NOT have any optional manipulators defined
+        options = TestPoly.get_options()
+        response = self.client.get(options.get_create_form())
+        self.assertEqual(response.status_code, 200)
+        self.assertNotRegexpMatches(response.content, r'optional_manipulators')
+
+        # get the form and confirm that it allows cliptostudyregion as optional manip
+        options = TestOptmanip.get_options()
+        response = self.client.get(options.get_create_form())
+        self.assertEqual(response.status_code, 200)
+        self.assertRegexpMatches(response.content, r'optional_manipulators')
+        self.assertRegexpMatches(response.content, r'ClipToStudyRegion')
+
+    def test_optional_manip(self):
+        # partial polygon
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.234 34.46, -120.152 34.454, -120.162 34.547, -120.234 34.46))')
+        g.transform(settings.GEOMETRY_DB_SRID)
+
+        orig_geom = '-120.234,34.46,700 -120.152,34.454,700 -120.162,34.547,700 -120.234,34.46,700'
+        clip_geom = "-120.154031278,34.472909502,700 -120.152,34.454,700 -120.234,34.46,700 "\
+                "-120.2251468,34.4707108689,700 -120.218519204,34.4709073104,700 -120.217006684,34.4706784357,700 "\
+                "-120.21271897,34.4708157272,700 -120.208662028,34.4704036177,700 -120.203517908,34.4704151237,700 "\
+                "-120.19793129,34.4707738014,700 -120.186931614,34.4698275471,700 -120.1839447,34.4706171748,700 "\
+                "-120.177446368,34.4709301328,700 -120.168699263,34.4697474322,700 -120.165655133,34.4711589807,700 "\
+                "-120.159605021,34.4716395135,700 -120.158477785,34.4722310096,700 -120.154031278,34.472909502,700"
+
+        # Next, POST to manipulators url with no manipulators specified; should get original geom back
+        response = self.client.post('/manipulators//', {'target_shape': display_kml(g)})
+        self.assertTrue(orig_geom in response.content)
+        self.assertFalse(clip_geom in response.content)
+
+        # Next, POST to manipulators url with ClipToStudyRegionManipulator specified; should get clipped geom back
+        response = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': display_kml(g)})
+        self.assertTrue(orig_geom in response.content)
+        self.assertTrue(clip_geom in response.content)

@@ -220,28 +220,17 @@ var lingcod = (function(){
             
         setupSidebarLinkHandler(panel);
         
-        that.client = lingcod.rest.client(gex, panel);
-                
-        // Allows projects to add a callback to run after any form is shown
-        if(typeof options.form_shown === 'function'){
-            $(that.client).bind('form_shown', options.form_shown);
-        }
-        
         var editors = [];
         
         if(options.myshapes){
             for(var i=0;i<options.myshapes.length; i++){
                 var url = options.myshapes[i].url;
                 var callback = options.myshapes[i]['callback'];
-                var editor = lingcod.rest.kmlEditor({
-                    ge: ge,
+                var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#myshapestree',
-                    div: '#map',
                     url: options.myshapes[i].url,
-                    client: that.client,
-                    shared: false,
-                    allow_copy: options.allow_copy
+                    panel: panel
                 });
                 if(callback){
                     $(editor).bind('kmlLoaded', function(event, e, kmlObject){
@@ -282,15 +271,11 @@ var lingcod = (function(){
 
         if(options.sharedshapes){
             for(var i=0;i<options.sharedshapes.length; i++){
-                var editor = lingcod.rest.kmlEditor({
-                    ge: ge,
+                var editor = lingcod.features.kmlEditor({
                     gex: gex,
                     appendTo: '#sharedshapestree',
-                    div: '#map',
                     url: options.sharedshapes[i],
-                    client: that.client,
-                    shared: true,
-                    allow_copy: options.allow_copy
+                    panel: panel
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
                     $('#sidebar').tabs('select', "#MyShapes");
@@ -316,9 +301,77 @@ var lingcod = (function(){
                 }
             }
         };
+                
+        var onEditorEdit = function(e, data, status, xhr, context){
+            // myshapes panel is the only one that needs refreshing
+            var editor = editors[0];
+            $('a[href=#MyShapes]').click();
+            var info = typeof data === 'object' ? data:jQuery.parseJSON(data);
+            var select = info['X-MarineMap-Select'];
+            var show = info['X-MarineMap-Show'];
+            var untoggle = info['X-MarineMap-UnToggle'];
+            var hint = info['X-MarineMap-Parent-Hint'];
+            // var select = xhr.getResponseHeader('X-MarineMap-Select');
+            $(editor.tree).one('kmlLoaded', function(){
+                if(select){
+                    editor.tree.clearSelection();
+                    select = select.split(' ');
+                    var nodes = [];
+                    for(var i = 0; i < select.length; i++){
+                        var id = select[i];
+                        var ns = editor.tree.getNodesById(id);
+                        if(ns.length){
+                            nodes.push(ns[0]);
+                        }
+                    }
+                    if(nodes.length){
+                        editor.tree.selectNodes($(nodes));                        
+                    }else{
+                        // only supports one hint for now. TODO? Not needed?
+                        var nl = editor.tree.getNodesById(hint.split(' ')[0]);
+                        if(nl.length){
+                            $(editor.tree).one('networklinkload', function(){
+                                var nodes = [];
+                                for(var i = 0; i < select.length; i++){
+                                    var id = select[i];
+                                    var ns = editor.tree.getNodesById(id);
+                                    if(ns.length){
+                                        nodes.push(ns[0]);
+                                    }
+                                }
+                                if(nodes.length){
+                                    editor.tree.selectNodes($(nodes));                        
+                                };
+                            });
+                            editor.tree.openNetworkLink(nl);
+                        }
+                    }
+                }
+                // Not sure why a timeout helps here, but otherwise the 
+                // dblclick event wont trigger
+                setTimeout(function(){
+                    if(untoggle){
+                        untoggle = untoggle.split(' ');
+                        for(var i = 0; i < untoggle.length; i++){
+                            var id = untoggle[i];
+                            var ns = editor.tree.getNodesById(id);
+                            $(ns[0]).find('> .toggler').click();
+                        }
+                    }
+                    if(show){
+                        var node = editor.tree.getNodesById(show);
+                        if(node.length){
+                            $(node).trigger('dblclick');
+                        }
+                    }
+                }, 20);
+            });
+            editor.refresh();
+        }
         
         for(var i=0;i<editors.length;i++){
             $(editors[i]).bind('select', onEditorSelect);
+            $(editors[i]).bind('edit', onEditorEdit);
         };
         
         $('#sidebar, #meta-navigation').click(function(e){
@@ -347,6 +400,38 @@ var lingcod = (function(){
             e.preventDefault();
         });
 
+        $('#signin').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Sign In Form';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.signin_url, opts);
+            e.preventDefault();
+        });
+
+        $('#profile').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading User Profile';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.profile_url, opts);
+            e.preventDefault();
+        });
+
+        $('#register').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Registration Form';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.registration_url, opts);
+            e.preventDefault();
+        });
+
+        $('#help').click(function(e){
+            opts = {};
+            opts['load_msg'] = 'Loading Help Page';
+            opts['showClose'] = true;
+            panel.showUrl(that.options.help_url, opts);
+            e.preventDefault();
+        });
+
         // for showing the news or about panels if they haven't been viewed 
         // yet (that determination is done with cookies in the django view)
         if(options.show_panel){
@@ -356,6 +441,8 @@ var lingcod = (function(){
                 panel.showUrl(that.options.about_url, opts);
             }else if(options.show_panel == 'news' && that.options.news_url){
                 panel.showUrl(that.options.news_url, opts);
+            }else if(options.show_panel == 'signin' && that.options.signin_url){
+                panel.showUrl(that.options.signin_url, opts);
             }
         }
 
@@ -386,12 +473,12 @@ var lingcod = (function(){
             resize();
         });
         
-        $(window).bind('beforeunload', function(){
+        window.onbeforeunload = function(){
             setCameraToLocalStorage();
             saveEarthOptionsToLocalStore();
             setStore('selectedTab', 
                 $('#sidebar > ul > .ui-tabs-selected a').attr('href'));
-        });
+        }
     };
     
     var studyRegionLoaded = function(kmlObject, node){

@@ -5,7 +5,7 @@ ROOT_PATH = ''
 
 def get_js_files():
     """Returns a list of all the javascript files listed in 
-    media/common/js/includes.xml"""
+    media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
     tree = et.parse(path+'/../../media/js_includes.xml')
@@ -15,7 +15,7 @@ def get_js_files():
     
 def get_js_test_files():
     """Returns a list of all the javascript test files listed in 
-    media/common/js/includes.xml"""
+    media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
     tree = et.parse(path+'/../../media/js_includes.xml')
@@ -25,7 +25,7 @@ def get_js_test_files():
     
 def get_css_files():
     """Returns a list of all css files listed in 
-    media/common/css/includes.xml"""
+    media/css_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
     tree = et.parse(path+'/../../media/css_includes.xml')

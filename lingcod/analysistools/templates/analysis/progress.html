@@ -1,0 +1,32 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{ progress.name }}{% endblock title %}
+{% block panel %}
+
+<h2>
+{{progress.html|safe}}
+</h2>
+
+{% if progress.done %}
+<p>
+<a href="#" class="button" id="refresh_{{progress.uid}}" onclick="this.blur(); return false;"><span>Refresh View</span></a>
+to see the results.
+</p>
+
+<script>
+lingcod.onShow(function(){
+    $('#refresh_{{progress.uid}}').click( function() {
+        var myshps = lingcod.editors[0];
+        myshps.tree.clearSelection();
+        myshps.refresh( function() {
+            var anode = myshps.tree.getNodesById('{{progress.uid}}');
+            if (anode.length === 1) {
+                myshps.tree.selectNode(anode); 
+            }
+        });
+
+    });
+});
+</script>
+
+{% endif %}
+{% endblock panel %}

@@ -1,23 +1,42 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from lingcod.features.tests import TestMpa, TestFolder
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from lingcod.common.utils import enable_sharing
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+class HeatmapTest(TestCase):
+    fixtures = ['example_data']
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+    def setUp(self):
+        enable_sharing()
 
->>> 1 + 1 == 2
-True
-"""}
+        self.user1 = User.objects.create_user(
+            'user1', 'featuretest@marinemap.org', password='pword')
+        self.user2 = User.objects.create_user(
+            'user2', 'othertest@marinemap.org', password='pword')
+
+        self.mpa1 = TestMpa(user=self.user1, name="My Mpa")
+        self.mpa1.save()
+        self.folder1 = TestFolder(user=self.user1, name="My Folder")
+        self.folder1.save()
+        self.mpa1.add_to_collection(self.folder1)
+
+        self.tif_url = reverse("heatmap-collection-geotiff", kwargs={'collection_uids': self.folder1.uid})
+        self.kmz_url = reverse("heatmap-collection-kmz", kwargs={'collection_uids': self.folder1.uid})
+
+    def test_noauth(self):
+        response = self.client.get(self.tif_url)
+        self.assertEqual(response.status_code, 401)
+
+        self.client.login(username=self.user2.username, password='pword')
+        response = self.client.get(self.tif_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_urls(self):
+        self.client.login(username=self.user1.username, password='pword')
+        response = self.client.get(self.tif_url)
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(self.kmz_url)
+        self.assertEqual(response.status_code, 200)
 

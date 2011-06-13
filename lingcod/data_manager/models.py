@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from django.contrib.gis.db import models
 from django.contrib.gis.gdal import *
 from django.contrib.gis import geos
@@ -61,6 +62,8 @@ def largest_poly_from_multi(geom):
 
 def clean_geometry(geom):
     from django.db import connection
+    if(isinstance(geom, Point)):
+        return geom
     cursor = connection.cursor()
     query = "select cleangeometry(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
     cursor.execute(query)
