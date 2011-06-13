@@ -103,6 +103,9 @@ class PrivateKml(models.Model):
         IMPORTANT: Every file in and below the base kml's directory path is accessible 
         if the user has proper permissions on the base kml.""")
 
+    def __unicode__(self):
+        return u'%s at %s' % (self.name,self.base_kml)
+
 class PublicLayerList(models.Model):
     """Model used for storing uploaded kml files that list all public layers.
 

@@ -38,5 +38,6 @@ class Command(BaseCommand):
                     if groupname:
                         pkml.sharing_groups.add(g)
                     print "Created %s from %s" % (pkml,kml)
-                except:
+                except Exception as e:
                     print "couldn't create privatekml from %s" % kml
+                    print "  ", e
