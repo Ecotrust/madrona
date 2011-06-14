@@ -204,7 +204,7 @@ For now, we'll just test our new project using django's built-in development ser
 for any absolute urls created by our MarineMap project. Then run the dev server to test it::
 
     python manage.py enable_sharing
-    python manage.py site_setup_for_dev
+    python manage.py site localhost:8000
     python manage.py runserver
 
 Our Oregon MarineMap project should now be accessible at http://localhost:8000/ ...
