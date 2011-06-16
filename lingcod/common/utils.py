@@ -486,7 +486,7 @@ def asKml(input_geom, altitudeMode=None):
     if altitudeMode and geom.geom_type == 'Polygon':
         kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>%s</altitudeMode><extrude>1</extrude>' % altitudeMode)
         # The GEOSGeometry.kml() method always adds a z dim = 0
-        kml = kml.replace(',0', ',%s' % settings.KML_EXTRUDE_HEIGHT)
+        kml = kml.replace(',0 ', ',%s ' % settings.KML_EXTRUDE_HEIGHT)
 
     cache.set(key, kml)
     return kml
