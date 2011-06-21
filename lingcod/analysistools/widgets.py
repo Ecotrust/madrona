@@ -159,3 +159,92 @@ class SimplePoint(forms.TextInput):
         });
         </script>
         """ % (set_text,output,new_text,self.title,name,name))
+
+class DualSliderWidget(forms.TextInput):
+
+    def __init__(self, min_field, max_field, min=None, max=None, step=None, image=None, attrs=None):
+        super(DualSliderWidget, self).__init__(attrs)
+        self.max = 100
+        self.min = 0
+        self.step = None
+        self.image = None
+        self.min_field = min_field
+        self.max_field = max_field
+
+        if max:
+            self.max = max
+        if min:
+            self.min = min
+        if step:
+            self.step = step
+        if image:
+            self.image = image
+    
+    def get_step(self):
+        if self.step:
+            return "step : %s," % self.step
+        else:
+            return ''
+
+    def render(self, name, value, attrs=None):
+        attrs['class'] = 'slidervalue'
+        final_attrs = self.build_attrs(attrs, name=name)
+        slider_id = 'slider-'+name
+
+        #field = super(DualSliderWidget, self).render(name, value, attrs)
+        
+        field = """<input style="display:none;" type="text" name="%(name)s" value="0" id="id_%(name)s" />""" % {'name':name}
+
+        image_html = ""
+        if self.image:
+            url = self.image
+            if not url.startswith("/") and not self.image.startswith("http://"):
+                url = settings.MEDIA_URL + url
+            image_html = """<span class="form-image"><img src="%s" /></span>""" % url
+        slider = """
+        <div class="slider" id="%(slider_id)s"></div>
+        <script type="text/javascript">
+        lingcod.onShow( function() {
+            var low_field = $('#%(low_field_id)s');
+            var high_field = $('#%(high_field_id)s');
+            var slidy = $('#%(slider_id)s');
+            // Create the sliderbar
+            slidy.slider({
+                range: 'min',
+                min : %(min)s, 
+                max : %(max)s,
+                values: [%(min)s, %(max)s],
+                %(step)s
+                change : function(event, ui) {
+                    // When the slider changes, set the value of the field
+                    low_field.val(ui.values[0]);
+                    high_field.val(ui.values[1]);
+                },
+                slide : function(event, ui) {
+                    // When the slider slides, set the value of the field
+                    low_field.val(ui.values[0]);
+                    high_field.val(ui.values[1]);
+                }
+            });
+
+            // initialize
+            slidy.slider("values", [low_field.val(),high_field.val()])
+
+            // If the field changes, change the slider bar
+            low_field.change( function (){
+                slidy.slider("values", [low_field.val(),high_field.val()])
+            }); 
+            high_field.change( function (){
+                slidy.slider("values", [low_field.val(),high_field.val()])
+            }); 
+        });
+        </script>
+        """ % { 'slider_id' : slider_id, 
+                'low_field_id' : "id_%s" % self.min_field, 
+                'high_field_id' : "id_%s" % self.max_field, 
+                'min' : self.min, 
+                'max' : self.max, 
+                'step' : self.get_step()}
+        
+        return mark_safe(image_html+field+slider)
+
