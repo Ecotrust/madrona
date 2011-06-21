@@ -123,6 +123,7 @@ lingcod.features.kmlEditor = (function(){
             multipleSelect: true,
             selectable: true,
             displayDocumentRoot: true,
+            displayEnhancedContent: options.enhancedContent || false,
             classname: function(kmlObject){
                 return lingcod.features.model(kmlObject) || '';
             }

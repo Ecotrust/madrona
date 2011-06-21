@@ -9,6 +9,7 @@ var lingcod = (function(){
     var constructor_defaults = {
         hideGoogleLayers: false,
         rememberMapExtent: true,
+        displayEnhancedContent: false,
         srcWhitelist: [new RegExp('^http://' + localAuthority)],
         targetWhitelist: [new RegExp('^http://' + localAuthority)]
     };
@@ -150,6 +151,7 @@ var lingcod = (function(){
                 mapElement: $('#map'),
                 element: div,
                 restoreState: !$.browser.msie,
+                displayEnhancedContent: options.displayEnhancedContent,
                 setExtent: !cameraSet && layers[i].opts && 
                     layers[i].opts.setExtent
             });
@@ -230,6 +232,7 @@ var lingcod = (function(){
                     gex: gex,
                     appendTo: '#myshapestree',
                     url: options.myshapes[i].url,
+                    enhancedContent: options.displayEnhancedContent,
                     panel: panel
                 });
                 if(callback){
@@ -275,6 +278,7 @@ var lingcod = (function(){
                     gex: gex,
                     appendTo: '#sharedshapestree',
                     url: options.sharedshapes[i],
+                    enhancedContent: options.displayEnhancedContent,
                     panel: panel
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {

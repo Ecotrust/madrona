@@ -23,6 +23,10 @@
         {% if show_panel %}
             options.show_panel = '{{ show_panel }}';
         {% endif %}
+        
+        {% block enhancedContent %}
+            options.displayEnhancedContent = false;
+        {% endblock enhancedContent %}
 
         {% block layersConfig %}
             // setup which kml files are shown in the data layers panel
