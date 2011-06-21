@@ -210,7 +210,7 @@ class DualSliderWidget(forms.TextInput):
             var slidy = $('#%(slider_id)s');
             // Create the sliderbar
             slidy.slider({
-                range: 'min',
+                range: true,
                 min : %(min)s, 
                 max : %(max)s,
                 values: [%(min)s, %(max)s],
