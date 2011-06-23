@@ -4,6 +4,8 @@ import os
 import time
 import shutil
 import subprocess
+from lingcod.common.utils import get_logger
+log = get_logger()
 
 DJANGO = True
 try:
@@ -230,7 +232,7 @@ class Grass:
         if nice:
             cmd = 'nice -n %d %s' % (nice,cmd)
         if self.verbose:
-            print cmd
+            log.debug(cmd)
         proc = subprocess.Popen(cmd, shell=True,
                     stdout=subprocess.PIPE, 
                     stderr=subprocess.PIPE,)
@@ -240,7 +242,7 @@ class Grass:
         if returncode != 0:
             raise Exception("\nCommand failed with return code %s: \n %s \n %s" % (returncode, cmd, err))
         elif err:
-            print err
+            log.debug(err)
         return out    
          
     ############ Shortcut Commands ############
