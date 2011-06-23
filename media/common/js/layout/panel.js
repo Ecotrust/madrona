@@ -434,9 +434,14 @@ lingcod.contentLoader = (function(){
                 var t = tabs.tabs({
                     'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
                     ajaxOptions: {
-                        error: function(){
+                        error: function(e){
                             $('#loadingTab').parent().parent().remove();
-                            alert('An error occured attempting to load this tab. If the problem persists, please contact help@marinemap.org for assistance.');
+                            if (e.statusText == 'error') {
+                                alert('An error occured attempting to load this tab. ' +
+                                      '\nError code ' + e.status +
+                                      '\nIf the problem persists, please contact ' +
+                                      'help@marinemap.org for assistance.');
+                            }
                         },
                         dataFilter: dataFilter
                     },
