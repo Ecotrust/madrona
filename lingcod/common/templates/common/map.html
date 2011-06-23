@@ -137,6 +137,7 @@
     <div id="map_container">
         <div id="map" class="kmlTreeReset"></div>
     </div>
+    {% block tools %}
     <div id="tools">
         <h1>Tools</h1>
         {% block flyto %}
@@ -178,10 +179,15 @@
             </ul>
         </div>
     </div>
+    {% endblock tools %}
+
+    {% block datalayers %}
     <div id="DataLayers">
         <h1>{% block dataLayersTitle %}Data Layers{% endblock dataLayersTitle %}</h1>
         <div id="datalayerstree"></div>
     </div>
+    {% endblock datalayers %}
+
     <div style="display:none;" id="panel-holder"></div>
     <div id="geopanel">
 
