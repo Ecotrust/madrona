@@ -97,7 +97,6 @@ class SimplePoint(forms.TextInput):
             geo = fromstr(value)
             set_text = "Reset"
             new_text = "Reset"
-            print geo
         return mark_safe("""
         <div>
             <a id="do_grabpoint" class="button" href="#">
