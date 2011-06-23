@@ -54,6 +54,10 @@ class Analysis(Feature):
     def input_fields(klass):
         return [f for f in klass._meta.fields if f.attname.startswith('input_')]
 
+    @classmethod
+    def input_manytomany_fields(klass):
+        return [f for f in klass._meta.manytomany if f.attname.startswith('input_')]
+
     @property
     def inputs(self):
         """
@@ -102,7 +106,7 @@ class Analysis(Feature):
         """
         # For now just check that the outputs are not None
         for of in self.outputs.keys():
-            if not self.outputs[of]:
+            if self.outputs[of] is None:
                 return False
         return True
 
