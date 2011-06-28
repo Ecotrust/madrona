@@ -646,7 +646,7 @@ var lingcod = (function(){
             var balloon = ge.getBalloon();
             if(balloon){
                 var feature = balloon.getFeature();
-                if(feature && feature.getUrl){
+                if(feature && 'getUrl' in feature){
                     var src = feature.getUrl();
                     if(src){
                         var target = $(this).attr('href');
