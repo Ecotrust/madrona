@@ -91,6 +91,8 @@
         </ul>
         <br />
     </div>
+
+    {% block menu_icons %}
     <ul class="menu_items" id="header_buttons">
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
         <li id="layers_menu" class="item">
@@ -106,6 +108,8 @@
         </li>
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
     </ul>
+    {% endblock menu_icons %}
+
     {% block toggle %}
     <div id="sidebar-toggler">
         &nbsp;
@@ -130,7 +134,9 @@
         </div>            
         {% endif %}
         <div id="SharedShapes">
+            {% block before_sharedshapes %}{% endblock before_sharedshapes %}
             <div style="font-size:1em;" id="sharedshapestree"></div>
+            {% block after_sharedshapes %}{% endblock after_sharedshapes %}
         </div>            
         {% endblock tabscontents %}
     </div>
