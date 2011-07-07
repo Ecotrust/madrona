@@ -5,6 +5,7 @@
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
+    z-index:11;
 }
 
 .menu_items a img {
