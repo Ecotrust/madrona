@@ -21,17 +21,18 @@ as image (PNG)
 
 as shapefile
 ------------
-The `Export as shapefile` option can be enabled by adding a urlpattern named ``mpa_shapefile``.
+The `Export as shapefile` option can be enabled by adding a view, a model, and a couple tweaks
+to the exportable model.  
 
-.. code-block:: python
+The following example will walk you through the steps of enabling the export as shapefile option using
+a sample model ``MyBioregion``.
 
-    urlpatterns = patterns('',
-        url(r'shapefile/mpa/(?P<mpa_id_list_str>(\d+,?)+)/$', mpa_shapefile, name='mpa_shapefile'),
-    )
+The following view (``bio_shapefile`` in this example) will utilize the built-in ``ShpResponder`` class 
+to generate a shapefile from our exportable model (``MyBioregion``).  
 
-This urlpattern refers to a view, which, in this example, is called ``mpa_shapefile``.  
-This view will utilize the built-in ``ShpResponder`` class to generate a shapefile from the 
-``export_query_set`` property of your model (``MPA`` will serve as the model in this example).  
+.. note::
+    This view is actually equipped to handle multiple instances of MyBioregion that may have been selected by the user
+    for exporting.  
 
 .. code-block:: python
 
@@ -39,98 +40,144 @@ This view will utilize the built-in ``ShpResponder`` class to generate a shapefi
     from lingcod.sharing.utils import get_viewable_object_or_respond
     from lingcod.shapes.views import ShpResponder
     from django.template.defaultfilters import slugify
+    
+    def bio_shapefile(request, instances):
+        from mybioregions.models import MyBioregion, BioregionShapefile
+        bios = []
+        for inst in instances:
+            viewable, response = inst.is_viewable(request.user)
+            if not viewable:
+                return response
 
-    def mpa_shapefile(request, mpa_id_list_str):
-        mpa_class = utils.get_mpa_class()
-        mpa_id_list = mpa_id_list_str.split(',')
-        mpa_id = mpa_id_list[0] # only expecting one 
-        mpa = get_viewable_object_or_respond(mpa_class, mpa_id, request.user)
-        shp_response = ShpResponder(mpa.export_query_set)
-        shp_response.file_name = slugify(mpa.name[0:8])
+            if isinstance(inst, MyBioregion):
+                inst.convert_to_shp()
+                bios.append(inst)
+            else:
+                pass # ignore anything else
+
+        filename = '_'.join([slugify(inst.name) for inst in instances])
+        pks = [bio.pk for bio in bios]
+        qs = BioregionShapefile.objects.filter(bio_id_num__in=pks)
+        if len(qs) == 0:
+            return HttpResponse(
+                "Nothing in the query set; you don't want an empty shapefile", 
+                status=404
+            )
+        shp_response = ShpResponder(qs)
+        shp_response.file_name = slugify(filename[0:8])
         return shp_response()
 
-In order for this view to function, your model (``MPA`` in this case) should have an ``export_query_set`` property defined.
+In order for this view to function, the exportable model (``MyBioregion``) will need a ``convert_to_shp`` function.
 
 .. code-block:: python
 
-    @property
-    def export_query_set(self):
-        return MpaShapefile.objects.filter(pk=self.export_version.pk)
+    def convert_to_shp(self):
+        '''
+        Port the Bioregion attributes over to the BioregionShapefile model so we can export the shapefile.
+        '''
+        bsf, created = BioregionShapefile.objects.get_or_create(bioregion=self)
+        if created or bsf.date_modified < self.date_modified:
+            bsf.name = self.name
+            bsf.bio_id_num = self.pk
+            bsf.geometry = self.output_geom
+            #short_name = self.name
+            if self.collection:
+                bsf.group = self.collection
+                bsf.group_name = self.collection.name
+            #units based on the settings variable DISPLAY_AREA_UNITS (currently sq miles)
+            bsf.area_sq_mi = area_in_display_units(self.output_geom)
+            bsf.author = self.user.username
+            bsf.aoi_modification_date = self.date_modified
+            bsf.save()
+        return bsf
     
-This ``export_query_set`` property requires an additional model (which we will call ``MpaShapefile``),
-and an additional property in your original model, ``export_version``, which will be responsible for
-generating an instance of this new model ``MpaShapefile``.
-This additional model, ``MpaShapefile``, will provide the fields you wish to have present in the attribute table of 
+And the following ``link`` entry should be added to the model's (``MyBioregion``) ``Options`` class. 
+
+.. code-block:: python
+    
+    links = (
+        alternate('Shapefile',
+            'mybioregions.views.bio_shapefile',
+            select='multiple single',
+            type='application/zip',
+        ),
+    )
+    
+    
+This ``convert_to_shp`` function requires an additional model (``BioregionShapefile`` in our example).
+This additional model will provide the fields you wish to have present in the attribute table of 
 the exported shapefile.  
 
 .. code-block:: python
 
-    class MpaShapefile(models.Model):
+    class BioregionShapefile(models.Model):
         """
-        This model will provide the correct fields for the export of shapefiles.
+        This model will provide the correct fields for the export of shapefiles using the django-shapes app.
         """
-        name = models.CharField(max_length=255)
-        mpa_id_num = models.IntegerField(blank=True, null=True)
         geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,blank=True,null=True)
-        mpa = models.OneToOneField(MPA, related_name="mpa")
-        mpa_modification_date = models.DateTimeField(blank=True, null=True)
+        name = models.CharField(max_length=255)
+        bio_id_num = models.IntegerField(blank=True, null=True)
+        group = models.ForeignKey(Folder, null=True, blank=True)
+        group_name = models.CharField(blank=True, max_length=255, null=True)
+        area_sq_mi = models.FloatField(blank=True,null=True)
+        author = models.CharField(blank=True, max_length=255,null=True)
+        bioregion = models.OneToOneField(MyBioregion, related_name="bioregion")
+        bio_modification_date = models.DateTimeField(blank=True, null=True)
         date_modified = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-        objects = models.GeoManager()
-
-And the ``export_version`` property of your original model (``MPA`` in our case), will generate an entry in 
-the ``MpaShapefile`` table if one is not already present (and current).  
-
-.. code-block:: python
-
-    @property
-    def export_version(self):
-        """
-        Port the MPAs attributes over to the MpaShapefile model so we can export the shapefile.
-        """
-        msf, created = MpaShapefile.objects.get_or_create(mpa=self)
-        if created or msf.date_modified < self.date_modified:
-            msf.name = self.name
-            msf.mpa_id_num = self.pk
-            msf.geometry = self.geometry_final
-            msf.mpa_modification_date = self.date_modified
-            msf.save()
-        return msf
+        objects = models.GeoManager()   
 
 Implementing all of the above should provide a working `Export as shapefile` feature for your individual model.
 
 Once you have this in place for an individual model, implementing the `Export as shapefile` feature for an array,
 or group of models is simple:
 
-Add an additional urlpattern:
-
-.. code-block:: python
-
-    url(r'shapefile/array/(?P<array_id_list_str>(\d+,?)+)/$', array_shapefile,name='array_shapefile')
-    
-An additional view:    
+Augment your view to reflect the minor changes seen below (including the possibility of a ``Folder`` instance):    
     
 .. code-block:: python
 
-    def array_shapefile(request, array_id_list_str):
-        array_class = utils.get_array_class()
-        array_id_list = array_id_list_str.split(',')
-        array_id = array_id_list[0] # for now we're only expecting to get one
-        array = get_viewable_object_or_respond(array_class,array_id,request.user)
-        file_name = array.name[0:8]
-        shp_response = ShpResponder(array.export_query_set)
-        shp_response.file_name = slugify(file_name)
+    def bio_shapefile(request, instances):
+        from mybioregions.models import MyBioregion, Folder, BioregionShapefile
+        bios = []
+        for inst in instances:
+            viewable, response = inst.is_viewable(request.user)
+            if not viewable:
+                return response
+
+            if isinstance(inst, MyBioregion):
+                inst.convert_to_shp()
+                bios.append(inst)
+            elif isinstance(inst, Folder):
+                for bio in inst.feature_set(recurse=True,feature_classes=[MyBioregion]):
+                    bio.convert_to_shp()
+                    bios.append(bio)
+            else:
+                pass # ignore anything else
+
+        filename = '_'.join([slugify(inst.name) for inst in instances])
+        pks = [bio.pk for bio in bios]
+        qs = BioregionShapefile.objects.filter(bio_id_num__in=pks)
+        if len(qs) == 0:
+            return HttpResponse(
+                "Nothing in the query set; you don't want an empty shapefile", 
+                status=404
+            )
+        shp_response = ShpResponder(qs)
+        shp_response.file_name = slugify(filename[0:8])
         return shp_response()
 
-And an ``export_query_set`` property to your Array model (``MpaArray`` in our case):
+This change will simply loop through the individual shapes in any ``Folder`` instance, generating 
+a shapefile record from each of the shapes contained within that array.
+
+And finally, add the following ``link`` entry to the ``Options`` class in your array model (``Folder`` in this example):
 
 .. code-block:: python
 
-    @property
-    def export_query_set(self):
-        for mpa in self.mpa_set.all():
-            mpa.export_version # update these records
-        qs = MpaShapefile.objects.filter(group=self)
-        return qs
+    links = (
+        alternate('Shapefile',
+            'mybioregions.views.bio_shapefile',
+            select='multiple single',
+            type='application/zip',
+        ),
+    )
 
-This property will simply loop through the individual shapes in your array, utilizing the ``export_version property`` 
-of your base model (``MPA``), to generate a shapefile with all of the shapes contained within that array.
+And you should now have the ability to export shapes and folders of shapes as shapefiles.
