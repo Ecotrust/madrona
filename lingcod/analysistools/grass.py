@@ -241,7 +241,7 @@ class Grass:
         
         if returncode != 0:
             raise Exception("\nCommand failed with return code %s: \n %s \n %s" % (returncode, cmd, err))
-        elif err:
+        elif err and self.verbose:
             log.debug(err)
         return out    
          
