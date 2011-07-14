@@ -55,7 +55,7 @@ class Grass:
     '''
     def __init__(self, location, srcMapset='PERMANENT', tmpMapset=True, 
                  gisdbase=None, gisbase=None, autoclean=True):
-        self.autoclean = False
+        self.autoclean = autoclean
         self.verbose = False
             
         self.location = location
@@ -85,7 +85,6 @@ class Grass:
             self.curMapset = srcMapset
             self.grassRcFile = os.path.join(gisdbase, "mm_grass6rc")  
             self.setupTmpGrassEnv(mktmp=False)
-            self.autoclean = autoclean
         else:
             self.curMapset = self.tmpMapset
             self.grassRcFile = os.path.join(self.tmpMapsetPath, "mm_grass6rc")  
