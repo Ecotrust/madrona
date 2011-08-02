@@ -227,3 +227,7 @@ CACHES = {
 HELP_EMAIL = 'help@marinemap.org'
 
 STATICMAP_AUTOZOOM = True
+
+TITLES = {
+    'self': 'Attributes',
+}

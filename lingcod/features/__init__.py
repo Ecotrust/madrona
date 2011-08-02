@@ -330,7 +330,7 @@ lingcod.features.forms.FeatureForm." % (self._model.__name__, ))
                 'self': {
                     'uri-template': reverse("%s_resource" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}'),
-                    'title': 'Attributes',
+                    'title': settings.TITLES['self'],
                 },
             }
         }
