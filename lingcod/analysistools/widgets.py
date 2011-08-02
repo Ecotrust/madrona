@@ -9,12 +9,13 @@ class SliderWidget(forms.TextInput):
     http://pastebin.com/f34f0c71d
     """
 
-    def __init__(self, min=None, max=None, step=None, image=None, attrs=None):
+    def __init__(self, min=None, max=None, step=None, image=None, attrs=None, show_number=True):
         super(SliderWidget, self).__init__(attrs)
         self.max = 100
         self.min = 0
         self.step = None
         self.image = None
+        self.show_number = True
 
         if max:
             self.max = max
@@ -24,6 +25,7 @@ class SliderWidget(forms.TextInput):
             self.step = step
         if image:
             self.image = image
+        self.show_number = show_number
     
     def get_step(self):
         if self.step:
@@ -37,6 +39,10 @@ class SliderWidget(forms.TextInput):
         slider_id = 'slider-'+name
 
         field = super(SliderWidget, self).render(name, value, attrs)
+        hide_js = ""
+        if not self.show_number:
+            hide_js = "field.hide();"
+
         image_html = ""
         if self.image:
             url = self.image
@@ -48,6 +54,7 @@ class SliderWidget(forms.TextInput):
         <script type="text/javascript">
         lingcod.onShow( function() {
             var field = $('#%(field_id)s');
+            %(hide_js)s // hide field?
             var slidy = $('#%(slider_id)s');
             // Create the sliderbar
             slidy.slider({
@@ -78,6 +85,7 @@ class SliderWidget(forms.TextInput):
                 'field_id' : "id_%s" % name, 
                 'min' : self.min, 
                 'max' : self.max, 
+                'hide_js': hide_js,
                 'step' : self.get_step()}
         
         return mark_safe(image_html+field+slider)
