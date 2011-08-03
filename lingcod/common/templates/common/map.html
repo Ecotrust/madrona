@@ -23,6 +23,12 @@
         {% if show_panel %}
             options.show_panel = '{{ show_panel }}';
         {% endif %}
+
+        {% if has_features %}
+            options.has_features = true;
+        {% else %}
+            options.has_features = false;
+        {% endif %}
         
         {% block enhancedContent %}
             options.displayEnhancedContent = false;

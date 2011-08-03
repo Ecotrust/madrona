@@ -769,3 +769,16 @@ def to_csv(features):
         return ' '.join([f.uid for f in features])
     else:
         return features
+
+def has_features(user):
+    """
+    Util function to determine if a user owns any features
+    """
+    from lingcod.features import registered_models
+    for model in registered_models:
+        try:
+            if len(model.objects.filter(user=user)) > 0:
+                return True
+        except:
+            pass
+    return False
