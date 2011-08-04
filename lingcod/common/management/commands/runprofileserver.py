@@ -57,25 +57,39 @@ class Command(BaseCommand):
 
             try:
                 # BEGIN profiling
-                import hotshot, time, tempfile
-                import hotshot.stats
-                def make_profiler_handler(inner_handler): 
+                import cProfile
+                import pstats
+                import time, tempfile
+
+                profile_temp_dir = None
+                if profile_temp_dir is not None:
+                    tempfile.tempdir = profile_temp_dir
+                def make_profiler_handler(inner_handler):
                     def handler(environ, start_response):
-                        print "==============================================="
-                        path = environ['PATH_INFO'].strip("/").replace('/', '.')
-                        fd, profname = tempfile.mkstemp('.prof', '%s.%3f' % (path, time.time()))
+                        print "============= Starting response ===================="
+                        path = environ['PATH_INFO']
+                        if path.startswith(settings.MEDIA_URL):
+                            return inner_handler(environ, start_response)
+                        path = path.strip('/').replace('/', '.')
+                        if path:
+                            prefix = 'p.%s.%3f' % (path, time.time())
+                        else:
+                            prefix = 'p.%3f' % time.time()
+                        fd, profname = tempfile.mkstemp('.prof', prefix)
                         os.close(fd)
-                        prof = hotshot.Profile(profname)
-                        response = prof.runcall(inner_handler, environ, start_response) 
-                        # Output to stdout
-                        if "media" not in profname:
-                            stats = hotshot.stats.load(profname)
+                        prof = cProfile.Profile()
+                        try:
+                            return prof.runcall(inner_handler, environ, start_response)
+                        finally:
+                            prof.dump_stats(profname)
+                            stats = pstats.Stats(profname)
                             stats.sort_stats('cumulative', 'time', 'calls')
                             stats.print_stats('lingcod',20)
-                        print " * Complete hotshot.stats output at %s" % profname
-                        print "==============================================="
-                        return response 
+                            print " * Complete cProfile output at %s" % profname
+                            print "============= Done ================================="
+
                     return handler
+
                 # END 
                 #handler = AdminMediaHandler(WSGIHandler(), admin_media_path)
                 handler = make_profiler_handler(AdminMediaHandler(WSGIHandler(), admin_media_path))
