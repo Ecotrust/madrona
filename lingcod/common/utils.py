@@ -4,9 +4,49 @@ from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
 from django.core.cache import cache
+from lingcod.common.models import KmlCache
 import zipfile
+import re
+import logging
+import inspect
+import tempfile
 
-#from django.db import transaction
+def get_logger(caller_name=None):
+    try:
+        fh = open(settings.LOG_FILE,'w')
+        logfile = settings.LOG_FILE
+    except:
+        print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        logfile = None
+
+    try:
+        level = settings.LOG_LEVEL
+    except AttributeError:
+        if settings.DEBUG:
+            level = logging.DEBUG
+        else:
+            level = logging.WARNING 
+    
+    format = '%(asctime)s %(name)s %(levelname)s %(message)s'
+    if logfile:
+        logging.basicConfig(level=level, format=format, filename=logfile)
+    else:
+        logging.basicConfig(level=level, format=format)
+
+    if not caller_name:
+        caller = inspect.currentframe().f_back
+        caller_name = caller.f_globals['__name__']
+
+    logger = logging.getLogger(caller_name)
+
+    if logfile and settings.DEBUG:
+        import sys
+        strm_out = logging.StreamHandler(sys.__stdout__)
+        logger.addHandler(strm_out)
+
+    return logger
+
+log = get_logger()
 
 def KmlWrap( string ):
     return '<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">' + string + '</kml>'
@@ -267,7 +307,6 @@ def hex8_to_rgba(hex8):
 from django.utils.importlib import import_module
 
 def load_session(request, session_key):
-    log = get_logger()
     if session_key and session_key != '0':
         engine = import_module(settings.SESSION_ENGINE)
         request.session = engine.SessionStore(session_key)
@@ -296,7 +335,6 @@ def valid_browser(ua):
 
     bp = uaparser.browser_platform(ua)
     if not bp.platform:
-        log = get_logger()
         log.warn("Platform is None: UA String is '%s'" % ua)
 
     for sb in supported_browsers:
@@ -346,45 +384,6 @@ class KMZUtil:
             elif os.path.isdir(full_path):
                 #print 'Entering folder: ' + str(full_path)
                 self.addFolderToZip(zip_file, full_path)
-
-import logging
-import inspect
-import tempfile
-def get_logger(caller_name=None):
-    try:
-        fh = open(settings.LOG_FILE,'w')
-        logfile = settings.LOG_FILE
-    except:
-        print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
-        logfile = None
-
-    try:
-        level = settings.LOG_LEVEL
-    except AttributeError:
-        if settings.DEBUG:
-            level = logging.DEBUG
-        else:
-            level = logging.WARNING 
-    
-    format = '%(asctime)s %(name)s %(levelname)s %(message)s'
-    if logfile:
-        logging.basicConfig(level=level, format=format, filename=logfile)
-    else:
-        logging.basicConfig(level=level, format=format)
-
-    if not caller_name:
-        caller = inspect.currentframe().f_back
-        caller_name = caller.f_globals['__name__']
-
-    logger = logging.getLogger(caller_name)
-
-    if logfile and settings.DEBUG:
-        import sys
-        strm_out = logging.StreamHandler(sys.__stdout__)
-        logger.addHandler(strm_out)
-
-    return logger
-
 
 def isCCW(ring):
     """
@@ -451,7 +450,7 @@ def forceLHR(polygon):
     poly = Polygon(*rings)
     return poly
 
-def asKml(input_geom, altitudeMode=None):
+def asKml(input_geom, altitudeMode=None, uid=''):
     """
     Performs three critical functions for creating suitable KML geometries:
      - simplifies the geoms (lines, polygons only)
@@ -459,13 +458,19 @@ def asKml(input_geom, altitudeMode=None):
      - sets the altitudeMode shape 
        (usually one of: absolute, clampToGround, relativeToGround)
     """
-    key = "asKml_%s_%s" % (input_geom.wkt.__hash__(), altitudeMode)
-    try:
-        cached_result = cache.get(key)
-        if cached_result: 
-            return cached_result
-    except:
-        pass
+    if altitudeMode is None:
+        try:
+            altitudeMode = settings.KML_ALTITUDEMODE_DEFAULT
+        except:
+            altitudeMode = None
+
+    key = "asKml_%s_%s_%s" % (input_geom.wkt.__hash__(), altitudeMode, uid)
+    kmlcache, created = KmlCache.objects.get_or_create(key=key)
+    kml = kmlcache.kml_text
+    if not created and kml:
+        return kml
+
+    log.debug("%s ...no kml cache found...seeding" % key)
 
     geom = input_geom.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
 
@@ -477,18 +482,13 @@ def asKml(input_geom, altitudeMode=None):
         
     kml = geom.kml
 
-    if not altitudeMode:
-        try:
-            altitudeMode = settings.KML_ALTITUDEMODE_DEFAULT
-        except:
-            altitudeMode = None
-
     if altitudeMode and geom.geom_type == 'Polygon':
         kml = kml.replace('<Polygon>', '<Polygon><altitudeMode>%s</altitudeMode><extrude>1</extrude>' % altitudeMode)
         # The GEOSGeometry.kml() method always adds a z dim = 0
         kml = kml.replace(',0 ', ',%s ' % settings.KML_EXTRUDE_HEIGHT)
 
-    cache.set(key, kml)
+    kmlcache.kml_text = kml
+    kmlcache.save()
     return kml
 
 def enable_sharing(group=None):

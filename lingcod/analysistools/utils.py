@@ -6,6 +6,7 @@ def linear_regression(X, Y):
         Linear regression of y = ax + b
     Usage
         real, real, real = linreg(list, list)
+        a, b, r2 = linreg(list, list)
     Returns coefficients to the regression line "y=ax+b" from x[] and y[], and R^2 Value
     """
     if len(X) != len(Y):  raise ValueError, 'unequal length'

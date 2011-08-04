@@ -313,7 +313,7 @@ class SpatialFeature(Feature):
         """
         Basic KML representation of the feature geometry
         """
-        return asKml(self.geometry_final)
+        return asKml(self.geometry_final, uid=self.uid)
     
     @classmethod
     def mapnik_style(self):
