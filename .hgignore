@@ -19,3 +19,4 @@ media/layers/uploaded-kml/*.kmz
 media/spacing/pickled_graphs/*
 example_projects/test_project/test.conf
 example_projects/test_project/test_wsgi.py
+*.orig
