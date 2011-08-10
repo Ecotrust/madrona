@@ -347,7 +347,7 @@ class CreateTest(TestCase):
         self.assertTrue(old_count < CreateTestFeature.objects.count())
         inst = CreateTestFeature.objects.get(name='My Test')
         self.assertTrue(
-            response['Location'].count(inst.get_absolute_url()) == 1)
+            response._get_content().find(inst.get_absolute_url()) > -1)
 
     def test_cannot_hack_user_field(self):
         other_user = User.objects.create_user(

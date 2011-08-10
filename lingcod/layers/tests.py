@@ -7,7 +7,7 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.core.files import File
-from lingcod.layers.models import PublicLayerList, PrivateLayerList, PrivateSuperOverlay
+from lingcod.layers.models import PublicLayerList, PrivateLayerList
 from lingcod.features.forms import FeatureForm
 from lingcod.features import register
 from lingcod.common.utils import enable_sharing
