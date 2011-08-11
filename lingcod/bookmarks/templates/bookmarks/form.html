@@ -5,28 +5,32 @@
     lingcod.onShow(function(){
         lingcod.setupForm($('#featureform'));
 
-        var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
 
-        $('#item_latitude').text("latitude : " + camera.getLatitude());
-        $('#id_latitude').val(camera.getLatitude());
+        function capture() {
+            var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+            $('#item_latitude').text("latitude : " + camera.getLatitude());
+            $('#id_latitude').val(camera.getLatitude());
 
-        $('#item_longitude').text("longitude : " + camera.getLongitude());
-        $('#id_longitude').val(camera.getLongitude());
+            $('#item_longitude').text("longitude : " + camera.getLongitude());
+            $('#id_longitude').val(camera.getLongitude());
 
-        $('#item_altitude').text("altitude : " + camera.getAltitude());
-        $('#id_altitude').val(camera.getAltitude());
+            $('#item_altitude').text("altitude : " + camera.getAltitude());
+            $('#id_altitude').val(camera.getAltitude());
 
-        $('#item_altitudeMode').text("altitudeMode : " + camera.getAltitudeMode());
-        $('#id_altitudeMode').val(camera.getAltitudeMode());
+            $('#item_altitudeMode').text("altitudeMode : " + camera.getAltitudeMode());
+            $('#id_altitudeMode').val(camera.getAltitudeMode());
 
-        $('#item_roll').text("roll : " + camera.getRoll());
-        $('#id_roll').val(camera.getRoll());
+            $('#item_roll').text("roll : " + camera.getRoll());
+            $('#id_roll').val(camera.getRoll());
 
-        $('#item_tilt').text("tilt : " + camera.getTilt());
-        $('#id_tilt').val(camera.getTilt());
+            $('#item_tilt').text("tilt : " + camera.getTilt());
+            $('#id_tilt').val(camera.getTilt());
 
-        $('#item_heading').text("heading : " + camera.getHeading());
-        $('#id_heading').val(camera.getHeading());
+            $('#item_heading').text("heading : " + camera.getHeading());
+            $('#id_heading').val(camera.getHeading());
+        }
+        
+        $('#camera_capture').click(capture);
     });
 </script>
 
@@ -57,6 +61,8 @@
         {% endfor %}
 
         <label for="id_camera">Details</label>
+        <a href="#" class="button" id="camera_capture"  onclick="this.blur(); return false;"><span>Recapture View</span></a>
+        <br/><br/>
         <div id="camera_results" style="color:grey; font-family: monospace">
         <ul>
         {% for hidden in form.hidden_fields %}
