@@ -31,12 +31,9 @@ class Bookmark(Feature):
             <description>%s</description>
             <styleUrl>#%s-default</styleUrl>
             %s
-            <Point>
-                <coordinates>%s,%s</coordinates>
-            </Point>
         </Placemark>
         """ % (self.uid, escape(self.name), escape(self.description), self.model_uid(), 
-               camera, self.longitude, self.latitude)
+               camera) 
 
     @property
     def kml_style(self):
