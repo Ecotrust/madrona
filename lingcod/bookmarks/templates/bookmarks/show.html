@@ -14,7 +14,7 @@
 {{instance.description}}</h2>
 
 <h2>Link</h2>
-<textarea id="id_description" name="description" cols="50" rows="3" style="color:grey" readonly="readonly">{% absurl map %}foo/{{instance.url}}</textarea>
+<textarea id="id_description" name="description" cols="50" rows="3" style="color:grey" readonly="readonly">{% absurl bookmark instance.pk %}</textarea>
 
 {% block linkdescription %}
 <p>To share this bookmarked map view with others, you can copy and paste this link to email, online forums, twitter or instant messaging. Some of the features on this map are protected content and may not be visible to all users.</p>
