@@ -35,20 +35,24 @@ Then just add to your installed apps::
 
 Adding a Raster
 ---------------
-Simple as it gets. Type can be continuous(eg elevation surface) or categorical(eg land use categories)::
+Simple as it gets. Type is used to define the raster as `continuous` (e.g. elevation)::
     
     from lingcod.raster_stats.models import RasterDataset
-    rast = RasterDataset.objects.create(name="test_impact",filepath='/tmp/data/impact.tif',type='continuous')  
+    elev = RasterDataset.objects.create(name="test_elevation",filepath='/tmp/data/elevation.tif',type='continuous')  
+
+or discrete categorical values (e.g. land use)::
+
+    land = RasterDataset.objects.create(name="landuse",filepath='/tmp/data/landuse.tif',type='categorical')  
 
 Running zonal stats
 -------------------
 Use the utility function which will first check the cache. If nothing is in the cache, the full starspan analysis is run. Otherwise the cache hit is returned::
 
     from lingcod.raster_stats.models import zonal_stats
-    stats = zonal_stats(geos_polygon_geom, rast)
+    stats = zonal_stats(geos_polygon_geom, elev)
     stats.from_cache # False
     
-    stats = zonal_stats(geos_polygon_geom, rast)
+    stats = zonal_stats(geos_polygon_geom, elev)
     stats.from_cache # True
     stats.min 
     stats.max
@@ -58,6 +62,26 @@ Use the utility function which will first check the cache. If nothing is in the 
     stats.pixels
     stats.avg
     stats.stdev
+
+
+Categorical rasters
+-------------------
+In addition to the zonal statistics calculated for a continuous raster, categorical rasters can access the pixel counts for each discrete category of raster values::
+
+    stats = zonal_stats(geos_polygon_geom, landuse)
+    total_pixels = stats.pixels
+    stats.categories.all() # returns a queryset of ZonalCategories
+    for cat in stats.categories.all():
+        print "Category", cat.category, "has", cat.count, "pixels out of a total of", total_pixels
+        # ex: "Category 42 has 1866 pixels out of a total of 7866"
+
+It is the programmers responsibility to account for mapping the category raster code to a meaningful category name (i.e. 42 == 'Douglas Fir') as well as handling any null cells that might affect the total pixel count; check `stats.nulls` and adjust accordingly. For example if stats.pixels == 7866 and stats.nulls == 1000, you may consider the total pixel count to be 6866 depending on your analysis needs.
+
+Specifying the pixel proportion
+-------------------------------
+Starspan allows you to define the threshold of cell inclusion based on the percentage of the pixel that is covered by the polygon. By default, a raster cell is included if the geometry overlaps >= 50% of the cell. You can adjust this value by assigning an alternate `pixprop` value between 0 and 1::
+
+    stats = zonal_stats(geos_polygon_geom, landuse, pixprop=0.85) # cell must be 85% covered to be included
 
 Using the web service
 ---------------------
