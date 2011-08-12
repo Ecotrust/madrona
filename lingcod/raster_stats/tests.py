@@ -22,6 +22,22 @@ def test_data():
     del(ds)
     return rast, polygons
 
+def test_categorical_data():
+    rastpath = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/landuse.tif')
+    rast, created = RasterDataset.objects.get_or_create(name="test_landuse",filepath=rastpath,type='categorical')  
+
+    polygons = []
+
+    shp = os.path.join(os.path.dirname(__file__), 'test_data/poly1.shp')
+    ds = DataSource(shp)
+    lyr = ds[0]
+    for feat in lyr:
+        polygons.append(feat.geom.geos)
+
+    del(lyr)
+    del(ds)
+    return rast, polygons
+
 class ZonalTest(TestCase):
 
     def setUp(self):
@@ -101,3 +117,16 @@ class ZonalWebServiceTest(TestCase):
             web_zonal = obj.object
             util_zonal = zonal_stats(self.polygons[0], self.rast, read_cache=False)
             self.failUnlessEqual(web_zonal.avg, util_zonal.avg)
+
+class ZonalCategoriesTest(TestCase):
+    def setUp(self):
+        clear_cache()
+        self.rast, self.polygons = test_categorical_data()
+
+    def test_categories(self):
+        zonal = zonal_stats(self.polygons[0], self.rast)
+        sumpix = 0
+        for zc in zonal.categories.all():
+            sumpix += zc.count
+        self.assertEqual(zonal.pixels, sumpix)
+
