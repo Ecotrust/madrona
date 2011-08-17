@@ -12,18 +12,15 @@ Installation
 ------------
 The raster_stats app relies on the `starspan` executable. This C++ app must be installed from src and requires GDAL and GEOS header files::
 
-    wget http://projects.atlas.ca.gov/frs/download.php/667/starspan-1.2.03.tar.gz
-    tar -xzvf starspan-1.2.03.tar.gz
-    cd starspan-1.2.03
+    wget http://marinemap.googlecode.com/files/starspan-1.2.05.tar.gz
+    tar -xzvf starspan-1.2.05.tar.gz
+    cd starspan-1.2.05
     ./configure
     make
     sudo make install
 
-If you get errors similar to::
-
-    src/csv/Csv.h:52: error: ‘stdout’ was not declared in this scope
-
-it means that you are probably compiling with a newer version of GCC (eg GCC 4.4 which ships with Ubuntu 10.4) and does not include some standard libraries by default. This means that you need to explicitly include them (eg add `#include <cstdio>` to the affected files). We also have a patched version available at http://marinemap.org/downloads/starspan-1.2.04.tar.gz
+We have forked starspan and are providing this patched version since the original, developed at UC Davis, is no longer maintained. Specifically, this version 
+can be compiled with a newer version of GCC (e.g. GCC 4.4 which ships with Ubuntu 10.4) by explicitly including standard libs. And this version of starspan is also updated to play nice with GEOS 3.3 which requires dynamic_casts (rather than the C-style casts used in the original code).
 
 Settings
 --------
