@@ -19,9 +19,6 @@ The raster_stats app relies on the `starspan` executable. This C++ app must be i
     make
     sudo make install
 
-We have forked starspan and are providing this patched version since the original, developed at UC Davis, is no longer maintained. Specifically, this version 
-can be compiled with a newer version of GCC (e.g. GCC 4.4 which ships with Ubuntu 10.4) by explicitly including standard libs. And this version of starspan is also updated to play nice with GEOS 3.3 which requires dynamic_casts (rather than the C-style casts used in the original code).
-
 Settings
 --------
 optionally set the `STARSPAN_BIN` setting to point to your starspan executable and the `RASTER_DIR` setting for the filepath to the directory containing your raster files.
