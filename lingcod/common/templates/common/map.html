@@ -1,5 +1,5 @@
 {% extends "common/base.html" %}
-{% load appname %}
+{% load appname absurl %}
 {% block head %}
     <script type="text/javascript">
 
@@ -30,6 +30,10 @@
             options.has_features = false;
         {% endif %}
         
+        {% if camera %}
+            options.rememberMapExtent = false; 
+        {% endif %}
+ 
         {% block enhancedContent %}
             options.displayEnhancedContent = false;
         {% endblock enhancedContent %}
@@ -67,7 +71,41 @@
         
         $(document).ready(function(){
             lingcod.init(options);
+
+            {% if camera %}
+            $(lingcod).bind('earthReady',  function() {
+                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+                {% for key, value in camera.items %}camera.set{{key}}({{value}});
+                {% endfor %}
+                ge.getView().setAbstractView(camera);
+             });
+            {% endif %}
+
             {% block js_ready %}{% endblock %}
+
+            function rnd(num, places) { 
+                var x = Math.pow(10, places);
+                return Math.round(num*x) / x;
+            };
+
+            function serialize_camera(camera) {
+                var p = 4;
+                var url = "{% absurl map %}";
+                url += "?Latitude=" + rnd(camera.getLatitude(), p);
+                url += "&Longitude=" + rnd(camera.getLongitude(), p);
+                url += "&Altitude=" + rnd(camera.getAltitude(), p);
+                url += "&Heading=" + rnd(camera.getHeading(), p);
+                url += "&Tilt=" + rnd(camera.getTilt(), p);
+                url += "&Roll=" + rnd(camera.getRoll(), p);
+                url += "&AltitudeMode=" + rnd(camera.getAltitudeMode(), p);
+                return url;
+            };
+
+            $('#create_bookmark').click( function() {
+                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+                $('#bookmark_results').show();
+                $('#bookmark_url').text(serialize_camera(camera));
+            });
         });
     </script>
 {% endblock %}
@@ -191,6 +229,21 @@
                 <li class="visible" id="atm"><span class="toggler"><img width="16" height="16" src="{{MEDIA_URL}}common/images/transparent.gif" /></span>Atmosphere</li>
             </ul>
         </div>
+        {% block bookmark %}
+        <div id="bookmark">
+            <h3>Bookmark</h3>
+            <a id="create_bookmark" href="#" class="button" onclick="this.blur(); return false;">
+                <span>Bookmark this view</span>
+            </a>
+            <br/><br/>
+            <div id="bookmark_results" style="display:none;">
+                <p> Paste this URL to get back to this location </p>
+                <div id="bookmark_url" style="border:1px #333 solid; background-color: white; padding: 8px; font-family:monospace; font-size: 8pt; color: grey;">
+                </div>
+            </div>
+        </div>
+        {% endblock bookmark %}
+
     </div>
     {% endblock tools %}
 

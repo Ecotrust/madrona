@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'djcelery', 
     'djkombu',
     ##### Optional Apps ####
+    #'lingcod.bookmarks',
     #'lingcod.intersection',
     #'lingcod.replication',
     #'lingcod.bioregions',
