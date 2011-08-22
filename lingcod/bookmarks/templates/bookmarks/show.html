@@ -1,0 +1,37 @@
+{% extends 'common/panel.html' %}
+{% load absurl %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+<script type="text/javascript">
+    lingcod.onShow(function(){
+        //pass
+    });
+</script>
+
+<h1><strong>{{instance.name}}</strong> Bookmark</h1>
+
+<h2>Description</h2>
+{{instance.description}}</h2>
+
+<h2>Link</h2>
+<textarea id="id_description" name="description" cols="50" rows="3" style="color:grey" readonly="readonly">{% absurl bookmark instance.pk %}</textarea>
+
+{% block linkdescription %}
+<p>To share this bookmarked map view with others, you can copy and paste this link to email, online forums, twitter or instant messaging. Some of the features on this map are protected content and may not be visible to all users.</p>
+{% endblock linkdescription %}
+
+<h2>Details</h2>
+<div id="camera_results" style="color:grey; font-family: monospace">
+    <ul>
+        <li id="instance_latitude">latitude : {{instance.latitude}}</li>
+        <li id="instance_longitude">longitude : {{instance.longitude}}</li>
+        <li id="instance_altitude">altitude : {{instance.altitude}}</li>
+        <li id="instance_heading">heading : {{instance.heading}}</li>
+        <li id="instance_tilt">tilt : {{instance.tilt}}</li>
+        <li id="instance_roll">roll : {{instance.roll}}</li>
+        <li id="instance_altitudeMode">altitudeMode : {{instance.altitudeMode}}</li>
+    </ul>
+</div>
+
+
+{% endblock panel %}

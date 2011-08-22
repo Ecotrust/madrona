@@ -1,0 +1,89 @@
+{% extends "common/panel.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block panel %}
+<script type="text/javascript" charset="utf-8">
+    lingcod.onShow(function(){
+        lingcod.setupForm($('#featureform'));
+
+        function capture() {
+            var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+            $('#item_latitude').text("latitude : " + camera.getLatitude());
+            $('#id_latitude').val(camera.getLatitude());
+
+            $('#item_longitude').text("longitude : " + camera.getLongitude());
+            $('#id_longitude').val(camera.getLongitude());
+
+            $('#item_altitude').text("altitude : " + camera.getAltitude());
+            $('#id_altitude').val(camera.getAltitude());
+
+            $('#item_altitudeMode').text("altitudeMode : " + camera.getAltitudeMode());
+            $('#id_altitudeMode').val(camera.getAltitudeMode());
+
+            $('#item_roll').text("roll : " + camera.getRoll());
+            $('#id_roll').val(camera.getRoll());
+
+            $('#item_tilt').text("tilt : " + camera.getTilt());
+            $('#id_tilt').val(camera.getTilt());
+
+            $('#item_heading').text("heading : " + camera.getHeading());
+            $('#id_heading').val(camera.getHeading());
+        }
+        
+        $('#camera_capture').click(capture);
+        // Grab the current view if its a "Create New" situation
+        if (!$('#id_latitude').val()) {
+            capture();
+        }
+    });
+</script>
+
+<style type="text/css">
+    .marinemap-panel form ul li { padding-left: 4px; }
+</style>
+<h1>{{ title }}</h1>
+<form id="featureform" action="{{action}}" method="post"> 
+
+        {% for field in form.visible_fields %}
+        <div class="field{% if field.field.required %} required{% endif %}">
+            {{ field.label_tag }}
+            {{ field.errors }}
+            {% if field.help_text %}
+            <p class="help_text">
+                {{ field.help_text|safe }}            
+            </p>            
+            {% endif %}
+            {{ field }}            
+        </div>
+        {% endfor %}
+
+        {% for hidden in form.hidden_fields %}
+          {% if hidden.errors %}
+            {{hidden.name}} : {{hidden.errors}} 
+          {% endif %}
+          {{hidden}}
+        {% endfor %}
+
+        <label for="id_camera">Details</label>
+        <a href="#" class="button" id="camera_capture"  onclick="this.blur(); return false;"><span>Recapture View</span></a>
+        <br/><br/>
+        <div id="camera_results" style="color:grey; font-family: monospace">
+        <ul>
+        {% for hidden in form.hidden_fields %}
+          {% if hidden.name != "user" %}
+          <li id="item_{{hidden.name}}"> {% if hidden.value %} {{ hidden.name }} : {{ hidden.value }} {% endif %}</li>
+          {% endif %}
+        {% endfor %}
+        </ul>
+        </div>
+
+<p><input type="submit" value="submit"></p>
+</form>
+
+
+<div>
+    <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+    <a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>
+</div>
+
+
+{% endblock %}

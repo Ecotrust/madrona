@@ -96,6 +96,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'is_public_layers': PublicLayerList.objects.filter(active=True).count() > 0,
         'is_privatekml': has_privatekml(user),
         'has_features': has_features(user),
+        'camera': parse_camera(request),
     })
 
     context.update(extra_context)
@@ -114,3 +115,16 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
 
 def forbidden(request, *args, **kwargs):
     return HttpResponse('Access denied', status=403)
+
+def parse_camera(request):
+    camera_params = ["Latitude", "Longitude", "Altitude", "Heading", "Tilt", "Roll", "AltitudeMode"]
+    camera = {}
+    for p in camera_params:
+        try:
+            camera[p] = float(request.REQUEST[p])
+        except KeyError:
+            pass
+
+    if len(camera.keys()) == 0:
+        return None
+    return camera
