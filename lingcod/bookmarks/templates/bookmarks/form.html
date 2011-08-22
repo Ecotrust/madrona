@@ -5,7 +5,6 @@
     lingcod.onShow(function(){
         lingcod.setupForm($('#featureform'));
 
-
         function capture() {
             var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
             $('#item_latitude').text("latitude : " + camera.getLatitude());
@@ -31,6 +30,10 @@
         }
         
         $('#camera_capture').click(capture);
+        // Grab the current view if its a "Create New" situation
+        if (!$('#id_latitude').val()) {
+            capture();
+        }
     });
 </script>
 
