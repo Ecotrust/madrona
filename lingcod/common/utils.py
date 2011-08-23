@@ -472,10 +472,21 @@ def asKml(input_geom, altitudeMode=None, uid=''):
 
     log.debug("%s ...no kml cache found...seeding" % key)
 
-    geom = input_geom.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+    latlon_geom = input_geom.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
 
-    if geom.geom_type in ['Polygon','LineString']:
-        geom = geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
+    if latlon_geom.geom_type in ['Polygon','LineString']:
+        geom = latlon_geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
+        # Gaurd against invalid geometries due to bad simplification
+        # Keep reducing the tolerance til we get a good one
+        if geom.empty or not geom.valid: 
+            i = 2
+            while True:
+                geom = latlon_geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES/float(i))
+                i += 1
+                if not geom.empty and geom.valid: 
+                    break
+    else:
+        geom = latlon_geom
 
     if geom.geom_type == 'Polygon':
         geom = forceLHR(geom)
