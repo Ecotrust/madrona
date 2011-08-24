@@ -136,7 +136,7 @@ class Feature(models.Model):
             return self.kml
         except Exception as e:
             try:
-                logger.error("%s .kml property is failing: \n\n%s\n\n" % (self.uid,e.message))
+                logger.error("%s .kml property is failing: \n%s\n" % (self.uid,e.message))
             except:
                 # just in case logging or the uid property are fubar
                 print ".kml is failing on something"
@@ -144,9 +144,10 @@ class Feature(models.Model):
             return """
             <Placemark id="%s">
                 <visibility>0</visibility>
-                <name>%s (INVALID KML)</name>
+                <name>%s (KML Error)</name>
+                <description>Error Details ... %s ... If the problem persists, please contact us.</description>
             </Placemark>
-            """ % (self.uid, self.name)
+            """ % (self.uid, self.name, e.message)
 
     
     def add_to_collection(self, collection):
