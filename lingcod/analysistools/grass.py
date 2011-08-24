@@ -104,6 +104,16 @@ class Grass:
             return u'Grass instance at permanent mapset %s' % self.srcMapsetPath
 
     @property
+    def revision(self):
+        rev = self.run('g.version -r')
+        for line in rev.split("\n"):
+            parts = line.split(":")
+            parts = [p.strip() for p in parts]
+            if parts[0].lower() == "revision":
+                return int(parts[1])
+        return None
+
+    @property
     def grass_tmp(self):
         try:
             return settings.GRASS_TMP
