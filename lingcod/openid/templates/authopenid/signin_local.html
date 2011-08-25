@@ -10,11 +10,14 @@
 {% endif %}
 {% if form2.errors %}
 <div class="errors"><p>Please correct errors below:<br />
+    {% if form2.non_field_errors %}
+        <span class="error">{{ form2.non_field_errors }}</span>
+        <br/>
+    {% endif %}
 	{% if form2.username.errors %} 
 		<span class="error">USERNAME errors {{ form2.username.errors|join:", " }}</span>
         <br/>
 	{% endif %}
-         
 	{% if form2.password.errors %} 
 		<span class="error">PASSWORD errors {{ form2.password.errors|join:", " }}</span>
         <br/>
