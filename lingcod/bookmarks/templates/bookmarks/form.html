@@ -27,6 +27,11 @@
 
             $('#item_heading').text("heading : " + camera.getHeading());
             $('#id_heading').val(camera.getHeading());
+
+            // TODO confirm that layer[0] is the public one 
+            var publicstate = JSON.stringify(lingcod.layers[0].tree.getState());
+            $('#item_publicstate').text("publicstate : " + publicstate);
+            $('#id_publicstate').val(publicstate);
         }
         
         $('#camera_capture').click(capture);

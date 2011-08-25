@@ -151,6 +151,7 @@ var lingcod = (function(){
                 mapElement: $('#map'),
                 element: div,
                 restoreState: !$.browser.msie,
+                refreshWithState: false,
                 displayEnhancedContent: options.displayEnhancedContent,
                 setExtent: !cameraSet && layers[i].opts && 
                     layers[i].opts.setExtent
@@ -160,6 +161,8 @@ var lingcod = (function(){
                 $('#datalayerstree').append('<p class="download_layer"><a href="'+layers[i].url+'">Download this layer</a> for use in Google Earth or your own website.</p>');
             }
         }
+
+        that.layers = layers;
 
         if(!that.options.hideGoogleLayers){
             var div = $('<div id="googlelayers"></div>');

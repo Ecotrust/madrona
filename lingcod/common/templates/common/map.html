@@ -72,12 +72,17 @@
         $(document).ready(function(){
             lingcod.init(options);
 
-            {% if camera %}
+            {% if camera and publicstate %}
             $(lingcod).bind('earthReady',  function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 {% for key, value in camera.items %}camera.set{{key}}({{value}});
                 {% endfor %}
                 ge.getView().setAbstractView(camera);
+
+                // TODO confirm layer[0] is public
+                t = lingcod.layers[0].tree;
+                t.previousState = JSON.parse('{{publicstate|safe}}');
+                t.refresh()
              });
             {% endif %}
 

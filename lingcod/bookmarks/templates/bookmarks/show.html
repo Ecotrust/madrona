@@ -4,7 +4,10 @@
 {% block panel %}
 <script type="text/javascript">
     lingcod.onShow(function(){
-        //pass
+        // TODO confirm layers[0] is the public one
+        t = lingcod.layers[0].tree;
+        t.previousState = JSON.parse('{{instance.publicstate|safe}}');
+        t.refresh()
     });
 </script>
 
@@ -30,6 +33,7 @@
         <li id="instance_tilt">tilt : {{instance.tilt}}</li>
         <li id="instance_roll">roll : {{instance.roll}}</li>
         <li id="instance_altitudeMode">altitudeMode : {{instance.altitudeMode}}</li>
+        <li id="instance_altitudeMode">publicstate : {{instance.publicstate}}</li>
     </ul>
 </div>
 
