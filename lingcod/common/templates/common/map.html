@@ -109,7 +109,11 @@
             $('#create_bookmark').click( function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 $('#bookmark_results').show();
-                $('#bookmark_url').text(serialize_camera(camera));
+                var url = serialize_camera(camera);
+                // TODO layer[0] == public?
+                url += "&publicshare=" + JSON.stringify(lingcod.layers[0].tree.getState());
+                $('#bookmark_url').text(url);
+
             });
         });
     </script>
