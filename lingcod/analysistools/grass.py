@@ -164,7 +164,8 @@ class Grass:
             'MAPSET' : self.srcMapset,
             'GISDBASE' : self.gisdbase,
             'GRASS_GUI' : 'text',
-            'GIS_LOCK' : str(os.getpid())
+            'GIS_LOCK' : str(os.getpid()),
+            'GISRC' : self.grassRcFile        
         }
         
         for key in grassenv.keys():
@@ -177,6 +178,7 @@ class Grass:
         os.chdir(self.locationPath)        
         #Output a new rc file, overwriting any old ones
         self.writeGrassRc()                    
+        return grassenv
 
     '''
     Create a temporary mapset
@@ -244,7 +246,8 @@ class Grass:
             log.debug(cmd)
         proc = subprocess.Popen(cmd, shell=True,
                     stdout=subprocess.PIPE, 
-                    stderr=subprocess.PIPE,)
+                    stderr=subprocess.PIPE,
+                    env=self.setupTmpGrassEnv(),)
         out, err = proc.communicate()
         returncode = proc.returncode
         
