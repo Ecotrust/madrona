@@ -479,12 +479,16 @@ def asKml(input_geom, altitudeMode=None, uid=''):
         # Gaurd against invalid geometries due to bad simplification
         # Keep reducing the tolerance til we get a good one
         if geom.empty or not geom.valid: 
-            i = 2
-            while True:
-                geom = latlon_geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES/float(i))
-                i += 1
+            toler = settings.KML_SIMPLIFY_TOLERANCE_DEGREES
+            maxruns = 20
+            for i in range(maxruns):
+                toler = toler / 3.0
+                geom = latlon_geom.simplify(toler)
+                log.debug("%s ... Simplification failed ... tolerance=%s" % (key,toler))
                 if not geom.empty and geom.valid: 
                     break
+            if i == maxruns-1:
+                geom = latlon_geom
     else:
         geom = latlon_geom
 
