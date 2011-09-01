@@ -96,32 +96,7 @@
 
             {% block js_ready %}{% endblock %}
 
-            function rnd(num, places) { 
-                var x = Math.pow(10, places);
-                return Math.round(num*x) / x;
-            };
-
             function serialize_camera(camera) {
-                var p = 4;
-                var url = "{% absurl map %}";
-                url += "?Latitude=" + rnd(camera.getLatitude(), p);
-                url += "&Longitude=" + rnd(camera.getLongitude(), p);
-                url += "&Altitude=" + rnd(camera.getAltitude(), p);
-                url += "&Heading=" + rnd(camera.getHeading(), p);
-                url += "&Tilt=" + rnd(camera.getTilt(), p);
-                url += "&Roll=" + rnd(camera.getRoll(), p);
-                url += "&AltitudeMode=" + rnd(camera.getAltitudeMode(), p);
-                return url;
-            };
-
-            $('#create_bookmark').click( function() {
-                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
-                $('#bookmark_results').show();
-                var url = serialize_camera(camera);
-                $('#bookmark_url').text(url);
-
-                /*
-                // For now, dont serialize the layer state b/c it's too big for a GET url
                 var tree = null;
                 for(var i=0; i<lingcod.layers.length; i++){
                     if(lingcod.layers[i].url.indexOf('public') != -1) {
@@ -130,10 +105,38 @@
                     }
                 }
                 if (tree) { 
-                    url += "&publicshare=" + JSON.stringify(tree.getState());
-                    $('#bookmark_url').text(url);
+                    var publicstate = JSON.stringify(tree.getState());
+                } else {
+                    var publicstate = '{}';
                 }
-                */
+
+                var params = { 
+                   Latitude : camera.getLatitude(),
+                   Longitude : camera.getLongitude(),
+                   Altitude : camera.getAltitude(),
+                   Heading : camera.getHeading(),
+                   Tilt : camera.getTilt(),
+                   Roll : camera.getRoll(),
+                   AltitudeMode : camera.getAltitudeMode(),
+                   publicstate: publicstate
+                };
+                return params; 
+            };
+
+            $('#create_bookmark').click( function() {
+                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+                var url = "{% absurl map %}bookmark/tool/";
+                xhr = $.post( url, serialize_camera(camera),
+                    function( data, status, xhr ) {
+                        $('#bookmark_url').text(data);
+                    }
+                )
+                .error(function(a,b,c) {
+                    $('#bookmark_url').text("We encountered an error while saving your bookmark: " + c + " , " + a.status + "\n Please try again.");
+                })
+                .complete(function() { 
+                    $('#bookmark_results').show();
+                });
 
             });
         });
