@@ -13,6 +13,7 @@ class Bookmark(Feature):
     tilt = models.FloatField(default=0)
     roll = models.FloatField(default=0)
     altitudeMode = models.FloatField(default=1)
+    publicstate = models.TextField(default="{}")
     
     @property
     def kml(self):

@@ -7,7 +7,7 @@ def lower_first(s):
 
 def show_bookmark(request, bookmark_id):
     b = Bookmark.objects.get(pk=bookmark_id)
-    camera_params = ["Latitude", "Longitude", "Altitude", "Heading", "Tilt", "Roll", "AltitudeMode"]
+    camera_params = ["Latitude", "Longitude", "Altitude", "Heading", "Tilt", "Roll", "AltitudeMode", 'publicstate']
     get = request.GET.copy()
     for p in camera_params:
         get[p] = b.__dict__[lower_first(p)];
