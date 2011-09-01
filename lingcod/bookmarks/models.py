@@ -2,8 +2,8 @@ from django.contrib.gis.db import models
 from lingcod.features import register
 from lingcod.features.models import Feature
 from django.utils.html import escape
+from django.conf import settings
 
-@register
 class Bookmark(Feature):
     description = models.TextField(default="", null=True, blank=True)
     latitude = models.FloatField()
@@ -59,3 +59,6 @@ class Bookmark(Feature):
         icon_url = 'bookmarks/images/bookmark.png'
         form_template = 'bookmarks/form.html'
         show_template = 'bookmarks/show.html'
+
+if settings.BOOKMARK_FEATURE:
+    Bookmark = register(Bookmark)

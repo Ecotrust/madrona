@@ -87,12 +87,12 @@ INSTALLED_APPS = (
     'lingcod.openid',
     'lingcod.async',
     'lingcod.loadshp',
+    'lingcod.bookmarks',
     'registration',
     'south',
     'djcelery', 
     'djkombu',
     ##### Optional Apps ####
-    #'lingcod.bookmarks',
     #'lingcod.intersection',
     #'lingcod.replication',
     #'lingcod.bioregions',
@@ -232,3 +232,6 @@ STATICMAP_AUTOZOOM = True
 TITLES = {
     'self': 'Attributes',
 }
+
+# Do you want bookmarks to show up in the kmleditor (True) or just the tool panel (False)?
+BOOKMARK_FEATURE = False
