@@ -118,9 +118,10 @@
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 $('#bookmark_results').show();
                 var url = serialize_camera(camera);
+                $('#bookmark_url').text(url);
 
                 /*
-                //For now, dont serialize the layer state b/c it's too big for a GET url
+                // For now, dont serialize the layer state b/c it's too big for a GET url
                 var tree = null;
                 for(var i=0; i<lingcod.layers.length; i++){
                     if(lingcod.layers[i].url.indexOf('public') != -1) {
@@ -175,7 +176,7 @@
             </span>
         </li>
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-        <li id="tools_menu" class="item autosize">
+        <li id="tools_menu" class="item">
             <span>
                 <a title="Tools" href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
             </span>
