@@ -28,8 +28,19 @@
             $('#item_heading').text("heading : " + camera.getHeading());
             $('#id_heading').val(camera.getHeading());
 
-            // TODO confirm that layer[0] is the public one 
-            var publicstate = JSON.stringify(lingcod.layers[0].tree.getState());
+            // Find the public layer tree
+            var tree = null;
+            for(var i=0; i<lingcod.layers.length; i++){
+                if(lingcod.layers[i].url.indexOf('public') != -1) {
+                    tree = lingcod.layers[i].tree;
+                    break;
+                }
+            }
+            if (tree) { 
+                var publicstate = JSON.stringify(tree.getState());
+            } else {
+                var publicstate = "{}";
+            }
             $('#item_publicstate').text("publicstate : " + publicstate);
             $('#id_publicstate').val(publicstate);
         }

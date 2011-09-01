@@ -4,10 +4,18 @@
 {% block panel %}
 <script type="text/javascript">
     lingcod.onShow(function(){
-        // TODO confirm layers[0] is the public one
-        t = lingcod.layers[0].tree;
-        t.previousState = JSON.parse('{{instance.publicstate|safe}}');
-        t.refresh()
+        // Find the public layer tree
+        var tree = null;
+        for(var i=0; i<lingcod.layers.length; i++){
+            if(lingcod.layers[i].url.indexOf('public') != -1) {
+                tree = lingcod.layers[i].tree;
+                break;
+            }
+        }
+        if (tree) { 
+            tree.previousState = JSON.parse('{{instance.publicstate|safe}}');
+            tree.refresh();
+        }
     });
 </script>
 

@@ -79,10 +79,18 @@
                 {% endfor %}
                 ge.getView().setAbstractView(camera);
 
-                // TODO confirm layer[0] is public
-                t = lingcod.layers[0].tree;
-                t.previousState = JSON.parse('{{publicstate|safe}}');
-                t.refresh()
+                // Find the public layer tree
+                var tree = null;
+                for(var i=0; i<lingcod.layers.length; i++){
+                    if(lingcod.layers[i].url.indexOf('public') != -1) {
+                        tree = lingcod.layers[i].tree;
+                        break;
+                    }
+                }
+                if (tree) { 
+                    tree.previousState = JSON.parse('{{publicstate|safe}}');
+                    tree.refresh();
+                }
              });
             {% endif %}
 
@@ -110,9 +118,21 @@
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 $('#bookmark_results').show();
                 var url = serialize_camera(camera);
-                // TODO layer[0] == public?
-                url += "&publicshare=" + JSON.stringify(lingcod.layers[0].tree.getState());
-                $('#bookmark_url').text(url);
+
+                /*
+                //For now, dont serialize the layer state b/c it's too big for a GET url
+                var tree = null;
+                for(var i=0; i<lingcod.layers.length; i++){
+                    if(lingcod.layers[i].url.indexOf('public') != -1) {
+                        tree = lingcod.layers[i].tree;
+                        break;
+                    }
+                }
+                if (tree) { 
+                    url += "&publicshare=" + JSON.stringify(tree.getState());
+                    $('#bookmark_url').text(url);
+                }
+                */
 
             });
         });
