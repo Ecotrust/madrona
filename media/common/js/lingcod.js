@@ -216,7 +216,12 @@ var lingcod = (function(){
             });
 
             googleLayers.load();
-            
+
+            $(googleLayers).bind('kmlLoaded', function() {
+                $(that).trigger('earthReady', [ge, gex]);
+            });
+        } else {
+            // No google layers, just trigger the event
             $(that).trigger('earthReady', [ge, gex]);
         }
                 
