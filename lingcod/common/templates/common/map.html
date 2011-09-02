@@ -123,6 +123,25 @@
                 return params; 
             };
 
+            jQuery.fn.selText = function() {
+                var obj = this[0];
+                if ($.browser.msie) {
+                    var range = obj.offsetParent.createTextRange();
+                    range.moveToElementText(obj);
+                    range.select();
+                } else if ($.browser.mozilla || $.browser.opera) {
+                    var selection = obj.ownerDocument.defaultView.getSelection();
+                    var range = obj.ownerDocument.createRange();
+                    range.selectNodeContents(obj);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                } else if ($.browser.safari) {
+                    var selection = obj.ownerDocument.defaultView.getSelection();
+                    selection.setBaseAndExtent(obj, 0, obj, 1);
+                }
+                return this;
+            }
+
             $('#create_bookmark').click( function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 var url = "{% absurl map %}bookmark/tool/";
@@ -136,6 +155,7 @@
                 })
                 .complete(function() { 
                     $('#bookmark_results').show();
+                    $('#bookmark_url').selText();
                 });
 
             });
@@ -268,9 +288,9 @@
             <a id="create_bookmark" href="#" class="button" onclick="this.blur(); return false;">
                 <span>Bookmark this view</span>
             </a>
-            <br/><br/>
+            <br/>
             <div id="bookmark_results" style="display:none;">
-                <p> Paste this URL to get back to this location </p>
+                <p> Copy and paste this URL to get back to this location </p>
                 <div id="bookmark_url" style="border:1px #333 solid; background-color: white; padding: 8px; font-family:monospace; font-size: 8pt; color: grey;">
                 </div>
             </div>
