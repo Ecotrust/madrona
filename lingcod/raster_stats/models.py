@@ -92,8 +92,8 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     # Run starspan
     out_csv = os.path.join(tmpdir, 'output_%s_stats.csv' % timestamp)
     out_categories = os.path.join(tmpdir, 'output_%s_categories.csv' % timestamp)
-    if os.path.exists(out_csv):
-        os.remove(out_csv)
+    if os.path.exists(out_csv): os.remove(out_csv)
+    if os.path.exists(out_categories): os.remove(out_categories)
     cmd = '%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls --pixprop %s ' % (STARSPAN_BIN,out_json,tmpdir, timestamp, rasterds.filepath, pixprop)
     if rasterds.type == 'categorical':
         cmd += "--class-summary-suffix _categories.csv"
@@ -148,6 +148,20 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
             # Most likely another zonal stats cache for this geom/raster
             # was saved to the cache before this one completed.
             pass
+    try:
+        remove_tmp = settings.STARSPAN_REMOVE_TMP
+    except:
+        remove_tmp = True
+
+    if remove_tmp:
+        if os.path.exists(out_csv): os.remove(out_csv)
+        if os.path.exists(out_json): os.remove(out_json)
+        if os.path.exists(out_categories): os.remove(out_categories)
+        import glob
+        for fname in glob.glob(os.path.join(tmpdir, 'output_%s_*' % timestamp)):
+            if os.path.exists(fname): os.remove(fname)
+
+
     return zonal
 
 def clear_cache():
