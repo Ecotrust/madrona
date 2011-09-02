@@ -66,12 +66,11 @@
                 options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"}];
             {% endif %}
         {% endblock myshapes %}
-                                        
         {% block addToOptions %}{% endblock addToOptions %}
-        
+
         $(document).ready(function(){
             lingcod.init(options);
-
+            {% block js_ready %}{% endblock %}
             {% if camera and publicstate %}
             $(lingcod).bind('earthReady',  function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
@@ -93,72 +92,6 @@
                 }
              });
             {% endif %}
-
-            {% block js_ready %}{% endblock %}
-
-            function serialize_camera(camera) {
-                var tree = null;
-                for(var i=0; i<lingcod.layers.length; i++){
-                    if(lingcod.layers[i].url.indexOf('public') != -1) {
-                        tree = lingcod.layers[i].tree;
-                        break;
-                    }
-                }
-                if (tree) { 
-                    var publicstate = JSON.stringify(tree.getState());
-                } else {
-                    var publicstate = '{}';
-                }
-
-                var params = { 
-                   Latitude : camera.getLatitude(),
-                   Longitude : camera.getLongitude(),
-                   Altitude : camera.getAltitude(),
-                   Heading : camera.getHeading(),
-                   Tilt : camera.getTilt(),
-                   Roll : camera.getRoll(),
-                   AltitudeMode : camera.getAltitudeMode(),
-                   publicstate: publicstate
-                };
-                return params; 
-            };
-
-            jQuery.fn.selText = function() {
-                var obj = this[0];
-                if ($.browser.msie) {
-                    var range = obj.offsetParent.createTextRange();
-                    range.moveToElementText(obj);
-                    range.select();
-                } else if ($.browser.mozilla || $.browser.opera) {
-                    var selection = obj.ownerDocument.defaultView.getSelection();
-                    var range = obj.ownerDocument.createRange();
-                    range.selectNodeContents(obj);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                } else if ($.browser.safari) {
-                    var selection = obj.ownerDocument.defaultView.getSelection();
-                    selection.setBaseAndExtent(obj, 0, obj, 1);
-                }
-                return this;
-            }
-
-            $('#create_bookmark').click( function() {
-                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
-                var url = "{% absurl map %}bookmark/tool/";
-                xhr = $.post( url, serialize_camera(camera),
-                    function( data, status, xhr ) {
-                        $('#bookmark_url').text(data);
-                    }
-                )
-                .error(function(a,b,c) {
-                    $('#bookmark_url').html("We encountered an error while saving your bookmark:<br/>" + a.responseText + " <br/> " + c + " , " + a.status );
-                })
-                .complete(function() { 
-                    $('#bookmark_results').show();
-                    $('#bookmark_url').selText();
-                });
-
-            });
         });
     </script>
 {% endblock %}
