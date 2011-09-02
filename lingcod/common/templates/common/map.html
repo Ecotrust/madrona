@@ -132,7 +132,7 @@
                     }
                 )
                 .error(function(a,b,c) {
-                    $('#bookmark_url').text("We encountered an error while saving your bookmark: " + c + " , " + a.status + "\n Please try again.");
+                    $('#bookmark_url').html("We encountered an error while saving your bookmark:<br/>" + a.responseText + " <br/> " + c + " , " + a.status );
                 })
                 .complete(function() { 
                     $('#bookmark_results').show();
