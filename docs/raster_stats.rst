@@ -23,6 +23,8 @@ Settings
 --------
 optionally set the `STARSPAN_BIN` setting to point to your starspan executable and the `RASTER_DIR` setting for the filepath to the directory containing your raster files.
 
+If you want to keep the temporary files around after starspan is done, set `STARSPAN_REMOVE_TMP` to False (default is True which clears disc space after each run).
+
 Then just add to your installed apps::
 
     INSTALLED_APPS += ( 'lingcod.raster_stats' )
