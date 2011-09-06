@@ -72,7 +72,7 @@
             lingcod.init(options);
             {% block js_ready %}{% endblock %}
             {% if camera and publicstate %}
-            $(lingcod).bind('earthReady',  function() {
+            $(lingcod).bind('publicReady',  function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 {% for key, value in camera.items %}camera.set{{key}}({{value}});
                 {% endfor %}
@@ -87,6 +87,7 @@
                     }
                 }
                 if (tree) { 
+                    $(tree).unbind('kmlLoaded'); // prevent infinite loop
                     tree.previousState = JSON.parse('{{publicstate|safe}}');
                     tree.refresh();
                 }

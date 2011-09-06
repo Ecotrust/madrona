@@ -157,6 +157,12 @@ var lingcod = (function(){
                     layers[i].opts.setExtent
             });
             layers[i].tree.load();
+            // if its the public layer tree, bind the kmlload to trigger the ready event 
+            if (layers[i].url.indexOf('public') != -1) {
+                $(layers[i].tree).bind("kmlLoaded", function() { 
+                    $(that).trigger('publicReady', [ge, gex]);
+                });
+            };
             if(layers[i]['opts'] && layers[i]['opts'].showDownloadLink){
                 $('#datalayerstree').append('<p class="download_layer"><a href="'+layers[i].url+'">Download this layer</a> for use in Google Earth or your own website.</p>');
             }
