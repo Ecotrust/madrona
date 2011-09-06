@@ -17,7 +17,11 @@ def lower_first(s):
 domain = "http://%s" % Site.objects.get_current().domain
 
 def show_bookmark(request, bookmark_id):
-    b = Bookmark.objects.get(pk=bookmark_id)
+    try:
+        b = Bookmark.objects.get(pk=bookmark_id)
+    except Bookmark.DoesNotExist:
+        return HttpResponse("<h3> Unable to find <em>bookmark %s</em>... please check URL </h3>" % bookmark_id, status=404)
+
     get = request.GET.copy()
     camera_params = ["Latitude", "Longitude", "Altitude", "Heading", "Tilt", "Roll", "AltitudeMode", 'publicstate']
     for p in camera_params:
