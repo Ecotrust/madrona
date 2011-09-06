@@ -38,7 +38,8 @@ def save_tool_bookmark(request):
         ip = request.META['REMOTE_ADDR']
 
     # see if they've met the limit for this IP address
-    if len(Bookmark.objects.filter(date_created__gt = datetime.datetime.now()-settings.BOOKMARK_ANON_LIMIT[1],
+    if len(Bookmark.objects.filter(user=u,
+                                   date_created__gt = datetime.datetime.now()-settings.BOOKMARK_ANON_LIMIT[1],
                                    ip=ip)) >= settings.BOOKMARK_ANON_LIMIT[0]:
         log.error(ip + " has exceeded the anonymous bookmark limit")
         return HttpResponse("Bookmark Limit Exceeded. Try again later.", status=404)
