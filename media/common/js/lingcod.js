@@ -71,6 +71,7 @@ var lingcod = (function(){
         ge.getWindow().setVisibility(true); // required
         ge.getOptions().setStatusBarVisibility(true);
         gex = new GEarthExtensions(ge);
+        $(that).trigger('geReady');
         
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
