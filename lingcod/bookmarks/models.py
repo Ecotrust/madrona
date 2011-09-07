@@ -30,18 +30,26 @@ class Bookmark(Feature):
         <Placemark id="%s">
             <visibility>1</visibility>
             <name>%s</name>
-            <description>%s</description>
             <styleUrl>#%s-default</styleUrl>
+            <ExtendedData>
+                <Data name="descr"><value>%s</value></Data>
+            </ExtendedData>
             %s
         </Placemark>
-        """ % (self.uid, escape(self.name), escape(self.description), self.model_uid(), 
-               camera) 
+        """ % (self.uid, escape(self.name), self.model_uid(), escape(self.description), camera) 
 
     @property
     def kml_style(self):
         return """
         <Style id="%s-default"> 
             <!-- invisible -->
+            <BalloonStyle>
+                <bgColor>ffeeeeee</bgColor>
+                <text> <![CDATA[ 
+                    <h3>$[name]</h3>
+                    <p>$[descr]</p>
+                ]]> </text>
+            </BalloonStyle>
             <IconStyle>
                 <scale>0.0</scale>
             </IconStyle>
