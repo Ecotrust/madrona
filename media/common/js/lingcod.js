@@ -71,6 +71,7 @@ var lingcod = (function(){
         ge.getWindow().setVisibility(true); // required
         ge.getOptions().setStatusBarVisibility(true);
         gex = new GEarthExtensions(ge);
+        $(that).trigger('geReady');
         
         that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
         that.measureTool = new lingcod.measureTool();
@@ -151,15 +152,24 @@ var lingcod = (function(){
                 mapElement: $('#map'),
                 element: div,
                 restoreState: !$.browser.msie,
+                refreshWithState: false,
                 displayEnhancedContent: options.displayEnhancedContent,
                 setExtent: !cameraSet && layers[i].opts && 
                     layers[i].opts.setExtent
             });
             layers[i].tree.load();
+            // if its the public layer tree, bind the kmlload to trigger the ready event 
+            if (layers[i].url.indexOf('public') != -1) {
+                $(layers[i].tree).bind("kmlLoaded", function() { 
+                    $(that).trigger('publicReady', [ge, gex]);
+                });
+            };
             if(layers[i]['opts'] && layers[i]['opts'].showDownloadLink){
                 $('#datalayerstree').append('<p class="download_layer"><a href="'+layers[i].url+'">Download this layer</a> for use in Google Earth or your own website.</p>');
             }
         }
+
+        that.layers = layers;
 
         if(!that.options.hideGoogleLayers){
             var div = $('<div id="googlelayers"></div>');
@@ -206,6 +216,7 @@ var lingcod = (function(){
 
             $(googleLayers).bind('kmlLoaded', function(){
                 updateGoogleLayers(googleLayers);
+                $(that).trigger('earthReady', [ge, gex]);
             });
 
             $(googleLayers).bind('toggleItem', function(){
@@ -213,7 +224,8 @@ var lingcod = (function(){
             });
 
             googleLayers.load();
-            
+        } else {
+            // No google layers, just trigger the event
             $(that).trigger('earthReady', [ge, gex]);
         }
                 
@@ -475,6 +487,48 @@ var lingcod = (function(){
             $('#sidebar > .ui-tabs-nav').show();            
             $('#sidebar-toggler').show();
             resize();
+        });
+
+        $('#create_bookmark').click( function() {
+            var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+            var url = "/bookmark/tool/";
+            // Get public layer state
+            var tree = null;
+            for(var i=0; i<lingcod.layers.length; i++){
+                if(lingcod.layers[i].url.indexOf('public') != -1) {
+                    tree = lingcod.layers[i].tree;
+                    break;
+                }
+            }
+            if (tree) { 
+                var publicstate = JSON.stringify(tree.getState());
+            } else {
+                var publicstate = '{}';
+            }
+            // Get camera params
+            var params = { 
+                Latitude : camera.getLatitude(),
+                Longitude : camera.getLongitude(),
+                Altitude : camera.getAltitude(),
+                Heading : camera.getHeading(),
+                Tilt : camera.getTilt(),
+                Roll : camera.getRoll(),
+                AltitudeMode : camera.getAltitudeMode(),
+                publicstate: publicstate
+            };
+            // Post the info and display the returned URL
+            xhr = $.post( url, params,
+                function( data, status, xhr ) {
+                    $('#bookmark_url').text(data);
+                }
+            )
+            .error(function(a,b,c) {
+                $('#bookmark_url').html("We encountered an error while saving your bookmark:<br/>" + a.responseText + " <br/> " + c + " , " + a.status );
+            })
+            .complete(function() { 
+                $('#bookmark_results').show();
+                $('#bookmark_url').selText();
+            });
         });
         
         window.onbeforeunload = function(){

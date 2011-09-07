@@ -5,6 +5,7 @@ Core Apps
     :maxdepth: 2
 
     async
+    bookmarks
     common
     features
     google-analytics

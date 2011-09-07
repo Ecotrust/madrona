@@ -66,46 +66,34 @@
                 options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"}];
             {% endif %}
         {% endblock myshapes %}
-                                        
         {% block addToOptions %}{% endblock addToOptions %}
-        
+
         $(document).ready(function(){
             lingcod.init(options);
-
-            {% if camera %}
-            $(lingcod).bind('earthReady',  function() {
+            {% block js_ready %}{% endblock %}
+            {% if camera and publicstate %}
+            $(lingcod).bind('geReady', function() {
                 var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
                 {% for key, value in camera.items %}camera.set{{key}}({{value}});
                 {% endfor %}
                 ge.getView().setAbstractView(camera);
+            });
+            $(lingcod).bind('publicReady',  function() {
+                // Find the public layer tree
+                var tree = null;
+                for(var i=0; i<lingcod.layers.length; i++){
+                    if(lingcod.layers[i].url.indexOf('public') != -1) {
+                        tree = lingcod.layers[i].tree;
+                        break;
+                    }
+                }
+                if (tree) { 
+                    $(tree).unbind('kmlLoaded'); // prevent infinite loop
+                    tree.previousState = JSON.parse('{{publicstate|safe}}');
+                    tree.refresh();
+                }
              });
             {% endif %}
-
-            {% block js_ready %}{% endblock %}
-
-            function rnd(num, places) { 
-                var x = Math.pow(10, places);
-                return Math.round(num*x) / x;
-            };
-
-            function serialize_camera(camera) {
-                var p = 4;
-                var url = "{% absurl map %}";
-                url += "?Latitude=" + rnd(camera.getLatitude(), p);
-                url += "&Longitude=" + rnd(camera.getLongitude(), p);
-                url += "&Altitude=" + rnd(camera.getAltitude(), p);
-                url += "&Heading=" + rnd(camera.getHeading(), p);
-                url += "&Tilt=" + rnd(camera.getTilt(), p);
-                url += "&Roll=" + rnd(camera.getRoll(), p);
-                url += "&AltitudeMode=" + rnd(camera.getAltitudeMode(), p);
-                return url;
-            };
-
-            $('#create_bookmark').click( function() {
-                var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
-                $('#bookmark_results').show();
-                $('#bookmark_url').text(serialize_camera(camera));
-            });
         });
     </script>
 {% endblock %}
@@ -146,7 +134,7 @@
             </span>
         </li>
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-        <li id="tools_menu" class="item autosize">
+        <li id="tools_menu" class="item">
             <span>
                 <a title="Tools" href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
             </span>
@@ -235,9 +223,9 @@
             <a id="create_bookmark" href="#" class="button" onclick="this.blur(); return false;">
                 <span>Bookmark this view</span>
             </a>
-            <br/><br/>
+            <br/>
             <div id="bookmark_results" style="display:none;">
-                <p> Paste this URL to get back to this location </p>
+                <p> Copy and paste this URL to get back to this location </p>
                 <div id="bookmark_url" style="border:1px #333 solid; background-color: white; padding: 8px; font-family:monospace; font-size: 8pt; color: grey;">
                 </div>
             </div>

@@ -87,12 +87,12 @@ INSTALLED_APPS = (
     'lingcod.openid',
     'lingcod.async',
     'lingcod.loadshp',
+    'lingcod.bookmarks',
     'registration',
     'south',
     'djcelery', 
     'djkombu',
     ##### Optional Apps ####
-    #'lingcod.bookmarks',
     #'lingcod.intersection',
     #'lingcod.replication',
     #'lingcod.bioregions',
@@ -232,3 +232,9 @@ STATICMAP_AUTOZOOM = True
 TITLES = {
     'self': 'Attributes',
 }
+
+# Do you want bookmarks to show up in the kmleditor (True) or just the tool panel (False)?
+BOOKMARK_FEATURE = False
+BOOKMARK_ANON_USERNAME = "anonymous_bookmark_user"
+from datetime import timedelta
+BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks per IP every 30 minutes

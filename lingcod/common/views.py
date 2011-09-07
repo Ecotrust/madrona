@@ -97,6 +97,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'is_privatekml': has_privatekml(user),
         'has_features': has_features(user),
         'camera': parse_camera(request),
+        'publicstate': get_publicstate(request), 
     })
 
     context.update(extra_context)
@@ -128,3 +129,11 @@ def parse_camera(request):
     if len(camera.keys()) == 0:
         return None
     return camera
+
+def get_publicstate(request):
+    try:
+        s = request.REQUEST['publicstate']
+    except KeyError:
+        s = None
+    return s
+
