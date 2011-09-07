@@ -12,6 +12,6 @@ class BookmarkForm(FeatureForm):
     roll = forms.FloatField(widget=forms.HiddenInput())
     altitudeMode = forms.FloatField(widget=forms.HiddenInput())
     publicstate = forms.CharField(widget=forms.HiddenInput())
-    ip = forms.CharField(widget=forms.HiddenInput(), required=False)
+    ip = forms.CharField(widget=forms.HiddenInput(), initial="0.0.0.0", required=False)
     class Meta(FeatureForm.Meta):
         model = Bookmark
