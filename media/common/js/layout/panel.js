@@ -435,8 +435,8 @@ lingcod.contentLoader = (function(){
                     'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
                     ajaxOptions: {
                         error: function(e){
-                            $('#loadingTab').parent().parent().remove();
                             if (e.statusText == 'error') {
+                                $('#loadingTab').parent().parent().remove();
                                 alert('An error occured attempting to load this tab. ' +
                                       '\nError code ' + e.status +
                                       '\nIf the problem persists, please contact ' +
