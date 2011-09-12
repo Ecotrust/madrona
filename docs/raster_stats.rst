@@ -12,16 +12,47 @@ Installation
 ------------
 The raster_stats app relies on the `starspan` executable. This C++ app must be installed from src and requires GDAL and GEOS header files::
 
-    wget http://marinemap.googlecode.com/files/starspan-1.2.05.tar.gz
-    tar -xzvf starspan-1.2.05.tar.gz
-    cd starspan-1.2.05
+    hg clone https://code.google.com/p/starspan/
+    cd starspan
     ./configure
     make
     sudo make install
 
+The above technique should be sufficient if you have GEOS 3.2.2 or earlier. However, starspan uses geos C++ api which is a moving target and the 3.3 version of GEOS is not fully compatible with starspan.
+This means if your system is build on GEOS 3.3+, you must compile starspan against seperate versions of GEOS 3.2.2 and GDAL 1.8.1 and keep them isolated (the starspan shell script uses environment variables to ensure the correct libaries are loaded at runtime). The procedure below should cover all the bases::
+
+    #geos 3.2.2 
+    cd /usr/local/src
+    wget http://download.osgeo.org/geos/geos-3.2.2.tar.bz2
+    tar -xjvf geos-3.2.2.tar.bz2
+    cd geos-3.2.2
+    ./configure --prefix=/usr/local/starspan
+    make
+    sudo make install
+
+    #gdal 1.8.1
+    cd /usr/local/src
+    wget http://download.osgeo.org/gdal/gdal-1.8.1.tar.gz
+    tar -xzvf gdal-1.8.1.tar.gz
+    cd gdal-1.8.1
+    ./configure --prefix=/usr/local/starspan --with-geos=/usr/local/starspan/bin/geos-config
+    make
+    sudo make install
+
+    #starspan 1.2.06
+    cd /usr/local/src
+    hg clone https://code.google.com/p/starspan/
+    cd starspan 
+    ./configure --with-gdal=/usr/local/starspan/bin/gdal-config --with-geos=/usr/local/starspan/bin/geos-config --prefix=/usr/local/starspan
+    make
+    sudo make install
+
+    # settings.py
+    # Finally, in settings_local.py, set STARSPAN_BIN to '/usr/local/starspan/bin/starspan'
+
 Settings
 --------
-optionally set the `STARSPAN_BIN` setting to point to your starspan executable and the `RASTER_DIR` setting for the filepath to the directory containing your raster files.
+You can set the `STARSPAN_BIN` setting to point to your starspan executable and the `RASTER_DIR` setting for the filepath to the directory containing your raster files.
 
 If you want to keep the temporary files around after starspan is done, set `STARSPAN_REMOVE_TMP` to False (default is True which clears disc space after each run).
 
