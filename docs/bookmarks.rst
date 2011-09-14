@@ -29,13 +29,15 @@ Public Data Layer KML Guidelines
 The layer state only captures the **differences** between your current tree and the default state of the original KML document. Both expanded/collapsed properties (for folders and netlinks) and visible/hidden properties (for features) are captured. KMLTree uses the folder and feature names to track the items so changing the public layer KML can have some repercussions for existing bookmarks. As such, there are several “best practices” for constructing public KML docs
 
 .. _bookmarks:
-#. Keep all the folders collapsed and features turned off in the initial doc. If, for some reason, you need to have a feature turned on by default, it should remain so for all subsequent revisions.
 #. Avoid renaming folders or features unless absolutely necessary. 
-#. Adding new layers is fine as long as their default state is OFF.
-#. Changing datasets is fine as long as they keep the same name and feature type. E.g. if you add a new revised “Nesting Sites” folder, keep the name “Nesting Sites” consistent; don’t call it “Nesting Sites version 2”. 
-#. Keep the feature and folder names unique across the entire document.
 #. Avoid restructuring folder hierarchies unless absolutely necessary. 
+#. Keep all the folders collapsed and features turned off in the initial doc. If, for some reason, you need to have a feature turned on by default, it should remain so for all subsequent revisions.
+#. Adding new layers is fine as long as their default state is OFF.
+#. Changing out datasets is fine as long as they keep the same name. E.g. if you add a new revised “Nesting Sites” folder, keep the name “Nesting Sites” consistent; don’t call it “Nesting Sites version 2”. And if you change the location of the "Site #12" don't rename it. 
+#. Keep the names unique within each folder level.
+#. Avoid deleting content from the KML unless necessary. Someone may have used that data in a bookmark. 
 
-The worst that can happen if you ignore these rules is that you’ll make existing bookmarks behave in a different way. 
-For instance, say a user created a bookmark with “Nautical Charts” turned on in a folder called “Stuff” which was set to the open state.  Then you rename to “Nautical Charts, new version” and put it in a different folder. The existing bookmark will not turn on the new charts and the nautical charts will be hidden (it’s no longer in an open folder). The camera angle will still be bookmarked but the changes will have made the bookmark’s layer state invalid.  Still, the bookmark will not be “broken” and it will not crash; it will just cause unexpected changes in layer behavior when the Nautical Charts no longer show up for that bookmark. 
+The worst that can happen if you ignore these rules is that existing bookmarks may not restore the layer tree state in the expected way.
+
+For example, if a user created a bookmark with “Nautical Charts” turned on and you rename to “Nautical Charts, new version”, the existing bookmark will not find the original layer and the new nautical chart will not be visible. The camera angle will still be bookmarked but the changes to the KML will make that bookmark’s layer state invalid.  Still, the bookmark will not be “broken” and it will not crash; it will just cause unexpected changes in behavior.
 
