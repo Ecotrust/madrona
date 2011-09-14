@@ -33,9 +33,9 @@ The layer state only captures the **differences** between your current tree and 
 #. Avoid restructuring folder hierarchies unless absolutely necessary. 
 #. Keep all the folders collapsed and features turned off in the initial doc. If, for some reason, you need to have a feature turned on by default, it should remain so for all subsequent revisions.
 #. Adding new layers is fine as long as their default state is OFF.
-#. Changing out datasets is fine as long as they keep the same name. E.g. if you add a new revised “Nesting Sites” folder, keep the name “Nesting Sites” consistent; don’t call it “Nesting Sites version 2”. And if you change the location of the "Site #12" don't rename it. 
+#. Changing out datasets is fine as long as they keep the same name. E.g. if you add a new revised “Nesting Sites” folder, keep the name “Nesting Sites” consistent; don’t call it “Nesting Sites version 2”. And if you edit the geometry of the "Site #12" within that folder,  don't rename it to "Site #12a". 
 #. Keep the names unique within each folder level.
-#. Avoid deleting content from the KML unless necessary. Someone may have used that data in a bookmark. 
+#. Think twice before deleting content from the KML. Someone may have used that data in a bookmark. 
 
 The worst that can happen if you ignore these rules is that existing bookmarks may not restore the layer tree state in the expected way.
 
