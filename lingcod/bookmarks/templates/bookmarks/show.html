@@ -13,8 +13,12 @@
             }
         }
         if (tree) { 
-            tree.previousState = JSON.parse('{{instance.publicstate|safe}}');
-            tree.refresh();
+            $('#bookmark_loading').show();
+            $.getJSON('{% url bookmark-state-json instance.pk %}', function(data) {
+                tree.previousState = data;
+                tree.refresh();
+                $('#bookmark_loading').hide();
+            });
         }
         {% if request.user.is_staff %}
         var tog = function() {
@@ -28,7 +32,9 @@
     });
 </script>
 
-<h1><strong>{{instance.name}}</strong> Bookmark</h1>
+<h1><strong>{{instance.name}}</strong> Bookmark
+<span id="bookmark_loading" style="display:none"><img src="/media/kmltree/dist/images/ajax-loader.gif"/></span>
+</h1>
 
 <h2>Description</h2>
 {{instance.description}}</h2>

@@ -29,6 +29,17 @@ def show_bookmark(request, bookmark_id):
     request.GET = get;
     return map(request)
 
+def bookmark_state_json(request, bookmark_id):
+    try:
+        b = Bookmark.objects.get(pk=bookmark_id)
+    except Bookmark.DoesNotExist:
+        return HttpResponse("<h3> Unable to find <em>bookmark %s</em>... please check URL </h3>" % bookmark_id, status=404)
+
+    state = b.publicstate
+    response = HttpResponse(state, status=200)
+    response.ContentType = "application/json"
+    return response
+
 def save_tool_bookmark(request):
     u, created = User.objects.get_or_create(username=settings.BOOKMARK_ANON_USERNAME)
     p = request.POST
