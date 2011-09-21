@@ -130,7 +130,10 @@ lingcod.panel = function(options){
         loader = lingcod.contentLoader($.extend({}, {
             url: url,
             activeTabs: options.syncTabs ? getActiveTabs(el) : false,
-            error: options.error,
+            error: function(e){ 
+                alert('error loading content in panel');
+                that.stopSpinning();
+            },
             behaviors: applyBehaviors,
             target: el.find('.content'),
             beforeCallbacks: function(){
