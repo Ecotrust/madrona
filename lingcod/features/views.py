@@ -223,8 +223,13 @@ def create(request, model, action):
             form = form_class(values, label_suffix='')
         if form.is_valid():
             m = form.save(commit=False)
-            m.save()
-            form.save_m2m()
+            try:
+                m.save(rerun=False)
+                form.save_m2m()
+                m.save(rerun=True)
+            except TypeError:
+                m.save()
+                form.save_m2m()
             return to_response(
                 status=201, 
                 location=m.get_absolute_url(),
@@ -359,8 +364,13 @@ def update(request, model, uid):
             form = form_class(values, instance=instance, label_suffix='')
         if form.is_valid():
             m = form.save(commit=False)
-            m.save()
-            form.save_m2m()
+            try:
+                m.save(rerun=False)
+                form.save_m2m()
+                m.save(rerun=True)
+            except TypeError:
+                m.save()
+                form.save_m2m()
             return to_response(
                 status=200,
                 select=m.uid,
