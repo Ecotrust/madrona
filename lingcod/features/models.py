@@ -65,6 +65,8 @@ class Feature(models.Model):
     superfluous here.)
     '''
     def save(self, rerun=True, form=None, *args, **kwargs):
+        if form is not None:
+            form.save_m2m()
         super(Feature, self).save(*args, **kwargs) # Call the "real" save() method
 
     @models.permalink

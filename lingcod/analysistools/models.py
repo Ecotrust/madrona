@@ -56,7 +56,7 @@ class Analysis(Feature):
 
     @classmethod
     def input_manytomany_fields(klass):
-        return [f for f in klass._meta.manytomany if f.attname.startswith('input_')]
+        return [f for f in klass._meta.many_to_many if f.attname.startswith('input_')]
 
     @property
     def inputs(self):
@@ -133,18 +133,15 @@ class Analysis(Feature):
     be called after super.save.  Since it also needs to be called before self.run, it needs to be called here in this 
     save method rather than its previous location in feature views update and create (after save has completed)
     '''
-    def save(self, rerun=True, form=None, *args, **kwargs):
+    def save(self, rerun=True, *args, **kwargs):
         if rerun:
             self.clear_output_fields() # get rid of old outputs
             super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
-            if form is not None:
-                form.save_m2m()
             self.run()
             super(Analysis, self).save(*args, **kwargs) 
         else:
             super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
-            if form is not None:
-                form.save_m2m()
+
 
     class Meta:
         abstract = True
