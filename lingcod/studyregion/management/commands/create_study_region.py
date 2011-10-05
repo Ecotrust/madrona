@@ -35,7 +35,7 @@ class Command(BaseCommand):
                 'name': 'name',
             }
 
-        lm = LayerMapping(StudyRegion, shapefile, mapping)
+        lm = LayerMapping(StudyRegion, shapefile, mapping, transform=False)
         lm.save()
         study_region = StudyRegion.objects.order_by('-creation_date')[0]
         if options.get('region_name'):
