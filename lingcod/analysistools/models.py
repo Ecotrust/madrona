@@ -125,12 +125,26 @@ class Analysis(Feature):
         for f in self.output_fields():
             self.__dict__[f.attname] = None
 
-    def save(self, rerun=True, *args, **kwargs):
+    '''
+    Note on keyword args rerun and form: these are extracted from kwargs so that they will not cause an unexpected 
+    keyword argument error during call to super.save
+    Note on rerun:  When set to false no output fields will be cleared and the run method will not be called
+    Note on form:  This is passed from feature.views update and create methods.  In the case of m2m fields this needs to 
+    be called after super.save.  Since it also needs to be called before self.run, it needs to be called here in this 
+    save method rather than its previous location in feature views update and create (after save has completed)
+    '''
+    def save(self, rerun=True, form=None, *args, **kwargs):
         if rerun:
             self.clear_output_fields() # get rid of old outputs
             super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
+            if form is not None:
+                form.save_m2m()
             self.run()
-        super(Analysis, self).save(*args, **kwargs) 
+            super(Analysis, self).save(*args, **kwargs) 
+        else:
+            super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
+            if form is not None:
+                form.save_m2m()
 
     class Meta:
         abstract = True

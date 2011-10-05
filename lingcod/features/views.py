@@ -224,18 +224,12 @@ def create(request, model, action):
         if form.is_valid():
             m = form.save(commit=False)
             '''
-            An explanation for the following save-related-code can be found in the update method below (about 150 lines below)
-            where the same code appears for feature edits 
+            Note on the following 3 lines:  
+            We need to call form.save_m2m after save but before run, this is accomplished in the Analysis model save method
             '''
-            save_again = False
-            try:
-                m.save(rerun=False)
-                save_again = True
-            except TypeError:
-                m.save()
-            form.save_m2m()
-            if save_again:
-                m.save()
+            kwargs = {}
+            kwargs['form']=form
+            m.save(**kwargs)
             
             return to_response(
                 status=201, 
@@ -371,30 +365,9 @@ def update(request, model, uid):
             form = form_class(values, instance=instance, label_suffix='')
         if form.is_valid():
             m = form.save(commit=False)
-            '''
-            The following save-related-code fixes the problem that occurred when save called run before the m2m fields were saved.
-            In the case where there are many to many fields and analysis to be run, we need to save an instance into the db,
-            then save the m2m fields, and then run the analysis.
-            In order to not break backward compatibility, the second save (which is only called after save(rerun=False)) is called 
-            without rerun=True.  (This also allows the project developer to determine rerun on a case-by-case basis.)
-            
-            The resulting code will either perform the following (if m.save allows a rerun keyword argument):
-                m.save(rerun=False)
-                form.save_m2m2()
-                m.save()
-            Or it will perform the following (if m.save does not allow a rerun keyword argument):
-                m.save()
-                form.save_m2m()
-            '''
-            save_again = False
-            try:
-                m.save(rerun=False)
-                save_again = True
-            except TypeError:
-                m.save()
-            form.save_m2m()
-            if save_again:
-                m.save()
+            kwargs = {}
+            kwargs['form']=form
+            m.save(**kwargs)
             
             return to_response(
                 status=200,

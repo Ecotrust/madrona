@@ -59,7 +59,12 @@ class Feature(models.Model):
     class Meta:
         abstract=True
 
-    def save(self, rerun=True, *args, **kwargs):
+    '''
+    Note on keyword args rerun and form: These are extracted from kwargs so that they will not cause an unexpected 
+    keyword argument error during call to super.save.  (They are used in the Analysis model save method, but become 
+    superfluous here.)
+    '''
+    def save(self, rerun=True, form=None, *args, **kwargs):
         super(Feature, self).save(*args, **kwargs) # Call the "real" save() method
 
     @models.permalink
