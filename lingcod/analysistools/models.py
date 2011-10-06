@@ -130,8 +130,9 @@ class Analysis(Feature):
     keyword argument error during call to super.save
     Note on rerun:  When set to false no output fields will be cleared and the run method will not be called
     Note on form:  This is passed from feature.views update and create methods.  In the case of m2m fields this needs to 
-    be called after super.save.  Since it also needs to be called before self.run, it needs to be called here in this 
-    save method rather than its previous location in feature views update and create (after save has completed)
+    be called after super.save.  Since it also needs to be called before self.run, it will be passed from here (in kwargs)
+    to the superclass (Feature) save method.
+    (rather than its previous location in feature views update and create (after save has completed))
     '''
     def save(self, rerun=True, *args, **kwargs):
         if rerun:
