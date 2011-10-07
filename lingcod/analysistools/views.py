@@ -16,8 +16,11 @@ def progress(request, uid):
         progress = {
             'complete': p[0],
             'total': p[1],
-            'html': instance.status_html
+            'html': instance.status_html,
+            'error': 0
         }
+        if 'error' in instance.status_html.lower():
+            progress['error'] = 1
         res = HttpResponse(simplejson.dumps(progress))
         res['Content-Type'] = mimetypes.JSON 
         return res
