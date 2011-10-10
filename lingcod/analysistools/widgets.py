@@ -9,22 +9,13 @@ class SliderWidget(forms.TextInput):
     http://pastebin.com/f34f0c71d
     """
 
-    def __init__(self, min=None, max=None, step=None, image=None, attrs=None, show_number=True):
+    def __init__(self, min=0, max=100, step=None, image=None, attrs=None, show_number=True):
         super(SliderWidget, self).__init__(attrs)
-        self.max = 100
-        self.min = 0
-        self.step = None
-        self.image = None
-        self.show_number = True
 
-        if max:
-            self.max = max
-        if min:
-            self.min = min
-        if step:
-            self.step = step
-        if image:
-            self.image = image
+        self.max = max
+        self.min = min
+        self.step = step
+        self.image = image
         self.show_number = show_number
     
     def get_step(self):
@@ -169,23 +160,15 @@ class SimplePoint(forms.TextInput):
 
 class DualSliderWidget(forms.TextInput):
 
-    def __init__(self, min_field, max_field, min=None, max=None, step=None, image=None, attrs=None):
+    def __init__(self, min_field, max_field, min=0, max=100, step=None, image=None, attrs=None):
         super(DualSliderWidget, self).__init__(attrs)
-        self.max = 100
-        self.min = 0
-        self.step = None
-        self.image = None
+
+        self.max = max
+        self.min = min
+        self.step = step
+        self.image = image
         self.min_field = min_field
         self.max_field = max_field
-
-        if max:
-            self.max = max
-        if min:
-            self.min = min
-        if step:
-            self.step = step
-        if image:
-            self.image = image
     
     def get_step(self):
         if self.step:
