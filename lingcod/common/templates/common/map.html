@@ -73,7 +73,13 @@
             {% block js_ready %}{% endblock %}
 
             {% if user.is_authenticated and bookmarks_as_feature %}
+            $('#bookmark-close').click(function(){
+                $('.cancel_button').click();
+                return false;
+            });
+
             $('#bookmark-menu-link').click( function(e) {
+                $('#bookmark-close').show();
                 e.preventDefault();
                 var url = "/features/bookmark/form/";
                 var panelOpts = {
@@ -81,6 +87,7 @@
                     showClose: true
                 };
                 var panel = lingcod.editors[0].panel;
+
 
                 function setupForm(form, options){
                     options = options || {};
@@ -90,11 +97,7 @@
                     var manipulator;
 
                     opts = {
-                        // Forcing submission of content thru iframe all the time, no
-                        // matter whether a file upload field is associated with the 
-                        // feature. I hate using iframes for this, but they are 
-                        // necessary for uploads so we may as well be consistent in 
-                        // their use with all forms.
+                        // Forcing submission of content thru iframe all the time
                         iframe: true,
                         beforeSubmit: function(a,b,c) {
                             panel.spin('Please wait while we save your bookmark.');
@@ -150,9 +153,11 @@
                     $(form).ajaxForm(opts);
 
                     el.find('.submit_button').click(function(){
+                        $('#bookmark-close').hide();
                         form.trigger('submit');
                     });
                     el.find('.cancel_button').click(function(){
+                        $('#bookmark-close').hide();
                         panel.close();
                         if(options.cancel){
                             options.cancel();
@@ -246,18 +251,21 @@
     <ul class="menu_items" id="header_buttons">
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
         {% if user.is_authenticated and bookmarks_as_feature %}
-        <li id="bookmarks_menuitem" class="item">
+        <li>
             <span>
                 <a id="bookmark-menu-link" title="Bookmark" href="#Bookmark">
-                    <img src="{{MEDIA_URL}}/bookmarks/images/bookmark-menu.png" style="padding: 6px; padding-top:10px;" width="32" height="32" />
+                    <img src="{{MEDIA_URL}}bookmarks/images/bookmark-menu.png" style="padding: 6px;" width="32" height="32" />
                 </a>
             </span>
+            <div style="position:relative; top: -12px; left: 10px;">
+                <a id="bookmark-close" style="display:none;" href="#"><img src="{{MEDIA_URL}}common/images/tool_window_pointer.png" width="23" height="36" /></a>
+            </div>
         </li>
         {% else %}
         <li id="bookmarks_menuitem" class="item">
             <span>
                 <a title="Bookmark" href="#Bookmark">
-                    <img src="{{MEDIA_URL}}/bookmarks/images/bookmark-menu.png" style="padding: 6px; padding-top:10px;" width="32" height="32" />
+                    <img src="{{MEDIA_URL}}bookmarks/images/bookmark-menu.png" style="padding: 6px; padding-top:10px;" width="32" height="32" />
                 </a>
             </span>
         </li>

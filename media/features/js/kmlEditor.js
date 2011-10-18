@@ -216,8 +216,14 @@ lingcod.features.kmlEditor = (function(){
                 // button.setEnabled(true);
                 jQuery.each(createActions, function(i, action){
                     var item = new goog.ui.MenuItem(action.title);
-                    item.action = action;
-                    menu.addItem(item);
+                    // SPECIAL CASE
+                    // Bookmarks, though they can be registered as a feature,
+                    // should not show up in the Create New menu since there is
+                    // a built-in UI element to create them
+                    if (item.content_ != 'Bookmark'){
+                        item.action = action;
+                        menu.addItem(item);
+                    }
                 });              
             }   
         }
