@@ -98,6 +98,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'has_features': has_features(user),
         'camera': parse_camera(request),
         'publicstate': get_publicstate(request), 
+        'bookmarks_as_feature': settings.BOOKMARK_FEATURE,
     })
 
     context.update(extra_context)
