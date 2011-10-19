@@ -49,6 +49,7 @@
         // Grab the current view if its a "Create New" situation
         if (!$('#id_latitude').val()) {
             capture();
+            $('#bookmark-close').show();
         }
 
         var ftog = function() {
@@ -58,8 +59,6 @@
         };
         $('#fshow_toggle_details').click(ftog);
         $('#fhide_toggle_details').click(ftog);
-
-        $('#bookmark-close').show();
     });
 </script>
 
