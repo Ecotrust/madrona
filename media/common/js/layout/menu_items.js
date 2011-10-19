@@ -60,6 +60,7 @@ lingcod.menu_items = (function(){
             });
         }
         // lingcod.unmaskSidebar();
+        $("#bookmark-close").click();
     }
     
     that.closeAll = closeAll;

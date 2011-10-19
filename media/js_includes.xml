@@ -45,4 +45,5 @@
 	<file path="features/features.js" />
 	<file path="features/js/workspace.js" />
 	<file path="features/js/kmlEditor.js" />	
+	<file path="bookmarks/js/bookmarks.js" />	
 </javascripts>
