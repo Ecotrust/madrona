@@ -114,8 +114,8 @@ function setupBookmarkFeatureUI() {
         lingcod.setupForm = function(form){
             setupForm(form);
         }
-        //lingcod.menu_items.closeAll();
-        //$('.panelMask').hide();
+        lingcod.menu_items.closeAll();
+        $('.panelMask').hide();
         panel.showUrl(url, panelOpts);
     });
 }
