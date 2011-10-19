@@ -60,7 +60,12 @@ lingcod.menu_items = (function(){
             });
         }
         // lingcod.unmaskSidebar();
-        $("#bookmark-close").click();
+        
+        // This is to prevent multiple menu items from appearing at once
+        // BUT it causes some strange behavior: clicking on the bookmark edit form panel
+        // causes the panel to close. Maybe having the bookmark panel PLUS the data layers
+        // panel open at the same time *would* be desireable... "it's a feature not a bug" ? 
+        // $("#bookmark-close").click();
     }
     
     that.closeAll = closeAll;

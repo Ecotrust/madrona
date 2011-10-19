@@ -14,7 +14,6 @@ function setupBookmarkFeatureUI() {
         };
         var panel = lingcod.editors[0].panel;
 
-
         function setupForm(form, options){
             options = options || {};
             var el = panel.getEl();
@@ -115,8 +114,8 @@ function setupBookmarkFeatureUI() {
         lingcod.setupForm = function(form){
             setupForm(form);
         }
-        lingcod.menu_items.closeAll();
-        $('.panelMask').hide();
+        //lingcod.menu_items.closeAll();
+        //$('.panelMask').hide();
         panel.showUrl(url, panelOpts);
     });
 }
