@@ -1,3 +1,22 @@
 #bookmark-close-container {position:relative; top: -12px; left: 10px;}
 #bookmark-feature-img {padding: 6px;}
 #bookmark-menu-img {padding: 6px; padding-top:10px;}
+.bookmark-notice { 
+    background-color: #EEE8AA !important;
+    font-weight: bold;
+    text-align: center; 
+}
+div .box { 
+    -moz-box-shadow: 5px 5px 5px #ddd;
+    -webkit-box-shadow: 5px 5px 5px #ddd;
+    box-shadow: 5px 5px 5px #ddd; 
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px #ddd solid;
+    padding: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background-color: white; 
+}

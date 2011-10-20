@@ -46,10 +46,11 @@
         }
         
         $('#camera_capture').click(capture);
-        // Grab the current view if its a "Create New" situation
+        // Grab the rurrent view if its a "Create New" situation
         if (!$('#id_latitude').val()) {
             capture();
             $('#bookmark-close').show();
+            $('.bookmark-notice').show();
         }
 
         var ftog = function() {
@@ -66,9 +67,12 @@
     .marinemap-panel form ul li { padding-left: 4px; }
 </style>
 <h1>{{ title }}</h1>
+
+<div class="bookmark-notice box" style="display:none;">The current view has been recorded</div>
+
 <form id="featureform" action="{{action}}" method="post"> 
 
-
+        <div class="box">
         {% for field in form.visible_fields %}
         <div class="field{% if field.field.required %} required{% endif %}">
             {{ field.label_tag }}
@@ -90,24 +94,27 @@
         {% endfor %}
 
         <label for="id_camera">Bookmark settings</label>
-        <a href="#" class="button" id="camera_capture"  onclick="this.blur(); return false;"><span>Recapture View</span></a>
-        <br/>
-        <div> The bookmark is set to capture the public layers and camera angle at the moment when you first created the bookmark.
-        If you have changed the view and wish to reflect that in the bookmark, click <em>Recapture View</em> above. </div>
-
-        <div style="padding:15px">
-        <a href="#" id="fshow_toggle_details" style="color:grey; font-family: monospace">show details</a>
-        <a href="#" id="fhide_toggle_details" style="display:none; color:grey; font-family: monospace">hide details</a>
-        <div id="fshow_camera_results" style="display:none; color:grey; font-family: monospace">
-            <ul>
-            {% for hidden in form.hidden_fields %}
-                {% if hidden.name != "user" %}
-                <li id="item_{{hidden.name}}"> {% if hidden.value %} {{ hidden.name }} : {{ hidden.value }} {% endif %}</li>
-                {% endif %}
-            {% endfor %}
-            </ul>
+        <div style="padding:5px">
+            <a href="#" id="fshow_toggle_details">show details</a>
+            <a href="#" id="fhide_toggle_details" style="display:none;">hide details</a>
+            <div id="fshow_camera_results" style="display:none; color:grey; font-family: monospace">
+                <ul>
+                {% for hidden in form.hidden_fields %}
+                    {% if hidden.name != "user" %}
+                    <li id="item_{{hidden.name}}"> {% if hidden.value %} {{ hidden.name }} : {{ hidden.value }} {% endif %}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
         </div>
-    </div>
+
+        <p> <strong>Note:</strong> You can <em> Reset View</em> if you have changed the view and wish to reflect that in the bookmark... </p>
+        <div> <a href="#" class="button" id="camera_capture"  onclick="this.blur(); return false;"><span>Reset View</span></a></div>
+        <br/>
+        <br/>
+        </div>
+
+
 
         </div>
 
