@@ -225,7 +225,7 @@ def create(request, model, action):
             m = form.save(commit=False)
             '''
             Note on the following 3 lines:  
-            We need to call form.save_m2m after save but before run, this is accomplished in the Analysis model save method
+            We need to call form.save_m2m after save but before run, this is accomplished in the Feature model save method
             '''
             kwargs = {}
             kwargs['form']=form
