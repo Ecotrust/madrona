@@ -20,7 +20,7 @@
                 $('#bookmark_loading').hide();
             });
         }
-        {% if request.user.is_staff %}
+        {% if instance.user.is_staff %}
         var tog = function() {
             $('#show_toggle_details').toggle();
             $('#hide_toggle_details').toggle();

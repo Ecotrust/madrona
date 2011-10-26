@@ -239,6 +239,7 @@ def create(request, model, action):
             )
         else:
             context = config.form_context
+            user = request.user
             context.update({
                 'form': form,
                 'title': title,
@@ -247,6 +248,7 @@ def create(request, model, action):
                 'MEDIA_URL': settings.MEDIA_URL,
                 'is_spatial': issubclass(model, SpatialFeature),
                 'is_collection': issubclass(model, FeatureCollection),
+                'user': user,
             })
             context = decorate_with_manipulators(context, form_class)
             c = RequestContext(request, context)
@@ -268,6 +270,7 @@ def create_form(request, model, action=None):
     if not request.user.is_authenticated():
         return HttpResponse('You must be logged in.', status=401)
     title = 'New %s' % (config.verbose_name)
+    user = request.user
     context = config.form_context
     if request.method == 'GET':
         context.update({
@@ -278,6 +281,7 @@ def create_form(request, model, action=None):
             'MEDIA_URL': settings.MEDIA_URL,
             'is_spatial': issubclass(model, SpatialFeature),
             'is_collection': issubclass(model, FeatureCollection),
+            'user': user,
         })
         context = decorate_with_manipulators(context, form_class)
         return render_to_response(config.form_template, context)
@@ -302,6 +306,7 @@ def update_form(request, model, uid):
     except:
         raise Exception('Model to be edited must have a name attribute.')
 
+    user = request.user
     config = model.get_options()
     if request.method == 'GET':
         form_class = config.get_form_class()
@@ -315,6 +320,7 @@ def update_form(request, model, uid):
             'MEDIA_URL': settings.MEDIA_URL,
             'is_spatial': issubclass(model, SpatialFeature),
             'is_collection': issubclass(model, FeatureCollection),
+            'user': user,
         })
         context = decorate_with_manipulators(context, form_class)
         return render_to_response(config.form_template, context)
