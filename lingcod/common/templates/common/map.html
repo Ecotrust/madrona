@@ -129,40 +129,36 @@
     </div>
 
     {% block menu_icons %}
+
     <ul class="menu_items" id="header_buttons">
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
 
         {% if user.is_authenticated and bookmarks_as_feature %}
-        <li>
-            <span>
-                <a id="bookmark-menu-link" title="Bookmark" href="#Bookmark">
-                    <img src="{{MEDIA_URL}}bookmarks/images/bookmark-menu.png" id="bookmark-feature-img" width="32" height="32" />
-                </a>
-            </span>
-            <div id="bookmark-close-container">
-                <a id="bookmark-close" style="display:none;" href="#">
-                    <img src="{{MEDIA_URL}}common/images/tool_window_pointer.png" width="23" height="36" />
-                </a>
+            <li id="bookmarks_menu" class="item">
+                <span>
+                    <a id="bookmark-menu-link" title="Bookmark" href="#Bookmark"><img src="{{MEDIA_URL}}common/images/transparent.gif" width="44" height="48" /></a>
+                </span>
+            </li>
+            <div id="bookmark-close-container" style="position: absolute; left:12px; top:35px;">
+                <a id="bookmark-close" style="display:none;" href="#"><img src="{{MEDIA_URL}}common/images/tool_window_pointer.png" width="23" height="36" /> </a>
             </div>
-        </li>
         {% else %}
-        <li id="bookmarks_menuitem" class="item">
-            <span>
-                <a title="Bookmark" href="#Bookmark">
-                    <img src="{{MEDIA_URL}}bookmarks/images/bookmark-menu.png" id="bookmark-menu-img" width="32" height="32" />
-                </a>
-            </span>
-        </li>
+            <li id="bookmarks_menu" class="item item_trigger">
+                <span>
+                    <a title="Bookmark" href="#Bookmark"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
+                </span>
+            </li>
         {% endif %}
 
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-        <li id="layers_menu" class="item">
+        <li id="layers_menu" class="item item_trigger">
             <span>
                 <a title="Data Layers" href="#DataLayers"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
             </span>
         </li>
+
         <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-        <li id="tools_menu" class="item">
+        <li id="tools_menu" class="item item_trigger">
             <span>
                 <a title="Tools" href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
             </span>

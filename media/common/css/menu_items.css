@@ -46,6 +46,7 @@
     position:absolute;
     left:350px;
     top:0px;
+    width: 140px; 
 }
 
 #layers_menu a {
@@ -54,6 +55,10 @@
 
 #tools_menu a {
     background: url(../images/gear.png) 0px 0px;
+}
+
+#bookmarks_menu a {
+    background: url(../images/bookmark.png) 0px 0px;
 }
 
 .menu_items li a:hover {

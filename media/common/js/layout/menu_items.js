@@ -5,7 +5,7 @@ lingcod.menu_items = (function(){
     
     var init = function(el){
         that.el = el;
-        that.el.find('li.item').each(function(){
+        that.el.find('li.item_trigger').each(function(){
             var self = $(this);
             var els = $('<a style="display:none;" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/tool_window_pointer.png" width="23" height="36" /></a></a>');
             els.click(function(){
@@ -43,7 +43,7 @@ lingcod.menu_items = (function(){
     that.init = init;
     
     var closeAll = function(){
-        var open = that.el.find('li.item.toggled');
+        var open = that.el.find('li.item_trigger.toggled');
         if(open.length === 1){
             $('.marinemap-panel:visible').each(function(){
                 $(this).find('.panelMask').hide();
