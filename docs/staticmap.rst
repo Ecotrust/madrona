@@ -46,7 +46,7 @@ These models contain polygon fields and are represented as postgis geometry fiel
 
 Adding Datasets
 **********************
-The staticmap application uses `Mapnik <http://mapnik.org>`_ to render map images from spatial data. Specifically, we use the `mapnik XML files <http://trac.mapnik.org/wiki/XMLConfigReference>`_ to configure the spatial data sources and their styling. If you are unfamiliar with Mapnik, we suggest going over the the `XML Configuration Tutorial <http://trac.mapnik.org/wiki/XMLGettingStarted>`_ first.  
+The staticmap application uses `Mapnik <http://mapnik.org>`_ to render map images from spatial data. Specifically, we use the `mapnik XML files <http://trac.mapnik.org/wiki/XMLConfigReference>`_ to configure the spatial data sources and their styling. If you are unfamiliar with Mapnik, we suggest going over the `XML Configuration Tutorial <http://trac.mapnik.org/wiki/XMLGettingStarted>`_ first.  
 
 The default mapnik XML config file (<MEDIA_ROOT>/staticmap/socal.xml) is a good starting point. You will need to add two main XML elements in order to set up any additional data for the staticmap
 
