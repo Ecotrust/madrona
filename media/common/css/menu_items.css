@@ -70,15 +70,6 @@
     background-position: -44px 0px !important;
 }
 
-#bookmarks_menu a:hover {
-    cursor: pointer;
-    background-position: -45px 0px !important;
-}
-
-#bookmarks_menu a:hover {
-    background-position: -45px 0px !important;
-}
-
 .menu_items li.item a.close {
     background:none !important;
     position:absolute;
