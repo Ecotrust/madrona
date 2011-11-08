@@ -91,7 +91,7 @@ class ShpResponder(object):
         # print 'about to try to create data layer'
         # print 'ds: %s, path: %s' % (ds, tmp.name)
         ###layer = ogr.OGR_DS_CreateLayer(ds, tmp.name, output_srs._ptr, ogr_type, None)
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr.wkbPolygon)
+        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
         
         # Create the fields
         # Todo: control field order as param
@@ -100,7 +100,12 @@ class ShpResponder(object):
             ###added = ogr.OGR_L_CreateField(layer, fld, 0)
             ###check_err(added) 
             
-            field_defn = ogr.FieldDefn(str(field.name),ogr.OFTString)
+            if field.__class__.__name__ == 'FloatField':
+                field_defn = ogr.FieldDefn(str(field.name),ogr.OFTReal)
+            elif field.__class__.__name__ == 'IntegerField':
+                field_defn = ogr.FieldDefn(str(field.name),ogr.OFTInteger)
+            else:
+                field_defn = ogr.FieldDefn(str(field.name),ogr.OFTString)
             field_defn.SetWidth( 255 )
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
@@ -136,18 +141,24 @@ class ShpResponder(object):
             idx = 0
             for field in attributes:
                 value = getattr(item,field.name)
-                try:
-                    string_value = str(value)
-                except UnicodeEncodeError, E:
-                    # pass for now....
-                    # http://trac.osgeo.org/gdal/ticket/882
-                    string_value = ''
+
+                if field.__class__.__name__ == 'FloatField':
+                    value = float(value)
+                elif field.__class__.__name__ == 'IntegerField':
+                    value = int(value)
+                else:
+                    try:
+                        value = str(value)
+                    except UnicodeEncodeError, E:
+                        # http://trac.osgeo.org/gdal/ticket/882
+                        value = ''
+
                 ###ogr.OGR_F_SetFieldString(feat, idx, string_value)
                 #changing the following SetField command from accessing field by name to index
                 #this change solves an issue that arose sometime after gdal 1.6.3
                 #in which the field names became truncated to 10 chars in CreateField
                 #feat.SetField(str(field.name),string_value)
-                feat.SetField(idx, string_value)
+                feat.SetField(idx, value)
                 idx += 1
               
             # Transforming & setting the geometry
