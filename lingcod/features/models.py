@@ -97,7 +97,15 @@ class Feature(models.Model):
             return """ li.%s > .icon { 
             background: url("%s") no-repeat scroll 0 0 transparent ! important; 
             display:inline ! important;
-            } """ % (klass.model_uid(), url)
+            } 
+
+            div.%s > .goog-menuitem-content {
+                background: url("%s") no-repeat scroll 0 0 transparent !important;
+                display: block !important;
+                padding-left: 22px;
+                position: relative;
+                left: -22px;
+            } """ % (klass.model_uid(), url, klass.model_uid(), url)
     
     @property
     def options(self):

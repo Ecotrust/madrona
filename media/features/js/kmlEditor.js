@@ -215,7 +215,10 @@ lingcod.features.kmlEditor = (function(){
                 button.setVisible(true);
                 // button.setEnabled(true);
                 jQuery.each(createActions, function(i, action){
+                    var img = 'http://wp.hestia.ecotrust.org/media/common/images/watershed.png'; 
+                    var cls = action.links[0].featureClass.id;
                     var item = new goog.ui.MenuItem(action.title);
+                    item.addClassName(cls);
                     // SPECIAL CASE
                     // Bookmarks, though they can be registered as a feature,
                     // should not show up in the Create New menu since there is
