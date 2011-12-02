@@ -105,6 +105,7 @@ class Feature(models.Model):
                 padding-left: 22px;
                 position: relative;
                 left: -22px;
+                height: 16px;
             } """ % (klass.model_uid(), url, klass.model_uid(), url)
     
     @property

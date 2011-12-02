@@ -40,7 +40,15 @@ class UserUploadedKml(Feature):
     def css(klass):
         return """ li.%s > .icon { 
         background: url('%scommon/images/kml_document_icon.png') no-repeat 0 0 ! important; 
-        } """ % (klass.model_uid(), settings.MEDIA_URL)
+        } 
+	div.%s > .goog-menuitem-content {
+ 	    background: url('%scommon/images/kml_document_icon.png') no-repeat 0 0 ! important; 
+	    display: block !important;
+	    left: -22px;
+	    padding-left: 22px;
+	    position: relative;
+            height: 16px;
+	}""" % (klass.model_uid(), settings.MEDIA_URL, klass.model_uid(), settings.MEDIA_URL)
 
     @property
     def kml_style(self):
