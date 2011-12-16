@@ -1,30 +1,30 @@
 <div class="panel">
     <script type="text/javascript" charset="utf-8">
 
-        lingcod.onShow(function(){
+        madrona.onShow(function(){
             window.reportShown++;
         });
 
-        lingcod.onUnhide(function(){
+        madrona.onUnhide(function(){
             window.reportUnhidden++;
             window.onUnhideSelected = $('.blah');
         });
 
-        lingcod.onHide(function(){
+        madrona.onHide(function(){
             window.reportHidden++;
         });
 
     </script>
     <script type="text/javascript" charset="utf-8">
-        lingcod.onShow('#subtab1', function(){
+        madrona.onShow('#subtab1', function(){
             window.subtab1Shown++;
         });
 
-        lingcod.onUnhide('#subtab1', function(){
+        madrona.onUnhide('#subtab1', function(){
             window.subtab1Unhidden++;
         });
 
-        lingcod.onHide('#subtab1', function(){
+        madrona.onHide('#subtab1', function(){
             window.subtab1Hidden++;
         });
     </script>

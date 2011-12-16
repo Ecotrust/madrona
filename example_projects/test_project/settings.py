@@ -1,5 +1,5 @@
 # Django settings for oregon project.
-from lingcod.common.default_settings import *
+from madrona.common.default_settings import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,11 +23,11 @@ ROOT_URLCONF = 'test_project.urls'
 
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
-INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', )
+INSTALLED_APPS += ( 'madrona.raster_stats', 'mlpa', )
 
 # For some reason, running the raster_stats tests causes
 # the xml test runner to fail to output the xml
-EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
+EXCLUDE_FROM_TESTS.append('madrona.raster_stats')
 
 KML_EXTRUDE_HEIGHT = 700
 

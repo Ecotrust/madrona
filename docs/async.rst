@@ -1,19 +1,19 @@
 .. _async:
 
-`lingcod.async`: Asyncronous Processing
+`madrona.async`: Asyncronous Processing
 ======================================
 
-MarineMap includes a strategy for runnning lengthy processes in the background.  
+Madrona includes a strategy for runnning lengthy processes in the background.  
 To implement this strategy we use `Celery <http://celeryproject.org/>`_ as our distributed 
-task queue, and we created the ``lingcod.async`` app for easy exchanges between the Celery tables 
+task queue, and we created the ``madrona.async`` app for easy exchanges between the Celery tables 
 and the codebase.  For more information on how to get Celery working on your machine, see the 
 :ref:`Asynchronous Task Queue<async_task_queue>` documentation.
 
 Overview
 ********
 
-The ``lingcod.async`` app makes many of the typical interactions with `Celery <http://celeryproject.org/>`_ 
-simpler as the ``lingcod.async`` app provides the ability to store and retrieve process results based on a 
+The ``madrona.async`` app makes many of the typical interactions with `Celery <http://celeryproject.org/>`_ 
+simpler as the ``madrona.async`` app provides the ability to store and retrieve process results based on a 
 url (as it is often the case that the same url request expects the same result), as well as making common 
 Celery requests and interactions such as checking the status or retrieving the results of a task easier by 
 abstracting away the need to manually digging through the celery tables yourself.  
@@ -118,7 +118,7 @@ is returned as well in case you are wish to use that as an identifier rather tha
   returns ``STARTED`` or ``SUCCESS``, then your import command is structured correctly and should be written 
   as such in your code.      
 
-lingcod.async API
+madrona.async API
 -----------------
 
 The following is a list of all the functions included with the ``async`` app.

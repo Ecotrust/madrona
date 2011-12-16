@@ -1,10 +1,10 @@
-if(!window.lingcod){
-    lingcod = {};
+if(!window.madrona){
+    madrona = {};
 }
 
-lingcod.geographicReport = (function(){
+madrona.geographicReport = (function(){
     
-    var ScaleBar = lingcod.graphics.ScaleBar;
+    var ScaleBar = madrona.graphics.ScaleBar;
         
     return function(options){
         if(!options.element || !options.maxScale){

@@ -1,8 +1,8 @@
 .. _raster_stats:
 
-`lingcod.raster_stats`: Raster Statistics
+`madrona.raster_stats`: Raster Statistics
 =========================================
-The `lingcod.raster_stats` app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection. 
+The `madrona.raster_stats` app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection. 
 
 The app uses an optional caching mechanism so that any geometry/raster combination only needs to be run once. 
 
@@ -58,13 +58,13 @@ If you want to keep the temporary files around after starspan is done, set `STAR
 
 Then just add to your installed apps::
 
-    INSTALLED_APPS += ( 'lingcod.raster_stats' )
+    INSTALLED_APPS += ( 'madrona.raster_stats' )
 
 Adding a Raster
 ---------------
 Simple as it gets. Type is used to define the raster as `continuous` (e.g. elevation)::
     
-    from lingcod.raster_stats.models import RasterDataset
+    from madrona.raster_stats.models import RasterDataset
     elev = RasterDataset.objects.create(name="test_elevation",filepath='/tmp/data/elevation.tif',type='continuous')  
 
 or discrete categorical values (e.g. land use)::
@@ -75,7 +75,7 @@ Running zonal stats
 -------------------
 Use the utility function which will first check the cache. If nothing is in the cache, the full starspan analysis is run. Otherwise the cache hit is returned::
 
-    from lingcod.raster_stats.models import zonal_stats
+    from madrona.raster_stats.models import zonal_stats
     stats = zonal_stats(geos_polygon_geom, elev)
     stats.from_cache # False
     
@@ -114,7 +114,7 @@ Using the web service
 ---------------------
 The app provides a urls.py file; just point your main URLCONF file to it::
 
-    (r'^zonal/', include('lingcod.raster_stats.urls')),
+    (r'^zonal/', include('madrona.raster_stats.urls')),
 
 You can get a json list of the rasters at this url::
 

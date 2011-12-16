@@ -12,10 +12,10 @@
                 'div#foo {padding:100px;};',
             '</style>',
             '<script type="text/javascript" charset="utf-8">',
-                'lingcod.onShow(function(){',
+                'madrona.onShow(function(){',
                 	"$(document.body).append('<div id=\"sctSuccess\" />');",
                 '});',
-                'lingcod.onShow(function(){',
+                'madrona.onShow(function(){',
                 	"$(document.body).append('<div id=\"sctSuccess2\" />');",
                 '});',
             '</script>',
@@ -34,16 +34,16 @@
                 'div#foo {padding:100px;};',
             '</style>',
             '<script type="text/javascript" charset="utf-8">',
-                'lingcod.onShow(function(){',
+                'madrona.onShow(function(){',
                 	"$(document.body).append('<div id=\"sctSuccess\" />');",
                 '});',
-                'lingcod.onShow("#tab1", function(){',
+                'madrona.onShow("#tab1", function(){',
                 	"$(document.body).append('<div id=\"tabSuccess1\" />');",
                 '});',
-                'lingcod.onShow("#tab2", function(){',
+                'madrona.onShow("#tab2", function(){',
                 	"$(document.body).append('<div id=\"tabSuccess2\" />');",
                 '});',
-                'lingcod.onShow("#tab2", function(){',
+                'madrona.onShow("#tab2", function(){',
                 	"$(document.body).append('<div id=\"tabSuccess22\" />');",
                 '});',
             '</script>',
@@ -61,23 +61,23 @@
     module('SanitizedContent');
     
     test('strips out style and script tags', function(){
-        var content = new lingcod.layout.SanitizedContent(html);
+        var content = new madrona.layout.SanitizedContent(html);
         ok(!content.html.match('script'), 'script tags removed');
         ok(!content.html.match('style'), 'style tags removed');
         ok(content.html.match('foo'), 'html left intact');
     });
 
     test('addStylesToDocument', function(){
-        var content = new lingcod.layout.SanitizedContent(html);
+        var content = new madrona.layout.SanitizedContent(html);
         content.addStylesToDocument();
         ok($('#ssheet1').length === 1, 'stylesheet added to doc');
-        var content = new lingcod.layout.SanitizedContent(html);
+        var content = new madrona.layout.SanitizedContent(html);
         content.addStylesToDocument();
         ok($('#ssheet1').length === 1, 'stylesheet added to doc only once');
     });
     
     test('finds onShow callbacks', function(){
-        var content = new lingcod.layout.SanitizedContent(html);
+        var content = new madrona.layout.SanitizedContent(html);
         var callbacks = content.extractCallbacks();
         ok(callbacks['panel'] && callbacks['panel'].show && 
             callbacks['panel'].show.length === 2, 'found two callbacks');
@@ -88,7 +88,7 @@
     });
 
     test('finds onShow callbacks bound to tabs', function(){
-        var content = new lingcod.layout.SanitizedContent(html2);
+        var content = new madrona.layout.SanitizedContent(html2);
         var callbacks = content.extractCallbacks();
         ok(callbacks['panel']);
         ok(callbacks['panel'] && callbacks['panel'].show && 
@@ -113,7 +113,7 @@
     asyncTest('error handling', function(){
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../url/that/doesnt/exist/',
             target: target,
             success: function(){
@@ -137,7 +137,7 @@
     asyncTest('verify "a simple panel" example from docs.', function(){
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example1.html',
             target: target,
             success: function(){
@@ -159,7 +159,7 @@
     asyncTest('verify "synchronous tabs" example from docs.', function(){
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example2.html',
             target: t,
             success: function(){
@@ -191,7 +191,7 @@
     asyncTest('verify "asynchronous tabs" example from docs.', function(){
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example3.html',
             target: t,
             success: function(){
@@ -228,7 +228,7 @@
     asyncTest('synchronous tabs with subtabs.', function(){
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example4.html',
             target: t,
             success: function(){
@@ -272,7 +272,7 @@
     asyncTest('synchronous tabs with async subtabs.', function(){
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example6.html',
             target: t,
             success: function(){
@@ -324,7 +324,7 @@
         $('#target').remove();
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example5.html',
             target: t,
             success: function(){
@@ -378,7 +378,7 @@
         $('#target').remove();
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example7.html',
             target: t,
             success: function(){
@@ -439,7 +439,7 @@
     asyncTest('verify simple css example from docs', function(){
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/cssExample1.html',
             target: target,
             success: function(){
@@ -452,7 +452,7 @@
                 var target = $('<div id="target"></div>');
                 $(document.body).append(target);
                 var numStyles = $('style').length;
-                var loader = lingcod.contentLoader({
+                var loader = madrona.contentLoader({
                     url: '../media/common/js/test/layout/cssExample1.html',
                     target: target,
                     error: function(){
@@ -493,7 +493,7 @@
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
         numStyles = $('style').length;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/cssExample2.html',
             target: target,
             success: function(){
@@ -508,7 +508,7 @@
                 var target = $('<div id="target"></div>');
                 $(document.body).append(target);
                 numStyles = $('style').length;
-                var loader = lingcod.contentLoader({
+                var loader = madrona.contentLoader({
                     url: '../media/common/js/test/layout/cssExample2.html',
                     target: target,
                     error: function(){
@@ -546,7 +546,7 @@
         numStyle = 0;
         var t = $('<div id="target"></div>');
         $(document.body).append(t);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example3.html',
             target: t,
             success: function(){
@@ -587,7 +587,7 @@
         $(document.body).append(target);
         window.callbackFired = 0;
         window.selectedEl = undefined;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample1.html',
             target: target,
             success: function(){
@@ -616,7 +616,7 @@
         $(document.body).append(target);
         window.callbackFired = 0;
         window.selectedEl = undefined;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample2.html',
             target: target,
             success: function(){
@@ -652,7 +652,7 @@
         $(document.body).append(t);
         window.callbackFired = 0;
         window.selectedEl = undefined;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample3.html',
             target: t,
             success: function(){
@@ -692,7 +692,7 @@
         window.callbackFired = 0;
         window.selectedEl = undefined;
         window.callbackOne = 0;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample4.html',
             target: t,
             success: function(){
@@ -744,7 +744,7 @@
         window.reportUnhidden       = 0;
         window.reportHidden         = 0;
 
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample5.html',
             target: $('#target'),
             success: function(){
@@ -843,7 +843,7 @@
         
         window.onUnhideSelected = false;
 
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample6.html',
             target: $('#target'),
             success: function(){
@@ -955,7 +955,7 @@
         window.subtab2Unhidden      = 0;
         window.subtab2Hidden        = 0;    
 
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample7.html',
             target: $('#target'),
             success: function(){
@@ -1154,7 +1154,7 @@
         $(document.body).append(target);
         window.callbackFired = 0;
         window.selectedEl = undefined;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample8.html',
             target: target,
             success: function(){
@@ -1184,7 +1184,7 @@
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
         window.callbackFired = 0;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample9.html',
             target: target,
             success: function(){
@@ -1219,7 +1219,7 @@
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
         window.callbackFired = 0;
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample10.html',
             target: target,
             success: function(){
@@ -1281,7 +1281,7 @@
         window.subtab2Hide             = 0;
         window.subtab2BeforeDestroy    = 0;
         
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample11.html',
             target: target,
             success: function(){
@@ -1706,7 +1706,7 @@
         window.subtab2Content = false;
         
     
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample11.html',
             target: target,
             activeTabs: ['Report', 'subtab1'],
@@ -2004,7 +2004,7 @@
         window.subtab2Hide             = 0;
         window.subtab2BeforeDestroy    = 0;
     
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/jsExample11.html',
             target: target,
             activeTabs: ['Report', 'subtab2'],
@@ -2272,7 +2272,7 @@
         window.behaviorsRan = false;
         var target = $('<div id="target"></div>');
         $(document.body).append(target);
-        var loader = lingcod.contentLoader({
+        var loader = madrona.contentLoader({
             url: '../media/common/js/test/layout/example1.html',
             target: target,
             behaviors: function(staging){
@@ -2299,12 +2299,12 @@
     
     module('panel');
     
-    if(!lingcod.options){
-        lingcod.options = {};
+    if(!madrona.options){
+        madrona.options = {};
     }
     
     test('initializes', function(){
-        var panel = lingcod.panel({});
+        var panel = madrona.panel({});
         ok(panel.getEl());
         panel.destroy();
     });

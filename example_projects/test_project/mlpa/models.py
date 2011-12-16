@@ -1,8 +1,8 @@
 from django.contrib.gis.db import models
-from lingcod.features import register
-from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
-from lingcod.layers.models import PrivateLayerList
-from lingcod.features.forms import FeatureForm, SpatialFeatureForm
+from madrona.features import register
+from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from madrona.layers.models import PrivateLayerList
+from madrona.features.forms import FeatureForm, SpatialFeatureForm
 
 DESIGNATION_CHOICES = (
     ('R', 'Reserve'), 

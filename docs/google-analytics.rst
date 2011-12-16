@@ -1,2 +1,2 @@
-`lingcod.google-analytics`: Web traffic analytics
+`madrona.google-analytics`: Web traffic analytics
 =================================================

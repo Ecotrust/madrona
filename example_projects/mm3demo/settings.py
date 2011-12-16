@@ -1,5 +1,5 @@
 # Django settings for oregon project.
-from lingcod.common.default_settings import *
+from madrona.common.default_settings import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,11 +22,11 @@ ROOT_URLCONF = 'mm3demo.urls'
 
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
-INSTALLED_APPS += ( 'lingcod.raster_stats', 'mlpa', 'lingcod.analysistools')
+INSTALLED_APPS += ( 'madrona.raster_stats', 'mlpa', 'madrona.analysistools')
 
 # For some reason, running the raster_stats tests causes
 # the xml test runner to fail to output the xml
-EXCLUDE_FROM_TESTS.append('lingcod.raster_stats')
+EXCLUDE_FROM_TESTS.append('madrona.raster_stats')
 
 KML_EXTRUDE_HEIGHT = 700
 
@@ -34,7 +34,7 @@ import os
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
 
 POSTGIS_TEMPLATE='template1'
-APP_NAME = "MarineMap 3.0 Demo"
+APP_NAME = "Madrona 3.0 Demo"
 
 KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
 try:

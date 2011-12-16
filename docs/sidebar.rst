@@ -3,7 +3,7 @@
 Authoring Sidebar Content
 =========================
 
-Most of the information in MarineMap is exposed via panels displayed in the 
+Most of the information in Madrona is exposed via panels displayed in the 
 sidebar. While the layout of the home tabs is mostly fixed, dynamic loading of
 content within sidebar panels provides many options for extensibilty. The 
 content and behavior of these panels can be defined entirely via server-side 
@@ -14,7 +14,7 @@ The following topical guide will detail how content can be added to the
 "Attributes" panel of spatial features. The details are also relevant for 
 a sidebar panel created via the javascript API. If you need to create a panel
 via the javascript API refer to the :ref:`rest` or 
-`lingcod.common.panel <http://maps11.msi.ucsb.edu/marinemap-docs/jsdocs/symbols/lingcod.panel.html>`_
+`madrona.common.panel <http://maps11.msi.ucsb.edu/madrona-docs/jsdocs/symbols/madrona.panel.html>`_
 documentation.
 
 Information Architecture
@@ -101,7 +101,7 @@ To add multiple tabs to this sidebar panel we have to add more markup:
 
 This example would create two tabs, one named "Information" and the other 
 "Report". A list above references div tags with appropriate anchor links to 
-form navigational elements. The MarineMap client modules will parse this 
+form navigational elements. The Madrona client modules will parse this 
 markup and javascript event listeners to manage user interaction. This will 
 only work if the markup is correct and the container div has a ``tabs`` class.
 
@@ -209,17 +209,17 @@ Style tags are very easy to include. The following will work perfectly well:
     ruin the layout of the entire application.
 
 There is one nuance to pay attention to here. Sidebar content is likely to be
-loaded multiple times. The MarineMap client-side modules will add any new 
+loaded multiple times. The Madrona client-side modules will add any new 
 style tags it finds to the page when sidebar content is rendered, but this 
 could end up creating a lot of redundant tags. In this example, the style tag 
 has an ID attribute of ``chartStyle``. This ID could be any value, and 
-MarineMap will check if a panel includes style tags with an ID. If another 
+Madrona will check if a panel includes style tags with an ID. If another 
 style tag with this ID is already in the document, it will be ignored. 
 
 It is highly recommended that you include ID attributes in style tags to 
 reduce the number of style tags added to the main document.
 
-The MarineMap client modules will handle multiple style tags in sidebar 
+The Madrona client modules will handle multiple style tags in sidebar 
 content, which can be useful for dynamic css. Say you have some generic styles
 that apply to all panels that a view renders, but there are also some dynamic
 styles that need to be added to the document each time. A solution is to 
@@ -280,7 +280,7 @@ content is rendered and shown to the user. It will execute only once:
         
         <script type="text/javascript" charset="utf-8">
             
-            lingcod.onShow(function(){
+            madrona.onShow(function(){
                 $('p.description').click(function(){
                     alert('clicked description');
                 });
@@ -299,7 +299,7 @@ of the main application and can be used in sidebar content along with other
 using inline javascript with tabs
 ---------------------------------
 
-:ref:`onShow <lingcod.onShow>` callbacks can also be scoped to particular tabs 
+:ref:`onShow <madrona.onShow>` callbacks can also be scoped to particular tabs 
 when using :ref:`sync_tabs` by providing the anchor link a tab points to:
 
 .. code-block:: html
@@ -310,7 +310,7 @@ when using :ref:`sync_tabs` by providing the anchor link a tab points to:
         
         <script type="text/javascript" charset="utf-8">
             
-            lingcod.onShow('#Report', function(){
+            madrona.onShow('#Report', function(){
                 alert('you are viewing the report tab');
             });
             
@@ -335,7 +335,7 @@ when using :ref:`sync_tabs` by providing the anchor link a tab points to:
 That example makes sense for synchronous tabs, but what about 
 :ref:`async_tabs`? It makes more sense organization-wise to have inline style 
 and javascript tags within the template that renders the tab content. Making 
-an :ref:`onShow <lingcod.onShow>` call with a url as the target argument will 
+an :ref:`onShow <madrona.onShow>` call with a url as the target argument will 
 not work. This is how we would implement the previous example for an 
 asynchronous report:
 
@@ -367,7 +367,7 @@ asynchronous report:
         
         <script type="text/javascript" charset="utf-8">
             
-            lingcod.onShow(function(){
+            madrona.onShow(function(){
                 alert('you are viewing the report tab');
             });
             
@@ -377,7 +377,7 @@ asynchronous report:
         <p>...</p>
     {% endblock panel %}
 
-Note that the remote tab template uses an :ref:`onShow <lingcod.onShow>` call 
+Note that the remote tab template uses an :ref:`onShow <madrona.onShow>` call 
 without the target argument. The callback will still be assigned to the 
 appropriate tab. 
 
@@ -395,13 +395,13 @@ You can do more than assign callbacks for when a tab or panel is first shown.
 You can also run javascript whenever content is temporarily hidden, revealed, 
 or right before it is permanently removed from the document.
 
-.. _lingcod.onShow:
+.. _madrona.onShow:
 
-lingcod.onShow([target], callback)
+madrona.onShow([target], callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assigns a callback to be executed when content is first shown. It will be 
-executed only once. See :ref:`lingcod.onUnhide <lingcod.onUnhide>` to assign
+executed only once. See :ref:`madrona.onUnhide <madrona.onUnhide>` to assign
 callbacks whenever content is shown again after being hidden.
 
 If binding the callback to a synchronous tab, give that tab's anchor link as 
@@ -409,9 +409,9 @@ the optional ``target`` argument. Omit it if assigning the callback to the
 entire panel or an asynchronous tab. 
 :ref:`More on this argument <target_or_not>`.
 
-.. _lingcod.onHide:
+.. _madrona.onHide:
 
-lingcod.onHide([target], callback)
+madrona.onHide([target], callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Assigns a callback to be executed whenever content in a tab is hidden from the
@@ -429,14 +429,14 @@ the optional ``target`` argument. Omit it if assigning the callback to an
 asynchronous tab. 
 :ref:`More on this argument <target_or_not>`.
 
-.. _lingcod.onUnhide:
+.. _madrona.onUnhide:
 
-lingcod.onUnhide([target], callback)
+madrona.onUnhide([target], callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Callback will be executed whenever content is revealed to the user, even after
 hiding. It *will* be executed when content is first shown as well, right after
-any :ref:`onShow <lingcod.onShow>` callbacks. This callback can only be
+any :ref:`onShow <madrona.onShow>` callbacks. This callback can only be
 assigned to synchronous or asynchronous tabs.
 
 If binding the callback to a synchronous tab, give that tab's anchor link as 
@@ -444,9 +444,9 @@ the optional ``target`` argument. Omit it if assigning the callback to an
 asynchronous tab. 
 :ref:`More on this argument <target_or_not>`.
 
-.. _lingcod.beforeDestroy:
+.. _madrona.beforeDestroy:
 
-lingcod.beforeDestroy(callback)
+madrona.beforeDestroy(callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Callbacks will be executed before content is removed from the document when

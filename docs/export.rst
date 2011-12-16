@@ -2,8 +2,8 @@
 
 Export Options
 ==============
-In order to provide the user the opportunity to make use of their shapes outside of the MarineMap environment, 
-MarineMap provides an `Export` option which allows the user to export individual 
+In order to provide the user the opportunity to make use of their shapes outside of the Madrona environment, 
+Madrona provides an `Export` option which allows the user to export individual 
 shapes and arrays of shapes in a variety of formats.
 
 Exporting as kmz and exporting as image are both built in to Lingcod and will 
@@ -11,7 +11,7 @@ appear by default in the `Export` drop-down menu.
 
 Exporting as shapefile requires the enabling of a urlpattern as explained below.
 
-Atom links for each of these Export options can be found in ``lingcod/kmlapp/templates/placemarks.kml``.
+Atom links for each of these Export options can be found in ``madrona/kmlapp/templates/placemarks.kml``.
 
 as kmz (Google Earth)
 ---------------------
@@ -36,9 +36,9 @@ to generate a shapefile from our exportable model (``MyBioregion``).
 
 .. code-block:: python
 
-    from lingcod.common import utils
-    from lingcod.sharing.utils import get_viewable_object_or_respond
-    from lingcod.shapes.views import ShpResponder
+    from madrona.common import utils
+    from madrona.sharing.utils import get_viewable_object_or_respond
+    from madrona.shapes.views import ShpResponder
     from django.template.defaultfilters import slugify
     
     def bio_shapefile(request, instances):

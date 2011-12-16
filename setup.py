@@ -12,25 +12,21 @@ from setuptools import setup, find_packages
 
 readme_text = file('README.txt', 'rb').read()
 
-from lingcod.common.default_settings import RELEASE
+from madrona.common.default_settings import RELEASE
 
 setup_args = dict(
-    name                = 'marinemap',
+    name                = 'madrona',
     version             = RELEASE,
-    #requires_python     = '>=2.5,<3',
-    #requires_external  = 
     description         = 'A framework for building decisison support tools supporting marine spatial planning',
-    author              = 'MarineMap Consortium',
+    author              = 'MarineMap Consortium, Ecotrust',
     author_email        = 'mcclintock@msi.ucsb.edu',
-    maintainer          = 'MarineMap Consortium',
-    maintainer_email    = 'mcclintock@msi.ucsb.edu',
-    url                 = 'http://code.google.com/p/marinemap',
+    maintainer          = 'Ecotrust',
+    maintainer_email    = 'ksdev@ecotrust.org',
+    url                 = 'http://ecotrust.github.com/madrona',
     license             = 'New BSD License',
     keywords            = 'kml marine decisionsupport science gis',
     long_description    = readme_text,
-    packages            = ['lingcod.%s' % x for x in find_packages('lingcod')],
-    #scripts            = 
-    #test_suite         = 
+    packages            = ['madrona.%s' % x for x in find_packages('madrona')],
     classifiers         = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

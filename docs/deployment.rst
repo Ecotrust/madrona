@@ -9,7 +9,7 @@ See the instructions for deploying a django project on the
 .. note::
 
     You'll need to add the path of your project to the python path just as you
-    did lingcod. 
+    did madrona. 
 
 Apache Configuration
 --------------------
@@ -25,7 +25,7 @@ Using Apache2, you can configure your project as an apache virtual host using th
             Allow from all
             </Location>
 
-            Alias /media/ /src/marinemap/media/
+            Alias /media/ /src/madrona/media/
             <Location /media>
             Order allow,deny
             Allow from all

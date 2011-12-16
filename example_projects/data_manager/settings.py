@@ -36,7 +36,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/Users/jaredkibele/Documents/workspace/lingcod_trunk/media/'
+MEDIA_ROOT = '/Users/jaredkibele/Documents/workspace/madrona_trunk/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -80,7 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     #'django.contrib.comments',
-    'lingcod.data_manager',
+    'madrona.data_manager',
 )
 
 from settings_local import *

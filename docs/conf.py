@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# MarineMap Decision Support Tool documentation build configuration file, created by
+# Madrona Decision Support Tool documentation build configuration file, created by
 # sphinx-quickstart on Tue Jun  9 12:49:50 2009.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -22,7 +22,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 from django.core.management import setup_environ
-from lingcod.common import default_settings as settings
+from madrona.common import default_settings as settings
 setup_environ(settings)
 
 # General configuration
@@ -45,10 +45,10 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'MarineMap Decision Support Tool'
+project = u'Madrona Decision Support Tool'
 from datetime import datetime
 current_year = datetime.now().year
-copyright = u'%s, MarineMap Consortium' % current_year
+copyright = u'%s, MarineMap Consortium, Ecotrust' % current_year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -156,7 +156,7 @@ html_use_smartypants = True
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MarineMapDecisionSupportTooldoc'
+htmlhelp_basename = 'MadronaDecisionSupportTooldoc'
 
 
 # Options for LaTeX output
@@ -171,8 +171,8 @@ htmlhelp_basename = 'MarineMapDecisionSupportTooldoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'MarineMapDecisionSupportTool.tex', ur'MarineMap Decision Support Tool Documentation',
-   ur'MarineMap Consortium', 'manual'),
+  ('index', 'MadronaDecisionSupportTool.tex', ur'Madrona Decision Support Tool Documentation',
+   ur'Ecotrust', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

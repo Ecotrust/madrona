@@ -22,7 +22,7 @@
 #    }
 #}
 
-# Uncomment this line to cause MarineMap to go into maintenance mode
+# Uncomment this line to cause Madrona to go into maintenance mode
 # It will not be accessible without logging in as staff
 # See http://pypi.python.org/pypi/django-maintenancemode
 # MAINTENANCE_MODE = True
@@ -36,13 +36,13 @@
 # WAVE_ID = 'wavesandbox.com!w+W0aM2epE%A'
 
 # Location where Ecotrust Fishing Data layers can be found
-# This path is used by lingcod.layers.views to handle requests initiated via EcotrustDataLayers.kml
+# This path is used by madrona.layers.views to handle requests initiated via EcotrustDataLayers.kml
 # GIS_DATA_ROOT = 'U:/dev/ecotrust_data_layers/SocioEconomicFishingNC/display/'
 
 # Settings for AWS media handling 
 #AWS_USE_S3_MEDIA = False  # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET, AWS_MEDIA_SUBDIR and MEDIA_URL
 #AWS_ACCESS_KEY = '...'
 #AWS_SECRET_KEY = '...'
-#AWS_MEDIA_BUCKET = 'marinemap-bucket'
+#AWS_MEDIA_BUCKET = 'madrona-bucket'
 #MEDIA_URL = 'http://blah.cloudfront.net/'
 

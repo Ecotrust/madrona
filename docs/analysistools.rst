@@ -1,4 +1,4 @@
-`lingcod.analysistools`
+`madrona.analysistools`
 =================================
 
 The analysistools module provides a toolkit to standardize interaction with external modeling/analysis software.
@@ -25,7 +25,7 @@ Basics
 ------
 Here is a barebones Analysis feature. Notice that the input_ and output_ field names are significant; the user will provide the inputs and the run() method (called when the feature save() method is fired off) which will take the input parameters and populate the output fields::
 
-    from lingcod.analysistools.models import Analysis
+    from madrona.analysistools.models import Analysis
 
     class SumABAnalysis(Analysis):
         input_a = models.IntegerField()

@@ -1,15 +1,15 @@
 <div class="panel">
     <script type="text/javascript" charset="utf-8">
         
-        lingcod.onShow(function(){
+        madrona.onShow(function(){
             window.panelShow++;
         });
         
-        lingcod.onUnhide(function(){
+        madrona.onUnhide(function(){
             window.panelUnhide++;
         });
         
-        lingcod.beforeDestroy(function(){
+        madrona.beforeDestroy(function(){
             window.panelBeforeDestroy++;
         });
         
@@ -17,15 +17,15 @@
         
     <script type="text/javascript" charset="utf-8">
 
-        lingcod.onShow('#Attributes', function(){
+        madrona.onShow('#Attributes', function(){
             window.attributesShow++;
         });
         
-        lingcod.onUnhide('#Attributes', function(){
+        madrona.onUnhide('#Attributes', function(){
             window.attributesUnhide++;
         });
         
-        lingcod.onHide('#Attributes', function(){
+        madrona.onHide('#Attributes', function(){
             window.attributesHide++;
         });
         

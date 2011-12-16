@@ -13,8 +13,8 @@ sys.stdout = sys.stderr
 sys.path.append('/path/to/src/django')
 
 # Project specific 
-sys.path.append('/path/to/src/marinemap/example_projects/simple')
-#sys.path.append('/path/to/src/marinemap')
+sys.path.append('/path/to/src/madrona/example_projects/simple')
+#sys.path.append('/path/to/src/madrona')
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'

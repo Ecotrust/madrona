@@ -1,10 +1,10 @@
-if(lingcod == undefined){
-    var lingcod = {};
+if(madrona == undefined){
+    var madrona = {};
 }
 
-lingcod.gadgetMessenger = {};
+madrona.gadgetMessenger = {};
 
-lingcod.gadgetMessenger.gadgetSide = function(url){
+madrona.gadgetMessenger.gadgetSide = function(url){
     this.target_url = url;
     this.target = top;
     
@@ -22,7 +22,7 @@ lingcod.gadgetMessenger.gadgetSide = function(url){
     });
 }
 
-lingcod.gadgetMessenger.gadgetSide.prototype.send = function(data){
+madrona.gadgetMessenger.gadgetSide.prototype.send = function(data){
     // console.log('send called with argument', data);
     var json = gadgets.json.stringify(data);
     // console.log('send, json:', json);

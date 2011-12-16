@@ -1,6 +1,6 @@
 .. _studyregion:
 
-`lingcod.studyregion`: The Study Region
+`madrona.studyregion`: The Study Region
 =======================================
 
 What is the Study Region?
@@ -17,16 +17,16 @@ study regions. Each study region was addressed in series, and the study region
 was limited to state waters because the process was backed by state
 legislation.
 
-The Study Region is the fundamental unit that defines a MarineMap installation.
+The Study Region is the fundamental unit that defines a Madrona installation.
 To support the `California MLPA Initiative <http://www.dfg.ca.gov/mlpa/>`_, 
-5 instances of MarineMap would need to be built and run. MarineMap clips all 
+5 instances of Madrona would need to be built and run. Madrona clips all 
 Marine Protected Areas to the Study Region boundaries. It also uses the Study 
 Region bounds to determine the default extent of the map.
 
 Specifying or Changing the Study Region
 ***************************************
 
-The ``lingcod.layers`` project includes an ``initial_data`` fixture that will
+The ``madrona.layers`` project includes an ``initial_data`` fixture that will
 setup an example Study Region when the database is first setup using the 
 syncdb management command. 
 
@@ -36,7 +36,7 @@ problems.
   * Any reports associated with those MPAs will need to be regenerated.
   * Some cached data structures such as the network graph used for calculating Array spacing will need to be regenerated.
 
-MarineMap is designed to make this process work as smoothly as possible, but
+Madrona is designed to make this process work as smoothly as possible, but
 the steps to change a Study Region must be followed exactly to avoid any 
 problems.
 
@@ -46,7 +46,7 @@ Every project should define a study region if the ClipToStudyRegion manipulator 
 The study region is a (multi)polygon shape which defines where
 shapes can be created. If the ClipToStudyRegion manipulator is used on a feature, new shapes are clipped to this boundary. It is highly
 recomended to create/choose your study region with great consideration up front; changing the study region at a
-later date is MUCH more complicated as all the user shapes will need to be re-clipped. Fortunately MarineMap stores the original geometry as well as the "manipulated" version so such clipping will never destroy the original digitized shape.
+later date is MUCH more complicated as all the user shapes will need to be re-clipped. Fortunately Madrona stores the original geometry as well as the "manipulated" version so such clipping will never destroy the original digitized shape.
 
 
 Create a New Study Region
@@ -94,7 +94,7 @@ Suspend the Application
 -----------------------
 
 Changing the Study Region on a live application is not recommended. Either 
-shutdown the server or put MarineMap into :ref:`maintenance_mode`.
+shutdown the server or put Madrona into :ref:`maintenance_mode`.
 
 Switch to the new Study Region
 ------------------------------
@@ -122,7 +122,7 @@ study region is the only argument needed to start.
     
     $ python manage.py change_study_region.py 18
     
-    This process should not be done when the MarineMap application is publicly 
+    This process should not be done when the Madrona application is publicly 
     accessible. Please shutdown the server or redirect users to a maintenance page
 
     Type 'yes' to continue, or 'no' to cancel: yes

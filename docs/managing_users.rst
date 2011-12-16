@@ -1,6 +1,6 @@
 .. _users:
 
-Managing Users in MarineMap
+Managing Users in Madrona
 ===========================
 
 users
@@ -12,7 +12,7 @@ Users can be added in one of two ways:
 
 web registration
 ----------------
-The web registration framework allows users to add themselves to an instance of MarineMap. After supplying the necessary info, an inactive user will be created and an email sent to the given email address. To activate the account, the user must visit the url contained in the email. At this time, user's can not add themselves to groups; that process requires moderator/admin approval and will be handled by email. 
+The web registration framework allows users to add themselves to an instance of Madrona. After supplying the necessary info, an inactive user will be created and an email sent to the given email address. To activate the account, the user must visit the url contained in the email. At this time, user's can not add themselves to groups; that process requires moderator/admin approval and will be handled by email. 
 
 All users registering through the web interface will be assigned to the group defined in settings.GROUP_REGISTERED_BY_WEB ('registered_by_web' is the default). This allows staff to track which users registered themselves versus were added manually. 
 
@@ -28,7 +28,7 @@ Each user has access to a 'my profile' page where they are able to view and edit
 
 groups
 ******
-Django groups are a convinient way to batch-assign permissions to many users. In MarineMap, groups have another function: they serve as the organizing unit for sharing of MPAs and Arrays. With a few exceptions, being a member of a group means that you can share your arrays with other group members and vice-versa. 
+Django groups are a convinient way to batch-assign permissions to many users. In Madrona, groups have another function: they serve as the organizing unit for sharing of MPAs and Arrays. With a few exceptions, being a member of a group means that you can share your arrays with other group members and vice-versa. 
 
 There are also two special groups which are exceptions: 
     * Share to public : Members of this group can make an array available to all users including non-authenticated users.

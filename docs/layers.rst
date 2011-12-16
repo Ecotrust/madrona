@@ -1,14 +1,14 @@
 .. _layers:
 
-`lingcod.layers`: KML Data Layers
+`madrona.layers`: KML Data Layers
 =================================
-This document outlines how KML base data layers are handled in MarineMap. 
+This document outlines how KML base data layers are handled in Madrona. 
 
 There are two categories of KML layers to consider:
 
-* **User Uploaded KMLs** are controlled by the user through the web interface. These act as ``Features`` and can be shared, managed through the MarineMap application, put into folders, etc. These will show up in the "My Shapes" and "Shared with Me" Tabs.
+* **User Uploaded KMLs** are controlled by the user through the web interface. These act as ``Features`` and can be shared, managed through the Madrona application, put into folders, etc. These will show up in the "My Shapes" and "Shared with Me" Tabs.
   
-* **Admin Managed KMLs** are managed by the site administrators on the server or through the admin site. They cannot be managed through the MarineMap application front-end, only viewed. Data can be uploaded directly onto the server with sftp. They aren't treated like features, they don't use the sharing API or have any of the built in functionality of ``Features``. They'll only show up in the data layers panel or wherever you choose to put them in your site template.
+* **Admin Managed KMLs** are managed by the site administrators on the server or through the admin site. They cannot be managed through the Madrona application front-end, only viewed. Data can be uploaded directly onto the server with sftp. They aren't treated like features, they don't use the sharing API or have any of the built in functionality of ``Features``. They'll only show up in the data layers panel or wherever you choose to put them in your site template.
 
   Of these, there are two sub-types of admin-managed KMLs:
 
@@ -28,7 +28,7 @@ creating a new layers list
 Create a kml file using Google Earth that references other kml files on the 
 web via `NetworkLinks <http://code.google.com/apis/kml/documentation/kml_tut.html#network_links>`_. 
 An example of such a file can be found under 
-``lingcod/layers/fixtures/public_layers.kml``. Once you have a kml file ready
+``madrona/layers/fixtures/public_layers.kml``. Once you have a kml file ready
 go into the admin tool and choose **Public layer lists**. From there you can 
 add a new layer. The most important thing to note here is be sure your first 
 uploaded layer is set as *active*!
@@ -41,8 +41,8 @@ changes is as follows.
 #. download existing kml
 #. open in google and make changes
 #. save locally
-#. use the admin site to create a new :class:`PublicLayerList <lingcod.layers.models.PublicLayerList>` with that kml file
-#. mark the new :class:`PublicLayerList <lingcod.layers.models.PublicLayerList>` as active
+#. use the admin site to create a new :class:`PublicLayerList <madrona.layers.models.PublicLayerList>` with that kml file
+#. mark the new :class:`PublicLayerList <madrona.layers.models.PublicLayerList>` as active
     
 This makes it easy to roll back to a previous version of the layer list as
 needed.
@@ -93,7 +93,7 @@ Setting up private KMLs
 
 #. The private will now be included in the private data layers list (assuming this is added to the map):: 
 
-    lingcod.addLayer('{% url layers_privatekml_list session_key=session_key %}');            
+    madrona.addLayer('{% url layers_privatekml_list session_key=session_key %}');            
    
 #. Alternatively, you can access each PrivateKml directly through a reverse url lookup like so::
 

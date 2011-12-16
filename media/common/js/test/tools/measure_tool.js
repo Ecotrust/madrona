@@ -1,7 +1,7 @@
 module('measure tool')
 
 test("unit conversions", 22, function(){
-    measureTool = new lingcod.measureTool()
+    measureTool = new madrona.measureTool()
     
     // metric tests
     measureTool.setUnits('metric');

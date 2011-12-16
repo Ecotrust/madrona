@@ -1,2 +1,2 @@
-`lingcod.simplefaq`: FAQ system 
+`madrona.simplefaq`: FAQ system 
 ===============================

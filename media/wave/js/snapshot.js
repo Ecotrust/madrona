@@ -38,7 +38,7 @@ var m;
 
 function init() {
     gadgets.window.adjustHeight();
-    m = new lingcod.gadgetMessenger.gadgetSide(window.app_url);
+    m = new madrona.gadgetMessenger.gadgetSide(window.app_url);
     $(m).bind('message', function(e, data){
         if(data.message == 'setSnapshot'){
             wave.getState().submitDelta({'snapshot': gadgets.json.stringify(data)});

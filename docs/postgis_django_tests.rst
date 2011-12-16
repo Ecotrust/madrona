@@ -6,7 +6,7 @@ PostGIS and the Django test database
 When django runs tests it creates a new database from scratch. This isolates 
 test data from your production or development environment. Without proper
 configuration, this database will lack the PostGIS functions needed to run
-those tests and reproduce MarineMap's data model.
+those tests and reproduce Madrona's data model.
 
 There are two different approaches to getting PostGIS working within these 
 newly created databases.

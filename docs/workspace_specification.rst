@@ -18,7 +18,7 @@ editing toolbar. Workspaces indicate for each feature class:
     Workspace documents are automatically created and embedded within kml 
     files by the features app. For project implementations, it should be 
     unnecessary to modify these files directly. This documentation is intended
-    for MarineMap developers who may need to add generic features to the core
+    for Madrona developers who may need to add generic features to the core
     framework.
     
 example workspace document

@@ -1,20 +1,20 @@
 <div class="panel">
     <script type="text/javascript" charset="utf-8">
     
-        lingcod.onShow(function(){
+        madrona.onShow(function(){
             window.subtab2Show++;
             window.subtab2Content = $('p.subtab2');
         });
 
-        lingcod.onUnhide(function(){
+        madrona.onUnhide(function(){
             window.subtab2Unhide++;
         });
             
-        lingcod.onHide(function(){
+        madrona.onHide(function(){
             window.subtab2Hide++;
         });
 
-        lingcod.beforeDestroy(function(){
+        madrona.beforeDestroy(function(){
             window.subtab2BeforeDestroy++;
         });
         

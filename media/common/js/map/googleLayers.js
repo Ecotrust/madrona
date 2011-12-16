@@ -5,7 +5,7 @@
  * @param {HTMLFormElement} options The form that controls options. See <a href="http://code.google.com/apis/earth/documentation/reference/interface_g_e_options.html">GEOptions</a>
  * @param {HTMLFormElement} layers The form that controls which layers are displayed. See <a href="http://code.google.com/apis/earth/documentation/layers.html#layers">layer reference</a>
  */
-lingcod.map.googleLayers = function(ge, options_form, layers_form){
+madrona.map.googleLayers = function(ge, options_form, layers_form){
     this.layers = $(layers_form);
     this.options = $(options_form);
     this.ge = ge;
@@ -25,7 +25,7 @@ lingcod.map.googleLayers = function(ge, options_form, layers_form){
 /**
  * Looks at the layers form and updates the map to match form values
  */
-lingcod.map.googleLayers.prototype.updateLayers = function(){
+madrona.map.googleLayers.prototype.updateLayers = function(){
     var self = this;
     this.layers.find('input').each(function(){
         self.ge.getLayerRoot().enableLayerById(self.ge[$(this).attr('name')], $(this).attr('checked'));
@@ -40,7 +40,7 @@ lingcod.map.googleLayers.prototype.updateLayers = function(){
  *
  *      &lt;input name=&quot;setGridVisibility&quot; /&gt;
  */
-lingcod.map.googleLayers.prototype.updateOptions = function(){
+madrona.map.googleLayers.prototype.updateOptions = function(){
     var self = this;
     var options = self.ge.getOptions();
     this.options.find('input').each(function(){
@@ -71,7 +71,7 @@ lingcod.map.googleLayers.prototype.updateOptions = function(){
 /**
  * Unbinds all event listeners.
  */ 
-lingcod.map.googleLayers.prototype.destroy = function(){
+madrona.map.googleLayers.prototype.destroy = function(){
     $(this.layers).find('input').unbind('click');
     $(this.options).find('input').unbind('click');
 }

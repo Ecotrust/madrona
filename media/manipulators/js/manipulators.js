@@ -1,4 +1,4 @@
-lingcod.Manipulator = function(gex, form, render_target, div){
+madrona.Manipulator = function(gex, form, render_target, div){
     this.altitude = 100;
     var json = false;
     var data = form.find('.json').html();
@@ -132,7 +132,7 @@ lingcod.Manipulator = function(gex, form, render_target, div){
     }
 }
 
-lingcod.Manipulator.prototype.constructUrl_ = function(){
+madrona.Manipulator.prototype.constructUrl_ = function(){
     var self = this;
     self.active = self.required_manipulators.slice(); // pass by value, NOT reference
     this.render_target_.find('input.optional_manipulator').each( function(index){
@@ -148,7 +148,7 @@ lingcod.Manipulator.prototype.constructUrl_ = function(){
     this.form_.find('#id_manipulators').val(self.active.join(","));
 }
 
-lingcod.Manipulator.prototype.drawNewShape_ = function(){
+madrona.Manipulator.prototype.drawNewShape_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = true;
     this.addNewShape_();
@@ -183,7 +183,7 @@ lingcod.Manipulator.prototype.drawNewShape_ = function(){
     }
 }
 
-lingcod.Manipulator.prototype.loadShapeForm_ = function(){
+madrona.Manipulator.prototype.loadShapeForm_ = function(){
     this.is_defining_shape_ = true;
     this.is_defining_new_shape_ = true;
 	var self = this;
@@ -250,7 +250,7 @@ lingcod.Manipulator.prototype.loadShapeForm_ = function(){
     });
 }
 
-lingcod.Manipulator.prototype.addNewShape_ = function(kml){
+madrona.Manipulator.prototype.addNewShape_ = function(kml){
     this.clearShape_();
     var geom;
     if(kml){
@@ -281,7 +281,7 @@ lingcod.Manipulator.prototype.addNewShape_ = function(kml){
     return this.shape_;
 }
 
-lingcod.Manipulator.prototype.setZ = function(kmlObject, z){
+madrona.Manipulator.prototype.setZ = function(kmlObject, z){
     if(this.type !== 'polygon'){
         // only polygons need z set
         return kmlObject;
@@ -299,7 +299,7 @@ lingcod.Manipulator.prototype.setZ = function(kmlObject, z){
     return kmlObject;
 }
 
-lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
+madrona.Manipulator.prototype.finishedEditingCallback_ = function(){
     var self = this;
     this.process(this.shape_.getKml(), this.manipulators_url, function(data){
         if(data.success === '1'){
@@ -322,7 +322,7 @@ lingcod.Manipulator.prototype.finishedEditingCallback_ = function(){
     });
 }
 
-lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, original_kml, final_wkt, final_kml){
+madrona.Manipulator.prototype.setGeometryFields_ = function(original_wkt, original_kml, final_wkt, final_kml){
     this.form_.find('#id_geometry_orig').val(original_wkt);
     // Replacing the entire script tag rather than just changing the contents
     // for the benefit of IE8 (damn IE 8 !!)
@@ -330,11 +330,11 @@ lingcod.Manipulator.prototype.setGeometryFields_ = function(original_wkt, origin
     $('#geometry_orig_kml').replaceWith('<script id="geometry_orig_kml" type="application/vnd.google-earth.kml+xml">'+original_kml+'</script>');
 }
 
-lingcod.Manipulator.prototype.hideStates_ = function(){
+madrona.Manipulator.prototype.hideStates_ = function(){
     this.render_target_.find('div.manipulators, div.new, div.edit, div.manipulated, div.editing').hide();
 }
 
-lingcod.Manipulator.prototype.enterManipulatedState_ = function(html, success){
+madrona.Manipulator.prototype.enterManipulatedState_ = function(html, success){
     this.hideStates_();
     if(success === true){
         this.render_target_.find('div.manipulated').removeClass('error');
@@ -350,11 +350,11 @@ lingcod.Manipulator.prototype.enterManipulatedState_ = function(html, success){
         .html(html);
 }
 
-lingcod.Manipulator.prototype.isInvalidGeometry = function(){
+madrona.Manipulator.prototype.isInvalidGeometry = function(){
     return this.is_invalid_geometry;
 }
 
-lingcod.Manipulator.prototype.enterNewState_ = function(){
+madrona.Manipulator.prototype.enterNewState_ = function(){
     this.hideStates_();
     // this.is_defining_shape_ = true;
     if(this.type === 'point'){
@@ -373,11 +373,11 @@ lingcod.Manipulator.prototype.enterNewState_ = function(){
     }
 }
 
-lingcod.Manipulator.prototype.isDefiningNewShape = function(){
+madrona.Manipulator.prototype.isDefiningNewShape = function(){
     return this.is_defining_new_shape_;
 }
 
-lingcod.Manipulator.prototype.enterEditingState_ = function(){
+madrona.Manipulator.prototype.enterEditingState_ = function(){
     this.hideStates_();
     this.is_invalid_geometry = false;
     this.is_defining_shape_ = true;
@@ -397,7 +397,7 @@ lingcod.Manipulator.prototype.enterEditingState_ = function(){
     }
 }
 
-lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
+madrona.Manipulator.prototype.enterExistingShapeState_ = function(){
     var self = this;
     this.hideStates_();
     this.is_defining_shape = false;
@@ -434,15 +434,15 @@ lingcod.Manipulator.prototype.enterExistingShapeState_ = function(){
     var self = this;
 }
 
-lingcod.Manipulator.prototype.isShapeDefined = function(){
+madrona.Manipulator.prototype.isShapeDefined = function(){
     return !!this.form_.find('#id_geometry_orig').val();
 }
 
-lingcod.Manipulator.prototype.isDefiningShape = function(){
+madrona.Manipulator.prototype.isDefiningShape = function(){
     return this.is_defining_shape_;
 }
 
-lingcod.Manipulator.prototype.process = function(kml, url, callback){
+madrona.Manipulator.prototype.process = function(kml, url, callback){
     $(this).trigger('processing');
 	var self = this;
     $.ajax({
@@ -466,7 +466,7 @@ lingcod.Manipulator.prototype.process = function(kml, url, callback){
     });
 }
 
-lingcod.Manipulator.prototype.editExistingShape_ = function(){
+madrona.Manipulator.prototype.editExistingShape_ = function(){
     var kml = jQuery.trim($('#geometry_orig_kml').html());
     this.addNewShape_(kml);
     if(this.type != 'point'){
@@ -478,7 +478,7 @@ lingcod.Manipulator.prototype.editExistingShape_ = function(){
     
 }
 
-lingcod.Manipulator.prototype.clearShape_ = function(){
+madrona.Manipulator.prototype.clearShape_ = function(){
     if(this.shape_ && this.shape_.getParentNode()){
         this.endEdit_();
         gex.dom.removeObject(this.shape_);
@@ -486,7 +486,7 @@ lingcod.Manipulator.prototype.clearShape_ = function(){
     }
 }
 
-lingcod.Manipulator.prototype.edit_ = function(){
+madrona.Manipulator.prototype.edit_ = function(){
     switch(this.type){
         case 'polygon':
             this.gex_.edit.editLineString(this.shape_.getGeometry().getOuterBoundary());
@@ -502,7 +502,7 @@ lingcod.Manipulator.prototype.edit_ = function(){
     }
 }
 
-lingcod.Manipulator.prototype.endEdit_ = function(){
+madrona.Manipulator.prototype.endEdit_ = function(){
     switch(this.type){
         case 'polygon':
             this.gex_.edit.endEditLineString(this.shape_.getGeometry().getOuterBoundary());
@@ -519,6 +519,6 @@ lingcod.Manipulator.prototype.endEdit_ = function(){
 }
 
 
-lingcod.Manipulator.prototype.destroy = function(){
+madrona.Manipulator.prototype.destroy = function(){
     this.clearShape_();
 }

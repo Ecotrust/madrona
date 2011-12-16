@@ -1,6 +1,6 @@
 .. _kmlapp:
 
-`lingcod.kmlapp`: KML Representation of Features and Collections
+`madrona.kmlapp`: KML Representation of Features and Collections
 ================================================================
 
 .. note::

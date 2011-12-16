@@ -1,14 +1,14 @@
-`lingcod.features`: Spatial Content Management  
+`madrona.features`: Spatial Content Management  
 ##############################################
 
-The ``lingcod.features`` app works along with other MarineMap apps to create a 
+The ``madrona.features`` app works along with other Madrona apps to create a 
 system that is best described as a content management system for user-designed
 spatial features. This system can be configured quickly to support a range of 
 management options such as marine protected areas, hydrokinetic generators, 
 wind turbines, or undersea cables. With one model definition it's possible to
 define the data schema for storing these features, as well as what behaviors 
-and actions they support within the MarineMap interface. I high degree of 
-customization can be achieved with a MarineMap project with this declarative 
+and actions they support within the Madrona interface. I high degree of 
+customization can be achieved with a Madrona project with this declarative 
 format, without having to customize the view or client-side javascript 
 components.
 
@@ -46,9 +46,9 @@ process involves:
   
 Look at this example::
 
-    from lingcod.features import register
-    from lingcod.features.models import PolygonFeature
-    from lingcod.features.forms import FeatureForm
+    from madrona.features import register
+    from madrona.features.models import PolygonFeature
+    from madrona.features.forms import FeatureForm
 
     @register
     class Mpa(PolygonFeature):
@@ -120,7 +120,7 @@ Creating a "Show" Template
 ==========================
 
 The show template is used to render sidebar content for a feature within the
-MarineMap interface, and can also be used to render a printable and 
+Madrona interface, and can also be used to render a printable and 
 bookmarkable page for it. This template can be placed in any template 
 directory by default under ``{{slug}}/show.html``. Subdirectories are used to
 allow for overriding templates as mentioned in the 
@@ -190,39 +190,39 @@ You must specify a list of required manipulators; if no manipulators are require
     class TestMpa(PolygonFeature):
         ...
         class Options:
-            manipulators = [ 'lingcod.manipulators.tests.TestManipulator' ]
-            optional_manipulators = [ 'lingcod.manipulators.manipulators.ClipToGraticuleManipulator' ]
+            manipulators = [ 'madrona.manipulators.tests.TestManipulator' ]
+            optional_manipulators = [ 'madrona.manipulators.manipulators.ClipToGraticuleManipulator' ]
 
 Base Classes
 ************
 
 Feature
 =======
-.. autoclass:: lingcod.features.models.Feature
+.. autoclass:: madrona.features.models.Feature
     :members:
     :exclude-members: __init__
 
 Spatial Feature
 ===============
-.. autoclass:: lingcod.features.models.SpatialFeature
+.. autoclass:: madrona.features.models.SpatialFeature
     :members:
     :exclude-members: __init__
 
 PointFeature
 ------------
-.. autoclass:: lingcod.features.models.PointFeature
+.. autoclass:: madrona.features.models.PointFeature
     :members:
     :exclude-members: __init__
 
 LineStringFeature
 -----------------
-.. autoclass:: lingcod.features.models.LineFeature
+.. autoclass:: madrona.features.models.LineFeature
     :members:
     :exclude-members: __init__
 
 PolygonFeature
 --------------
-.. autoclass:: lingcod.features.models.PolygonFeature
+.. autoclass:: madrona.features.models.PolygonFeature
     :members:
     :no-undoc-members:
     :exclude-members: __init__
@@ -243,7 +243,7 @@ collection, all the features/collections contained within it are implicitly shar
         class Options:
             valid_children = ('mlpa.models.Mpa', )
 
-.. autoclass:: lingcod.features.models.FeatureCollection
+.. autoclass:: madrona.features.models.FeatureCollection
     :members:
     :exclude-members: __init__, url_name, parent_slug, reverse, json
 
@@ -255,7 +255,7 @@ The Options inner-class
 
     Specifies a `ModelForm <http://docs.djangoproject.com/en/dev/topics/forms/modelforms/>`_
     that will be used to create and edit features of this class. The form 
-    must be a subclass of lingcod.features.forms.FeatureForm, and the path
+    must be a subclass of madrona.features.forms.FeatureForm, and the path
     to the form must be provided as a *string*. Otherwise you'll cause 
     circular reference issues.
 
@@ -333,19 +333,19 @@ Here's an example of links in use::
         type = models.CharField(max_length=1, choices=TYPE_CHOICES)
         class Options:
             verbose_name = 'Renewable Energy Site'
-            form = 'lingcod.features.tests.RenewableEnergySiteForm'
+            form = 'madrona.features.tests.RenewableEnergySiteForm'
             links = (
                 alternate('Export KML',
-                    'lingcod.features.tests.kml',
+                    'madrona.features.tests.kml',
                     select='multiple single'
                 ),
                 related('Viewshed Map',
-                    'lingcod.features.tests.viewshed_map',
+                    'madrona.features.tests.viewshed_map',
                     select='single',
                     type='image/png'
                 ),
                 edit('Delete w/related cables',
-                    'lingcod.features.tests.delete_w_cables',
+                    'madrona.features.tests.delete_w_cables',
                     select='single multiple',
                     confirm="""
                     Are you sure you want to delete this site and associated 
@@ -371,7 +371,7 @@ configured views.
 link properties
 ---------------
 
-.. autoclass:: lingcod.features.Link
+.. autoclass:: madrona.features.Link
     :members:
     :no-undoc-members:
     :exclude-members: __init__, url_name, parent_slug, reverse, json

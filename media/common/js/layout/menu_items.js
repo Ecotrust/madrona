@@ -1,4 +1,4 @@
-lingcod.menu_items = (function(){
+madrona.menu_items = (function(){
     var that = {};
     
     that.panels = [];
@@ -7,7 +7,7 @@ lingcod.menu_items = (function(){
         that.el = el;
         that.el.find('li.item_trigger').each(function(){
             var self = $(this);
-            var els = $('<a style="display:none;" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/tool_window_pointer.png" width="23" height="36" /></a></a>');
+            var els = $('<a style="display:none;" class="close" href="#"><img src="'+madrona.options.media_url+'common/images/tool_window_pointer.png" width="23" height="36" /></a></a>');
             els.click(function(){
                 closeAll();
                 return false;
@@ -25,7 +25,7 @@ lingcod.menu_items = (function(){
             var href = menuLink.attr('href');
             var content = $(href);
             if(content){
-                var panel = lingcod.panel({
+                var panel = madrona.panel({
                     scrollable: !self.hasClass('autosize'),
                     content: content,
                     hideOnly: true,
@@ -33,7 +33,7 @@ lingcod.menu_items = (function(){
                     appendTo: $('#panel-holder')
                 });
                 panel.getEl().css('z-index', '11');
-                panel.getEl().addClass('marinemap-menu-items');
+                panel.getEl().addClass('madrona-menu-items');
                 $.data(self[0], 'panel', that.panels.length)
                 that.panels.push(panel);
             }
@@ -45,7 +45,7 @@ lingcod.menu_items = (function(){
     var closeAll = function(){
         var open = that.el.find('li.item_trigger.toggled');
         if(open.length === 1){
-            $('.marinemap-panel:visible').each(function(){
+            $('.madrona-panel:visible').each(function(){
                 $(this).find('.panelMask').hide();
             });
             open.removeClass('toggled')
@@ -59,7 +59,7 @@ lingcod.menu_items = (function(){
                 }
             });
         }
-        // lingcod.unmaskSidebar();
+        // madrona.unmaskSidebar();
         
         // This is to prevent multiple menu items from appearing at once
         // BUT it causes some strange behavior: clicking on the bookmark edit form panel
@@ -71,12 +71,12 @@ lingcod.menu_items = (function(){
     that.closeAll = closeAll;
     
     var openItem = function(item){
-        lingcod.maskSidebar();
+        madrona.maskSidebar();
         item = $(item);
         item.addClass('toggled');
         item.find('a.close').show();
         if(item.data('panel') || item.data('panel') === 0){
-            $('.marinemap-panel:visible').each(function(){
+            $('.madrona-panel:visible').each(function(){
                 $(this).find('.panelMask').show();
             });
             var panel = that.panels[item.data('panel')];

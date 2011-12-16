@@ -1,2 +1,2 @@
-`lingcod.bioeconomic_model`
+`madrona.bioeconomic_model`
 =================================

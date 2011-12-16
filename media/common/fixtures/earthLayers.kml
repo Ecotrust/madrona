@@ -10,7 +10,7 @@
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
                 <state>open closed</state>
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/arrow_branch.png</href>
+                <href>http://madrona.googlecode.com/svn/trunk/media/common/images/silk/arrow_branch.png</href>
               </ItemIcon>
             </ListStyle>	       
 	    </Style>
@@ -23,7 +23,7 @@
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
                 <state>open closed</state>                
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/flag_blue.png</href>
+                <href>http://madrona.googlecode.com/svn/trunk/media/common/images/silk/flag_blue.png</href>
               </ItemIcon>
             </ListStyle>	       
 	    </Style>
@@ -36,7 +36,7 @@
               <listItemType>checkHideChildren</listItemType>
               <ItemIcon>
                 <state>open closed</state>  
-                <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/3d_buildings_16px.png</href>
+                <href>http://madrona.googlecode.com/svn/trunk/media/common/images/3d_buildings_16px.png</href>
               </ItemIcon>
             </ListStyle>	       
 	    </Style>
@@ -49,7 +49,7 @@
                 <listItemType>checkHideChildren</listItemType>
                 <ItemIcon>
                     <state>open closed</state>
-                    <href>http://marinemap.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
+                    <href>http://madrona.googlecode.com/svn/trunk/media/common/images/silk/database.png</href>
                 </ItemIcon>
             </ListStyle>
         </Style>

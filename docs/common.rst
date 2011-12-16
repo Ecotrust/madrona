@@ -1,2 +1,2 @@
-`lingcod.common`: Misc Goodies
+`madrona.common`: Misc Goodies
 =================================

@@ -24,6 +24,6 @@ MEDIA_URL = '/media/'
 from settings import TEMPLATE_DIRS
 
 TEMPLATE_DIRS += (
-   #os.path.join(os.path.dirname(__file__), '../../lingcod/data_manager/templates/').replace('\\','/'), #This didn't really work out for me
-   '/your-path-to/lingcod/data_manager/templates',
+   #os.path.join(os.path.dirname(__file__), '../../madrona/data_manager/templates/').replace('\\','/'), #This didn't really work out for me
+   '/your-path-to/madrona/data_manager/templates',
 )

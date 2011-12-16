@@ -164,7 +164,7 @@
             
             function refreshWorkspace(){
                 var doc = eval('('+editor.getSession().getValue()+')');
-                workspace = lingcod.features.workspace(doc);
+                workspace = madrona.features.workspace(doc);
                 populateMenus(workspace);
             }
 

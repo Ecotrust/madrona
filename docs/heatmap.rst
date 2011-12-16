@@ -1,2 +1,2 @@
-`lingcod.heatmap`
+`madrona.heatmap`
 =================================

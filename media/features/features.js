@@ -1,9 +1,9 @@
-if(typeof lingcod == 'undefined'){
-    lingcod = {};
+if(typeof madrona == 'undefined'){
+    madrona = {};
 }
-lingcod.features = {};
+madrona.features = {};
 
-lingcod.features.model = function(kmlObject){
+madrona.features.model = function(kmlObject){
     var id = kmlObject.getId();
     if(!id){
         return false;

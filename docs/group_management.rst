@@ -1,2 +1,2 @@
-`lingcod.group_management`
+`madrona.group_management`
 =================================

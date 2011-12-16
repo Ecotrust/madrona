@@ -1,3 +1,3 @@
-lingcod.map = {
+madrona.map = {
     isnamespace_:true
 };

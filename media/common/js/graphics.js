@@ -1,4 +1,4 @@
-lingcod.graphics = (function(){
+madrona.graphics = (function(){
     
     var ScaleBar = function(opts){
         // var s = "M"+opts.origin[0]+' '+opts.origin[1]+'L'+opts.origin[0] + opts.width+' '+opts.origin[1];

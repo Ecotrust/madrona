@@ -1,10 +1,10 @@
 """
-Fetches tickets from the marinemap issue tracker and generates a dot file for 
+Fetches tickets from the madrona issue tracker and generates a dot file for 
 generating a diagram using graphviz
 """
 
 import urllib
-f = urllib.urlopen('http://code.google.com/p/marinemap/issues/csv?can=1&q=&colspec=ID%20Type%20Status%20Priority%20Owner%20Component%20BlockedOn%20EstimatedTime%20Summary')
+f = urllib.urlopen('http://code.google.com/p/madrona/issues/csv?can=1&q=&colspec=ID%20Type%20Status%20Priority%20Owner%20Component%20BlockedOn%20EstimatedTime%20Summary')
 
 
 def get_ticket(id):
@@ -62,6 +62,6 @@ for ticket in tickets:
         if ticket['status'] == 'Started':
             fillcolor = 'palegreen'
             
-        print '%s [URL="http://code.google.com/p/marinemap/issues/detail?id=%s",label="%s\\n%s\\n%s\\n%s\\nStatus: %s\\nOwner: %s",fontsize=24,fillcolor=%s,fontcolor=%s, style=%s];' % (ticket['id'], ticket['id'], ticket['summary'], ticket['estimatedtime'], ticket['priority'], ticket['component'], ticket['status'], ticket['owner'], fillcolor, fontcolor, style)
+        print '%s [URL="http://code.google.com/p/madrona/issues/detail?id=%s",label="%s\\n%s\\n%s\\n%s\\nStatus: %s\\nOwner: %s",fontsize=24,fillcolor=%s,fontcolor=%s, style=%s];' % (ticket['id'], ticket['id'], ticket['summary'], ticket['estimatedtime'], ticket['priority'], ticket['component'], ticket['status'], ticket['owner'], fillcolor, fontcolor, style)
         
 print "}"

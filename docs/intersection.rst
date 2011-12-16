@@ -1,12 +1,12 @@
 .. _intersection:
 
-`lingcod.intersection`: The Intersection App
+`madrona.intersection`: The Intersection App
 ============================================
 
 Introduction
 ************
 
-The basis of habitat reporting in MarineMap is knowing how much habitat is captured within each MPA. Habitats can be represented as points, lines, or polygons. These habitat features generally come to us as shapefiles with wildly varying schemas. The intersection app assists in the process of resolving these various schemas into single feature shapefiles.
+The basis of habitat reporting in Madrona is knowing how much habitat is captured within each MPA. Habitats can be represented as points, lines, or polygons. These habitat features generally come to us as shapefiles with wildly varying schemas. The intersection app assists in the process of resolving these various schemas into single feature shapefiles.
 
 Once the habitat features are in simple single feature shapefiles, the intersection app lets you import them in into the database as intersection features. The features are then available to do intersections with. However, the more common use case will be to define an organization scheme first. Organization schemes let you define the order in which feature results are reported and let you combine existing features of the same type (two or more polygon features, for instance) into a single result.
 
@@ -24,7 +24,7 @@ The Difference Between Multi Feature and Single Feature Shapefiles
 ------------------------------------------------------------------
 Sometimes, as is the case with the MLPA linear kelp data sets, the presence of geometry indicates the presence of the habitat. We'll refer to this type of shapefile as a Single Feature Shapefile.
 
-In other cases, a shapefile may contain geometries that represent any number of different habitats according to how each individual geometry is attributed. An example of one of these Multi Feature Shapefiles is available `here <http://code.google.com/p/marinemap/source/browse/trunk/lingcod/intersection/test_data/test_substrate.zip>`_. That example is a portion of the substrate data set used in the South Coast MLPA process. The shapefile consists of polygons with a sub_depth attribute (among others). Some values of this attribute are 'Hard 0 - 30m', 'Soft 30 - 50m', etc. If we want to know, for instance, how much hard substrate with a depth of 0 - 30 meters is within a given polygon, we want to intersect that polygon with a set of geometries that represent just that habitat type. In other words, we want to intersect with a single feature rather than a multi feature.
+In other cases, a shapefile may contain geometries that represent any number of different habitats according to how each individual geometry is attributed. An example of one of these Multi Feature Shapefiles is available `here <http://code.google.com/p/madrona/source/browse/trunk/madrona/intersection/test_data/test_substrate.zip>`_. That example is a portion of the substrate data set used in the South Coast MLPA process. The shapefile consists of polygons with a sub_depth attribute (among others). Some values of this attribute are 'Hard 0 - 30m', 'Soft 30 - 50m', etc. If we want to know, for instance, how much hard substrate with a depth of 0 - 30 meters is within a given polygon, we want to intersect that polygon with a set of geometries that represent just that habitat type. In other words, we want to intersect with a single feature rather than a multi feature.
 
 Turning a Multi Feature Shapefile into Single Feature Shapefiles
 ----------------------------------------------------------------

@@ -1,5 +1,5 @@
-from lingcod.mpa.forms import MpaForm as BaseMpaForm
-from lingcod.array.forms import ArrayForm as BaseArrayForm
+from madrona.mpa.forms import MpaForm as BaseMpaForm
+from madrona.array.forms import ArrayForm as BaseArrayForm
 from models import Mpa, MpaArray
 
 class ArrayForm(BaseArrayForm):

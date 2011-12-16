@@ -1,19 +1,19 @@
 <div class="panel">
     <script type="text/javascript" charset="utf-8">
 
-        lingcod.onShow(function(){
+        madrona.onShow(function(){
             window.reportShow++;
         });
 
-        lingcod.onUnhide(function(){
+        madrona.onUnhide(function(){
             window.reportUnhide++;
         });
 
-        lingcod.onHide(function(){
+        madrona.onHide(function(){
             window.reportHide++;
         });
 
-        lingcod.beforeDestroy(function(){
+        madrona.beforeDestroy(function(){
             window.reportBeforeDestroy++;
         });
 
@@ -21,16 +21,16 @@
 
     <script type="text/javascript" charset="utf-8">
 
-        lingcod.onShow('#subtab1', function(){
+        madrona.onShow('#subtab1', function(){
             window.subtab1Show++;
             window.subtab1Content = $('#subtab1 p');
         });
 
-        lingcod.onUnhide('#subtab1', function(){
+        madrona.onUnhide('#subtab1', function(){
             window.subtab1Unhide++;
         });
 
-        lingcod.onHide('#subtab1', function(){
+        madrona.onHide('#subtab1', function(){
             window.subtab1Hide++;
         });
 

@@ -1,11 +1,11 @@
 
-`lingcod.bookmarks`: Bookmark the map state
+`madrona.bookmarks`: Bookmark the map state
 ===========================================
 
 Introduction
 ------------
 Bookmarks save the google earth camera settings and the public layer list state and serialize it to a shortened URL that can be used to restore the map state.
-There are two mechanisms by which bookmarks can be used: The bookmark tool in the Tools panel (required in all lingcod-based apps) and bookmark features which show up in the My Shapes kmltree (optional).
+There are two mechanisms by which bookmarks can be used: The bookmark tool in the Tools panel (required in all madrona-based apps) and bookmark features which show up in the My Shapes kmltree (optional).
 Internally, these are handled by the same mechanism but the "Bookmarks as a Feature" functionality can be turned off via a setting. 
 
 Bookmarks as a Feature

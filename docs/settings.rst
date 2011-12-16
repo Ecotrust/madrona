@@ -1,16 +1,16 @@
 Default Settings
 ================
 
-Default settings can be found under lingcod/common/default_settings.py
+Default settings can be found under madrona/common/default_settings.py
 Include it **at the top** of your project's settings.py file like so to 
 simplify setup::
   
-    from lingcod.common.default_settings import *
+    from madrona.common.default_settings import *
 
 Once these settings are included you can override them in the projects 
 settings.py or settings_local.py file.
 
-MarineMap Settings
+Madrona Settings
 ------------------
 
 .. _SUPEROVERLAY_ROOT:
@@ -19,7 +19,7 @@ MarineMap Settings
 
 .. _LOG_FILE:
 ``LOG_FILE``
-    Location of the marinemap log file output. Used for debugging. Defaults to `/tmp/marinemap.log` 
+    Location of the madrona log file output. Used for debugging. Defaults to `/tmp/madrona.log` 
 
 .. _GEOMETRY_DB_SRID:
 
@@ -58,13 +58,13 @@ MarineMap Settings
 
 ``MPA_FORM``
     Set to a ModelForm class for editing MPAs. Defaults to 
-    ``'lingcod.mpa.forms.MpaForm'``
+    ``'madrona.mpa.forms.MpaForm'``
 
 .. _ARRAY_FORM:
 
 ``ARRAY_FORM``
     Set to a ModelForm class for editing Arrays. Defaults to 
-    ``'lingcod.mpa.forms.ArrayForm'``
+    ``'madrona.mpa.forms.ArrayForm'``
 
 .. _RELEASE:
 
@@ -118,19 +118,19 @@ MarineMap Settings
 
 .. _RASTER_DIR:
 ``RASTER_DIR``
-    Absolute filepath to a directory containing raster files. Used with the `lingcod.raster_stats` app. (Optional; defaults to `lingcod/raster_stats/test_data`)
+    Absolute filepath to a directory containing raster files. Used with the `madrona.raster_stats` app. (Optional; defaults to `madrona/raster_stats/test_data`)
 
 .. _STARSPAN_BIN:
 ``STARSPAN_BIN``
-    Location of the starspan executable. Used with the `lingcod.raster_stats` app. (Optional; defaults to `starspan`)
+    Location of the starspan executable. Used with the `madrona.raster_stats` app. (Optional; defaults to `starspan`)
 
 .. _HELP_EMAIL:
 ``HELP_EMAIL``
-    Email address used in templates for users to contact in case of problems. defaults to help@marinemap.org
+    Email address used in templates for users to contact in case of problems. defaults to help@madrona.org
 
 .. _APP_NAME:
 ``APP_NAME``
-    Name of the application to be used in templates as the title. defaults to 'MarineMap'
+    Name of the application to be used in templates as the title. defaults to 'Madrona'
 
 3rd Party App Settings
 ----------------------
@@ -153,7 +153,7 @@ MarineMap Settings
 .. _GOOGLE_ANALYTICS:
 
 ``GOOGLE_ANALYTICS_MODEL``
-    The `lingcod.google-analytics <http://code.google.com/p/django-google-analytics/>`_ app
+    The `madrona.google-analytics <http://code.google.com/p/django-google-analytics/>`_ app
     (with alterations made to models.py and admin.py) 
     allows for managing of Google Analytics accounts from the Django admin page.
     
@@ -186,8 +186,8 @@ Django Settings
 .. _INSTALLED_APPS:
 
 ``INSTALLED_APPS``
-    Contains all marinemap apps and contrib.auth, contenttypes and other
-    django apps critical to marinemap functionality.
+    Contains all madrona apps and contrib.auth, contenttypes and other
+    django apps critical to madrona functionality.
 
     Add new apps in your settings like so::
 
@@ -203,7 +203,7 @@ Django Settings
 .. _MEDIA_URL:
 
 ``MEDIA_URL``
-    This should be a full absolute path to the media directory (e.g. "http://northcoast.marinemap.org/media/"). Defaults to /media/; application will work with a relative path but there may be some minor js errors to contend with.
+    This should be a full absolute path to the media directory (e.g. "http://northcoast.madrona.org/media/"). Defaults to /media/; application will work with a relative path but there may be some minor js errors to contend with.
 
 
 .. _LOGIN_URL:

@@ -1,0 +1,53 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+
+<script type="text/javascript">
+    google.load("earth", "1");
+
+    var ge = null;
+    var measureTool = null;
+
+    function init() {
+        $.ajaxSetup({ cache: false });
+        google.earth.createInstance("map3d", initCallback, failureCallback);
+    }
+
+    function initCallback(pluginInstance) {
+    
+        ge = pluginInstance;
+        ge.getWindow().setVisibility(true); // required
+        
+        gex = new GEarthExtensions(pluginInstance);
+        
+        <!--- location and zoom (tilt changed from 40 to 30) (lat changed from 33 to 33.5)--->
+        gex.util.lookAt([33.5, -118], { range: 800000, tilt: 30 }); 
+            
+        gex.util.displayKml( 'http://' + document.location.host + '/studyregion/kml/' );
+        
+        {% if extra_kml %}
+        gex.util.displayKmlString( '{{ extra_kml|safe }}' );
+        {% endif %}
+
+        drawTool = new madrona.DrawTool(ge, gex);
+        draw_panels = { button_panel: 'mpa_draw_panel', results_panel: 'mpa_results_panel' };
+        mpaCreator = new madrona.MpaCreator(drawTool, draw_panels);
+        //drawTool.drawShape( gex, drawMpaComplete );  
+    }
+
+    function failureCallback(errorCode) {
+        alert("Failure loading the Google Earth Plugin: " + errorCode);
+    }
+    
+    $(document).ready(function(){
+        init();
+    });
+        
+</script>
+{% endblock %}
+{% block body %} 
+<div id="map3d" style="overflow: auto; width: 500px; height: 200px; border: 1px solid silver;"></div>
+<div style="padding:1em;"><h4>MPA Draw Tool</h4></div>
+<div id="mpa_draw_panel" style="padding:1em;"></div>
+<div id="mpa_results_panel" style="padding:1em; overflow: auto"></div>
+{% endblock %}

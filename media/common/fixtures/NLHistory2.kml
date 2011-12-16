@@ -12,7 +12,7 @@
 	<NetworkLink>
 		<name>Y</name>
 		<Link>
-			<href>http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/TreeTraversal.kmz</href>
+			<href>http://madrona.googlecode.com/svn/trunk/media/common/fixtures/TreeTraversal.kmz</href>
 		</Link>
 	</NetworkLink>
 </Folder>

@@ -1,4 +1,4 @@
-if(typeof lingcod == 'undefined'){
-    lingcod = {};
+if(typeof madrona == 'undefined'){
+    madrona = {};
 }
-lingcod.layout = {};
+madrona.layout = {};

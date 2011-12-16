@@ -1,12 +1,12 @@
 from django.contrib.gis.db import models
 from django import forms
-from lingcod.features import register
-from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
-from lingcod.layers.models import PrivateLayerList, PrivateSuperOverlay 
-from lingcod.features.forms import FeatureForm, SpatialFeatureForm
-from lingcod.analysistools.models import Analysis
-from lingcod.analysistools.widgets import SimplePoint, SliderWidget
-from lingcod.common.utils import asKml
+from madrona.features import register
+from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from madrona.layers.models import PrivateLayerList, PrivateSuperOverlay 
+from madrona.features.forms import FeatureForm, SpatialFeatureForm
+from madrona.analysistools.models import Analysis
+from madrona.analysistools.widgets import SimplePoint, SliderWidget
+from madrona.common.utils import asKml
 from django.conf import settings
 from django.utils.html import escape
 

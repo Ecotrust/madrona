@@ -1,6 +1,6 @@
 .. _spacing:
 
-`lingcod.spacing`: The Spacing App
+`madrona.spacing`: The Spacing App
 ==================================
 
 Introduction

@@ -11,8 +11,8 @@ var load_clear_html = '<p><button id="load_button">Load Mpa</button><button id="
  * @param {DrawTool} drawTool, initialized drawTool object
  * @param {Dictionary} panels, the ids of the button panel and the results panel
  */
-lingcod.MpaCreator = function( drawTool, panels) {
-    //we've put the gex back into draw_tool via the constructor (was needed to run lingcod.js)
+madrona.MpaCreator = function( drawTool, panels) {
+    //we've put the gex back into draw_tool via the constructor (was needed to run madrona.js)
     //will need to re-examine this public gex at some point...
     this.drawTool = drawTool;
         
@@ -22,9 +22,9 @@ lingcod.MpaCreator = function( drawTool, panels) {
     this.button_panel.html(button_html);
     this.template_buttons = []
     
-    this.manipulators = new lingcod.Manipulators(this.results_panel, $.delegate(this.finishManipulatorDisplay, this), this.drawTool);
-    this.mpaLoader = new lingcod.MpaLoader(this.drawTool, this.results_panel, $.delegate(this.finishLoadDisplay, this), "1");
-    this.mpaSaver = new lingcod.MpaSaver(this.results_panel, $.delegate(this.finishSave, this));
+    this.manipulators = new madrona.Manipulators(this.results_panel, $.delegate(this.finishManipulatorDisplay, this), this.drawTool);
+    this.mpaLoader = new madrona.MpaLoader(this.drawTool, this.results_panel, $.delegate(this.finishLoadDisplay, this), "1");
+    this.mpaSaver = new madrona.MpaSaver(this.results_panel, $.delegate(this.finishSave, this));
     
     this.initializeButtons();
 }
@@ -32,7 +32,7 @@ lingcod.MpaCreator = function( drawTool, panels) {
 /**
  * Initializes the primary buttons used in drawing, loading, saving, and editing mpas.
  */
-lingcod.MpaCreator.prototype.initializeButtons = function() {
+madrona.MpaCreator.prototype.initializeButtons = function() {
     this.create_button = $('#create_button');
     this.create_button.click($.delegate(this.createMpa, this)); 
     this.edit_button   = $('#edit_button');
@@ -57,7 +57,7 @@ lingcod.MpaCreator.prototype.initializeButtons = function() {
  * Clears any template contents from the results panel
  * Resets the buttons for drawing/loading
  */
-lingcod.MpaCreator.prototype.clearMpa = function() {
+madrona.MpaCreator.prototype.clearMpa = function() {
     this.clearShapeFromDrawTool();
     this.clearResultsPanel();
     this.disableButton(this.edit_button);
@@ -72,7 +72,7 @@ lingcod.MpaCreator.prototype.clearMpa = function() {
  * Clears any template contents from the results panel
  * Resets the buttons for drawing/loading
  */
-lingcod.MpaCreator.prototype.clearAll = function() {
+madrona.MpaCreator.prototype.clearAll = function() {
     this.drawTool.clearAll();
     this.clearResultsPanel();
     this.disableButton(this.edit_button);
@@ -86,7 +86,7 @@ lingcod.MpaCreator.prototype.clearAll = function() {
 /**
  * Starts the Loading process 
  */
-lingcod.MpaCreator.prototype.loadMpa = function() {
+madrona.MpaCreator.prototype.loadMpa = function() {
     this.disableButton(this.create_button);
     this.disableButton(this.load_button);
     this.disableButton(this.clear_mpa_button);
@@ -99,7 +99,7 @@ lingcod.MpaCreator.prototype.loadMpa = function() {
  * Resets buttons for Load Acceptance/Editing/Rejecting
  * @param {boolean} success, boolean value representing load success or failure
  */
-lingcod.MpaCreator.prototype.finishLoadDisplay = function(success) {
+madrona.MpaCreator.prototype.finishLoadDisplay = function(success) {
     if (success) {
         var load_html = this.results_panel.html() + accept_html;
         this.results_panel.html(load_html);
@@ -121,7 +121,7 @@ lingcod.MpaCreator.prototype.finishLoadDisplay = function(success) {
  * Clears contents from results panel 
  * Resets buttons for drawing/loading
  */
-lingcod.MpaCreator.prototype.acceptLoad = function() {
+madrona.MpaCreator.prototype.acceptLoad = function() {
     this.clearResultsPanel();
     this.enableCreateAndLoad();
     this.disableButton(this.clear_mpa_button);
@@ -134,7 +134,7 @@ lingcod.MpaCreator.prototype.acceptLoad = function() {
  * Starts shape drawing process
  * Callback from drawShape (when user finishes drawing) returns control to this.manipulators.process
  */
-lingcod.MpaCreator.prototype.createMpa = function() {
+madrona.MpaCreator.prototype.createMpa = function() {
     this.results_panel.html("");
     this.drawTool.drawShape($.delegate(this.manipulators.process, this.manipulators));
     this.disableButton(this.create_button);
@@ -150,7 +150,7 @@ lingcod.MpaCreator.prototype.createMpa = function() {
  * Resets buttons for Load Acceptance/Editing/Rejecting
  * @param {boolean} success, boolean value representing manipulators success or failure
  */
-lingcod.MpaCreator.prototype.finishManipulatorDisplay = function(success) {
+madrona.MpaCreator.prototype.finishManipulatorDisplay = function(success) {
     if(success) {
         var display = this.results_panel.html() + accept_html;
         this.results_panel.html(display);
@@ -174,7 +174,7 @@ lingcod.MpaCreator.prototype.finishManipulatorDisplay = function(success) {
  * Called upon mpa creation/clipping 'Accept' button click event
  * disables primary buttons and begins the Save process
  */
-lingcod.MpaCreator.prototype.acceptManipulatorResults = function() {
+madrona.MpaCreator.prototype.acceptManipulatorResults = function() {
     this.disableButton(this.edit_button);
     this.disableButton(this.clear_mpa_button);
     this.disableButton(this.clear_all_button);
@@ -187,7 +187,7 @@ lingcod.MpaCreator.prototype.acceptManipulatorResults = function() {
  * Adjusts button enable/disable
  * Starts the edit process
  */
-lingcod.MpaCreator.prototype.editMpa = function() {
+madrona.MpaCreator.prototype.editMpa = function() {
     this.drawTool.removeClipped();
 
     this.disableButtons(this.template_buttons);
@@ -206,7 +206,7 @@ lingcod.MpaCreator.prototype.editMpa = function() {
  * Disables primary buttons 
  * Ends editing, which in turn restarts manipulator processing
  */
-lingcod.MpaCreator.prototype.finishEdit = function() {
+madrona.MpaCreator.prototype.finishEdit = function() {
     this.disableButton(this.finish_button);
     this.disableButton(this.clear_mpa_button);
     this.disableButton(this.clear_all_button);
@@ -218,7 +218,7 @@ lingcod.MpaCreator.prototype.finishEdit = function() {
 /**
  * Saves the clipped shape (and original geometry) to the database.
  */
-lingcod.MpaCreator.prototype.saveMpa = function() {
+madrona.MpaCreator.prototype.saveMpa = function() {
     //this.mpaSaver.getFormAndPostData(this.drawTool.getMpaID(), this.drawTool.targetToWkt(), this.drawTool.getClippedWKT());
     this.mpaSaver.getFormAndPostData(this.drawTool.targetToWkt(), this.drawTool.getClippedWKT());
 }
@@ -231,7 +231,7 @@ lingcod.MpaCreator.prototype.saveMpa = function() {
  *      return state to that before attempted save (clipped shape is shown with edit option)
  * @param {boolean} success, boolean value representing Save success or failure
  */
-lingcod.MpaCreator.prototype.finishSave = function(success) {
+madrona.MpaCreator.prototype.finishSave = function(success) {
     if(success) {
         this.enableCreateAndLoad();
         this.enableButton(this.clear_all_button);
@@ -246,7 +246,7 @@ lingcod.MpaCreator.prototype.finishSave = function(success) {
 /**
  * Removes any template display from results panel
  */
-lingcod.MpaCreator.prototype.clearResultsPanel = function() {
+madrona.MpaCreator.prototype.clearResultsPanel = function() {
     this.results_panel.html("");
     this.template_buttons = [];
 }
@@ -254,7 +254,7 @@ lingcod.MpaCreator.prototype.clearResultsPanel = function() {
 /**
  * Removes shape references from drawTool
  */
-lingcod.MpaCreator.prototype.clearShapeFromDrawTool = function() {
+madrona.MpaCreator.prototype.clearShapeFromDrawTool = function() {
     this.drawTool.removeClipped();
     this.drawTool.clear();
 }
@@ -263,7 +263,7 @@ lingcod.MpaCreator.prototype.clearShapeFromDrawTool = function() {
  * Enables Create Mpa and Load Mpa buttons
  * Disables Edit Mpa and Finish Edit buttons
  */
-lingcod.MpaCreator.prototype.enableCreateAndLoad = function() {
+madrona.MpaCreator.prototype.enableCreateAndLoad = function() {
     this.enableButton(this.create_button);
     this.enableButton(this.load_button); 
     this.disableButtons([this.edit_button, this.finish_button]);
@@ -273,7 +273,7 @@ lingcod.MpaCreator.prototype.enableCreateAndLoad = function() {
  * Disables the given button.
  * @param {button object} button to be disabled
  */
-lingcod.MpaCreator.prototype.disableButton = function(button) {
+madrona.MpaCreator.prototype.disableButton = function(button) {
     button.attr('disabled', 'disabled');
 }
 
@@ -281,7 +281,7 @@ lingcod.MpaCreator.prototype.disableButton = function(button) {
  * Disables the given buttons.
  * @param {list of button objects} buttons to be disabled
  */
-lingcod.MpaCreator.prototype.disableButtons = function(buttons) {
+madrona.MpaCreator.prototype.disableButtons = function(buttons) {
     for ( var i in buttons ) {
         buttons[i].attr('disabled', 'disabled');
     }
@@ -291,6 +291,6 @@ lingcod.MpaCreator.prototype.disableButtons = function(buttons) {
  * Enables the given button
  * @param {button object} button to be enabled
  */
-lingcod.MpaCreator.prototype.enableButton = function(button) {
+madrona.MpaCreator.prototype.enableButton = function(button) {
     button.removeAttr('disabled');
 }

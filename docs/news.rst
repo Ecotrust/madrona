@@ -1,4 +1,4 @@
 .. _news:
 
-`lingcod.news`: Display news items, announcements, etc
+`madrona.news`: Display news items, announcements, etc
 ======================================================

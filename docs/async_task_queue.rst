@@ -119,4 +119,4 @@ You can run it from the command line in a terminal::
 
 Note the -B flag to turn on the 'hearbeat' for periodic tasks, the -c 1 which limits the operation to a single cpu
 
-For production environments, use an init.d script. And example is in the code repository at marinemap/apache/celeryd. Instructions are contained in the comments of that file.
+For production environments, use an init.d script. And example is in the code repository at madrona/apache/celeryd. Instructions are contained in the comments of that file.

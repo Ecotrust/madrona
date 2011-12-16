@@ -110,7 +110,7 @@ li {
     padding:10px;
 }
 
-.marinemap-panel {
+.madrona-panel {
     position:absolute;
     left:0px;
     top:14px;
@@ -124,27 +124,27 @@ li {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);   
 }
 
-.marinemap-panel.marinemap-menu-items {
+.madrona-panel.madrona-menu-items {
     height:92%;
 }
 
-.marinemap-panel-noscroll {
+.madrona-panel-noscroll {
     overflow-y:hidden;
     max-height:95%;
     height:auto;
 }
 
-.marinemap-panel.marinemap-menu-items.marinemap-panel-noscroll {
+.madrona-panel.madrona-menu-items.madrona-panel-noscroll {
     overflow-y:hidden;
     max-height:95%;
     height:auto;
 }
 
-.marinemap-panel .content {
+.madrona-panel .content {
     padding: 0 12px;
 }
 
-.marinemap-panel .close {
+.madrona-panel .close {
     float:right;
     margin:5px;
 }
@@ -301,7 +301,7 @@ ul.errorlist li {
     padding-left:10px !important;
 }
 
-.marinemap-panel ul.metadata {
+.madrona-panel ul.metadata {
     margin:0;
     margin-top:-10px;
     color:#666;
@@ -310,12 +310,12 @@ ul.errorlist li {
     font-size:12px;
 }
 
-.marinemap-panel ul.metadata li {
+.madrona-panel ul.metadata li {
     float:right;
     clear:right;
 }
 
-.marinemap-panel ul.metadata li.creator {
+.madrona-panel ul.metadata li.creator {
     float:left;
     clear:none;
 }
@@ -357,7 +357,7 @@ div.field textarea {
     margin-bottom:-3px;
 }
 
-.marinemap-panel .loadingMask {
+.madrona-panel .loadingMask {
     z-index:5;
     display:none;
     position:absolute;
@@ -371,7 +371,7 @@ div.field textarea {
     text-align:center;
 }
 
-.marinemap-panel .loadingMask span {
+.madrona-panel .loadingMask span {
     position:absolute;
     padding-top:20px;
     top:120px;
@@ -386,7 +386,7 @@ div.field textarea {
     background: transparent url(../images/ajax-loader.gif) no-repeat center bottom;
 }
 
-.marinemap-panel-staging {
+.madrona-panel-staging {
     width:499px;
     position:absolute;
     left:-1000px;
@@ -424,7 +424,7 @@ div.field textarea {
     top:10px;
 }
 
-.marinemap-panel p.download_layer {
+.madrona-panel p.download_layer {
     margin-bottom: 20px;
 }
 

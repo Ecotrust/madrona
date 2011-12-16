@@ -5,7 +5,7 @@
  * @param {GEPlugin} plugin An instance of GoogleEarthExtensions
  * @param {HTMLFormElement} location A form with a single text input for a location to geocode
  */
-lingcod.map.geocoder = function(gex, form){
+madrona.map.geocoder = function(gex, form){
     // Will need to have google maps api v3 already loaded
     this.geocoder = new google.maps.Geocoder();
     this.form = form;
@@ -74,7 +74,7 @@ lingcod.map.geocoder = function(gex, form){
 /**
  * Prepare instance for destruction by remove event listeners.
  */
-lingcod.map.geocoder.prototype.destroy = function(){
+madrona.map.geocoder.prototype.destroy = function(){
     $(this.form).find('#flytogo').unbind('click');
     $(this.form).unbind('submit');
 };

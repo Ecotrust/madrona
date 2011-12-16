@@ -2,7 +2,7 @@
 #content_div {
 /*    padding:2px;*/
     margin:5px;
-    background:#F2F8F8 url('http://marinemap.googlecode.com/svn/trunk/wave/gadgets/camera.png') no-repeat 3px 5px; 
+    background:#F2F8F8 url('http://madrona.googlecode.com/svn/trunk/wave/gadgets/camera.png') no-repeat 3px 5px; 
     border:solid #5C85B7 2px; 
     -webkit-border-radius:5px;
     -moz-border-radius:5px;

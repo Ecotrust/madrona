@@ -6,7 +6,7 @@
  *
  * @constructor
  */
-lingcod.panel = function(options){
+madrona.panel = function(options){
     
     var defaults = {
         hideOnly: false,
@@ -21,8 +21,8 @@ lingcod.panel = function(options){
         shown: false
     };
     
-    if(lingcod && lingcod.addPanel){
-        lingcod.addPanel(that);
+    if(madrona && madrona.addPanel){
+        madrona.addPanel(that);
     }
     
     var s = '';
@@ -32,10 +32,10 @@ lingcod.panel = function(options){
         s = 'display:none';
     }
     
-    var close = '<a style="'+s+'" class="close" href="#"><img src="'+lingcod.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
+    var close = '<a style="'+s+'" class="close" href="#"><img src="'+madrona.options.media_url+'common/images/close.png" width="17" height="16" /></a>';
     
-    var other_classes = that.options.scrollable ? '' : 'marinemap-panel-noscroll';
-    var el = $('<div style="display:none;" class="marinemap-panel '+other_classes+'"><div class="loadingMask"><span>Loading</span></div><div class="panelMask"></div>'+close+'<div class="content container_12"><div class="panel"></div></div></div>');
+    var other_classes = that.options.scrollable ? '' : 'madrona-panel-noscroll';
+    var el = $('<div style="display:none;" class="madrona-panel '+other_classes+'"><div class="loadingMask"><span>Loading</span></div><div class="panelMask"></div>'+close+'<div class="content container_12"><div class="panel"></div></div></div>');
     el.data('panelComponent', that);
     var anotherel = el;
         
@@ -70,8 +70,8 @@ lingcod.panel = function(options){
     
     that.show = function(animate){
         $(el[0]).show();
-        $(el[0]).find('.marinemap-table').each(function(){
-            lingcod.ui.table(this);
+        $(el[0]).find('.madrona-table').each(function(){
+            madrona.ui.table(this);
         });
         $(el[0]).scrollTop(0);
         that.shown = true;
@@ -97,12 +97,12 @@ lingcod.panel = function(options){
             el.find('.loadingMask span').text(message || "Loading")
             el.find('.loadingMask').show();
         }else{
-            lingcod.showLoadingMask(message);
+            madrona.showLoadingMask(message);
         }
     };
     
     that.stopSpinning = function(){
-        lingcod.hideLoadingMask();
+        madrona.hideLoadingMask();
         el.find('.loadingMask').hide();
     };
     
@@ -127,7 +127,7 @@ lingcod.panel = function(options){
     that.showUrl = function(url, options){
         that.spin(options.load_msg || "Loading");
         $(that).trigger('panelloading');        
-        loader = lingcod.contentLoader($.extend({}, {
+        loader = madrona.contentLoader($.extend({}, {
             url: url,
             activeTabs: options.syncTabs ? getActiveTabs(el) : false,
             error: function(e){ 
@@ -146,7 +146,7 @@ lingcod.panel = function(options){
     };
     
     that.showText = function(text, options){
-        loader = lingcod.contentLoader($.extend({}, {
+        loader = madrona.contentLoader($.extend({}, {
             text: text,
             activeTabs: options.syncTabs ? getActiveTabs(el) : false,
             error: options.error,
@@ -209,7 +209,7 @@ lingcod.panel = function(options){
 // exposes a method for adding stylesheets to the page and extracting 
 // callbacks within the content and providing them with references to the tabs
 // they are to be associated with.
-lingcod.layout.SanitizedContent = function(html){
+madrona.layout.SanitizedContent = function(html){
     
     // these instance variables will be available, but are not 
     // particularly useful. Use instance methods instead.
@@ -270,7 +270,7 @@ lingcod.layout.SanitizedContent = function(html){
 // Adds new style tags to the head of the document that were found in the
 // sanitized fragment. If a style tag has an ID attribute, and has already
 // been added to the document, it won't be added again.
-lingcod.layout.SanitizedContent.prototype.addStylesToDocument = function(){
+madrona.layout.SanitizedContent.prototype.addStylesToDocument = function(){
     for(var i = 0; i < this.styles.length; i++){
         var style = this.styles[i];
         if(!style.id || $('#'+style.id).length < 1){
@@ -294,7 +294,7 @@ lingcod.layout.SanitizedContent.prototype.addStylesToDocument = function(){
 // Extracts all callbacks defined in the html fragment by onPanelShow and
 // onTabShow calls and returns them as an object with keys 'tabs'
 // and 'panel'. 'tabs' is an object keyed 
-lingcod.layout.SanitizedContent.prototype.extractCallbacks = function(){
+madrona.layout.SanitizedContent.prototype.extractCallbacks = function(){
     var returnObj = {
         panel: {},
         tabs: {}
@@ -323,19 +323,19 @@ lingcod.layout.SanitizedContent.prototype.extractCallbacks = function(){
         }        
     }
     
-    lingcod.onShow = function(target, callback){
+    madrona.onShow = function(target, callback){
         addCallback('show', target, callback);
     };
     
-    lingcod.onHide = function(target, callback){
+    madrona.onHide = function(target, callback){
         addCallback('hide', target, callback);
     };
     
-    lingcod.onUnhide = function(target, callback){
+    madrona.onUnhide = function(target, callback){
         addCallback('unhide', target, callback);
     };
     
-    lingcod.beforeDestroy = function(target, callback){
+    madrona.beforeDestroy = function(target, callback){
         if(!callback){
             callback = target;
         }
@@ -346,12 +346,12 @@ lingcod.layout.SanitizedContent.prototype.extractCallbacks = function(){
     jQuery.globalEval(this.js.join(';\n'));
     
     // remove the event registration functions to ensure no overlap
-    // lingcod.onShow = lingcod.onHide = lingod.onUnhide = lingcode.beforeDestroy = false;
+    // madrona.onShow = madrona.onHide = lingod.onUnhide = madronae.beforeDestroy = false;
     
     return returnObj;
 }
 
-lingcod.layout.SanitizedContent.prototype.cleanHtml = function(){
+madrona.layout.SanitizedContent.prototype.cleanHtml = function(){
     return this.html;
 }
 
@@ -363,16 +363,16 @@ lingcod.layout.SanitizedContent.prototype.cleanHtml = function(){
 // (in order) that should be opened before firing the callback.
 // 
 // Examples
-// lingcod.contentLoader('/my/url.html', ['firstTab', 'childTab'], function(domRef){
+// madrona.contentLoader('/my/url.html', ['firstTab', 'childTab'], function(domRef){
 //      $(domRef).detach();
 //      $('#sidebar .content').append(domRef);
 // });
-lingcod.contentLoader = (function(){
+madrona.contentLoader = (function(){
     
     return function(options){
         
         if(!options.target &&(!options.url || !options.text)){
-            throw('lingcod.contentLoader: must specify a target, and a url or text option.');
+            throw('madrona.contentLoader: must specify a target, and a url or text option.');
         }
         
         options.error = options.error || function(){ 
@@ -386,7 +386,7 @@ lingcod.contentLoader = (function(){
         var that = {};
         var callbacks = false;
         var still_staging = true;
-        var staging = $('<div class="marinemap-panel-staging"></div>');
+        var staging = $('<div class="madrona-panel-staging"></div>');
         $(document.body).prepend(staging);
         
         // Finds any onShow callbacks via the mm:onshow data attribute and fires
@@ -423,7 +423,7 @@ lingcod.contentLoader = (function(){
             if(callbacks){
                 throw('callbacks not handled before fetching new content!');
             }
-            var content = new lingcod.layout.SanitizedContent(html);
+            var content = new madrona.layout.SanitizedContent(html);
             content.addStylesToDocument();
             callbacks = content.extractCallbacks();
             return content.cleanHtml();
@@ -435,7 +435,7 @@ lingcod.contentLoader = (function(){
             var tabs = el.find('div.tabs');
             if(tabs.length){
                 var t = tabs.tabs({
-                    'spinner': '<img id="loadingTab" src="'+lingcod.options.media_url+'common/images/small-loader.gif" />loading...', 
+                    'spinner': '<img id="loadingTab" src="'+madrona.options.media_url+'common/images/small-loader.gif" />loading...', 
                     ajaxOptions: {
                         error: function(e){
                             if (e.statusText == 'error') {
@@ -443,7 +443,7 @@ lingcod.contentLoader = (function(){
                                 alert('An error occured attempting to load this tab. ' +
                                       '\nError code ' + e.status +
                                       '\nIf the problem persists, please contact ' +
-                                      'help@marinemap.org for assistance.');
+                                      'help@madrona.org for assistance.');
                             }
                         },
                         dataFilter: dataFilter

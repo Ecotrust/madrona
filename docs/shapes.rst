@@ -1,2 +1,2 @@
-`lingcod.shapes`: Shapefile tools
+`madrona.shapes`: Shapefile tools
 =================================

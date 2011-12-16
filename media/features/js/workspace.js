@@ -1,4 +1,4 @@
-lingcod.features.workspace = (function(){
+madrona.features.workspace = (function(){
     
     function ucase(string){
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -148,7 +148,7 @@ lingcod.features.workspace = (function(){
     }
     
     //
-    // lingcod.feature.workspace constructor
+    // madrona.feature.workspace constructor
     //
     var constructor = function(doc, options){
         // Exported public API
@@ -303,7 +303,7 @@ lingcod.features.workspace = (function(){
                 for(var i = 0; i < selected.length; i++){
                     var model = selected[i];
                     if(typeof model['getType'] !== 'undefined'){
-                        model = lingcod.features.model(model);
+                        model = madrona.features.model(model);
                     }
                     if(jQuery.inArray(model, link.models) === -1){
                         valid_link = false;

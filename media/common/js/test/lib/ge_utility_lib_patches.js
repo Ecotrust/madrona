@@ -3,7 +3,7 @@ module('ge-utility-lib-patches');
 earthAsyncTest("load kml and flyToView", 2, function(ge, gex){
     gex.dom.clearFeatures();
     var oldNorth = ge.getView().getViewportGlobeBounds().getNorth();    
-    gex.util.displayKml('http://marinemap.googlecode.com/svn/trunk/media/common/fixtures/example_camera_view.kml', {'flyToView': true});
+    gex.util.displayKml('http://madrona.googlecode.com/svn/trunk/media/common/fixtures/example_camera_view.kml', {'flyToView': true});
     var found = false;
     setTimeout(function(){
         start();

@@ -16,11 +16,11 @@
     margin-right:10px;
 }
 
-.marinemap-panel form {
+.madrona-panel form {
     
 }
 
-.marinemap-panel form label {
+.madrona-panel form label {
     clear:both;
     display:block;
     font-size:12px;
@@ -32,27 +32,27 @@
     -moz-text-shadow: #FCFAFF 0px 1px 0px;
 }
 
-.marinemap-panel form textarea {
+.madrona-panel form textarea {
 /*    float:right;*/
     width:440px;
 }
 
-.marinemap-panel form textarea, .marinemap-panel form input {
+.madrona-panel form textarea, .madrona-panel form input {
     margin-bottom:10px;
 }
 
-.marinemap-panel form input[type=text] {
+.madrona-panel form input[type=text] {
     width:250px;
 }
 
-.marinemap-panel form input[type=checkbox] {
+.madrona-panel form input[type=checkbox] {
 /*    float:right;*/
 /*    margin-right:20px;*/
     position:relative;
     top:-10px;
 }
 
-.marinemap-panel form p.help_text {
+.madrona-panel form p.help_text {
     font-size:12px;
     margin:0;
     padding:0;
@@ -60,7 +60,7 @@
 }
 
 
-.marinemap-panel form .required label:after {
+.madrona-panel form .required label:after {
     content: " * ";
 }
 
@@ -84,11 +84,11 @@ div.field ul h4 {
     -moz-text-shadow: #FCFAFF 0px 1px 0px;
 }
 
-.marinemap-panel form ul li {
+.madrona-panel form ul li {
     padding-left:40px;
 }
 
-.marinemap-panel form ul input[type=checkbox] {
+.madrona-panel form ul input[type=checkbox] {
     display:relative;
     top:0px;
     margin-left:-20px;
@@ -105,7 +105,7 @@ div.field ul label {
     margin-top:5px;
 }
 
-.marinemap-panel .manipulated p {
+.madrona-panel .manipulated p {
     font-size:12px;
     margin:10px 0px;
 }

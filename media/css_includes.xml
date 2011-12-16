@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	includes.xml
-    List all css files that should be aggregated into the main marinemap.css
+    List all css files that should be aggregated into the main madrona.css
     file here. Be mindful of the order.
 -->
 <stylesheets>

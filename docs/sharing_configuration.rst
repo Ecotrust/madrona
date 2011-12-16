@@ -27,7 +27,7 @@ Groups can be given sharing permissions through the admin interface
 
 Or through python::
 
-    from lingcod.common.utils import enable_sharing
+    from madrona.common.utils import enable_sharing
     from django.contrib.auth.models import Group
 
     mygroup = Group.objects.get(name="My Group")
@@ -55,7 +55,7 @@ A GET request to this URL will give access to this form (assuming that a user wi
 
 Using the sharing functionality
 ********************************
-This section describes the various components of the lingcod API related to sharing.
+This section describes the various components of the madrona API related to sharing.
 
 First, there is the object manager which allows you to quickly obtain a queryset of all objects that have been shared with a user::
 
@@ -64,12 +64,12 @@ First, there is the object manager which allows you to quickly obtain a queryset
 
 The groups_users_sharing_with() utility function returns the groups and users which are currently sharing feature instances with a given user::
 
-    from lingcod.features import groups_users_sharing_with
+    from madrona.features import groups_users_sharing_with
     sharing_with_me = groups_users_sharing_with(user1)
 
 To find out which groups a user can potentially share with, use the user_sharing_groups() utility function::
 
-    from lingcod.features import user_sharing_groups
+    from madrona.features import user_sharing_groups
     my_sharing_groups = user_sharing_groups(user1)
 
 A common use case will be to determine if an object is readable by a user. In other words, is the object owned by OR shared with a given user. You can use the is_viewable() Feature method which returns two items: A boolean indicating if the user has read access and an appropriate HttpResponse object. It's up to the implementation whether or not you return the HttpResponse or not but the common scenario would be to check if the object were readable by the user and, if not, return the HttpResponse. For example::

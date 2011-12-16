@@ -1,4 +1,4 @@
-var lingcod = (function(){
+var madrona = (function(){
 
     var options = {};
     var that = {};    
@@ -38,9 +38,9 @@ var lingcod = (function(){
                 
         resize();
         
-        $('.marinemap-panel').live('click', function(){
-            if(!$(this).hasClass('marinemap-menu-items')){
-                lingcod.menu_items.closeAll();
+        $('.madrona-panel').live('click', function(){
+            if(!$(this).hasClass('madrona-menu-items')){
+                madrona.menu_items.closeAll();
             }
         });
         
@@ -54,7 +54,7 @@ var lingcod = (function(){
                     geFailure(code);
                 });
             setupListeners();
-            lingcod.menu_items.init($('.menu_items'));
+            madrona.menu_items.init($('.menu_items'));
             // makes button clicking a lot more reliable!!
         }else{
             geFailure();
@@ -73,8 +73,8 @@ var lingcod = (function(){
         gex = new GEarthExtensions(ge);
         $(that).trigger('geReady');
         
-        that.geocoder = new lingcod.map.geocoder(gex, $('#flyToLocation'));
-        that.measureTool = new lingcod.measureTool();
+        that.geocoder = new madrona.map.geocoder(gex, $('#flyToLocation'));
+        that.measureTool = new madrona.measureTool();
                 
         $('#measure_distance').click(function(){
             that.measureTool.clear();
@@ -229,7 +229,7 @@ var lingcod = (function(){
             $(that).trigger('earthReady', [ge, gex]);
         }
                 
-        var panel = lingcod.panel({appendTo: $('#panel-holder'), 
+        var panel = madrona.panel({appendTo: $('#panel-holder'), 
             showCloseButton: false});
             
         setupSidebarLinkHandler(panel);
@@ -240,7 +240,7 @@ var lingcod = (function(){
             for(var i=0;i<options.myshapes.length; i++){
                 var url = options.myshapes[i].url;
                 var callback = options.myshapes[i]['callback'];
-                var editor = lingcod.features.kmlEditor({
+                var editor = madrona.features.kmlEditor({
                     gex: gex,
                     appendTo: '#myshapestree',
                     url: options.myshapes[i].url,
@@ -268,7 +268,7 @@ var lingcod = (function(){
         
         $('a.myshapes-link').live('click', function(e){
             e.preventDefault();
-            $('.marinemap-panel:visible a.close').click();
+            $('.madrona-panel:visible a.close').click();
             var href = $(this).attr('href');
             for(var i=0;i<editors.length;i++){
                 var editor = editors[i];
@@ -286,7 +286,7 @@ var lingcod = (function(){
 
         if(options.sharedshapes){
             for(var i=0;i<options.sharedshapes.length; i++){
-                var editor = lingcod.features.kmlEditor({
+                var editor = madrona.features.kmlEditor({
                     gex: gex,
                     appendTo: '#sharedshapestree',
                     url: options.sharedshapes[i],
@@ -323,11 +323,11 @@ var lingcod = (function(){
             var editor = editors[0];
             $('a[href=#MyShapes]').click();
             var info = typeof data === 'object' ? data:jQuery.parseJSON(data);
-            var select = info['X-MarineMap-Select'];
-            var show = info['X-MarineMap-Show'];
-            var untoggle = info['X-MarineMap-UnToggle'];
-            var hint = info['X-MarineMap-Parent-Hint'];
-            // var select = xhr.getResponseHeader('X-MarineMap-Select');
+            var select = info['X-Madrona-Select'];
+            var show = info['X-Madrona-Show'];
+            var untoggle = info['X-Madrona-UnToggle'];
+            var hint = info['X-Madrona-Parent-Hint'];
+            // var select = xhr.getResponseHeader('X-Madrona-Select');
             $(editor.tree).one('kmlLoaded', function(){
                 if(select){
                     editor.tree.clearSelection();
@@ -494,9 +494,9 @@ var lingcod = (function(){
             var url = "/bookmark/tool/";
             // Get public layer state
             var tree = null;
-            for(var i=0; i<lingcod.layers.length; i++){
-                if(lingcod.layers[i].url.indexOf('public') != -1) {
-                    tree = lingcod.layers[i].tree;
+            for(var i=0; i<madrona.layers.length; i++){
+                if(madrona.layers[i].url.indexOf('public') != -1) {
+                    tree = madrona.layers[i].tree;
                     break;
                 }
             }
@@ -592,15 +592,15 @@ var lingcod = (function(){
             resize();
         });
         $('#meta-navigation').click(function(){
-            lingcod.menu_items.closeAll();
+            madrona.menu_items.closeAll();
             $('#panel-holder').find('a.close:visible').click();
         });
         $('#sidebar').bind('mouseup', function(e){
-            lingcod.menu_items.closeAll();
+            madrona.menu_items.closeAll();
             // return false;
         });
         $('#sidebar-mask').click(function(){
-            lingcod.menu_items.closeAll();
+            madrona.menu_items.closeAll();
         });
         $('#sidebar > .ui-tabs-nav li a').click(function(){
             $('#panel-holder').find('a.close:visible').click();
@@ -608,7 +608,7 @@ var lingcod = (function(){
         
         $('#panel-holder').click(function(e){
             if(e.originalTarget === this){
-                lingcod.menu_items.closeAll();
+                madrona.menu_items.closeAll();
                 $('#panel-holder').find('a.close:visible').click();
             }
         });
@@ -632,7 +632,7 @@ var lingcod = (function(){
     };
     
     that.unmaskSidebar = function(){
-        if($('#panel-holder').find('.marinemap-panel:visible').length === 0){
+        if($('#panel-holder').find('.madrona-panel:visible').length === 0){
             $('#panel-holder').hide();
             $('#sidebar').removeClass('masked');
         }
@@ -643,13 +643,13 @@ var lingcod = (function(){
         var lmsg = $('#sidebar-mask').find('span.loadingMsg');
         lmsg.text(msg);
         lmsg.show();
-        lingcod.menu_items.disable();
+        madrona.menu_items.disable();
         $('#sidebar').addClass('masked');
     };
     
     that.hideLoadingMask = function(){
         $('#sidebar-mask').find('span.loadingMsg').hide();
-        lingcod.menu_items.enable();
+        madrona.menu_items.enable();
         that.unmaskSidebar();
     }
     
@@ -681,13 +681,13 @@ var lingcod = (function(){
     
     var setCameraToLocalStorage = function(){
         if(!!window.localStorage){
-            localStorage.setItem('marinemap-camera', gex.view.serialize());
+            localStorage.setItem('madrona-camera', gex.view.serialize());
         }
     };
     
     var setCameraFromLocalStorage = function(){
-        if(!!window.localStorage && localStorage.getItem('marinemap-camera')){
-            gex.view.deserialize(localStorage.getItem('marinemap-camera'));
+        if(!!window.localStorage && localStorage.getItem('madrona-camera')){
+            gex.view.deserialize(localStorage.getItem('madrona-camera'));
             return true;
         }
         return false;

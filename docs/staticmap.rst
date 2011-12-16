@@ -1,6 +1,6 @@
 .. _staticmap:
 
-`lingcod.staticmap`: Static Map Data Layers
+`madrona.staticmap`: Static Map Data Layers
 ===========================================
 
 Customizing the Mapnik Rendering
@@ -27,12 +27,12 @@ Each spatial feature type should provide a classmethod named `mapnik_style` whic
 
 PNG Generic Link
 ****************
-The ``lingcod.features`` app contains a generic link view that leverages staticmap to create PNG Download links for all Features. 
+The ``madrona.features`` app contains a generic link view that leverages staticmap to create PNG Download links for all Features. 
 
 
 Default Datasets
 **********************
-MarineMap ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in <MEDIA_ROOT>/staticmap/data/.
+Madrona ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in <MEDIA_ROOT>/staticmap/data/.
 
 #. Land Mask (Based on the "Global Self-consistent, Hierarchical, High-resolution Shoreline" dataset and clipped to southern california region - full dataset available from `EVS Islands <http://www.evs-islands.com/2007/11/data-global-land-mask-using-vectors.html>`_.
 #. World ports dataset. (`The Geography of Transport Systems <http://www.people.hofstra.edu/geotrans/eng/media.html>`_)

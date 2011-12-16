@@ -5,7 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Include all lingcod app urls. Any urls above will overwrite the common 
+    # Include all madrona app urls. Any urls above will overwrite the common 
     # urls below
-    (r'', include('lingcod.common.urls')),
+    (r'', include('madrona.common.urls')),
 )

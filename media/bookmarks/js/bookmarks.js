@@ -12,7 +12,7 @@ function setupBookmarkFeatureUI() {
             loading_msg: 'Loading Bookmark Form',
             showClose: true
         };
-        var panel = lingcod.editors[0].panel;
+        var panel = madrona.editors[0].panel;
 
         function setupForm(form, options){
             options = options || {};
@@ -43,13 +43,13 @@ function setupBookmarkFeatureUI() {
                         };
                         panelOpts['showCloseButton'] = false;
                         panelOpts['success'] = function(){
-                            lingcod.setupForm = function(){
+                            madrona.setupForm = function(){
                                 alert('error:setupForm called after clearing?');
                             };
                         }
                         // set a setupForm function that can be called by content
                         // of the panel
-                        lingcod.setupForm = function(form){
+                        madrona.setupForm = function(form){
                             setupForm(form);
                         }
                         panel.close();
@@ -63,7 +63,7 @@ function setupBookmarkFeatureUI() {
                             tree.refresh();
                             alert('There was an error saving your feature.');
                         }else{
-                            $(lingcod.editors[0]).trigger('edit', [text, status, req, this]);
+                            $(madrona.editors[0]).trigger('edit', [text, status, req, this]);
                         }
                     }
                 }
@@ -111,10 +111,10 @@ function setupBookmarkFeatureUI() {
         ///////////////////////////END setupForm///////////////////////
 
         // bind the setupForm function that can be called by content of the panel
-        lingcod.setupForm = function(form){
+        madrona.setupForm = function(form){
             setupForm(form);
         }
-        lingcod.menu_items.closeAll();
+        madrona.menu_items.closeAll();
         $('.panelMask').hide();
         panel.showUrl(url, panelOpts);
     });

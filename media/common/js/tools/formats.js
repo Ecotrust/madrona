@@ -2,14 +2,14 @@
  * Creates a new Formats object.
  * @constructor
  */
-lingcod.Formats = function() {
+madrona.Formats = function() {
 };
 
 /**
  * Builds the wkt polygon representation from a geojson polygon representation
  * @param {Geojson} geojson_obj, geojson representation of a polygon
  */
-lingcod.Formats.prototype.geojsonToWkt = function(geojson_obj) {
+madrona.Formats.prototype.geojsonToWkt = function(geojson_obj) {
     var coords = geojson_obj.coordinates;
     var wkt = 'POLYGON(';
     var numPolys = coords.length;
@@ -30,7 +30,7 @@ lingcod.Formats.prototype.geojsonToWkt = function(geojson_obj) {
     return wkt;
 };
 
-lingcod.Formats.prototype.kmlToWkt = function(shape) {
+madrona.Formats.prototype.kmlToWkt = function(shape) {
     var linearRing = shape.getGeometry().getOuterBoundary();
     var wkt = 'POLYGON((';
     for ( var i = 0; i < linearRing.getCoordinates().getLength(); i++ ) {
@@ -47,7 +47,7 @@ lingcod.Formats.prototype.kmlToWkt = function(shape) {
  * Builds the kml placemark representation from a geojson encoded polygon 
  * @param {Geojson} geojson_obj, geojson representation of a polygon
  */
-lingcod.Formats.prototype.geojsonToKmlPlacemark = function(geojson_obj) {
+madrona.Formats.prototype.geojsonToKmlPlacemark = function(geojson_obj) {
     var coords = geojson_obj.coordinates;
     var inner_kml = this.innerKml(coords);
     var kml = '<Placemark> <Style> <LineStyle><color>ffffffff</color><width>2</width></LineStyle> <PolyStyle><color>8000ff00</color></PolyStyle> </Style>'+inner_kml+'</Placemark>';
@@ -59,7 +59,7 @@ lingcod.Formats.prototype.geojsonToKmlPlacemark = function(geojson_obj) {
  * Builds the coordinate related kml from a geojson list of coordinates
  * @param {List} coords, geojson list of coordinates
  */
-lingcod.Formats.prototype.innerKml = function(coords) {
+madrona.Formats.prototype.innerKml = function(coords) {
     var kml = '<Polygon>';
     var numPolys = coords.length;
     for ( var poly = 0; poly < numPolys; poly++ ) {
@@ -82,7 +82,7 @@ lingcod.Formats.prototype.innerKml = function(coords) {
     return kml;
 };
 
-lingcod.Formats.prototype.wktPolyToKml = function(wkt){
+madrona.Formats.prototype.wktPolyToKml = function(wkt){
     var wkt = wkt.replace('POLYGON', '');
     wkt = wkt.replace('SRID=4326;', '');
     wkt = jQuery.trim(wkt.replace('((', '').replace('))', ''));

@@ -13,7 +13,7 @@
 		<altitudeMode>relativeToGround</altitudeMode>
 	</LookAt>
 	<Link>
-		<href>http://marinemap.org/kml_test/cburt/SubstrateProjected-ok/doc.kml</href>
+		<href>http://madrona.org/kml_test/cburt/SubstrateProjected-ok/doc.kml</href>
 	</Link>
 </NetworkLink>
 </kml>

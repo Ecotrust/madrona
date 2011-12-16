@@ -14,7 +14,7 @@ def use_exec(pdir):
 #    execute_from_command_line(['manage.py','install_media'])
 #    execute_from_command_line(['manage.py','synccompress'])
 
-    from lingcod.common.management.commands.install_media import Command as InstallMediaCommand
+    from madrona.common.management.commands.install_media import Command as InstallMediaCommand
     command = InstallMediaCommand()
     # RUNNING COMMANDS CAUSES WIERD SETTINGS STUFF
     # The solution is a horrible, horrible hack
@@ -30,14 +30,14 @@ def use_exec(pdir):
     command.media_root = settings.MEDIA_ROOT
     command.force_compress = True
 
-    lingcod_media_dir = command.get_lingcod_dir()
+    madrona_media_dir = command.get_madrona_dir()
     project_media_dir = command.get_project_dir()
 
-    if os.path.abspath(os.path.realpath(lingcod_media_dir)) == os.path.abspath(os.path.realpath(command.media_root)) or \
+    if os.path.abspath(os.path.realpath(madrona_media_dir)) == os.path.abspath(os.path.realpath(command.media_root)) or \
         os.path.abspath(os.path.realpath(project_media_dir)) == os.path.abspath(os.path.realpath(command.media_root)):
-        raise Exception("Your MEDIA_ROOT setting has to be a directory other than your lingcod or project media folder!")
+        raise Exception("Your MEDIA_ROOT setting has to be a directory other than your madrona or project media folder!")
 
-    command.copy_media_to_root(lingcod_media_dir)
+    command.copy_media_to_root(madrona_media_dir)
     command.copy_media_to_root(project_media_dir)
     # Cant call synccompress so can't do command.compile_media()
     manage_path = os.path.join(pdir,'manage.py')

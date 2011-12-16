@@ -1,0 +1,41 @@
+{% if not is_ajax and not request.is_ajax %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>{% block title %}title not set. use block title.{% endblock %}</title>
+    {% block head %}{% endblock %}
+	<style type="text/css" media="screen">
+		ul.errorlist li {
+			background-color:#C54035;
+			padding:5px;
+			color:white;
+		}
+	</style>
+    <script type="text/javascript" charset="utf-8">
+        if(typeof madrona === 'undefined'){
+            window.madrona = {
+                setupForm: function(){},
+                onShow: function(){},
+                onHide: function(){},
+                onUnhide: function(){},
+                beforeDestroy: function(){}
+            }
+        }
+    </script>
+  </head>
+  <body>    
+{% endif %}
+    <div class="panel">
+      {% block panel %}
+        <h1>Example Panel</h1>
+        <p>
+          Override block "panel" to replace this content.
+        </p>
+      {% endblock %}      
+    </div>
+{% if not is_ajax and not request.is_ajax %}
+  </body>
+</html>    
+{% endif %}

@@ -1,2 +1,2 @@
-`lingcod.geographic_report`
+`madrona.geographic_report`
 =================================

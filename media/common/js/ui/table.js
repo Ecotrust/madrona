@@ -1,19 +1,19 @@
-lingcod.ui = {};
+madrona.ui = {};
 
-lingcod.ui.table = (function(){
+madrona.ui.table = (function(){
     
     
     return function(element){
         var element = $(element);
         
-        if(element.hasClass('marinemap-table')){
+        if(element.hasClass('madrona-table')){
             if(element.hasClass('processed')){
                 return;
             }
             
             element.addClass('processed');
             
-            if(element.hasClass('marinemap-table-zebra')){
+            if(element.hasClass('madrona-table-zebra')){
                 var odd = false;
                 element.find('tbody tr').each(function(){
                     if(odd){
@@ -23,14 +23,14 @@ lingcod.ui.table = (function(){
                 });
             }
             if(element.find('span.hover').length > 0){
-                element.addClass('marinemap-table-hover');
+                element.addClass('madrona-table-hover');
             }
             if(element.find('span.popup').length > 0){
-                element.addClass('marinemap-table-popup');
+                element.addClass('madrona-table-popup');
             }
             
         }else{
-            throw('element does not have class marinemap-table');
+            throw('element does not have class madrona-table');
         }
     }
 })();

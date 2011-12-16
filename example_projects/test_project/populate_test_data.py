@@ -10,7 +10,7 @@ setup_environ(settings)
 from mlpa.models import *
 from django.contrib.gis.geos import GEOSGeometry 
 from django.contrib.auth.models import User, Group
-from lingcod.common.utils import enable_sharing
+from madrona.common.utils import enable_sharing
 
 def main():
     user = User.objects.get(username='cburt')
@@ -80,7 +80,7 @@ def main():
     try:
         user2 = User.objects.get(username="user2")
     except:
-        user2 = User.objects.create_user('user2', 'test@marinemap.org', password='pass')
+        user2 = User.objects.create_user('user2', 'test@madrona.org', password='pass')
 
     try:
         group1 = Group.objects.get(name="Group1")

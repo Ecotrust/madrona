@@ -7,4 +7,4 @@ As you develop django models, it quickly becomes apparent that syncing changes b
 
 Using ``south``, you can create migrations - python code which describes how to alter the database schema and contents to keep up with changes in your model definitions.
 
-For full details, please check out the `MarineMap Migration Wiki Page <http://code.google.com/p/marinemap/wiki/Migration>`_ or the `south documentation <http://south.aeracode.org/docs/about.html>`_.
+For full details, please check out the `Madrona Migration Wiki Page <http://code.google.com/p/madrona/wiki/Migration>`_ or the `south documentation <http://south.aeracode.org/docs/about.html>`_.

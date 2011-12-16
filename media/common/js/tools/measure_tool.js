@@ -2,7 +2,7 @@
 * Unit conversion table used by measureTool to convert metric units to others,
 * and to select appropriate units based on size of value.
 */
-lingcod.measureConvTable = [
+madrona.measureConvTable = [
     [ 'metric', 
         [ // distance measures
             ['m', 1, 500 ], // switch to km at 1/2 km
@@ -40,7 +40,7 @@ lingcod.measureConvTable = [
  *    
  * @constructor
  */
-lingcod.measureTool = function() {
+madrona.measureTool = function() {
     this.placemark = null;
     this.distTarget = null;
     this.areaTarget = null;
@@ -52,7 +52,7 @@ lingcod.measureTool = function() {
     this.distance_unit = 'm';
 };
 
-lingcod.measureTool.prototype.clear = function() 
+madrona.measureTool.prototype.clear = function() 
 { 
     this.area = 0.0;
     this.distance = 0.0;
@@ -82,7 +82,7 @@ lingcod.measureTool.prototype.clear = function()
  * Set the measure tool's system of measurement for reporting (still uses metric internally)
  * @param {String} units The name of the system of measure, i.e. 'english', 'metric', 'nautical'
  */
-lingcod.measureTool.prototype.setUnits = function( units ) {
+madrona.measureTool.prototype.setUnits = function( units ) {
     this.units = units;
     this.updateDistance();
 };
@@ -92,7 +92,7 @@ lingcod.measureTool.prototype.setUnits = function( units ) {
  * @param {GEarthExtensions} gex The handle to the GEarthExtensions object
  * @param {String} areaSpanId The id of an HTML tag whose innerHTML will be overwritten with measure results.
  */
-lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId ) 
+madrona.measureTool.prototype.measureArea = function( gex, areaSpanId ) 
 {
     var self = this;
     this.gex = gex;
@@ -132,7 +132,7 @@ lingcod.measureTool.prototype.measureArea = function( gex, areaSpanId )
  * @param {GEarthExtensions} gex The handle to the GEarthExtensions object
  * @param {String} distSpanId The id of an HTML tag whose innerHTML will be overwritten with measure results.
  */
-lingcod.measureTool.prototype.measureDistance = function( gex, distSpanId ) 
+madrona.measureTool.prototype.measureDistance = function( gex, distSpanId ) 
 {    
     var self = this;
     this.gex = gex;
@@ -173,7 +173,7 @@ lingcod.measureTool.prototype.measureDistance = function( gex, distSpanId )
  * @param {Number} value The metric value to convert to the measureTool's currently set units.
  * @return [{Number}, {String}] The converted value and its units.
  */
-lingcod.measureTool.prototype.convertMetricValue = function( measure_type_str, value )
+madrona.measureTool.prototype.convertMetricValue = function( measure_type_str, value )
 {
     var SYSTEM = 0;
     var DISTANCE_MAPPINGS = 1;
@@ -187,17 +187,17 @@ lingcod.measureTool.prototype.convertMetricValue = function( measure_type_str, v
     if ( measure_type_str == 'area' )
         measure_type = AREA_MAPPINGS;
     
-    for ( var system_iter = 0; system_iter < lingcod.measureConvTable.length; system_iter++ )
+    for ( var system_iter = 0; system_iter < madrona.measureConvTable.length; system_iter++ )
     {
-        if ( lingcod.measureConvTable[system_iter][SYSTEM] == this.units )
+        if ( madrona.measureConvTable[system_iter][SYSTEM] == this.units )
         {
-            for ( var unit_iter = 0; unit_iter < lingcod.measureConvTable[system_iter][measure_type].length; unit_iter++ )
+            for ( var unit_iter = 0; unit_iter < madrona.measureConvTable[system_iter][measure_type].length; unit_iter++ )
             {
-                if ( value < lingcod.measureConvTable[system_iter][measure_type][unit_iter][RANGE_MAX] 
-                    || lingcod.measureConvTable[system_iter][measure_type][unit_iter][RANGE_MAX] == null )
+                if ( value < madrona.measureConvTable[system_iter][measure_type][unit_iter][RANGE_MAX] 
+                    || madrona.measureConvTable[system_iter][measure_type][unit_iter][RANGE_MAX] == null )
                     return [ value * 
-                            lingcod.measureConvTable[system_iter][measure_type][unit_iter][CONVERSION_FACTOR],
-                        lingcod.measureConvTable[system_iter][measure_type][unit_iter][UNIT] ];
+                            madrona.measureConvTable[system_iter][measure_type][unit_iter][CONVERSION_FACTOR],
+                        madrona.measureConvTable[system_iter][measure_type][unit_iter][UNIT] ];
             }
         }
     }
@@ -209,7 +209,7 @@ lingcod.measureTool.prototype.convertMetricValue = function( measure_type_str, v
  * Calculate the current measurement(s) based on the state of the measureTool's placemark object.
  * Writes values to target HTML object and stores internally.
  */
-lingcod.measureTool.prototype.updateDistance = function() 
+madrona.measureTool.prototype.updateDistance = function() 
 { 
     if ( this.areaTarget ) 
     {

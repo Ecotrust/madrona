@@ -1,6 +1,6 @@
 .. _manipulators:
 
-`lingcod.manipulators`: Manipulators
+`madrona.manipulators`: Manipulators
 ====================================
 
 What is a Manipulator?
@@ -14,7 +14,7 @@ any changes made to their geometry and given the chance to accept or reject thos
 changes or to modify the parameters that went into the manipulations.
 
 Use cases might include clipping an MPA to the study region or to a specified 
-graticule.  Both of these manipulations are already included in MarineMap and 
+graticule.  Both of these manipulations are already included in Madrona and 
 can easily be accessed by additional applications.  Instructions for 
 accessing such built-in manipulators follow, as do instructions for adding your 
 own manipulators.  
@@ -36,8 +36,8 @@ a line similar to the following:
 
     class Options:
         manipulators = [ 
-           'lingcod.manipulators.maniplators.ClipToStudyRegionManipulator' , 
-           'lingcod.manipulators.maniplators.EastWestManipulator' , 
+           'madrona.manipulators.maniplators.ClipToStudyRegionManipulator' , 
+           'madrona.manipulators.maniplators.EastWestManipulator' , 
         ]
  
 In the above example from the ``simple_app/models.py`` file, we can see that 2 manipulators 
@@ -175,7 +175,7 @@ Things to keep in mind as you create your own manipulators:
 ..
 
 We invite you to use the manipulator provided by simple_app (or any of our manipulators defined in 
-``lingcod/manipulators``) as a template for generating your own manipulators.  
+``madrona/manipulators``) as a template for generating your own manipulators.  
 
 .. note::
 
@@ -193,8 +193,8 @@ In this case we can specify `optional_manipulators` in the MPA model Options.
 .. code-block:: python 
 
     class Options:
-        manipulators = [ 'lingcod.manipulators.manipulators.ClipToStudyRegionManipulator', ]
-        optional_manipulators = ['lingcod.manipulators.manipulators.EastWestManipulator', ]
+        manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegionManipulator', ]
+        optional_manipulators = ['madrona.manipulators.manipulators.EastWestManipulator', ]
 
 On the user-interface side, when a user creates or edits a shape, there will be a form with checkboxes allowing them to select from these optional manipulators. 
 
@@ -210,15 +210,15 @@ If there are no required manipulators, you must still provide an empty list for 
     class Options:
         manipulators = []
         optional_manipulators = [ 
-           'lingcod.manipulators.maniplators.ClipToStudyRegionManipulator' , 
-           'lingcod.manipulators.maniplators.EastWestManipulator' , 
+           'madrona.manipulators.maniplators.ClipToStudyRegionManipulator' , 
+           'madrona.manipulators.maniplators.EastWestManipulator' , 
         ]
 
 If the user doesn't select any other optional manipulators and there are none required, a special case is triggered. We can't allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the `NullManipulator` is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should *not* appear in either your manipulators or optional_manipulators lists. 
 
 .. note::
 
-   There are several steps that a marinemap-based project must take in order to ensure that optional manipulators function correctly.
+   There are several steps that a madrona-based project must take in order to ensure that optional manipulators function correctly.
 
    First, make sure that the MPA superclass is migrated to reflect the MPA schema change.
    Secondly, make sure to run manage.py install_media

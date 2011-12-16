@@ -1,12 +1,12 @@
 .. _loadshp:
 
-`lingcod.loadshp`: Load Shapefile (loadshp) App
+`madrona.loadshp`: Load Shapefile (loadshp) App
 ============================
-The `lingcod.loadshp` app provides a mechanism to upload shapefiles, validate their contents and convert to KML. This can be used by the marinemap application to allow uploading shapefiles in lieu of digitizing a shape (useful in cases where a complex boundary may have already been developed outside of MarineMap).
+The `madrona.loadshp` app provides a mechanism to upload shapefiles, validate their contents and convert to KML. This can be used by the madrona application to allow uploading shapefiles in lieu of digitizing a shape (useful in cases where a complex boundary may have already been developed outside of Madrona).
 
-The loadshp app borrows heavily from the django_shapes project but has been modified/extended to fit the needs of MarineMap.
+The loadshp app borrows heavily from the django_shapes project but has been modified/extended to fit the needs of Madrona.
 
-Integration with MarineMap
+Integration with Madrona
 --------------------------
 
 In order to enable the loadshp functionality, add the following to your model Options class::

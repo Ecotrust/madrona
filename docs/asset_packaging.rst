@@ -9,13 +9,13 @@ javascript and css components into multiple files. The problem with this
 approach is that http requests are costly and loading many css and js files 
 increases the loading time of the app.
 
-MarineMap utilizes the `django-compress <http://code.google.com/p/django-compress/>`_ 
+Madrona utilizes the `django-compress <http://code.google.com/p/django-compress/>`_ 
 app not only to concatenate these files but compress them by removing 
 comments and whitespace.
 
 Where to put files
 ******************
-Each django app in the ``lingcod`` module has a folder under ``media/``, that 
+Each django app in the ``madrona`` module has a folder under ``media/``, that 
 contains folders for javascript, css, and images. Also there is a folder for 
 external libraries called ``lib``, and a folder for testing javascript::
 
@@ -34,7 +34,7 @@ How to add files to the build
 *****************************
 There are two ways to incorporate your javascript and css asset in the build.
 
-incorporating javascript and css stylesheets into lingcod
+incorporating javascript and css stylesheets into madrona
 ---------------------------------------------------------
 
 To include your files in the main javascript and css packages, you'll need to
@@ -49,7 +49,7 @@ add them to ``js_includes.xml`` and ``css_includes.xml``.
     <?xml version="1.0" encoding="UTF-8"?>
     <!--
     	includes.xml
-        List all css files that should be aggregated into the main marinemap.css
+        List all css files that should be aggregated into the main madrona.css
         file here. Be mindful of the order.
     -->
     <stylesheets>
@@ -65,7 +65,7 @@ add them to ``js_includes.xml`` and ``css_includes.xml``.
     <!--
     	includes.xml
         Edit this file to add javascript files that need to be included in the
-        main marinemap.js distribution, as well as point to appropriate tests.
+        main madrona.js distribution, as well as point to appropriate tests.
         Please avoid adding third party libs where they are available from a CDN        
         like Google's ajaxlibs
     -->
@@ -85,7 +85,7 @@ on the client code without a server running.
 project-specific javascript and css files
 -----------------------------------------
 
-For implementations of MarineMap for specific geographies, keep these files in 
+For implementations of Madrona for specific geographies, keep these files in 
 the media folder in a project file tree. Within the project's settings.py 
 file, modify the ``COMPRESS_JS`` and ``COMPRESS_CSS`` dictionaries like so:
 
@@ -117,7 +117,7 @@ template tags:
 
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-        <title>MarineMap Decision Support Tool</title>
+        <title>Madrona Decision Support Tool</title>
         {% load compressed %}
         {% compressed_css 'application' %}
         {% compressed_js 'application' %}
@@ -172,7 +172,7 @@ This page loads all the same files that django-compress packages, but loads
 each file individually and dynamically, so you don't need a server running. In
 fact, one can simple browse to the mercurial repository and run tests from there!
 
-`<http://marinemap.googlecode.com/hg/media/tests.html>`_
+`<http://madrona.googlecode.com/hg/media/tests.html>`_
 
 This method *will not test whether the code runs after packaging*. For that
 reason it is suitable for quick use during development but cannot adequately
