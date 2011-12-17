@@ -1,5 +1,3 @@
-syntax: glob
-
 *.pyc
 marinemap.egg-info*
 marinemap.r*.css
