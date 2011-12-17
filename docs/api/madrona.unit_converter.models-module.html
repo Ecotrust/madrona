@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.unit_converter.models</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.unit_converter-module.html">Package&nbsp;unit_converter</a> ::
+        Module&nbsp;models
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module models</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html">source&nbsp;code</a></span></p>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="srid_list"></a><span class="summary-sig-name">srid_list</span>()</span><br />
+      Return a list of numberic srids by looking in the spatial_ref_sys 
+      table of the db.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#srid_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="units_from_srid"></a><span class="summary-sig-name">units_from_srid</span>(<span class="summary-sig-arg">srid</span>)</span><br />
+      Get the linear units name from the srid definition.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#units_from_srid">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="area_unit_code_from_srid_unit"></a><span class="summary-sig-name">area_unit_code_from_srid_unit</span>(<span class="summary-sig-arg">srid_unit</span>)</span><br />
+      Look at Area.LALIAS (a dictionary of lower case aliases found in srid
+      definitions for units) and return the proper unit abbreviation used 
+      in the django.contrib.gis.measure.Area class.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_unit_code_from_srid_unit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="distance_unit_code_from_srid_unit"></a><span class="summary-sig-name">distance_unit_code_from_srid_unit</span>(<span class="summary-sig-arg">srid_unit</span>)</span><br />
+      Look at Distance.LALIAS (a dictionary of lower case aliases found in 
+      srid definitions for units) and return the proper unit abbreviation 
+      used in the django.contrib.gis.measure.Distance class.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#distance_unit_code_from_srid_unit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#area_unit_code_from_srid" class="summary-sig-name">area_unit_code_from_srid</a>(<span class="summary-sig-arg">srid</span>)</span><br />
+      Return the unit code used in django.contrib.gis.measure.Area to 
+      represent the units of the given srid.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_unit_code_from_srid">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#distance_unit_code_from_srid" class="summary-sig-name">distance_unit_code_from_srid</a>(<span class="summary-sig-arg">srid</span>)</span><br />
+      Return the unit code used in django.contrib.gis.measure.Distance to 
+      represent the units of the given srid.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#distance_unit_code_from_srid">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="units_list"></a><span class="summary-sig-name">units_list</span>()</span><br />
+      Return a non repeating list of all the linear units from the 
+      spatial_ref_sys table.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#units_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="units_count_dict"></a><span class="summary-sig-name">units_count_dict</span>()</span><br />
+      Return a dictionary with linear units as keys and a count of how many
+      projections in the spatial_ref_sys table use those units as values.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#units_count_dict">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#units" class="summary-sig-name">units</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the name of the units, derived from the projection, for a 
+      given geometry.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#distance_object" class="summary-sig-name">distance_object</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the django.contrib.gis.measure.Distance object for a given 
+      geometry with origin units determined by the geometry's srid.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#distance_object">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#area_object" class="summary-sig-name">area_object</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the django.contrib.gis.measure.Area object for a given 
+      geometry with origin units determined by the geometry's srid.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_object">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#add_dist_meth" class="summary-sig-name">add_dist_meth</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">unit</span>)</span><br />
+      Add a method to cls called length_UNIT (where UNIT is the value of 
+      unit) that will return the length in those units.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_dist_meth">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#add_area_meth" class="summary-sig-name">add_area_meth</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">unit</span>)</span><br />
+      Add a method to cls called area_UNIT (where UNIT is the value of 
+      unit) that will return the length in those units.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_area_meth">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#add_conversion_methods_to_GEOSGeometry" class="summary-sig-name">add_conversion_methods_to_GEOSGeometry</a>()</span><br />
+      Add a bunch of methods to the GEOSGeometry object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_conversion_methods_to_GEOSGeometry">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="convert_float_to_length_display_units"></a><span class="summary-sig-name">convert_float_to_length_display_units</span>(<span class="summary-sig-arg">float_value</span>)</span><br />
+      Given a float value, this method will convert from the units found in
+      settings.GEOMETRY_DB_SRID to the units defined in 
+      settings.DISPLAY_LENGTH_UNITS.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#convert_float_to_length_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="convert_float_to_area_display_units"></a><span class="summary-sig-name">convert_float_to_area_display_units</span>(<span class="summary-sig-arg">float_value</span>)</span><br />
+      Given a float value, this method will convert from the units found in
+      settings.GEOMETRY_DB_SRID to the units defined in 
+      settings.DISPLAY_AREA_UNITS.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#convert_float_to_area_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#geometry_length_in_display_units" class="summary-sig-name">geometry_length_in_display_units</a>(<span class="summary-sig-arg">geom</span>)</span><br />
+      For a given geometry, return the geometry length in the units 
+      specified as settings.DISPLAY_LENGTH_UNITS.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#geometry_length_in_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.unit_converter.models-module.html#geometry_area_in_display_units" class="summary-sig-name">geometry_area_in_display_units</a>(<span class="summary-sig-arg">geom</span>)</span><br />
+      For a given geometry, return the geometry area in the units specified
+      as settings.DISPLAY_AREA_UNITS.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#geometry_area_in_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="length_in_display_units"></a><span class="summary-sig-name">length_in_display_units</span>(<span class="summary-sig-arg">geom_or_num</span>)</span><br />
+      Take either a geometry or a numeric length value and convert to 
+      display units.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#length_in_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="area_in_display_units"></a><span class="summary-sig-name">area_in_display_units</span>(<span class="summary-sig-arg">geom_or_num</span>)</span><br />
+      Take either a geometry or a numeric area value and convert to display
+      units.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_in_display_units">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="area_unit_code_from_srid"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">area_unit_code_from_srid</span>(<span class="sig-arg">srid</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_unit_code_from_srid">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the unit code used in django.contrib.gis.measure.Area to 
+  represent the units of the given srid.  For example srid 3310 (California
+  Albers) has a linear unit value of 'metre'.  
+  django.contrib.gis.measure.Area uses 'sq_m' to represent square meters so
+  that's what this method will return for srid 3310.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="distance_unit_code_from_srid"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">distance_unit_code_from_srid</span>(<span class="sig-arg">srid</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#distance_unit_code_from_srid">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the unit code used in django.contrib.gis.measure.Distance to 
+  represent the units of the given srid.  For example srid 3310 (California
+  Albers) has a linear unit value of 'metre'.  
+  django.contrib.gis.measure.Distance uses 'm' to represent meters so 
+  that's what this method will return for srid 3310.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="units"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">units</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#units">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the name of the units, derived from the projection, for a 
+  given geometry.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="distance_object"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">distance_object</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#distance_object">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the django.contrib.gis.measure.Distance object for a given 
+  geometry with origin units determined by the geometry's srid.  This 
+  object can be evaluated by looking at the attribute named after the 
+  proper units. For instance if you want to see the distance in miles, call
+  distance_object.mi</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="area_object"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">area_object</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#area_object">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the django.contrib.gis.measure.Area object for a given geometry
+  with origin units determined by the geometry's srid. This object can be 
+  evaluated by looking at the attribute named after the proper units. For 
+  instance if you want to see the area in square miles, call 
+  distance_object.sq_mi</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="add_dist_meth"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_dist_meth</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">unit</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_dist_meth">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a method to cls called length_UNIT (where UNIT is the value of 
+  unit) that will return the length in those units.  unit must be one of 
+  the values found in django.contrib.gis.measure.Distance.UNITS  Most 
+  common will be mi, m, km, nm, ft</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="add_area_meth"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_area_meth</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">unit</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_area_meth">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a method to cls called area_UNIT (where UNIT is the value of unit)
+  that will return the length in those units.  unit must be one of the 
+  values found in django.contrib.gis.measure.Area.UNITS  Most common will 
+  be sq_mi, sq_m, sq_km, sq_nm, sq_ft</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="add_conversion_methods_to_GEOSGeometry"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_conversion_methods_to_GEOSGeometry</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#add_conversion_methods_to_GEOSGeometry">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a bunch of methods to the GEOSGeometry object.  After running this
+  method once, all subsequent geos geometries will have methods to report 
+  out their length and area in any of the units listed in Area.UNITS or 
+  Distance.UNITS.  If you have a polygon called poly and want its length in
+  mi, you can just call poly.length_mi. If you want the area in square 
+  centimeters, call poly.area_sq_cm.  Additionally, you can call 
+  poly.area_in_display_units or poly.length_in_display_units and get the 
+  measurments in the units specified in settings.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="geometry_length_in_display_units"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">geometry_length_in_display_units</span>(<span class="sig-arg">geom</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#geometry_length_in_display_units">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>For a given geometry, return the geometry length in the units 
+  specified as settings.DISPLAY_LENGTH_UNITS. If the geometry has an srid, 
+  assume the origin units are the ones appropriate to that srid.  If there 
+  is no assigned srid, assume the srid is the one in 
+  settings.GEOMETRY_DB_SRID.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="geometry_area_in_display_units"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">geometry_area_in_display_units</span>(<span class="sig-arg">geom</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.unit_converter.models-pysrc.html#geometry_area_in_display_units">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>For a given geometry, return the geometry area in the units specified 
+  as settings.DISPLAY_AREA_UNITS. If the geometry has an srid, assume the 
+  origin units are the ones appropriate to that srid.  If there is no 
+  assigned srid, assume the srid is the one in 
+  settings.GEOMETRY_DB_SRID.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:15 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

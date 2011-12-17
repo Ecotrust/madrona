@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.uaparser.clientos</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.uaparser-module.html">Package&nbsp;uaparser</a> ::
+        Module&nbsp;clientos
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.uaparser.clientos-module.html">Module madrona.common.uaparser.clientos</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">Based on http://vaig.be/2009/03/getting-client-os-in-django.html</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="client_os"></a><div id="client_os-def"><a name="L7"></a><tt class="py-lineno"> 7</tt> <a class="py-toggle" href="#" id="client_os-toggle" onclick="return toggle('client_os');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.uaparser.clientos-module.html#client_os">client_os</a><tt class="py-op">(</tt><tt class="py-param">user_agent</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="client_os-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="client_os-expanded"><a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt class="py-docstring">''' </tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">    Context processor for Django that provides operating system</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">    information base on HTTP user agent.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">    A user agent looks like (line break added):</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">    "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.6) \</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">    Gecko/2009020409 Iceweasel/3.0.6 (Debian-3.0.6-1)"</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">    '''</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">    <tt class="py-comment"># Mozilla/5.0</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">=</tt> <tt class="py-string">'(?P&lt;application_name&gt;\w+)/(?P&lt;application_version&gt;[\d\.]+)'</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">' \('</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-comment"># X11</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'(?P&lt;compatibility_flag&gt;\w+)'</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'; '</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">    <tt class="py-comment"># U </tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-string">"U;"</tt> <tt class="py-keyword">in</tt> <tt class="py-name">user_agent</tt> <tt class="py-keyword">or</tt> <tt class="py-string">"MSIE"</tt> <tt class="py-keyword">in</tt> <tt class="py-name">user_agent</tt><tt class="py-op">:</tt>   <tt class="py-comment"># some UA strings leave out the U;</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'(?P&lt;version_token&gt;[\w .]+)'</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'; '</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">    <tt class="py-comment"># Linux i686</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'(?P&lt;platform_token&gt;[\w ._]+)'</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">    <tt class="py-comment"># anything else</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-name">regex</tt> <tt class="py-op">+=</tt> <tt class="py-string">'; .*'</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">    <tt id="link-0" class="py-name" targets="Variable madrona.intersection.models.ResultCache.result=madrona.intersection.models.ResultCache-class.html#result,Method madrona.manipulators.manipulators.BaseManipulator.result()=madrona.manipulators.manipulators.BaseManipulator-class.html#result"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-0', 'result', 'link-0');">result</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">match</tt><tt class="py-op">(</tt><tt class="py-name">regex</tt><tt class="py-op">,</tt> <tt class="py-name">user_agent</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-1" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-1', 'result', 'link-0');">result</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-name">result_dict</tt> <tt class="py-op">=</tt> <tt id="link-2" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-2', 'result', 'link-0');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">groupdict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-name">full_platform</tt> <tt class="py-op">=</tt> <tt class="py-name">result_dict</tt><tt class="py-op">[</tt><tt class="py-string">'platform_token'</tt><tt class="py-op">]</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">        <tt class="py-name">platform_values</tt> <tt class="py-op">=</tt> <tt class="py-name">full_platform</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">platform_values</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">'Windows'</tt><tt class="py-op">,</tt> <tt class="py-string">'Linux'</tt><tt class="py-op">,</tt> <tt class="py-string">'Mac'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-name">platform_values</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">platform_values</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">'Mac'</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">            <tt class="py-comment"># Mac is given as "PPC Mac" or "Intel Mac"</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-name">platform_values</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-comment"># Total hack to avoid dealing with regex nightmares</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-string">'mac'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">user_agent</tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">            <tt class="py-name">full_platform</tt> <tt class="py-op">=</tt> <tt class="py-string">"Intel Mac 10.6"</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-string">'Mac'</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-string">'windows'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">user_agent</tt><tt class="py-op">.</tt><tt class="py-name">lower</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">            <tt class="py-name">full_platform</tt> <tt class="py-op">=</tt> <tt class="py-string">"Windows"</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-string">'Windows'</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">            <tt class="py-name">full_platform</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">            <tt class="py-name">platform</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">{</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-string">'full_platform'</tt><tt class="py-op">:</tt> <tt class="py-name">full_platform</tt><tt class="py-op">,</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-string">'platform'</tt><tt class="py-op">:</tt> <tt class="py-name">platform</tt><tt class="py-op">,</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">    <tt class="py-op">}</tt> </tt>
+</div><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:20 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

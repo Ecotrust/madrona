@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.loadshp.views</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.loadshp-module.html">Package&nbsp;loadshp</a> ::
+        Module&nbsp;views
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.loadshp.views-module.html">Module madrona.loadshp.views</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">http</tt> <tt class="py-keyword">import</tt> <tt class="py-name">HttpResponse</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">shortcuts</tt> <tt class="py-keyword">import</tt> <tt class="py-name">render_to_response</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module madrona.analysistools.utils=madrona.analysistools.utils-module.html,Module madrona.common.utils=madrona.common.utils-module.html,Package madrona.openid.utils=madrona.openid.utils-module.html"><a title="madrona.analysistools.utils
+madrona.common.utils
+madrona.openid.utils" class="py-name" href="#" onclick="return doclink('link-0', 'utils', 'link-0');">utils</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">simplejson</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Context</tt><tt class="py-op">,</tt> <tt class="py-name">RequestContext</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module madrona.pg_spacing.loader=madrona.pg_spacing.loader-module.html,Module madrona.spacing.loader=madrona.spacing.loader-module.html"><a title="madrona.pg_spacing.loader
+madrona.spacing.loader" class="py-name" href="#" onclick="return doclink('link-1', 'loader', 'link-1');">loader</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">get_template</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-2', 'madrona', 'link-2');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package madrona.common=madrona.common-module.html"><a title="madrona.common" class="py-name" href="#" onclick="return doclink('link-3', 'common', 'link-3');">common</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Module madrona.common.default_mimetypes=madrona.common.default_mimetypes-module.html"><a title="madrona.common.default_mimetypes" class="py-name" href="#" onclick="return doclink('link-4', 'default_mimetypes', 'link-4');">default_mimetypes</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">mimetypes</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-5" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-5', 'madrona', 'link-2');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="madrona.common" class="py-name" href="#" onclick="return doclink('link-6', 'common', 'link-3');">common</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="madrona.analysistools.utils
+madrona.common.utils
+madrona.openid.utils" class="py-name" href="#" onclick="return doclink('link-7', 'utils', 'link-0');">utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name" targets="Function madrona.common.utils.kml_errors()=madrona.common.utils-module.html#kml_errors"><a title="madrona.common.utils.kml_errors" class="py-name" href="#" onclick="return doclink('link-8', 'kml_errors', 'link-8');">kml_errors</a></tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-9" class="py-name" targets="Module madrona.analysistools.forms=madrona.analysistools.forms-module.html,Module madrona.bookmarks.forms=madrona.bookmarks.forms-module.html,Module madrona.common.forms=madrona.common.forms-module.html,Module madrona.common.registration_backend.forms=madrona.common.registration_backend.forms-module.html,Module madrona.features.forms=madrona.features.forms-module.html,Module madrona.intersection.forms=madrona.intersection.forms-module.html,Module madrona.loadshp.forms=madrona.loadshp.forms-module.html,Module madrona.manipulators.forms=madrona.manipulators.forms-module.html,Module madrona.openid.forms=madrona.openid.forms-module.html,Module madrona.shapes.forms=madrona.shapes.forms-module.html,Module madrona.user_profile.forms=madrona.user_profile.forms-module.html"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-9', 'forms', 'link-9');">forms</a></tt> <tt class="py-keyword">import</tt> <tt id="link-10" class="py-name" targets="Class madrona.loadshp.forms.UploadForm=madrona.loadshp.forms.UploadForm-class.html,Class madrona.shapes.forms.UploadForm=madrona.shapes.forms.UploadForm-class.html"><a title="madrona.loadshp.forms.UploadForm
+madrona.shapes.forms.UploadForm" class="py-name" href="#" onclick="return doclink('link-10', 'UploadForm', 'link-10');">UploadForm</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="load_single_shp"></a><div id="load_single_shp-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="load_single_shp-toggle" onclick="return toggle('load_single_shp');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.views-module.html#load_single_shp">load_single_shp</a><tt class="py-op">(</tt><tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="load_single_shp-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="load_single_shp-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">    GET returns a form to upload a zipped shp</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">    POST takes the zip, validates that it is a single-feature poly shp and returns KML </tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">    <tt id="link-11" class="py-name" targets="Variable madrona.features.forms.FeatureForm.user=madrona.features.forms.FeatureForm-class.html#user,Variable madrona.features.models.Feature.user=madrona.features.models.Feature-class.html#user,Variable madrona.group_management.models.GroupRequest.user=madrona.group_management.models.GroupRequest-class.html#user,Variable madrona.openid.models.UserAssociation.user=madrona.openid.models.UserAssociation-class.html#user,Variable madrona.user_profile.models.UserProfile.user=madrona.user_profile.models.UserProfile-class.html#user"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-11', 'user', 'link-11');">user</a></tt> <tt class="py-op">=</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-12', 'user', 'link-11');">user</a></tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-13" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-13', 'user', 'link-11');">user</a></tt><tt class="py-op">.</tt><tt class="py-name">is_anonymous</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-keyword">not</tt> <tt id="link-14" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-14', 'user', 'link-11');">user</a></tt><tt class="py-op">.</tt><tt class="py-name">is_authenticated</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">HttpResponse</tt><tt class="py-op">(</tt><tt class="py-string">'You must be logged in'</tt><tt class="py-op">,</tt> <tt class="py-name">status</tt><tt class="py-op">=</tt><tt class="py-number">401</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable madrona.analysistools.examples.BufferPoint.Options.form=madrona.analysistools.examples.BufferPoint.Options-class.html#form,Variable madrona.features.tests.CreateFormTestFeature.Options.form=madrona.features.tests.CreateFormTestFeature.Options-class.html#form,Variable madrona.features.tests.CreateTestFeature.Options.form=madrona.features.tests.CreateTestFeature.Options-class.html#form,Variable madrona.features.tests.GenericLinksTestFeature.Options.form=madrona.features.tests.GenericLinksTestFeature.Options-class.html#form,Variable madrona.features.tests.LastGenericLinksTestFeature.Options.form=madrona.features.tests.LastGenericLinksTestFeature.Options-class.html#form,Variable madrona.features.tests.LinkTestFeature.Options.form=madrona.features.tests.LinkTestFeature.Options-class.html#form,Variable madrona.features.tests.OtherGenericLinksTestFeature.Options.form=madrona.features.tests.OtherGenericLinksTestFeature.Options-class.html#form,Variable madrona.features.tests.Pipeline.Options.form=madrona.features.tests.Pipeline.Options-class.html#form,Variable madrona.features.tests.RenewableEnergySite.Options.form=madrona.features.tests.RenewableEnergySite.Options-class.html#form,Variable madrona.features.tests.Shipwreck.Options.form=madrona.features.tests.Shipwreck.Options-class.html#form,Variable madrona.features.tests.TestArray.Options.form=madrona.features.tests.TestArray.Options-class.html#form,Variable madrona.features.tests.TestCustomShowTemplateFeature.Options.form=madrona.features.tests.TestCustomShowTemplateFeature.Options-class.html#form,Variable madrona.features.tests.TestCustomVerboseNameFeature.Options.form=madrona.features.tests.TestCustomVerboseNameFeature.Options-class.html#form,Variable madrona.features.tests.TestDefaultShowTemplateFeature.Options.form=madrona.features.tests.TestDefaultShowTemplateFeature.Options-class.html#form,Variable madrona.features.tests.TestDefaultVerboseNameFeature.Options.form=madrona.features.tests.TestDefaultVerboseNameFeature.Options-class.html#form,Variable madrona.features.tests.TestDeleteFeature.Options.form=madrona.features.tests.TestDeleteFeature.Options-class.html#form,Variable madrona.features.tests.TestFolder.Options.form=madrona.features.tests.TestFolder.Options-class.html#form,Variable madrona.features.tests.TestGetFormClassFailFeature.Options.form=madrona.features.tests.TestGetFormClassFailFeature.Options-class.html#form,Variable madrona.features.tests.TestGetFormClassFeature.Options.form=madrona.features.tests.TestGetFormClassFeature.Options-class.html#form,Variable madrona.features.tests.TestMissingCustomShowFeature.Options.form=madrona.features.tests.TestMissingCustomShowFeature.Options-class.html#form,Variable madrona.features.tests.TestMissingDefaultShowFeature.Options.form=madrona.features.tests.TestMissingDefaultShowFeature.Options-class.html#form,Variable madrona.features.tests.TestMpa.Options.form=madrona.features.tests.TestMpa.Options-class.html#form,Variable madrona.features.tests.TestSlugFeature.Options.form=madrona.features.tests.TestSlugFeature.Options-class.html#form,Variable madrona.features.tests.UpdateFormTestFeature.Options.form=madrona.features.tests.UpdateFormTestFeature.Options-class.html#form,Variable madrona.features.tests.UpdateTestFeature.Options.form=madrona.features.tests.UpdateTestFeature.Options-class.html#form,Variable madrona.layers.tests.TestUserKml.Options.form=madrona.layers.tests.TestUserKml.Options-class.html#form,Variable madrona.manipulators.tests.TestLine.Options.form=madrona.manipulators.tests.TestLine.Options-class.html#form,Variable madrona.manipulators.tests.TestOptmanip.Options.form=madrona.manipulators.tests.TestOptmanip.Options-class.html#form,Variable madrona.manipulators.tests.TestPoint.Options.form=madrona.manipulators.tests.TestPoint.Options-class.html#form,Variable madrona.manipulators.tests.TestPoly.Options.form=madrona.manipulators.tests.TestPoly.Options-class.html#form"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-15', 'form', 'link-15');">form</a></tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="madrona.loadshp.forms.UploadForm
+madrona.shapes.forms.UploadForm" class="py-name" href="#" onclick="return doclink('link-16', 'UploadForm', 'link-10');">UploadForm</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">method</tt> <tt class="py-op">==</tt> <tt class="py-string">'POST'</tt><tt class="py-op">:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt id="link-17" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-17', 'form', 'link-15');">form</a></tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name"><a title="madrona.loadshp.forms.UploadForm
+madrona.shapes.forms.UploadForm" class="py-name" href="#" onclick="return doclink('link-18', 'UploadForm', 'link-10');">UploadForm</a></tt><tt class="py-op">(</tt><tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">POST</tt><tt class="py-op">,</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">FILES</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-comment"># Override the defulat form behavior and </tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-comment"># only allow single-feature polygon shps</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt id="link-19" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-19', 'form', 'link-15');">form</a></tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.multi_feature=madrona.loadshp.forms.UploadForm-class.html#multi_feature"><a title="madrona.loadshp.forms.UploadForm.multi_feature" class="py-name" href="#" onclick="return doclink('link-20', 'multi_feature', 'link-20');">multi_feature</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt id="link-21" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-21', 'form', 'link-15');">form</a></tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.supported_geomtypes=madrona.loadshp.forms.UploadForm-class.html#supported_geomtypes"><a title="madrona.loadshp.forms.UploadForm.supported_geomtypes" class="py-name" href="#" onclick="return doclink('link-22', 'supported_geomtypes', 'link-22');">supported_geomtypes</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'Polygon'</tt><tt class="py-op">]</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-23" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-23', 'form', 'link-15');">form</a></tt><tt class="py-op">.</tt><tt class="py-name">is_valid</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">            <tt id="link-24" class="py-name" targets="Variable madrona.xyquery.models.Feature.layer=madrona.xyquery.models.Feature-class.html#layer,Variable madrona.xyquery.models.Raster.layer=madrona.xyquery.models.Raster-class.html#layer"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-24', 'layer', 'link-24');">layer</a></tt> <tt class="py-op">=</tt> <tt id="link-25" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-25', 'form', 'link-15');">form</a></tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method madrona.common.management.commands.clear_cache.Command.handle()=madrona.common.management.commands.clear_cache.Command-class.html#handle,Method madrona.common.management.commands.install_cleangeometry.Command.handle()=madrona.common.management.commands.install_cleangeometry.Command-class.html#handle,Method madrona.common.management.commands.install_media.Command.handle()=madrona.common.management.commands.install_media.Command-class.html#handle,Method madrona.common.management.commands.runprofileserver.Command.handle()=madrona.common.management.commands.runprofileserver.Command-class.html#handle,Method madrona.common.management.commands.site.Command.handle()=madrona.common.management.commands.site.Command-class.html#handle,Method madrona.features.management.commands.enable_sharing.Command.handle()=madrona.features.management.commands.enable_sharing.Command-class.html#handle,Method madrona.layers.management.commands.create_privatekml.Command.handle()=madrona.layers.management.commands.create_privatekml.Command-class.html#handle,Method madrona.loadshp.forms.UploadForm.handle()=madrona.loadshp.forms.UploadForm-class.html#handle,Method madrona.manipulators.management.commands.change_manipulator_geom.Command.handle()=madrona.manipulators.management.commands.change_manipulator_geom.Command-class.html#handle,Method madrona.manipulators.management.commands.create_manipulator_geom.Command.handle()=madrona.manipulators.management.commands.create_manipulator_geom.Command-class.html#handle,Variable madrona.openid.models.Association.handle=madrona.openid.models.Association-class.html#handle,Method madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle()=madrona.raster_stats.management.commands.update_rasterdatasets.Command-class.html#handle,Method madrona.shapes.forms.UploadForm.handle()=madrona.shapes.forms.UploadForm-class.html#handle,Method madrona.studyregion.management.commands.change_study_region.Command.handle()=madrona.studyregion.management.commands.change_study_region.Command-class.html#handle,Method madrona.studyregion.management.commands.create_study_region.Command.handle()=madrona.studyregion.management.commands.create_study_region.Command-class.html#handle,Method madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle()=madrona.studyregion.management.commands.summarize_study_region_changes.Command-class.html#handle,Method madrona.xyquery.management.commands.loadraster.Command.handle()=madrona.xyquery.management.commands.loadraster.Command-class.html#handle,Method madrona.xyquery.management.commands.loadshp.Command.handle()=madrona.xyquery.management.commands.loadshp.Command-class.html#handle"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-26', 'handle', 'link-26');">handle</a></tt><tt class="py-op">(</tt><tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">FILES</tt><tt class="py-op">[</tt><tt class="py-string">'file_obj'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt id="link-27" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-27', 'user', 'link-11');">user</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">            <tt class="py-name">g</tt> <tt class="py-op">=</tt> <tt id="link-28" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-28', 'layer', 'link-24');">layer</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Variable madrona.xyquery.models.Feature.geom=madrona.xyquery.models.Feature-class.html#geom"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-29', 'geom', 'link-29');">geom</a></tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">srs</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">transform_to</tt><tt class="py-op">(</tt><tt class="py-number">4326</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">            <tt class="py-name">geoms</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">g</tt><tt class="py-op">]</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">            <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">get_template</tt><tt class="py-op">(</tt><tt class="py-string">'loadshp/loadshp.kml'</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">            <tt id="link-30" class="py-name" targets="Method madrona.analysistools.models.Analysis.kml()=madrona.analysistools.models.Analysis-class.html#kml,Method madrona.features.models.FeatureCollection.kml()=madrona.features.models.FeatureCollection-class.html#kml,Method madrona.features.models.SpatialFeature.kml()=madrona.features.models.SpatialFeature-class.html#kml,Function madrona.features.tests.kml()=madrona.features.tests-module.html#kml,Function madrona.features.views.kml()=madrona.features.views-module.html#kml,Method madrona.layers.models.UserUploadedKml.kml()=madrona.layers.models.UserUploadedKml-class.html#kml,Method madrona.spacing.models.Land.kml()=madrona.spacing.models.Land-class.html#kml,Method madrona.studyregion.models.StudyRegion.kml()=madrona.studyregion.models.StudyRegion-class.html#kml,Function madrona.studyregion.views.kml()=madrona.studyregion.views-module.html#kml"><a title="madrona.analysistools.models.Analysis.kml
+madrona.features.models.FeatureCollection.kml
+madrona.features.models.SpatialFeature.kml
+madrona.features.tests.kml
+madrona.features.views.kml
+madrona.layers.models.UserUploadedKml.kml
+madrona.spacing.models.Land.kml
+madrona.studyregion.models.StudyRegion.kml
+madrona.studyregion.views.kml" class="py-name" href="#" onclick="return doclink('link-30', 'kml', 'link-30');">kml</a></tt> <tt class="py-op">=</tt> <tt class="py-name">t</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method madrona.analysistools.widgets.DualSliderWidget.render()=madrona.analysistools.widgets.DualSliderWidget-class.html#render,Method madrona.analysistools.widgets.SimplePoint.render()=madrona.analysistools.widgets.SimplePoint-class.html#render,Method madrona.analysistools.widgets.SliderWidget.render()=madrona.analysistools.widgets.SliderWidget-class.html#render,Method madrona.bookmarks.widgets.BookmarkWidget.render()=madrona.bookmarks.widgets.BookmarkWidget-class.html#render,Method madrona.common.forms.ShortTextarea.render()=madrona.common.forms.ShortTextarea-class.html#render,Method madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.render()=madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode-class.html#render,Method madrona.common.templatetags.absurl.AbsoluteURLNode.render()=madrona.common.templatetags.absurl.AbsoluteURLNode-class.html#render,Method madrona.common.templatetags.layout_tags.BackLinkNode.render()=madrona.common.templatetags.layout_tags.BackLinkNode-class.html#render,Method madrona.common.templatetags.layout_tags.FooterNode.render()=madrona.common.templatetags.layout_tags.FooterNode-class.html#render,Method madrona.common.templatetags.layout_tags.HomeLinkNode.render()=madrona.common.templatetags.layout_tags.HomeLinkNode-class.html#render,Method madrona.common.templatetags.layout_tags.PanelNode.render()=madrona.common.templatetags.layout_tags.PanelNode-class.html#render,Method madrona.common.templatetags.layout_tags.PrintableNode.render()=madrona.common.templatetags.layout_tags.PrintableNode-class.html#render,Method madrona.common.templatetags.layout_tags.TabNode.render()=madrona.common.templatetags.layout_tags.TabNode-class.html#render,Method madrona.common.templatetags.layout_tags.TabPanelNode.render()=madrona.common.templatetags.layout_tags.TabPanelNode-class.html#render,Method madrona.common.templatetags.relurl.RelativeURLNode.render()=madrona.common.templatetags.relurl.RelativeURLNode-class.html#render,Method madrona.common.templatetags.set_var.SetVarNode.render()=madrona.common.templatetags.set_var.SetVarNode-class.html#render,Method madrona.data_manager.templatetags.smart_if.SmartIfNode.render()=madrona.data_manager.templatetags.smart_if.SmartIfNode-class.html#render,Method madrona.features.forms.ShapeInput.render()=madrona.features.forms.ShapeInput-class.html#render,Method madrona.geographic_report.templatetags.geographic_report.GeographicReportNode.render()=madrona.geographic_report.templatetags.geographic_report.GeographicReportNode-class.html#render,Method madrona.google-analytics.templatetags.analytics.AnalyticsNode.render()=madrona.google-analytics.templatetags.analytics.AnalyticsNode-class.html#render"><a title="madrona.analysistools.widgets.DualSliderWidget.render
+madrona.analysistools.widgets.SimplePoint.render
+madrona.analysistools.widgets.SliderWidget.render
+madrona.bookmarks.widgets.BookmarkWidget.render
+madrona.common.forms.ShortTextarea.render
+madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.render
+madrona.common.templatetags.absurl.AbsoluteURLNode.render
+madrona.common.templatetags.layout_tags.BackLinkNode.render
+madrona.common.templatetags.layout_tags.FooterNode.render
+madrona.common.templatetags.layout_tags.HomeLinkNode.render
+madrona.common.templatetags.layout_tags.PanelNode.render
+madrona.common.templatetags.layout_tags.PrintableNode.render
+madrona.common.templatetags.layout_tags.TabNode.render
+madrona.common.templatetags.layout_tags.TabPanelNode.render
+madrona.common.templatetags.relurl.RelativeURLNode.render
+madrona.common.templatetags.set_var.SetVarNode.render
+madrona.data_manager.templatetags.smart_if.SmartIfNode.render
+madrona.features.forms.ShapeInput.render
+madrona.geographic_report.templatetags.geographic_report.GeographicReportNode.render
+madrona.google-analytics.templatetags.analytics.AnalyticsNode.render" class="py-name" href="#" onclick="return doclink('link-31', 'render', 'link-31');">render</a></tt><tt class="py-op">(</tt><tt class="py-name">Context</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">'username'</tt><tt class="py-op">:</tt> <tt id="link-32" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-32', 'user', 'link-11');">user</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Variable madrona.common.registration_backend.forms.MadronaRegistrationForm.username=madrona.common.registration_backend.forms.MadronaRegistrationForm-class.html#username,Variable madrona.openid.forms.OpenidRegisterForm.username=madrona.openid.forms.OpenidRegisterForm-class.html#username"><a title="madrona.common.registration_backend.forms.MadronaRegistrationForm.username
+madrona.openid.forms.OpenidRegisterForm.username" class="py-name" href="#" onclick="return doclink('link-33', 'username', 'link-33');">username</a></tt><tt class="py-op">,</tt> <tt class="py-string">'geoms'</tt><tt class="py-op">:</tt> <tt class="py-name">geoms</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">            <tt id="link-34" class="py-name" targets="Method madrona.features.FeatureOptions.json()=madrona.features.FeatureOptions-class.html#json,Method madrona.features.Link.json()=madrona.features.Link-class.html#json,Method madrona.raster_stats.models.ZonalStatsCache.json()=madrona.raster_stats.models.ZonalStatsCache-class.html#json"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-34', 'json', 'link-34');">json</a></tt> <tt class="py-op">=</tt> <tt class="py-name">simplejson</tt><tt class="py-op">.</tt><tt class="py-name">dumps</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">'input_kml'</tt><tt class="py-op">:</tt> <tt id="link-35" class="py-name"><a title="madrona.analysistools.models.Analysis.kml
+madrona.features.models.FeatureCollection.kml
+madrona.features.models.SpatialFeature.kml
+madrona.features.tests.kml
+madrona.features.views.kml
+madrona.layers.models.UserUploadedKml.kml
+madrona.spacing.models.Land.kml
+madrona.studyregion.models.StudyRegion.kml
+madrona.studyregion.views.kml" class="py-name" href="#" onclick="return doclink('link-35', 'kml', 'link-30');">kml</a></tt><tt class="py-op">,</tt> <tt class="py-string">'status'</tt><tt class="py-op">:</tt><tt class="py-string">'success'</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">            <tt class="py-comment"># Jquery Form plugin requires that we wrap this in a textarea </tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-comment"># otherwise it mangles the kml  </tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">HttpResponse</tt><tt class="py-op">(</tt><tt class="py-string">'&lt;textarea&gt;'</tt><tt class="py-op">+</tt><tt id="link-36" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-36', 'json', 'link-34');">json</a></tt><tt class="py-op">+</tt><tt class="py-string">'&lt;/textarea&gt;'</tt><tt class="py-op">,</tt><tt class="py-name">mimetype</tt><tt class="py-op">=</tt><tt class="py-string">"text/html"</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt id="link-37" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-37', 'json', 'link-34');">json</a></tt> <tt class="py-op">=</tt> <tt class="py-name">simplejson</tt><tt class="py-op">.</tt><tt class="py-name">dumps</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">'error_html'</tt><tt class="py-op">:</tt> <tt id="link-38" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-38', 'form', 'link-15');">form</a></tt><tt class="py-op">.</tt><tt class="py-name">errors</tt><tt class="py-op">[</tt><tt class="py-string">'file_obj'</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">'status'</tt><tt class="py-op">:</tt><tt class="py-string">'errors'</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">HttpResponse</tt><tt class="py-op">(</tt><tt class="py-string">'&lt;textarea&gt;'</tt><tt class="py-op">+</tt><tt id="link-39" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-39', 'json', 'link-34');">json</a></tt><tt class="py-op">+</tt><tt class="py-string">'&lt;/textarea&gt;'</tt><tt class="py-op">,</tt><tt class="py-name">mimetype</tt><tt class="py-op">=</tt><tt class="py-string">"text/html"</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">method</tt> <tt class="py-op">==</tt> <tt class="py-string">'GET'</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">render_to_response</tt><tt class="py-op">(</tt><tt class="py-string">'loadshp/upload.html'</tt><tt class="py-op">,</tt> <tt class="py-name">RequestContext</tt><tt class="py-op">(</tt><tt class="py-name">request</tt><tt class="py-op">,</tt><tt class="py-op">{</tt><tt class="py-string">'form'</tt><tt class="py-op">:</tt> <tt id="link-40" class="py-name"><a title="madrona.analysistools.examples.BufferPoint.Options.form
+madrona.features.tests.CreateFormTestFeature.Options.form
+madrona.features.tests.CreateTestFeature.Options.form
+madrona.features.tests.GenericLinksTestFeature.Options.form
+madrona.features.tests.LastGenericLinksTestFeature.Options.form
+madrona.features.tests.LinkTestFeature.Options.form
+madrona.features.tests.OtherGenericLinksTestFeature.Options.form
+madrona.features.tests.Pipeline.Options.form
+madrona.features.tests.RenewableEnergySite.Options.form
+madrona.features.tests.Shipwreck.Options.form
+madrona.features.tests.TestArray.Options.form
+madrona.features.tests.TestCustomShowTemplateFeature.Options.form
+madrona.features.tests.TestCustomVerboseNameFeature.Options.form
+madrona.features.tests.TestDefaultShowTemplateFeature.Options.form
+madrona.features.tests.TestDefaultVerboseNameFeature.Options.form
+madrona.features.tests.TestDeleteFeature.Options.form
+madrona.features.tests.TestFolder.Options.form
+madrona.features.tests.TestGetFormClassFailFeature.Options.form
+madrona.features.tests.TestGetFormClassFeature.Options.form
+madrona.features.tests.TestMissingCustomShowFeature.Options.form
+madrona.features.tests.TestMissingDefaultShowFeature.Options.form
+madrona.features.tests.TestMpa.Options.form
+madrona.features.tests.TestSlugFeature.Options.form
+madrona.features.tests.UpdateFormTestFeature.Options.form
+madrona.features.tests.UpdateTestFeature.Options.form
+madrona.layers.tests.TestUserKml.Options.form
+madrona.manipulators.tests.TestLine.Options.form
+madrona.manipulators.tests.TestOptmanip.Options.form
+madrona.manipulators.tests.TestPoint.Options.form
+madrona.manipulators.tests.TestPoly.Options.form" class="py-name" href="#" onclick="return doclink('link-40', 'form', 'link-15');">form</a></tt><tt class="py-op">,</tt><tt class="py-string">'action'</tt><tt class="py-op">:</tt><tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"This URL does not support %s requests"</tt> <tt class="py-op">%</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">method</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:20 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

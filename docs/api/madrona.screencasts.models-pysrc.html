@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.screencasts.models</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.screencasts-module.html">Package&nbsp;screencasts</a> ::
+        Module&nbsp;models
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.screencasts.models-module.html">Module madrona.screencasts.models</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">gis</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-0', 'models', 'link-0');">models</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="Screencast"></a><div id="Screencast-def"><a name="L4"></a><tt class="py-lineno"> 4</tt> <a class="py-toggle" href="#" id="Screencast-toggle" onclick="return toggle('Screencast');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.screencasts.models.Screencast-class.html">Screencast</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Screencast-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Screencast-expanded"><a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable madrona.screencasts.models.Screencast.video=madrona.screencasts.models.Screencast-class.html#video"><a title="madrona.screencasts.models.Screencast.video" class="py-name" href="#" onclick="return doclink('link-1', 'video', 'link-1');">video</a></tt> <tt class="py-op">=</tt> <tt id="link-2" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FileField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Variable madrona.common.default_settings.SCREENCASTS=madrona.common.default_settings-module.html#SCREENCASTS"><a title="madrona.common.default_settings.SCREENCASTS" class="py-name" href="#" onclick="return doclink('link-3', 'SCREENCASTS', 'link-3');">SCREENCASTS</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Variable madrona.screencasts.models.Screencast.image=madrona.screencasts.models.Screencast-class.html#image,Variable madrona.screencasts.models.YoutubeScreencast.image=madrona.screencasts.models.YoutubeScreencast-class.html#image"><a title="madrona.screencasts.models.Screencast.image
+madrona.screencasts.models.YoutubeScreencast.image" class="py-name" href="#" onclick="return doclink('link-4', 'image', 'link-4');">image</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-5', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">ImageField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Variable madrona.common.default_settings.SCREENCAST_IMAGES=madrona.common.default_settings-module.html#SCREENCAST_IMAGES"><a title="madrona.common.default_settings.SCREENCAST_IMAGES" class="py-name" href="#" onclick="return doclink('link-6', 'SCREENCAST_IMAGES', 'link-6');">SCREENCAST_IMAGES</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable madrona.news.models.Entry.title=madrona.news.models.Entry-class.html#title,Variable madrona.screencasts.models.Screencast.title=madrona.screencasts.models.Screencast-class.html#title,Variable madrona.screencasts.models.YoutubeScreencast.title=madrona.screencasts.models.YoutubeScreencast-class.html#title"><a title="madrona.news.models.Entry.title
+madrona.screencasts.models.Screencast.title
+madrona.screencasts.models.YoutubeScreencast.title" class="py-name" href="#" onclick="return doclink('link-7', 'title', 'link-7');">title</a></tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-8', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">100</tt><tt class="py-op">)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Variable madrona.screencasts.models.Screencast.urlname=madrona.screencasts.models.Screencast-class.html#urlname"><a title="madrona.screencasts.models.Screencast.urlname" class="py-name" href="#" onclick="return doclink('link-9', 'urlname', 'link-9');">urlname</a></tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-10', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">100</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt id="link-11" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.description=madrona.bioeconomic_model.models.Extent-class.html#description,Variable madrona.bioeconomic_model.models.LengthUnit.description=madrona.bioeconomic_model.models.LengthUnit-class.html#description,Variable madrona.data_manager.models.DataLayer.description=madrona.data_manager.models.DataLayer-class.html#description,Variable madrona.data_manager.models.GeneralFile.description=madrona.data_manager.models.GeneralFile-class.html#description,Variable madrona.intersection.models.FeatureMapping.description=madrona.intersection.models.FeatureMapping-class.html#description,Variable madrona.intersection.models.IntersectionFeature.description=madrona.intersection.models.IntersectionFeature-class.html#description,Variable madrona.intersection.models.OrganizationScheme.description=madrona.intersection.models.OrganizationScheme-class.html#description,Variable madrona.intersection.models.Shapefile.description=madrona.intersection.models.Shapefile-class.html#description,Variable madrona.layers.models.UserUploadedKml.description=madrona.layers.models.UserUploadedKml-class.html#description,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#description,Variable madrona.replication.models.ThresholdRule.description=madrona.replication.models.ThresholdRule-class.html#description,Variable madrona.screencasts.models.Screencast.description=madrona.screencasts.models.Screencast-class.html#description,Variable madrona.screencasts.models.YoutubeScreencast.description=madrona.screencasts.models.YoutubeScreencast-class.html#description"><a title="madrona.bioeconomic_model.models.Extent.description
+madrona.bioeconomic_model.models.LengthUnit.description
+madrona.data_manager.models.DataLayer.description
+madrona.data_manager.models.GeneralFile.description
+madrona.intersection.models.FeatureMapping.description
+madrona.intersection.models.IntersectionFeature.description
+madrona.intersection.models.OrganizationScheme.description
+madrona.intersection.models.Shapefile.description
+madrona.layers.models.UserUploadedKml.description
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description
+madrona.replication.models.ThresholdRule.description
+madrona.screencasts.models.Screencast.description
+madrona.screencasts.models.YoutubeScreencast.description" class="py-name" href="#" onclick="return doclink('link-11', 'description', 'link-11');">description</a></tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-12', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">350</tt><tt class="py-op">)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Variable madrona.screencasts.models.Screencast.selected_for_help=madrona.screencasts.models.Screencast-class.html#selected_for_help,Variable madrona.screencasts.models.YoutubeScreencast.selected_for_help=madrona.screencasts.models.YoutubeScreencast-class.html#selected_for_help"><a title="madrona.screencasts.models.Screencast.selected_for_help
+madrona.screencasts.models.YoutubeScreencast.selected_for_help" class="py-name" href="#" onclick="return doclink('link-13', 'selected_for_help', 'link-13');">selected_for_help</a></tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-14', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">BooleanField</tt><tt class="py-op">(</tt><tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Display this screencast on the main help page?"</tt><tt class="py-op">)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable madrona.screencasts.models.Screencast.IMPORTANCE_CHOICES=madrona.screencasts.models.Screencast-class.html#IMPORTANCE_CHOICES,Variable madrona.screencasts.models.YoutubeScreencast.IMPORTANCE_CHOICES=madrona.screencasts.models.YoutubeScreencast-class.html#IMPORTANCE_CHOICES,Variable madrona.simplefaq.models.Faq.IMPORTANCE_CHOICES=madrona.simplefaq.models.Faq-class.html#IMPORTANCE_CHOICES,Variable madrona.simplefaq.models.FaqGroup.IMPORTANCE_CHOICES=madrona.simplefaq.models.FaqGroup-class.html#IMPORTANCE_CHOICES"><a title="madrona.screencasts.models.Screencast.IMPORTANCE_CHOICES
+madrona.screencasts.models.YoutubeScreencast.IMPORTANCE_CHOICES
+madrona.simplefaq.models.Faq.IMPORTANCE_CHOICES
+madrona.simplefaq.models.FaqGroup.IMPORTANCE_CHOICES" class="py-name" href="#" onclick="return doclink('link-15', 'IMPORTANCE_CHOICES', 'link-15');">IMPORTANCE_CHOICES</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-string">'1'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">,</tt><tt class="py-string">'2'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">,</tt><tt class="py-string">'3'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">4</tt><tt class="py-op">,</tt><tt class="py-string">'4'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">,</tt><tt class="py-string">'5'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">6</tt><tt class="py-op">,</tt><tt class="py-string">'6'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">7</tt><tt class="py-op">,</tt><tt class="py-string">'7'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">8</tt><tt class="py-op">,</tt><tt class="py-string">'8'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">9</tt><tt class="py-op">,</tt><tt class="py-string">'9'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt><tt class="py-string">'10'</tt><tt class="py-op">)</tt>                       </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt id="link-16" class="py-name" targets="Variable madrona.screencasts.models.Screencast.importance=madrona.screencasts.models.Screencast-class.html#importance,Variable madrona.screencasts.models.YoutubeScreencast.importance=madrona.screencasts.models.YoutubeScreencast-class.html#importance,Variable madrona.simplefaq.models.Faq.importance=madrona.simplefaq.models.Faq-class.html#importance,Variable madrona.simplefaq.models.FaqGroup.importance=madrona.simplefaq.models.FaqGroup-class.html#importance"><a title="madrona.screencasts.models.Screencast.importance
+madrona.screencasts.models.YoutubeScreencast.importance
+madrona.simplefaq.models.Faq.importance
+madrona.simplefaq.models.FaqGroup.importance" class="py-name" href="#" onclick="return doclink('link-16', 'importance', 'link-16');">importance</a></tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-17', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-name">choices</tt><tt class="py-op">=</tt><tt id="link-18" class="py-name"><a title="madrona.screencasts.models.Screencast.IMPORTANCE_CHOICES
+madrona.screencasts.models.YoutubeScreencast.IMPORTANCE_CHOICES
+madrona.simplefaq.models.Faq.IMPORTANCE_CHOICES
+madrona.simplefaq.models.FaqGroup.IMPORTANCE_CHOICES" class="py-name" href="#" onclick="return doclink('link-18', 'IMPORTANCE_CHOICES', 'link-15');">IMPORTANCE_CHOICES</a></tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">     </tt>
+<a name="Screencast.Meta"></a><div id="Screencast.Meta-def"><a name="L25"></a><tt class="py-lineno">25</tt> <a class="py-toggle" href="#" id="Screencast.Meta-toggle" onclick="return toggle('Screencast.Meta');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.screencasts.models.Screencast.Meta-class.html">Meta</a><tt class="py-op">:</tt> </tt>
+</div><div id="Screencast.Meta-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Screencast.Meta-expanded"><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt id="link-19" class="py-name" targets="Variable madrona.pg_spacing.models.Vertices.Meta.db_table=madrona.pg_spacing.models.Vertices.Meta-class.html#db_table,Variable madrona.screencasts.models.Screencast.Meta.db_table=madrona.screencasts.models.Screencast.Meta-class.html#db_table,Variable madrona.studyregion.models.StudyRegion.Meta.db_table=madrona.studyregion.models.StudyRegion.Meta-class.html#db_table"><a title="madrona.pg_spacing.models.Vertices.Meta.db_table
+madrona.screencasts.models.Screencast.Meta.db_table
+madrona.studyregion.models.StudyRegion.Meta.db_table" class="py-name" href="#" onclick="return doclink('link-19', 'db_table', 'link-19');">db_table</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'mm_screencast'</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">         </tt>
+<a name="Screencast.__unicode__"></a><div id="Screencast.__unicode__-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="Screencast.__unicode__-toggle" onclick="return toggle('Screencast.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.screencasts.models.Screencast-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Screencast.__unicode__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Screencast.__unicode__-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="madrona.news.models.Entry.title
+madrona.screencasts.models.Screencast.title
+madrona.screencasts.models.YoutubeScreencast.title" class="py-name" href="#" onclick="return doclink('link-20', 'title', 'link-7');">title</a></tt> </tt>
+</div></div><a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">     </tt>
+<a name="YoutubeScreencast"></a><div id="YoutubeScreencast-def"><a name="L32"></a><tt class="py-lineno">32</tt> <a class="py-toggle" href="#" id="YoutubeScreencast-toggle" onclick="return toggle('YoutubeScreencast');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.screencasts.models.YoutubeScreencast-class.html">YoutubeScreencast</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="YoutubeScreencast-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="YoutubeScreencast-expanded"><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable madrona.screencasts.models.YoutubeScreencast.youtube_id=madrona.screencasts.models.YoutubeScreencast-class.html#youtube_id"><a title="madrona.screencasts.models.YoutubeScreencast.youtube_id" class="py-name" href="#" onclick="return doclink('link-21', 'youtube_id', 'link-21');">youtube_id</a></tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-22', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">24</tt><tt class="py-op">,</tt> <tt class="py-name">unique</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Youtube video id (hint: http://www.youtube.com/watch?v=&lt;YOUTUBE_VIDEO_ID&gt;)"</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">    <tt id="link-23" class="py-name"><a title="madrona.screencasts.models.Screencast.image
+madrona.screencasts.models.YoutubeScreencast.image" class="py-name" href="#" onclick="return doclink('link-23', 'image', 'link-4');">image</a></tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-24', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">ImageField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="madrona.common.default_settings.SCREENCAST_IMAGES" class="py-name" href="#" onclick="return doclink('link-25', 'SCREENCAST_IMAGES', 'link-6');">SCREENCAST_IMAGES</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt id="link-26" class="py-name"><a title="madrona.news.models.Entry.title
+madrona.screencasts.models.Screencast.title
+madrona.screencasts.models.YoutubeScreencast.title" class="py-name" href="#" onclick="return doclink('link-26', 'title', 'link-7');">title</a></tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-27', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">100</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">    <tt id="link-28" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.description
+madrona.bioeconomic_model.models.LengthUnit.description
+madrona.data_manager.models.DataLayer.description
+madrona.data_manager.models.GeneralFile.description
+madrona.intersection.models.FeatureMapping.description
+madrona.intersection.models.IntersectionFeature.description
+madrona.intersection.models.OrganizationScheme.description
+madrona.intersection.models.Shapefile.description
+madrona.layers.models.UserUploadedKml.description
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description
+madrona.replication.models.ThresholdRule.description
+madrona.screencasts.models.Screencast.description
+madrona.screencasts.models.YoutubeScreencast.description" class="py-name" href="#" onclick="return doclink('link-28', 'description', 'link-11');">description</a></tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-29', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">350</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">    <tt id="link-30" class="py-name"><a title="madrona.screencasts.models.Screencast.selected_for_help
+madrona.screencasts.models.YoutubeScreencast.selected_for_help" class="py-name" href="#" onclick="return doclink('link-30', 'selected_for_help', 'link-13');">selected_for_help</a></tt> <tt class="py-op">=</tt> <tt id="link-31" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-31', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">BooleanField</tt><tt class="py-op">(</tt><tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Display this screencast on the main help page?"</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt id="link-32" class="py-name"><a title="madrona.screencasts.models.Screencast.IMPORTANCE_CHOICES
+madrona.screencasts.models.YoutubeScreencast.IMPORTANCE_CHOICES
+madrona.simplefaq.models.Faq.IMPORTANCE_CHOICES
+madrona.simplefaq.models.FaqGroup.IMPORTANCE_CHOICES" class="py-name" href="#" onclick="return doclink('link-32', 'IMPORTANCE_CHOICES', 'link-15');">IMPORTANCE_CHOICES</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-string">'1'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">,</tt><tt class="py-string">'2'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">,</tt><tt class="py-string">'3'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">4</tt><tt class="py-op">,</tt><tt class="py-string">'4'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">,</tt><tt class="py-string">'5'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">6</tt><tt class="py-op">,</tt><tt class="py-string">'6'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">7</tt><tt class="py-op">,</tt><tt class="py-string">'7'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">8</tt><tt class="py-op">,</tt><tt class="py-string">'8'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">9</tt><tt class="py-op">,</tt><tt class="py-string">'9'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt><tt class="py-string">'10'</tt><tt class="py-op">)</tt>                       </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">    <tt id="link-33" class="py-name"><a title="madrona.screencasts.models.Screencast.importance
+madrona.screencasts.models.YoutubeScreencast.importance
+madrona.simplefaq.models.Faq.importance
+madrona.simplefaq.models.FaqGroup.importance" class="py-name" href="#" onclick="return doclink('link-33', 'importance', 'link-16');">importance</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-34', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-name">choices</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="madrona.screencasts.models.Screencast.IMPORTANCE_CHOICES
+madrona.screencasts.models.YoutubeScreencast.IMPORTANCE_CHOICES
+madrona.simplefaq.models.Faq.IMPORTANCE_CHOICES
+madrona.simplefaq.models.FaqGroup.IMPORTANCE_CHOICES" class="py-name" href="#" onclick="return doclink('link-35', 'IMPORTANCE_CHOICES', 'link-15');">IMPORTANCE_CHOICES</a></tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt id="link-36" class="py-name" targets="Variable madrona.screencasts.models.YoutubeScreencast.video_width=madrona.screencasts.models.YoutubeScreencast-class.html#video_width"><a title="madrona.screencasts.models.YoutubeScreencast.video_width" class="py-name" href="#" onclick="return doclink('link-36', 'video_width', 'link-36');">video_width</a></tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-37', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-number">853</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt id="link-38" class="py-name" targets="Variable madrona.screencasts.models.YoutubeScreencast.video_height=madrona.screencasts.models.YoutubeScreencast-class.html#video_height"><a title="madrona.screencasts.models.YoutubeScreencast.video_height" class="py-name" href="#" onclick="return doclink('link-38', 'video_height', 'link-38');">video_height</a></tt> <tt class="py-op">=</tt> <tt id="link-39" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-39', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-number">505</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt id="link-40" class="py-name" targets="Variable madrona.screencasts.models.YoutubeScreencast.play_hd=madrona.screencasts.models.YoutubeScreencast-class.html#play_hd"><a title="madrona.screencasts.models.YoutubeScreencast.play_hd" class="py-name" href="#" onclick="return doclink('link-40', 'play_hd', 'link-40');">play_hd</a></tt> <tt class="py-op">=</tt> <tt id="link-41" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-41', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">BooleanField</tt><tt class="py-op">(</tt><tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">     </tt>
+<a name="YoutubeScreencast.__unicode__"></a><div id="YoutubeScreencast.__unicode__-def"><a name="L55"></a><tt class="py-lineno">55</tt> <a class="py-toggle" href="#" id="YoutubeScreencast.__unicode__-toggle" onclick="return toggle('YoutubeScreencast.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.screencasts.models.YoutubeScreencast-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="YoutubeScreencast.__unicode__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="YoutubeScreencast.__unicode__-expanded"><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="madrona.news.models.Entry.title
+madrona.screencasts.models.Screencast.title
+madrona.screencasts.models.YoutubeScreencast.title" class="py-name" href="#" onclick="return doclink('link-42', 'title', 'link-7');">title</a></tt> </tt>
+</div></div><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:24 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

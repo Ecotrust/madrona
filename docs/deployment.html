@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Deployment &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Sharing Features and Collections" href="sharing_configuration.html" />
+    <link rel="prev" title="Topics" href="topics.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sharing_configuration.html" title="Sharing Features and Collections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="topics.html" title="Topics"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="deployment">
+<span id="id1"></span><h1>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h1>
+<p>See the instructions for deploying a django project on the
+<a class="reference external" href="http://docs.djangoproject.com/en/dev/howto/deployment/modwsgi/">django deployment page</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You&#8217;ll need to add the path of your project to the python path just as you
+did madrona.</p>
+</div>
+<div class="section" id="apache-configuration">
+<h2>Apache Configuration<a class="headerlink" href="#apache-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Using Apache2, you can configure your project as an apache virtual host using the following:</p>
+<div class="highlight-python"><pre>&lt;VirtualHost *:80&gt;
+        ServerName your.server.org
+
+        Alias /media/admin/ /src/django/django/contrib/admin/media/
+        &lt;Location /media/admin&gt;
+        Order allow,deny
+        Allow from all
+        &lt;/Location&gt;
+
+        Alias /media/ /src/madrona/media/
+        &lt;Location /media&gt;
+        Order allow,deny
+        Allow from all
+        Options -ExecCGI
+        Options -Indexes
+        &lt;/Location&gt;
+
+        &lt;Location /media/upload&gt;
+        Order Allow,Deny
+        Deny from all
+        &lt;/Location&gt;
+
+        WSGIScriptAlias / /src/project/project_wsgi.py
+        WSGIDaemonProcess project user=gisdev group=gisdev processes=10 threads=1
+        WSGIProcessGroup project
+&lt;/VirtualHost&gt;
+
+WSGIRestrictStdin Off</pre>
+</div>
+<p>This file is typically placed in /etc/apache2/sites-available/project and then made available using the apache utilities:</p>
+<div class="highlight-python"><pre>a2ensite project</pre>
+</div>
+<p>This configuration allows admin media and standard media to be served by apache. It also locks down the media/upload directory which is where user-uploaded files will be placed; we control access to these files through django views in order to leverage authentication and security.</p>
+<p>The wsgi script is a python file similar to this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+
+<span class="c"># If django is not already in python site-directories</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;/src/django&#39;</span><span class="p">)</span>
+
+<span class="c"># Project specific</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;/src/project&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)))</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;DJANGO_SETTINGS_MODULE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;settings&#39;</span>
+
+<span class="kn">import</span> <span class="nn">django.core.handlers.wsgi</span>
+<span class="n">application</span> <span class="o">=</span> <span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIHandler</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nginx-gunicorn-configuration">
+<h2>Nginx/Gunicorn Configuration<a class="headerlink" href="#nginx-gunicorn-configuration" title="Permalink to this headline">¶</a></h2>
+<p>nginx is an alternate high-performance, low memory footprint web server. It can use gunicorn to serve django wsgi apps.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>With Ubuntu:</p>
+<div class="highlight-python"><pre>sudo apt-get install nginx
+sudo pip install gunicorn
+
+# If you use eventlet
+sudo pip install eventlet
+
+# or gevent
+sudo apt-get install libevent-dev
+sudo pip install gevent</pre>
+</div>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>/etc/nginx/nginx.conf:</p>
+<div class="highlight-python"><pre>worker_processes 1;
+
+user www-data gisdev;
+
+events {
+    worker_connections 1024;
+    accept_mutex off;
+}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    gzip on;
+    gzip_buffers 32 8k;
+    gzip_types
+        text/html
+        application/javascript
+        text/javascript
+        text/css
+        text/xml
+        application/atom+xml
+        application/json
+        application/xml;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    include /etc/nginx/sites-enabled/*;
+}</pre>
+</div>
+<p>/etc/nginx/sites-enabled/app:</p>
+<div class="highlight-python"><pre>upstream app_server {
+    server localhost:8000 fail_timeout=0;
+}
+
+server {
+    server_name server.org;
+    access_log /var/log/nginx/app.access.log;
+    error_log /var/log/nginx/app.error.log info;
+    keepalive_timeout 5;
+    client_max_body_size 20M; # file upload size
+    root /var/www/;
+
+    location /media/admin {
+        alias /usr/local/src/django/django/contrib/admin/media/;
+    }
+
+    location /media {
+        alias /usr/local/media/app/;
+    }
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass http://app_server;
+            break;
+        }
+    }
+
+}</pre>
+</div>
+<p>Next start the application server listening on the specified host:port (in this example, <cite>localhost:8000</cite>).
+You can technically just run the django development server:</p>
+<div class="highlight-python"><pre>python manage.py runserver 127.0.0.1:8000</pre>
+</div>
+<p>But that&#8217;s not a good practice for deploying production sites. Instead we can use a gunicorn wsgi server with an asynchronous event handler:</p>
+<div class="highlight-python"><pre>gunicorn_django --log-file=/tmp/app.log -w 3 -k gevent /usr/local/src/project/app/settings.py -u www-data -b 127.0.0.1:8000 --daemon</pre>
+</div>
+<p>Finally, in order to ensure that the gunicorn process starts automatically, create an init script; A fairly comprehensive solution for managing multiple gunicorn servers can be found at <a class="reference external" href="https://github.com/spack/gunicorn-init">gunicorn-init</a>. If you need to manage mutiple servers in different virtual environments, take a look at <a class="reference external" href="http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script/">this init script</a> for some ideas.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Deployment</a><ul>
+<li><a class="reference internal" href="#apache-configuration">Apache Configuration</a></li>
+<li><a class="reference internal" href="#nginx-gunicorn-configuration">Nginx/Gunicorn Configuration</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="topics.html"
+                        title="previous chapter">Topics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sharing_configuration.html"
+                        title="next chapter">Sharing Features and Collections</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/deployment.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sharing_configuration.html" title="Sharing Features and Collections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="topics.html" title="Topics"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

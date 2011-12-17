@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="next" title="Creating a new Madrona project" href="creating_new_project.html" />
+    <link rel="prev" title="Madrona Decision Support Tool Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="creating_new_project.html" title="Creating a new Madrona project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Madrona Decision Support Tool Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Madrona is a framework for building web-based spatial decision support tools.
+Originally designed to support the <a class="reference internal" href="background.html#background"><em>California Marine Life Protection Act Initiative</em></a>,
+Madrona has evolved into a reusable platform for marine and terrestrial applications.
+If your problem involves spatial data and multi-user collaboration, Madrona is the premier tool.</p>
+<p>This documentation is aimed at developers/programmers who want to
+implement a Madrona based project of their own. You should be familiar with</p>
+<blockquote>
+<div><ul class="simple">
+<li>programming in Python</li>
+<li>how web application are structured in <a class="reference external" href="http://djangoproject.com">Django</a></li>
+<li>the command line interface in a unix-style operating system</li>
+<li>the basics of <a class="reference external" href="http://mercurial.selenic.com/">Mercurial</a> source control</li>
+</ul>
+</div></blockquote>
+<p>These instructions will walk you through developing a basic implementation of
+Madrona. This includes installing from the development repository, setting
+up a sample app, testing that everything installed smoothly, then doing some
+basic customization. By the end you&#8217;ll have an application that will perform
+all the <a class="reference external" href="http://code.google.com/p/madrona/wiki/FeaturesAndRequirements">basic functions</a>
+needed to start drawing MPAs on a map.</p>
+</div>
+<div class="section" id="dependencies">
+<span id="id2"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>You need the following installed on your system in order to start running
+Madrona.</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://geodjango.org">GeoDjango</a> : GeoDjango has it&#8217;s own set of dependencies including proj, GDAL and postgis. Please refer to the <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/contrib/gis/install/">GeoDjango installation docs</a> for details.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Madrona development tends to follow django trunk. It may work on the
+point releases but it&#8217;s safer to just track django with subversion.</p>
+</div>
+<ol class="arabic simple" start="2">
+<li><a class="reference external" href="http://mapnik.org/">Mapnik</a> : Used for generating static maps for reports. Please refer to the Mapnik docs. We highly recomend sticking with version 0.7.1.</li>
+<li>The version control systems mercurial and subversion</li>
+<li>The following python packages listed in <a class="reference external" href="http://madrona.googlecode.com/hg/madrona_requirements.txt">madrona_requirements.txt</a>:</li>
+</ol>
+<div class="highlight-python"><pre>#############################################################################
+# pip requirements file for madrona/madrona
+#
+# Automates the installation of most madrona python dependencies
+# To begin you need pip, virtualenv, hg, svn
+#
+# Usage:
+# -----------------------------------------
+# cd /usr/local
+# sudo pip install -r madrona_requirements.txt
+# # OR if you want to upgrade existing installations
+# sudo pip install --upgrade -r madrona_requirements.txt
+# # OR if you want to reference by URL
+# sudo pip install --upgrade -r http://madrona.googlecode.com/hg/madrona_requirements.txt
+# -----------------------------------------
+# 
+# You can also use this with virtualenv
+# -----------------------------------------
+# virtualenv MyMadrona
+# pip -E MyMadrona install -r madrona_requirements.txt
+# cd MyMadrona
+# source bin/activate
+# deactivate
+# -----------------------------------------
+#
+# Note that there are several hairy requirements that aren't handled 
+# by this file; these must be installed globally the hard way:
+#
+# GDAL &gt;= 1.6 : just copy the gdal.pth file into your local site packages dir
+# Mapnik == 0.7.1 : just copy the entire mapnik dir into your local site packages dir
+# PIL : symlink the PIL directory to site-packages dir
+# Postgis : set up according to the geodjango and madrona docs
+#############################################################################
+
+-e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
+BeautifulSoup&gt;=3.1.0.1
+Sphinx&gt;=0.6.3
+django-compress&gt;=1.0.1
+django-maintenancemode&gt;=0.9.2
+-e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
+-e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/src/#egg=feedvalidator
+-e hg+https://bitbucket.org/springmeyer/djmapnik#egg=djmapnik
+elementtree
+xlwt&gt;=0.7.2
+networkx==1.1
+boto
+django-celery&gt;=2.2.4
+django-unittest-depth&gt;=0.6
+python-openid&gt;=2.2.5
+django-picklefield&gt;=0.1.9
+python-cjson&gt;=1.0.5
+epydoc&gt;=3.0.1
+docutils&gt;=0.5
+South&gt;=0.7
+psycopg2&gt;=2.0.12
+wsgiref&gt;=0.1.2
+# numpy is having issues with pip, install globally
+#numpy&gt;=1.5.1
+unittest-xml-reporting&gt;=1.2
+django-kombu&gt;=0.9.2
+</pre>
+</div>
+<p>Most of the dependencies are well-behaved python packages; They can be installed using standard python package management tools such as <a class="reference external" href="http://pip.openplans.org/">pip</a>.
+We have created the <a class="reference external" href="http://madrona.googlecode.com/hg/madrona_requirements.txt">pip requirements file</a> to automate the installation of most of the dependencies:</p>
+<div class="highlight-python"><pre>cd /usr/local # Assuming you want to put stuff in /usr/local/src
+pip install -r http://madrona.googlecode.com/hg/madrona_requirements.txt</pre>
+</div>
+</div>
+<div class="section" id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<p>It is important to understand how a Madrona application is structured. There are essentially two codebases:</p>
+<blockquote>
+<div><ul class="simple">
+<li>madrona - a python module providing a set of django apps that contain the core functionality common to all Madrona instances.</li>
+<li>the project code - a django project which implements and extends the functionality provided by madrona (specific to the particular project&#8217;s needs).</li>
+</ul>
+</div></blockquote>
+<p>By seperating the two codebases, we can more easily maintain multiple Madrona projects while continuing to improve the underlying core functionality.
+If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed
+just like any other python module and you should&#8217;t need to mess with any madrona code.</p>
+</div>
+<div class="section" id="installing-lingcod">
+<h2>Installing Lingcod<a class="headerlink" href="#installing-lingcod" title="Permalink to this headline">¶</a></h2>
+<p>First you will need to checkout a copy of the default branch of madrona from the <a class="reference external" href="http://code.google.com/p/madrona/source/checkout">project page</a></p>
+<div class="highlight-python"><pre>cd ~/src
+hg clone https://madrona.googlecode.com/hg/ madrona</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Though the top-level directory name is &#8216;madrona&#8217;, the python module provided by this code is called &#8216;madrona&#8217;</p>
+</div>
+<p>To install, use the setup.py script provided. We recommend using the &#8216;develop&#8217; command instead of &#8216;install&#8217; as this
+allows you to alter the madrona code in place without reinstalling.:</p>
+<div class="highlight-python"><pre>cd madrona
+python setup.py develop</pre>
+</div>
+<p>Finally, confirm that we can import the madrona module. This example simply prints out the release number:</p>
+<div class="highlight-python"><pre>python -c "from madrona.common import default_settings; print default_settings.RELEASE"</pre>
+</div>
+</div>
+<div class="section" id="using-the-sample-app">
+<h2>Using the Sample App<a class="headerlink" href="#using-the-sample-app" title="Permalink to this headline">¶</a></h2>
+<p>Inside the example-projects/ directory there are sample applications built
+using the Madrona components. These serve as useful documentation as well as
+practical tests. We&#8217;ll be starting up <tt class="docutils literal"><span class="pre">example-projects/test_project</span></tt> here.</p>
+<div class="section" id="using-settings-py-and-settings-local-py">
+<h3>using settings.py and settings_local.py<a class="headerlink" href="#using-settings-py-and-settings-local-py" title="Permalink to this headline">¶</a></h3>
+<p>Take a look at <tt class="docutils literal"><span class="pre">example-projects/test_project/settings_local.template</span></tt> and
+<tt class="docutils literal"><span class="pre">settings.py</span></tt>. Madrona uses a simple splitsetting scheme as described
+<a class="reference external" href="http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother">here</a>. What this enables is the ability to specify standard
+settings in settings.py and commit them to a public repository, but these
+don&#8217;t correspond to any particular machine. You then create a
+settings_local.py file on the machine for deployment or development from the
+template, and it contains your passwords and such.</p>
+<p>Lets do that now. Copy settings_local.template to settings_local.py, then
+uncomment the following line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># SECRET_KEY = &#39;6c(kr8r%aqf#r8%arr=0py_7t9m)wgocwyp5g@!j7eb0erm(2+sdklj23&#39;</span>
+</pre></div>
+</div>
+<p>Alter <tt class="docutils literal"><span class="pre">SECRET_Key</span></tt> to make it unique. Next uncomment and alter the following
+lines as needed to allow this application to connect to your local database:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#DATABASES = {</span>
+<span class="c">#    &#39;default&#39;: {</span>
+<span class="c">#        &#39;ENGINE&#39;: &#39;django.contrib.gis.db.backends.postgis&#39;,</span>
+<span class="c">#        &#39;NAME&#39;: &#39;example&#39;,</span>
+<span class="c">#        &#39;USER&#39;: &#39;postgres&#39;,</span>
+<span class="c">#    }</span>
+<span class="c">#}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="handling-media">
+<h3>handling media<a class="headerlink" href="#handling-media" title="Permalink to this headline">¶</a></h3>
+<p>Because a Madrona instance is split between madrona (core functionality) and the project-specific code, static media files such as html, javascript, css, images, etc. may exist in both. Django, however, expects all the static media to be in a single directory. In order to merge the madrona media with the project media, you need to create a third (empty) media directory and set it as your MEDIA_ROOT in the project settings_local.py</p>
+<div class="highlight-python"><pre>mkdir /tmp/test_media
+cd ~/src/madrona/example_projects/test_project/
+echo "MEDIA_ROOT='/tmp/test_media'" &gt;&gt; settings_local.py</pre>
+</div>
+<p>Then use the &#8216;install_media&#8217; management command to merge all the media files into the MEDIA_ROOT directory.:</p>
+<div class="highlight-python"><pre>python manage.py install_media</pre>
+</div>
+</div>
+<div class="section" id="setup-the-database">
+<h3>setup the database<a class="headerlink" href="#setup-the-database" title="Permalink to this headline">¶</a></h3>
+<p>Create a database accessible by the connection settings above using a tool
+like <a class="reference external" href="http://www.pgadmin.org/">pgAdmin</a>. It is very important that this
+database be created from a template with all the PostGIS functions installed. One approach
+is to set up postgis in the default postgres database called template1:</p>
+<div class="highlight-python"><pre>#run as postgres superuser
+POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib/postgis-1.5
+createlang -d template1 plpgsql # Adding PLPGSQL language support.
+psql -d template1 -f $POSTGIS_SQL_PATH/postgis.sql # Loading the PostGIS SQL routines
+psql -d template1 -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
+psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"</pre>
+</div>
+<p>Next we&#8217;ll need to install a postgresql stored procedure for geometry handling:</p>
+<div class="highlight-python"><pre>psql -d template1 -U postgres -f /usr/local/src/madrona/madrona/common/cleangeometry.sql</pre>
+</div>
+<p>Once the template is spatially enabled, create your project database:</p>
+<div class="highlight-python"><pre>createdb example -U postgres</pre>
+</div>
+<p>To setup the database schema and populate with some initial data, run the
+django syncdb command from within the <tt class="docutils literal"><span class="pre">example-projects/test_project</span></tt> directory:</p>
+<div class="highlight-python"><pre>python manage.py syncdb</pre>
+</div>
+<p>And then use the migrate command which will handle creating the schemas and populating the database
+for those applications which are under <a class="reference external" href="http://south.aeracode.org/docs/about.html">migration control</a>:</p>
+<div class="highlight-python"><pre>python manage.py migrate</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If syncdb fails and you get an error related to importing settings.py
+failing, you are likely missing a python dependency. Double-check
+<a class="reference internal" href="#dependencies"><em>the dependencies</em></a>, and if none are missing jump into a python shell from
+<tt class="docutils literal"><span class="pre">example-projects/test_project</span></tt>, <tt class="docutils literal"><span class="pre">import</span> <span class="pre">settings</span></tt>, and look for any errors.</p>
+</div>
+</div>
+<div class="section" id="verify-and-run-the-dev-server">
+<h3>verify and run the dev server<a class="headerlink" href="#verify-and-run-the-dev-server" title="Permalink to this headline">¶</a></h3>
+<p>Confirm that everything is working as expected by running the tests:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">python</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">madrona</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">run_tests</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Django creates a test database that is different than the database specified
+in <tt class="docutils literal"><span class="pre">settings_local.py</span></tt>. Depending on your database setup, PostGIS
+functions may not be added to this new database and cause errors at this
+step related to the geometry columns. See the guide to using <a class="reference internal" href="postgis_django_tests.html#django-test-database-and-postgis"><em>PostGIS and the Django test database</em></a>.</p>
+</div>
+<p>If everything looks good, turn on the dev server:</p>
+<div class="highlight-python"><pre>python manage.py runserver</pre>
+</div>
+<p>Go to <a class="reference external" href="http://localhost:8000/admin/">http://localhost:8000/admin/</a> in a browser and use the authentication
+credentials specified when syncdb was run.</p>
+<p>At <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> the interface should render with sample data.</p>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Now that you have installed madrona and tested it out using the pre-built example project,
+You&#8217;ll want to visit <a class="reference internal" href="creating_new_project.html#create-new-project"><em>Creating a New Project</em></a> to find out how to
+build your own customized Madrona instance.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#project-structure">Project Structure</a></li>
+<li><a class="reference internal" href="#installing-lingcod">Installing Lingcod</a></li>
+<li><a class="reference internal" href="#using-the-sample-app">Using the Sample App</a><ul>
+<li><a class="reference internal" href="#using-settings-py-and-settings-local-py">using settings.py and settings_local.py</a></li>
+<li><a class="reference internal" href="#handling-media">handling media</a></li>
+<li><a class="reference internal" href="#setup-the-database">setup the database</a></li>
+<li><a class="reference internal" href="#verify-and-run-the-dev-server">verify and run the dev server</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Madrona Decision Support Tool Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="creating_new_project.html"
+                        title="next chapter">Creating a new Madrona project</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/getting_started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="creating_new_project.html" title="Creating a new Madrona project"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Madrona Decision Support Tool Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

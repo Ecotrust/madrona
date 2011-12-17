@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.staticmap.models.MapConfig</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.staticmap-module.html">Package&nbsp;staticmap</a> ::
+        <a href="madrona.staticmap.models-module.html">Module&nbsp;models</a> ::
+        Class&nbsp;MapConfig
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class MapConfig</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.staticmap.models-pysrc.html#MapConfig">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+django.contrib.gis.db.models.Model --+
+                                     |
+                                    <strong class="uidshort">MapConfig</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+Model used for representing a map (ie a collection of styled map layers)
+
+======================  ==============================================
+Attribute               Description
+======================  ==============================================
+
+``mapname``             Name of the map. Will be refered to by URL so 
+                        use http friendly names (no spaces, slashes, etc)
+
+``mapfile``             Mapnik xml configuration file that defines data 
+                        sources and styles. All paths within xml must be 
+                        relative to media/staticmap/
+                        
+``default_x1``          LL X coordinate
+
+``default_y1``          LL Y coordinate
+
+``default_x2``          UR X coordinate
+
+``default_y2``          UR Y coordinate
+
+``default_width``       Default image width (pixels)
+
+``default_height``      Default image height (pixels)
+======================  ==============================================
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__unicode__"></a><span class="summary-sig-name">__unicode__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.staticmap.models-pysrc.html#MapConfig.__unicode__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="mapname"></a><span class="summary-name">mapname</span> = <code title="models.CharField(max_length= 50, unique= True)">models.CharField(max_length= 50, unique= True)</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#mapfile" class="summary-name">mapfile</a> = <code title="models.FileField(upload_to= 'staticmap/', help_text= &quot;&quot;&quot;
+        Mapnik xml configuration file that defines data sources and st\
+yles. 
+        All paths within xml must be relative to media/staticmap/
+    &quot;&quot;&quot;, blank= False, max_length= 510)">models.FileField(upload_to= 'staticmap/', help_text=<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_x1" class="summary-name">default_x1</a> = <code title="models.FloatField(help_text= &quot;Lower-left X coordinate of default map e\
+xtent. Units and spatial reference system are defined in the mapnik xm\
+l.&quot;)">models.FloatField(help_text= &quot;Lower-left X coordi<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_y1" class="summary-name">default_y1</a> = <code title="models.FloatField(help_text= &quot;Lower-left Y coordinate of default map e\
+xtent. Units and spatial reference system are defined in the mapnik xm\
+l.&quot;)">models.FloatField(help_text= &quot;Lower-left Y coordi<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_x2" class="summary-name">default_x2</a> = <code title="models.FloatField(help_text= &quot;Upper-right X coordinate of default map \
+extent. Units and spatial reference system are defined in the mapnik x\
+ml.&quot;)">models.FloatField(help_text= &quot;Upper-right X coord<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_y2" class="summary-name">default_y2</a> = <code title="models.FloatField(help_text= &quot;Upper-right Y coordinate of default map \
+extent. Units and spatial reference system are defined in the mapnik x\
+ml.&quot;)">models.FloatField(help_text= &quot;Upper-right Y coord<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_width" class="summary-name">default_width</a> = <code title="models.IntegerField(help_text= &quot;Default map image width in pixels&quot;)">models.IntegerField(help_text= &quot;Default map im<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_height" class="summary-name">default_height</a> = <code title="models.IntegerField(help_text= &quot;Default map image height in pixels&quot;)">models.IntegerField(help_text= &quot;Default map i<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.staticmap.models.MapConfig-class.html#default_srid" class="summary-name">default_srid</a> = <code title="models.IntegerField(help_text= &quot;Spatial Reference ID of the output map\
+&quot;, default= 4326)">models.IntegerField(help_text= &quot;Spatial Referen<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
+<a name="section-ClassVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="mapfile"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">mapfile</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.FileField(upload_to= 'staticmap/', help_text= &quot;&quot;&quot;
+        Mapnik xml configuration file that defines data sources and st<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+yles. 
+        All paths within xml must be relative to media/staticmap/
+    &quot;&quot;&quot;, blank= False, max_length= 510)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_x1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_x1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.FloatField(help_text= &quot;Lower-left X coordinate of default map e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+xtent. Units and spatial reference system are defined in the mapnik xm<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+l.&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_y1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_y1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.FloatField(help_text= &quot;Lower-left Y coordinate of default map e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+xtent. Units and spatial reference system are defined in the mapnik xm<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+l.&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_x2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_x2</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.FloatField(help_text= &quot;Upper-right X coordinate of default map <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+extent. Units and spatial reference system are defined in the mapnik x<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ml.&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_y2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_y2</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.FloatField(help_text= &quot;Upper-right Y coordinate of default map <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+extent. Units and spatial reference system are defined in the mapnik x<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ml.&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_width"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_width</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.IntegerField(help_text= &quot;Default map image width in pixels&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_height"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_height</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.IntegerField(help_text= &quot;Default map image height in pixels&quot;)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="default_srid"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">default_srid</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+models.IntegerField(help_text= &quot;Spatial Reference ID of the output map<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&quot;, default= 4326)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:17 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.unit_converter.tests</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.unit_converter-module.html">Package&nbsp;unit_converter</a> ::
+        Module&nbsp;tests
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.unit_converter.tests-module.html">Module madrona.unit_converter.tests</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-docstring">This file demonstrates two different styles of tests (one doctest and one</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-docstring">unittest). These will both pass when you run "manage.py test".</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">Replace these with more appropriate tests for your application.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">test</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TestCase</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">gis</tt> <tt class="py-keyword">import</tt> <tt class="py-name">geos</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-0', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package madrona.unit_converter=madrona.unit_converter-module.html"><a title="madrona.unit_converter" class="py-name" href="#" onclick="return doclink('link-1', 'unit_converter', 'link-1');">unit_converter</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2', 'models', 'link-2');">models</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">gis</tt><tt class="py-op">.</tt><tt class="py-name">measure</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># Number of digits to round results to for comparison</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable madrona.unit_converter.tests.NUM_DIGITS=madrona.unit_converter.tests-module.html#NUM_DIGITS"><a title="madrona.unit_converter.tests.NUM_DIGITS" class="py-name" href="#" onclick="return doclink('link-3', 'NUM_DIGITS', 'link-3');">NUM_DIGITS</a></tt> <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="create_test_geometries"></a><div id="create_test_geometries-def"><a name="L17"></a><tt class="py-lineno"> 17</tt> <a class="py-toggle" href="#" id="create_test_geometries-toggle" onclick="return toggle('create_test_geometries');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests-module.html#create_test_geometries">create_test_geometries</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="create_test_geometries-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="create_test_geometries-expanded"><a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">    <tt class="py-name">geoms</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-name">poly</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">fromstr</tt><tt class="py-op">(</tt><tt class="py-string">'POLYGON ((-370109.1943174076732248 256715.2728654230013490, -376985.4612110010348260 257023.5105245867744088, -376389.0298118293867446 266349.4951122021302581, -369815.3686999985366128 265947.4629999864846468, -370941.4576000009546988 259130.8280999893322587, -370109.1943174076732248 256715.2728654230013490))'</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">    <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">fromstr</tt><tt class="py-op">(</tt><tt class="py-string">'LINESTRING (-370109.1943174076732248 256715.2728654230013490, -376985.4612110010348260 257023.5105245867744088)'</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">    <tt class="py-name">mpoly</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">MultiPolygon</tt><tt class="py-op">(</tt><tt class="py-name">poly</tt><tt class="py-op">,</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">fromstr</tt><tt class="py-op">(</tt><tt class="py-string">'POLYGON ((-340404.9563809176324867 383194.1489779399707913, -341376.1892856784397736 378422.7254901370033622, -346118.1728583426447585 378627.0628479672595859, -345907.4695642645237967 383431.2573733469471335, -340404.9563809176324867 383194.1489779399707913))'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">    <tt class="py-name">mline</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">MultiLineString</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">fromstr</tt><tt class="py-op">(</tt><tt class="py-string">'LINESTRING (-340404.9563809176324867 383194.1489779399707913, -341376.1892856784397736 378422.7254901370033622, -346118.1728583426447585 378627.0628479672595859)'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-name">gc_polys</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">GeometryCollection</tt><tt class="py-op">(</tt><tt class="py-name">poly</tt><tt class="py-op">,</tt> <tt class="py-name">mpoly</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">    <tt class="py-name">gc_lines</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">GeometryCollection</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt> <tt class="py-name">mline</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt class="py-name">gc_everything</tt> <tt class="py-op">=</tt> <tt class="py-name">geos</tt><tt class="py-op">.</tt><tt class="py-name">GeometryCollection</tt><tt class="py-op">(</tt><tt class="py-name">poly</tt><tt class="py-op">,</tt><tt class="py-name">line</tt><tt class="py-op">,</tt><tt class="py-name">mpoly</tt><tt class="py-op">,</tt><tt class="py-name">mline</tt><tt class="py-op">)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt class="py-name">geoms</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-string">'poly'</tt><tt class="py-op">:</tt> <tt class="py-name">poly</tt><tt class="py-op">,</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-string">'line'</tt><tt class="py-op">:</tt> <tt class="py-name">line</tt><tt class="py-op">,</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-string">'mpoly'</tt><tt class="py-op">:</tt> <tt class="py-name">mpoly</tt><tt class="py-op">,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-string">'mline'</tt><tt class="py-op">:</tt> <tt class="py-name">mline</tt><tt class="py-op">,</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-string">'gc_polys'</tt><tt class="py-op">:</tt> <tt class="py-name">gc_polys</tt><tt class="py-op">,</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-string">'gc_lines'</tt><tt class="py-op">:</tt> <tt class="py-name">gc_lines</tt><tt class="py-op">,</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-string">'gc_everything'</tt><tt class="py-op">:</tt> <tt class="py-name">gc_everything</tt><tt class="py-op">,</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-op">}</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-4" class="py-name" targets="Variable madrona.xyquery.models.Feature.geom=madrona.xyquery.models.Feature-class.html#geom"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-4', 'geom', 'link-4');">geom</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">geoms</tt><tt class="py-op">.</tt><tt class="py-name">values</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt id="link-5" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-5', 'geom', 'link-4');">geom</a></tt><tt class="py-op">.</tt><tt class="py-name">srid</tt> <tt class="py-op">=</tt> <tt class="py-number">3310</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">geoms</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">     </tt>
+<a name="meter_measurements"></a><div id="meter_measurements-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="meter_measurements-toggle" onclick="return toggle('meter_measurements');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests-module.html#meter_measurements">meter_measurements</a><tt class="py-op">(</tt><tt class="py-param">geoms</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="meter_measurements-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="meter_measurements-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-name">rdict</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt><tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">geoms</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">k</tt><tt class="py-op">.</tt><tt class="py-name">find</tt><tt class="py-op">(</tt><tt class="py-string">'line'</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">            <tt class="py-name">rdict</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">v</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Variable madrona.pg_spacing.models.Network.length=madrona.pg_spacing.models.Network-class.html#length"><a title="madrona.pg_spacing.models.Network.length" class="py-name" href="#" onclick="return doclink('link-6', 'length', 'link-6');">length</a></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-name">rdict</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">v</tt><tt class="py-op">.</tt><tt class="py-name">area</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">rdict</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">     </tt>
+<a name="meter_dict_convert"></a><div id="meter_dict_convert-def"><a name="L48"></a><tt class="py-lineno"> 48</tt> <a class="py-toggle" href="#" id="meter_dict_convert-toggle" onclick="return toggle('meter_dict_convert');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests-module.html#meter_dict_convert">meter_dict_convert</a><tt class="py-op">(</tt><tt class="py-param">mdict</tt><tt class="py-op">,</tt><tt class="py-param">unit</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="meter_dict_convert-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="meter_dict_convert-expanded"><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-name">con_dict</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt><tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">mdict</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">k</tt><tt class="py-op">.</tt><tt class="py-name">find</tt><tt class="py-op">(</tt><tt class="py-string">'line'</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-name">con_dict</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">D</tt><tt class="py-op">(</tt><tt class="py-name">m</tt><tt class="py-op">=</tt><tt class="py-name">v</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">__getattr__</tt><tt class="py-op">(</tt><tt class="py-name">unit</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">con_dict</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">A</tt><tt class="py-op">(</tt><tt class="py-name">sq_m</tt><tt class="py-op">=</tt><tt class="py-name">v</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">__getattr__</tt><tt class="py-op">(</tt><tt class="py-string">'sq_'</tt> <tt class="py-op">+</tt> <tt class="py-name">unit</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">con_dict</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="SettingsTest"></a><div id="SettingsTest-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="SettingsTest-toggle" onclick="return toggle('SettingsTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.unit_converter.tests.SettingsTest-class.html">SettingsTest</a><tt class="py-op">(</tt><tt class="py-base-class">TestCase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SettingsTest-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="SettingsTest-expanded"><a name="SettingsTest.test_settings"></a><div id="SettingsTest.test_settings-def"><a name="L58"></a><tt class="py-lineno"> 58</tt> <a class="py-toggle" href="#" id="SettingsTest.test_settings-toggle" onclick="return toggle('SettingsTest.test_settings');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests.SettingsTest-class.html#test_settings">test_settings</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SettingsTest.test_settings-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="SettingsTest.test_settings-expanded"><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">        Make sure that the necessary settings exist and are appropriate.</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">dlu</tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Variable madrona.common.default_settings.DISPLAY_LENGTH_UNITS=madrona.common.default_settings-module.html#DISPLAY_LENGTH_UNITS"><a title="madrona.common.default_settings.DISPLAY_LENGTH_UNITS" class="py-name" href="#" onclick="return doclink('link-7', 'DISPLAY_LENGTH_UNITS', 'link-7');">DISPLAY_LENGTH_UNITS</a></tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">dau</tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Variable madrona.common.default_settings.DISPLAY_AREA_UNITS=madrona.common.default_settings-module.html#DISPLAY_AREA_UNITS"><a title="madrona.common.default_settings.DISPLAY_AREA_UNITS" class="py-name" href="#" onclick="return doclink('link-8', 'DISPLAY_AREA_UNITS', 'link-8');">DISPLAY_AREA_UNITS</a></tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">gds</tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Variable madrona.common.default_settings.GEOMETRY_DB_SRID=madrona.common.default_settings-module.html#GEOMETRY_DB_SRID"><a title="madrona.common.default_settings.GEOMETRY_DB_SRID" class="py-name" href="#" onclick="return doclink('link-9', 'GEOMETRY_DB_SRID', 'link-9');">GEOMETRY_DB_SRID</a></tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">failIf</tt><tt class="py-op">(</tt><tt class="py-name">None</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-name">dlu</tt><tt class="py-op">,</tt><tt class="py-name">dau</tt><tt class="py-op">,</tt><tt class="py-name">gds</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">         </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">unit</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-name">dlu</tt><tt class="py-op">,</tt><tt class="py-name">dau</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">failIf</tt><tt class="py-op">(</tt> <tt class="py-name">unit</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">D</tt><tt class="py-op">.</tt><tt class="py-name">UNITS</tt><tt class="py-op">.</tt><tt class="py-name">keys</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">A</tt><tt class="py-op">.</tt><tt class="py-name">UNITS</tt><tt class="py-op">.</tt><tt class="py-name">keys</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
+</div></div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">             </tt>
+<a name="AppendedMethodsTest"></a><div id="AppendedMethodsTest-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="AppendedMethodsTest-toggle" onclick="return toggle('AppendedMethodsTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.unit_converter.tests.AppendedMethodsTest-class.html">AppendedMethodsTest</a><tt class="py-op">(</tt><tt class="py-base-class">TestCase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AppendedMethodsTest-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="AppendedMethodsTest-expanded"><a name="AppendedMethodsTest.test_appended_methods"></a><div id="AppendedMethodsTest.test_appended_methods-def"><a name="L71"></a><tt class="py-lineno"> 71</tt> <a class="py-toggle" href="#" id="AppendedMethodsTest.test_appended_methods-toggle" onclick="return toggle('AppendedMethodsTest.test_appended_methods');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests.AppendedMethodsTest-class.html#test_appended_methods">test_appended_methods</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AppendedMethodsTest.test_appended_methods-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AppendedMethodsTest.test_appended_methods-expanded"><a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">geoms</tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name" targets="Function madrona.unit_converter.tests.create_test_geometries()=madrona.unit_converter.tests-module.html#create_test_geometries"><a title="madrona.unit_converter.tests.create_test_geometries" class="py-name" href="#" onclick="return doclink('link-10', 'create_test_geometries', 'link-10');">create_test_geometries</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">m_dict</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name" targets="Function madrona.unit_converter.tests.meter_measurements()=madrona.unit_converter.tests-module.html#meter_measurements"><a title="madrona.unit_converter.tests.meter_measurements" class="py-name" href="#" onclick="return doclink('link-11', 'meter_measurements', 'link-11');">meter_measurements</a></tt><tt class="py-op">(</tt><tt class="py-name">geoms</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-name">mi_dict</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name" targets="Function madrona.unit_converter.tests.meter_dict_convert()=madrona.unit_converter.tests-module.html#meter_dict_convert"><a title="madrona.unit_converter.tests.meter_dict_convert" class="py-name" href="#" onclick="return doclink('link-12', 'meter_dict_convert', 'link-12');">meter_dict_convert</a></tt><tt class="py-op">(</tt><tt class="py-name">m_dict</tt><tt class="py-op">,</tt><tt class="py-string">'mi'</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-name">ft_dict</tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="madrona.unit_converter.tests.meter_dict_convert" class="py-name" href="#" onclick="return doclink('link-13', 'meter_dict_convert', 'link-12');">meter_dict_convert</a></tt><tt class="py-op">(</tt><tt class="py-name">m_dict</tt><tt class="py-op">,</tt><tt class="py-string">'ft'</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-name">km_dict</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="madrona.unit_converter.tests.meter_dict_convert" class="py-name" href="#" onclick="return doclink('link-14', 'meter_dict_convert', 'link-12');">meter_dict_convert</a></tt><tt class="py-op">(</tt><tt class="py-name">m_dict</tt><tt class="py-op">,</tt><tt class="py-string">'km'</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">display_dict</tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="madrona.unit_converter.tests.meter_dict_convert" class="py-name" href="#" onclick="return doclink('link-15', 'meter_dict_convert', 'link-12');">meter_dict_convert</a></tt><tt class="py-op">(</tt><tt class="py-name">m_dict</tt><tt class="py-op">,</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="madrona.common.default_settings.DISPLAY_LENGTH_UNITS" class="py-name" href="#" onclick="return doclink('link-16', 'DISPLAY_LENGTH_UNITS', 'link-7');">DISPLAY_LENGTH_UNITS</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-name">units_dict</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-string">'m'</tt><tt class="py-op">:</tt> <tt class="py-name">m_dict</tt><tt class="py-op">,</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-string">'mi'</tt><tt class="py-op">:</tt> <tt class="py-name">mi_dict</tt><tt class="py-op">,</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-string">'ft'</tt><tt class="py-op">:</tt> <tt class="py-name">ft_dict</tt><tt class="py-op">,</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-string">'km'</tt><tt class="py-op">:</tt> <tt class="py-name">km_dict</tt><tt class="py-op">,</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="madrona.common.default_settings.DISPLAY_LENGTH_UNITS" class="py-name" href="#" onclick="return doclink('link-17', 'DISPLAY_LENGTH_UNITS', 'link-7');">DISPLAY_LENGTH_UNITS</a></tt><tt class="py-op">:</tt> <tt class="py-name">display_dict</tt><tt class="py-op">,</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-op">}</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt id="link-18" class="py-name" targets="Function madrona.unit_converter.models.add_conversion_methods_to_GEOSGeometry()=madrona.unit_converter.models-module.html#add_conversion_methods_to_GEOSGeometry"><a title="madrona.unit_converter.models.add_conversion_methods_to_GEOSGeometry" class="py-name" href="#" onclick="return doclink('link-18', 'add_conversion_methods_to_GEOSGeometry', 'link-18');">add_conversion_methods_to_GEOSGeometry</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">         </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">unit</tt><tt class="py-op">,</tt> <tt class="py-name">result_dict</tt> <tt class="py-keyword">in</tt> <tt class="py-name">units_dict</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-19" class="py-name" targets="Variable madrona.common.models.KmlCache.key=madrona.common.models.KmlCache-class.html#key,Variable madrona.xyquery.models.Attribute.key=madrona.xyquery.models.Attribute-class.html#key"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-19', 'key', 'link-19');">key</a></tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-20', 'geom', 'link-4');">geom</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">geoms</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                <tt class="py-name">fail_str</tt> <tt class="py-op">=</tt> <tt class="py-string">"unit = %s, key = %s, dict value = %f"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">unit</tt><tt class="py-op">,</tt><tt id="link-21" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-21', 'key', 'link-19');">key</a></tt><tt class="py-op">,</tt><tt class="py-name">result_dict</tt><tt class="py-op">[</tt><tt id="link-22" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-22', 'key', 'link-19');">key</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-23" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-23', 'key', 'link-19');">key</a></tt><tt class="py-op">.</tt><tt class="py-name">find</tt><tt class="py-op">(</tt><tt class="py-string">'line'</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                    <tt class="py-name">att_name</tt> <tt class="py-op">=</tt> <tt class="py-string">'length_'</tt> <tt class="py-op">+</tt> <tt class="py-name">unit</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">                    <tt class="py-name">att_name</tt> <tt class="py-op">=</tt> <tt class="py-string">'area_sq_'</tt> <tt class="py-op">+</tt> <tt class="py-name">unit</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                <tt class="py-name">fail_str</tt> <tt class="py-op">+=</tt> <tt class="py-string">', appended method value = %f'</tt> <tt class="py-op">%</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt id="link-24" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-24', 'geom', 'link-4');">geom</a></tt><tt class="py-op">,</tt><tt class="py-name">att_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertAlmostEqual</tt><tt class="py-op">(</tt><tt class="py-name">result_dict</tt><tt class="py-op">[</tt><tt id="link-25" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-25', 'key', 'link-19');">key</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt id="link-26" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-26', 'geom', 'link-4');">geom</a></tt><tt class="py-op">,</tt><tt class="py-name">att_name</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-27" class="py-name"><a title="madrona.unit_converter.tests.NUM_DIGITS" class="py-name" href="#" onclick="return doclink('link-27', 'NUM_DIGITS', 'link-3');">NUM_DIGITS</a></tt><tt class="py-op">,</tt><tt class="py-name">fail_str</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">             </tt>
+<a name="OtherMethodsTest"></a><div id="OtherMethodsTest-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="OtherMethodsTest-toggle" onclick="return toggle('OtherMethodsTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.unit_converter.tests.OtherMethodsTest-class.html">OtherMethodsTest</a><tt class="py-op">(</tt><tt class="py-base-class">TestCase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OtherMethodsTest-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="OtherMethodsTest-expanded"><a name="OtherMethodsTest.test_other_methods"></a><div id="OtherMethodsTest.test_other_methods-def"><a name="L98"></a><tt class="py-lineno"> 98</tt> <a class="py-toggle" href="#" id="OtherMethodsTest.test_other_methods-toggle" onclick="return toggle('OtherMethodsTest.test_other_methods');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.unit_converter.tests.OtherMethodsTest-class.html#test_other_methods">test_other_methods</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OtherMethodsTest.test_other_methods-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OtherMethodsTest.test_other_methods-expanded"><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-name">unit</tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="madrona.common.default_settings.DISPLAY_LENGTH_UNITS" class="py-name" href="#" onclick="return doclink('link-28', 'DISPLAY_LENGTH_UNITS', 'link-7');">DISPLAY_LENGTH_UNITS</a></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-name">geoms</tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="madrona.unit_converter.tests.create_test_geometries" class="py-name" href="#" onclick="return doclink('link-29', 'create_test_geometries', 'link-10');">create_test_geometries</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-name">m_dict</tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="madrona.unit_converter.tests.meter_measurements" class="py-name" href="#" onclick="return doclink('link-30', 'meter_measurements', 'link-11');">meter_measurements</a></tt><tt class="py-op">(</tt><tt class="py-name">geoms</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-name">result_dict</tt> <tt class="py-op">=</tt> <tt id="link-31" class="py-name"><a title="madrona.unit_converter.tests.meter_dict_convert" class="py-name" href="#" onclick="return doclink('link-31', 'meter_dict_convert', 'link-12');">meter_dict_convert</a></tt><tt class="py-op">(</tt><tt class="py-name">m_dict</tt><tt class="py-op">,</tt><tt class="py-name">unit</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">         </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-32" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-32', 'key', 'link-19');">key</a></tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-33', 'geom', 'link-4');">geom</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">geoms</tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">            <tt class="py-name">fail_str</tt> <tt class="py-op">=</tt> <tt class="py-string">"unit = %s, key = %s, dict value = %f"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">unit</tt><tt class="py-op">,</tt><tt id="link-34" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-34', 'key', 'link-19');">key</a></tt><tt class="py-op">,</tt><tt class="py-name">result_dict</tt><tt class="py-op">[</tt><tt id="link-35" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-35', 'key', 'link-19');">key</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-36" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-36', 'key', 'link-19');">key</a></tt><tt class="py-op">.</tt><tt class="py-name">find</tt><tt class="py-op">(</tt><tt class="py-string">'line'</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                <tt class="py-name">att_name</tt> <tt class="py-op">=</tt> <tt class="py-string">'length_'</tt> <tt class="py-op">+</tt> <tt class="py-name">unit</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                <tt class="py-name">att_name</tt> <tt class="py-op">=</tt> <tt class="py-string">'area_sq_'</tt> <tt class="py-op">+</tt> <tt class="py-name">unit</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-name">fail_str</tt> <tt class="py-op">+=</tt> <tt class="py-string">', appended method value = %f'</tt> <tt class="py-op">%</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-37', 'geom', 'link-4');">geom</a></tt><tt class="py-op">,</tt><tt class="py-name">att_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertAlmostEqual</tt><tt class="py-op">(</tt><tt class="py-name">result_dict</tt><tt class="py-op">[</tt><tt id="link-38" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-38', 'key', 'link-19');">key</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt><tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt id="link-39" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-39', 'geom', 'link-4');">geom</a></tt><tt class="py-op">,</tt><tt class="py-name">att_name</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt id="link-40" class="py-name"><a title="madrona.unit_converter.tests.NUM_DIGITS" class="py-name" href="#" onclick="return doclink('link-40', 'NUM_DIGITS', 'link-3');">NUM_DIGITS</a></tt><tt class="py-op">,</tt><tt class="py-name">fail_str</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:25 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

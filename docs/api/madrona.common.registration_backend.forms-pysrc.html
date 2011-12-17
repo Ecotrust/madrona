@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.registration_backend.forms</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.registration_backend-module.html">Package&nbsp;registration_backend</a> ::
+        Module&nbsp;forms
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.registration_backend.forms-module.html">Module madrona.common.registration_backend.forms</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona.intersection.templates.registration=madrona.intersection.templates.registration-module.html"><a title="madrona.intersection.templates.registration" class="py-name" href="#" onclick="return doclink('link-0', 'registration', 'link-0');">registration</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module madrona.analysistools.forms=madrona.analysistools.forms-module.html,Module madrona.bookmarks.forms=madrona.bookmarks.forms-module.html,Module madrona.common.forms=madrona.common.forms-module.html,Module madrona.common.registration_backend.forms=madrona.common.registration_backend.forms-module.html,Module madrona.features.forms=madrona.features.forms-module.html,Module madrona.intersection.forms=madrona.intersection.forms-module.html,Module madrona.loadshp.forms=madrona.loadshp.forms-module.html,Module madrona.manipulators.forms=madrona.manipulators.forms-module.html,Module madrona.openid.forms=madrona.openid.forms-module.html,Module madrona.shapes.forms=madrona.shapes.forms-module.html,Module madrona.user_profile.forms=madrona.user_profile.forms-module.html"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-1', 'forms', 'link-1');">forms</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">RegistrationForm</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-2', 'forms', 'link-1');">forms</a></tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable madrona.common.registration_backend.forms.attrs_dict=madrona.common.registration_backend.forms-module.html#attrs_dict,Variable madrona.openid.forms.attrs_dict=madrona.openid.forms-module.html#attrs_dict"><a title="madrona.common.registration_backend.forms.attrs_dict
+madrona.openid.forms.attrs_dict" class="py-name" href="#" onclick="return doclink('link-3', 'attrs_dict', 'link-3');">attrs_dict</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line">        <tt class="py-string">'class'</tt><tt class="py-op">:</tt> <tt class="py-string">'required'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment">#        'onchange':'alert("check your self, fool");'</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-op">}</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="MadronaRegistrationForm"></a><div id="MadronaRegistrationForm-def"><a name="L10"></a><tt class="py-lineno">10</tt> <a class="py-toggle" href="#" id="MadronaRegistrationForm-toggle" onclick="return toggle('MadronaRegistrationForm');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.registration_backend.forms.MadronaRegistrationForm-class.html">MadronaRegistrationForm</a><tt class="py-op">(</tt><tt class="py-base-class">RegistrationForm</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MadronaRegistrationForm-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="MadronaRegistrationForm-expanded"><a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Variable madrona.common.registration_backend.forms.MadronaRegistrationForm.username=madrona.common.registration_backend.forms.MadronaRegistrationForm-class.html#username,Variable madrona.openid.forms.OpenidRegisterForm.username=madrona.openid.forms.OpenidRegisterForm-class.html#username"><a title="madrona.common.registration_backend.forms.MadronaRegistrationForm.username
+madrona.openid.forms.OpenidRegisterForm.username" class="py-name" href="#" onclick="return doclink('link-4', 'username', 'link-4');">username</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-5', 'forms', 'link-1');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">RegexField</tt><tt class="py-op">(</tt><tt class="py-name">regex</tt><tt class="py-op">=</tt><tt class="py-string">r'^\w+$'</tt><tt class="py-op">,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">        <tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">30</tt><tt class="py-op">,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-6" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-6', 'forms', 'link-1');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">TextInput</tt><tt class="py-op">(</tt><tt class="py-name">attrs</tt><tt class="py-op">=</tt><tt id="link-7" class="py-name"><a title="madrona.common.registration_backend.forms.attrs_dict
+madrona.openid.forms.attrs_dict" class="py-name" href="#" onclick="return doclink('link-7', 'attrs_dict', 'link-3');">attrs_dict</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">        <tt id="link-8" class="py-name" targets="Variable madrona.geographic_report.models.Annotation.label=madrona.geographic_report.models.Annotation-class.html#label"><a title="madrona.geographic_report.models.Annotation.label" class="py-name" href="#" onclick="return doclink('link-8', 'label', 'link-8');">label</a></tt><tt class="py-op">=</tt><tt class="py-string">"Username"</tt><tt class="py-op">,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-name">error_messages</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-string">'invalid'</tt><tt class="py-op">:</tt> <tt class="py-string">"Username can contain only letters, numbers or underscores (spaces are not permitted)."</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:23 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

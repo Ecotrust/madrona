@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Default Settings &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Template Customization" href="template_customization.html" />
+    <link rel="prev" title="PostGIS and the Django test database" href="postgis_django_tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_customization.html" title="Template Customization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="default-settings">
+<h1>Default Settings<a class="headerlink" href="#default-settings" title="Permalink to this headline">¶</a></h1>
+<p>Default settings can be found under madrona/common/default_settings.py
+Include it <strong>at the top</strong> of your project&#8217;s settings.py file like so to
+simplify setup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.common.default_settings</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>Once these settings are included you can override them in the projects
+settings.py or settings_local.py file.</p>
+<div class="section" id="madrona-settings">
+<h2>Madrona Settings<a class="headerlink" href="#madrona-settings" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">SUPEROVERLAY_ROOT</span></tt></dt>
+<dd>Directory path containing access-restricted/private superoverlay kmls.</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">LOG_FILE</span></tt></dt>
+<dd>Location of the madrona log file output. Used for debugging. Defaults to <cite>/tmp/madrona.log</cite></dd>
+</dl>
+<dl class="docutils" id="geometry-db-srid">
+<dt><tt class="docutils literal"><span class="pre">GEOMETRY_DB_SRID</span></tt></dt>
+<dd>Defines the projection that will be used for storing data in the
+database. Default is California teale albers, you will likely want to
+change it.</dd>
+</dl>
+<dl class="docutils" id="geometry-client-srid">
+<dt><tt class="docutils literal"><span class="pre">GEOMETRY_CLIENT_SRID</span></tt></dt>
+<dd>Defines the projection that is produced and consumed by the client. The
+default is 4326, compatible with the Google Earth Plugin.</dd>
+</dl>
+<dl class="docutils" id="google-api-key">
+<dt><tt class="docutils literal"><span class="pre">GOOGLE_API_KEY</span></tt></dt>
+<dd>Default key works for localhost:8080.
+Obtain new keys from <a class="reference external" href="http://code.google.com/apis/maps/signup.html">Google</a></dd>
+</dl>
+<dl class="docutils" id="mpa-class">
+<dt><tt class="docutils literal"><span class="pre">MPA_CLASS</span></tt></dt>
+<dd>Set to the class representing Marine Protected Areas in your project. The
+default for this setting is <tt class="docutils literal"><span class="pre">None</span></tt>, and will cause an exception if it is
+not set.</dd>
+</dl>
+<dl class="docutils" id="array-class">
+<dt><tt class="docutils literal"><span class="pre">ARRAY_CLASS</span></tt></dt>
+<dd>Set to the class representing Arrays in your project. The default for this
+setting is <tt class="docutils literal"><span class="pre">None</span></tt>, and will cause an exception if it is not set.</dd>
+</dl>
+<dl class="docutils" id="mpa-form">
+<dt><tt class="docutils literal"><span class="pre">MPA_FORM</span></tt></dt>
+<dd>Set to a ModelForm class for editing MPAs. Defaults to
+<tt class="docutils literal"><span class="pre">'madrona.mpa.forms.MpaForm'</span></tt></dd>
+</dl>
+<dl class="docutils" id="array-form">
+<dt><tt class="docutils literal"><span class="pre">ARRAY_FORM</span></tt></dt>
+<dd>Set to a ModelForm class for editing Arrays. Defaults to
+<tt class="docutils literal"><span class="pre">'madrona.mpa.forms.ArrayForm'</span></tt></dd>
+</dl>
+<dl class="docutils" id="release">
+<dt><tt class="docutils literal"><span class="pre">RELEASE</span></tt></dt>
+<dd>The next milestone or major revision number (ie <tt class="docutils literal"><span class="pre">'1.1'</span></tt>)</dd>
+</dl>
+<dl class="docutils" id="group-request-email">
+<dt><tt class="docutils literal"><span class="pre">GROUP_REQUEST_EMAIL</span></tt></dt>
+<dd>When user requests group membership, send email to this address (<tt class="docutils literal"><span class="pre">None</span></tt> = no email sent)</dd>
+</dl>
+<dl class="docutils" id="group-registered-by-web">
+<dt><tt class="docutils literal"><span class="pre">GROUP_REGISTERED_BY_WEB</span></tt></dt>
+<dd>Group name assigned to users who register using the web interface. Defaults to &#8216;registered_by_web&#8217;</dd>
+</dl>
+<dl class="docutils" id="kml-simplify-tolerance">
+<dt><tt class="docutils literal"><span class="pre">KML_SIMPLIFY_TOLERANCE</span></tt></dt>
+<dd>Tolerance argument to the postgis simplify command used when generating viewable KMLs. Defaults to <tt class="docutils literal"><span class="pre">20</span></tt>.</dd>
+</dl>
+<dl class="docutils" id="kml-extrude-height">
+<dt><tt class="docutils literal"><span class="pre">KML_EXTRUDE_HEIGHT</span></tt></dt>
+<dd>KML output is extruded to produce 3D shapes; This setting determines the height in meters. Defaults to <tt class="docutils literal"><span class="pre">100</span></tt>.</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">KML_ALTITUDEMODE_DEFAULT</span></tt></dt>
+<dd>Sets the default KML altitudeMode (usually one of: <cite>absolute</cite>, <cite>clampToGround</cite>, <cite>relativeToGround</cite>).</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">SHARING_TO_PUBLIC_GROUPS</span></tt></dt>
+<dd>List of groups which have the ability to make arrays publically viewable. Defaults to <tt class="docutils literal"><span class="pre">['Share</span> <span class="pre">with</span> <span class="pre">Public']</span></tt></dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">SHARING_TO_STAFF_GROUPS</span></tt></dt>
+<dd>List of groups which have the ability to submit mpas/arrays to staff for approval. Defaults to <tt class="docutils literal"><span class="pre">['Share</span> <span class="pre">with</span> <span class="pre">Staff']</span></tt></dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">SCREENCASTS</span></tt></dt>
+<dd>Directory to store screencast movies</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">SCREENCAST_IMAGES</span></tt></dt>
+<dd>Directory to store thumbnails and other supporting images for screencasts</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">VIDEO_PLAYER</span></tt></dt>
+<dd>Path to .swf flash video player for streaming screencast videos</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">RASTER_DIR</span></tt></dt>
+<dd>Absolute filepath to a directory containing raster files. Used with the <cite>madrona.raster_stats</cite> app. (Optional; defaults to <cite>madrona/raster_stats/test_data</cite>)</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">STARSPAN_BIN</span></tt></dt>
+<dd>Location of the starspan executable. Used with the <cite>madrona.raster_stats</cite> app. (Optional; defaults to <cite>starspan</cite>)</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">HELP_EMAIL</span></tt></dt>
+<dd>Email address used in templates for users to contact in case of problems. defaults to <a class="reference external" href="mailto:help&#37;&#52;&#48;madrona&#46;org">help<span>&#64;</span>madrona<span>&#46;</span>org</a></dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">APP_NAME</span></tt></dt>
+<dd>Name of the application to be used in templates as the title. defaults to &#8216;Madrona&#8217;</dd>
+</dl>
+</div>
+<div class="section" id="rd-party-app-settings">
+<h2>3rd Party App Settings<a class="headerlink" href="#rd-party-app-settings" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">ACCOUNT_ACTIVATION_DAYS</span></tt></dt>
+<dd>How many days do new users have to activate their account once they&#8217;ve registered. Default is <tt class="docutils literal"><span class="pre">7</span></tt> days.</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">REGISTRATION_OPEN</span></tt></dt>
+<dd>Boolean. Can users register themselves or not? Default is <tt class="docutils literal"><span class="pre">True</span></tt>.</dd>
+</dl>
+<dl class="docutils" id="compress">
+<dt><tt class="docutils literal"><span class="pre">COMPRESS_CSS</span></tt>, <tt class="docutils literal"><span class="pre">COMPRESS_JS</span></tt>, <tt class="docutils literal"><span class="pre">COMPRESS_VERSION</span></tt>, <tt class="docutils literal"><span class="pre">COMPRESS_AUTO</span></tt></dt>
+<dd>The <a class="reference external" href="http://code.google.com/p/django-compress/">django-compress</a> app
+is setup to compress css and js assets described in
+<tt class="docutils literal"><span class="pre">media/css_includes.xml</span></tt> and <tt class="docutils literal"><span class="pre">media/js_includes.xml</span></tt></dd>
+</dl>
+<dl class="docutils" id="google-analytics">
+<dt><tt class="docutils literal"><span class="pre">GOOGLE_ANALYTICS_MODEL</span></tt></dt>
+<dd>The <a class="reference external" href="http://code.google.com/p/django-google-analytics/">madrona.google-analytics</a> app
+(with alterations made to models.py and admin.py)
+allows for managing of Google Analytics accounts from the Django admin page.</dd>
+</dl>
+<dl class="docutils" id="base-dir">
+<dt><tt class="docutils literal"><span class="pre">BASE_DIR</span></tt></dt>
+<dd>Provides the path to the project codebase.</dd>
+</dl>
+<dl class="docutils" id="openid-enabled">
+<dt><tt class="docutils literal"><span class="pre">OPENID_ENABLED</span></tt></dt>
+<dd>Boolean. Determines whether to expose OpenID authentication. False implies local user/pass authentication only. Defaults to False.</dd>
+</dl>
+<dl class="docutils" id="wsgi-user">
+<dt><tt class="docutils literal"><span class="pre">WSGI_USER</span></tt></dt>
+<dd>Username of the UNIX/system user which runs the wsgi process. This has implications for the ownership of the MEDIA_ROOT directory as it
+needs to be writeable by the WSGI process. Setting WSGI_USER will cause the install_media command to chown the MEDIA_ROOT directory
+to this user. Defaults to None.</dd>
+</dl>
+</div>
+<div class="section" id="django-settings">
+<h2>Django Settings<a class="headerlink" href="#django-settings" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils" id="middleware-classes">
+<dt><tt class="docutils literal"><span class="pre">MIDDLEWARE_CLASSES</span></tt></dt>
+<dd>Is defined in <tt class="docutils literal"><span class="pre">default_settings.py</span></tt> to include GZIP and Auth
+middleware by default.</dd>
+</dl>
+<dl class="docutils" id="installed-apps">
+<dt><tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt></dt>
+<dd><p class="first">Contains all madrona apps and contrib.auth, contenttypes and other
+django apps critical to madrona functionality.</p>
+<p>Add new apps in your settings like so:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span>
+    <span class="s">&#39;path.to.my.app&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="media-root">
+<dt><tt class="docutils literal"><span class="pre">MEDIA_ROOT</span></tt></dt>
+<dd>Set to a default relative to trunk/media</dd>
+</dl>
+<dl class="docutils" id="media-url">
+<dt><tt class="docutils literal"><span class="pre">MEDIA_URL</span></tt></dt>
+<dd>This should be a full absolute path to the media directory (e.g. &#8220;<a class="reference external" href="http://northcoast.madrona.org/media/">http://northcoast.madrona.org/media/</a>&#8221;). Defaults to /media/; application will work with a relative path but there may be some minor js errors to contend with.</dd>
+</dl>
+<dl class="docutils" id="login-url">
+<dt><tt class="docutils literal"><span class="pre">LOGIN_URL</span></tt></dt>
+<dd>set to /login/</dd>
+</dl>
+<dl class="docutils" id="login-redirect-url">
+<dt><tt class="docutils literal"><span class="pre">LOGIN_REDIRECT_URL</span></tt></dt>
+<dd>Set to the map view at the root ( <tt class="docutils literal"><span class="pre">/</span></tt> )</dd>
+</dl>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">CACHES</span></tt></dt>
+<dd>see the <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/settings/#caches">django docs</a> for details on cache setup. defaults to local memory caching.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Default Settings</a><ul>
+<li><a class="reference internal" href="#madrona-settings">Madrona Settings</a></li>
+<li><a class="reference internal" href="#rd-party-app-settings">3rd Party App Settings</a></li>
+<li><a class="reference internal" href="#django-settings">Django Settings</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postgis_django_tests.html"
+                        title="previous chapter">PostGIS and the Django test database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_customization.html"
+                        title="next chapter">Template Customization</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/settings.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_customization.html" title="Template Customization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

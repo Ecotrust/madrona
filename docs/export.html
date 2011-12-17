@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Export Options &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Background" href="background.html" />
+    <link rel="prev" title="Workspace Documents" href="workspace_specification.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="workspace_specification.html" title="Workspace Documents"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="export-options">
+<span id="export"></span><h1>Export Options<a class="headerlink" href="#export-options" title="Permalink to this headline">¶</a></h1>
+<p>In order to provide the user the opportunity to make use of their shapes outside of the Madrona environment,
+Madrona provides an <cite>Export</cite> option which allows the user to export individual
+shapes and arrays of shapes in a variety of formats.</p>
+<p>Exporting as kmz and exporting as image are both built in to Lingcod and will
+appear by default in the <cite>Export</cite> drop-down menu.</p>
+<p>Exporting as shapefile requires the enabling of a urlpattern as explained below.</p>
+<p>Atom links for each of these Export options can be found in <tt class="docutils literal"><span class="pre">madrona/kmlapp/templates/placemarks.kml</span></tt>.</p>
+<div class="section" id="as-kmz-google-earth">
+<h2>as kmz (Google Earth)<a class="headerlink" href="#as-kmz-google-earth" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="as-image-png">
+<h2>as image (PNG)<a class="headerlink" href="#as-image-png" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="as-shapefile">
+<h2>as shapefile<a class="headerlink" href="#as-shapefile" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>Export as shapefile</cite> option can be enabled by adding a view, a model, and a couple tweaks
+to the exportable model.</p>
+<p>The following example will walk you through the steps of enabling the export as shapefile option using
+a sample model <tt class="docutils literal"><span class="pre">MyBioregion</span></tt>.</p>
+<p>The following view (<tt class="docutils literal"><span class="pre">bio_shapefile</span></tt> in this example) will utilize the built-in <tt class="docutils literal"><span class="pre">ShpResponder</span></tt> class
+to generate a shapefile from our exportable model (<tt class="docutils literal"><span class="pre">MyBioregion</span></tt>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This view is actually equipped to handle multiple instances of MyBioregion that may have been selected by the user
+for exporting.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.common</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">madrona.sharing.utils</span> <span class="kn">import</span> <span class="n">get_viewable_object_or_respond</span>
+<span class="kn">from</span> <span class="nn">madrona.shapes.views</span> <span class="kn">import</span> <span class="n">ShpResponder</span>
+<span class="kn">from</span> <span class="nn">django.template.defaultfilters</span> <span class="kn">import</span> <span class="n">slugify</span>
+
+<span class="k">def</span> <span class="nf">bio_shapefile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">mybioregions.models</span> <span class="kn">import</span> <span class="n">MyBioregion</span><span class="p">,</span> <span class="n">BioregionShapefile</span>
+    <span class="n">bios</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+        <span class="n">viewable</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">is_viewable</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">viewable</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">MyBioregion</span><span class="p">):</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">convert_to_shp</span><span class="p">()</span>
+            <span class="n">bios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c"># ignore anything else</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">slugify</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">])</span>
+    <span class="n">pks</span> <span class="o">=</span> <span class="p">[</span><span class="n">bio</span><span class="o">.</span><span class="n">pk</span> <span class="k">for</span> <span class="n">bio</span> <span class="ow">in</span> <span class="n">bios</span><span class="p">]</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">BioregionShapefile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">bio_id_num__in</span><span class="o">=</span><span class="n">pks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
+            <span class="s">&quot;Nothing in the query set; you don&#39;t want an empty shapefile&quot;</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="mi">404</span>
+        <span class="p">)</span>
+    <span class="n">shp_response</span> <span class="o">=</span> <span class="n">ShpResponder</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
+    <span class="n">shp_response</span><span class="o">.</span><span class="n">file_name</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">shp_response</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In order for this view to function, the exportable model (<tt class="docutils literal"><span class="pre">MyBioregion</span></tt>) will need a <tt class="docutils literal"><span class="pre">convert_to_shp</span></tt> function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">convert_to_shp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Port the Bioregion attributes over to the BioregionShapefile model so we can export the shapefile.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bsf</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">BioregionShapefile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">bioregion</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">created</span> <span class="ow">or</span> <span class="n">bsf</span><span class="o">.</span><span class="n">date_modified</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_modified</span><span class="p">:</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">bio_id_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_geom</span>
+        <span class="c">#short_name = self.name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">:</span>
+            <span class="n">bsf</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span>
+            <span class="n">bsf</span><span class="o">.</span><span class="n">group_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">name</span>
+        <span class="c">#units based on the settings variable DISPLAY_AREA_UNITS (currently sq miles)</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">area_sq_mi</span> <span class="o">=</span> <span class="n">area_in_display_units</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_geom</span><span class="p">)</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">aoi_modification_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_modified</span>
+        <span class="n">bsf</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">bsf</span>
+</pre></div>
+</div>
+<p>And the following <tt class="docutils literal"><span class="pre">link</span></tt> entry should be added to the model&#8217;s (<tt class="docutils literal"><span class="pre">MyBioregion</span></tt>) <tt class="docutils literal"><span class="pre">Options</span></tt> class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">links</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">alternate</span><span class="p">(</span><span class="s">&#39;Shapefile&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mybioregions.views.bio_shapefile&#39;</span><span class="p">,</span>
+        <span class="n">select</span><span class="o">=</span><span class="s">&#39;multiple single&#39;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s">&#39;application/zip&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This <tt class="docutils literal"><span class="pre">convert_to_shp</span></tt> function requires an additional model (<tt class="docutils literal"><span class="pre">BioregionShapefile</span></tt> in our example).
+This additional model will provide the fields you wish to have present in the attribute table of
+the exported shapefile.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">BioregionShapefile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This model will provide the correct fields for the export of shapefiles using the django-shapes app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PolygonField</span><span class="p">(</span><span class="n">srid</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">GEOMETRY_DB_SRID</span><span class="p">,</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+    <span class="n">bio_id_num</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Folder</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">group_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">area_sq_mi</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">bioregion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">MyBioregion</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&quot;bioregion&quot;</span><span class="p">)</span>
+    <span class="n">bio_modification_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">date_modified</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">GeoManager</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Implementing all of the above should provide a working <cite>Export as shapefile</cite> feature for your individual model.</p>
+<p>Once you have this in place for an individual model, implementing the <cite>Export as shapefile</cite> feature for an array,
+or group of models is simple:</p>
+<p>Augment your view to reflect the minor changes seen below (including the possibility of a <tt class="docutils literal"><span class="pre">Folder</span></tt> instance):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">bio_shapefile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">mybioregions.models</span> <span class="kn">import</span> <span class="n">MyBioregion</span><span class="p">,</span> <span class="n">Folder</span><span class="p">,</span> <span class="n">BioregionShapefile</span>
+    <span class="n">bios</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+        <span class="n">viewable</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">is_viewable</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">viewable</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">MyBioregion</span><span class="p">):</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">convert_to_shp</span><span class="p">()</span>
+            <span class="n">bios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Folder</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">bio</span> <span class="ow">in</span> <span class="n">inst</span><span class="o">.</span><span class="n">feature_set</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">feature_classes</span><span class="o">=</span><span class="p">[</span><span class="n">MyBioregion</span><span class="p">]):</span>
+                <span class="n">bio</span><span class="o">.</span><span class="n">convert_to_shp</span><span class="p">()</span>
+                <span class="n">bios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bio</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c"># ignore anything else</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">slugify</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">])</span>
+    <span class="n">pks</span> <span class="o">=</span> <span class="p">[</span><span class="n">bio</span><span class="o">.</span><span class="n">pk</span> <span class="k">for</span> <span class="n">bio</span> <span class="ow">in</span> <span class="n">bios</span><span class="p">]</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">BioregionShapefile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">bio_id_num__in</span><span class="o">=</span><span class="n">pks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
+            <span class="s">&quot;Nothing in the query set; you don&#39;t want an empty shapefile&quot;</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="mi">404</span>
+        <span class="p">)</span>
+    <span class="n">shp_response</span> <span class="o">=</span> <span class="n">ShpResponder</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
+    <span class="n">shp_response</span><span class="o">.</span><span class="n">file_name</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">shp_response</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This change will simply loop through the individual shapes in any <tt class="docutils literal"><span class="pre">Folder</span></tt> instance, generating
+a shapefile record from each of the shapes contained within that array.</p>
+<p>And finally, add the following <tt class="docutils literal"><span class="pre">link</span></tt> entry to the <tt class="docutils literal"><span class="pre">Options</span></tt> class in your array model (<tt class="docutils literal"><span class="pre">Folder</span></tt> in this example):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">links</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">alternate</span><span class="p">(</span><span class="s">&#39;Shapefile&#39;</span><span class="p">,</span>
+        <span class="s">&#39;mybioregions.views.bio_shapefile&#39;</span><span class="p">,</span>
+        <span class="n">select</span><span class="o">=</span><span class="s">&#39;multiple single&#39;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s">&#39;application/zip&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>And you should now have the ability to export shapes and folders of shapes as shapefiles.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Export Options</a><ul>
+<li><a class="reference internal" href="#as-kmz-google-earth">as kmz (Google Earth)</a></li>
+<li><a class="reference internal" href="#as-image-png">as image (PNG)</a></li>
+<li><a class="reference internal" href="#as-shapefile">as shapefile</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="workspace_specification.html"
+                        title="previous chapter">Workspace Documents</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="background.html"
+                        title="next chapter">Background</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/export.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="workspace_specification.html" title="Workspace Documents"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

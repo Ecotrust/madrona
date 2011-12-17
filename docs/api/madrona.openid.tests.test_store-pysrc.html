@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.openid.tests.test_store</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.openid-module.html">Package&nbsp;openid</a> ::
+        <a href="madrona.openid.tests-module.html">Package&nbsp;tests</a> ::
+        Module&nbsp;test_store
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.openid.tests.test_store-module.html">Module madrona.openid.tests.test_store</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/env python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># django-openid-auth -  OpenID integration for django.contrib.auth</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2009 Canonical Ltd.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># Redistribution and use in source and binary forms, with or without</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># modification, are permitted provided that the following conditions</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># are met:</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># * Redistributions of source code must retain the above copyright</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># notice, this list of conditions and the following disclaimer.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># * Redistributions in binary form must reproduce the above copyright</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># notice, this list of conditions and the following disclaimer in the</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># documentation and/or other materials provided with the distribution.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"># THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"># "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"># LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-comment"># FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-comment"># COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-comment"># INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-comment"># BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-comment"># LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-comment"># CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-comment"># LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-comment"># ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-comment"># POSSIBILITY OF SUCH DAMAGE.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">unittest</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">test</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TestCase</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona.openid=madrona.openid-module.html"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-0', 'openid', 'link-0');">openid</a></tt><tt class="py-op">.</tt><tt class="py-name">association</tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class madrona.openid.models.Association=madrona.openid.models.Association-class.html"><a title="madrona.openid.models.Association" class="py-name" href="#" onclick="return doclink('link-1', 'Association', 'link-1');">Association</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">OIDAssociation</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-2', 'openid', 'link-0');">openid</a></tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt class="py-name">nonce</tt> <tt class="py-keyword">import</tt> <tt class="py-name">SKEW</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-3', 'madrona', 'link-3');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-4', 'openid', 'link-0');">openid</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-5', 'models', 'link-5');">models</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name"><a title="madrona.openid.models.Association" class="py-name" href="#" onclick="return doclink('link-6', 'Association', 'link-1');">Association</a></tt><tt class="py-op">,</tt> <tt id="link-7" class="py-name" targets="Class madrona.openid.models.Nonce=madrona.openid.models.Nonce-class.html"><a title="madrona.openid.models.Nonce" class="py-name" href="#" onclick="return doclink('link-7', 'Nonce', 'link-7');">Nonce</a></tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-8" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-8', 'madrona', 'link-3');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-9', 'openid', 'link-0');">openid</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Module madrona.openid.openid_store=madrona.openid.openid_store-module.html"><a title="madrona.openid.openid_store" class="py-name" href="#" onclick="return doclink('link-10', 'openid_store', 'link-10');">openid_store</a></tt> <tt class="py-keyword">import</tt> <tt id="link-11" class="py-name" targets="Variable madrona.openid.DjangoOpenIDStore=madrona.openid-module.html#DjangoOpenIDStore,Class madrona.openid.openid_store.DjangoOpenIDStore=madrona.openid.openid_store.DjangoOpenIDStore-class.html"><a title="madrona.openid.DjangoOpenIDStore
+madrona.openid.openid_store.DjangoOpenIDStore" class="py-name" href="#" onclick="return doclink('link-11', 'DjangoOpenIDStore', 'link-11');">DjangoOpenIDStore</a></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests"></a><div id="OpenIDStoreTests-def"><a name="L42"></a><tt class="py-lineno"> 42</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests-toggle" onclick="return toggle('OpenIDStoreTests');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html">OpenIDStoreTests</a><tt class="py-op">(</tt><tt class="py-base-class">TestCase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="OpenIDStoreTests-expanded"><a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.setUp"></a><div id="OpenIDStoreTests.setUp-def"><a name="L44"></a><tt class="py-lineno"> 44</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.setUp-toggle" onclick="return toggle('OpenIDStoreTests.setUp');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#setUp">setUp</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.setUp-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.setUp-expanded"><a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-12" class="py-name" targets="Class madrona.openid.tests.test_store.OpenIDStoreTests=madrona.openid.tests.test_store.OpenIDStoreTests-class.html"><a title="madrona.openid.tests.test_store.OpenIDStoreTests" class="py-name" href="#" onclick="return doclink('link-12', 'OpenIDStoreTests', 'link-12');">OpenIDStoreTests</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method madrona.common.tests.BrowserUserAgentTest.setUp()=madrona.common.tests.BrowserUserAgentTest-class.html#setUp,Method madrona.data_manager.templatetags.smart_if.SmartIfTests.setUp()=madrona.data_manager.templatetags.smart_if.SmartIfTests-class.html#setUp,Method madrona.features.tests.CollectionTest.setUp()=madrona.features.tests.CollectionTest-class.html#setUp,Method madrona.features.tests.CopyTest.setUp()=madrona.features.tests.CopyTest-class.html#setUp,Method madrona.features.tests.CreateFormTest.setUp()=madrona.features.tests.CreateFormTest-class.html#setUp,Method madrona.features.tests.CreateTest.setUp()=madrona.features.tests.CreateTest-class.html#setUp,Method madrona.features.tests.DeleteTest.setUp()=madrona.features.tests.DeleteTest-class.html#setUp,Method madrona.features.tests.GenericLinksTest.setUp()=madrona.features.tests.GenericLinksTest-class.html#setUp,Method madrona.features.tests.JsonSerializationTest.setUp()=madrona.features.tests.JsonSerializationTest-class.html#setUp,Method madrona.features.tests.LinkTest.setUp()=madrona.features.tests.LinkTest-class.html#setUp,Method madrona.features.tests.SharingTestCase.setUp()=madrona.features.tests.SharingTestCase-class.html#setUp,Method madrona.features.tests.SpatialTest.setUp()=madrona.features.tests.SpatialTest-class.html#setUp,Method madrona.features.tests.UpdateFormTest.setUp()=madrona.features.tests.UpdateFormTest-class.html#setUp,Method madrona.features.tests.UpdateTest.setUp()=madrona.features.tests.UpdateTest-class.html#setUp,Method madrona.heatmap.tests.HeatmapTest.setUp()=madrona.heatmap.tests.HeatmapTest-class.html#setUp,Method madrona.kmlapp.tests.KMLAppTest.setUp()=madrona.kmlapp.tests.KMLAppTest-class.html#setUp,Method madrona.layers.tests.PrivateLayerListTest.setUp()=madrona.layers.tests.PrivateLayerListTest-class.html#setUp,Method madrona.manipulators.tests.FeaturesManipulatorTest.setUp()=madrona.manipulators.tests.FeaturesManipulatorTest-class.html#setUp,Method madrona.manipulators.tests.ManipulatorsTest.setUp()=madrona.manipulators.tests.ManipulatorsTest-class.html#setUp,Method madrona.openid.tests.test_store.OpenIDStoreTests.setUp()=madrona.openid.tests.test_store.OpenIDStoreTests-class.html#setUp,Method madrona.raster_stats.tests.ZonalCategoriesTest.setUp()=madrona.raster_stats.tests.ZonalCategoriesTest-class.html#setUp,Method madrona.raster_stats.tests.ZonalTest.setUp()=madrona.raster_stats.tests.ZonalTest-class.html#setUp,Method madrona.raster_stats.tests.ZonalWebServiceTest.setUp()=madrona.raster_stats.tests.ZonalWebServiceTest-class.html#setUp,Method madrona.staticmap.tests.StaticMapTest.setUp()=madrona.staticmap.tests.StaticMapTest-class.html#setUp,Method madrona.user_profile.tests.UserProfileTest.setUp()=madrona.user_profile.tests.UserProfileTest-class.html#setUp"><a title="madrona.common.tests.BrowserUserAgentTest.setUp
+madrona.data_manager.templatetags.smart_if.SmartIfTests.setUp
+madrona.features.tests.CollectionTest.setUp
+madrona.features.tests.CopyTest.setUp
+madrona.features.tests.CreateFormTest.setUp
+madrona.features.tests.CreateTest.setUp
+madrona.features.tests.DeleteTest.setUp
+madrona.features.tests.GenericLinksTest.setUp
+madrona.features.tests.JsonSerializationTest.setUp
+madrona.features.tests.LinkTest.setUp
+madrona.features.tests.SharingTestCase.setUp
+madrona.features.tests.SpatialTest.setUp
+madrona.features.tests.UpdateFormTest.setUp
+madrona.features.tests.UpdateTest.setUp
+madrona.heatmap.tests.HeatmapTest.setUp
+madrona.kmlapp.tests.KMLAppTest.setUp
+madrona.layers.tests.PrivateLayerListTest.setUp
+madrona.manipulators.tests.FeaturesManipulatorTest.setUp
+madrona.manipulators.tests.ManipulatorsTest.setUp
+madrona.openid.tests.test_store.OpenIDStoreTests.setUp
+madrona.raster_stats.tests.ZonalCategoriesTest.setUp
+madrona.raster_stats.tests.ZonalTest.setUp
+madrona.raster_stats.tests.ZonalWebServiceTest.setUp
+madrona.staticmap.tests.StaticMapTest.setUp
+madrona.user_profile.tests.UserProfileTest.setUp" class="py-name" href="#" onclick="return doclink('link-13', 'setUp', 'link-13');">setUp</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="madrona.openid.DjangoOpenIDStore
+madrona.openid.openid_store.DjangoOpenIDStore" class="py-name" href="#" onclick="return doclink('link-14', 'DjangoOpenIDStore', 'link-11');">DjangoOpenIDStore</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_storeAssociation"></a><div id="OpenIDStoreTests.test_storeAssociation-def"><a name="L48"></a><tt class="py-lineno"> 48</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_storeAssociation-toggle" onclick="return toggle('OpenIDStoreTests.test_storeAssociation');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_storeAssociation">test_storeAssociation</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_storeAssociation-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_storeAssociation-expanded"><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-name">assoc</tt> <tt class="py-op">=</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt class="py-number">42</tt><tt class="py-op">,</tt> <tt class="py-number">600</tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#storeAssociation"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-15', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">assoc</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-name">dbassoc</tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="madrona.openid.models.Association" class="py-name" href="#" onclick="return doclink('link-16', 'Association', 'link-1');">Association</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.objects=madrona.bioeconomic_model.models.Extent-class.html#objects,Variable madrona.bioeconomic_model.models.PointScrap.objects=madrona.bioeconomic_model.models.PointScrap-class.html#objects,Variable madrona.bioeconomic_model.models.PolygonGrid.objects=madrona.bioeconomic_model.models.PolygonGrid-class.html#objects,Variable madrona.bioeconomic_model.models.Scrap.objects=madrona.bioeconomic_model.models.Scrap-class.html#objects,Variable madrona.bioeconomic_model.models.StudyRegion.objects=madrona.bioeconomic_model.models.StudyRegion-class.html#objects,Variable madrona.bioregions.models.Bioregion.objects=madrona.bioregions.models.Bioregion-class.html#objects,Variable madrona.depth_range.models.DepthSounding.objects=madrona.depth_range.models.DepthSounding-class.html#objects,Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.intersection.models.ArealFeature.objects=madrona.intersection.models.ArealFeature-class.html#objects,Variable madrona.intersection.models.CommonFeatureInfo.objects=madrona.intersection.models.CommonFeatureInfo-class.html#objects,Variable madrona.intersection.models.IntersectionFeature.objects=madrona.intersection.models.IntersectionFeature-class.html#objects,Variable madrona.intersection.models.LinearFeature.objects=madrona.intersection.models.LinearFeature-class.html#objects,Variable madrona.intersection.models.PointFeature.objects=madrona.intersection.models.PointFeature-class.html#objects,Variable madrona.intersection.models.ResultCache.objects=madrona.intersection.models.ResultCache-class.html#objects,Variable madrona.intersection.models.TestPolygon.objects=madrona.intersection.models.TestPolygon-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.pg_spacing.models.Land.objects=madrona.pg_spacing.models.Land-class.html#objects,Variable madrona.pg_spacing.models.Network.objects=madrona.pg_spacing.models.Network-class.html#objects,Variable madrona.pg_spacing.models.Vertices.objects=madrona.pg_spacing.models.Vertices-class.html#objects,Variable madrona.spacing.models.Land.objects=madrona.spacing.models.Land-class.html#objects,Variable madrona.spacing.models.SpacingPoint.objects=madrona.spacing.models.SpacingPoint-class.html#objects,Variable madrona.straightline_spacing.models.SpacingPoint.objects=madrona.straightline_spacing.models.SpacingPoint-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-17', 'objects', 'link-17');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt id="link-18" class="py-name" targets="Variable madrona.openid.models.Association.server_url=madrona.openid.models.Association-class.html#server_url,Variable madrona.openid.models.Nonce.server_url=madrona.openid.models.Nonce-class.html#server_url"><a title="madrona.openid.models.Association.server_url
+madrona.openid.models.Nonce.server_url" class="py-name" href="#" onclick="return doclink('link-18', 'server_url', 'link-18');">server_url</a></tt><tt class="py-op">=</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-19" class="py-name" targets="Method madrona.common.management.commands.clear_cache.Command.handle()=madrona.common.management.commands.clear_cache.Command-class.html#handle,Method madrona.common.management.commands.install_cleangeometry.Command.handle()=madrona.common.management.commands.install_cleangeometry.Command-class.html#handle,Method madrona.common.management.commands.install_media.Command.handle()=madrona.common.management.commands.install_media.Command-class.html#handle,Method madrona.common.management.commands.runprofileserver.Command.handle()=madrona.common.management.commands.runprofileserver.Command-class.html#handle,Method madrona.common.management.commands.site.Command.handle()=madrona.common.management.commands.site.Command-class.html#handle,Method madrona.features.management.commands.enable_sharing.Command.handle()=madrona.features.management.commands.enable_sharing.Command-class.html#handle,Method madrona.layers.management.commands.create_privatekml.Command.handle()=madrona.layers.management.commands.create_privatekml.Command-class.html#handle,Method madrona.loadshp.forms.UploadForm.handle()=madrona.loadshp.forms.UploadForm-class.html#handle,Method madrona.manipulators.management.commands.change_manipulator_geom.Command.handle()=madrona.manipulators.management.commands.change_manipulator_geom.Command-class.html#handle,Method madrona.manipulators.management.commands.create_manipulator_geom.Command.handle()=madrona.manipulators.management.commands.create_manipulator_geom.Command-class.html#handle,Variable madrona.openid.models.Association.handle=madrona.openid.models.Association-class.html#handle,Method madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle()=madrona.raster_stats.management.commands.update_rasterdatasets.Command-class.html#handle,Method madrona.shapes.forms.UploadForm.handle()=madrona.shapes.forms.UploadForm-class.html#handle,Method madrona.studyregion.management.commands.change_study_region.Command.handle()=madrona.studyregion.management.commands.change_study_region.Command-class.html#handle,Method madrona.studyregion.management.commands.create_study_region.Command.handle()=madrona.studyregion.management.commands.create_study_region.Command-class.html#handle,Method madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle()=madrona.studyregion.management.commands.summarize_study_region_changes.Command-class.html#handle,Method madrona.xyquery.management.commands.loadraster.Command.handle()=madrona.xyquery.management.commands.loadraster.Command-class.html#handle,Method madrona.xyquery.management.commands.loadshp.Command.handle()=madrona.xyquery.management.commands.loadshp.Command-class.html#handle"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-19', 'handle', 'link-19');">handle</a></tt><tt class="py-op">=</tt><tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="madrona.openid.models.Association.server_url
+madrona.openid.models.Nonce.server_url" class="py-name" href="#" onclick="return doclink('link-20', 'server_url', 'link-18');">server_url</a></tt><tt class="py-op">,</tt> <tt class="py-string">'server-url'</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-21', 'handle', 'link-19');">handle</a></tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Variable madrona.openid.models.Association.secret=madrona.openid.models.Association-class.html#secret"><a title="madrona.openid.models.Association.secret" class="py-name" href="#" onclick="return doclink('link-22', 'secret', 'link-22');">secret</a></tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">.</tt><tt class="py-name">encode</tt><tt class="py-op">(</tt><tt class="py-string">'base-64'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Variable madrona.openid.models.Association.issued=madrona.openid.models.Association-class.html#issued"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-23', 'issued', 'link-23');">issued</a></tt><tt class="py-op">,</tt> <tt class="py-number">42</tt><tt class="py-op">)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Variable madrona.openid.models.Association.lifetime=madrona.openid.models.Association-class.html#lifetime"><a title="madrona.openid.models.Association.lifetime" class="py-name" href="#" onclick="return doclink('link-24', 'lifetime', 'link-24');">lifetime</a></tt><tt class="py-op">,</tt> <tt class="py-number">600</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">dbassoc</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Variable madrona.openid.models.Association.assoc_type=madrona.openid.models.Association-class.html#assoc_type"><a title="madrona.openid.models.Association.assoc_type" class="py-name" href="#" onclick="return doclink('link-25', 'assoc_type', 'link-25');">assoc_type</a></tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_getAssociation"></a><div id="OpenIDStoreTests.test_getAssociation-def"><a name="L61"></a><tt class="py-lineno"> 61</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_getAssociation-toggle" onclick="return toggle('OpenIDStoreTests.test_getAssociation');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_getAssociation">test_getAssociation</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_getAssociation-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_getAssociation-expanded"><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt id="link-26" class="py-name" targets="Variable madrona.openid.models.Nonce.timestamp=madrona.openid.models.Nonce-class.html#timestamp"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-26', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-27', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-28" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-28', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-number">600</tt><tt class="py-op">,</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                                         <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-name">assoc</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.getAssociation()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#getAssociation"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-29', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertTrue</tt><tt class="py-op">(</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-30', 'handle', 'link-19');">handle</a></tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="madrona.openid.models.Association.secret" class="py-name" href="#" onclick="return doclink('link-31', 'secret', 'link-22');">secret</a></tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-32', 'issued', 'link-23');">issued</a></tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-33', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="madrona.openid.models.Association.lifetime" class="py-name" href="#" onclick="return doclink('link-34', 'lifetime', 'link-24');">lifetime</a></tt><tt class="py-op">,</tt> <tt class="py-number">600</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="madrona.openid.models.Association.assoc_type" class="py-name" href="#" onclick="return doclink('link-35', 'assoc_type', 'link-25');">assoc_type</a></tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_getAssociation_unknown"></a><div id="OpenIDStoreTests.test_getAssociation_unknown-def"><a name="L75"></a><tt class="py-lineno"> 75</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_getAssociation_unknown-toggle" onclick="return toggle('OpenIDStoreTests.test_getAssociation_unknown');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_getAssociation_unknown">test_getAssociation_unknown</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_getAssociation_unknown-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_getAssociation_unknown-expanded"><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-name">assoc</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-36', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'unknown'</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_getAssociation_expired"></a><div id="OpenIDStoreTests.test_getAssociation_expired-def"><a name="L79"></a><tt class="py-lineno"> 79</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_getAssociation_expired-toggle" onclick="return toggle('OpenIDStoreTests.test_getAssociation_expired');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_getAssociation_expired">test_getAssociation_expired</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_getAssociation_expired-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_getAssociation_expired-expanded"><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt id="link-37" class="py-name"><a title="madrona.openid.models.Association.lifetime" class="py-name" href="#" onclick="return doclink('link-37', 'lifetime', 'link-24');">lifetime</a></tt> <tt class="py-op">=</tt> <tt class="py-number">600</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt id="link-38" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-38', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt id="link-39" class="py-name"><a title="madrona.openid.models.Association.lifetime" class="py-name" href="#" onclick="return doclink('link-39', 'lifetime', 'link-24');">lifetime</a></tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-40', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-41" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-41', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                                         <tt id="link-42" class="py-name"><a title="madrona.openid.models.Association.lifetime" class="py-name" href="#" onclick="return doclink('link-42', 'lifetime', 'link-24');">lifetime</a></tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-comment"># The association is not returned, and is removed from the database.</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-name">assoc</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-43', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertRaises</tt><tt class="py-op">(</tt><tt id="link-44" class="py-name"><a title="madrona.openid.models.Association" class="py-name" href="#" onclick="return doclink('link-44', 'Association', 'link-1');">Association</a></tt><tt class="py-op">.</tt><tt class="py-name">DoesNotExist</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="madrona.openid.models.Association" class="py-name" href="#" onclick="return doclink('link-45', 'Association', 'link-1');">Association</a></tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-46', 'objects', 'link-17');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">,</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                          <tt id="link-47" class="py-name"><a title="madrona.openid.models.Association.server_url
+madrona.openid.models.Nonce.server_url" class="py-name" href="#" onclick="return doclink('link-47', 'server_url', 'link-18');">server_url</a></tt><tt class="py-op">=</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-48" class="py-name"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-48', 'handle', 'link-19');">handle</a></tt><tt class="py-op">=</tt><tt class="py-string">'handle'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_getAssociation_no_handle"></a><div id="OpenIDStoreTests.test_getAssociation_no_handle-def"><a name="L92"></a><tt class="py-lineno"> 92</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_getAssociation_no_handle-toggle" onclick="return toggle('OpenIDStoreTests.test_getAssociation_no_handle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_getAssociation_no_handle">test_getAssociation_no_handle</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_getAssociation_no_handle-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_getAssociation_no_handle-expanded"><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt id="link-49" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-49', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-50', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle1'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-51" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-51', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">                                         <tt class="py-number">600</tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-52', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle2'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-53" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-53', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">                                         <tt class="py-number">600</tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-comment"># The newest handle is returned.</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-name">assoc</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-54', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertNotEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="madrona.common.management.commands.clear_cache.Command.handle
+madrona.common.management.commands.install_cleangeometry.Command.handle
+madrona.common.management.commands.install_media.Command.handle
+madrona.common.management.commands.runprofileserver.Command.handle
+madrona.common.management.commands.site.Command.handle
+madrona.features.management.commands.enable_sharing.Command.handle
+madrona.layers.management.commands.create_privatekml.Command.handle
+madrona.loadshp.forms.UploadForm.handle
+madrona.manipulators.management.commands.change_manipulator_geom.Command.handle
+madrona.manipulators.management.commands.create_manipulator_geom.Command.handle
+madrona.openid.models.Association.handle
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.handle
+madrona.shapes.forms.UploadForm.handle
+madrona.studyregion.management.commands.change_study_region.Command.handle
+madrona.studyregion.management.commands.create_study_region.Command.handle
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.handle
+madrona.xyquery.management.commands.loadraster.Command.handle
+madrona.xyquery.management.commands.loadshp.Command.handle" class="py-name" href="#" onclick="return doclink('link-55', 'handle', 'link-19');">handle</a></tt><tt class="py-op">,</tt> <tt class="py-string">'handle1'</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">assoc</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-56', 'issued', 'link-23');">issued</a></tt><tt class="py-op">,</tt> <tt id="link-57" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-57', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_removeAssociation"></a><div id="OpenIDStoreTests.test_removeAssociation-def"><a name="L108"></a><tt class="py-lineno">108</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_removeAssociation-toggle" onclick="return toggle('OpenIDStoreTests.test_removeAssociation');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_removeAssociation">test_removeAssociation</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_removeAssociation-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_removeAssociation-expanded"><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.removeAssociation()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#removeAssociation"><a title="madrona.openid.openid_store.DjangoOpenIDStore.removeAssociation" class="py-name" href="#" onclick="return doclink('link-58', 'removeAssociation', 'link-58');">removeAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'unknown'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt id="link-59" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-59', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-60', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-61" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-61', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-number">600</tt><tt class="py-op">,</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                                         <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.removeAssociation" class="py-name" href="#" onclick="return doclink('link-62', 'removeAssociation', 'link-58');">removeAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-63', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'handle'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_useNonce"></a><div id="OpenIDStoreTests.test_useNonce-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_useNonce-toggle" onclick="return toggle('OpenIDStoreTests.test_useNonce');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_useNonce">test_useNonce</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_useNonce-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_useNonce-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt id="link-64" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-64', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-comment"># The nonce can only be used once.</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.useNonce()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#useNonce"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-65', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-66" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-66', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-67', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-68" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-68', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-69', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-70" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-70', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_useNonce_expired"></a><div id="OpenIDStoreTests.test_useNonce_expired-def"><a name="L131"></a><tt class="py-lineno">131</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_useNonce_expired-toggle" onclick="return toggle('OpenIDStoreTests.test_useNonce_expired');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_useNonce_expired">test_useNonce_expired</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_useNonce_expired-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_useNonce_expired-expanded"><a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt id="link-71" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-71', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">SKEW</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-72', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-73" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-73', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_useNonce_future"></a><div id="OpenIDStoreTests.test_useNonce_future-def"><a name="L136"></a><tt class="py-lineno">136</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_useNonce_future-toggle" onclick="return toggle('OpenIDStoreTests.test_useNonce_future');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_useNonce_future">test_useNonce_future</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_useNonce_future-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_useNonce_future-expanded"><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt id="link-74" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-74', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">SKEW</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-75', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt id="link-76" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-76', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_cleanupNonces"></a><div id="OpenIDStoreTests.test_cleanupNonces-def"><a name="L141"></a><tt class="py-lineno">141</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_cleanupNonces-toggle" onclick="return toggle('OpenIDStoreTests.test_cleanupNonces');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_cleanupNonces">test_cleanupNonces</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_cleanupNonces-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_cleanupNonces-expanded"><a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt id="link-77" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-77', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-78', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server1'</tt><tt class="py-op">,</tt> <tt id="link-79" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-79', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt1'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-80', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server2'</tt><tt class="py-op">,</tt> <tt id="link-81" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-81', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt2'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-82" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-82', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server3'</tt><tt class="py-op">,</tt> <tt id="link-83" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-83', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt3'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="madrona.openid.models.Nonce" class="py-name" href="#" onclick="return doclink('link-84', 'Nonce', 'link-7');">Nonce</a></tt><tt class="py-op">.</tt><tt id="link-85" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-85', 'objects', 'link-17');">objects</a></tt><tt class="py-op">.</tt><tt id="link-86" class="py-name" targets="Variable madrona.raster_stats.models.ZonalCategory.count=madrona.raster_stats.models.ZonalCategory-class.html#count"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-86', 'count', 'link-86');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-87" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.cleanupNonces()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#cleanupNonces"><a title="madrona.openid.openid_store.DjangoOpenIDStore.cleanupNonces" class="py-name" href="#" onclick="return doclink('link-87', 'cleanupNonces', 'link-87');">cleanupNonces</a></tt><tt class="py-op">(</tt><tt class="py-name">_now</tt><tt class="py-op">=</tt><tt id="link-88" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-88', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">SKEW</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt id="link-89" class="py-name"><a title="madrona.openid.models.Nonce" class="py-name" href="#" onclick="return doclink('link-89', 'Nonce', 'link-7');">Nonce</a></tt><tt class="py-op">.</tt><tt id="link-90" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-90', 'objects', 'link-17');">objects</a></tt><tt class="py-op">.</tt><tt id="link-91" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-91', 'count', 'link-86');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-comment"># The nonces have now been cleared:</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-92" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.useNonce" class="py-name" href="#" onclick="return doclink('link-92', 'useNonce', 'link-65');">useNonce</a></tt><tt class="py-op">(</tt><tt class="py-string">'server1'</tt><tt class="py-op">,</tt> <tt id="link-93" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-93', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'salt1'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-94" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.cleanupNonces" class="py-name" href="#" onclick="return doclink('link-94', 'cleanupNonces', 'link-87');">cleanupNonces</a></tt><tt class="py-op">(</tt><tt class="py-name">_now</tt><tt class="py-op">=</tt><tt id="link-95" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-95', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">SKEW</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-96" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.cleanupNonces" class="py-name" href="#" onclick="return doclink('link-96', 'cleanupNonces', 'link-87');">cleanupNonces</a></tt><tt class="py-op">(</tt><tt class="py-name">_now</tt><tt class="py-op">=</tt><tt id="link-97" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-97', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">+</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">SKEW</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"> </tt>
+<a name="OpenIDStoreTests.test_cleanupAssociations"></a><div id="OpenIDStoreTests.test_cleanupAssociations-def"><a name="L163"></a><tt class="py-lineno">163</tt> <a class="py-toggle" href="#" id="OpenIDStoreTests.test_cleanupAssociations-toggle" onclick="return toggle('OpenIDStoreTests.test_cleanupAssociations');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store.OpenIDStoreTests-class.html#test_cleanupAssociations">test_cleanupAssociations</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenIDStoreTests.test_cleanupAssociations-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenIDStoreTests.test_cleanupAssociations-expanded"><a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt id="link-98" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-98', 'timestamp', 'link-26');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">100</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-99', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle1'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-100" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-100', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                                         <tt class="py-number">50</tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.storeAssociation" class="py-name" href="#" onclick="return doclink('link-101', 'storeAssociation', 'link-15');">storeAssociation</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">            <tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-name">OIDAssociation</tt><tt class="py-op">(</tt><tt class="py-string">'handle2'</tt><tt class="py-op">,</tt> <tt class="py-string">'secret'</tt><tt class="py-op">,</tt> <tt id="link-102" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-102', 'timestamp', 'link-26');">timestamp</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">                                         <tt class="py-number">200</tt><tt class="py-op">,</tt> <tt class="py-string">'HMAC-SHA1'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEquals</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name" targets="Method madrona.openid.openid_store.DjangoOpenIDStore.cleanupAssociations()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#cleanupAssociations"><a title="madrona.openid.openid_store.DjangoOpenIDStore.cleanupAssociations" class="py-name" href="#" onclick="return doclink('link-103', 'cleanupAssociations', 'link-103');">cleanupAssociations</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">        <tt class="py-comment"># The second (non-expired) association is left behind.</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertNotEqual</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">store</tt><tt class="py-op">.</tt><tt id="link-104" class="py-name"><a title="madrona.openid.openid_store.DjangoOpenIDStore.getAssociation" class="py-name" href="#" onclick="return doclink('link-104', 'getAssociation', 'link-29');">getAssociation</a></tt><tt class="py-op">(</tt><tt class="py-string">'server-url'</tt><tt class="py-op">,</tt> <tt class="py-string">'handle2'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">                            <tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"> </tt>
+<a name="suite"></a><div id="suite-def"><a name="L180"></a><tt class="py-lineno">180</tt> <a class="py-toggle" href="#" id="suite-toggle" onclick="return toggle('suite');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.tests.test_store-module.html#suite">suite</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="suite-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="suite-expanded"><a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">unittest</tt><tt class="py-op">.</tt><tt class="py-name">TestLoader</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">loadTestsFromName</tt><tt class="py-op">(</tt><tt class="py-name">__name__</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:25 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

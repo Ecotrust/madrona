@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.openid.openid_store.DjangoOpenIDStore</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.openid-module.html">Package&nbsp;openid</a> ::
+        <a href="madrona.openid.openid_store-module.html">Module&nbsp;openid_store</a> ::
+        Class&nbsp;DjangoOpenIDStore
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class DjangoOpenIDStore</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+                        object --+    
+                                 |    
+openid.store.interface.OpenIDStore --+
+                                     |
+                                    <strong class="uidshort">DjangoOpenIDStore</strong>
+</pre>
+
+<hr />
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>NoneType</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#storeAssociation" class="summary-sig-name">storeAssociation</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">server_url</span>,
+        <span class="summary-sig-arg">association</span>)</span><br />
+      This method puts a <code><a 
+      href="madrona.openid.models.Association-class.html" 
+      class="link">Association</a></code> object into storage, retrievable 
+      by server URL and handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.storeAssociation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code><a href="madrona.openid.models.Association-class.html" 
+      class="link">Association</a></code> or <code>NoneType</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#getAssociation" class="summary-sig-name">getAssociation</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">server_url</span>,
+        <span class="summary-sig-arg">handle</span>=<span class="summary-sig-default">None</span>)</span><br />
+      This method returns an <code><a 
+      href="madrona.openid.models.Association-class.html" 
+      class="link">Association</a></code> object from storage that matches 
+      the server URL and, if specified, handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.getAssociation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>bool</code> or <code>int</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#removeAssociation" class="summary-sig-name">removeAssociation</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">server_url</span>,
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      This method removes the matching association if it's found, and 
+      returns whether the association was removed or not.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.removeAssociation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>bool</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#useNonce" class="summary-sig-name">useNonce</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">server_url</span>,
+        <span class="summary-sig-arg">timestamp</span>,
+        <span class="summary-sig-arg">salt</span>)</span><br />
+      Called when using a nonce.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.useNonce">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">int</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#cleanupNonces" class="summary-sig-name">cleanupNonces</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">_now</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Remove expired nonces from the store.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.cleanupNonces">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">int</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#cleanupAssociations" class="summary-sig-name">cleanupAssociations</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Remove expired associations from the store.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.cleanupAssociations">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getAuthKey"></a><span class="summary-sig-name">getAuthKey</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.getAuthKey">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isDumb"></a><span class="summary-sig-name">isDumb</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.isDumb">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>openid.store.interface.OpenIDStore</code></b>:
+      <code>cleanup</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="storeAssociation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">storeAssociation</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">server_url</span>,
+        <span class="sig-arg">association</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.storeAssociation">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This method puts a <code><a 
+  href="madrona.openid.models.Association-class.html" 
+  class="link">Association</a></code> object into storage, retrievable by 
+  server URL and handle.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server_url</code></strong> - The URL of the identity server that this association is with.  
+          Because of the way the server portion of the library uses this 
+          interface, don't assume there are any limitations on the 
+          character set of the input string.  In particular, expect to see 
+          unescaped non-url-safe characters in the server_url field.</li>
+        <li><strong class="pname"><code>association</code></strong> - The <code><a href="madrona.openid.models.Association-class.html" 
+          class="link">Association</a></code> to store.</li>
+    </ul></dd>
+    <dt>Returns: <code>NoneType</code></dt>
+        <dd><code>None</code></dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.storeAssociation
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="getAssociation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getAssociation</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">server_url</span>,
+        <span class="sig-arg">handle</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.getAssociation">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This method returns an <code><a 
+  href="madrona.openid.models.Association-class.html" 
+  class="link">Association</a></code> object from storage that matches the 
+  server URL and, if specified, handle. It returns <code>None</code> if no 
+  such association is found or if the matching association is expired.</p>
+  <p>If no handle is specified, the store may return any association which 
+  matches the server URL.  If multiple associations are valid, the 
+  recommended return value for this method is the one most recently 
+  issued.</p>
+  <p>This method is allowed (and encouraged) to garbage collect expired 
+  associations when found. This method must not return expired 
+  associations.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server_url</code></strong> - The URL of the identity server to get the association for.  
+          Because of the way the server portion of the library uses this 
+          interface, don't assume there are any limitations on the 
+          character set of the input string. In particular, expect to see 
+          unescaped non-url-safe characters in the server_url field.</li>
+        <li><strong class="pname"><code>handle</code></strong> - This optional parameter is the handle of the specific association
+          to get.  If no specific handle is provided, any valid association
+          matching the server URL is returned.</li>
+    </ul></dd>
+    <dt>Returns: <code><a href="madrona.openid.models.Association-class.html" 
+      class="link">Association</a></code> or <code>NoneType</code></dt>
+        <dd>The <code><a href="madrona.openid.models.Association-class.html" 
+          class="link">Association</a></code> for the given identity 
+          server.</dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.getAssociation
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="removeAssociation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">removeAssociation</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">server_url</span>,
+        <span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.removeAssociation">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This method removes the matching association if it's found, and 
+  returns whether the association was removed or not.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server_url</code></strong> - The URL of the identity server the association to remove belongs 
+          to.  Because of the way the server portion of the library uses 
+          this interface, don't assume there are any limitations on the 
+          character set of the input string.  In particular, expect to see 
+          unescaped non-url-safe characters in the server_url field.</li>
+        <li><strong class="pname"><code>handle</code></strong> - This is the handle of the association to remove.  If there isn't 
+          an association found that matches both the given URL and handle, 
+          then there was no matching handle found.</li>
+    </ul></dd>
+    <dt>Returns: <code>bool</code> or <code>int</code></dt>
+        <dd>Returns whether or not the given association existed.</dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.removeAssociation
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="useNonce"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">useNonce</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">server_url</span>,
+        <span class="sig-arg">timestamp</span>,
+        <span class="sig-arg">salt</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.useNonce">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Called when using a nonce.</p>
+  <p>This method should return <code>True</code> if the nonce has not been 
+  used before, and store it for a while to make sure nobody tries to use 
+  the same value again.  If the nonce has already been used or the 
+  timestamp is not current, return <code>False</code>.</p>
+  <p>You may use <code class="link">openid.store.nonce.SKEW</code> for your
+  timestamp window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server_url</code></strong> - The URL of the server from which the nonce originated.</li>
+        <li><strong class="pname"><code>timestamp</code></strong> - The time that the nonce was created (to the nearest second), in 
+          seconds since January 1 1970 UTC.</li>
+        <li><strong class="pname"><code>salt</code></strong> - A random string that makes two nonces from the same server issued
+          during the same second unique.</li>
+    </ul></dd>
+    <dt>Returns: <code>bool</code></dt>
+        <dd>Whether or not the nonce was valid.</dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.useNonce
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="cleanupNonces"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">cleanupNonces</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">_now</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.cleanupNonces">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Remove expired nonces from the store.</p>
+  <p>Discards any nonce from storage that is old enough that its timestamp 
+  would not pass <a 
+  href="madrona.openid.openid_store.DjangoOpenIDStore-class.html#useNonce" 
+  class="link">useNonce</a>.</p>
+  <p>This method is not called in the normal operation of the library.  It 
+  provides a way for store admins to keep their storage from filling up 
+  with expired data.</p>
+  <dl class="fields">
+    <dt>Returns: int</dt>
+        <dd>the number of nonces expired.</dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.cleanupNonces
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="cleanupAssociations"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">cleanupAssociations</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.openid.openid_store-pysrc.html#DjangoOpenIDStore.cleanupAssociations">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Remove expired associations from the store.</p>
+  <p>This method is not called in the normal operation of the library.  It 
+  provides a way for store admins to keep their storage from filling up 
+  with expired data.</p>
+  <dl class="fields">
+    <dt>Returns: int</dt>
+        <dd>the number of associations expired.</dd>
+    <dt>Overrides:
+        openid.store.interface.OpenIDStore.cleanupAssociations
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:17 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

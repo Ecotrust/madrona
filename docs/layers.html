@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.layers: KML Data Layers &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.loadshp: Load Shapefile (loadshp) App" href="loadshp.html" />
+    <link rel="prev" title="madrona.kmlapp: KML Representation of Features and Collections" href="kmlapp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp: Load Shapefile (loadshp) App"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="kmlapp.html" title="madrona.kmlapp: KML Representation of Features and Collections"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-layers-kml-data-layers">
+<span id="layers"></span><h1><cite>madrona.layers</cite>: KML Data Layers<a class="headerlink" href="#madrona-layers-kml-data-layers" title="Permalink to this headline">¶</a></h1>
+<p>This document outlines how KML base data layers are handled in Madrona.</p>
+<p>There are two categories of KML layers to consider:</p>
+<ul>
+<li><p class="first"><strong>User Uploaded KMLs</strong> are controlled by the user through the web interface. These act as <tt class="docutils literal"><span class="pre">Features</span></tt> and can be shared, managed through the Madrona application, put into folders, etc. These will show up in the &#8220;My Shapes&#8221; and &#8220;Shared with Me&#8221; Tabs.</p>
+</li>
+<li><p class="first"><strong>Admin Managed KMLs</strong> are managed by the site administrators on the server or through the admin site. They cannot be managed through the Madrona application front-end, only viewed. Data can be uploaded directly onto the server with sftp. They aren&#8217;t treated like features, they don&#8217;t use the sharing API or have any of the built in functionality of <tt class="docutils literal"><span class="pre">Features</span></tt>. They&#8217;ll only show up in the data layers panel or wherever you choose to put them in your site template.</p>
+<p>Of these, there are two sub-types of admin-managed KMLs:</p>
+<ul class="simple">
+<li><strong>Private KMLs</strong> can be single KMLs or superoverlay trees which are only available to select groups.</li>
+<li><strong>Public Layer Lists</strong> is a single KML file that is used to represent all publically-available data layers.</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="adding-public-kml-datasets">
+<h2>Adding Public KML Datasets<a class="headerlink" href="#adding-public-kml-datasets" title="Permalink to this headline">¶</a></h2>
+<p>Public datasets, accessible to all users, are managed using a single KML file. This
+file uses <tt class="docutils literal"><span class="pre">NetworkLinks</span></tt> to refer to other datasets that can be hosted
+anywhere else on the web.</p>
+<div class="section" id="creating-a-new-layers-list">
+<h3>creating a new layers list<a class="headerlink" href="#creating-a-new-layers-list" title="Permalink to this headline">¶</a></h3>
+<p>Create a kml file using Google Earth that references other kml files on the
+web via <a class="reference external" href="http://code.google.com/apis/kml/documentation/kml_tut.html#network_links">NetworkLinks</a>.
+An example of such a file can be found under
+<tt class="docutils literal"><span class="pre">madrona/layers/fixtures/public_layers.kml</span></tt>. Once you have a kml file ready
+go into the admin tool and choose <strong>Public layer lists</strong>. From there you can
+add a new layer. The most important thing to note here is be sure your first
+uploaded layer is set as <em>active</em>!</p>
+</div>
+<div class="section" id="updating-the-layers-list">
+<h3>updating the layers list<a class="headerlink" href="#updating-the-layers-list" title="Permalink to this headline">¶</a></h3>
+<p>Once an initial layer list is loaded into the tool, the basic workflow to make
+changes is as follows.</p>
+<ol class="arabic simple">
+<li>download existing kml</li>
+<li>open in google and make changes</li>
+<li>save locally</li>
+<li>use the admin site to create a new <tt class="xref py py-class docutils literal"><span class="pre">PublicLayerList</span></tt> with that kml file</li>
+<li>mark the new <tt class="xref py py-class docutils literal"><span class="pre">PublicLayerList</span></tt> as active</li>
+</ol>
+<p>This makes it easy to roll back to a previous version of the layer list as
+needed.</p>
+</div>
+<div class="section" id="best-practices-for-creating-updating-public-kmls">
+<h3>best practices for creating/updating public KMLs<a class="headerlink" href="#best-practices-for-creating-updating-public-kmls" title="Permalink to this headline">¶</a></h3>
+<p>With the advent of bookmarking functionality, updating public KMLs can have some repercussions for the existing bookmarks.
+Please <a class="reference internal" href="bookmarks.html#bookmarks"><em>follow the guidelines</em></a> to avoid disrupting any user&#8217;s bookmarks.</p>
+</div>
+</div>
+<div class="section" id="adding-restricted-access-kml-datasets">
+<h2>Adding Restricted-Access KML Datasets<a class="headerlink" href="#adding-restricted-access-kml-datasets" title="Permalink to this headline">¶</a></h2>
+<p>Private KMLs allow you to create and add additional layers with access control. You can choose to keep the layers entirely private or share them with select user groups.</p>
+<div class="section" id="adding-restricted-access-kml-superoverlays">
+<h3>Adding Restricted-Access KML SuperOverlays<a class="headerlink" href="#adding-restricted-access-kml-superoverlays" title="Permalink to this headline">¶</a></h3>
+<p>SuperOverlays are multi-file KML heirarchies for displaying things like tiled rasters (created using the gdal2tiles utility for example). The key distinctions between a normal private dataset and a private superoverlay is that a) superoverlays must exist on disk (cant be uploaded via admin) and b) they allow authorized users to access <em>any</em> file in or below the directory of the base kml file.</p>
+<p>For example, consider this directory structure:</p>
+<div class="highlight-python"><pre>- rockfish
+  - doc.kml
+  - something.txt
+  - level1
+    - doc.kml</pre>
+</div>
+<p>If you create a PrivateKML with the kml set to <cite>rockfish/doc.kml</cite> you can access the base kml itself using the normal URL (assume pk=1, session_key=0):</p>
+<div class="highlight-python"><pre>http://localhost:8000/layers/overlay/1/0/</pre>
+</div>
+<p>Or any path relative to this URL to access files in or below that directory:</p>
+<div class="highlight-python"><pre>http://localhost:8000/layers/overlay/1/0/something.txt
+http://localhost:8000/layers/overlay/1/0/level1/doc.kml</pre>
+</div>
+<p>The appended paths are sanitized according to the algorithm in django.views.static which ensures that only file at or below the base directory can be accessed. <em>If a user has access to the base kml, they also have access to every file at or below that directory level!</em> This has important security implications and it&#8217;s highly recomended that you put each superoverlay in its own folder as a result.</p>
+</div>
+<div class="section" id="setting-up-private-kmls">
+<h3>Setting up private KMLs<a class="headerlink" href="#setting-up-private-kmls" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Create a directory for private KMLS and set <cite>settings.PRIVATE_KML_ROOT</cite></p>
+</li>
+<li><p class="first">Transfer the data to PRIVATE_KML_ROOT. For best results, it&#8217;s highly recomended that each dataset get it&#8217;s own subdirectory, especially if you are dealing with superoverlays.</p>
+</li>
+<li><p class="first">Using the Admin interface, add the privatekml. The .kml/.kmz files should appear in the dropdown</p>
+</li>
+<li><p class="first">Alternatively, you can run a management command to auto-create private kml entries and share them with a group. This is based on the exisiting contents of PRIVATE_KML_ROOT. You&#8217;ll probaby want to tweak the PrivateKml entries via admin later but this provides a decent starting point.:</p>
+<div class="highlight-python"><pre>python manage.py create_privatekml GroupName</pre>
+</div>
+</li>
+<li><p class="first">The private will now be included in the private data layers list (assuming this is added to the map):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">madrona</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span><span class="s">&#39;{</span><span class="si">% u</span><span class="s">rl layers_privatekml_list session_key=session_key %}&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Alternatively, you can access each PrivateKml directly through a reverse url lookup like so:</p>
+<div class="highlight-python"><pre>{% url layers-privatekml pk=1 session_key=session_key %}</pre>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.layers</cite>: KML Data Layers</a><ul>
+<li><a class="reference internal" href="#adding-public-kml-datasets">Adding Public KML Datasets</a><ul>
+<li><a class="reference internal" href="#creating-a-new-layers-list">creating a new layers list</a></li>
+<li><a class="reference internal" href="#updating-the-layers-list">updating the layers list</a></li>
+<li><a class="reference internal" href="#best-practices-for-creating-updating-public-kmls">best practices for creating/updating public KMLs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-restricted-access-kml-datasets">Adding Restricted-Access KML Datasets</a><ul>
+<li><a class="reference internal" href="#adding-restricted-access-kml-superoverlays">Adding Restricted-Access KML SuperOverlays</a></li>
+<li><a class="reference internal" href="#setting-up-private-kmls">Setting up private KMLs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="kmlapp.html"
+                        title="previous chapter"><cite>madrona.kmlapp</cite>: KML Representation of Features and Collections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="loadshp.html"
+                        title="next chapter"><cite>madrona.loadshp</cite>: Load Shapefile (loadshp) App</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/layers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp: Load Shapefile (loadshp) App"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="kmlapp.html" title="madrona.kmlapp: KML Representation of Features and Collections"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.straightline_spacing.views</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.straightline_spacing-module.html">Package&nbsp;straightline_spacing</a> ::
+        Module&nbsp;views
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.straightline_spacing.views-module.html">Module madrona.straightline_spacing.views</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt><tt class="py-op">.</tt><tt class="py-name">defaultfilters</tt> <tt class="py-keyword">import</tt> <tt class="py-name">slugify</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-0', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package madrona.straightline_spacing=madrona.straightline_spacing-module.html"><a title="madrona.straightline_spacing" class="py-name" href="#" onclick="return doclink('link-1', 'straightline_spacing', 'link-1');">straightline_spacing</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2', 'models', 'link-2');">models</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-3" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-3', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package madrona.intersection=madrona.intersection-module.html,Method madrona.intersection.models.ArealFeature.intersection()=madrona.intersection.models.ArealFeature-class.html#intersection,Method madrona.intersection.models.LinearFeature.intersection()=madrona.intersection.models.LinearFeature-class.html#intersection"><a title="madrona.intersection
+madrona.intersection.models.ArealFeature.intersection
+madrona.intersection.models.LinearFeature.intersection" class="py-name" href="#" onclick="return doclink('link-4', 'intersection', 'link-4');">intersection</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module madrona.analysistools.views=madrona.analysistools.views-module.html,Module madrona.async.views=madrona.async.views-module.html,Module madrona.bioeconomic_model.views=madrona.bioeconomic_model.views-module.html,Module madrona.bioregions.views=madrona.bioregions.views-module.html,Module madrona.bookmarks.views=madrona.bookmarks.views-module.html,Module madrona.common.views=madrona.common.views-module.html,Module madrona.data_distributor.views=madrona.data_distributor.views-module.html,Module madrona.data_manager.views=madrona.data_manager.views-module.html,Module madrona.depth_range.views=madrona.depth_range.views-module.html,Module madrona.features.views=madrona.features.views-module.html,Module madrona.group_management.views=madrona.group_management.views-module.html,Module madrona.heatmap.views=madrona.heatmap.views-module.html,Module madrona.help.views=madrona.help.views-module.html,Module madrona.intersection.views=madrona.intersection.views-module.html,Module madrona.kmlapp.views=madrona.kmlapp.views-module.html,Module madrona.layers.views=madrona.layers.views-module.html,Module madrona.loadshp.views=madrona.loadshp.views-module.html,Module madrona.manipulators.views=madrona.manipulators.views-module.html,Module madrona.news.views=madrona.news.views-module.html,Module madrona.openid.views=madrona.openid.views-module.html,Module madrona.pg_spacing.views=madrona.pg_spacing.views-module.html,Module madrona.raster_stats.views=madrona.raster_stats.views-module.html,Module madrona.replication.views=madrona.replication.views-module.html,Module madrona.screencasts.views=madrona.screencasts.views-module.html,Package madrona.shapes.views=madrona.shapes.views-module.html,Module madrona.simplefaq.views=madrona.simplefaq.views-module.html,Module madrona.spacing.views=madrona.spacing.views-module.html,Module madrona.staticmap.views=madrona.staticmap.views-module.html,Module madrona.straightline_spacing.views=madrona.straightline_spacing.views-module.html,Module madrona.studyregion.views=madrona.studyregion.views-module.html,Module madrona.unit_converter.views=madrona.unit_converter.views-module.html,Module madrona.user_profile.views=madrona.user_profile.views-module.html,Module madrona.wave.views=madrona.wave.views-module.html,Module madrona.xyquery.views=madrona.xyquery.views-module.html"><a title="madrona.analysistools.views
+madrona.async.views
+madrona.bioeconomic_model.views
+madrona.bioregions.views
+madrona.bookmarks.views
+madrona.common.views
+madrona.data_distributor.views
+madrona.data_manager.views
+madrona.depth_range.views
+madrona.features.views
+madrona.group_management.views
+madrona.heatmap.views
+madrona.help.views
+madrona.intersection.views
+madrona.kmlapp.views
+madrona.layers.views
+madrona.loadshp.views
+madrona.manipulators.views
+madrona.news.views
+madrona.openid.views
+madrona.pg_spacing.views
+madrona.raster_stats.views
+madrona.replication.views
+madrona.screencasts.views
+madrona.shapes.views
+madrona.simplefaq.views
+madrona.spacing.views
+madrona.staticmap.views
+madrona.straightline_spacing.views
+madrona.studyregion.views
+madrona.unit_converter.views
+madrona.user_profile.views
+madrona.wave.views
+madrona.xyquery.views" class="py-name" href="#" onclick="return doclink('link-5', 'views', 'link-5');">views</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">int_views</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">xlwt</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="spacing_workbook"></a><div id="spacing_workbook-def"><a name="L6"></a><tt class="py-lineno"> 6</tt> <a class="py-toggle" href="#" id="spacing_workbook-toggle" onclick="return toggle('spacing_workbook');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.straightline_spacing.views-module.html#spacing_workbook">spacing_workbook</a><tt class="py-op">(</tt><tt class="py-param">in_dict</tt><tt class="py-op">,</tt> <tt class="py-param">ws_title</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="spacing_workbook-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="spacing_workbook-expanded"><a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line">    <tt class="py-name">wb</tt> <tt class="py-op">=</tt> <tt class="py-name">xlwt</tt><tt class="py-op">.</tt><tt class="py-name">Workbook</tt><tt class="py-op">(</tt><tt class="py-name">encoding</tt><tt class="py-op">=</tt><tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt class="py-name">ws</tt> <tt class="py-op">=</tt> <tt class="py-name">wb</tt><tt class="py-op">.</tt><tt class="py-name">add_sheet</tt><tt class="py-op">(</tt><tt class="py-string">'spacing_matrix'</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt class="py-name">ws</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name" targets="Function madrona.spacing.views.spacing_worksheet()=madrona.spacing.views-module.html#spacing_worksheet,Function madrona.straightline_spacing.views.spacing_worksheet()=madrona.straightline_spacing.views-module.html#spacing_worksheet"><a title="madrona.spacing.views.spacing_worksheet
+madrona.straightline_spacing.views.spacing_worksheet" class="py-name" href="#" onclick="return doclink('link-6', 'spacing_worksheet', 'link-6');">spacing_worksheet</a></tt><tt class="py-op">(</tt><tt class="py-name">in_dict</tt><tt class="py-op">,</tt> <tt class="py-name">ws_title</tt><tt class="py-op">,</tt><tt class="py-name">ws</tt><tt class="py-op">)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">wb</tt> </tt>
+</div><a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">     </tt>
+<a name="spacing_worksheet"></a><div id="spacing_worksheet-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="spacing_worksheet-toggle" onclick="return toggle('spacing_worksheet');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.straightline_spacing.views-module.html#spacing_worksheet">spacing_worksheet</a><tt class="py-op">(</tt><tt class="py-param">in_dict</tt><tt class="py-op">,</tt><tt class="py-param">ws_title</tt><tt class="py-op">,</tt><tt class="py-param">ws</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="spacing_worksheet-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="spacing_worksheet-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-name">results</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name" targets="Function madrona.spacing.models.distance_matrix_and_labels()=madrona.spacing.models-module.html#distance_matrix_and_labels,Function madrona.straightline_spacing.models.distance_matrix_and_labels()=madrona.straightline_spacing.models-module.html#distance_matrix_and_labels"><a title="madrona.spacing.models.distance_matrix_and_labels
+madrona.straightline_spacing.models.distance_matrix_and_labels" class="py-name" href="#" onclick="return doclink('link-7', 'distance_matrix_and_labels', 'link-7');">distance_matrix_and_labels</a></tt><tt class="py-op">(</tt><tt class="py-name">in_dict</tt><tt class="py-op">)</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt class="py-name">label_list</tt> <tt class="py-op">=</tt> <tt class="py-name">results</tt><tt class="py-op">[</tt><tt class="py-string">'labels'</tt><tt class="py-op">]</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">    <tt class="py-name">dist_mat</tt> <tt class="py-op">=</tt> <tt class="py-name">results</tt><tt class="py-op">[</tt><tt class="py-string">'matrix'</tt><tt class="py-op">]</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">    <tt class="py-name">current_row</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">    <tt class="py-comment"># put the title at the top</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">ws_title</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">ws_title</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">current_row</tt> <tt class="py-op">+=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">     </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-comment"># write the header labels row across the top</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">lab</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">label_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">lab</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">    <tt class="py-name">current_row</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">     </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">    <tt class="py-comment"># write the rest of the matrix</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">row</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">dist_mat</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-comment"># write the label in the first column</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">label_list</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-comment"># write the distance values</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">x</tt><tt class="py-op">,</tt><tt class="py-name">distance</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">            <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-name">distance</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">        <tt class="py-name">current_row</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">ws</tt> </tt>
+</div><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.bookmarks: Bookmark the map state &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.common: Misc Goodies" href="common.html" />
+    <link rel="prev" title="madrona.async: Asyncronous Processing" href="async.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="common.html" title="madrona.common: Misc Goodies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="madrona.async: Asyncronous Processing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-bookmarks-bookmark-the-map-state">
+<h1><cite>madrona.bookmarks</cite>: Bookmark the map state<a class="headerlink" href="#madrona-bookmarks-bookmark-the-map-state" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Bookmarks save the google earth camera settings and the public layer list state and serialize it to a shortened URL that can be used to restore the map state.
+There are two mechanisms by which bookmarks can be used: The bookmark tool in the Tools panel (required in all madrona-based apps) and bookmark features which show up in the My Shapes kmltree (optional).
+Internally, these are handled by the same mechanism but the &#8220;Bookmarks as a Feature&#8221; functionality can be turned off via a setting.</p>
+</div>
+<div class="section" id="bookmarks-as-a-feature">
+<h2>Bookmarks as a Feature<a class="headerlink" href="#bookmarks-as-a-feature" title="Permalink to this headline">¶</a></h2>
+<p>Will show up in Create New &gt; Bookmark and can be shared, copied, etc just like any other feature. This can be enabled by setting <tt class="docutils literal"><span class="pre">BOOKMARK_FEATURE</span> <span class="pre">=</span> <span class="pre">True</span></tt>. Defaults to False.</p>
+</div>
+<div class="section" id="bookmarks-tool">
+<h2>Bookmarks Tool<a class="headerlink" href="#bookmarks-tool" title="Permalink to this headline">¶</a></h2>
+<p>This will show up as a button in the tools panel. Clicking the button will POST the data to the server and save the Bookmark object under an anonymous user account (username is set by <tt class="docutils literal"><span class="pre">BOOKMARK_ANON_USERNAME</span></tt>).
+These can be created by any user including unauthenticated users. The bookmark URL will appear directly below the button and can be copy-and-pasted as needed.
+You can set a limit on the number of bookmarks by IP address using the <tt class="docutils literal"><span class="pre">BOOKMARK_ANON_LIMIT</span></tt> settings; A tuple providing the number of requests and the time delta.
+For example, the default setting is <tt class="docutils literal"><span class="pre">(100,</span> <span class="pre">timedelta(minutes=30))</span></tt> which translates to 100 bookmarks per IP every 30 minutes.</p>
+</div>
+<div class="section" id="serialization">
+<h2>Serialization<a class="headerlink" href="#serialization" title="Permalink to this headline">¶</a></h2>
+<p>The bookmarks will try to recreate your map state as closely as possible. The camera settings and public layer lists are preserved fully but keep in mind
+that any private layers and features that you see may not necessarily be available to other user and are not included in the bookmark state.</p>
+</div>
+<div class="section" id="public-data-layer-kml-guidelines">
+<h2>Public Data Layer KML Guidelines<a class="headerlink" href="#public-data-layer-kml-guidelines" title="Permalink to this headline">¶</a></h2>
+<p>The layer state only captures the <strong>differences</strong> between your current tree and the default state of the original KML document. Both expanded/collapsed properties (for folders and netlinks) and visible/hidden properties (for features) are captured. KMLTree uses the folder and feature names to track the items so changing the public layer KML can have some repercussions for existing bookmarks. As such, there are several “best practices” for constructing public KML docs</p>
+<ol class="arabic simple">
+<li>Avoid renaming folders or features unless absolutely necessary.</li>
+<li>Avoid restructuring folder hierarchies unless absolutely necessary.</li>
+<li>Keep all the folders collapsed and features turned off in the initial doc. If, for some reason, you need to have a feature turned on by default, it should remain so for all subsequent revisions.</li>
+<li>Adding new layers is fine as long as their default state is OFF.</li>
+<li>Changing out datasets is fine as long as they keep the same name. E.g. if you add a new revised “Nesting Sites” folder, keep the name “Nesting Sites” consistent; don’t call it “Nesting Sites version 2”. And if you edit the geometry of the &#8220;Site #12&#8221; within that folder,  don&#8217;t rename it to &#8220;Site #12a&#8221;.</li>
+<li>Keep the names unique within each folder level.</li>
+<li>Think twice before deleting content from the KML. Someone may have used that data in a bookmark.</li>
+</ol>
+<p>The worst that can happen if you ignore these rules is that existing bookmarks may not restore the layer tree state in the expected way.</p>
+<p>For example, if a user created a bookmark with “Nautical Charts” turned on and you rename to “Nautical Charts, new version”, the existing bookmark will not find the original layer and the new nautical chart will not be visible. The camera angle will still be bookmarked but the changes to the KML will make that bookmark’s layer state invalid.  Still, the bookmark will not be “broken” and it will not crash; it will just cause unexpected changes in behavior.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.bookmarks</cite>: Bookmark the map state</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#bookmarks-as-a-feature">Bookmarks as a Feature</a></li>
+<li><a class="reference internal" href="#bookmarks-tool">Bookmarks Tool</a></li>
+<li><a class="reference internal" href="#serialization">Serialization</a></li>
+<li><a class="reference internal" href="#public-data-layer-kml-guidelines">Public Data Layer KML Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="async.html"
+                        title="previous chapter"><cite>madrona.async</cite>: Asyncronous Processing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="common.html"
+                        title="next chapter"><cite>madrona.common</cite>: Misc Goodies</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/bookmarks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="common.html" title="madrona.common: Misc Goodies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="madrona.async: Asyncronous Processing"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

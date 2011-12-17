@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.loadshp.forms</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.loadshp-module.html">Package&nbsp;loadshp</a> ::
+        Module&nbsp;forms
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.loadshp.forms-module.html">Module madrona.loadshp.forms</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">zipfile</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">tempfile</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">datetime</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.forms=madrona.analysistools.forms-module.html,Module madrona.bookmarks.forms=madrona.bookmarks.forms-module.html,Module madrona.common.forms=madrona.common.forms-module.html,Module madrona.common.registration_backend.forms=madrona.common.registration_backend.forms-module.html,Module madrona.features.forms=madrona.features.forms-module.html,Module madrona.intersection.forms=madrona.intersection.forms-module.html,Module madrona.loadshp.forms=madrona.loadshp.forms-module.html,Module madrona.manipulators.forms=madrona.manipulators.forms-module.html,Module madrona.openid.forms=madrona.openid.forms-module.html,Module madrona.shapes.forms=madrona.shapes.forms-module.html,Module madrona.user_profile.forms=madrona.user_profile.forms-module.html"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-0', 'forms', 'link-0');">forms</a></tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-1', 'forms', 'link-0');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">util</tt> <tt class="py-keyword">import</tt> <tt class="py-name">ValidationError</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module madrona.analysistools.utils=madrona.analysistools.utils-module.html,Module madrona.common.utils=madrona.common.utils-module.html,Package madrona.openid.utils=madrona.openid.utils-module.html"><a title="madrona.analysistools.utils
+madrona.common.utils
+madrona.openid.utils" class="py-name" href="#" onclick="return doclink('link-2', 'utils', 'link-2');">utils</a></tt><tt class="py-op">.</tt><tt class="py-name">translation</tt> <tt class="py-keyword">import</tt> <tt class="py-name">ugettext_lazy</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">gis</tt> <tt class="py-keyword">import</tt> <tt class="py-name">gdal</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#http://docs.djangoproject.com/en/dev/topics/http/file-uploads/</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#http://www.neverfriday.com/sweetfriday/2008/09/-a-long-time-ago.html </tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm"></a><div id="UploadForm-def"><a name="L14"></a><tt class="py-lineno"> 14</tt> <a class="py-toggle" href="#" id="UploadForm-toggle" onclick="return toggle('UploadForm');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html">UploadForm</a><tt class="py-op">(</tt><tt class="py-base-class">forms</tt><tt class="py-op">.</tt><tt class="py-base-class">Form</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="UploadForm-expanded"><a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.file_obj=madrona.loadshp.forms.UploadForm-class.html#file_obj,Variable madrona.shapes.forms.UploadForm.file_obj=madrona.shapes.forms.UploadForm-class.html#file_obj"><a title="madrona.loadshp.forms.UploadForm.file_obj
+madrona.shapes.forms.UploadForm.file_obj" class="py-name" href="#" onclick="return doclink('link-3', 'file_obj', 'link-3');">file_obj</a></tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-4', 'forms', 'link-0');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FileField</tt><tt class="py-op">(</tt><tt id="link-5" class="py-name" targets="Variable madrona.geographic_report.models.Annotation.label=madrona.geographic_report.models.Annotation-class.html#label"><a title="madrona.geographic_report.models.Annotation.label" class="py-name" href="#" onclick="return doclink('link-5', 'label', 'link-5');">label</a></tt><tt class="py-op">=</tt><tt class="py-string">'Upload a Zipped Shapefile'</tt><tt class="py-op">)</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">    <tt id="link-6" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.multi_feature=madrona.loadshp.forms.UploadForm-class.html#multi_feature"><a title="madrona.loadshp.forms.UploadForm.multi_feature" class="py-name" href="#" onclick="return doclink('link-6', 'multi_feature', 'link-6');">multi_feature</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.supported_geomtypes=madrona.loadshp.forms.UploadForm-class.html#supported_geomtypes"><a title="madrona.loadshp.forms.UploadForm.supported_geomtypes" class="py-name" href="#" onclick="return doclink('link-7', 'supported_geomtypes', 'link-7');">supported_geomtypes</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'Polygon'</tt><tt class="py-op">,</tt><tt class="py-string">'Point'</tt><tt class="py-op">,</tt><tt class="py-string">'Line'</tt><tt class="py-op">]</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt id="link-8" class="py-name" targets="Variable madrona.loadshp.forms.UploadForm.enforce_4326=madrona.loadshp.forms.UploadForm-class.html#enforce_4326"><a title="madrona.loadshp.forms.UploadForm.enforce_4326" class="py-name" href="#" onclick="return doclink('link-8', 'enforce_4326', 'link-8');">enforce_4326</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm.clean_file_obj"></a><div id="UploadForm.clean_file_obj-def"><a name="L21"></a><tt class="py-lineno"> 21</tt> <a class="py-toggle" href="#" id="UploadForm.clean_file_obj-toggle" onclick="return toggle('UploadForm.clean_file_obj');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html#clean_file_obj">clean_file_obj</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm.clean_file_obj-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UploadForm.clean_file_obj-expanded"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-name">f</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cleaned_data</tt><tt class="py-op">[</tt><tt class="py-string">'file_obj'</tt><tt class="py-op">]</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">        <tt class="py-name">valid_shp</tt><tt class="py-op">,</tt> <tt class="py-name">error</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method madrona.loadshp.forms.UploadForm.validate()=madrona.loadshp.forms.UploadForm-class.html#validate,Method madrona.shapes.forms.UploadForm.validate()=madrona.shapes.forms.UploadForm-class.html#validate"><a title="madrona.loadshp.forms.UploadForm.validate
+madrona.shapes.forms.UploadForm.validate" class="py-name" href="#" onclick="return doclink('link-9', 'validate', 'link-9');">validate</a></tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">valid_shp</tt><tt class="py-op">:</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValidationError</tt><tt class="py-op">(</tt><tt class="py-string">"A problem occured: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">error</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm.handle"></a><div id="UploadForm.handle-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="UploadForm.handle-toggle" onclick="return toggle('UploadForm.handle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html#handle">handle</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">filefield_data</tt><tt class="py-op">,</tt><tt class="py-param">user</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm.handle-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UploadForm.handle-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-docstring">""" Upload the file data, in chunks, to the media/upload/loadshp.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">            Then unpack it, read the features and return them</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-comment"># ensure the upload directory exists</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-name">upload_dir</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Variable madrona.common.default_settings.MEDIA_ROOT=madrona.common.default_settings-module.html#MEDIA_ROOT"><a title="madrona.common.default_settings.MEDIA_ROOT" class="py-name" href="#" onclick="return doclink('link-10', 'MEDIA_ROOT', 'link-10');">MEDIA_ROOT</a></tt><tt class="py-op">,</tt><tt class="py-string">'upload'</tt><tt class="py-op">,</tt><tt class="py-string">'loadshp'</tt><tt class="py-op">,</tt><tt id="link-11" class="py-name" targets="Variable madrona.features.forms.FeatureForm.user=madrona.features.forms.FeatureForm-class.html#user,Variable madrona.features.models.Feature.user=madrona.features.models.Feature-class.html#user,Variable madrona.group_management.models.GroupRequest.user=madrona.group_management.models.GroupRequest-class.html#user,Variable madrona.openid.models.UserAssociation.user=madrona.openid.models.UserAssociation-class.html#user,Variable madrona.user_profile.models.UserProfile.user=madrona.user_profile.models.UserProfile-class.html#user"><a title="madrona.features.forms.FeatureForm.user
+madrona.features.models.Feature.user
+madrona.group_management.models.GroupRequest.user
+madrona.openid.models.UserAssociation.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-11', 'user', 'link-11');">user</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Variable madrona.common.registration_backend.forms.MadronaRegistrationForm.username=madrona.common.registration_backend.forms.MadronaRegistrationForm-class.html#username,Variable madrona.openid.forms.OpenidRegisterForm.username=madrona.openid.forms.OpenidRegisterForm-class.html#username"><a title="madrona.common.registration_backend.forms.MadronaRegistrationForm.username
+madrona.openid.forms.OpenidRegisterForm.username" class="py-name" href="#" onclick="return doclink('link-12', 'username', 'link-12');">username</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">upload_dir</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">            <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">makedirs</tt><tt class="py-op">(</tt><tt class="py-name">upload_dir</tt><tt class="py-op">)</tt>  </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">         </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-comment"># contruct the full filepath and filename</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">downloaded_file</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">normpath</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">upload_dir</tt><tt class="py-op">,</tt> <tt class="py-name">filefield_data</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.name=madrona.bioeconomic_model.models.Extent-class.html#name,Variable madrona.bioeconomic_model.models.GridAttributes.name=madrona.bioeconomic_model.models.GridAttributes-class.html#name,Variable madrona.bioeconomic_model.models.StudyRegion.name=madrona.bioeconomic_model.models.StudyRegion-class.html#name,Variable madrona.bioregions.models.Bioregion.name=madrona.bioregions.models.Bioregion-class.html#name,Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.data_distributor.models.LoadSetup.name=madrona.data_distributor.models.LoadSetup-class.html#name,Variable madrona.data_distributor.models.PotentialTarget.name=madrona.data_distributor.models.PotentialTarget-class.html#name,Variable madrona.data_distributor.models.PotentialTargetField.name=madrona.data_distributor.models.PotentialTargetField-class.html#name,Variable madrona.data_manager.models.DataLayer.name=madrona.data_manager.models.DataLayer-class.html#name,Variable madrona.data_manager.models.GeneralFile.name=madrona.data_manager.models.GeneralFile-class.html#name,Variable madrona.data_manager.models.ShapefileField.name=madrona.data_manager.models.ShapefileField-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.geographic_report.models.GeographicReport.name=madrona.geographic_report.models.GeographicReport-class.html#name,Variable madrona.intersection.models.CommonFeatureInfo.name=madrona.intersection.models.CommonFeatureInfo-class.html#name,Variable madrona.intersection.models.FeatureMapping.name=madrona.intersection.models.FeatureMapping-class.html#name,Variable madrona.intersection.models.IntersectionFeature.name=madrona.intersection.models.IntersectionFeature-class.html#name,Variable madrona.intersection.models.OrganizationScheme.name=madrona.intersection.models.OrganizationScheme-class.html#name,Variable madrona.intersection.models.Shapefile.name=madrona.intersection.models.Shapefile-class.html#name,Variable madrona.intersection.models.ShapefileField.name=madrona.intersection.models.ShapefileField-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.pg_spacing.models.Land.name=madrona.pg_spacing.models.Land-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.replication.models.ThresholdRule.name=madrona.replication.models.ThresholdRule-class.html#name,Variable madrona.spacing.models.Land.name=madrona.spacing.models.Land-class.html#name,Variable madrona.spacing.models.SpacingPoint.name=madrona.spacing.models.SpacingPoint-class.html#name,Variable madrona.straightline_spacing.models.SpacingPoint.name=madrona.straightline_spacing.models.SpacingPoint-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-13', 'name', 'link-13');">name</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-comment"># if we've already got an upload with the same name, append the daymonthyear_minute</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">downloaded_file</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">            <tt id="link-14" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-14', 'name', 'link-13');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">ext</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">downloaded_file</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">            <tt class="py-name">append</tt> <tt class="py-op">=</tt> <tt class="py-name">datetime</tt><tt class="py-op">.</tt><tt class="py-name">datetime</tt><tt class="py-op">.</tt><tt class="py-name">now</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">strftime</tt><tt class="py-op">(</tt><tt class="py-string">'%Y%m%d_%H%M%S'</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">            <tt class="py-name">downloaded_file</tt> <tt class="py-op">=</tt> <tt class="py-string">'%s_%s%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-15" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-15', 'name', 'link-13');">name</a></tt><tt class="py-op">,</tt><tt class="py-name">append</tt><tt class="py-op">,</tt><tt class="py-name">ext</tt><tt class="py-op">)</tt>  </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-comment"># write the zip archive to final location</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method madrona.loadshp.forms.UploadForm.write_file()=madrona.loadshp.forms.UploadForm-class.html#write_file,Method madrona.shapes.forms.UploadForm.write_file()=madrona.shapes.forms.UploadForm-class.html#write_file"><a title="madrona.loadshp.forms.UploadForm.write_file
+madrona.shapes.forms.UploadForm.write_file" class="py-name" href="#" onclick="return doclink('link-16', 'write_file', 'link-16');">write_file</a></tt><tt class="py-op">(</tt><tt class="py-name">downloaded_file</tt><tt class="py-op">,</tt><tt class="py-name">filefield_data</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-comment">#unpack the files</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-name">zfile</tt> <tt class="py-op">=</tt> <tt class="py-name">zipfile</tt><tt class="py-op">.</tt><tt class="py-name">ZipFile</tt><tt class="py-op">(</tt><tt class="py-name">downloaded_file</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-name">tmp_dir</tt> <tt class="py-op">=</tt> <tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">gettempdir</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-17" class="py-name" targets="Method madrona.intersection.models.OrganizationScheme.info()=madrona.intersection.models.OrganizationScheme-class.html#info"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-17', 'info', 'link-17');">info</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">infolist</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-name">data</tt> <tt class="py-op">=</tt> <tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt id="link-18" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-18', 'info', 'link-17');">info</a></tt><tt class="py-op">.</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt class="py-name">shp_part</tt> <tt class="py-op">=</tt> <tt class="py-string">'%s%s%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tmp_dir</tt><tt class="py-op">,</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">sep</tt><tt class="py-op">,</tt><tt id="link-19" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-19', 'info', 'link-17');">info</a></tt><tt class="py-op">.</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">fout</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">shp_part</tt><tt class="py-op">,</tt> <tt class="py-string">"wb"</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt class="py-name">fout</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">data</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">            <tt class="py-name">fout</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">         </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-comment"># get the datasource name without extension</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-name">ds_name</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">namelist</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-name">ds</tt> <tt class="py-op">=</tt> <tt class="py-name">gdal</tt><tt class="py-op">.</tt><tt class="py-name">DataSource</tt><tt class="py-op">(</tt><tt class="py-string">'%s%s%s.shp'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tmp_dir</tt><tt class="py-op">,</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">sep</tt><tt class="py-op">,</tt><tt class="py-name">ds_name</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">ds</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm.write_file"></a><div id="UploadForm.write_file-def"><a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="UploadForm.write_file-toggle" onclick="return toggle('UploadForm.write_file');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html#write_file">write_file</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">filename</tt><tt class="py-op">,</tt><tt class="py-param">filefield_data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm.write_file-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UploadForm.write_file-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">destination</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt class="py-string">'wb+'</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">chunk</tt> <tt class="py-keyword">in</tt> <tt class="py-name">filefield_data</tt><tt class="py-op">.</tt><tt class="py-name">chunks</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-name">destination</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">chunk</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">destination</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt>         </tt>
+</div><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm.check_zip_contents"></a><div id="UploadForm.check_zip_contents-def"><a name="L69"></a><tt class="py-lineno"> 69</tt> <a class="py-toggle" href="#" id="UploadForm.check_zip_contents-toggle" onclick="return toggle('UploadForm.check_zip_contents');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html#check_zip_contents">check_zip_contents</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">ext</tt><tt class="py-op">,</tt> <tt class="py-param">zip_file</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm.check_zip_contents-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UploadForm.check_zip_contents-expanded"><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">True</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt id="link-20" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-20', 'info', 'link-17');">info</a></tt><tt class="py-op">.</tt><tt class="py-name">filename</tt><tt class="py-op">.</tt><tt class="py-name">endswith</tt><tt class="py-op">(</tt><tt class="py-name">ext</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-21" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-21', 'info', 'link-17');">info</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">zip_file</tt><tt class="py-op">.</tt><tt class="py-name">infolist</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+</div><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
+<a name="UploadForm.validate"></a><div id="UploadForm.validate-def"><a name="L74"></a><tt class="py-lineno"> 74</tt> <a class="py-toggle" href="#" id="UploadForm.validate-toggle" onclick="return toggle('UploadForm.validate');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.loadshp.forms.UploadForm-class.html#validate">validate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">filefield_data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UploadForm.validate-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UploadForm.validate-expanded"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-docstring">""" Validate the uploaded, zipped shapefile by unpacking to a temporary sandbox.</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-comment"># create a temporary file to write the zip archive to</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-name">tmp</tt> <tt class="py-op">=</tt> <tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">NamedTemporaryFile</tt><tt class="py-op">(</tt><tt class="py-name">suffix</tt><tt class="py-op">=</tt><tt class="py-string">'.zip'</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.mode=madrona.raster_stats.models.ZonalStatsCache-class.html#mode"><a title="madrona.raster_stats.models.ZonalStatsCache.mode" class="py-name" href="#" onclick="return doclink('link-22', 'mode', 'link-22');">mode</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'w'</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name" targets="Method madrona.features.models.FeatureCollection.delete()=madrona.features.models.FeatureCollection-class.html#delete,Function madrona.features.views.delete()=madrona.features.views-module.html#delete"><a title="madrona.features.models.FeatureCollection.delete
+madrona.features.views.delete" class="py-name" href="#" onclick="return doclink('link-23', 'delete', 'link-23');">delete</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-comment"># write zip to tmp sandbox</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="madrona.loadshp.forms.UploadForm.write_file
+madrona.shapes.forms.UploadForm.write_file" class="py-name" href="#" onclick="return doclink('link-24', 'write_file', 'link-16');">write_file</a></tt><tt class="py-op">(</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-25', 'name', 'link-13');">name</a></tt><tt class="py-op">,</tt><tt class="py-name">filefield_data</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">zipfile</tt><tt class="py-op">.</tt><tt class="py-name">is_zipfile</tt><tt class="py-op">(</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-26', 'name', 'link-13');">name</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'That file is not a valid Zip Archive'</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-comment"># create zip object</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-name">zfile</tt> <tt class="py-op">=</tt> <tt class="py-name">zipfile</tt><tt class="py-op">.</tt><tt class="py-name">ZipFile</tt><tt class="py-op">(</tt><tt class="py-name">tmp</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-27', 'name', 'link-13');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">         </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-comment"># ensure proper file contents by extensions inside</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method madrona.loadshp.forms.UploadForm.check_zip_contents()=madrona.loadshp.forms.UploadForm-class.html#check_zip_contents,Method madrona.shapes.forms.UploadForm.check_zip_contents()=madrona.shapes.forms.UploadForm-class.html#check_zip_contents"><a title="madrona.loadshp.forms.UploadForm.check_zip_contents
+madrona.shapes.forms.UploadForm.check_zip_contents" class="py-name" href="#" onclick="return doclink('link-28', 'check_zip_contents', 'link-28');">check_zip_contents</a></tt><tt class="py-op">(</tt><tt class="py-string">'shp'</tt><tt class="py-op">,</tt> <tt class="py-name">zfile</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'Found Zip Archive but no file with a .shp extension found inside.'</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="madrona.loadshp.forms.UploadForm.check_zip_contents
+madrona.shapes.forms.UploadForm.check_zip_contents" class="py-name" href="#" onclick="return doclink('link-29', 'check_zip_contents', 'link-28');">check_zip_contents</a></tt><tt class="py-op">(</tt><tt class="py-string">'dbf'</tt><tt class="py-op">,</tt> <tt class="py-name">zfile</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'You must supply a .dbf file with the Shapefile to supply attribute data.'</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="madrona.loadshp.forms.UploadForm.check_zip_contents
+madrona.shapes.forms.UploadForm.check_zip_contents" class="py-name" href="#" onclick="return doclink('link-30', 'check_zip_contents', 'link-28');">check_zip_contents</a></tt><tt class="py-op">(</tt><tt class="py-string">'shx'</tt><tt class="py-op">,</tt> <tt class="py-name">zfile</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'You must supply a .shx file for the Shapefile to have a valid index.'</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">         </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-comment"># unpack contents into tmp directory</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">tmp_dir</tt> <tt class="py-op">=</tt> <tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">gettempdir</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-31" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-31', 'info', 'link-17');">info</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">infolist</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">            <tt class="py-name">data</tt> <tt class="py-op">=</tt> <tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-32', 'info', 'link-17');">info</a></tt><tt class="py-op">.</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">            <tt class="py-name">shp_part</tt> <tt class="py-op">=</tt> <tt class="py-string">'%s%s%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tmp_dir</tt><tt class="py-op">,</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">sep</tt><tt class="py-op">,</tt><tt id="link-33" class="py-name"><a title="madrona.intersection.models.OrganizationScheme.info" class="py-name" href="#" onclick="return doclink('link-33', 'info', 'link-17');">info</a></tt><tt class="py-op">.</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-name">fout</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">shp_part</tt><tt class="py-op">,</tt> <tt class="py-string">"wb"</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">            <tt class="py-name">fout</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">data</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-name">fout</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">         </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-comment"># get the datasource name without extension</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-name">ds_name</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">zfile</tt><tt class="py-op">.</tt><tt class="py-name">namelist</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-comment"># ogr needs the full path to the unpacked 'file.shp'</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-name">ds</tt> <tt class="py-op">=</tt> <tt class="py-name">gdal</tt><tt class="py-op">.</tt><tt class="py-name">DataSource</tt><tt class="py-op">(</tt><tt class="py-string">'%s%s%s.shp'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tmp_dir</tt><tt class="py-op">,</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">sep</tt><tt class="py-op">,</tt><tt class="py-name">ds_name</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-comment"># shapefiles have just one layer, so grab the first...</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt id="link-34" class="py-name" targets="Variable madrona.xyquery.models.Feature.layer=madrona.xyquery.models.Feature-class.html#layer,Variable madrona.xyquery.models.Raster.layer=madrona.xyquery.models.Raster-class.html#layer"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-34', 'layer', 'link-34');">layer</a></tt> <tt class="py-op">=</tt> <tt class="py-name">ds</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-comment"># one way of testing a sane shapefile...</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-comment"># further tests should be able to be plugged in here...</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-35" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-35', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt class="py-name">test_capability</tt><tt class="py-op">(</tt><tt class="py-string">'RandomRead'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">ds</tt><tt class="py-op">.</tt><tt class="py-name">driver</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-string">'ESRI Shapefile'</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">"Sorry, we've experienced a problem on our server. Please try again later."</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again'</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-comment"># Must have a prj or have data in the -180,-90,180,90 window (assumed to be latlong)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="madrona.loadshp.forms.UploadForm.check_zip_contents
+madrona.shapes.forms.UploadForm.check_zip_contents" class="py-name" href="#" onclick="return doclink('link-36', 'check_zip_contents', 'link-28');">check_zip_contents</a></tt><tt class="py-op">(</tt><tt class="py-string">'prj'</tt><tt class="py-op">,</tt> <tt class="py-name">zfile</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-37', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method madrona.bioeconomic_model.models.StudyRegionManager.extent()=madrona.bioeconomic_model.models.StudyRegionManager-class.html#extent"><a title="madrona.bioeconomic_model.models.StudyRegionManager.extent" class="py-name" href="#" onclick="return doclink('link-38', 'extent', 'link-38');">extent</a></tt><tt class="py-op">.</tt><tt class="py-name">min_x</tt> <tt class="py-op">&lt;</tt> <tt class="py-op">-</tt><tt class="py-number">180.0</tt> <tt class="py-keyword">or</tt> <tt id="link-39" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-39', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="madrona.bioeconomic_model.models.StudyRegionManager.extent" class="py-name" href="#" onclick="return doclink('link-40', 'extent', 'link-38');">extent</a></tt><tt class="py-op">.</tt><tt class="py-name">max_x</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">180.0</tt> \ </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">               <tt class="py-keyword">or</tt> <tt id="link-41" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-41', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="madrona.bioeconomic_model.models.StudyRegionManager.extent" class="py-name" href="#" onclick="return doclink('link-42', 'extent', 'link-38');">extent</a></tt><tt class="py-op">.</tt><tt class="py-name">min_y</tt> <tt class="py-op">&lt;</tt> <tt class="py-op">-</tt><tt class="py-number">90.0</tt> <tt class="py-keyword">or</tt> <tt id="link-43" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-43', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="madrona.bioeconomic_model.models.StudyRegionManager.extent" class="py-name" href="#" onclick="return doclink('link-44', 'extent', 'link-38');">extent</a></tt><tt class="py-op">.</tt><tt class="py-name">max_y</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">90.0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'You must supply a .prj file with the Shapefile to indicate the projection.'</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-name">g</tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-45', 'layer', 'link-34');">layer</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name" targets="Variable madrona.xyquery.models.Feature.geom=madrona.xyquery.models.Feature-class.html#geom"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-46', 'geom', 'link-46');">geom</a></tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">srs</tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">transform_to</tt><tt class="py-op">(</tt><tt class="py-number">4326</tt><tt class="py-op">)</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">            <tt class="py-name">ext</tt> <tt class="py-op">=</tt> <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">envelope</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">ext</tt><tt class="py-op">.</tt><tt class="py-name">min_x</tt> <tt class="py-op">&lt;</tt> <tt class="py-op">-</tt><tt class="py-number">180.0</tt> <tt class="py-keyword">or</tt> <tt class="py-name">ext</tt><tt class="py-op">.</tt><tt class="py-name">max_x</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">180.0</tt> <tt class="py-keyword">or</tt> <tt class="py-name">ext</tt><tt class="py-op">.</tt><tt class="py-name">min_y</tt> <tt class="py-op">&lt;</tt> <tt class="py-op">-</tt><tt class="py-number">90.0</tt> <tt class="py-keyword">or</tt> <tt class="py-name">ext</tt><tt class="py-op">.</tt><tt class="py-name">max_y</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">90.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">'There was an error reprojecting your geometry. You must supply a .prj file or reproject to WGS84.'</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-47" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-47', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt class="py-name">geom_type</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-48', 'name', 'link-13');">name</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="madrona.loadshp.forms.UploadForm.supported_geomtypes" class="py-name" href="#" onclick="return doclink('link-49', 'supported_geomtypes', 'link-7');">supported_geomtypes</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">"Sorry, %s geometries are not supported. Try uploading a zipped shapefile with %s geometries"</tt> <tt class="py-op">%</tt> \ </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">                    <tt class="py-op">(</tt><tt id="link-50" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-50', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt class="py-name">geom_type</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-51', 'name', 'link-13');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">', '</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="madrona.loadshp.forms.UploadForm.supported_geomtypes" class="py-name" href="#" onclick="return doclink('link-52', 'supported_geomtypes', 'link-7');">supported_geomtypes</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">         </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="madrona.loadshp.forms.UploadForm.multi_feature" class="py-name" href="#" onclick="return doclink('link-53', 'multi_feature', 'link-6');">multi_feature</a></tt> <tt class="py-keyword">and</tt> <tt id="link-54" class="py-name"><a title="madrona.xyquery.models.Feature.layer
+madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-54', 'layer', 'link-34');">layer</a></tt><tt class="py-op">.</tt><tt class="py-name">num_feat</tt> <tt class="py-op">!=</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-string">"We can only support shapefiles with a single feature"</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-string">"Shapefile is good to go"</tt> </tt>
+</div></div><a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

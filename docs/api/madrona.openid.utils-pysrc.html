@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.openid.utils</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.openid-module.html">Package&nbsp;openid</a> ::
+        Package&nbsp;utils
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.openid.utils-module.html">Package madrona.openid.utils</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># -*- coding: utf-8 -*-</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2007, 2008,2009 by Beno&#238;t Chesneau &lt;benoitc@e-engura.org&gt;</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># </tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># Licensed under the Apache License, Version 2.0 (the "License");</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># you may not use this file except in compliance with the License.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># You may obtain a copy of the License at</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#     http://www.apache.org/licenses/LICENSE-2.0</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># Unless required by applicable law or agreed to in writing, software</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># distributed under the License is distributed on an "AS IS" BASIS,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># See the License for the specific language governing permissions and</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># limitations under the License.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">urllib</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">http</tt> <tt class="py-keyword">import</tt> <tt class="py-name">str_to_unicode</tt><tt class="py-op">,</tt> <tt class="py-name">get_host</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module madrona.analysistools.utils=madrona.analysistools.utils-module.html,Module madrona.common.utils=madrona.common.utils-module.html,Package madrona.openid.utils=madrona.openid.utils-module.html"><a title="madrona.analysistools.utils
+madrona.common.utils
+madrona.openid.utils" class="py-name" href="#" onclick="return doclink('link-0', 'utils', 'link-0');">utils</a></tt><tt class="py-op">.</tt><tt class="py-name">html</tt> <tt class="py-keyword">import</tt> <tt class="py-name">escape</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Package madrona.openid=madrona.openid-module.html"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-1', 'openid', 'link-1');">openid</a></tt><tt class="py-op">.</tt><tt class="py-name">consumer</tt><tt class="py-op">.</tt><tt class="py-name">discover</tt> <tt class="py-keyword">import</tt> <tt class="py-name">discover</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-2', 'openid', 'link-1');">openid</a></tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt> <tt class="py-keyword">import</tt> <tt class="py-name">sreg</tt><tt class="py-op">,</tt> <tt class="py-name">ax</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-comment"># needed for some linux distributions like debian</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-3', 'openid', 'link-1');">openid</a></tt><tt class="py-op">.</tt><tt class="py-name">yadis</tt> <tt class="py-keyword">import</tt> <tt class="py-name">xri</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">yadis</tt> <tt class="py-keyword">import</tt> <tt class="py-name">xri</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"> </tt>
+<a name="OpenID"></a><div id="OpenID-def"><a name="L31"></a><tt class="py-lineno"> 31</tt> <a class="py-toggle" href="#" id="OpenID-toggle" onclick="return toggle('OpenID');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.openid.utils.OpenID-class.html">OpenID</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenID-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="OpenID-expanded"><a name="OpenID.__init__"></a><div id="OpenID.__init__-def"><a name="L32"></a><tt class="py-lineno"> 32</tt> <a class="py-toggle" href="#" id="OpenID.__init__-toggle" onclick="return toggle('OpenID.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils.OpenID-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">openid_</tt><tt class="py-op">,</tt> <tt class="py-param">issued</tt><tt class="py-op">,</tt> <tt class="py-param">attrs</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">sreg_</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">ax_</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenID.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenID.__init__-expanded"><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-4', 'openid', 'link-1');">openid</a></tt> <tt class="py-op">=</tt> <tt class="py-name">openid_</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Variable madrona.openid.models.Association.issued=madrona.openid.models.Association-class.html#issued"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-5', 'issued', 'link-5');">issued</a></tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-6', 'issued', 'link-5');">issued</a></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attrs</tt> <tt class="py-op">=</tt> <tt class="py-name">attrs</tt> <tt class="py-keyword">or</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">sreg</tt> <tt class="py-op">=</tt> <tt class="py-name">sreg_</tt> <tt class="py-keyword">or</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ax</tt> <tt class="py-op">=</tt> <tt class="py-name">ax_</tt> <tt class="py-keyword">or</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">is_iname</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">xri</tt><tt class="py-op">.</tt><tt class="py-name">identifierScheme</tt><tt class="py-op">(</tt><tt class="py-name">openid_</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'XRI'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">     </tt>
+<a name="OpenID.__repr__"></a><div id="OpenID.__repr__-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="OpenID.__repr__-toggle" onclick="return toggle('OpenID.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils.OpenID-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenID.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenID.__repr__-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">'&lt;OpenID: %s&gt;'</tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-7', 'openid', 'link-1');">openid</a></tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">     </tt>
+<a name="OpenID.__str__"></a><div id="OpenID.__str__-def"><a name="L43"></a><tt class="py-lineno"> 43</tt> <a class="py-toggle" href="#" id="OpenID.__str__-toggle" onclick="return toggle('OpenID.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils.OpenID-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OpenID.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OpenID.__str__-expanded"><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-8', 'openid', 'link-1');">openid</a></tt> </tt>
+</div></div><a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">     </tt>
+<a name="discover_extensions"></a><div id="discover_extensions-def"><a name="L46"></a><tt class="py-lineno"> 46</tt> <a class="py-toggle" href="#" id="discover_extensions-toggle" onclick="return toggle('discover_extensions');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils-module.html#discover_extensions">discover_extensions</a><tt class="py-op">(</tt><tt class="py-param">openid_url</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="discover_extensions-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="discover_extensions-expanded"><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-name">service</tt> <tt class="py-op">=</tt> <tt class="py-name">discover</tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable madrona.openid.forms.AssociateOpenID.openid_url=madrona.openid.forms.AssociateOpenID-class.html#openid_url,Variable madrona.openid.forms.OpenidDissociateForm.openid_url=madrona.openid.forms.OpenidDissociateForm-class.html#openid_url,Variable madrona.openid.forms.OpenidSigninForm.openid_url=madrona.openid.forms.OpenidSigninForm-class.html#openid_url,Variable madrona.openid.models.UserAssociation.openid_url=madrona.openid.models.UserAssociation-class.html#openid_url"><a title="madrona.openid.forms.AssociateOpenID.openid_url
+madrona.openid.forms.OpenidDissociateForm.openid_url
+madrona.openid.forms.OpenidSigninForm.openid_url
+madrona.openid.models.UserAssociation.openid_url" class="py-name" href="#" onclick="return doclink('link-9', 'openid_url', 'link-9');">openid_url</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt class="py-name">use_ax</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-name">use_sreg</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">endpoint</tt> <tt class="py-keyword">in</tt> <tt class="py-name">service</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">use_sreg</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-name">use_sreg</tt> <tt class="py-op">=</tt> <tt class="py-name">sreg</tt><tt class="py-op">.</tt><tt class="py-name">supportsSReg</tt><tt class="py-op">(</tt><tt class="py-name">endpoint</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">use_ax</tt><tt class="py-op">:</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">use_ax</tt> <tt class="py-op">=</tt> <tt class="py-name">endpoint</tt><tt class="py-op">.</tt><tt class="py-name">usesExtension</tt><tt class="py-op">(</tt><tt class="py-string">"http://openid.net/srv/ax/1.0"</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">use_ax</tt> <tt class="py-keyword">and</tt> <tt class="py-name">use_sreg</tt><tt class="py-op">:</tt> <tt class="py-keyword">break</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">use_sreg</tt> <tt class="py-keyword">and</tt> <tt class="py-keyword">not</tt> <tt class="py-name">use_ax</tt><tt class="py-op">:</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">use_sreg</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">use_ax</tt><tt class="py-op">,</tt> <tt class="py-name">use_sreg</tt> </tt>
+</div><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable madrona.openid.utils.DEFAULT_NEXT=madrona.openid.utils-module.html#DEFAULT_NEXT"><a title="madrona.openid.utils.DEFAULT_NEXT" class="py-name" href="#" onclick="return doclink('link-10', 'DEFAULT_NEXT', 'link-10');">DEFAULT_NEXT</a></tt> <tt class="py-op">=</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">settings</tt><tt class="py-op">,</tt> <tt class="py-string">'OPENID_REDIRECT_NEXT'</tt><tt class="py-op">,</tt> <tt class="py-string">'/'</tt><tt class="py-op">)</tt> </tt>
+<a name="clean_next"></a><div id="clean_next-def"><a name="L62"></a><tt class="py-lineno"> 62</tt> <a class="py-toggle" href="#" id="clean_next-toggle" onclick="return toggle('clean_next');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils-module.html#clean_next">clean_next</a><tt class="py-op">(</tt><tt class="py-param">next</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="clean_next-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="clean_next-expanded"><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">next</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-11" class="py-name"><a title="madrona.openid.utils.DEFAULT_NEXT" class="py-name" href="#" onclick="return doclink('link-11', 'DEFAULT_NEXT', 'link-10');">DEFAULT_NEXT</a></tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-name">next</tt> <tt class="py-op">=</tt> <tt class="py-name">str_to_unicode</tt><tt class="py-op">(</tt><tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">unquote</tt><tt class="py-op">(</tt><tt class="py-name">next</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'utf-8'</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">    <tt class="py-name">next</tt> <tt class="py-op">=</tt> <tt class="py-name">next</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">next</tt><tt class="py-op">.</tt><tt class="py-name">startswith</tt><tt class="py-op">(</tt><tt class="py-string">'/'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">next</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-12" class="py-name"><a title="madrona.openid.utils.DEFAULT_NEXT" class="py-name" href="#" onclick="return doclink('link-12', 'DEFAULT_NEXT', 'link-10');">DEFAULT_NEXT</a></tt> </tt>
+</div><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"> </tt>
+<a name="from_openid_response"></a><div id="from_openid_response-def"><a name="L72"></a><tt class="py-lineno"> 72</tt> <a class="py-toggle" href="#" id="from_openid_response-toggle" onclick="return toggle('from_openid_response');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils-module.html#from_openid_response">from_openid_response</a><tt class="py-op">(</tt><tt class="py-param">openid_response</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="from_openid_response-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="from_openid_response-expanded"><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-docstring">""" return openid object from response """</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt id="link-13" class="py-name"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-13', 'issued', 'link-5');">issued</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-name">sreg_resp</tt> <tt class="py-op">=</tt> <tt class="py-name">sreg</tt><tt class="py-op">.</tt><tt class="py-name">SRegResponse</tt><tt class="py-op">.</tt><tt class="py-name">fromSuccessResponse</tt><tt class="py-op">(</tt><tt class="py-name">openid_response</tt><tt class="py-op">)</tt> \ </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-keyword">or</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-name">ax_resp</tt> <tt class="py-op">=</tt> <tt class="py-name">ax</tt><tt class="py-op">.</tt><tt class="py-name">FetchResponse</tt><tt class="py-op">.</tt><tt class="py-name">fromSuccessResponse</tt><tt class="py-op">(</tt><tt class="py-name">openid_response</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">    <tt class="py-name">ax_args</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">ax_resp</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">ax_args</tt> <tt class="py-op">=</tt> <tt class="py-name">ax_resp</tt><tt class="py-op">.</tt><tt class="py-name">getExtensionArgs</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">ax_resp</tt><tt class="py-op">.</tt><tt class="py-name">parseExtensionArgs</tt><tt class="py-op">(</tt><tt class="py-name">ax_args</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">ax_args</tt> <tt class="py-op">=</tt> <tt class="py-name">ax_resp</tt><tt class="py-op">.</tt><tt class="py-name">data</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-14" class="py-name" targets="Class madrona.openid.utils.OpenID=madrona.openid.utils.OpenID-class.html"><a title="madrona.openid.utils.OpenID" class="py-name" href="#" onclick="return doclink('link-14', 'OpenID', 'link-14');">OpenID</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">openid_response</tt><tt class="py-op">.</tt><tt class="py-name">identity_url</tt><tt class="py-op">,</tt> <tt id="link-15" class="py-name"><a title="madrona.openid.models.Association.issued" class="py-name" href="#" onclick="return doclink('link-15', 'issued', 'link-5');">issued</a></tt><tt class="py-op">,</tt> <tt class="py-name">openid_response</tt><tt class="py-op">.</tt><tt class="py-name">signed_fields</tt><tt class="py-op">,</tt>  </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt id="link-16" class="py-name" targets="Method madrona.features.FeatureOptions.dict()=madrona.features.FeatureOptions-class.html#dict,Method madrona.features.Link.dict()=madrona.features.Link-class.html#dict"><a title="madrona.features.FeatureOptions.dict
+madrona.features.Link.dict" class="py-name" href="#" onclick="return doclink('link-16', 'dict', 'link-16');">dict</a></tt><tt class="py-op">(</tt><tt class="py-name">sreg_resp</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">ax_args</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">    <tt class="py-op">)</tt> </tt>
+</div><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">     </tt>
+<a name="get_url_host"></a><div id="get_url_host-def"><a name="L89"></a><tt class="py-lineno"> 89</tt> <a class="py-toggle" href="#" id="get_url_host-toggle" onclick="return toggle('get_url_host');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils-module.html#get_url_host">get_url_host</a><tt class="py-op">(</tt><tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_url_host-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_url_host-expanded"><a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">is_secure</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">protocol</tt> <tt class="py-op">=</tt> <tt class="py-string">'https'</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">protocol</tt> <tt class="py-op">=</tt> <tt class="py-string">'http'</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-name">host</tt> <tt class="py-op">=</tt> <tt class="py-name">escape</tt><tt class="py-op">(</tt><tt class="py-name">get_host</tt><tt class="py-op">(</tt><tt class="py-name">request</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">'%s://%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">protocol</tt><tt class="py-op">,</tt> <tt class="py-name">host</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"> </tt>
+<a name="get_full_url"></a><div id="get_full_url-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="get_full_url-toggle" onclick="return toggle('get_full_url');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.openid.utils-module.html#get_full_url">get_full_url</a><tt class="py-op">(</tt><tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_full_url-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_full_url-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-17" class="py-name" targets="Function madrona.openid.utils.get_url_host()=madrona.openid.utils-module.html#get_url_host"><a title="madrona.openid.utils.get_url_host" class="py-name" href="#" onclick="return doclink('link-17', 'get_url_host', 'link-17');">get_url_host</a></tt><tt class="py-op">(</tt><tt class="py-name">request</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">get_full_path</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:20 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

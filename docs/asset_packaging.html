@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Javascript and CSS Assets &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Maintenance Mode" href="maintenance_mode.html" />
+    <link rel="prev" title="Built-in Template Tags" href="templatetags.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="maintenance_mode.html" title="Maintenance Mode"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="templatetags.html" title="Built-in Template Tags"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="javascript-and-css-assets">
+<h1>Javascript and CSS Assets<a class="headerlink" href="#javascript-and-css-assets" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="packaging">
+<h2>Packaging<a class="headerlink" href="#packaging" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s difficult to maintain a large web application without breaking the
+javascript and css components into multiple files. The problem with this
+approach is that http requests are costly and loading many css and js files
+increases the loading time of the app.</p>
+<p>Madrona utilizes the <a class="reference external" href="http://code.google.com/p/django-compress/">django-compress</a>
+app not only to concatenate these files but compress them by removing
+comments and whitespace.</p>
+</div>
+<div class="section" id="where-to-put-files">
+<h2>Where to put files<a class="headerlink" href="#where-to-put-files" title="Permalink to this headline">¶</a></h2>
+<p>Each django app in the <tt class="docutils literal"><span class="pre">madrona</span></tt> module has a folder under <tt class="docutils literal"><span class="pre">media/</span></tt>, that
+contains folders for javascript, css, and images. Also there is a folder for
+external libraries called <tt class="docutils literal"><span class="pre">lib</span></tt>, and a folder for testing javascript:</p>
+<div class="highlight-python"><pre>media/&lt;app-name&gt;/
+  css/
+  lib/
+  js/
+    test/
+  images/</pre>
+</div>
+<p>This can of course be expanded and will likely need to incorporate a folder
+for test fixtures.</p>
+</div>
+<div class="section" id="how-to-add-files-to-the-build">
+<h2>How to add files to the build<a class="headerlink" href="#how-to-add-files-to-the-build" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to incorporate your javascript and css asset in the build.</p>
+<div class="section" id="incorporating-javascript-and-css-stylesheets-into-madrona">
+<h3>incorporating javascript and css stylesheets into madrona<a class="headerlink" href="#incorporating-javascript-and-css-stylesheets-into-madrona" title="Permalink to this headline">¶</a></h3>
+<p>To include your files in the main javascript and css packages, you&#8217;ll need to
+add them to <tt class="docutils literal"><span class="pre">js_includes.xml</span></tt> and <tt class="docutils literal"><span class="pre">css_includes.xml</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>Do not</em> include project-specific javascript and css files using this method.</p>
+</div>
+<p><tt class="docutils literal"><span class="pre">media/css_includes.xml</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="c">&lt;!--</span>
+<span class="c">    includes.xml</span>
+<span class="c">    List all css files that should be aggregated into the main madrona.css</span>
+<span class="c">    file here. Be mindful of the order.</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;stylesheets&gt;</span>
+    <span class="nt">&lt;file</span> <span class="na">path=</span><span class="s">&quot;common/css/typography.css&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;file</span> <span class="na">path=</span><span class="s">&quot;common/css/application.css&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/stylesheets&gt;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">media/js_includes.xml</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="c">&lt;!--</span>
+<span class="c">    includes.xml</span>
+<span class="c">    Edit this file to add javascript files that need to be included in the</span>
+<span class="c">    main madrona.js distribution, as well as point to appropriate tests.</span>
+<span class="c">    Please avoid adding third party libs where they are available from a CDN</span>
+<span class="c">    like Google&#39;s ajaxlibs</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;javascripts&gt;</span>
+    <span class="nt">&lt;file</span> <span class="na">path=</span><span class="s">&quot;common/js/lib/tmpl.js&quot;</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- note the inclusion of tests --&gt;</span>
+    <span class="nt">&lt;test</span> <span class="na">path=</span><span class="s">&quot;common/js/test/lib/tmpl.js&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/javascripts&gt;</span>
+</pre></div>
+</div>
+<p>Note that this diverges significantly from the standard way one configures
+<a class="reference external" href="http://code.google.com/p/django-compress/">django-compress</a>. The reason for
+this is that static html files can then parse these xml files and run tests
+on the client code without a server running.</p>
+</div>
+<div class="section" id="project-specific-javascript-and-css-files">
+<span id="project-assets"></span><h3>project-specific javascript and css files<a class="headerlink" href="#project-specific-javascript-and-css-files" title="Permalink to this headline">¶</a></h3>
+<p>For implementations of Madrona for specific geographies, keep these files in
+the media folder in a project file tree. Within the project&#8217;s settings.py
+file, modify the <tt class="docutils literal"><span class="pre">COMPRESS_JS</span></tt> and <tt class="docutils literal"><span class="pre">COMPRESS_CSS</span></tt> dictionaries like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">COMPRESS_JS</span><span class="p">[</span><span class="s">&#39;application&#39;</span><span class="p">][</span><span class="s">&#39;source_filenames&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+    <span class="s">&#39;projects/nc_mlpa/js/mlpa.js&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/js/mpa_form.js&#39;</span><span class="p">,</span>
+    <span class="s">&#39;report/js/jquery.hoverIntent.minified.js&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/js/representationReport.js&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">COMPRESS_CSS</span><span class="p">[</span><span class="s">&#39;application&#39;</span><span class="p">][</span><span class="s">&#39;source_filenames&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+    <span class="s">&#39;projects/nc_mlpa/css/closure_fixes.css&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/css/mlpa_forms.css&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/css/mlpa_attributes.css&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/css/replication.css&#39;</span><span class="p">,</span>
+    <span class="s">&#39;projects/nc_mlpa/css/mpa_hab_representation.css&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="including-assets-in-your-pages">
+<h3>Including assets in your pages<a class="headerlink" href="#including-assets-in-your-pages" title="Permalink to this headline">¶</a></h3>
+<p>Use the standard <a class="reference external" href="http://code.google.com/p/django-compress/">django-compress</a>
+template tags:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;head&gt;</span>
+<span class="x">    &lt;meta http-equiv=&quot;Content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
+<span class="x">    &lt;title&gt;Madrona Decision Support Tool&lt;/title&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">compressed</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">compressed_css</span> <span class="s1">&#39;application&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">compressed_js</span> <span class="s1">&#39;application&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/head&gt;</span>
+<span class="x">&lt;body&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-javascript-code">
+<h2>Testing Javascript Code<a class="headerlink" href="#testing-javascript-code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defining-unit-tests">
+<h3>defining unit tests<a class="headerlink" href="#defining-unit-tests" title="Permalink to this headline">¶</a></h3>
+<p>Unit tests are defined using <a class="reference external" href="http://docs.jquery.com/QUnit">QUnit</a>. Simply
+create a test js file and then add a reference to it in <tt class="docutils literal"><span class="pre">js_includes.xml</span></tt>
+and it can be run using the methods defined in the following sections.</p>
+<p><strong>Example unit test</strong></p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;micro-templating&#39;</span><span class="p">)</span>
+
+<span class="nx">test</span><span class="p">(</span><span class="s2">&quot;list template&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">template</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;&lt;ul&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;% for (var i=0; i &lt; users.length; i++) { %&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&lt;li&gt;&lt;%= users[i].name %&gt;&lt;/li&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;% } %&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;/ul&gt;&quot;</span>
+    <span class="p">];</span>
+    <span class="nx">template</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+    <span class="nx">list_users</span> <span class="o">=</span> <span class="nx">tmpl</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+    <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span><span class="nx">users</span><span class="o">:</span> <span class="p">[{</span><span class="nx">name</span><span class="o">:</span><span class="s1">&#39;me&#39;</span><span class="p">},</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;myself&#39;</span><span class="p">}]}</span>
+    <span class="nx">equals</span><span class="p">(</span><span class="nx">list_users</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s2">&quot;&lt;ul&gt;&lt;li&gt;me&lt;/li&gt;&lt;li&gt;myself&lt;/li&gt;&lt;/ul&gt;&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p><strong>Inclusion in</strong> <tt class="docutils literal"><span class="pre">media/js_includes.xml</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre>...
+<span class="nt">&lt;file</span> <span class="na">path=</span><span class="s">&quot;common/js/lib/tmpl.js&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;test</span> <span class="na">path=</span><span class="s">&quot;common/js/test/lib/tmpl.js&quot;</span> <span class="nt">/&gt;</span>
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing-unpackaged-javascript">
+<h3>testing unpackaged javascript<a class="headerlink" href="#testing-unpackaged-javascript" title="Permalink to this headline">¶</a></h3>
+<p>It&#8217;s possible to test the client javascript code without a running server by
+simply opening <tt class="docutils literal"><span class="pre">media/tests.html</span></tt>. Because it&#8217;s a static file, one could even
+run the tests by opening <tt class="docutils literal"><span class="pre">tests.html</span></tt> directly from the online mercurial repository.</p>
+<p>This page loads all the same files that django-compress packages, but loads
+each file individually and dynamically, so you don&#8217;t need a server running. In
+fact, one can simple browse to the mercurial repository and run tests from there!</p>
+<p><a class="reference external" href="http://madrona.googlecode.com/hg/media/tests.html">http://madrona.googlecode.com/hg/media/tests.html</a></p>
+<p>This method <em>will not test whether the code runs after packaging</em>. For that
+reason it is suitable for quick use during development but cannot adequately
+test code for use in a production environment.</p>
+<p>The most likely bugs not caught without packaging are forgotten trailing
+semi-colons. Fortunately, these bugs immediately cause parse errors when
+tested using the server-side method so they are easy to catch.</p>
+</div>
+<div class="section" id="testing-packaged-files">
+<h3>testing packaged files<a class="headerlink" href="#testing-packaged-files" title="Permalink to this headline">¶</a></h3>
+<p>In order to test that javascript code runs properly after packaging and
+compression, you&#8217;ll need a running server. See <a class="reference internal" href="getting_started.html#getting-started"><em>Getting Started</em></a> for
+instructions on how to run the server, then point a browser to <a class="reference external" href="http://localhost:8000/tests">http://localhost:8000/tests</a>. This
+will run the same tests, but using django-compress to load assets.</p>
+<p><em>In order to test these files both concatenated and compressed you must have
+one of the following settings set</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">COMPRESS</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing-and-documenting-reusable-css-styles">
+<h2>Testing and Documenting Reusable CSS Styles<a class="headerlink" href="#testing-and-documenting-reusable-css-styles" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">media/styles.html</span></tt></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Javascript and CSS Assets</a><ul>
+<li><a class="reference internal" href="#packaging">Packaging</a></li>
+<li><a class="reference internal" href="#where-to-put-files">Where to put files</a></li>
+<li><a class="reference internal" href="#how-to-add-files-to-the-build">How to add files to the build</a><ul>
+<li><a class="reference internal" href="#incorporating-javascript-and-css-stylesheets-into-madrona">incorporating javascript and css stylesheets into madrona</a></li>
+<li><a class="reference internal" href="#project-specific-javascript-and-css-files">project-specific javascript and css files</a></li>
+<li><a class="reference internal" href="#including-assets-in-your-pages">Including assets in your pages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-javascript-code">Testing Javascript Code</a><ul>
+<li><a class="reference internal" href="#defining-unit-tests">defining unit tests</a></li>
+<li><a class="reference internal" href="#testing-unpackaged-javascript">testing unpackaged javascript</a></li>
+<li><a class="reference internal" href="#testing-packaged-files">testing packaged files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-and-documenting-reusable-css-styles">Testing and Documenting Reusable CSS Styles</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="templatetags.html"
+                        title="previous chapter">Built-in Template Tags</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="maintenance_mode.html"
+                        title="next chapter">Maintenance Mode</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/asset_packaging.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="maintenance_mode.html" title="Maintenance Mode"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="templatetags.html" title="Built-in Template Tags"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

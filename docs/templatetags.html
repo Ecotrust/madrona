@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Built-in Template Tags &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Javascript and CSS Assets" href="asset_packaging.html" />
+    <link rel="prev" title="Authoring Sidebar Content" href="sidebar.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="asset_packaging.html" title="Javascript and CSS Assets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sidebar.html" title="Authoring Sidebar Content"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="built-in-template-tags">
+<span id="templatetags"></span><h1>Built-in Template Tags<a class="headerlink" href="#built-in-template-tags" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="footer">
+<span id="tag-footer"></span><h2>footer<a class="headerlink" href="#footer" title="Permalink to this headline">¶</a></h2>
+<p>Creates a footer section that will be attached to the very bottom of the panel
+and appropriately styled.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">footer</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    This is &lt;i&gt;my&lt;/i&gt; footer content</span>
+<span class="cp">{%</span> <span class="k">endfooter</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="panel">
+<span id="tag-panel"></span><h2>panel<a class="headerlink" href="#panel" title="Permalink to this headline">¶</a></h2>
+<p>Creates a content block that represents a &#8220;panel&#8221;. A panel can be rendered
+both in its own page or within <em class="xref std std-ref">map_view</em>.</p>
+<p>Accepts one argument, the name of the panel. This will show up in the
+header, and can be a string(quoted) or a context variable.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">panel</span> <span class="s2">&quot;My Panel is Awesome&quot;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;p&gt;Here are the reasons why:&lt;/p&gt;</span>
+<span class="x">    &lt;ul&gt;...&lt;/ul&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">footer</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        Notice I place the footer within panel tags</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endfooter</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endpanel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tabpanel">
+<span id="tag-tabpanel"></span><h2>tabpanel<a class="headerlink" href="#tabpanel" title="Permalink to this headline">¶</a></h2>
+<p>Alternative to <a class="reference internal" href="#tag-panel"><em>panel</em></a>. Works in conjunction with <a class="reference internal" href="#tag-tab"><em>tab</em></a> tags
+to create tabbed navigation within a single panel.</p>
+<p>Accepts one argument, the name of the panel. This will show up in the
+header, and can be a string(quoted) or a context variable.</p>
+</div>
+<div class="section" id="tab">
+<span id="tag-tab"></span><h2>tab<a class="headerlink" href="#tab" title="Permalink to this headline">¶</a></h2>
+<p>Defines a block of content that renders within it&#8217;s own tab.</p>
+<p>Accepts one argument, the name of the tab. This will show up in the tab
+navigation element, and can be a string(quoted) or a context variable.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">tabpanel</span> <span class="s2">&quot;My TabPanel&quot;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">tab</span> <span class="s2">&quot;First Tab&quot;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;p&gt;...&lt;/p&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endtab</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">tab</span> <span class="s2">&quot;Second Tab&quot;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;p&gt;...&lt;/p&gt;</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">footer</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">            Optional footer...</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">endfooter</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endtab</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endtabpanel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="printable">
+<span id="tag-printable"></span><h2>printable<a class="headerlink" href="#printable" title="Permalink to this headline">¶</a></h2>
+<p>Indicates that this panel should have a complementary page linked from the
+panel, with a style suitable for printing and direct linking.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">printable</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="back-link">
+<span id="tag-back-link"></span><h2>back_link<a class="headerlink" href="#back-link" title="Permalink to this headline">¶</a></h2>
+<p>Required for proper operation, this tag creates the link to go back to it&#8217;s
+&#8220;parent&#8221;. Note, this does not have to be the last panel shown. It could be
+that the previous panel linked to this one via a &#8220;switch&#8221; animation.</p>
+<p>Accepts the url of a panel as a variable, as well as the title of the link.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">url</span> <span class="nv">mpa_attributes</span> <span class="nv">mpa.pk</span> <span class="k">as</span> <span class="nv">my_url</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">back_link</span> <span class="nv">my_url</span> <span class="s2">&quot;MPA Attributes&quot;</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="home-link">
+<span id="tag-home-link"></span><h2>home_link<a class="headerlink" href="#home-link" title="Permalink to this headline">¶</a></h2>
+<p>Can be used rather than <a class="reference internal" href="#tag-back-link"><em>back_link</em></a> for linking directly to the home
+panel.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Built-in Template Tags</a><ul>
+<li><a class="reference internal" href="#footer">footer</a></li>
+<li><a class="reference internal" href="#panel">panel</a></li>
+<li><a class="reference internal" href="#tabpanel">tabpanel</a></li>
+<li><a class="reference internal" href="#tab">tab</a></li>
+<li><a class="reference internal" href="#printable">printable</a></li>
+<li><a class="reference internal" href="#back-link">back_link</a></li>
+<li><a class="reference internal" href="#home-link">home_link</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sidebar.html"
+                        title="previous chapter">Authoring Sidebar Content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="asset_packaging.html"
+                        title="next chapter">Javascript and CSS Assets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/templatetags.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="asset_packaging.html" title="Javascript and CSS Assets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sidebar.html" title="Authoring Sidebar Content"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

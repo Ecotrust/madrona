@@ -1,0 +1,175 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Managing Users in Madrona &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Reports" href="reports.html" />
+    <link rel="prev" title="Sharing Features and Collections" href="sharing_configuration.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reports.html" title="Reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sharing_configuration.html" title="Sharing Features and Collections"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="managing-users-in-madrona">
+<span id="users"></span><h1>Managing Users in Madrona<a class="headerlink" href="#managing-users-in-madrona" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>users<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Users can be added in one of two ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Staff/Superuser can add the user manually through the admin interface.</li>
+<li>Users can register themselves via web registration.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="web-registration">
+<h3>web registration<a class="headerlink" href="#web-registration" title="Permalink to this headline">¶</a></h3>
+<p>The web registration framework allows users to add themselves to an instance of Madrona. After supplying the necessary info, an inactive user will be created and an email sent to the given email address. To activate the account, the user must visit the url contained in the email. At this time, user&#8217;s can not add themselves to groups; that process requires moderator/admin approval and will be handled by email.</p>
+<p>All users registering through the web interface will be assigned to the group defined in settings.GROUP_REGISTERED_BY_WEB (&#8216;registered_by_web&#8217; is the default). This allows staff to track which users registered themselves versus were added manually.</p>
+</div>
+<div class="section" id="user-profiles">
+<h3>user profiles<a class="headerlink" href="#user-profiles" title="Permalink to this headline">¶</a></h3>
+<p>Each user has access to a &#8216;my profile&#8217; page where they are able to view and edit:</p>
+<blockquote>
+<div><ul class="simple">
+<li>First and last name</li>
+<li>Email address</li>
+<li>About - and other additional fields extending the user information</li>
+<li>Password</li>
+<li>Their groups (read-only)</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="groups">
+<h2>groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<p>Django groups are a convinient way to batch-assign permissions to many users. In Madrona, groups have another function: they serve as the organizing unit for sharing of MPAs and Arrays. With a few exceptions, being a member of a group means that you can share your arrays with other group members and vice-versa.</p>
+<dl class="docutils">
+<dt>There are also two special groups which are exceptions:</dt>
+<dd><ul class="first last simple">
+<li>Share to public : Members of this group can make an array available to all users including non-authenticated users.</li>
+<li>Share to staff : Members of this group can submit an array to the staff for approval; Only staff is able to view them but all group members can submit.</li>
+</ul>
+</dd>
+</dl>
+<p>Access to the admin interface is not determined by groups; a special &#8216;is_staff&#8217; field can be set on a per-user basis.</p>
+</div>
+<div class="section" id="permissions">
+<h2>permissions<a class="headerlink" href="#permissions" title="Permalink to this headline">¶</a></h2>
+<p>Permissions, in general, define who can add/edit/delete various objects in the admin interface. Currently we don&#8217;t use this fine-grained permsission set, instead relying on the staff field for each user to allow unfettered access to the admin interface.</p>
+<p>There are several permissions related to sharing that can be useful if set on groups. For example can_share_mpas and can_share_arrays allow that group&#8217;s members permission to share the specified object with one another. See <a class="reference internal" href="sharing_configuration.html#sharing-configuration"><em>Sharing</em></a> documentation for more detail.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Managing Users in Madrona</a><ul>
+<li><a class="reference internal" href="#id1">users</a><ul>
+<li><a class="reference internal" href="#web-registration">web registration</a></li>
+<li><a class="reference internal" href="#user-profiles">user profiles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#groups">groups</a></li>
+<li><a class="reference internal" href="#permissions">permissions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sharing_configuration.html"
+                        title="previous chapter">Sharing Features and Collections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reports.html"
+                        title="next chapter">Reports</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/managing_users.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reports.html" title="Reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sharing_configuration.html" title="Sharing Features and Collections"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

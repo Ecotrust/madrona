@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.uaparser.regexes</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.uaparser-module.html">Package&nbsp;uaparser</a> ::
+        Module&nbsp;regexes
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.uaparser.regexes-module.html">Module madrona.common.uaparser.regexes</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python2.4</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2009 Google Inc.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># Licensed under the Apache License, Version 2.0 (the "License");</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># you may not use this file except in compliance with the License.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># You may obtain a copy of the License at</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#     http://www.apache.org/licenses/LICENSE-2.0</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># Unless required by applicable law or agreed to in writing, software</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># distributed under the License is distributed on an "AS IS" BASIS,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># See the License for the specific language governing permissions and</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># limitations under the License.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">"""Regexes."""</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.common.uaparser.parser=madrona.common.uaparser.parser-module.html"><a title="madrona.common.uaparser.parser" class="py-name" href="#" onclick="return doclink('link-0', 'parser', 'link-0');">parser</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable madrona.common.uaparser.regexes.browser_slash_v123_names=madrona.common.uaparser.regexes-module.html#browser_slash_v123_names"><a title="madrona.common.uaparser.regexes.browser_slash_v123_names" class="py-name" href="#" onclick="return doclink('link-1', 'browser_slash_v123_names', 'link-1');">browser_slash_v123_names</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-string">'Jasmine|ANTGalio|Midori|Fresco|Lobo|Maxthon|Lynx|OmniWeb|Dillo|Camino|'</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">    <tt class="py-string">'Demeter|Fluid|Fennec|Shiira|Sunrise|Chrome|Flock|Netscape|Lunascape|'</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt class="py-string">'Epiphany|WebPilot|Vodafone|NetFront|Konqueror|SeaMonkey|Kazehakase|'</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt class="py-string">'Vienna|Iceape|Iceweasel|IceWeasel|Iron|K-Meleon|Sleipnir|Galeon|'</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">    <tt class="py-string">'GranParadiso|Opera Mini|iCab|NetNewsWire|Iron|Iris'</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable madrona.common.uaparser.regexes.browser_slash_v12_names=madrona.common.uaparser.regexes-module.html#browser_slash_v12_names"><a title="madrona.common.uaparser.regexes.browser_slash_v12_names" class="py-name" href="#" onclick="return doclink('link-2', 'browser_slash_v12_names', 'link-2');">browser_slash_v12_names</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">    <tt class="py-string">'Bolt|Jasmine|Maxthon|Lynx|Arora|IBrowse|Dillo|Camino|Shiira|Fennec|'</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt class="py-string">'Phoenix|Chrome|Flock|Netscape|Lunascape|Epiphany|WebPilot|'</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">    <tt class="py-string">'Opera Mini|Opera|Vodafone|'</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-string">'NetFront|Konqueror|SeaMonkey|Kazehakase|Vienna|Iceape|Iceweasel|IceWeasel|'</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-string">'Iron|K-Meleon|Sleipnir|Galeon|GranParadiso|'</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-string">'iCab|NetNewsWire|Iron|Space Bison|Stainless|Orca'</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-name">_P</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name"><a title="madrona.common.uaparser.parser" class="py-name" href="#" onclick="return doclink('link-3', 'parser', 'link-0');">parser</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Class madrona.common.uaparser.parser.UserAgentParser=madrona.common.uaparser.parser.UserAgentParser-class.html"><a title="madrona.common.uaparser.parser.UserAgentParser" class="py-name" href="#" onclick="return doclink('link-4', 'UserAgentParser', 'link-4');">UserAgentParser</a></tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt id="link-5" class="py-name" targets="Variable madrona.common.uaparser.regexes.USER_AGENT_PARSERS=madrona.common.uaparser.regexes-module.html#USER_AGENT_PARSERS"><a title="madrona.common.uaparser.regexes.USER_AGENT_PARSERS" class="py-name" href="#" onclick="return doclink('link-5', 'USER_AGENT_PARSERS', 'link-5');">USER_AGENT_PARSERS</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">  <tt class="py-comment">#### SPECIAL CASES TOP ####</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">  <tt class="py-comment"># must go before Opera</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'^(Opera)/(\d+)\.(\d+) \(Nintendo Wii'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Wii'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">  <tt class="py-comment"># must go before Browser/v1.v2 - eg: Minefield/3.1a1pre</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Namoroka|Shiretoko|Minefield)/(\d+)\.(\d+)\.(\d+(?:pre)?)'</tt><tt class="py-op">,</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">     <tt class="py-string">'Firefox ($1)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Namoroka|Shiretoko|Minefield)/(\d+)\.(\d+)([ab]\d+[a-z]*)?'</tt><tt class="py-op">,</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">     <tt class="py-string">'Firefox ($1)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(SeaMonkey|Fennec|Camino)/(\d+)\.(\d+)([ab]?\d+[a-z]*)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">  <tt class="py-comment"># e.g.: Flock/2.0b2</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Flock)/(\d+)\.(\d+)(b\d+?)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">  <tt class="py-comment"># e.g.: Fennec/0.9pre</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Fennec)/(\d+)\.(\d+)(pre)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Navigator)/(\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Netscape'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Navigator)/(\d+)\.(\d+)([ab]\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Netscape'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Netscape6)/(\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Netscape'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(MyIBrow)/(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'My Internet Browser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Firefox).*Tablet browser (\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'MicroB'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">  <tt class="py-comment"># Opera will stop at 9.80 and hide the real version in the Version string.</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">  <tt class="py-comment"># see: http://dev.opera.com/articles/view/opera-ua-string-changes/</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Opera)/9.80.*Version\/(\d+)\.(\d+)(?:\.(\d+))?'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Firefox)/(\d+)\.(\d+)\.(\d+(?:pre)?) \(Swiftfox\)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Swiftfox'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Firefox)/(\d+)\.(\d+)([ab]\d+[a-z]*)? \(Swiftfox\)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Swiftfox'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">  <tt class="py-comment"># catches lower case konqueror</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(konqueror)/(\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Konqueror'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">  <tt class="py-comment">#### END SPECIAL CASES TOP ####</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">  <tt class="py-comment">#### MAIN CASES - this catches &gt; 50% of all browsers ####</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">  <tt class="py-comment"># Browser/v1.v2.v3</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(%s)/(\d+)\.(\d+)\.(\d+)'</tt> <tt class="py-op">%</tt> <tt id="link-6" class="py-name"><a title="madrona.common.uaparser.regexes.browser_slash_v123_names" class="py-name" href="#" onclick="return doclink('link-6', 'browser_slash_v123_names', 'link-1');">browser_slash_v123_names</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">  <tt class="py-comment"># Browser/v1.v2</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(%s)/(\d+)\.(\d+)'</tt> <tt class="py-op">%</tt> <tt id="link-7" class="py-name"><a title="madrona.common.uaparser.regexes.browser_slash_v12_names" class="py-name" href="#" onclick="return doclink('link-7', 'browser_slash_v12_names', 'link-2');">browser_slash_v12_names</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">  <tt class="py-comment"># Browser v1.v2.v3 (space instead of slash)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(iRider|Crazy Browser|SkipStone|iCab|Lunascape|Sleipnir|Maemo Browser) (\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">  <tt class="py-comment"># Browser v1.v2 (space instead of slash)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(iCab|Lunascape|Opera|Android) (\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(IEMobile) (\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'IE Mobile'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">  <tt class="py-comment"># DO THIS AFTER THE EDGE CASES ABOVE!</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Firefox)/(\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Firefox)/(\d+)\.(\d+)(pre|[ab]\d+[a-z]*)?'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">  <tt class="py-comment">#### END MAIN CASES ####</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">  <tt class="py-comment">#### SPECIAL CASES ####</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">  <tt class="py-comment">#_P(r''),</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Obigo|OBIGO)[^\d]*(\d+)(?:.(\d+))?'</tt><tt class="py-op">,</tt> <tt class="py-string">'Obigo'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(MAXTHON|Maxthon) (\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Maxthon'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Maxthon|MyIE2|Uzbl|Shiira)'</tt><tt class="py-op">,</tt> <tt class="py-name">v1_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'0'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(PLAYSTATION) (\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'PlayStation'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(PlayStation Portable)[^\d]+(\d+).(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(BrowseX) \((\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Opera)/(\d+)\.(\d+).*Opera Mobi'</tt><tt class="py-op">,</tt> <tt class="py-string">'Opera Mobile'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(POLARIS)/(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Polaris'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(BonEcho)/(\d+)\.(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Bon Echo'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(iPhone) OS (\d+)_(\d+)(?:_(\d+))?'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Avant)'</tt><tt class="py-op">,</tt> <tt class="py-name">v1_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'1'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Nokia)[EN]?(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Black[bB]erry)(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Blackberry'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(OmniWeb)/v(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Blazer)/(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Palm Blazer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Pre)/(\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-string">'Palm Pre'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Links) \((\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(QtWeb) Internet Browser/(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Version)/(\d+)\.(\d+)(?:\.(\d+))?.*Safari/'</tt><tt class="py-op">,</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">     <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Safari'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(OLPC)/Update(\d+)\.(\d+)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(OLPC)/Update()\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">v1_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'0'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(SamsungSGHi560)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Samsung SGHi560'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'^(SonyEricssonK800i)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'Sony Ericsson K800i'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(Teleca Q7)'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">  <tt class="py-name">_P</tt><tt class="py-op">(</tt><tt class="py-string">r'(MSIE) (\d+)\.(\d+)'</tt><tt class="py-op">,</tt> <tt class="py-name">family_replacement</tt><tt class="py-op">=</tt><tt class="py-string">'IE'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:17 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

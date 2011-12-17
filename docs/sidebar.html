@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Authoring Sidebar Content &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Built-in Template Tags" href="templatetags.html" />
+    <link rel="prev" title="Reports" href="reports.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templatetags.html" title="Built-in Template Tags"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="reports.html" title="Reports"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="authoring-sidebar-content">
+<span id="sidebar"></span><h1>Authoring Sidebar Content<a class="headerlink" href="#authoring-sidebar-content" title="Permalink to this headline">¶</a></h1>
+<p>Most of the information in Madrona is exposed via panels displayed in the
+sidebar. While the layout of the home tabs is mostly fixed, dynamic loading of
+content within sidebar panels provides many options for extensibilty. The
+content and behavior of these panels can be defined entirely via server-side
+templates and <a class="reference internal" href="#behaviors"><em>Built-In Behaviors and Styles</em></a>, minimizing the amount of client-side scripting
+necessary to make information dynamic and engaging.</p>
+<p>The following topical guide will detail how content can be added to the
+&#8220;Attributes&#8221; panel of spatial features. The details are also relevant for
+a sidebar panel created via the javascript API. If you need to create a panel
+via the javascript API refer to the <em class="xref std std-ref">rest</em> or
+<a class="reference external" href="http://maps11.msi.ucsb.edu/madrona-docs/jsdocs/symbols/madrona.panel.html">madrona.common.panel</a>
+documentation.</p>
+<div class="section" id="information-architecture">
+<h2>Information Architecture<a class="headerlink" href="#information-architecture" title="Permalink to this headline">¶</a></h2>
+<p>The primary pathway for users to find information is to select a feature, then
+view that feature&#8217;s attributes. The attributes panel for a feature can be at
+it&#8217;s simplest a single page. More commonly though, content will be divided
+into seperate tabs.</p>
+<p>By convention the first tab should contain metadata-type information like the
+feature author and creation date. It should contain additional information,
+but an effort should be made to load this content quickly so do not include
+any long-running reports. Other tabs can hold this type of information and
+should be loaded asynchronously once the user clicks on them.</p>
+<p>Each tab can also have sub-tabs, but this hierarchy is limited to just two
+levels deep for simplicity&#8217;s sake. These sub tabs have been used to split the
+same report data into a data visualization tab and a data grid tab.</p>
+</div>
+<div class="section" id="configuring-templates">
+<h2>Configuring Templates<a class="headerlink" href="#configuring-templates" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-simple-panel">
+<h3>a simple panel<a class="headerlink" href="#a-simple-panel" title="Permalink to this headline">¶</a></h3>
+<p>Lets start with a simple example of a feature with a tab-less attributes
+panel. You&#8217;ll first need find (or create) the template used to render
+attributes for the feature class of interest. In the case of <em class="xref std std-ref">mpas</em>, this
+template can be found in <tt class="docutils literal"><span class="pre">&lt;your_project&gt;/templates/mpa/show.html</span></tt>.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;h1&gt;</span><span class="cp">{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x">&lt;/h1&gt;</span>
+<span class="x">    &lt;p&gt;</span><span class="cp">{{</span><span class="nv">instance.description</span><span class="cp">}}</span><span class="x">&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>This most basic of templates is extending <tt class="docutils literal"><span class="pre">common/panel.html</span></tt>, defining some
+basic markup, and setting the title of the page. It is important to extend the
+base template so that client-side modules can correctly parse your content.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">What if your view template doesn&#8217;t extend <tt class="docutils literal"><span class="pre">common/panel.html</span></tt>?
+It should. This will improve consistency and in the future we can make
+enhancements to simultaneously provide both panel content and print pages.
+Extending <tt class="docutils literal"><span class="pre">common/panel.html</span></tt> will also enable analytics on ajax content
+in the future. If it&#8217;s not possible to extend this template, you will have
+to ensure that your view returns an html fragement
+(as opposed to a whole document), with a single top-level div containing
+all content.</p>
+</div>
+</div>
+<div class="section" id="synchronous-tabs">
+<span id="sync-tabs"></span><h3>synchronous tabs<a class="headerlink" href="#synchronous-tabs" title="Permalink to this headline">¶</a></h3>
+<p>To add multiple tabs to this sidebar panel we have to add more markup:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;h1&gt;</span><span class="cp">{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x">&lt;/h1&gt;</span>
+<span class="x">    &lt;div class=&quot;tabs&quot;&gt;</span>
+<span class="x">        &lt;ul&gt;</span>
+<span class="x">            &lt;li&gt;&lt;a href=&quot;#Attributes&quot;&gt;&lt;span&gt;Information&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+<span class="x">            &lt;li&gt;&lt;a href=&quot;#Report&quot;&gt;&lt;span&gt;Report&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+<span class="x">        &lt;/ul&gt;</span>
+<span class="x">        &lt;div id=&quot;Attributes&quot;&gt;</span>
+<span class="x">            &lt;p&gt;....&lt;/p&gt;</span>
+<span class="x">        &lt;/div&gt;</span>
+<span class="x">        &lt;div id=&quot;Report&quot;&gt;</span>
+<span class="x">            &lt;img class=&quot;chart&quot; href=&quot;...&quot; /&gt;</span>
+<span class="x">            &lt;p&gt;....&lt;/p&gt;</span>
+<span class="x">        &lt;/div&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>This example would create two tabs, one named &#8220;Information&#8221; and the other
+&#8220;Report&#8221;. A list above references div tags with appropriate anchor links to
+form navigational elements. The Madrona client modules will parse this
+markup and javascript event listeners to manage user interaction. This will
+only work if the markup is correct and the container div has a <tt class="docutils literal"><span class="pre">tabs</span></tt> class.</p>
+<p>Notice that no header tags are defined within the content divs. The tabs
+themselves will serve as headers.</p>
+</div>
+<div class="section" id="asynchronous-tabs">
+<span id="async-tabs"></span><h3>asynchronous tabs<a class="headerlink" href="#asynchronous-tabs" title="Permalink to this headline">¶</a></h3>
+<p>In the previous example the content for both tabs is available immediately
+without doing any ajax calls because the tab contents are defined within one
+template. If the Report tab requires a lot of processing it may slow down
+access to the &#8220;Information&#8221; tab.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;h1&gt;</span><span class="cp">{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x">&lt;/h1&gt;</span>
+<span class="x">    &lt;div class=&quot;tabs&quot;&gt;</span>
+<span class="x">        &lt;ul&gt;</span>
+<span class="x">            &lt;li&gt;&lt;a href=&quot;#Attributes&quot;&gt;&lt;span&gt;Information&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+<span class="x">            &lt;li&gt;&lt;a href=&quot;/path/to/report/&quot;&gt;&lt;span&gt;Report&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+<span class="x">        &lt;/ul&gt;</span>
+<span class="x">        &lt;div id=&quot;Attributes&quot;&gt;</span>
+<span class="x">            &lt;p&gt;....&lt;/p&gt;</span>
+<span class="x">        &lt;/div&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>In this example we&#8217;ve simply removed the tab content div for &#8220;Report&#8221; and
+changed to url from an anchor link to one that points to a separate view. When
+the user clicks on that tab the view will be fetched and displayed within the
+panel.</p>
+<p>The markup of the &#8220;Report&#8221; template can either be a simple panel or contain
+synchronous and/or asynchronous tabs. Just be sure to limit the tabs to
+two levels deep. The client-side tab handling will break down (purposely) for
+anything more extensive.</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x"> Report</span><span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;img class=&quot;chart&quot; href=&quot;...&quot; /&gt;</span>
+<span class="x">    &lt;p&gt;...&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>This is a simple example but it could also look more like the asynchronous
+tabs example above to create sub-tabs.</p>
+</div>
+<div class="section" id="tab-behavior-when-switching-features">
+<h3>tab behavior when switching features<a class="headerlink" href="#tab-behavior-when-switching-features" title="Permalink to this headline">¶</a></h3>
+<p>Sidebar panels have the ability to &#8220;sync&#8221; with each other when the selected
+spatial feature is changed. If a user has drilled down into sub-tabs for a
+particular feature, then without closing the panel selects another feature on
+the map, those same tabs will be selected within the new content.</p>
+<p>If this feature is not working properly make sure that the tab names
+(set in div.tabs &gt; ul &gt; li &gt; a &gt; span) match.</p>
+</div>
+</div>
+<div class="section" id="inline-style-and-script-tags">
+<h2>Inline &lt;style&gt; and &lt;script&gt; Tags<a class="headerlink" href="#inline-style-and-script-tags" title="Permalink to this headline">¶</a></h2>
+<p>One way to style or alter the behavior of sidebar content is to add
+<a class="reference internal" href="asset_packaging.html#project-assets"><em>project-specific javascript and css files</em></a> in <tt class="docutils literal"><span class="pre">settings.py</span></tt>. These will load when
+the application is first starts and is the best solution for including large
+libraries of code like a charting library or external dependency. It doesn&#8217;t
+work that well for small snippets that only apply to sidebar content though.</p>
+<p>For custom css and javascript that is tied to a specific panel, it&#8217;s easier to
+implement and organize this code as inline tags within the panel template.</p>
+<div class="section" id="css">
+<h3>css<a class="headerlink" href="#css" title="Permalink to this headline">¶</a></h3>
+<p>Style tags are very easy to include. The following will work perfectly well:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x"> Report</span><span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">    &lt;style id=&quot;chartStyle&quot; type=&quot;text/css&quot; media=&quot;screen&quot;&gt;</span>
+<span class="x">        .chart {</span>
+<span class="x">            border: solid black 1px;</span>
+<span class="x">        }</span>
+<span class="x">    &lt;/style&gt;</span>
+
+<span class="x">    &lt;img class=&quot;chart&quot; href=&quot;...&quot; /&gt;</span>
+<span class="x">    &lt;p&gt;...&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be careful how you use css. Scope styles down to unique id or class names
+so that they don&#8217;t interfere with application-wide styles. Sidebar content
+is not sandboxed in any way so if you set <tt class="docutils literal"><span class="pre">p</span> <span class="pre">{margin-left:50px}</span></tt> it will
+ruin the layout of the entire application.</p>
+</div>
+<p>There is one nuance to pay attention to here. Sidebar content is likely to be
+loaded multiple times. The Madrona client-side modules will add any new
+style tags it finds to the page when sidebar content is rendered, but this
+could end up creating a lot of redundant tags. In this example, the style tag
+has an ID attribute of <tt class="docutils literal"><span class="pre">chartStyle</span></tt>. This ID could be any value, and
+Madrona will check if a panel includes style tags with an ID. If another
+style tag with this ID is already in the document, it will be ignored.</p>
+<p>It is highly recommended that you include ID attributes in style tags to
+reduce the number of style tags added to the main document.</p>
+<p>The Madrona client modules will handle multiple style tags in sidebar
+content, which can be useful for dynamic css. Say you have some generic styles
+that apply to all panels that a view renders, but there are also some dynamic
+styles that need to be added to the document each time. A solution is to
+provide the generic css rules as a style tag with an ID attribute and the
+dynamic rules in a separate tag:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;common/panel.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x"> Report</span><span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">    &lt;!-- generic rules, added to the document only once --&gt;</span>
+<span class="x">    &lt;style id=&quot;chartStyle&quot; type=&quot;text/css&quot; media=&quot;screen&quot;&gt;</span>
+<span class="x">        .chart {</span>
+<span class="x">            border: solid black 1px;</span>
+<span class="x">        }</span>
+<span class="x">    &lt;/style&gt;</span>
+
+<span class="x">    &lt;!-- dynamic css rules, no ID attribute --&gt;</span>
+<span class="x">    &lt;style type=&quot;text/css&quot; media=&quot;screen&quot;&gt;</span>
+<span class="x">        #</span><span class="cp">{{</span><span class="nv">instance.div_id</span><span class="cp">}}</span><span class="x"> {</span>
+<span class="x">            background-color: #</span><span class="cp">{{</span><span class="nv">instance.color</span><span class="cp">}}</span><span class="x">;</span>
+<span class="x">        }</span>
+<span class="x">    &lt;/style&gt;</span>
+
+<span class="x">    &lt;img class=&quot;chart&quot; href=&quot;...&quot; /&gt;</span>
+<span class="x">    &lt;span id=&quot;</span><span class="cp">{{</span><span class="nv">intance.div_id</span><span class="cp">}}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span><span class="nv">instance.name</span><span class="cp">}}</span><span class="x">&lt;/span&gt;</span>
+<span class="x">    &lt;p&gt;...&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">panel</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>When a panel is opened multiple times and for different features, the first
+style tag will only ever be added to the document once while the second tag
+will be added to the document every time a panel is opened.</p>
+</div>
+<div class="section" id="inline-javascript">
+<h3>inline javascript<a class="headerlink" href="#inline-javascript" title="Permalink to this headline">¶</a></h3>
+<p>Inline javascript is supported through the setting of callback functions on
+the sidebar panel. You should only execute javascript within the scope of a
+callback function. If not, your javascript will execute at unpredictable
+times, possibly before the sidebar panel content is added to the document.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It&#8217;s worth repeating &#8211; execute all of your javascript within a callback
+function!</p>
+</div>
+<p>Here is a simple example of a callback that will run as soon as the panel
+content is rendered and shown to the user. It will execute only once:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &#39;common/panel.html&#39; %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+
+        <span class="nx">madrona</span><span class="p">.</span><span class="nx">onShow</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;p.description&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+                <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;clicked description&#39;</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+
+    <span class="nt">&lt;/script&gt;</span>
+
+    <span class="nt">&lt;h1&gt;</span>{{instance.name}}<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;description&quot;</span><span class="nt">&gt;</span>{{instance.description}}<span class="nt">&lt;/p&gt;</span>
+{% endblock panel %}
+</pre></div>
+</div>
+<p>Notice how in the example callback jQuery was used. jQuery is loaded as part
+of the main application and can be used in sidebar content along with other
+<a class="reference internal" href="#built-in-js"><em>built-in javascript libraries</em></a>.</p>
+</div>
+<div class="section" id="using-inline-javascript-with-tabs">
+<h3>using inline javascript with tabs<a class="headerlink" href="#using-inline-javascript-with-tabs" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="#madrona-onshow"><em>onShow</em></a> callbacks can also be scoped to particular tabs
+when using <a class="reference internal" href="#sync-tabs"><em>synchronous tabs</em></a> by providing the anchor link a tab points to:</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &#39;common/panel.html&#39; %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+
+        <span class="nx">madrona</span><span class="p">.</span><span class="nx">onShow</span><span class="p">(</span><span class="s1">&#39;#Report&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;you are viewing the report tab&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="nt">&lt;/script&gt;</span>
+
+    <span class="nt">&lt;h1&gt;</span>{{instance.name}}<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tabs&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ul&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#Attributes&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Information<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#Report&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Report<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;Attributes&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;p&gt;</span>....<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;Report&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;chart&quot;</span> <span class="na">href=</span><span class="s">&quot;...&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;p&gt;</span>....<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+{% endblock panel %}
+</pre></div>
+</div>
+<p>That example makes sense for synchronous tabs, but what about
+<a class="reference internal" href="#async-tabs"><em>asynchronous tabs</em></a>? It makes more sense organization-wise to have inline style
+and javascript tags within the template that renders the tab content. Making
+an <a class="reference internal" href="#madrona-onshow"><em>onShow</em></a> call with a url as the target argument will
+not work. This is how we would implement the previous example for an
+asynchronous report:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- first template --&gt;</span>
+{% extends &#39;common/panel.html&#39; %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+
+    <span class="nt">&lt;h1&gt;</span>{{instance.name}}<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tabs&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ul&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#Attributes&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Information<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;/path/to/view/&quot;</span><span class="nt">&gt;&lt;span&gt;</span>Report<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;Attributes&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;p&gt;</span>....<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+{% endblock panel %}
+</pre></div>
+</div>
+<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- template at /path/to/view/ --&gt;</span>
+{% extends &#39;common/panel.html&#39; %}
+{% block title %}{{instance.name}} Report{% endblock title %}
+{% block panel %}
+
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+
+        <span class="nx">madrona</span><span class="p">.</span><span class="nx">onShow</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;you are viewing the report tab&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    <span class="nt">&lt;/script&gt;</span>
+
+    <span class="nt">&lt;img</span> <span class="na">class=</span><span class="s">&quot;chart&quot;</span> <span class="na">href=</span><span class="s">&quot;...&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;p&gt;</span>...<span class="nt">&lt;/p&gt;</span>
+{% endblock panel %}
+</pre></div>
+</div>
+<p>Note that the remote tab template uses an <a class="reference internal" href="#madrona-onshow"><em>onShow</em></a> call
+without the target argument. The callback will still be assigned to the
+appropriate tab.</p>
+<div class="admonition note" id="target-or-not">
+<p class="first admonition-title">Note</p>
+<p class="last">Just remember that when assigning callbacks to synchronous tabs you must
+provide the target argument to scope it to that tab. Callbacks bound to
+whole panels or asynchronous tabs do not need to be set with this argument</p>
+</div>
+</div>
+<div class="section" id="available-callbacks">
+<h3>available callbacks<a class="headerlink" href="#available-callbacks" title="Permalink to this headline">¶</a></h3>
+<p>You can do more than assign callbacks for when a tab or panel is first shown.
+You can also run javascript whenever content is temporarily hidden, revealed,
+or right before it is permanently removed from the document.</p>
+<div class="section" id="madrona-onshow-target-callback">
+<span id="madrona-onshow"></span><h4>madrona.onShow([target], callback)<a class="headerlink" href="#madrona-onshow-target-callback" title="Permalink to this headline">¶</a></h4>
+<p>Assigns a callback to be executed when content is first shown. It will be
+executed only once. See <a class="reference internal" href="#madrona-onunhide"><em>madrona.onUnhide</em></a> to assign
+callbacks whenever content is shown again after being hidden.</p>
+<p>If binding the callback to a synchronous tab, give that tab&#8217;s anchor link as
+the optional <tt class="docutils literal"><span class="pre">target</span></tt> argument. Omit it if assigning the callback to the
+entire panel or an asynchronous tab.
+<a class="reference internal" href="#target-or-not"><em>More on this argument</em></a>.</p>
+</div>
+<div class="section" id="madrona-onhide-target-callback">
+<span id="madrona-onhide"></span><h4>madrona.onHide([target], callback)<a class="headerlink" href="#madrona-onhide-target-callback" title="Permalink to this headline">¶</a></h4>
+<p>Assigns a callback to be executed whenever content in a tab is hidden from the
+user because another tab or sub-tab has been opened. This callback can only be
+assigned to synchronous or asynchronous tabs.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This callback could be called 2 or more times as different tabs are being
+selected before onUnhide is ever called. This is just an implementation
+quirk, but make sure your script doesn&#8217;t fail if callbacks are executed in
+an odd order like: onUnhide -&gt; onHide -&gt; onHide -&gt; onHide -&gt; onUnhide.</p>
+</div>
+<p>If binding the callback to a synchronous tab, give that tab&#8217;s anchor link as
+the optional <tt class="docutils literal"><span class="pre">target</span></tt> argument. Omit it if assigning the callback to an
+asynchronous tab.
+<a class="reference internal" href="#target-or-not"><em>More on this argument</em></a>.</p>
+</div>
+<div class="section" id="madrona-onunhide-target-callback">
+<span id="madrona-onunhide"></span><h4>madrona.onUnhide([target], callback)<a class="headerlink" href="#madrona-onunhide-target-callback" title="Permalink to this headline">¶</a></h4>
+<p>Callback will be executed whenever content is revealed to the user, even after
+hiding. It <em>will</em> be executed when content is first shown as well, right after
+any <a class="reference internal" href="#madrona-onshow"><em>onShow</em></a> callbacks. This callback can only be
+assigned to synchronous or asynchronous tabs.</p>
+<p>If binding the callback to a synchronous tab, give that tab&#8217;s anchor link as
+the optional <tt class="docutils literal"><span class="pre">target</span></tt> argument. Omit it if assigning the callback to an
+asynchronous tab.
+<a class="reference internal" href="#target-or-not"><em>More on this argument</em></a>.</p>
+</div>
+<div class="section" id="madrona-beforedestroy-callback">
+<span id="madrona-beforedestroy"></span><h4>madrona.beforeDestroy(callback)<a class="headerlink" href="#madrona-beforedestroy-callback" title="Permalink to this headline">¶</a></h4>
+<p>Callbacks will be executed before content is removed from the document when
+a user closes the panel or it is closed by an API call. There is no need to
+provide a <tt class="docutils literal"><span class="pre">target</span></tt> argument, the whole panel with tabs is destroyed at once.</p>
+</div>
+</div>
+</div>
+<div class="section" id="built-in-behaviors-and-styles">
+<span id="behaviors"></span><h2>Built-In Behaviors and Styles<a class="headerlink" href="#built-in-behaviors-and-styles" title="Permalink to this headline">¶</a></h2>
+<p>By using special markup within sidebar content you can take advantage of
+built-in widgets to implement dynamic behavior without having to resort to
+inline style and script tags. This reduces the workload for incorporating new
+content and provides users with a more consistent user interface.</p>
+<p>The following is a list of the built-in behaviors you can take advantage of in
+sidebar content.</p>
+<div class="section" id="links">
+<h3>links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<p>Links with a class of <tt class="docutils literal"><span class="pre">panel_link</span></tt> will open the specified view within the
+same sidebar, replacing the current content. This functionality is used in
+<a class="reference internal" href="news.html#news"><em>madrona.news: Display news items, announcements, etc</em></a>.</p>
+<p>Be sure to think about navigation when using this functionality. Content
+loaded via these links will probably need a &#8220;back button&#8221; link with the
+<tt class="docutils literal"><span class="pre">panel_link</span></tt> class to open the previous page.</p>
+<p>Example markup:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;panel_link&quot;</span> <span class="na">href=</span><span class="s">&quot;/path/to/panel/content/&quot;</span><span class="nt">&gt;</span>my link<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-grids">
+<h3>data grids<a class="headerlink" href="#data-grids" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="data-visualization">
+<h3>data visualization<a class="headerlink" href="#data-visualization" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="linking-to-related-spatial-features">
+<h3>linking to related spatial features<a class="headerlink" href="#linking-to-related-spatial-features" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="turning-on-data-layers">
+<h3>turning on data layers<a class="headerlink" href="#turning-on-data-layers" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="controlling-map-state">
+<h3>controlling map state<a class="headerlink" href="#controlling-map-state" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="built-in-javascript-libraries">
+<span id="built-in-js"></span><h3>built-in javascript libraries<a class="headerlink" href="#built-in-javascript-libraries" title="Permalink to this headline">¶</a></h3>
+<p>These libraries are included in the main application and can be used within
+sidebar content.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://jquery.com/">jQuery</a></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="providing-print-links">
+<h2>Providing Print Links<a class="headerlink" href="#providing-print-links" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+<div class="section" id="integration-with-google-analytics">
+<h2>Integration with Google Analytics<a class="headerlink" href="#integration-with-google-analytics" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">todo</span></tt></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Authoring Sidebar Content</a><ul>
+<li><a class="reference internal" href="#information-architecture">Information Architecture</a></li>
+<li><a class="reference internal" href="#configuring-templates">Configuring Templates</a><ul>
+<li><a class="reference internal" href="#a-simple-panel">a simple panel</a></li>
+<li><a class="reference internal" href="#synchronous-tabs">synchronous tabs</a></li>
+<li><a class="reference internal" href="#asynchronous-tabs">asynchronous tabs</a></li>
+<li><a class="reference internal" href="#tab-behavior-when-switching-features">tab behavior when switching features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inline-style-and-script-tags">Inline &lt;style&gt; and &lt;script&gt; Tags</a><ul>
+<li><a class="reference internal" href="#css">css</a></li>
+<li><a class="reference internal" href="#inline-javascript">inline javascript</a></li>
+<li><a class="reference internal" href="#using-inline-javascript-with-tabs">using inline javascript with tabs</a></li>
+<li><a class="reference internal" href="#available-callbacks">available callbacks</a><ul>
+<li><a class="reference internal" href="#madrona-onshow-target-callback">madrona.onShow([target], callback)</a></li>
+<li><a class="reference internal" href="#madrona-onhide-target-callback">madrona.onHide([target], callback)</a></li>
+<li><a class="reference internal" href="#madrona-onunhide-target-callback">madrona.onUnhide([target], callback)</a></li>
+<li><a class="reference internal" href="#madrona-beforedestroy-callback">madrona.beforeDestroy(callback)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#built-in-behaviors-and-styles">Built-In Behaviors and Styles</a><ul>
+<li><a class="reference internal" href="#links">links</a></li>
+<li><a class="reference internal" href="#data-grids">data grids</a></li>
+<li><a class="reference internal" href="#data-visualization">data visualization</a></li>
+<li><a class="reference internal" href="#linking-to-related-spatial-features">linking to related spatial features</a></li>
+<li><a class="reference internal" href="#turning-on-data-layers">turning on data layers</a></li>
+<li><a class="reference internal" href="#controlling-map-state">controlling map state</a></li>
+<li><a class="reference internal" href="#built-in-javascript-libraries">built-in javascript libraries</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#providing-print-links">Providing Print Links</a></li>
+<li><a class="reference internal" href="#integration-with-google-analytics">Integration with Google Analytics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="reports.html"
+                        title="previous chapter">Reports</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="templatetags.html"
+                        title="next chapter">Built-in Template Tags</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/sidebar.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="templatetags.html" title="Built-in Template Tags"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="reports.html" title="Reports"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

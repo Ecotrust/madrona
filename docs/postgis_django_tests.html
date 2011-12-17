@@ -1,0 +1,147 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PostGIS and the Django test database &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Default Settings" href="settings.html" />
+    <link rel="prev" title="Maintenance Mode" href="maintenance_mode.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="settings.html" title="Default Settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="maintenance_mode.html" title="Maintenance Mode"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="postgis-and-the-django-test-database">
+<span id="django-test-database-and-postgis"></span><h1>PostGIS and the Django test database<a class="headerlink" href="#postgis-and-the-django-test-database" title="Permalink to this headline">¶</a></h1>
+<p>When django runs tests it creates a new database from scratch. This isolates
+test data from your production or development environment. Without proper
+configuration, this database will lack the PostGIS functions needed to run
+those tests and reproduce Madrona&#8217;s data model.</p>
+<p>There are two different approaches to getting PostGIS working within these
+newly created databases.</p>
+<div class="section" id="configuring-django-to-spatially-enable-the-new-databases">
+<h2>Configuring django to spatially-enable the new databases<a class="headerlink" href="#configuring-django-to-spatially-enable-the-new-databases" title="Permalink to this headline">¶</a></h2>
+<p>If altering the properties of every newly created database is undesirable,
+GeoDjango has made the process of spatially-enabling just the test databases
+easier. See <a class="reference external" href="http://geodjango.org/docs/testing.html?highlight=testing#testing-geodjango-apps">Testing GeoDjango Apps</a>.</p>
+</div>
+<div class="section" id="adding-postgis-to-the-default-template">
+<h2>Adding PostGIS to the default template<a class="headerlink" href="#adding-postgis-to-the-default-template" title="Permalink to this headline">¶</a></h2>
+<p>Another option is to spatially-enable all databases created on your system.
+By default new databases are created from a template called <tt class="docutils literal"><span class="pre">template1</span></tt>.
+Any functions or data added to this template will appear in the new databases,
+whether they are created by the django test framework, another tool, or the
+postgres shell itself.</p>
+<p>The PostGIS documentation has a section on <a class="reference external" href="http://postgis.refractions.net/documentation/manual-1.4/ch02.html#id2532099">spatially-enabling a database</a>.
+Simply follow those instructions, installing spatial functions and the
+reference system into <tt class="docutils literal"><span class="pre">template1</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PostGIS and the Django test database</a><ul>
+<li><a class="reference internal" href="#configuring-django-to-spatially-enable-the-new-databases">Configuring django to spatially-enable the new databases</a></li>
+<li><a class="reference internal" href="#adding-postgis-to-the-default-template">Adding PostGIS to the default template</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="maintenance_mode.html"
+                        title="previous chapter">Maintenance Mode</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="settings.html"
+                        title="next chapter">Default Settings</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/postgis_django_tests.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="settings.html" title="Default Settings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="maintenance_mode.html" title="Maintenance Mode"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

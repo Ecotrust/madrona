@@ -1,0 +1,203 @@
+Javascript and CSS Assets
+=========================
+
+Packaging
+*********
+
+It's difficult to maintain a large web application without breaking the 
+javascript and css components into multiple files. The problem with this 
+approach is that http requests are costly and loading many css and js files 
+increases the loading time of the app.
+
+Madrona utilizes the `django-compress <http://code.google.com/p/django-compress/>`_ 
+app not only to concatenate these files but compress them by removing 
+comments and whitespace.
+
+Where to put files
+******************
+Each django app in the ``madrona`` module has a folder under ``media/``, that 
+contains folders for javascript, css, and images. Also there is a folder for 
+external libraries called ``lib``, and a folder for testing javascript::
+
+    media/<app-name>/
+      css/
+      lib/
+      js/
+        test/
+      images/
+
+This can of course be expanded and will likely need to incorporate a folder
+for test fixtures.
+      
+      
+How to add files to the build
+*****************************
+There are two ways to incorporate your javascript and css asset in the build.
+
+incorporating javascript and css stylesheets into madrona
+---------------------------------------------------------
+
+To include your files in the main javascript and css packages, you'll need to
+add them to ``js_includes.xml`` and ``css_includes.xml``.
+
+.. note:: *Do not* include project-specific javascript and css files using this method.
+
+``media/css_includes.xml``
+
+.. code-block:: xml
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--
+    	includes.xml
+        List all css files that should be aggregated into the main madrona.css
+        file here. Be mindful of the order.
+    -->
+    <stylesheets>
+        <file path="common/css/typography.css" />
+        <file path="common/css/application.css" />
+    </stylesheets>
+    
+``media/js_includes.xml``
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--
+    	includes.xml
+        Edit this file to add javascript files that need to be included in the
+        main madrona.js distribution, as well as point to appropriate tests.
+        Please avoid adding third party libs where they are available from a CDN        
+        like Google's ajaxlibs
+    -->
+    <javascripts>
+        <file path="common/js/lib/tmpl.js" />
+        <!-- note the inclusion of tests -->
+        <test path="common/js/test/lib/tmpl.js" />
+    </javascripts>
+
+Note that this diverges significantly from the standard way one configures
+`django-compress <http://code.google.com/p/django-compress/>`_. The reason for
+this is that static html files can then parse these xml files and run tests
+on the client code without a server running.
+
+.. _project_assets:
+
+project-specific javascript and css files
+-----------------------------------------
+
+For implementations of Madrona for specific geographies, keep these files in 
+the media folder in a project file tree. Within the project's settings.py 
+file, modify the ``COMPRESS_JS`` and ``COMPRESS_CSS`` dictionaries like so:
+
+.. code-block:: python
+
+    COMPRESS_JS['application']['source_filenames'] += (
+        'projects/nc_mlpa/js/mlpa.js',
+        'projects/nc_mlpa/js/mpa_form.js',
+        'report/js/jquery.hoverIntent.minified.js',
+        'projects/nc_mlpa/js/representationReport.js',
+    )
+
+
+    COMPRESS_CSS['application']['source_filenames'] += (
+        'projects/nc_mlpa/css/closure_fixes.css',
+        'projects/nc_mlpa/css/mlpa_forms.css',
+        'projects/nc_mlpa/css/mlpa_attributes.css',
+        'projects/nc_mlpa/css/replication.css',
+        'projects/nc_mlpa/css/mpa_hab_representation.css',
+    )
+
+
+Including assets in your pages
+------------------------------
+Use the standard `django-compress <http://code.google.com/p/django-compress/>`_
+template tags:
+
+.. code-block:: django
+
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Madrona Decision Support Tool</title>
+        {% load compressed %}
+        {% compressed_css 'application' %}
+        {% compressed_js 'application' %}
+    </head>
+    <body>
+
+Testing Javascript Code
+***********************
+
+defining unit tests
+-------------------
+Unit tests are defined using `QUnit <http://docs.jquery.com/QUnit>`_. Simply
+create a test js file and then add a reference to it in ``js_includes.xml`` 
+and it can be run using the methods defined in the following sections.
+
+**Example unit test**
+
+.. code-block:: javascript
+
+    module('micro-templating')
+
+    test("list template", function(){
+        template = [
+            "<ul>",
+                "<% for (var i=0; i < users.length; i++) { %>",
+                    "<li><%= users[i].name %></li>",
+                "<% } %>",
+            "</ul>"
+        ];
+        template = template.join("");
+        list_users = tmpl(template);
+        data = {users: [{name:'me'}, {name: 'myself'}]}
+        equals(list_users(data), "<ul><li>me</li><li>myself</li></ul>");
+    });
+
+**Inclusion in** ``media/js_includes.xml``
+
+.. code-block:: xml
+
+    ...
+    <file path="common/js/lib/tmpl.js" />
+    <test path="common/js/test/lib/tmpl.js" />
+    ...
+    
+testing unpackaged javascript
+-----------------------------
+It's possible to test the client javascript code without a running server by
+simply opening ``media/tests.html``. Because it's a static file, one could even
+run the tests by opening ``tests.html`` directly from the online mercurial repository.
+
+This page loads all the same files that django-compress packages, but loads
+each file individually and dynamically, so you don't need a server running. In
+fact, one can simple browse to the mercurial repository and run tests from there!
+
+`<http://madrona.googlecode.com/hg/media/tests.html>`_
+
+This method *will not test whether the code runs after packaging*. For that
+reason it is suitable for quick use during development but cannot adequately
+test code for use in a production environment.
+
+The most likely bugs not caught without packaging are forgotten trailing 
+semi-colons. Fortunately, these bugs immediately cause parse errors when 
+tested using the server-side method so they are easy to catch.
+
+testing packaged files
+----------------------
+In order to test that javascript code runs properly after packaging and 
+compression, you'll need a running server. See :ref:`getting_started` for 
+instructions on how to run the server, then point a browser to `<http://localhost:8000/tests>`_. This
+will run the same tests, but using django-compress to load assets. 
+
+*In order to test these files both concatenated and compressed you must have 
+one of the following settings set*::
+
+    COMPRESS = True
+
+or::
+    
+    DEBUG = False
+
+Testing and Documenting Reusable CSS Styles
+*******************************************
+``media/styles.html``

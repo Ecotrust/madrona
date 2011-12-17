@@ -1,0 +1,525 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.features: Spatial Content Management &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.google-analytics: Web traffic analytics" href="google-analytics.html" />
+    <link rel="prev" title="madrona.common: Misc Goodies" href="common.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="google-analytics.html" title="madrona.google-analytics: Web traffic analytics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="madrona.common: Misc Goodies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-features-spatial-content-management">
+<h1><cite>madrona.features</cite>: Spatial Content Management<a class="headerlink" href="#madrona-features-spatial-content-management" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">madrona.features</span></tt> app works along with other Madrona apps to create a
+system that is best described as a content management system for user-designed
+spatial features. This system can be configured quickly to support a range of
+management options such as marine protected areas, hydrokinetic generators,
+wind turbines, or undersea cables. With one model definition it&#8217;s possible to
+define the data schema for storing these features, as well as what behaviors
+and actions they support within the Madrona interface. I high degree of
+customization can be achieved with a Madrona project with this declarative
+format, without having to customize the view or client-side javascript
+components.</p>
+<p>Feature Classes can be configured to:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Represent various management scenarios as Point, LineString or Polygon
+data</li>
+<li>Collect attributes from users using forms generated from the model
+definition (or customized forms)</li>
+<li>Pre-process and validate user-defined geometries with Manipulators</li>
+<li>Enable sharing of features among users</li>
+<li>Add custom downloads, like Shapefile or Excel files</li>
+<li>Support custom editing actions</li>
+</ul>
+</div></blockquote>
+<p>In addition, FeatureCollection Classes can be created that are collections of
+Feature Class instances with their own attributes. These can be used to
+represent simple Folders to help users organize their designs, or represent
+management concepts such as Marine Protected Area Networks.</p>
+<div class="section" id="creating-a-spatial-feature-class">
+<h2>Creating a Spatial Feature Class<a class="headerlink" href="#creating-a-spatial-feature-class" title="Permalink to this headline">¶</a></h2>
+<p>Lets walk through the basics of creating a simple Feature Class. The basic
+process involves:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Defining a subclass of <tt class="docutils literal"><span class="pre">PointFeature</span></tt>, <tt class="docutils literal"><span class="pre">LineStringFeature</span></tt>,
+<tt class="docutils literal"><span class="pre">PolygonFeature</span></tt>, including the attributes to be
+stored with it.</li>
+<li>Creating an Options inner-class, and using it to specify a form to use
+when creating or editing this Feature Class.</li>
+<li>Creating kml and kml_style properties that define it&#8217;s KML representation</li>
+<li>Specifying links to downloads or services related to the Feature Class.</li>
+<li>Specifying any optional parameters on the Options inner-class</li>
+<li>Creating a template to use when displaying this Feature Class&#8217; attributes</li>
+</ul>
+</div></blockquote>
+<p>Look at this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.features</span> <span class="kn">import</span> <span class="n">register</span>
+<span class="kn">from</span> <span class="nn">madrona.features.models</span> <span class="kn">import</span> <span class="n">PolygonFeature</span>
+<span class="kn">from</span> <span class="nn">madrona.features.forms</span> <span class="kn">import</span> <span class="n">FeatureForm</span>
+
+<span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">Mpa</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="s">&quot;12&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Marine Protected Area&#39;</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;myproject.forms.MpaForm&#39;</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">alternate</span><span class="p">(</span><span class="s">&#39;Shapefile&#39;</span><span class="p">,</span>
+                <span class="s">&#39;mlpa.views.shapefile&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single&#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s">&#39;application/shapefile&#39;</span><span class="p">),</span>
+
+            <span class="n">alternate</span><span class="p">(</span><span class="s">&#39;KMZ (Google Earth)&#39;</span><span class="p">,</span>
+                <span class="s">&#39;mlpa.views.kml_export&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single multiple&#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s">&#39;application/vnd.google-earth.kmz&#39;</span><span class="p">,</span>
+                <span class="n">generic</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+
+            <span class="n">related</span><span class="p">(</span><span class="s">&#39;MPA Spreadsheet&#39;</span><span class="p">,</span>
+                <span class="s">&#39;mlpa.views.spreadsheet&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single&#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s">&#39;application/excel&#39;</span><span class="p">),</span>
+
+            <span class="n">edit</span><span class="p">(</span><span class="s">&#39;Delete w/Grids&#39;</span><span class="p">,</span>
+                <span class="s">&#39;mlpa.views.delete_w_grids&#39;</span><span class="p">,</span>
+                <span class="n">confirm</span><span class="o">=</span><span class="s">&quot;Are you sure you want to delete with grids?&quot;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&quot;single multiple&quot;</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">MpaArray</span><span class="p">],</span>
+                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;keyword_argument&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}),</span>
+
+            <span class="n">edit_form</span><span class="p">(</span><span class="s">&#39;Tags&#39;</span><span class="p">,</span>
+                <span class="s">&#39;mlpa.views.tag&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single multiple&#39;</span><span class="p">,</span>
+                <span class="n">generic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">models</span><span class="o">=</span><span class="p">(</span><span class="n">MpaArray</span><span class="p">,</span> <span class="n">MlpaMpa</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MpaForm</span><span class="p">(</span><span class="n">FeatureForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Mpa</span>
+</pre></div>
+</div>
+<div class="section" id="defining-the-model">
+<h3>Defining the Model<a class="headerlink" href="#defining-the-model" title="Permalink to this headline">¶</a></h3>
+<p>Must be a subclass of one of the <tt class="docutils literal"><span class="pre">Feature</span></tt> subclasses (<tt class="docutils literal"><span class="pre">PointFeature</span></tt>,
+<tt class="docutils literal"><span class="pre">PolygonFeature</span></tt>, <tt class="docutils literal"><span class="pre">LineStringFeature</span></tt>)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>Keep the model name to under 30 characters in length</em>.
+When creating a Feature model, django will automatically add permissions with a verbose name (e.g. &#8220;Can share Your Model Name&#8221;)
+which must be &lt; 50 chars. Keeping the model name to around 30 chars or less will prevent SQL errors when creating the model.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>When creating a model for your unit tests, define the model outside of your TestCase class</em>.
+Otherwise the feature class gets destroyed when the test finishes but it is never &#8216;unregistered&#8217;
+which can lead to very difficult SQL/ORM debugging problems later in the tests.</p>
+</div>
+</div>
+<div class="section" id="specifying-a-form">
+<h3>Specifying a Form<a class="headerlink" href="#specifying-a-form" title="Permalink to this headline">¶</a></h3>
+<p>All Feature Classes must have an <tt class="docutils literal"><span class="pre">Options</span></tt> inner-class that contains a
+property specifying the <tt class="docutils literal"><span class="pre">FeatureForm</span></tt> subclass that can be used to edit it.
+All <em class="xref std std-ref">other properties</em> on the Options inner-class
+are optional.</p>
+</div>
+<div class="section" id="creating-a-show-template">
+<h3>Creating a &#8220;Show&#8221; Template<a class="headerlink" href="#creating-a-show-template" title="Permalink to this headline">¶</a></h3>
+<p>The show template is used to render sidebar content for a feature within the
+Madrona interface, and can also be used to render a printable and
+bookmarkable page for it. This template can be placed in any template
+directory by default under <tt class="docutils literal"><span class="pre">{{slug}}/show.html</span></tt>. Subdirectories are used to
+allow for overriding templates as mentioned in the
+<a class="reference external" href="http://docs.djangoproject.com/en/1.2/ref/templates/api/#using-subdirectories">django documentation</a>.
+The default path to the show template can be changed using an optional
+<a class="reference internal" href="#show_template">show_template</a> parameter to the Options inner-class.</p>
+<p>Templates will be rendered with the following context:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">instance</span></tt> - the feature class instance being being displayed</li>
+<li>...</li>
+<li>...</li>
+</ul>
+</div></blockquote>
+<p>You can add to this list using the <a class="reference internal" href="#show_context">show_context</a> Option property.</p>
+</div>
+<div class="section" id="customizing-the-output-styling-and-kml-representation">
+<h3>Customizing the Output Styling and KML Representation<a class="headerlink" href="#customizing-the-output-styling-and-kml-representation" title="Permalink to this headline">¶</a></h3>
+<p>There are three primary visual representations of Features: KML, the KMLTree and static maps.
+While the base Feature classes define reasonable default styling, it&#8217;s likely that you&#8217;ll need to customize the look and feel for your implementation.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="kmlapp.html#kmlapp"><em>Customizing the styling of the KML</em></a></li>
+<li><a class="reference internal" href="staticmap.html#staticmap"><em>Customizing the Mapnik static map rendering</em></a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="customizing-the-styling-of-the-kmltree">
+<h4>Customizing the styling of the KMLTree<a class="headerlink" href="#customizing-the-styling-of-the-kmltree" title="Permalink to this headline">¶</a></h4>
+<p>You can use css to style the representation of the Features in the KMLTree, specifically the small icon to the left of the Feature name. There are two mechanisms to do this.</p>
+<p>First you can specify an <tt class="docutils literal"><span class="pre">icon_url</span></tt> in the Options. This can be an absolute http URL or relative to the MEDIA_ROOT directory.</p>
+<p>If you need more control over styling icons (such as specifying multiple styles or using scrolling sprites) you can use raw css by overriding the Feature.css() classmethod. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">css</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    li.KmlDocument &gt; .icon {</span>
+<span class="s">      background: url(&#39;</span><span class="si">%(media)s</span><span class="s">/sprites/kml.png?1302821411&#39;) no-repeat -566px 0px ! important;</span>
+<span class="s">    }</span>
+<span class="s">    li.</span><span class="si">%(uid)s</span><span class="s"> &gt; .icon {</span>
+<span class="s">      background: url(&#39;</span><span class="si">%(media)s</span><span class="s">/sprites/kml.png?1302821411&#39;) no-repeat 0px 0px ! important;</span>
+<span class="s">    }</span>
+<span class="s">    &quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">{</span> <span class="s">&#39;uid&#39;</span><span class="p">:</span> <span class="n">klass</span><span class="o">.</span><span class="n">model_uid</span><span class="p">(),</span> <span class="s">&#39;media&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_URL</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="beyond-the-basics">
+<h3>Beyond the Basics<a class="headerlink" href="#beyond-the-basics" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="implementing-a-custom-copy-method">
+<h4>Implementing a Custom Copy Method<a class="headerlink" href="#implementing-a-custom-copy-method" title="Permalink to this headline">¶</a></h4>
+<p>Some default copying behavior is provided with the built-in feature.copy method. Unless you want to reimplement/change all that logic (and maybe your application requires it) you can call the Super() function and just override the necessary bits:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">FeatureCollection</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="n">copy</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Folder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">copy</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; (copy)&#39;</span><span class="p">,</span> <span class="s">&#39;-Copy&#39;</span><span class="p">)</span>
+        <span class="n">copy</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">copy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specifying-manipulators">
+<h4>Specifying Manipulators<a class="headerlink" href="#specifying-manipulators" title="Permalink to this headline">¶</a></h4>
+<p>You must specify a list of required manipulators; if no manipulators are required simply pass an empty list <tt class="docutils literal"><span class="pre">[]</span></tt>. Optional manipulators can be specified as well:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">TestMpa</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;madrona.manipulators.tests.TestManipulator&#39;</span> <span class="p">]</span>
+        <span class="n">optional_manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;madrona.manipulators.manipulators.ClipToGraticuleManipulator&#39;</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="base-classes">
+<h2>Base Classes<a class="headerlink" href="#base-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="feature">
+<h3>Feature<a class="headerlink" href="#feature" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="spatial-feature">
+<h3>Spatial Feature<a class="headerlink" href="#spatial-feature" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="pointfeature">
+<h4>PointFeature<a class="headerlink" href="#pointfeature" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="linestringfeature">
+<h4>LineStringFeature<a class="headerlink" href="#linestringfeature" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="polygonfeature">
+<h4>PolygonFeature<a class="headerlink" href="#polygonfeature" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="featurecollection-base-class">
+<h3>FeatureCollection Base Class<a class="headerlink" href="#featurecollection-base-class" title="Permalink to this headline">¶</a></h3>
+<p>Subclasses of FeatureCollection have a one-to-many relationship with one or
+more Feature Classes. One could create a Marine Protected Area Network class
+that can only contain MPAs, or a Folder class that can contain any combination
+of FeatureClasses or even other Folders and FeatureCollections.</p>
+<p>One important note about the sharing behavior of FeatureCollections - If a user shares a
+collection, all the features/collections contained within it are implicitly shared.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MPANetwork</span><span class="p">(</span><span class="n">FeatureCollection</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">valid_children</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;mlpa.models.Mpa&#39;</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="the-options-inner-class">
+<h2>The Options inner-class<a class="headerlink" href="#the-options-inner-class" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="form">
+<tt class="descname">form</tt><big>(</big><em>required</em><big>)</big><a class="headerlink" href="#form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a <a class="reference external" href="http://docs.djangoproject.com/en/dev/topics/forms/modelforms/">ModelForm</a>
+that will be used to create and edit features of this class. The form
+must be a subclass of madrona.features.forms.FeatureForm, and the path
+to the form must be provided as a <em>string</em>. Otherwise you&#8217;ll cause
+circular reference issues.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="verbose_name">
+<tt class="descname">verbose_name</tt><a class="headerlink" href="#verbose_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide your feature class with a human readable name to be used
+within the interface. For example, this name determines the name used
+in the &#8220;Create&#8221; menu. If not specified, the CamelCase model name will
+be used. Even though it is optional, this property is obviously highly
+recommended.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="show_template">
+<tt class="descname">show_template</tt><a class="headerlink" href="#show_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, will look for the template at <tt class="docutils literal"><span class="pre">{{modelname}}/show.html</span></tt>
+when rendering shape attributes. For example, the template for a model
+named MpaArray  would be <tt class="docutils literal"><span class="pre">mpaarray/show.html</span></tt>. You can specify a
+different template location with this option.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="form_template">
+<tt class="descname">form_template</tt><a class="headerlink" href="#form_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this option to specify a custom template to be shown when creating
+or editing a feature. By default, looks for a template under
+<tt class="docutils literal"><span class="pre">features/form.html</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="form_context">
+<tt class="descname">form_context</tt><a class="headerlink" href="#form_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify a base context to use for rendering templates when creating and
+editing features.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="show_context">
+<tt class="descname">show_context</tt><a class="headerlink" href="#show_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify a base context to use when rendering feature attributes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="copy">
+<tt class="descname">copy</tt><a class="headerlink" href="#copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enabled by default, set to False to disable copy functionality. Calls the
+copy method of Feature, which can be overriden by subclasses to customize
+this functionality.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="manipulators">
+<tt class="descname">manipulators</tt><a class="headerlink" href="#manipulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defaults to clipping features to the study region. Set to <tt class="docutils literal"><span class="pre">[]</span></tt> to
+disable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="optional_manipulators">
+<tt class="descname">optional_manipulators</tt><a class="headerlink" href="#optional_manipulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional list of manipulators that users can choose to apply to any digitized
+features.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="links">
+<tt class="descname">links</tt><a class="headerlink" href="#links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify links associated a Feature Class that point to related downloads,
+export tools, and editing actions that can be performed.</p>
+</dd></dl>
+
+<div class="section" id="specifying-links">
+<h3>Specifying Links<a class="headerlink" href="#specifying-links" title="Permalink to this headline">¶</a></h3>
+<p>Links allow developers to extend the functionality of features by specifying
+downloads, actions, or related pages that should be made available through the
+interface. There are 4 types of Links:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">alternate</span></tt> links specify alternative representations of features that
+should be made available through the Export menu.</li>
+<li><tt class="docutils literal"><span class="pre">related</span></tt> links specify related downloads or pages that are also made
+available in the Export menu but in a downloads section.</li>
+<li><tt class="docutils literal"><span class="pre">edit</span></tt> links specify items that should appear in the Edit menu and
+modify a selected feature, create a copy, or some other
+<a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">non-idempotent</a>
+action.</li>
+</ul>
+</div></blockquote>
+<p>Here&#8217;s an example of links in use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">RenewableEnergySite</span><span class="p">(</span><span class="n">Feature</span><span class="p">):</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">TYPE_CHOICES</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Renewable Energy Site&#39;</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;madrona.features.tests.RenewableEnergySiteForm&#39;</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">alternate</span><span class="p">(</span><span class="s">&#39;Export KML&#39;</span><span class="p">,</span>
+                <span class="s">&#39;madrona.features.tests.kml&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;multiple single&#39;</span>
+            <span class="p">),</span>
+            <span class="n">related</span><span class="p">(</span><span class="s">&#39;Viewshed Map&#39;</span><span class="p">,</span>
+                <span class="s">&#39;madrona.features.tests.viewshed_map&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single&#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s">&#39;image/png&#39;</span>
+            <span class="p">),</span>
+            <span class="n">edit</span><span class="p">(</span><span class="s">&#39;Delete w/related cables&#39;</span><span class="p">,</span>
+                <span class="s">&#39;madrona.features.tests.delete_w_cables&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single multiple&#39;</span><span class="p">,</span>
+                <span class="n">confirm</span><span class="o">=</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">                Are you sure you want to delete this site and associated</span>
+<span class="s">                undersea cables?</span>
+<span class="s">                This action cannot be undone.</span>
+<span class="s">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="creating-compatible-views">
+<h4>creating compatible views<a class="headerlink" href="#creating-compatible-views" title="Permalink to this headline">¶</a></h4>
+<p>Views that are wired up to features using links must accept a second argument
+named <tt class="docutils literal"><span class="pre">instance</span></tt> or <tt class="docutils literal"><span class="pre">instances</span></tt> depending on whether they can work on
+single or multiple selected features.</p>
+<p>The features app will handle requests</p>
+<p>Generic views will handle cases where a user is not authorized to view or edit
+a feature, requests related to features that cannot be found, and improperly
+configured views.</p>
+</div>
+<div class="section" id="link-properties">
+<h4>link properties<a class="headerlink" href="#link-properties" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.features</cite>: Spatial Content Management</a><ul>
+<li><a class="reference internal" href="#creating-a-spatial-feature-class">Creating a Spatial Feature Class</a><ul>
+<li><a class="reference internal" href="#defining-the-model">Defining the Model</a></li>
+<li><a class="reference internal" href="#specifying-a-form">Specifying a Form</a></li>
+<li><a class="reference internal" href="#creating-a-show-template">Creating a &#8220;Show&#8221; Template</a></li>
+<li><a class="reference internal" href="#customizing-the-output-styling-and-kml-representation">Customizing the Output Styling and KML Representation</a><ul>
+<li><a class="reference internal" href="#customizing-the-styling-of-the-kmltree">Customizing the styling of the KMLTree</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#beyond-the-basics">Beyond the Basics</a><ul>
+<li><a class="reference internal" href="#implementing-a-custom-copy-method">Implementing a Custom Copy Method</a></li>
+<li><a class="reference internal" href="#specifying-manipulators">Specifying Manipulators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#base-classes">Base Classes</a><ul>
+<li><a class="reference internal" href="#feature">Feature</a></li>
+<li><a class="reference internal" href="#spatial-feature">Spatial Feature</a><ul>
+<li><a class="reference internal" href="#pointfeature">PointFeature</a></li>
+<li><a class="reference internal" href="#linestringfeature">LineStringFeature</a></li>
+<li><a class="reference internal" href="#polygonfeature">PolygonFeature</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#featurecollection-base-class">FeatureCollection Base Class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-options-inner-class">The Options inner-class</a><ul>
+<li><a class="reference internal" href="#specifying-links">Specifying Links</a><ul>
+<li><a class="reference internal" href="#creating-compatible-views">creating compatible views</a></li>
+<li><a class="reference internal" href="#link-properties">link properties</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="common.html"
+                        title="previous chapter"><cite>madrona.common</cite>: Misc Goodies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="google-analytics.html"
+                        title="next chapter"><cite>madrona.google-analytics</cite>: Web traffic analytics</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/features.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="google-analytics.html" title="madrona.google-analytics: Web traffic analytics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="madrona.common: Misc Goodies"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.manipulators.manipulators</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.manipulators-module.html">Package&nbsp;manipulators</a> ::
+        Module&nbsp;manipulators
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module manipulators</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html">source&nbsp;code</a></span></p>
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.BaseManipulator-class.html" class="summary-name">BaseManipulator</a><br />
+      BaseManipulator should be used as the parent class to all manipulator classes.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.ClipToShapeManipulator-class.html" class="summary-name">ClipToShapeManipulator</a><br />
+      required arguments:
+    target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+    clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
+    zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
+concerning **kwargs:
+    kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
+manipulate() return value:
+    a call to self.result() 
+    with required parameter 'clipped_shape': 
+        The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+        The clipped shape will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against' 
+    and optional parameters 'html' and 'success':
+        The html is usually a template that will be displayed to the client, explaining the manipulation
+        if not provided, this will remain empty
+        The success parameter is defined as '1' for success and '0' for failure
+        if not provided, the default value, '1', is used
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.DifferenceFromShapeManipulator-class.html" class="summary-name">DifferenceFromShapeManipulator</a><br />
+      required arguments:
+    target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+    clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
+    zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
+concerning **kwargs:
+    kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
+manipulate() return value:
+    a call to self.result() 
+    with required parameter 'clipped_shape': 
+        The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+        The clipped shape will be the largest (in area) polygon result from taking the difference of 'target_shape' with 'clip_against' 
+    and optional parameters 'html' and 'success':
+        The html is usually a template that will be displayed to the client, explaining the manipulation
+        if not provided, this will remain empty
+        The success parameter is defined as '1' for success and '0' for failure
+        if not provided, the default value, '1', is used
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.ClipToStudyRegionManipulator-class.html" class="summary-name">ClipToStudyRegionManipulator</a><br />
+      required argument: 
+    target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+optional argument:
+    generally USED FOR TESTING ONLY
+    study_region: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+concerning **kwargs:
+    kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
+manipulate() return value:
+    a call to self.result() 
+    with required parameter 'clipped_shape': 
+        The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+        The clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region 
+    and optional parameters 'html' and 'success':
+        The html is usually a template that will be displayed to the client, explaining the manipulation
+        if not provided, this will remain empty
+        The success parameter is defined as '1' for success and '0' for failure
+        if not provided, the default value, '1', is used
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.ClipToGraticuleManipulator-class.html" class="summary-name">ClipToGraticuleManipulator</a><br />
+      required argument: 
+    target_shape:  GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
+optional arguments:
+    north, south, east, west:  expressed in srid GEOMETRY_CLIENT_SRID (4326) 
+concerning **kwargs:
+    kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
+manipulate() return value:
+    a call to self.result() 
+    with required parameter 'clipped_shape': 
+        The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
+        The clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s) 
+    and optional parameters 'html' and 'success':
+        The html is usually a template that will be displayed to the client, explaining the manipulation
+        if not provided, this will remain empty
+        The success parameter is defined as '1' for success and '0' for failure
+        if not provided, the default value, '1', is used
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.manipulators.manipulators.NullManipulator-class.html" class="summary-name">NullManipulator</a><br />
+      This manipulator does nothing but ensure the geometry is clean.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="simplify"></a><span class="summary-sig-name">simplify</span>(<span class="summary-sig-arg">geom</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#simplify">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="display_kml"></a><span class="summary-sig-name">display_kml</span>(<span class="summary-sig-arg">geom</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#display_kml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parsekmlpoly"></a><span class="summary-sig-name">parsekmlpoly</span>(<span class="summary-sig-arg">kmlstring</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#parsekmlpoly">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parsekmllinestring"></a><span class="summary-sig-name">parsekmllinestring</span>(<span class="summary-sig-arg">kmlstring</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#parsekmllinestring">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parsekmlpoint"></a><span class="summary-sig-name">parsekmlpoint</span>(<span class="summary-sig-arg">kmlstring</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#parsekmlpoint">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="parsekml"></a><span class="summary-sig-name">parsekml</span>(<span class="summary-sig-arg">shape</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#parsekml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iskml"></a><span class="summary-sig-name">iskml</span>(<span class="summary-sig-arg">string</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#iskml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_url_for_model"></a><span class="summary-sig-name">get_url_for_model</span>(<span class="summary-sig-arg">model</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#get_url_for_model">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_manipulators_for_model"></a><span class="summary-sig-name">get_manipulators_for_model</span>(<span class="summary-sig-arg">model</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.manipulators.manipulators-pysrc.html#get_manipulators_for_model">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="manipulatorsDict"></a><span class="summary-name">manipulatorsDict</span> = <code title="{}">{}</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:15 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

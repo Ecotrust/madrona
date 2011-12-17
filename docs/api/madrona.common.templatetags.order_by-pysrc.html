@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.templatetags.order_by</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.templatetags-module.html">Package&nbsp;templatetags</a> ::
+        Module&nbsp;order_by
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.templatetags.order_by-module.html">Module madrona.common.templatetags.order_by</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># http://www.djangosnippets.org/snippets/741/</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Library</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Method madrona.common.registration_backend.LingcodBackend.register()=madrona.common.registration_backend.LingcodBackend-class.html#register,Variable madrona.common.templatetags.absolute_media_url.register=madrona.common.templatetags.absolute_media_url-module.html#register,Variable madrona.common.templatetags.absurl.register=madrona.common.templatetags.absurl-module.html#register,Variable madrona.common.templatetags.appname.register=madrona.common.templatetags.appname-module.html#register,Variable madrona.common.templatetags.layout_tags.register=madrona.common.templatetags.layout_tags-module.html#register,Variable madrona.common.templatetags.order_by.register=madrona.common.templatetags.order_by-module.html#register,Variable madrona.common.templatetags.percentage.register=madrona.common.templatetags.percentage-module.html#register,Variable madrona.common.templatetags.relurl.register=madrona.common.templatetags.relurl-module.html#register,Variable madrona.common.templatetags.set_var.register=madrona.common.templatetags.set_var-module.html#register,Variable madrona.data_manager.templatetags.smart_if.register=madrona.data_manager.templatetags.smart_if-module.html#register,Function madrona.features.register()=madrona.features-module.html#register,Variable madrona.geographic_report.templatetags.geographic_report.register=madrona.geographic_report.templatetags.geographic_report-module.html#register,Variable madrona.google-analytics.templatetags.analytics.register=madrona.google-analytics.templatetags.analytics-module.html#register,Function madrona.openid.views.register()=madrona.openid.views-module.html#register"><a title="madrona.common.registration_backend.LingcodBackend.register
+madrona.common.templatetags.absolute_media_url.register
+madrona.common.templatetags.absurl.register
+madrona.common.templatetags.appname.register
+madrona.common.templatetags.layout_tags.register
+madrona.common.templatetags.order_by.register
+madrona.common.templatetags.percentage.register
+madrona.common.templatetags.relurl.register
+madrona.common.templatetags.set_var.register
+madrona.data_manager.templatetags.smart_if.register
+madrona.features.register
+madrona.geographic_report.templatetags.geographic_report.register
+madrona.google-analytics.templatetags.analytics.register
+madrona.openid.views.register" class="py-name" href="#" onclick="return doclink('link-0', 'register', 'link-0');">register</a></tt> <tt class="py-op">=</tt> <tt class="py-name">Library</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="order_by"></a><div id="order_by-def"><a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-decorator">@</tt><tt class="py-decorator">register</tt><tt class="py-op">.</tt><tt class="py-name">filter_function</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt> <a class="py-toggle" href="#" id="order_by-toggle" onclick="return toggle('order_by');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.templatetags.order_by-module.html#order_by">order_by</a><tt class="py-op">(</tt><tt class="py-param">queryset</tt><tt class="py-op">,</tt> <tt class="py-param">args</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="order_by-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="order_by-expanded"><a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable madrona.common.management.commands.runprofileserver.Command.args=madrona.common.management.commands.runprofileserver.Command-class.html#args,Variable madrona.common.management.commands.site.Command.args=madrona.common.management.commands.site.Command-class.html#args,Variable madrona.features.management.commands.enable_sharing.Command.args=madrona.features.management.commands.enable_sharing.Command-class.html#args,Variable madrona.layers.management.commands.create_privatekml.Command.args=madrona.layers.management.commands.create_privatekml.Command-class.html#args,Variable madrona.manipulators.management.commands.change_manipulator_geom.Command.args=madrona.manipulators.management.commands.change_manipulator_geom.Command-class.html#args,Variable madrona.manipulators.management.commands.create_manipulator_geom.Command.args=madrona.manipulators.management.commands.create_manipulator_geom.Command-class.html#args,Variable madrona.raster_stats.management.commands.update_rasterdatasets.Command.args=madrona.raster_stats.management.commands.update_rasterdatasets.Command-class.html#args,Variable madrona.studyregion.management.commands.change_study_region.Command.args=madrona.studyregion.management.commands.change_study_region.Command-class.html#args,Variable madrona.studyregion.management.commands.create_study_region.Command.args=madrona.studyregion.management.commands.create_study_region.Command-class.html#args,Variable madrona.studyregion.management.commands.summarize_study_region_changes.Command.args=madrona.studyregion.management.commands.summarize_study_region_changes.Command-class.html#args,Variable madrona.xyquery.management.commands.loadraster.Command.args=madrona.xyquery.management.commands.loadraster.Command-class.html#args,Variable madrona.xyquery.management.commands.loadshp.Command.args=madrona.xyquery.management.commands.loadshp.Command-class.html#args"><a title="madrona.common.management.commands.runprofileserver.Command.args
+madrona.common.management.commands.site.Command.args
+madrona.features.management.commands.enable_sharing.Command.args
+madrona.layers.management.commands.create_privatekml.Command.args
+madrona.manipulators.management.commands.change_manipulator_geom.Command.args
+madrona.manipulators.management.commands.create_manipulator_geom.Command.args
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.args
+madrona.studyregion.management.commands.change_study_region.Command.args
+madrona.studyregion.management.commands.create_study_region.Command.args
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.args
+madrona.xyquery.management.commands.loadraster.Command.args
+madrona.xyquery.management.commands.loadshp.Command.args" class="py-name" href="#" onclick="return doclink('link-1', 'args', 'link-1');">args</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt id="link-2" class="py-name"><a title="madrona.common.management.commands.runprofileserver.Command.args
+madrona.common.management.commands.site.Command.args
+madrona.features.management.commands.enable_sharing.Command.args
+madrona.layers.management.commands.create_privatekml.Command.args
+madrona.manipulators.management.commands.change_manipulator_geom.Command.args
+madrona.manipulators.management.commands.create_manipulator_geom.Command.args
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.args
+madrona.studyregion.management.commands.change_study_region.Command.args
+madrona.studyregion.management.commands.create_study_region.Command.args
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.args
+madrona.xyquery.management.commands.loadraster.Command.args
+madrona.xyquery.management.commands.loadshp.Command.args" class="py-name" href="#" onclick="return doclink('link-2', 'args', 'link-1');">args</a></tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">queryset</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module madrona.common.templatetags.order_by=madrona.common.templatetags.order_by-module.html,Function madrona.common.templatetags.order_by.order_by()=madrona.common.templatetags.order_by-module.html#order_by"><a title="madrona.common.templatetags.order_by
+madrona.common.templatetags.order_by.order_by" class="py-name" href="#" onclick="return doclink('link-3', 'order_by', 'link-3');">order_by</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-4" class="py-name"><a title="madrona.common.management.commands.runprofileserver.Command.args
+madrona.common.management.commands.site.Command.args
+madrona.features.management.commands.enable_sharing.Command.args
+madrona.layers.management.commands.create_privatekml.Command.args
+madrona.manipulators.management.commands.change_manipulator_geom.Command.args
+madrona.manipulators.management.commands.create_manipulator_geom.Command.args
+madrona.raster_stats.management.commands.update_rasterdatasets.Command.args
+madrona.studyregion.management.commands.change_study_region.Command.args
+madrona.studyregion.management.commands.create_study_region.Command.args
+madrona.studyregion.management.commands.summarize_study_region_changes.Command.args
+madrona.xyquery.management.commands.loadraster.Command.args
+madrona.xyquery.management.commands.loadshp.Command.args" class="py-name" href="#" onclick="return doclink('link-4', 'args', 'link-1');">args</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

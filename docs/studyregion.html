@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.studyregion: The Study Region &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.unit_converter" href="unit_converter.html" />
+    <link rel="prev" title="madrona.staticmap: Static Map Data Layers" href="staticmap.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="unit_converter.html" title="madrona.unit_converter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="staticmap.html" title="madrona.staticmap: Static Map Data Layers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-studyregion-the-study-region">
+<span id="studyregion"></span><h1><cite>madrona.studyregion</cite>: The Study Region<a class="headerlink" href="#madrona-studyregion-the-study-region" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-the-study-region">
+<h2>What is the Study Region?<a class="headerlink" href="#what-is-the-study-region" title="Permalink to this headline">¶</a></h2>
+<p>The Study Region is a <a class="reference external" href="http://geodjango.org/docs/geos.html#multipolygon">multipolygon</a>
+that refers to all areas within which new Marine Protected Areas may be
+proposed. Often this is based on a combination of factors including the
+administrative jurisdiction of the agency implementing the MPAs, biogeography,
+and the logistics of running a design process across a wide area. For example,
+the <a class="reference external" href="http://www.dfg.ca.gov/mlpa/">Marine Life Protection Act Initiative</a>
+proceeded with establishing MPAs by breaking up the state of California into 5
+study regions. Each study region was addressed in series, and the study region
+was limited to state waters because the process was backed by state
+legislation.</p>
+<p>The Study Region is the fundamental unit that defines a Madrona installation.
+To support the <a class="reference external" href="http://www.dfg.ca.gov/mlpa/">California MLPA Initiative</a>,
+5 instances of Madrona would need to be built and run. Madrona clips all
+Marine Protected Areas to the Study Region boundaries. It also uses the Study
+Region bounds to determine the default extent of the map.</p>
+</div>
+<div class="section" id="specifying-or-changing-the-study-region">
+<h2>Specifying or Changing the Study Region<a class="headerlink" href="#specifying-or-changing-the-study-region" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">madrona.layers</span></tt> project includes an <tt class="docutils literal"><span class="pre">initial_data</span></tt> fixture that will
+setup an example Study Region when the database is first setup using the
+syncdb management command.</p>
+<p>Changing the Study Region boundaries on a deployed application presents many
+problems.</p>
+<blockquote>
+<div><ul class="simple">
+<li>All Marine Protected Areas affected by the Study Region geometry changes will need to be re-clipped.</li>
+<li>Any reports associated with those MPAs will need to be regenerated.</li>
+<li>Some cached data structures such as the network graph used for calculating Array spacing will need to be regenerated.</li>
+</ul>
+</div></blockquote>
+<p>Madrona is designed to make this process work as smoothly as possible, but
+the steps to change a Study Region must be followed exactly to avoid any
+problems.</p>
+<div class="section" id="manipulators">
+<h3>Manipulators<a class="headerlink" href="#manipulators" title="Permalink to this headline">¶</a></h3>
+<p>Every project should define a study region if the ClipToStudyRegion manipulator will be used.
+The study region is a (multi)polygon shape which defines where
+shapes can be created. If the ClipToStudyRegion manipulator is used on a feature, new shapes are clipped to this boundary. It is highly
+recomended to create/choose your study region with great consideration up front; changing the study region at a
+later date is MUCH more complicated as all the user shapes will need to be re-clipped. Fortunately Madrona stores the original geometry as well as the &#8220;manipulated&#8221; version so such clipping will never destroy the original digitized shape.</p>
+</div>
+<div class="section" id="create-a-new-study-region">
+<h3>Create a New Study Region<a class="headerlink" href="#create-a-new-study-region" title="Permalink to this headline">¶</a></h3>
+<p>To create a new study region a shapefile (or other <a class="reference external" href="http://geodjango.org/docs/layermapping.html">LayerMapping</a> compatible datasource)
+that contains a single multipolygon representing the Study Region bounds is
+needed. One way to create such a file would be to use a tool like <a class="reference external" href="http://www.qgis.org/">QGis</a>
+to export the current Study Region in the database to a shapefile and modify
+the boundaries as needed.</p>
+<p>It is highly recomended that the study region shapefile be created in the same spatial reference system
+as the application SRID.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Do not modify the Study Region in-place in the database. Modifications to
+a Study Region geometry will not be detected by the application this way,
+leaving Marine Protected Areas clipped to the wrong shape in the system.
+Always use the management commands.</p>
+</div>
+<p>Once a shapefile is ready and sitting on the server, the next step is to use
+the <tt class="docutils literal"><span class="pre">create_study_region</span></tt> management command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py create_study_region ~/Desktop/study_region2.shp
+
+Study region created: Sample Study Region - Southern California MLPA, primary <span class="nv">key</span> <span class="o">=</span> 18
+To switch to this study region, you will need to run <span class="s1">&#39;python manage.py change_study_region 18&#39;</span>
+</pre></div>
+</div>
+<p>If the study region shapefile does not contain a field named &#8216;name&#8217;, you can specify the name on the command
+line using the &#8211;name option.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py create_study_region --name <span class="s2">&quot;new study region&quot;</span> ~/Desktop/study_region2.shp
+
+Study region created: new study region, primary <span class="nv">key</span> <span class="o">=</span> 3
+To switch to this study region, you will need to run <span class="s1">&#39;python manage.py change_study_region 3&#39;</span>
+</pre></div>
+</div>
+<p>The Study Region should then be accessible via the admin tool.</p>
+</div>
+<div class="section" id="suspend-the-application">
+<h3>Suspend the Application<a class="headerlink" href="#suspend-the-application" title="Permalink to this headline">¶</a></h3>
+<p>Changing the Study Region on a live application is not recommended. Either
+shutdown the server or put Madrona into <a class="reference internal" href="maintenance_mode.html#maintenance-mode"><em>Maintenance Mode</em></a>.</p>
+</div>
+<div class="section" id="switch-to-the-new-study-region">
+<h3>Switch to the new Study Region<a class="headerlink" href="#switch-to-the-new-study-region" title="Permalink to this headline">¶</a></h3>
+<p>Currently, the change_study_region command simply sets specified region as the current active study region. It does <em>not</em> do any re-clipping, re-configuration, etc. If run on a working installation, this will require a lot more manual work. However, it is sufficient to initally set up the study region for a brand new project.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py change_study_region.py 18
+</pre></div>
+</div>
+</div>
+<div class="section" id="switch-to-the-new-study-region-future-plans">
+<h3>Switch to the new Study Region (Future Plans)<a class="headerlink" href="#switch-to-the-new-study-region-future-plans" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following steps are not implemented, but this documentation can serve
+as a specification for the future tools.</p>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">change_study_region</span></tt> command will walk one through the process of
+changing from one study region to another. The primary key of an existing
+study region is the only argument needed to start.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python manage.py change_study_region.py 18
+
+This process should not be <span class="k">done </span>when the Madrona application is publicly
+accessible. Please shutdown the server or redirect users to a maintenance page
+
+Type <span class="s1">&#39;yes&#39;</span> to <span class="k">continue</span>, or <span class="s1">&#39;no&#39;</span> to cancel: yes
+
+calculating difference between the specified study region and the one currently active...
+
+            current study region: Sample Study Region - Southern California MLPA
+                area: 6088792658.45
+
+            new study region: Sample Study Region - Southern California MLPA
+                area: 6087778804.81
+
+            difference between study regions:
+                area: 1013853.63735
+                sections: 1
+
+            User Shapes Affected:
+            Mpas: 12
+
+Are you sure you would like the switch to the new study region?
+Type <span class="s1">&#39;yes&#39;</span> to <span class="k">continue</span>, or <span class="s1">&#39;no&#39;</span> to cancel: yes
+</pre></div>
+</div>
+<p>Changing to a new study region means re-clipping and processing Marine
+Protected Area geometries, and will take a significant amount of time.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Processing shapes:
+|---------------------------------------          |  84% | ETA:  00:00:12
+</pre></div>
+</div>
+<p>When the process is over there is the option to send a summary email to users
+who have had shapes modified by the process.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Done processing shapes.
+Would you like to send an email notifying users that their shapes have changed?
+Type <span class="s1">&#39;yes&#39;</span> or <span class="s1">&#39;no&#39;</span>: yes
+sending emails...
+This process is complete. You can now resume public access to the application.
+</pre></div>
+</div>
+</div>
+<div class="section" id="resume-the-application">
+<h3>Resume the Application<a class="headerlink" href="#resume-the-application" title="Permalink to this headline">¶</a></h3>
+<p>Restart the server or take the application out of <a class="reference internal" href="maintenance_mode.html#maintenance-mode"><em>Maintenance Mode</em></a>.</p>
+</div>
+</div>
+<div class="section" id="cross-study-region-support">
+<h2>Cross-Study Region Support<a class="headerlink" href="#cross-study-region-support" title="Permalink to this headline">¶</a></h2>
+<p>There are use cases where it makes sense to have integration across multiple
+study regions. For example, in California it makes sense for work in the
+southern study region to be informed by work in the central one. It would be
+desirable to report on the Marine Protected Areas in multiple study regions as
+a network. Such integration cannot happen within a single app, and will need
+to be supported by webservices. The actual implementation details of these
+services have yet to be worked out.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.studyregion</cite>: The Study Region</a><ul>
+<li><a class="reference internal" href="#what-is-the-study-region">What is the Study Region?</a></li>
+<li><a class="reference internal" href="#specifying-or-changing-the-study-region">Specifying or Changing the Study Region</a><ul>
+<li><a class="reference internal" href="#manipulators">Manipulators</a></li>
+<li><a class="reference internal" href="#create-a-new-study-region">Create a New Study Region</a></li>
+<li><a class="reference internal" href="#suspend-the-application">Suspend the Application</a></li>
+<li><a class="reference internal" href="#switch-to-the-new-study-region">Switch to the new Study Region</a></li>
+<li><a class="reference internal" href="#switch-to-the-new-study-region-future-plans">Switch to the new Study Region (Future Plans)</a></li>
+<li><a class="reference internal" href="#resume-the-application">Resume the Application</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cross-study-region-support">Cross-Study Region Support</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="staticmap.html"
+                        title="previous chapter"><cite>madrona.staticmap</cite>: Static Map Data Layers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unit_converter.html"
+                        title="next chapter"><cite>madrona.unit_converter</cite></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/studyregion.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="unit_converter.html" title="madrona.unit_converter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="staticmap.html" title="madrona.staticmap: Static Map Data Layers"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

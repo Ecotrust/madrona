@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.async: Asyncronous Processing &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.bookmarks: Bookmark the map state" href="bookmarks.html" />
+    <link rel="prev" title="Core Apps" href="apps.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bookmarks.html" title="madrona.bookmarks: Bookmark the map state"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apps.html" title="Core Apps"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-async-asyncronous-processing">
+<span id="async"></span><h1><cite>madrona.async</cite>: Asyncronous Processing<a class="headerlink" href="#madrona-async-asyncronous-processing" title="Permalink to this headline">¶</a></h1>
+<p>Madrona includes a strategy for runnning lengthy processes in the background.
+To implement this strategy we use <a class="reference external" href="http://celeryproject.org/">Celery</a> as our distributed
+task queue, and we created the <tt class="docutils literal"><span class="pre">madrona.async</span></tt> app for easy exchanges between the Celery tables
+and the codebase.  For more information on how to get Celery working on your machine, see the
+<a class="reference internal" href="async_task_queue.html#async-task-queue"><em>Asynchronous Task Queue</em></a> documentation.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">madrona.async</span></tt> app makes many of the typical interactions with <a class="reference external" href="http://celeryproject.org/">Celery</a>
+simpler as the <tt class="docutils literal"><span class="pre">madrona.async</span></tt> app provides the ability to store and retrieve process results based on a
+url (as it is often the case that the same url request expects the same result), as well as making common
+Celery requests and interactions such as checking the status or retrieving the results of a task easier by
+abstracting away the need to manually digging through the celery tables yourself.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If <a class="reference external" href="http://celeryproject.org/">Celery</a> is not yet set up for your machine, you&#8217;ll want to see the
+<a class="reference internal" href="async_task_queue.html#async-task-queue"><em>Asynchronous Task Queue</em></a> documentation to get Celery up and running.</p>
+</div>
+</div>
+<div class="section" id="how-to-use-the-async-app">
+<h2>How to Use the Async App<a class="headerlink" href="#how-to-use-the-async-app" title="Permalink to this headline">¶</a></h2>
+<p>First, you will want to add a <tt class="docutils literal"><span class="pre">tasks.py</span></tt> file to the app that contains the process you want to
+run asynchronously.  This file will house the tasks that will be called by the <tt class="docutils literal"><span class="pre">async</span></tt> app, and
+each of the tasks should define a discrete operation that will be tagged as such (<tt class="docutils literal"><span class="pre">&#64;task</span></tt>) so that
+they will be registered with Celery when the <tt class="docutils literal"><span class="pre">celeryd</span></tt> process is started.</p>
+<p>The following shows a sample <tt class="docutils literal"><span class="pre">tasks.py</span></tt> with a simple <tt class="docutils literal"><span class="pre">add</span></tt> method that may be useful for testing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.decorators</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>Once you have a <tt class="docutils literal"><span class="pre">tasks.py</span></tt>, you&#8217;ll be able to utilize the <tt class="docutils literal"><span class="pre">async</span></tt> app to start your tasks,
+check their status, and retrieve their results.</p>
+<div class="section" id="basic-uses">
+<h3>Basic Uses<a class="headerlink" href="#basic-uses" title="Permalink to this headline">¶</a></h3>
+<p>Often times, you&#8217;ll want to simply run a process in the background.  In these cases a simple call
+to <tt class="docutils literal"><span class="pre">async.check_status_or_begin</span></tt> with the task method, the task method arguments, and a flag  will suffice.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">my_app</span> <span class="kn">import</span> <span class="n">tasks</span>
+<span class="n">status_text</span><span class="p">,</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">check_status_or_begin</span><span class="p">(</span><span class="n">tasks</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The above call returns an id that helps to identify the process for later retrieval.  Rather than force
+you to store this <tt class="docutils literal"><span class="pre">task_id</span></tt> somewhere for later use, it may be more useful to utilize the url that
+triggered this process in the first place.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">my_app</span> <span class="kn">import</span> <span class="n">tasks</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span>
+<span class="n">status_text</span><span class="p">,</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">check_status_or_begin</span><span class="p">(</span><span class="n">tasks</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">polling_url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The advantage to this url strategy is that there is often a one-to-one correlation between
+a url and an expected result.  When the same url is accessed, such as <tt class="docutils literal"><span class="pre">&lt;your-domain&gt;/add/3/5/</span></tt>,
+<tt class="docutils literal"><span class="pre">async</span></tt> methods can be used to help determine whether the process associated with that url has already been
+completed and can be retrieved for the user (without running the process again), or whether the process is
+still running and the user should receive some sort of &#8216;process is still running...&#8217; message.  For the most
+part, methods in the <tt class="docutils literal"><span class="pre">async</span></tt> app have been configured to use both task ids and polling urls as identifiers
+(or keys) to a process.</p>
+<p>A common flow of control may be as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#get the url that caused this view to execute</span>
+<span class="n">url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span>
+<span class="c">#check to see if the requested process has been run already</span>
+<span class="k">if</span> <span class="n">process_is_complete</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">get_process_result</span><span class="p">(</span><span class="n">url</span><span class="p">)))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c">#start the process or continue to wait for the process to complete</span>
+    <span class="kn">from</span> <span class="nn">my_app</span> <span class="kn">import</span> <span class="n">tasks</span>
+    <span class="n">status_text</span><span class="p">,</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">check_status_or_begin</span><span class="p">(</span><span class="n">tasks</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">task_args</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">polling_url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="n">my_template</span><span class="p">,</span> <span class="n">RequestContext</span><span class="p">(</span> <span class="n">request</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="n">status_text</span><span class="p">}</span> <span class="p">))</span>
+</pre></div>
+</div>
+<p>The above strategy allows the code to deal with the possibility that the process has already completed and the
+results are cached, or that the process is still running in the background, or that the process hasn&#8217;t begun
+at all.  If the results have already been cached, then they can be retrieved by the get_process_result method.
+In the other cases, the check_status_or_begin method will provide the user with an explanation relating to
+whether the process is still running or whether it just now begun.  In both of these latter cases, the task_id
+is returned as well in case you are wish to use that as an identifier rather than the url.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The manner in which the import tasks statement is structured is very important to Celery.
+Where one of the following strategies may work on one machine or platform, the other strategy might be
+necessary on another machine or platform.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;from my_proj.my_app.tasks import add</span>
+<span class="go">&gt;&gt;&gt;result = add.delay(2,2)</span>
+<span class="go">&gt;&gt;&gt;result.status</span>
+<span class="go">PENDING</span>
+
+<span class="go">&gt;&gt;&gt;from my_proj.my_app import tasks</span>
+<span class="go">&gt;&gt;&gt;result = tasks.add.delay(2,2)</span>
+<span class="go">&gt;&gt;&gt;result.status</span>
+<span class="go">SUCCESS</span>
+</pre></div>
+</div>
+<p class="last">If the process seems to register with Celery but never completes (status equals <tt class="docutils literal"><span class="pre">PENDING</span></tt> and never changes),
+then your import command may not be structured correctly for your platform.  If <tt class="docutils literal"><span class="pre">result.status</span></tt> eventually
+returns <tt class="docutils literal"><span class="pre">STARTED</span></tt> or <tt class="docutils literal"><span class="pre">SUCCESS</span></tt>, then your import command is structured correctly and should be written
+as such in your code.</p>
+</div>
+</div>
+<div class="section" id="madrona-async-api">
+<h3>madrona.async API<a class="headerlink" href="#madrona-async-api" title="Permalink to this headline">¶</a></h3>
+<p>The following is a list of all the functions included with the <tt class="docutils literal"><span class="pre">async</span></tt> app.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><strong>check_status_or_begin(task_method, task_args=(), task_kwargs={}, polling_url=None, task_id=None, check_running=True, cache_results=True)</strong></dt>
+<dd><p class="first">If check_running is left as True, this method begins the process only if the process is not already running.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to check whether the process is running or not, either a polling_url or a task_id must be passed.
+If neither is provided, the method assumes that this check should not be made.</p>
+</div>
+<p>If check_running is set to False (or if neither task_id, nor polling_url is provided), this method begins the
+process.  In such cases, the function referred to by <tt class="docutils literal"><span class="pre">task_method</span></tt> will be called with the arguments included
+in the <tt class="docutils literal"><span class="pre">task_args</span></tt> parameter.  If <tt class="docutils literal"><span class="pre">polling_url</span></tt> is given a value and <tt class="docutils literal"><span class="pre">cache_results</span></tt> remains set to
+<tt class="docutils literal"><span class="pre">True</span></tt>, then the <tt class="docutils literal"><span class="pre">polling_url</span></tt> can, in the future, be used as a key for cache retrieval.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This method does not check to see if the process has already been completed. The process_is_completed method
+can be used to check for process completion, and the get_process_result method can be used for retrieving
+the results.</p>
+</div>
+<p class="last">The return values include a rendered template, explaining whether the process was already running,
+or has been started, and the task_id of that process.</p>
+</dd>
+<dt><strong>process_is_running_or_complete(polling_url=None, task_id=None)</strong></dt>
+<dd><p class="first">This method takes either the polling url or the task id as a unique identifier.</p>
+<p class="last">Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the process is currently running, or if the process is complete.</p>
+</dd>
+<dt><strong>process_is_running(polling_url=None, task_id=None)</strong></dt>
+<dd><p class="first">This method takes either the polling url or the task id as a unique identifier.</p>
+<p class="last">Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the process is running (<tt class="docutils literal"><span class="pre">status=='STARTED'</span></tt>).</p>
+</dd>
+<dt><strong>process_is_complete(polling_url=None, task_id=None)</strong></dt>
+<dd><p class="first">This method takes either the polling url or the task id as a unique identifier.</p>
+<p class="last">Returns <tt class="docutils literal"><span class="pre">True</span></tt> if the process is complete (<tt class="docutils literal"><span class="pre">status=='SUCCESS'</span></tt>).</p>
+</dd>
+<dt><strong>get_process_result(polling_url=None, task_id=None)</strong></dt>
+<dd><p class="first">This method takes either the polling url or the task id as a unique identifier.</p>
+<p class="last">Returns the cached result of the process.</p>
+</dd>
+<dt><strong>get_taskid_from_url(polling_url=None)</strong></dt>
+<dd>This method takes a polling url and returns the related task id.</dd>
+<dt><strong>get_url_from_taskid(task_id=None)</strong></dt>
+<dd>This method takes a task id and returns the related polling url.</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.async</cite>: Asyncronous Processing</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#how-to-use-the-async-app">How to Use the Async App</a><ul>
+<li><a class="reference internal" href="#basic-uses">Basic Uses</a></li>
+<li><a class="reference internal" href="#madrona-async-api">madrona.async API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="apps.html"
+                        title="previous chapter">Core Apps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bookmarks.html"
+                        title="next chapter"><cite>madrona.bookmarks</cite>: Bookmark the map state</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/async.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bookmarks.html" title="madrona.bookmarks: Bookmark the map state"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apps.html" title="Core Apps"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

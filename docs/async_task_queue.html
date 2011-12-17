@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Asynchronous Task Queue &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Workspace Documents" href="workspace_specification.html" />
+    <link rel="prev" title="Template Customization" href="template_customization.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="workspace_specification.html" title="Workspace Documents"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="template_customization.html" title="Template Customization"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="asynchronous-task-queue">
+<span id="async-task-queue"></span><h1>Asynchronous Task Queue<a class="headerlink" href="#asynchronous-task-queue" title="Permalink to this headline">¶</a></h1>
+<p>Celery is an asynchronous task queue/job queue based on distributed message passing. It is focused on real-time operation, but supports scheduling as well.</p>
+<p><a class="reference external" href="http://ask.github.com/celery/getting-started/introduction.html">http://ask.github.com/celery/getting-started/introduction.html</a></p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The requirements are easy_installable since we&#8217;re using ghettoq instead of the more powerful but complicated RabbitMQ:</p>
+<div class="highlight-python"><pre>sudo pip install django-celery
+sudo pip install djkombu</pre>
+</div>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>In the simplest case, we can just add the apps and point them to use the current django db settings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span> <span class="s">&#39;djcelery&#39;</span><span class="p">,</span> <span class="s">&#39;djkombu&#39;</span> <span class="p">)</span>
+<span class="n">CARROT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;django&quot;</span>
+<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&quot;database&quot;</span>
+<span class="n">CELERY_TRACK_STARTED</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">BROKER_BACKEND</span> <span class="o">=</span> <span class="s">&quot;djkombu.transport.DatabaseTransport&quot;</span>
+
+<span class="c">#Make sure to add any modules containing tasks other than app.tasks</span>
+<span class="n">CELERY_IMPORT</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;myapp.other_tasks&#39;</span><span class="p">,)</span>
+</pre></div>
+</div>
+<p>After that, make sure to run <cite>python manage.py syncdb</cite> to create the necessary tables</p>
+</div>
+<div class="section" id="writing-your-tasks">
+<h2>Writing your tasks<a class="headerlink" href="#writing-your-tasks" title="Permalink to this headline">¶</a></h2>
+<p>Just a normal python function with a decorator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.decorators</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span><span class="p">(</span><span class="n">rate_limit</span><span class="o">=</span><span class="s">&#39;4/m&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_shps</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+   <span class="n">logger</span> <span class="o">=</span> <span class="n">get_shps</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+   <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Starting the task&quot;</span><span class="p">)</span>
+   <span class="n">polygons</span> <span class="o">=</span> <span class="n">some_long_process</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">polygons</span>
+</pre></div>
+</div>
+<p>rate_limit sets the frequency of task exceution (in this case 4 tasks per minute or &#8216;4/m&#8217;)</p>
+<p>Beware of &#8216;unpicklable&#8217; objects getting passed around.</p>
+</div>
+<div class="section" id="periodic-tasks">
+<h2>Periodic tasks<a class="headerlink" href="#periodic-tasks" title="Permalink to this headline">¶</a></h2>
+<p>Like a cron job. Requires that you start the celeryd service with a &#8216;heartbeat&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.decorators</span> <span class="kn">import</span> <span class="n">periodic_task</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+
+<span class="nd">@periodic_task</span><span class="p">(</span><span class="n">run_every</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">do_stuff</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">clean_up_temp_files</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="executing-tasks">
+<h2>Executing tasks<a class="headerlink" href="#executing-tasks" title="Permalink to this headline">¶</a></h2>
+<p>You can call the task directly to run syncronously:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="n">get_shps</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or you can do it async via the task queue:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span> <span class="o">=</span> <span class="n">get_shps</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result of the async call can be monitored and the result retrieved when ready:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span><span class="o">.</span><span class="n">status</span> <span class="c"># u&#39;PENDING&#39;</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">status</span> <span class="c"># u&#39;STARTED&#39;</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">status</span> <span class="c"># u&#39;SUCCESS&#39;</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">ready</span><span class="p">()</span> <span class="c"># True or False</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">result</span> <span class="c"># The polygon objects returned by the task</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The manner in which the import tasks statement is structured is very important to Celery.
+Where one of the following strategies may work on one machine or platform, the other strategy might be
+necessary on another machine or platform.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;from my_proj.my_app.tasks import add</span>
+<span class="go">&gt;&gt;&gt;result = add.delay(2,2)</span>
+<span class="go">&gt;&gt;&gt;result.status</span>
+<span class="go">PENDING</span>
+
+<span class="go">&gt;&gt;&gt;from my_proj.my_app import tasks</span>
+<span class="go">&gt;&gt;&gt;result = tasks.add.delay(2,2)</span>
+<span class="go">&gt;&gt;&gt;result.status</span>
+<span class="go">SUCCESS</span>
+</pre></div>
+</div>
+<p>You can test your import strategy in the shell with a simple process such as <tt class="docutils literal"><span class="pre">add</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">celery.decorators</span> <span class="kn">import</span> <span class="n">task</span>
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p class="last">If the process seems to register with Celery but never completes (status equals <tt class="docutils literal"><span class="pre">PENDING</span></tt> and never changes),
+then your import command is not structured correctly for your platform.  If <tt class="docutils literal"><span class="pre">result.status</span></tt> eventually
+returns <tt class="docutils literal"><span class="pre">STARTED</span></tt> or <tt class="docutils literal"><span class="pre">SUCCESS</span></tt>, then your import command is structured correctly and should be written
+as such in your code.</p>
+</div>
+</div>
+<div class="section" id="running-the-celeryd-service">
+<h2>Running the celeryd service<a class="headerlink" href="#running-the-celeryd-service" title="Permalink to this headline">¶</a></h2>
+<p>This has to be running to execute the jobs. If, for whatever reason, the celeryd service is stopped, jobs can still get added to the queue but wont get run
+until the celeryd process is fired up again.</p>
+<p>You can run it from the command line in a terminal:</p>
+<div class="highlight-python"><pre>python manage.py celeryd -v 2 -l DEBUG -c 1 -B -E</pre>
+</div>
+<p>Note the -B flag to turn on the &#8216;hearbeat&#8217; for periodic tasks, the -c 1 which limits the operation to a single cpu</p>
+<p>For production environments, use an init.d script. And example is in the code repository at madrona/apache/celeryd. Instructions are contained in the comments of that file.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Asynchronous Task Queue</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#settings">Settings</a></li>
+<li><a class="reference internal" href="#writing-your-tasks">Writing your tasks</a></li>
+<li><a class="reference internal" href="#periodic-tasks">Periodic tasks</a></li>
+<li><a class="reference internal" href="#executing-tasks">Executing tasks</a></li>
+<li><a class="reference internal" href="#running-the-celeryd-service">Running the celeryd service</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="template_customization.html"
+                        title="previous chapter">Template Customization</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="workspace_specification.html"
+                        title="next chapter">Workspace Documents</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/async_task_queue.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="workspace_specification.html" title="Workspace Documents"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="template_customization.html" title="Template Customization"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.async.ProcessHandler</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.async-module.html">Package&nbsp;async</a> ::
+        Module&nbsp;ProcessHandler
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.async.ProcessHandler-module.html">Module madrona.async.ProcessHandler</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-0', 'models', 'link-0');">models</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class madrona.async.models.URLtoTaskID=madrona.async.models.URLtoTaskID-class.html"><a title="madrona.async.models.URLtoTaskID" class="py-name" href="#" onclick="return doclink('link-1', 'URLtoTaskID', 'link-1');">URLtoTaskID</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">djcelery</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2', 'models', 'link-0');">models</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">TaskMeta</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module madrona.pg_spacing.loader=madrona.pg_spacing.loader-module.html,Module madrona.spacing.loader=madrona.spacing.loader-module.html"><a title="madrona.pg_spacing.loader
+madrona.spacing.loader" class="py-name" href="#" onclick="return doclink('link-3', 'loader', 'link-3');">loader</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">render_to_string</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-string">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-string">NOTES:</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-string">    url entries should be unique -- a single url maps to a single task_id in a one-to-one fashion</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-string">    this strategy allows the asynchronous models to serve as a cache for those apps that wish to use it as such</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-string">    check_status_or_begin does not check to see if process is already complete</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-string">    if the caller wants the process to be run ONLY IF it hasn't been completed already,</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-string">    the caller should check process_is_complete instead</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-string">    </tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-string">    process_is_running (called on its own or from check_status_or_begin or process_is_running_or_complete) checks</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-string">    only if status == 'STARTED', this seems like the safest strategy although it does have it's shortcomings.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-string">    When a task is triggered, it is stored in the celery_taskmeta table with status == PENDING, as soon as </tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-string">    a worker is assigned to that task, the status becomes STARTED, when the task is complete, status becomes SUCCESS.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-string">    If something goes wrong during the STARTED phase (celeryd is shut down, etc), then status becomes FAILURE. </tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-string">    If celeryd is not communicating with ghettoq, or not running at all, then the status will remain as PENDING.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-string">    If we assume that PENDING means STARTED, then we may be mislead into thinking a task is being processed, </tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-string">    when in fact it is sitting idle.  This may only become apparent after waiting way-too-long for the task</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-string">    to complete.  </tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-string">    If we only check for STARTED, then each time the task is requested, we will add a new task to the queue.  This</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-string">    may back up the queue, but only in situations when there is something wrong to begin with.  This will also</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-string">    likely alert the user (or the developer) more immediately that something has gone wrong with celeryd (or ghettoq,</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-string">    or whatever) since the returned statement will be something like 'the process has begun', even with subsequent</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-string">    requests which should have changed the statement to something like 'the process is already running'.  There is</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-string">    also the slight chance that a task will be requested in such quick succession that a worker will not yet be assigned</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-string">    to that task and the status will still be PENDING, in which case a new task will be added to the queue.  This seems</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-string">    a small price to pay for the more immediate recognition that there is indeed a problem.  As the developer in this</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-string">    case, I'd rather get the impression of a False Negative (thinking there may be a problem, when in fact there is none),</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-string">    than a False Positive (given the impression that everything is fine, when in fact there is a problem).  Also, the </tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-string">    user is more likely to notice a problem sooner in the case when there is a hint in the returned statement (that</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-string">    the process has begun...yet again), than in the case when they must figure out there is a problem only because</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-string">    the process is taking an inordinately long time (in many cases this could mean hours rather than minutes).  </tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-string">"""</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-string">'''</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-string">begin_process starts the background process</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-string">if the process has already been run, the related URLtoTaskID entry is cleared and re-calculated</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-string">if the process is currently running, the related URLtoTaskID entry is cleared, and the process is started again</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-string">(in this case more than one identical process may be running at the same time -- to prevent this see NOTES above)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-string">called by check_status_or_begin</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-string">'''</tt> </tt>
+<a name="__begin_process"></a><div id="__begin_process-def"><a name="L45"></a><tt class="py-lineno"> 45</tt> <a class="py-toggle" href="#" id="__begin_process-toggle" onclick="return toggle('__begin_process');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#__begin_process">__begin_process</a><tt class="py-op">(</tt><tt class="py-param">task_method</tt><tt class="py-op">,</tt> <tt class="py-param">task_args</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">task_kwargs</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">,</tt> <tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">cache_results</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="__begin_process-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="__begin_process-expanded"><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-comment">#see if task exists already</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt id="link-4" class="py-name"><a title="madrona.async.models.URLtoTaskID" class="py-name" href="#" onclick="return doclink('link-4', 'URLtoTaskID', 'link-1');">URLtoTaskID</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.objects=madrona.bioeconomic_model.models.Extent-class.html#objects,Variable madrona.bioeconomic_model.models.PointScrap.objects=madrona.bioeconomic_model.models.PointScrap-class.html#objects,Variable madrona.bioeconomic_model.models.PolygonGrid.objects=madrona.bioeconomic_model.models.PolygonGrid-class.html#objects,Variable madrona.bioeconomic_model.models.Scrap.objects=madrona.bioeconomic_model.models.Scrap-class.html#objects,Variable madrona.bioeconomic_model.models.StudyRegion.objects=madrona.bioeconomic_model.models.StudyRegion-class.html#objects,Variable madrona.bioregions.models.Bioregion.objects=madrona.bioregions.models.Bioregion-class.html#objects,Variable madrona.depth_range.models.DepthSounding.objects=madrona.depth_range.models.DepthSounding-class.html#objects,Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.intersection.models.ArealFeature.objects=madrona.intersection.models.ArealFeature-class.html#objects,Variable madrona.intersection.models.CommonFeatureInfo.objects=madrona.intersection.models.CommonFeatureInfo-class.html#objects,Variable madrona.intersection.models.IntersectionFeature.objects=madrona.intersection.models.IntersectionFeature-class.html#objects,Variable madrona.intersection.models.LinearFeature.objects=madrona.intersection.models.LinearFeature-class.html#objects,Variable madrona.intersection.models.PointFeature.objects=madrona.intersection.models.PointFeature-class.html#objects,Variable madrona.intersection.models.ResultCache.objects=madrona.intersection.models.ResultCache-class.html#objects,Variable madrona.intersection.models.TestPolygon.objects=madrona.intersection.models.TestPolygon-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.pg_spacing.models.Land.objects=madrona.pg_spacing.models.Land-class.html#objects,Variable madrona.pg_spacing.models.Network.objects=madrona.pg_spacing.models.Network-class.html#objects,Variable madrona.pg_spacing.models.Vertices.objects=madrona.pg_spacing.models.Vertices-class.html#objects,Variable madrona.spacing.models.Land.objects=madrona.spacing.models.Land-class.html#objects,Variable madrona.spacing.models.SpacingPoint.objects=madrona.spacing.models.SpacingPoint-class.html#objects,Variable madrona.straightline_spacing.models.SpacingPoint.objects=madrona.straightline_spacing.models.SpacingPoint-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-5', 'objects', 'link-5');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-6" class="py-name" targets="Variable madrona.async.models.URLtoTaskID.url=madrona.async.models.URLtoTaskID-class.html#url,Variable madrona.bioeconomic_model.models.Reference.url=madrona.bioeconomic_model.models.Reference-class.html#url"><a title="madrona.async.models.URLtoTaskID.url
+madrona.bioeconomic_model.models.Reference.url" class="py-name" href="#" onclick="return doclink('link-6', 'url', 'link-6');">url</a></tt><tt class="py-op">=</tt><tt class="py-name">polling_url</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method madrona.features.models.FeatureCollection.delete()=madrona.features.models.FeatureCollection-class.html#delete,Function madrona.features.views.delete()=madrona.features.views-module.html#delete"><a title="madrona.features.models.FeatureCollection.delete
+madrona.features.views.delete" class="py-name" href="#" onclick="return doclink('link-7', 'delete', 'link-7');">delete</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-keyword">pass</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-comment">#initialize task</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt class="py-name">task</tt> <tt class="py-op">=</tt> <tt class="py-name">task_method</tt><tt class="py-op">.</tt><tt class="py-name">delay</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">task_args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">task_kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">polling_url</tt> <tt class="py-keyword">and</tt> <tt class="py-name">cache_results</tt><tt class="py-op">:</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt id="link-8" class="py-name"><a title="madrona.async.models.URLtoTaskID" class="py-name" href="#" onclick="return doclink('link-8', 'URLtoTaskID', 'link-1');">URLtoTaskID</a></tt><tt class="py-op">(</tt><tt id="link-9" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.bioeconomic_model.models.Reference.url" class="py-name" href="#" onclick="return doclink('link-9', 'url', 'link-6');">url</a></tt><tt class="py-op">=</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name" targets="Variable madrona.async.models.URLtoTaskID.task_id=madrona.async.models.URLtoTaskID-class.html#task_id"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-10', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">=</tt><tt class="py-name">task</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-11', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method madrona.analysistools.models.Analysis.save()=madrona.analysistools.models.Analysis-class.html#save,Method madrona.bioeconomic_model.models.OrganizationScheme.save()=madrona.bioeconomic_model.models.OrganizationScheme-class.html#save,Method madrona.data_distributor.models.LoadSetup.save()=madrona.data_distributor.models.LoadSetup-class.html#save,Method madrona.data_manager.models.Shapefile.save()=madrona.data_manager.models.Shapefile-class.html#save,Method madrona.features.models.Feature.save()=madrona.features.models.Feature-class.html#save,Method madrona.features.models.FeatureCollection.save()=madrona.features.models.FeatureCollection-class.html#save,Method madrona.features.models.SpatialFeature.save()=madrona.features.models.SpatialFeature-class.html#save,Method madrona.intersection.models.IntersectionFeature.save()=madrona.intersection.models.IntersectionFeature-class.html#save,Method madrona.intersection.models.MultiFeatureShapefile.save()=madrona.intersection.models.MultiFeatureShapefile-class.html#save,Method madrona.layers.models.PublicLayerList.save()=madrona.layers.models.PublicLayerList-class.html#save,Method madrona.manipulators.models.BaseManipulatorGeometry.save()=madrona.manipulators.models.BaseManipulatorGeometry-class.html#save,Method madrona.news.models.Entry.save()=madrona.news.models.Entry-class.html#save,Method madrona.news.models.Tag.save()=madrona.news.models.Tag-class.html#save,Method madrona.openid.models.UserAssociation.save()=madrona.openid.models.UserAssociation-class.html#save,Method madrona.pg_spacing.models.Network.save()=madrona.pg_spacing.models.Network-class.html#save,Method madrona.replication.models.HabitatThreshold.save()=madrona.replication.models.HabitatThreshold-class.html#save,Method madrona.replication.models.ReplicationSetup.save()=madrona.replication.models.ReplicationSetup-class.html#save,Method madrona.replication.models.ThresholdRule.save()=madrona.replication.models.ThresholdRule-class.html#save,Method madrona.studyregion.models.StudyRegion.save()=madrona.studyregion.models.StudyRegion-class.html#save"><a title="madrona.analysistools.models.Analysis.save
+madrona.bioeconomic_model.models.OrganizationScheme.save
+madrona.data_distributor.models.LoadSetup.save
+madrona.data_manager.models.Shapefile.save
+madrona.features.models.Feature.save
+madrona.features.models.FeatureCollection.save
+madrona.features.models.SpatialFeature.save
+madrona.intersection.models.IntersectionFeature.save
+madrona.intersection.models.MultiFeatureShapefile.save
+madrona.layers.models.PublicLayerList.save
+madrona.manipulators.models.BaseManipulatorGeometry.save
+madrona.news.models.Entry.save
+madrona.news.models.Tag.save
+madrona.openid.models.UserAssociation.save
+madrona.pg_spacing.models.Network.save
+madrona.replication.models.HabitatThreshold.save
+madrona.replication.models.ReplicationSetup.save
+madrona.replication.models.ThresholdRule.save
+madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-12', 'save', 'link-12');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">task</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-13', 'task_id', 'link-10');">task_id</a></tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-string">'''</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-string">check_status_or_begin</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-string">if the user has supplied neither the polling_url nor the task_id, it is assumed that they wish to start the process</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-string">(since no process_is_running check can be made without a process identifier anyway)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-string">otherwise, if check_running is left to its default value of True, then a check will be made to see if the process is</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-string">already running, in which case a related message is returned to the user and the process is not re-started</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-string">if the process is not already running (or the user doesn't wish to check for that case), then the process will be</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-string">added to the queue, and a message indicating the process has begun will be returned to the user</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-string">if the process had already completed (status == SUCCESS rather than STARTED), it will be run again</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-string">if the caller wants the process to be run ONLY IF it hasn't been completed already,</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-string">the caller should check process_is_complete instead</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-string">'''</tt> </tt>
+<a name="check_status_or_begin"></a><div id="check_status_or_begin-def"><a name="L69"></a><tt class="py-lineno"> 69</tt> <a class="py-toggle" href="#" id="check_status_or_begin-toggle" onclick="return toggle('check_status_or_begin');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#check_status_or_begin">check_status_or_begin</a><tt class="py-op">(</tt><tt class="py-param">task_method</tt><tt class="py-op">,</tt> <tt class="py-param">task_args</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">task_kwargs</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">,</tt> <tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">check_running</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">cache_results</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="check_status_or_begin-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="check_status_or_begin-expanded"><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">polling_url</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt id="link-14" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-14', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-name">check_running</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">check_running</tt> <tt class="py-keyword">and</tt> <tt id="link-15" class="py-name" targets="Function madrona.async.ProcessHandler.process_is_running()=madrona.async.ProcessHandler-module.html#process_is_running"><a title="madrona.async.ProcessHandler.process_is_running" class="py-name" href="#" onclick="return doclink('link-15', 'process_is_running', 'link-15');">process_is_running</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-16" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-16', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-17" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-17', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt id="link-18" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-18', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name" targets="Function madrona.async.ProcessHandler.get_taskid_from_url()=madrona.async.ProcessHandler-module.html#get_taskid_from_url"><a title="madrona.async.ProcessHandler.get_taskid_from_url" class="py-name" href="#" onclick="return doclink('link-19', 'get_taskid_from_url', 'link-19');">get_taskid_from_url</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">render_to_string</tt><tt class="py-op">(</tt><tt class="py-string">'already_processing.html'</tt><tt class="py-op">,</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-20', 'task_id', 'link-10');">task_id</a></tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt id="link-21" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-21', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name" targets="Function madrona.async.ProcessHandler.__begin_process()=madrona.async.ProcessHandler-module.html#__begin_process"><a title="madrona.async.ProcessHandler.__begin_process" class="py-name" href="#" onclick="return doclink('link-22', '__begin_process', 'link-22');">__begin_process</a></tt><tt class="py-op">(</tt><tt class="py-name">task_method</tt><tt class="py-op">,</tt> <tt class="py-name">task_args</tt><tt class="py-op">,</tt> <tt class="py-name">task_kwargs</tt><tt class="py-op">,</tt> <tt class="py-name">polling_url</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">render_to_string</tt><tt class="py-op">(</tt><tt class="py-string">'starting_process.html'</tt><tt class="py-op">,</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-23', 'task_id', 'link-10');">task_id</a></tt> </tt>
+</div><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">   </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-comment">#returns boolean based on process.status == 'STARTED' or 'SUCCESS' (currently running or complete)</tt> </tt>
+<a name="process_is_running_or_complete"></a><div id="process_is_running_or_complete-def"><a name="L81"></a><tt class="py-lineno"> 81</tt> <a class="py-toggle" href="#" id="process_is_running_or_complete-toggle" onclick="return toggle('process_is_running_or_complete');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#process_is_running_or_complete">process_is_running_or_complete</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="process_is_running_or_complete-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="process_is_running_or_complete-expanded"><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-24" class="py-name"><a title="madrona.async.ProcessHandler.process_is_running" class="py-name" href="#" onclick="return doclink('link-24', 'process_is_running', 'link-15');">process_is_running</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-25" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-25', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt id="link-26" class="py-name" targets="Function madrona.async.ProcessHandler.process_is_complete()=madrona.async.ProcessHandler-module.html#process_is_complete"><a title="madrona.async.ProcessHandler.process_is_complete" class="py-name" href="#" onclick="return doclink('link-26', 'process_is_complete', 'link-26');">process_is_complete</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-27" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-27', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">   </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-comment">#returns boolean based on whether process is in cache and marked as STARTED</tt> </tt>
+<a name="process_is_running"></a><div id="process_is_running-def"><a name="L88"></a><tt class="py-lineno"> 88</tt> <a class="py-toggle" href="#" id="process_is_running-toggle" onclick="return toggle('process_is_running');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#process_is_running">process_is_running</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="process_is_running-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="process_is_running-expanded"><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt id="link-28" class="py-name" targets="Variable madrona.intersection.models.ResultCache.result=madrona.intersection.models.ResultCache-class.html#result,Method madrona.manipulators.manipulators.BaseManipulator.result()=madrona.manipulators.manipulators.BaseManipulator-class.html#result"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-28', 'result', 'link-28');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name" targets="Function madrona.async.ProcessHandler.__get_asyncresult()=madrona.async.ProcessHandler-module.html#__get_asyncresult"><a title="madrona.async.ProcessHandler.__get_asyncresult" class="py-name" href="#" onclick="return doclink('link-29', '__get_asyncresult', 'link-29');">__get_asyncresult</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-30" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-30', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-31" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-31', 'result', 'link-28');">result</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt id="link-32" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-32', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">status</tt> <tt class="py-op">==</tt> <tt class="py-string">'STARTED'</tt><tt class="py-op">:</tt>  </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">         </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-comment">#returns boolean based on whether process is in cache and marked as PENDING</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-comment"># i.e. it has been sent to the queue but processing has not yet begun</tt> </tt>
+<a name="process_is_pending"></a><div id="process_is_pending-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="process_is_pending-toggle" onclick="return toggle('process_is_pending');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#process_is_pending">process_is_pending</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="process_is_pending-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="process_is_pending-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt id="link-33" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-33', 'result', 'link-28');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name"><a title="madrona.async.ProcessHandler.__get_asyncresult" class="py-name" href="#" onclick="return doclink('link-34', '__get_asyncresult', 'link-29');">__get_asyncresult</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-35" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-35', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-36" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-36', 'result', 'link-28');">result</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt id="link-37" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-37', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">status</tt> <tt class="py-op">==</tt> <tt class="py-string">'PENDING'</tt><tt class="py-op">:</tt>  </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-comment">#returns boolean value based on result=='SUCCESS' from celery table</tt> </tt>
+<a name="process_is_complete"></a><div id="process_is_complete-def"><a name="L105"></a><tt class="py-lineno">105</tt> <a class="py-toggle" href="#" id="process_is_complete-toggle" onclick="return toggle('process_is_complete');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#process_is_complete">process_is_complete</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="process_is_complete-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="process_is_complete-expanded"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">    <tt id="link-38" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-38', 'result', 'link-28');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-39" class="py-name"><a title="madrona.async.ProcessHandler.__get_asyncresult" class="py-name" href="#" onclick="return doclink('link-39', '__get_asyncresult', 'link-29');">__get_asyncresult</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-40" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-40', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-41" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-41', 'result', 'link-28');">result</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt id="link-42" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-42', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">status</tt> <tt class="py-op">==</tt> <tt class="py-string">'SUCCESS'</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">     </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-comment">#returns result.result from celery table</tt> </tt>
+<a name="get_process_result"></a><div id="get_process_result-def"><a name="L113"></a><tt class="py-lineno">113</tt> <a class="py-toggle" href="#" id="get_process_result-toggle" onclick="return toggle('get_process_result');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#get_process_result">get_process_result</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_process_result-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_process_result-expanded"><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">    <tt id="link-43" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-43', 'result', 'link-28');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-44" class="py-name"><a title="madrona.async.ProcessHandler.__get_asyncresult" class="py-name" href="#" onclick="return doclink('link-44', '__get_asyncresult', 'link-29');">__get_asyncresult</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-45', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-46" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-46', 'result', 'link-28');">result</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-47" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-47', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-48', 'result', 'link-28');">result</a></tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">     </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-comment">#get task_id from URLtoTaskID table</tt> </tt>
+<a name="get_taskid_from_url"></a><div id="get_taskid_from_url-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="get_taskid_from_url-toggle" onclick="return toggle('get_taskid_from_url');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#get_taskid_from_url">get_taskid_from_url</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_taskid_from_url-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_taskid_from_url-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-name">entry</tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name"><a title="madrona.async.models.URLtoTaskID" class="py-name" href="#" onclick="return doclink('link-49', 'URLtoTaskID', 'link-1');">URLtoTaskID</a></tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-50', 'objects', 'link-5');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-51" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.bioeconomic_model.models.Reference.url" class="py-name" href="#" onclick="return doclink('link-51', 'url', 'link-6');">url</a></tt><tt class="py-op">=</tt><tt class="py-name">polling_url</tt><tt class="py-op">)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">entry</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-52', 'task_id', 'link-10');">task_id</a></tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-comment">#raise ValueError("Given URL does not map to any known task_id")</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">     </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-comment">#get url from URLtoTaskID table    </tt> </tt>
+<a name="get_url_from_taskid"></a><div id="get_url_from_taskid-def"><a name="L130"></a><tt class="py-lineno">130</tt> <a class="py-toggle" href="#" id="get_url_from_taskid-toggle" onclick="return toggle('get_url_from_taskid');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#get_url_from_taskid">get_url_from_taskid</a><tt class="py-op">(</tt><tt class="py-param">task_id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_url_from_taskid-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_url_from_taskid-expanded"><a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-name">entry</tt> <tt class="py-op">=</tt> <tt id="link-53" class="py-name"><a title="madrona.async.models.URLtoTaskID" class="py-name" href="#" onclick="return doclink('link-53', 'URLtoTaskID', 'link-1');">URLtoTaskID</a></tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-54', 'objects', 'link-5');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-55" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-55', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">=</tt><tt id="link-56" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-56', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-57" class="py-name" targets="Class exceptions.ValueError=exceptions.ValueError-class.html"><a title="exceptions.ValueError" class="py-name" href="#" onclick="return doclink('link-57', 'ValueError', 'link-57');">ValueError</a></tt><tt class="py-op">(</tt><tt class="py-string">"Given task_id does not map to any known URL"</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">entry</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.bioeconomic_model.models.Reference.url" class="py-name" href="#" onclick="return doclink('link-58', 'url', 'link-6');">url</a></tt> </tt>
+</div><a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"><tt class="py-comment">#get the AsyncResult object associated with the given (directly or indirectly) task_id</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-comment">#(this object provides us access to the status field)</tt> </tt>
+<a name="__get_asyncresult"></a><div id="__get_asyncresult-def"><a name="L139"></a><tt class="py-lineno">139</tt> <a class="py-toggle" href="#" id="__get_asyncresult-toggle" onclick="return toggle('__get_asyncresult');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.async.ProcessHandler-module.html#__get_asyncresult">__get_asyncresult</a><tt class="py-op">(</tt><tt class="py-param">polling_url</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">task_id</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="__get_asyncresult-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="__get_asyncresult-expanded"><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">polling_url</tt> <tt class="py-op">==</tt> <tt id="link-59" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-59', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-op">==</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-60" class="py-name"><a title="exceptions.ValueError" class="py-name" href="#" onclick="return doclink('link-60', 'ValueError', 'link-57');">ValueError</a></tt><tt class="py-op">(</tt><tt class="py-string">"Either polling_url or task_id must be passed a value"</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-61" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-61', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt id="link-62" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-62', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-op">=</tt> <tt id="link-63" class="py-name"><a title="madrona.async.ProcessHandler.get_taskid_from_url" class="py-name" href="#" onclick="return doclink('link-63', 'get_taskid_from_url', 'link-19');">get_taskid_from_url</a></tt><tt class="py-op">(</tt><tt class="py-name">polling_url</tt><tt class="py-op">)</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">celery</tt> <tt class="py-keyword">import</tt> <tt id="link-64" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-64', 'result', 'link-28');">result</a></tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">    <tt id="link-65" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-65', 'result', 'link-28');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-66" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-66', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">AsyncResult</tt><tt class="py-op">(</tt><tt id="link-67" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-67', 'task_id', 'link-10');">task_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-68" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-68', 'result', 'link-28');">result</a></tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="madrona.async.models.URLtoTaskID.task_id" class="py-name" href="#" onclick="return doclink('link-69', 'task_id', 'link-10');">task_id</a></tt> <tt class="py-op">==</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-70" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-70', 'result', 'link-28');">result</a></tt> </tt>
+</div><a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:25 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

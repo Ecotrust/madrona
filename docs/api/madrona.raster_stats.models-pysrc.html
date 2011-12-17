@@ -1,0 +1,1292 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.raster_stats.models</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.raster_stats-module.html">Package&nbsp;raster_stats</a> ::
+        Module&nbsp;models
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.raster_stats.models-module.html">Module madrona.raster_stats.models</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-0', 'models', 'link-0');">models</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">core</tt> <tt class="py-keyword">import</tt> <tt class="py-name">serializers</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module madrona.analysistools.utils=madrona.analysistools.utils-module.html,Module madrona.common.utils=madrona.common.utils-module.html,Package madrona.openid.utils=madrona.openid.utils-module.html"><a title="madrona.analysistools.utils
+madrona.common.utils
+madrona.openid.utils" class="py-name" href="#" onclick="return doclink('link-1', 'utils', 'link-1');">utils</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">DatabaseError</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">tempfile</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable madrona.raster_stats.models.RASTDIR=madrona.raster_stats.models-module.html#RASTDIR"><a title="madrona.raster_stats.models.RASTDIR" class="py-name" href="#" onclick="return doclink('link-2', 'RASTDIR', 'link-2');">RASTDIR</a></tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">RASTER_DIR</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line">    <tt id="link-3" class="py-name"><a title="madrona.raster_stats.models.RASTDIR" class="py-name" href="#" onclick="return doclink('link-3', 'RASTDIR', 'link-2');">RASTDIR</a></tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">dirname</tt><tt class="py-op">(</tt><tt class="py-name">__file__</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'test_data'</tt><tt class="py-op">)</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable madrona.raster_stats.models.RASTER_TYPES=madrona.raster_stats.models-module.html#RASTER_TYPES"><a title="madrona.raster_stats.models.RASTER_TYPES" class="py-name" href="#" onclick="return doclink('link-4', 'RASTER_TYPES', 'link-4');">RASTER_TYPES</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt>  </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-string">"continuous"</tt><tt class="py-op">,</tt> <tt class="py-string">"continuous"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-string">"categorical"</tt><tt class="py-op">,</tt> <tt class="py-string">"catgorical"</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">               <tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt id="link-5" class="py-name" targets="Variable madrona.raster_stats.models.STARSPAN_BIN=madrona.raster_stats.models-module.html#STARSPAN_BIN"><a title="madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="return doclink('link-5', 'STARSPAN_BIN', 'link-5');">STARSPAN_BIN</a></tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="return doclink('link-6', 'STARSPAN_BIN', 'link-5');">STARSPAN_BIN</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">    <tt id="link-7" class="py-name"><a title="madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="return doclink('link-7', 'STARSPAN_BIN', 'link-5');">STARSPAN_BIN</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'starspan'</tt> </tt>
+<a name="RasterDataset"></a><div id="RasterDataset-def"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt> <a class="py-toggle" href="#" id="RasterDataset-toggle" onclick="return toggle('RasterDataset');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.raster_stats.models.RasterDataset-class.html">RasterDataset</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="RasterDataset-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="RasterDataset-expanded"><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt id="link-8" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.name=madrona.bioeconomic_model.models.Extent-class.html#name,Variable madrona.bioeconomic_model.models.GridAttributes.name=madrona.bioeconomic_model.models.GridAttributes-class.html#name,Variable madrona.bioeconomic_model.models.StudyRegion.name=madrona.bioeconomic_model.models.StudyRegion-class.html#name,Variable madrona.bioregions.models.Bioregion.name=madrona.bioregions.models.Bioregion-class.html#name,Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.data_distributor.models.LoadSetup.name=madrona.data_distributor.models.LoadSetup-class.html#name,Variable madrona.data_distributor.models.PotentialTarget.name=madrona.data_distributor.models.PotentialTarget-class.html#name,Variable madrona.data_distributor.models.PotentialTargetField.name=madrona.data_distributor.models.PotentialTargetField-class.html#name,Variable madrona.data_manager.models.DataLayer.name=madrona.data_manager.models.DataLayer-class.html#name,Variable madrona.data_manager.models.GeneralFile.name=madrona.data_manager.models.GeneralFile-class.html#name,Variable madrona.data_manager.models.ShapefileField.name=madrona.data_manager.models.ShapefileField-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.geographic_report.models.GeographicReport.name=madrona.geographic_report.models.GeographicReport-class.html#name,Variable madrona.intersection.models.CommonFeatureInfo.name=madrona.intersection.models.CommonFeatureInfo-class.html#name,Variable madrona.intersection.models.FeatureMapping.name=madrona.intersection.models.FeatureMapping-class.html#name,Variable madrona.intersection.models.IntersectionFeature.name=madrona.intersection.models.IntersectionFeature-class.html#name,Variable madrona.intersection.models.OrganizationScheme.name=madrona.intersection.models.OrganizationScheme-class.html#name,Variable madrona.intersection.models.Shapefile.name=madrona.intersection.models.Shapefile-class.html#name,Variable madrona.intersection.models.ShapefileField.name=madrona.intersection.models.ShapefileField-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.pg_spacing.models.Land.name=madrona.pg_spacing.models.Land-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.replication.models.ThresholdRule.name=madrona.replication.models.ThresholdRule-class.html#name,Variable madrona.spacing.models.Land.name=madrona.spacing.models.Land-class.html#name,Variable madrona.spacing.models.SpacingPoint.name=madrona.spacing.models.SpacingPoint-class.html#name,Variable madrona.straightline_spacing.models.SpacingPoint.name=madrona.straightline_spacing.models.SpacingPoint-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-8', 'name', 'link-8');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-9', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">30</tt><tt class="py-op">,</tt> <tt class="py-name">unique</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Variable madrona.raster_stats.models.RasterDataset.full_name=madrona.raster_stats.models.RasterDataset-class.html#full_name"><a title="madrona.raster_stats.models.RasterDataset.full_name" class="py-name" href="#" onclick="return doclink('link-10', 'full_name', 'link-10');">full_name</a></tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-11', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">255</tt><tt class="py-op">,</tt> <tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-string">""</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">    <tt id="link-12" class="py-name" targets="Variable madrona.raster_stats.models.RasterDataset.filepath=madrona.raster_stats.models.RasterDataset-class.html#filepath,Variable madrona.xyquery.models.Raster.filepath=madrona.xyquery.models.Raster-class.html#filepath"><a title="madrona.raster_stats.models.RasterDataset.filepath
+madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return doclink('link-12', 'filepath', 'link-12');">filepath</a></tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-13', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FilePathField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">255</tt><tt class="py-op">,</tt> <tt class="py-name">path</tt><tt class="py-op">=</tt><tt id="link-14" class="py-name"><a title="madrona.raster_stats.models.RASTDIR" class="py-name" href="#" onclick="return doclink('link-14', 'RASTDIR', 'link-2');">RASTDIR</a></tt><tt class="py-op">,</tt> <tt class="py-name">recursive</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable madrona.data_manager.models.ShapefileField.type=madrona.data_manager.models.ShapefileField-class.html#type,Variable madrona.features.tests.Pipeline.type=madrona.features.tests.Pipeline-class.html#type,Variable madrona.features.tests.RenewableEnergySite.type=madrona.features.tests.RenewableEnergySite-class.html#type,Method madrona.intersection.models.FeatureMapping.type()=madrona.intersection.models.FeatureMapping-class.html#type,Variable madrona.intersection.models.ShapefileField.type=madrona.intersection.models.ShapefileField-class.html#type,Variable madrona.manipulators.tests.TestLine.type=madrona.manipulators.tests.TestLine-class.html#type,Variable madrona.manipulators.tests.TestOptmanip.type=madrona.manipulators.tests.TestOptmanip-class.html#type,Variable madrona.manipulators.tests.TestPoly.type=madrona.manipulators.tests.TestPoly-class.html#type,Variable madrona.raster_stats.models.RasterDataset.type=madrona.raster_stats.models.RasterDataset-class.html#type"><a title="madrona.data_manager.models.ShapefileField.type
+madrona.features.tests.Pipeline.type
+madrona.features.tests.RenewableEnergySite.type
+madrona.intersection.models.FeatureMapping.type
+madrona.intersection.models.ShapefileField.type
+madrona.manipulators.tests.TestLine.type
+madrona.manipulators.tests.TestOptmanip.type
+madrona.manipulators.tests.TestPoly.type
+madrona.raster_stats.models.RasterDataset.type" class="py-name" href="#" onclick="return doclink('link-15', 'type', 'link-15');">type</a></tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-16', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">30</tt><tt class="py-op">,</tt> <tt class="py-name">choices</tt><tt class="py-op">=</tt><tt id="link-17" class="py-name"><a title="madrona.raster_stats.models.RASTER_TYPES" class="py-name" href="#" onclick="return doclink('link-17', 'RASTER_TYPES', 'link-4');">RASTER_TYPES</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">     </tt>
+<a name="RasterDataset.__unicode__"></a><div id="RasterDataset.__unicode__-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="RasterDataset.__unicode__-toggle" onclick="return toggle('RasterDataset.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.RasterDataset-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="RasterDataset.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="RasterDataset.__unicode__-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-18', 'name', 'link-8');">name</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" raster at "</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="madrona.raster_stats.models.RasterDataset.filepath
+madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return doclink('link-19', 'filepath', 'link-12');">filepath</a></tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">     </tt>
+<a name="ZonalCategory"></a><div id="ZonalCategory-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="ZonalCategory-toggle" onclick="return toggle('ZonalCategory');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalCategory-class.html">ZonalCategory</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalCategory-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ZonalCategory-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt id="link-20" class="py-name" targets="Variable madrona.raster_stats.models.ZonalCategory.category=madrona.raster_stats.models.ZonalCategory-class.html#category"><a title="madrona.raster_stats.models.ZonalCategory.category" class="py-name" href="#" onclick="return doclink('link-20', 'category', 'link-20');">category</a></tt> <tt class="py-op">=</tt> <tt id="link-21" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-21', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt id="link-22" class="py-name" targets="Variable madrona.raster_stats.models.ZonalCategory.count=madrona.raster_stats.models.ZonalCategory-class.html#count"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-22', 'count', 'link-22');">count</a></tt> <tt class="py-op">=</tt> <tt id="link-23" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-23', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">IntegerField</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="ZonalCategory.__unicode__"></a><div id="ZonalCategory.__unicode__-def"><a name="L37"></a><tt class="py-lineno"> 37</tt> <a class="py-toggle" href="#" id="ZonalCategory.__unicode__-toggle" onclick="return toggle('ZonalCategory.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalCategory-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalCategory.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ZonalCategory.__unicode__-expanded"><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-string">"Category %s (count = %s)"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.category" class="py-name" href="#" onclick="return doclink('link-24', 'category', 'link-20');">category</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-25', 'count', 'link-22');">count</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="ZonalStatsCache"></a><div id="ZonalStatsCache-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="ZonalStatsCache-toggle" onclick="return toggle('ZonalStatsCache');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalStatsCache-class.html">ZonalStatsCache</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalStatsCache-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ZonalStatsCache-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">    <tt id="link-26" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.geom_hash=madrona.raster_stats.models.ZonalStatsCache-class.html#geom_hash"><a title="madrona.raster_stats.models.ZonalStatsCache.geom_hash" class="py-name" href="#" onclick="return doclink('link-26', 'geom_hash', 'link-26');">geom_hash</a></tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-27', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">255</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">    <tt id="link-28" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.raster=madrona.raster_stats.models.ZonalStatsCache-class.html#raster"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-28', 'raster', 'link-28');">raster</a></tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-29', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">ForeignKey</tt><tt class="py-op">(</tt><tt class="py-string">'RasterDataset'</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">    <tt id="link-30" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.sum=madrona.raster_stats.models.ZonalStatsCache-class.html#sum"><a title="madrona.raster_stats.models.ZonalStatsCache.sum" class="py-name" href="#" onclick="return doclink('link-30', 'sum', 'link-30');">sum</a></tt> <tt class="py-op">=</tt> <tt id="link-31" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-31', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">    <tt id="link-32" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.avg=madrona.raster_stats.models.ZonalStatsCache-class.html#avg"><a title="madrona.raster_stats.models.ZonalStatsCache.avg" class="py-name" href="#" onclick="return doclink('link-32', 'avg', 'link-32');">avg</a></tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-33', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">    <tt id="link-34" class="py-name" targets="Variable madrona.geographic_report.models.Annotation.min=madrona.geographic_report.models.Annotation-class.html#min,Variable madrona.raster_stats.models.ZonalStatsCache.min=madrona.raster_stats.models.ZonalStatsCache-class.html#min"><a title="madrona.geographic_report.models.Annotation.min
+madrona.raster_stats.models.ZonalStatsCache.min" class="py-name" href="#" onclick="return doclink('link-34', 'min', 'link-34');">min</a></tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-35', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt id="link-36" class="py-name" targets="Variable madrona.geographic_report.models.Annotation.max=madrona.geographic_report.models.Annotation-class.html#max,Variable madrona.raster_stats.models.ZonalStatsCache.max=madrona.raster_stats.models.ZonalStatsCache-class.html#max"><a title="madrona.geographic_report.models.Annotation.max
+madrona.raster_stats.models.ZonalStatsCache.max" class="py-name" href="#" onclick="return doclink('link-36', 'max', 'link-36');">max</a></tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-37', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt id="link-38" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.mode=madrona.raster_stats.models.ZonalStatsCache-class.html#mode"><a title="madrona.raster_stats.models.ZonalStatsCache.mode" class="py-name" href="#" onclick="return doclink('link-38', 'mode', 'link-38');">mode</a></tt> <tt class="py-op">=</tt> <tt id="link-39" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-39', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt id="link-40" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.median=madrona.raster_stats.models.ZonalStatsCache-class.html#median"><a title="madrona.raster_stats.models.ZonalStatsCache.median" class="py-name" href="#" onclick="return doclink('link-40', 'median', 'link-40');">median</a></tt> <tt class="py-op">=</tt> <tt id="link-41" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-41', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt id="link-42" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.stdev=madrona.raster_stats.models.ZonalStatsCache-class.html#stdev"><a title="madrona.raster_stats.models.ZonalStatsCache.stdev" class="py-name" href="#" onclick="return doclink('link-42', 'stdev', 'link-42');">stdev</a></tt> <tt class="py-op">=</tt> <tt id="link-43" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-43', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt id="link-44" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.nulls=madrona.raster_stats.models.ZonalStatsCache-class.html#nulls"><a title="madrona.raster_stats.models.ZonalStatsCache.nulls" class="py-name" href="#" onclick="return doclink('link-44', 'nulls', 'link-44');">nulls</a></tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-45', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt id="link-46" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.pixels=madrona.raster_stats.models.ZonalStatsCache-class.html#pixels"><a title="madrona.raster_stats.models.ZonalStatsCache.pixels" class="py-name" href="#" onclick="return doclink('link-46', 'pixels', 'link-46');">pixels</a></tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-47', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">null</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt id="link-48" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.categories=madrona.raster_stats.models.ZonalStatsCache-class.html#categories"><a title="madrona.raster_stats.models.ZonalStatsCache.categories" class="py-name" href="#" onclick="return doclink('link-48', 'categories', 'link-48');">categories</a></tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-49', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">ManyToManyField</tt><tt class="py-op">(</tt><tt id="link-50" class="py-name" targets="Class madrona.raster_stats.models.ZonalCategory=madrona.raster_stats.models.ZonalCategory-class.html"><a title="madrona.raster_stats.models.ZonalCategory" class="py-name" href="#" onclick="return doclink('link-50', 'ZonalCategory', 'link-50');">ZonalCategory</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt id="link-51" class="py-name" targets="Variable madrona.data_manager.models.DataLayer.date_modified=madrona.data_manager.models.DataLayer-class.html#date_modified,Variable madrona.data_manager.models.GeneralFile.date_modified=madrona.data_manager.models.GeneralFile-class.html#date_modified,Variable madrona.data_manager.models.Shapefile.date_modified=madrona.data_manager.models.Shapefile-class.html#date_modified,Variable madrona.features.models.Feature.date_modified=madrona.features.models.Feature-class.html#date_modified,Variable madrona.intersection.models.CommonFeatureInfo.date_modified=madrona.intersection.models.CommonFeatureInfo-class.html#date_modified,Variable madrona.intersection.models.FeatureMapping.date_modified=madrona.intersection.models.FeatureMapping-class.html#date_modified,Variable madrona.intersection.models.IntersectionFeature.date_modified=madrona.intersection.models.IntersectionFeature-class.html#date_modified,Variable madrona.intersection.models.ResultCache.date_modified=madrona.intersection.models.ResultCache-class.html#date_modified,Variable madrona.intersection.models.Shapefile.date_modified=madrona.intersection.models.Shapefile-class.html#date_modified,Variable madrona.raster_stats.models.ZonalStatsCache.date_modified=madrona.raster_stats.models.ZonalStatsCache-class.html#date_modified,Variable madrona.replication.models.HabitatThreshold.date_modified=madrona.replication.models.HabitatThreshold-class.html#date_modified,Variable madrona.spacing.models.Land.date_modified=madrona.spacing.models.Land-class.html#date_modified,Variable madrona.spacing.models.PickledGraph.date_modified=madrona.spacing.models.PickledGraph-class.html#date_modified,Variable madrona.studyregion.models.StudyRegion.date_modified=madrona.studyregion.models.StudyRegion-class.html#date_modified"><a title="madrona.data_manager.models.DataLayer.date_modified
+madrona.data_manager.models.GeneralFile.date_modified
+madrona.data_manager.models.Shapefile.date_modified
+madrona.features.models.Feature.date_modified
+madrona.intersection.models.CommonFeatureInfo.date_modified
+madrona.intersection.models.FeatureMapping.date_modified
+madrona.intersection.models.IntersectionFeature.date_modified
+madrona.intersection.models.ResultCache.date_modified
+madrona.intersection.models.Shapefile.date_modified
+madrona.raster_stats.models.ZonalStatsCache.date_modified
+madrona.replication.models.HabitatThreshold.date_modified
+madrona.spacing.models.Land.date_modified
+madrona.spacing.models.PickledGraph.date_modified
+madrona.studyregion.models.StudyRegion.date_modified" class="py-name" href="#" onclick="return doclink('link-51', 'date_modified', 'link-51');">date_modified</a></tt> <tt class="py-op">=</tt> <tt id="link-52" class="py-name"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-52', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">DateTimeField</tt><tt class="py-op">(</tt><tt class="py-name">auto_now</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="ZonalStatsCache.json"></a><div id="ZonalStatsCache.json-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="ZonalStatsCache.json-toggle" onclick="return toggle('ZonalStatsCache.json');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalStatsCache-class.html#json">json</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalStatsCache.json-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ZonalStatsCache.json-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">serializers</tt><tt class="py-op">.</tt><tt class="py-name">serialize</tt><tt class="py-op">(</tt><tt class="py-string">"json"</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"> </tt>
+<a name="ZonalStatsCache.__unicode__"></a><div id="ZonalStatsCache.__unicode__-def"><a name="L59"></a><tt class="py-lineno"> 59</tt> <a class="py-toggle" href="#" id="ZonalStatsCache.__unicode__-toggle" onclick="return toggle('ZonalStatsCache.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalStatsCache-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalStatsCache.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ZonalStatsCache.__unicode__-expanded"><a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-string">"Zonal Stats for %s - avg:%s , pixels:%s, nulls:%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-53', 'raster', 'link-28');">raster</a></tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-54', 'name', 'link-8');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.avg" class="py-name" href="#" onclick="return doclink('link-55', 'avg', 'link-32');">avg</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.pixels" class="py-name" href="#" onclick="return doclink('link-56', 'pixels', 'link-46');">pixels</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.nulls" class="py-name" href="#" onclick="return doclink('link-57', 'nulls', 'link-44');">nulls</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="ZonalStatsCache.Meta"></a><div id="ZonalStatsCache.Meta-def"><a name="L62"></a><tt class="py-lineno"> 62</tt> <a class="py-toggle" href="#" id="ZonalStatsCache.Meta-toggle" onclick="return toggle('ZonalStatsCache.Meta');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalStatsCache.Meta-class.html">Meta</a><tt class="py-op">:</tt> </tt>
+</div><div id="ZonalStatsCache.Meta-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ZonalStatsCache.Meta-expanded"><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt id="link-58" class="py-name" targets="Variable madrona.intersection.models.ResultCache.Meta.unique_together=madrona.intersection.models.ResultCache.Meta-class.html#unique_together,Variable madrona.raster_stats.models.ZonalStatsCache.Meta.unique_together=madrona.raster_stats.models.ZonalStatsCache.Meta-class.html#unique_together"><a title="madrona.intersection.models.ResultCache.Meta.unique_together
+madrona.raster_stats.models.ZonalStatsCache.Meta.unique_together" class="py-name" href="#" onclick="return doclink('link-58', 'unique_together', 'link-58');">unique_together</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">'geom_hash'</tt><tt class="py-op">,</tt> <tt class="py-string">'raster'</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"> </tt>
+<a name="geom_to_file"></a><div id="geom_to_file-def"><a name="L65"></a><tt class="py-lineno"> 65</tt> <a class="py-toggle" href="#" id="geom_to_file-toggle" onclick="return toggle('geom_to_file');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models-module.html#geom_to_file">geom_to_file</a><tt class="py-op">(</tt><tt class="py-param">geom</tt><tt class="py-op">,</tt> <tt class="py-param">filepath</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="geom_to_file-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="geom_to_file-expanded"><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">    <tt id="link-59" class="py-name" targets="Method madrona.features.FeatureOptions.json()=madrona.features.FeatureOptions-class.html#json,Method madrona.features.Link.json()=madrona.features.Link-class.html#json,Method madrona.raster_stats.models.ZonalStatsCache.json()=madrona.raster_stats.models.ZonalStatsCache-class.html#json"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-59', 'json', 'link-59');">json</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"""{</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-string">"type": "FeatureCollection",</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-string">"features": [</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-string">{ "type": "Feature", "properties": { "id": 1 }, "geometry": %s }</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-string">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-string">}"""</tt> <tt class="py-op">%</tt> <tt id="link-60" class="py-name" targets="Variable madrona.xyquery.models.Feature.geom=madrona.xyquery.models.Feature-class.html#geom"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-60', 'geom', 'link-60');">geom</a></tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-61', 'json', 'link-59');">json</a></tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt id="link-62" class="py-name" targets="Variable madrona.common.uaparser.tests.fh=madrona.common.uaparser.tests-module.html#fh"><a title="madrona.common.uaparser.tests.fh" class="py-name" href="#" onclick="return doclink('link-62', 'fh', 'link-62');">fh</a></tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt id="link-63" class="py-name"><a title="madrona.raster_stats.models.RasterDataset.filepath
+madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return doclink('link-63', 'filepath', 'link-12');">filepath</a></tt><tt class="py-op">,</tt><tt class="py-string">'w'</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt id="link-64" class="py-name"><a title="madrona.common.uaparser.tests.fh" class="py-name" href="#" onclick="return doclink('link-64', 'fh', 'link-62');">fh</a></tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt id="link-65" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-65', 'json', 'link-59');">json</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt id="link-66" class="py-name"><a title="madrona.common.uaparser.tests.fh" class="py-name" href="#" onclick="return doclink('link-66', 'fh', 'link-62');">fh</a></tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-keyword">assert</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt id="link-67" class="py-name"><a title="madrona.raster_stats.models.RasterDataset.filepath
+madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return doclink('link-67', 'filepath', 'link-12');">filepath</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="run_starspan_zonal"></a><div id="run_starspan_zonal-def"><a name="L77"></a><tt class="py-lineno"> 77</tt> <a class="py-toggle" href="#" id="run_starspan_zonal-toggle" onclick="return toggle('run_starspan_zonal');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models-module.html#run_starspan_zonal">run_starspan_zonal</a><tt class="py-op">(</tt><tt class="py-param">geom</tt><tt class="py-op">,</tt> <tt class="py-param">rasterds</tt><tt class="py-op">,</tt> <tt class="py-param">write_cache</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">pixprop</tt><tt class="py-op">=</tt><tt class="py-number">0.5</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="run_starspan_zonal-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="run_starspan_zonal-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">    Consider this a 'private' method .. dont call directly, use zonal_stats() instead</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">    Runs starspan and returns a ZonalStatsCache object</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">    If not write_cache, just return an unsaved object</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">    <tt class="py-comment"># Create tempdir and cd in </tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">    <tt class="py-name">tmpdir</tt> <tt class="py-op">=</tt> <tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">gettempdir</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">chdir</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">    <tt class="py-comment"># Output geom to temp dataset</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">    <tt id="link-68" class="py-name" targets="Variable madrona.openid.models.Nonce.timestamp=madrona.openid.models.Nonce-class.html#timestamp"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-68', 'timestamp', 'link-68');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-name">out_json</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir</tt><tt class="py-op">,</tt> <tt class="py-string">'geom_%s.json'</tt> <tt class="py-op">%</tt> <tt id="link-69" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-69', 'timestamp', 'link-68');">timestamp</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt id="link-70" class="py-name" targets="Function madrona.raster_stats.models.geom_to_file()=madrona.raster_stats.models-module.html#geom_to_file"><a title="madrona.raster_stats.models.geom_to_file" class="py-name" href="#" onclick="return doclink('link-70', 'geom_to_file', 'link-70');">geom_to_file</a></tt><tt class="py-op">(</tt><tt id="link-71" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-71', 'geom', 'link-60');">geom</a></tt><tt class="py-op">,</tt> <tt class="py-name">out_json</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt class="py-comment"># Run starspan</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt class="py-name">out_csv</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir</tt><tt class="py-op">,</tt> <tt class="py-string">'output_%s_stats.csv'</tt> <tt class="py-op">%</tt> <tt id="link-72" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-72', 'timestamp', 'link-68');">timestamp</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-name">out_categories</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir</tt><tt class="py-op">,</tt> <tt class="py-string">'output_%s_categories.csv'</tt> <tt class="py-op">%</tt> <tt id="link-73" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-73', 'timestamp', 'link-68');">timestamp</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name" targets="Method madrona.features.models.FeatureCollection.remove()=madrona.features.models.FeatureCollection-class.html#remove"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-74', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">)</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-75', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">    <tt class="py-name">cmd</tt> <tt class="py-op">=</tt> <tt class="py-string">'%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls --pixprop %s '</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-76" class="py-name"><a title="madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="return doclink('link-76', 'STARSPAN_BIN', 'link-5');">STARSPAN_BIN</a></tt><tt class="py-op">,</tt><tt class="py-name">out_json</tt><tt class="py-op">,</tt><tt class="py-name">tmpdir</tt><tt class="py-op">,</tt> <tt id="link-77" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-77', 'timestamp', 'link-68');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-name">rasterds</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="madrona.raster_stats.models.RasterDataset.filepath
+madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return doclink('link-78', 'filepath', 'link-12');">filepath</a></tt><tt class="py-op">,</tt> <tt class="py-name">pixprop</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">rasterds</tt><tt class="py-op">.</tt><tt id="link-79" class="py-name"><a title="madrona.data_manager.models.ShapefileField.type
+madrona.features.tests.Pipeline.type
+madrona.features.tests.RenewableEnergySite.type
+madrona.intersection.models.FeatureMapping.type
+madrona.intersection.models.ShapefileField.type
+madrona.manipulators.tests.TestLine.type
+madrona.manipulators.tests.TestOptmanip.type
+madrona.manipulators.tests.TestPoly.type
+madrona.raster_stats.models.RasterDataset.type" class="py-name" href="#" onclick="return doclink('link-79', 'type', 'link-15');">type</a></tt> <tt class="py-op">==</tt> <tt class="py-string">'categorical'</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-name">cmd</tt> <tt class="py-op">+=</tt> <tt class="py-string">"--class-summary-suffix _categories.csv"</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-name">starspan_out</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">popen</tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"Starspan failed to produce output file: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">starspan_out</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">rasterds</tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="madrona.data_manager.models.ShapefileField.type
+madrona.features.tests.Pipeline.type
+madrona.features.tests.RenewableEnergySite.type
+madrona.intersection.models.FeatureMapping.type
+madrona.intersection.models.ShapefileField.type
+madrona.manipulators.tests.TestLine.type
+madrona.manipulators.tests.TestOptmanip.type
+madrona.manipulators.tests.TestPoly.type
+madrona.raster_stats.models.RasterDataset.type" class="py-name" href="#" onclick="return doclink('link-80', 'type', 'link-15');">type</a></tt> <tt class="py-op">==</tt> <tt class="py-string">'categorical'</tt> <tt class="py-keyword">and</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"Starspan failed to produce output file: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">starspan_out</tt><tt class="py-op">)</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">    <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">,</tt><tt class="py-string">'r'</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">readlines</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-comment"># Create zonal model</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">    <tt id="link-81" class="py-name" targets="Method madrona.features.models.Feature.hash()=madrona.features.models.Feature-class.html#hash"><a title="madrona.features.models.Feature.hash" class="py-name" href="#" onclick="return doclink('link-81', 'hash', 'link-81');">hash</a></tt> <tt class="py-op">=</tt> <tt id="link-82" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-82', 'geom', 'link-60');">geom</a></tt><tt class="py-op">.</tt><tt class="py-name">wkt</tt><tt class="py-op">.</tt><tt class="py-name">__hash__</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-name">zonal</tt> <tt class="py-op">=</tt> <tt id="link-83" class="py-name" targets="Class madrona.raster_stats.models.ZonalStatsCache=madrona.raster_stats.models.ZonalStatsCache-class.html"><a title="madrona.raster_stats.models.ZonalStatsCache" class="py-name" href="#" onclick="return doclink('link-83', 'ZonalStatsCache', 'link-83');">ZonalStatsCache</a></tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-84', 'raster', 'link-28');">raster</a></tt><tt class="py-op">=</tt><tt class="py-name">rasterds</tt><tt class="py-op">,</tt> <tt id="link-85" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.geom_hash" class="py-name" href="#" onclick="return doclink('link-85', 'geom_hash', 'link-26');">geom_hash</a></tt><tt class="py-op">=</tt><tt id="link-86" class="py-name"><a title="madrona.features.models.Feature.hash" class="py-name" href="#" onclick="return doclink('link-86', 'hash', 'link-81');">hash</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">    <tt class="py-comment"># Make sure we have valid results output by starspan</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">res</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt> <tt class="py-keyword">and</tt> <tt class="py-string">"Intersecting features: 0"</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">starspan_out</tt><tt class="py-op">:</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-name">headers</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">res</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-name">vals</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">res</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">headers</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">vals</tt><tt class="py-op">)</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-comment"># loop and populate model</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt id="link-87" class="py-name" targets="Variable madrona.bioeconomic_model.models.OrganismParameters.range=madrona.bioeconomic_model.models.OrganismParameters-class.html#range"><a title="madrona.bioeconomic_model.models.OrganismParameters.range" class="py-name" href="#" onclick="return doclink('link-87', 'range', 'link-87');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">headers</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-string">"_Band1"</tt> <tt class="py-keyword">in</tt> <tt class="py-name">headers</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                <tt class="py-name">stat_type</tt> <tt class="py-op">=</tt> <tt class="py-name">headers</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">"_Band1"</tt><tt class="py-op">,</tt><tt class="py-string">''</tt><tt class="py-op">)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">                <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt class="py-name">__dict__</tt><tt class="py-op">[</tt><tt class="py-name">stat_type</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">vals</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">headers</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'numPixels'</tt><tt class="py-op">:</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.pixels" class="py-name" href="#" onclick="return doclink('link-88', 'pixels', 'link-46');">pixels</a></tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">vals</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">    <tt class="py-comment"># Handle categories</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">rasterds</tt><tt class="py-op">.</tt><tt id="link-89" class="py-name"><a title="madrona.data_manager.models.ShapefileField.type
+madrona.features.tests.Pipeline.type
+madrona.features.tests.RenewableEnergySite.type
+madrona.intersection.models.FeatureMapping.type
+madrona.intersection.models.ShapefileField.type
+madrona.manipulators.tests.TestLine.type
+madrona.manipulators.tests.TestOptmanip.type
+madrona.manipulators.tests.TestPoly.type
+madrona.raster_stats.models.RasterDataset.type" class="py-name" href="#" onclick="return doclink('link-89', 'type', 'link-15');">type</a></tt> <tt class="py-op">==</tt> <tt class="py-string">'categorical'</tt> <tt class="py-keyword">and</tt> <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-90" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.pixels" class="py-name" href="#" onclick="return doclink('link-90', 'pixels', 'link-46');">pixels</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-91" class="py-name" targets="Method madrona.analysistools.models.Analysis.save()=madrona.analysistools.models.Analysis-class.html#save,Method madrona.bioeconomic_model.models.OrganizationScheme.save()=madrona.bioeconomic_model.models.OrganizationScheme-class.html#save,Method madrona.data_distributor.models.LoadSetup.save()=madrona.data_distributor.models.LoadSetup-class.html#save,Method madrona.data_manager.models.Shapefile.save()=madrona.data_manager.models.Shapefile-class.html#save,Method madrona.features.models.Feature.save()=madrona.features.models.Feature-class.html#save,Method madrona.features.models.FeatureCollection.save()=madrona.features.models.FeatureCollection-class.html#save,Method madrona.features.models.SpatialFeature.save()=madrona.features.models.SpatialFeature-class.html#save,Method madrona.intersection.models.IntersectionFeature.save()=madrona.intersection.models.IntersectionFeature-class.html#save,Method madrona.intersection.models.MultiFeatureShapefile.save()=madrona.intersection.models.MultiFeatureShapefile-class.html#save,Method madrona.layers.models.PublicLayerList.save()=madrona.layers.models.PublicLayerList-class.html#save,Method madrona.manipulators.models.BaseManipulatorGeometry.save()=madrona.manipulators.models.BaseManipulatorGeometry-class.html#save,Method madrona.news.models.Entry.save()=madrona.news.models.Entry-class.html#save,Method madrona.news.models.Tag.save()=madrona.news.models.Tag-class.html#save,Method madrona.openid.models.UserAssociation.save()=madrona.openid.models.UserAssociation-class.html#save,Method madrona.pg_spacing.models.Network.save()=madrona.pg_spacing.models.Network-class.html#save,Method madrona.replication.models.HabitatThreshold.save()=madrona.replication.models.HabitatThreshold-class.html#save,Method madrona.replication.models.ReplicationSetup.save()=madrona.replication.models.ReplicationSetup-class.html#save,Method madrona.replication.models.ThresholdRule.save()=madrona.replication.models.ThresholdRule-class.html#save,Method madrona.studyregion.models.StudyRegion.save()=madrona.studyregion.models.StudyRegion-class.html#save"><a title="madrona.analysistools.models.Analysis.save
+madrona.bioeconomic_model.models.OrganizationScheme.save
+madrona.data_distributor.models.LoadSetup.save
+madrona.data_manager.models.Shapefile.save
+madrona.features.models.Feature.save
+madrona.features.models.FeatureCollection.save
+madrona.features.models.SpatialFeature.save
+madrona.intersection.models.IntersectionFeature.save
+madrona.intersection.models.MultiFeatureShapefile.save
+madrona.layers.models.PublicLayerList.save
+madrona.manipulators.models.BaseManipulatorGeometry.save
+madrona.news.models.Entry.save
+madrona.news.models.Tag.save
+madrona.openid.models.UserAssociation.save
+madrona.pg_spacing.models.Network.save
+madrona.replication.models.HabitatThreshold.save
+madrona.replication.models.ReplicationSetup.save
+madrona.replication.models.ThresholdRule.save
+madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-91', 'save', 'link-91');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">readlines</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-name">headers</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">res</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">headers</tt> <tt class="py-op">==</tt> <tt class="py-op">[</tt><tt class="py-string">'FID'</tt><tt class="py-op">,</tt> <tt class="py-string">'class'</tt><tt class="py-op">,</tt> <tt class="py-string">'count'</tt><tt class="py-op">]</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">row</tt> <tt class="py-keyword">in</tt> <tt class="py-name">res</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">            <tt class="py-name">vals</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">x</tt> <tt class="py-keyword">in</tt> <tt class="py-name">row</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-name">cat</tt> <tt class="py-op">=</tt> <tt class="py-name">vals</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt id="link-92" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-92', 'count', 'link-22');">count</a></tt> <tt class="py-op">=</tt> <tt class="py-name">vals</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">            <tt class="py-name">zc</tt> <tt class="py-op">=</tt> <tt id="link-93" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory" class="py-name" href="#" onclick="return doclink('link-93', 'ZonalCategory', 'link-50');">ZonalCategory</a></tt><tt class="py-op">.</tt><tt id="link-94" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.objects=madrona.bioeconomic_model.models.Extent-class.html#objects,Variable madrona.bioeconomic_model.models.PointScrap.objects=madrona.bioeconomic_model.models.PointScrap-class.html#objects,Variable madrona.bioeconomic_model.models.PolygonGrid.objects=madrona.bioeconomic_model.models.PolygonGrid-class.html#objects,Variable madrona.bioeconomic_model.models.Scrap.objects=madrona.bioeconomic_model.models.Scrap-class.html#objects,Variable madrona.bioeconomic_model.models.StudyRegion.objects=madrona.bioeconomic_model.models.StudyRegion-class.html#objects,Variable madrona.bioregions.models.Bioregion.objects=madrona.bioregions.models.Bioregion-class.html#objects,Variable madrona.depth_range.models.DepthSounding.objects=madrona.depth_range.models.DepthSounding-class.html#objects,Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.intersection.models.ArealFeature.objects=madrona.intersection.models.ArealFeature-class.html#objects,Variable madrona.intersection.models.CommonFeatureInfo.objects=madrona.intersection.models.CommonFeatureInfo-class.html#objects,Variable madrona.intersection.models.IntersectionFeature.objects=madrona.intersection.models.IntersectionFeature-class.html#objects,Variable madrona.intersection.models.LinearFeature.objects=madrona.intersection.models.LinearFeature-class.html#objects,Variable madrona.intersection.models.PointFeature.objects=madrona.intersection.models.PointFeature-class.html#objects,Variable madrona.intersection.models.ResultCache.objects=madrona.intersection.models.ResultCache-class.html#objects,Variable madrona.intersection.models.TestPolygon.objects=madrona.intersection.models.TestPolygon-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.pg_spacing.models.Land.objects=madrona.pg_spacing.models.Land-class.html#objects,Variable madrona.pg_spacing.models.Network.objects=madrona.pg_spacing.models.Network-class.html#objects,Variable madrona.pg_spacing.models.Vertices.objects=madrona.pg_spacing.models.Vertices-class.html#objects,Variable madrona.spacing.models.Land.objects=madrona.spacing.models.Land-class.html#objects,Variable madrona.spacing.models.SpacingPoint.objects=madrona.spacing.models.SpacingPoint-class.html#objects,Variable madrona.straightline_spacing.models.SpacingPoint.objects=madrona.straightline_spacing.models.SpacingPoint-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-94', 'objects', 'link-94');">objects</a></tt><tt class="py-op">.</tt><tt id="link-95" class="py-name" targets="Function madrona.features.views.create()=madrona.features.views-module.html#create"><a title="madrona.features.views.create" class="py-name" href="#" onclick="return doclink('link-95', 'create', 'link-95');">create</a></tt><tt class="py-op">(</tt><tt id="link-96" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.category" class="py-name" href="#" onclick="return doclink('link-96', 'category', 'link-20');">category</a></tt><tt class="py-op">=</tt><tt class="py-name">cat</tt><tt class="py-op">,</tt> <tt id="link-97" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-97', 'count', 'link-22');">count</a></tt><tt class="py-op">=</tt><tt id="link-98" class="py-name"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-98', 'count', 'link-22');">count</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-name">zc</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name"><a title="madrona.analysistools.models.Analysis.save
+madrona.bioeconomic_model.models.OrganizationScheme.save
+madrona.data_distributor.models.LoadSetup.save
+madrona.data_manager.models.Shapefile.save
+madrona.features.models.Feature.save
+madrona.features.models.FeatureCollection.save
+madrona.features.models.SpatialFeature.save
+madrona.intersection.models.IntersectionFeature.save
+madrona.intersection.models.MultiFeatureShapefile.save
+madrona.layers.models.PublicLayerList.save
+madrona.manipulators.models.BaseManipulatorGeometry.save
+madrona.news.models.Entry.save
+madrona.news.models.Tag.save
+madrona.openid.models.UserAssociation.save
+madrona.pg_spacing.models.Network.save
+madrona.replication.models.HabitatThreshold.save
+madrona.replication.models.ReplicationSetup.save
+madrona.replication.models.ThresholdRule.save
+madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-99', 'save', 'link-91');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-100" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.categories" class="py-name" href="#" onclick="return doclink('link-100', 'categories', 'link-48');">categories</a></tt><tt class="py-op">.</tt><tt id="link-101" class="py-name" targets="Method madrona.features.models.FeatureCollection.add()=madrona.features.models.FeatureCollection-class.html#add"><a title="madrona.features.models.FeatureCollection.add" class="py-name" href="#" onclick="return doclink('link-101', 'add', 'link-101');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">zc</tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">    <tt class="py-comment"># return zonal object (caching it if needed)</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">write_cache</tt><tt class="py-op">:</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-102" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.pixels" class="py-name" href="#" onclick="return doclink('link-102', 'pixels', 'link-46');">pixels</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-name">zonal</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name"><a title="madrona.analysistools.models.Analysis.save
+madrona.bioeconomic_model.models.OrganizationScheme.save
+madrona.data_distributor.models.LoadSetup.save
+madrona.data_manager.models.Shapefile.save
+madrona.features.models.Feature.save
+madrona.features.models.FeatureCollection.save
+madrona.features.models.SpatialFeature.save
+madrona.intersection.models.IntersectionFeature.save
+madrona.intersection.models.MultiFeatureShapefile.save
+madrona.layers.models.PublicLayerList.save
+madrona.manipulators.models.BaseManipulatorGeometry.save
+madrona.news.models.Entry.save
+madrona.news.models.Tag.save
+madrona.openid.models.UserAssociation.save
+madrona.pg_spacing.models.Network.save
+madrona.replication.models.HabitatThreshold.save
+madrona.replication.models.ReplicationSetup.save
+madrona.replication.models.ThresholdRule.save
+madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-103', 'save', 'link-91');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">            <tt class="py-comment"># Most likely another zonal stats cache for this geom/raster</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">            <tt class="py-comment"># was saved to the cache before this one completed.</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">        <tt class="py-name">remove_tmp</tt> <tt class="py-op">=</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">STARSPAN_REMOVE_TMP</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">        <tt class="py-name">remove_tmp</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">remove_tmp</tt><tt class="py-op">:</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-104" class="py-name"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-104', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">out_csv</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_json</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-105" class="py-name"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-105', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">out_json</tt><tt class="py-op">)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-106" class="py-name"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-106', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">out_categories</tt><tt class="py-op">)</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">glob</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">fname</tt> <tt class="py-keyword">in</tt> <tt class="py-name">glob</tt><tt class="py-op">.</tt><tt class="py-name">glob</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir</tt><tt class="py-op">,</tt> <tt class="py-string">'output_%s_*'</tt> <tt class="py-op">%</tt> <tt id="link-107" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-107', 'timestamp', 'link-68');">timestamp</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">fname</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt id="link-108" class="py-name"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-108', 'remove', 'link-74');">remove</a></tt><tt class="py-op">(</tt><tt class="py-name">fname</tt><tt class="py-op">)</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">zonal</tt> </tt>
+</div><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"> </tt>
+<a name="clear_cache"></a><div id="clear_cache-def"><a name="L167"></a><tt class="py-lineno">167</tt> <a class="py-toggle" href="#" id="clear_cache-toggle" onclick="return toggle('clear_cache');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models-module.html#clear_cache">clear_cache</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="clear_cache-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="clear_cache-expanded"><a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">    <tt class="py-name">objs</tt> <tt class="py-op">=</tt> <tt id="link-109" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache" class="py-name" href="#" onclick="return doclink('link-109', 'ZonalStatsCache', 'link-83');">ZonalStatsCache</a></tt><tt class="py-op">.</tt><tt id="link-110" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-110', 'objects', 'link-94');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">all</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">    <tt class="py-name">objs</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name" targets="Method madrona.features.models.FeatureCollection.delete()=madrona.features.models.FeatureCollection-class.html#delete,Function madrona.features.views.delete()=madrona.features.views-module.html#delete"><a title="madrona.features.models.FeatureCollection.delete
+madrona.features.views.delete" class="py-name" href="#" onclick="return doclink('link-111', 'delete', 'link-111');">delete</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"> </tt>
+<a name="zonal_stats"></a><div id="zonal_stats-def"><a name="L171"></a><tt class="py-lineno">171</tt> <a class="py-toggle" href="#" id="zonal_stats-toggle" onclick="return toggle('zonal_stats');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models-module.html#zonal_stats">zonal_stats</a><tt class="py-op">(</tt><tt class="py-param">geom</tt><tt class="py-op">,</tt> <tt class="py-param">rasterds</tt><tt class="py-op">,</tt> <tt class="py-param">write_cache</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">read_cache</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">cache_only</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">pixprop</tt><tt class="py-op">=</tt><tt class="py-number">0.5</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="zonal_stats-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="zonal_stats-expanded"><a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"><tt class="py-docstring">    Given a GEOSGeometry and a RasterDataset,</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">    compute the zonal stats and return json like</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring">     { 'raster': 'elevation', 'stats': {'sum': 10234.2, 'mean': 12.4}}</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">    result can be stored in cache (write_cache)</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring">     and cache value is returned if read_cache</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-112" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-112', 'geom', 'link-60');">geom</a></tt><tt class="py-op">.</tt><tt class="py-name">valid</tt><tt class="py-op">:</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">    <tt id="link-113" class="py-name"><a title="madrona.features.models.Feature.hash" class="py-name" href="#" onclick="return doclink('link-113', 'hash', 'link-81');">hash</a></tt> <tt class="py-op">=</tt> <tt id="link-114" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-114', 'geom', 'link-60');">geom</a></tt><tt class="py-op">.</tt><tt class="py-name">wkt</tt><tt class="py-op">.</tt><tt class="py-name">__hash__</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">      </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">    <tt class="py-name">cached</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">read_cache</tt><tt class="py-op">:</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">            <tt class="py-name">cached</tt> <tt class="py-op">=</tt> <tt id="link-115" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache" class="py-name" href="#" onclick="return doclink('link-115', 'ZonalStatsCache', 'link-83');">ZonalStatsCache</a></tt><tt class="py-op">.</tt><tt id="link-116" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
+madrona.bioeconomic_model.models.PointScrap.objects
+madrona.bioeconomic_model.models.PolygonGrid.objects
+madrona.bioeconomic_model.models.Scrap.objects
+madrona.bioeconomic_model.models.StudyRegion.objects
+madrona.bioregions.models.Bioregion.objects
+madrona.depth_range.models.DepthSounding.objects
+madrona.features.models.Feature.objects
+madrona.intersection.models.ArealFeature.objects
+madrona.intersection.models.CommonFeatureInfo.objects
+madrona.intersection.models.IntersectionFeature.objects
+madrona.intersection.models.LinearFeature.objects
+madrona.intersection.models.PointFeature.objects
+madrona.intersection.models.ResultCache.objects
+madrona.intersection.models.TestPolygon.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.pg_spacing.models.Land.objects
+madrona.pg_spacing.models.Network.objects
+madrona.pg_spacing.models.Vertices.objects
+madrona.spacing.models.Land.objects
+madrona.spacing.models.SpacingPoint.objects
+madrona.straightline_spacing.models.SpacingPoint.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-116', 'objects', 'link-94');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-117" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.geom_hash" class="py-name" href="#" onclick="return doclink('link-117', 'geom_hash', 'link-26');">geom_hash</a></tt><tt class="py-op">=</tt><tt id="link-118" class="py-name"><a title="madrona.features.models.Feature.hash" class="py-name" href="#" onclick="return doclink('link-118', 'hash', 'link-81');">hash</a></tt><tt class="py-op">,</tt> <tt id="link-119" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-119', 'raster', 'link-28');">raster</a></tt><tt class="py-op">=</tt><tt class="py-name">rasterds</tt><tt class="py-op">)</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt id="link-120" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache" class="py-name" href="#" onclick="return doclink('link-120', 'ZonalStatsCache', 'link-83');">ZonalStatsCache</a></tt><tt class="py-op">.</tt><tt class="py-name">DoesNotExist</tt><tt class="py-op">:</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">            <tt class="py-name">cached</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">DatabaseError</tt><tt class="py-op">:</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">            <tt class="py-name">cached</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">        <tt class="py-comment">#If we're not reading the cache, </tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-comment">#we're not going to write to it either</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-name">write_cache</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt>  </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">cached</tt><tt class="py-op">:</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt id="link-121" class="py-name" targets="Variable madrona.intersection.models.ResultCache.result=madrona.intersection.models.ResultCache-class.html#result,Method madrona.manipulators.manipulators.BaseManipulator.result()=madrona.manipulators.manipulators.BaseManipulator-class.html#result"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-121', 'result', 'link-121');">result</a></tt> <tt class="py-op">=</tt> <tt class="py-name">cached</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt id="link-122" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-122', 'result', 'link-121');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">from_cache</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cache_only</tt><tt class="py-op">:</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">            <tt class="py-comment"># Return an empty result</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">            <tt id="link-123" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-123', 'result', 'link-121');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-124" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache" class="py-name" href="#" onclick="return doclink('link-124', 'ZonalStatsCache', 'link-83');">ZonalStatsCache</a></tt><tt class="py-op">(</tt><tt id="link-125" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.geom_hash" class="py-name" href="#" onclick="return doclink('link-125', 'geom_hash', 'link-26');">geom_hash</a></tt><tt class="py-op">=</tt><tt id="link-126" class="py-name"><a title="madrona.features.models.Feature.hash" class="py-name" href="#" onclick="return doclink('link-126', 'hash', 'link-81');">hash</a></tt><tt class="py-op">,</tt> <tt id="link-127" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-127', 'raster', 'link-28');">raster</a></tt><tt class="py-op">=</tt><tt class="py-name">rasterds</tt><tt class="py-op">)</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">            <tt id="link-128" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-128', 'result', 'link-121');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-129" class="py-name" targets="Function madrona.raster_stats.models.run_starspan_zonal()=madrona.raster_stats.models-module.html#run_starspan_zonal"><a title="madrona.raster_stats.models.run_starspan_zonal" class="py-name" href="#" onclick="return doclink('link-129', 'run_starspan_zonal', 'link-129');">run_starspan_zonal</a></tt><tt class="py-op">(</tt><tt id="link-130" class="py-name"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-130', 'geom', 'link-60');">geom</a></tt><tt class="py-op">,</tt> <tt class="py-name">rasterds</tt><tt class="py-op">,</tt> <tt class="py-name">write_cache</tt><tt class="py-op">=</tt><tt class="py-name">write_cache</tt><tt class="py-op">,</tt> <tt class="py-name">pixprop</tt><tt class="py-op">=</tt><tt class="py-name">pixprop</tt><tt class="py-op">)</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt id="link-131" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-131', 'result', 'link-121');">result</a></tt><tt class="py-op">.</tt><tt class="py-name">from_cache</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">     </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-132" class="py-name"><a title="madrona.intersection.models.ResultCache.result
+madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-132', 'result', 'link-121');">result</a></tt> </tt>
+</div><a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:21 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

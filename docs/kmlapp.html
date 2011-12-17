@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.kmlapp: KML Representation of Features and Collections &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.layers: KML Data Layers" href="layers.html" />
+    <link rel="prev" title="madrona.help: End user help system" href="help.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="layers.html" title="madrona.layers: KML Data Layers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="help.html" title="madrona.help: End user help system"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-kmlapp-kml-representation-of-features-and-collections">
+<span id="kmlapp"></span><h1><cite>madrona.kmlapp</cite>: KML Representation of Features and Collections<a class="headerlink" href="#madrona-kmlapp-kml-representation-of-features-and-collections" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Why call it <cite>kmlapp</cite> instead of simply <cite>kml</cite>? That namespace conflicts with the python bindings for libkml.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Certain aspects of KML require absolute URLs and thus require configuring
+the site domain with the <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/contrib/sites/">Django Sites framework</a>.
+You can do this by setting the domain name of your server
+through the admin tool (e.g. <a class="reference external" href="http://localhost:8000/admin/sites/site/1/">http://localhost:8000/admin/sites/site/1/</a>).</p>
+</div>
+<div class="section" id="customizing-the-kml-representation">
+<h2>Customizing the KML Representation<a class="headerlink" href="#customizing-the-kml-representation" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>The Feature&#8217;s kml representation is determined by several properties on the feature instance,</dt>
+<dd><ul class="first last simple">
+<li>.kml</li>
+<li>.kml_style</li>
+</ul>
+</dd>
+</dl>
+<p>Reasonble default kml and kml_style properties are provided for all Feature types but most likely you&#8217;ll need to override them to customize the look, feel and behavior of your application.</p>
+<dl class="docutils">
+<dt>The <cite>.kml</cite> property MUST</dt>
+<dd><ul class="first last simple">
+<li>Return a string containing a valid <a class="reference external" href="http://code.google.com/apis/kml/documentation/kmlreference.html#feature">KML Feature</a> element (most commonly a Placemark or Folder)</li>
+<li>Encode/escape any strings containing html entities that not part of the KML document structure. For instance, the name attribute of the feature might contain an ampersand which, if left unescaped, might create invalid kml. Use the <tt class="docutils literal"><span class="pre">django.utils.html.escape</span></tt> function.</li>
+<li>The element must have an <tt class="docutils literal"><span class="pre">id</span></tt> attribute populated with the value of <tt class="docutils literal"><span class="pre">instance.uid</span></tt>.</li>
+<li>If it references any style URLs, the corresponding <a class="reference external" href="http://code.google.com/apis/kml/documentation/kmlreference.html#style">Style element(s)</a> must be provided by the feature&#8217;s .kml_style property</li>
+</ul>
+</dd>
+<dt>The <cite>.kml_style</cite> property MUST</dt>
+<dd><ul class="first last simple">
+<li>Return a string containing one or more valid <a class="reference external" href="http://code.google.com/apis/kml/documentation/kmlreference.html#style">Style element(s)</a> which may be referenced by URL from the KML feature.</li>
+<li>Attempt to be reusable by all similar features; If your kml document contains multiple features, only the <em>unique</em> .kml_style strings will appear in the document. Refrain from creating a seperate style for each and every feature and try to group them into classes.</li>
+</ul>
+</dd>
+</dl>
+<p>Below is an example of how one might use the kml properties to classify the kml represetation of features.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">Mpa</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">designation</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">designation</span> <span class="o">==</span> <span class="s">&#39;Marine Conservation Area&#39;</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;green&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;blue&quot;</span>
+
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        &lt;Placemark id=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;</span>
+<span class="s">            &lt;name&gt;</span><span class="si">%s</span><span class="s">&lt;/name&gt;</span>
+<span class="s">            &lt;styleUrl&gt;#</span><span class="si">%s</span><span class="s">-default&lt;/styleUrl&gt;</span>
+<span class="s">            &lt;styleUrl&gt;#</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">&lt;/styleUrl&gt;</span>
+<span class="s">            &lt;ExtendedData&gt;</span>
+<span class="s">                &lt;Data name=&quot;name&quot;&gt;&lt;value&gt;</span><span class="si">%s</span><span class="s">&lt;/value&gt;&lt;/Data&gt;</span>
+<span class="s">                &lt;Data name=&quot;user&quot;&gt;&lt;value&gt;</span><span class="si">%s</span><span class="s">&lt;/value&gt;&lt;/Data&gt;</span>
+<span class="s">                &lt;Data name=&quot;modified&quot;&gt;&lt;value&gt;</span><span class="si">%s</span><span class="s">&lt;/value&gt;&lt;/Data&gt;</span>
+<span class="s">            &lt;/ExtendedData&gt;</span>
+<span class="s">            </span><span class="si">%s</span><span class="s"></span>
+<span class="s">        &lt;/Placemark&gt;</span>
+<span class="s">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_uid</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_uid</span><span class="p">(),</span> <span class="n">color</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_modified</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geom_kml</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kml_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        &lt;Style id=&quot;</span><span class="si">%s</span><span class="s">-default&quot;&gt;</span>
+<span class="s">            &lt;BalloonStyle&gt;</span>
+<span class="s">                &lt;bgColor&gt;ffeeeeee&lt;/bgColor&gt;</span>
+<span class="s">                &lt;text&gt; &lt;![CDATA[</span>
+<span class="s">                    &lt;font color=&quot;#1A3752&quot;&gt;&lt;strong&gt;$[name]&lt;/strong&gt;&lt;/font&gt;&lt;br /&gt;</span>
+<span class="s">                    &lt;font size=1&gt;Created by $[user] on $[modified]&lt;/font&gt;</span>
+<span class="s">                ]]&gt; &lt;/text&gt;</span>
+<span class="s">            &lt;/BalloonStyle&gt;</span>
+<span class="s">            &lt;LabelStyle&gt;</span>
+<span class="s">                &lt;color&gt;ffffffff&lt;/color&gt;</span>
+<span class="s">                &lt;scale&gt;0.8&lt;/scale&gt;</span>
+<span class="s">            &lt;/LabelStyle&gt;</span>
+<span class="s">        &lt;/Style&gt;</span>
+
+<span class="s">        &lt;Style id=&quot;</span><span class="si">%s</span><span class="s">-green&quot;&gt;</span>
+<span class="s">            &lt;PolyStyle&gt;</span>
+<span class="s">                &lt;color&gt;ff0000c0&lt;/color&gt;</span>
+<span class="s">            &lt;/PolyStyle&gt;</span>
+<span class="s">        &lt;/Style&gt;</span>
+
+<span class="s">        &lt;Style id=&quot;</span><span class="si">%s</span><span class="s">-blue&quot;&gt;</span>
+<span class="s">            &lt;PolyStyle&gt;</span>
+<span class="s">                &lt;color&gt;778B1A55&lt;/color&gt;</span>
+<span class="s">            &lt;/PolyStyle&gt;</span>
+<span class="s">        &lt;/Style&gt;</span>
+<span class="s">        &quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_uid</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_uid</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_uid</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>There is also the special case where the Feature may need to be represented by a full KML Document rather than a fragment containing KML Features. For example, the representation of a <cite>User Uploaded KML</cite> would be the contents of the unaltered file itself; we&#8217;d want use a network link to point to the full KML Document. To acheive this, we can specify an optional <cite>kml_full</cite> property which should return a complete, valid KML Document:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">kml_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kml_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">f</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;&quot;&lt;kml xmlns=&quot;http://www.opengis.net/kml/2.2&quot;&gt;&lt;Document&gt;&lt;!-- empty --&gt;&lt;/Document&gt;&lt;/kml&gt;&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>By default, Feature Collections are represented by network links for performance reasons. (Reduced file size, faster loading.)</p>
+</div>
+<div class="section" id="kml-templates">
+<h2>KML Templates<a class="headerlink" href="#kml-templates" title="Permalink to this headline">¶</a></h2>
+<p>The layout of the KML document is configured using the django templating system. You can override some or all of these templates by placing your customized versions in a TEMPLATE_DIR that is loaded before the kmlapp/templates directory (See <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/templates/api/#loading-templates">Loading Templates</a> in the django docs).</p>
+<blockquote>
+<div><ul class="simple">
+<li><cite>kmlapp/base.kml</cite> configures the overall top-level structure of the KML document.</li>
+<li><cite>kmlapp/public.kml</cite> is a minor extension of the base.kml for unauthenticated users.</li>
+<li><cite>kmlapp/shared.kml</cite> configures the structure of the shared features; organized by group and user.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.kmlapp</cite>: KML Representation of Features and Collections</a><ul>
+<li><a class="reference internal" href="#customizing-the-kml-representation">Customizing the KML Representation</a></li>
+<li><a class="reference internal" href="#kml-templates">KML Templates</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="help.html"
+                        title="previous chapter"><cite>madrona.help</cite>: End user help system</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="layers.html"
+                        title="next chapter"><cite>madrona.layers</cite>: KML Data Layers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/kmlapp.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="layers.html" title="madrona.layers: KML Data Layers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="help.html" title="madrona.help: End user help system"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Workspace Documents &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Export Options" href="export.html" />
+    <link rel="prev" title="Asynchronous Task Queue" href="async_task_queue.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="export.html" title="Export Options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="async_task_queue.html" title="Asynchronous Task Queue"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="workspace-documents">
+<h1>Workspace Documents<a class="headerlink" href="#workspace-documents" title="Permalink to this headline">¶</a></h1>
+<p>Workspace documents are a json data structure passed to the client along with
+KML files to specify how feature classes within that file can be interacted
+with. Primarily, this interaction takes the form of options available in the
+editing toolbar. Workspaces indicate for each feature class:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Alternative representations available within the Export menu, such as kml
+or shapefile downloads.</li>
+<li>Related files that can be downloaded, such as spreadsheet or pdf reports.</li>
+<li>Editing actions that can be performed</li>
+<li>How to create, update, and delete instances</li>
+<li>How to view feature attributes in the sidebar</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Workspace documents are automatically created and embedded within kml
+files by the features app. For project implementations, it should be
+unnecessary to modify these files directly. This documentation is intended
+for Madrona developers who may need to add generic features to the core
+framework.</p>
+</div>
+<div class="section" id="example-workspace-document">
+<h2>example workspace document<a class="headerlink" href="#example-workspace-document" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;feature-classes&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Marine Protected Area&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;features_mpa&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;link-relations&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;self&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/mpa/{id}/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;create&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/mpa/form/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;related&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Habitat Spreadsheet&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/mpa/links/habitat-spreadsheet/{id+}/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;select&quot;</span><span class="o">:</span> <span class="s2">&quot;single&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rel&quot;</span><span class="o">:</span> <span class="s2">&quot;related&quot;</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;update&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/mpa/{id}/form/&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Renewable Energy Site&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;features_renewableenergysite&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;link-relations&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;self&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/renewableenergysite/{id}/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;create&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/renewableenergysite/form/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;related&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Viewshed Map&quot;</span>
+            <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/renewableenergysite/links/viewshed-map/{id+}/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;select&quot;</span><span class="o">:</span> <span class="s2">&quot;single&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rel&quot;</span><span class="o">:</span> <span class="s2">&quot;related&quot;</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;update&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/renewableenergysite/{id}/form/&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Folder&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;features_folder&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;collection&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;add-uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/collections/add/{id+}/&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;remove-uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/collections/remove/{id+}/&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;valid-children&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="s2">&quot;features_folder&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;features_mpa&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;features_renewableenergysite&quot;</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;link-relations&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;edit&quot;</span><span class="o">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Delete folder and contents&quot;</span>
+            <span class="s2">&quot;method&quot;</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/folder/links/delete-folder-and-contents/{id+}/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;select&quot;</span><span class="o">:</span> <span class="s2">&quot;single multiple&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rel&quot;</span><span class="o">:</span> <span class="s2">&quot;edit&quot;</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;self&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/folder/{id}/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;create&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/folder/form/&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;update&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/folder/{id}/form/&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+  <span class="s2">&quot;generic-links&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Copy&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/generic-links/links/copy/{id+}/&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;rel&quot;</span><span class="o">:</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;method&quot;</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;select&quot;</span><span class="o">:</span> <span class="s2">&quot;multiple single&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;models&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;features_folder&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features_mpa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features_renewableenergysite&quot;</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Export KML&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;uri-template&quot;</span><span class="o">:</span> <span class="s2">&quot;/features/generic-links/links/export-kml/{id+}/&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;select&quot;</span><span class="o">:</span> <span class="s2">&quot;multiple single&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;rel&quot;</span><span class="o">:</span> <span class="s2">&quot;alternate&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;models&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;features_folder&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features_mpa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features_renewableenergysite&quot;</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="root">
+<h3>Root<a class="headerlink" href="#root" title="Permalink to this headline">¶</a></h3>
+<p>The root of the workspace is a javascript object with two properties,
+<tt class="docutils literal"><span class="pre">generic-links</span></tt> and <tt class="docutils literal"><span class="pre">feature-classes</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="feature-classes">
+<h2>feature-classes<a class="headerlink" href="#feature-classes" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">feature-classes</span></tt> contains an array of objects that represent every feature
+class present in the kml document. Each of these objects describe how the
+feature should be displayed, crud operations can be performed, any related
+downloads or non-standard editing operations supported.</p>
+<div class="section" id="feature-class-objects">
+<h3>feature-class objects<a class="headerlink" href="#feature-class-objects" title="Permalink to this headline">¶</a></h3>
+<p>Each contain the following properties:</p>
+<div class="section" id="title">
+<h4>title<a class="headerlink" href="#title" title="Permalink to this headline">¶</a></h4>
+<p>The title that this feature class should be referred to within the user
+interface. The most prominent use of this property is in the &#8220;Create New&#8221;
+menu.</p>
+</div>
+<div class="section" id="id">
+<h4>id<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h4>
+<p>The unique id for this feature class. Each instance of a feature class has an
+id composed of <tt class="docutils literal"><span class="pre">{class.id}_{instance.pk}</span></tt>. When instances are selected in
+the user-interface, the id of it&#8217;s class can be derived by matching all
+characters preceding the final underscore <tt class="docutils literal"><span class="pre">_</span></tt>.</p>
+</div>
+<div class="section" id="link-relations">
+<h4>link relations<a class="headerlink" href="#link-relations" title="Permalink to this headline">¶</a></h4>
+<p>Contains a dictionary of links keyed by their <tt class="docutils literal"><span class="pre">rel</span></tt> value. Each feature
+class must have single links of <tt class="docutils literal"><span class="pre">rel</span></tt> <tt class="docutils literal"><span class="pre">self</span></tt>, <tt class="docutils literal"><span class="pre">create</span></tt>, and <tt class="docutils literal"><span class="pre">update</span></tt>.
+They can also optionally have an array of links for relations <tt class="docutils literal"><span class="pre">alternate</span></tt>,
+<tt class="docutils literal"><span class="pre">related</span></tt> and <tt class="docutils literal"><span class="pre">edit</span></tt>.</p>
+<p>See the Links description for more info on how links are interpreted.</p>
+</div>
+</div>
+<div class="section" id="generic-links">
+<h3>generic-links<a class="headerlink" href="#generic-links" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">generic-links</span></tt> contains an array of all links that can apply to multiple
+models. See below for a description of how these links are interpreted.</p>
+</div>
+<div class="section" id="links">
+<h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<p>Links describe a path to a service or resource and have properties that
+describe how they should be used by the client.</p>
+<div class="section" id="rel">
+<h4>rel<a class="headerlink" href="#rel" title="Permalink to this headline">¶</a></h4>
+<p>The link rel attribute is modeled after
+<a class="reference external" href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">link relations</a>
+in html. Valid options are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">self</span></tt> link supports GET requests to fetch feature attributes, and
+DELETE requests to well, delete it.</li>
+<li><tt class="docutils literal"><span class="pre">create</span></tt> is the path to a form that can be used to create new features.</li>
+<li><tt class="docutils literal"><span class="pre">update</span></tt> is the link to a form for editing an instance.</li>
+<li><tt class="docutils literal"><span class="pre">alternate</span></tt> links link to alternative representations of the feature,
+such a kml or shapefile download option that should appear in the <em>Export</em>
+menu.</li>
+<li><tt class="docutils literal"><span class="pre">related</span></tt> is for links to content related to the feature that should
+also appear in the <em>Export</em> menu.</li>
+<li><tt class="docutils literal"><span class="pre">edit</span></tt> links are added to the <em>Edit</em> menu. The value of the method
+property will determine whether a GET request should be sent to the url to
+grab a form, or just to POST directly to the url without user interaction.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h4>title<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Each link that appears in a menu must have a title. This title will be used by
+the user interface to identify it to the user. Doesn&#8217;t need to be specified
+for <tt class="docutils literal"><span class="pre">create</span></tt>, <tt class="docutils literal"><span class="pre">self</span></tt>, or <tt class="docutils literal"><span class="pre">update</span></tt> links.</p>
+</div>
+<div class="section" id="uri-template">
+<h4>uri-template<a class="headerlink" href="#uri-template" title="Permalink to this headline">¶</a></h4>
+<p>Specifies the path to the link. Since these links often must be changed to
+apply to one or more instances of a feature class, templates identify how
+their properties should be added to the path. Currently the only property that
+is supported for templating are feature uids.</p>
+<p>Ideally any templates covered by the
+<a class="reference external" href="http://tools.ietf.org/html/draft-gregorio-uritemplate-04">uri-templates</a>
+specification would work.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The client only supports the forms {id} and {id+} at this time. Lets keep
+that our little secret okay?</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;/features/generic-links/link/copy/{id+}/&quot;</span>
+<span class="c"># applied to two features becomes:</span>
+<span class="s">&quot;/features/generic-links/link/copy/features_mpa_1,features_folder_3/&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="select">
+<h4>select<a class="headerlink" href="#select" title="Permalink to this headline">¶</a></h4>
+<p>Specifies whether this link can be requested for a single selected feature,
+multiple selected features, or 1+ features. Valid values are <tt class="docutils literal"><span class="pre">single</span></tt>,
+<tt class="docutils literal"><span class="pre">multiple</span></tt>, <tt class="docutils literal"><span class="pre">single</span> <span class="pre">multiple</span></tt>, or <tt class="docutils literal"><span class="pre">multiple</span> <span class="pre">single</span></tt>.</p>
+<p>Defaults to <tt class="docutils literal"><span class="pre">single</span></tt>.</p>
+</div>
+<div class="section" id="method">
+<h4>method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h4>
+<p>When used in combination with links with a relation of <tt class="docutils literal"><span class="pre">edit</span></tt>, specifies
+whether to GET a form from this link to present to the user for editing, or to
+just POST to the link.</p>
+<p>Acceptable values are <tt class="docutils literal"><span class="pre">GET</span></tt> and <tt class="docutils literal"><span class="pre">POST</span></tt>. Defaults to <tt class="docutils literal"><span class="pre">GET</span></tt>.</p>
+</div>
+<div class="section" id="confirm">
+<h4>confirm<a class="headerlink" href="#confirm" title="Permalink to this headline">¶</a></h4>
+<p>When used in combination with rel=edit and method=POST, specifies a
+confirmation message to display before performing the action.</p>
+</div>
+<div class="section" id="models">
+<h4>models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h4>
+<p>For <tt class="docutils literal"><span class="pre">generic-links</span></tt>, defines what feature classes can be accepted.</p>
+</div>
+<div class="section" id="collection">
+<h4>collection<a class="headerlink" href="#collection" title="Permalink to this headline">¶</a></h4>
+<p>Indicates that this is a FeatureCollection subclass, and can have other
+Feature and/or FeatureCollection instances nested under it. This is an object
+containing the following properties:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">valid-children</span></tt>: a list of Feature classes that can be nested within
+it.</li>
+<li><tt class="docutils literal"><span class="pre">add-uri-template</span></tt>: uri-template to send a POST request to when adding
+features to this collection.</li>
+<li><tt class="docutils literal"><span class="pre">remove-uri-template</span></tt>: for removing features.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Workspace Documents</a><ul>
+<li><a class="reference internal" href="#example-workspace-document">example workspace document</a><ul>
+<li><a class="reference internal" href="#root">Root</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#feature-classes">feature-classes</a><ul>
+<li><a class="reference internal" href="#feature-class-objects">feature-class objects</a><ul>
+<li><a class="reference internal" href="#title">title</a></li>
+<li><a class="reference internal" href="#id">id</a></li>
+<li><a class="reference internal" href="#link-relations">link relations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generic-links">generic-links</a></li>
+<li><a class="reference internal" href="#links">Links</a><ul>
+<li><a class="reference internal" href="#rel">rel</a></li>
+<li><a class="reference internal" href="#id2">title</a></li>
+<li><a class="reference internal" href="#uri-template">uri-template</a></li>
+<li><a class="reference internal" href="#select">select</a></li>
+<li><a class="reference internal" href="#method">method</a></li>
+<li><a class="reference internal" href="#confirm">confirm</a></li>
+<li><a class="reference internal" href="#models">models</a></li>
+<li><a class="reference internal" href="#collection">collection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="async_task_queue.html"
+                        title="previous chapter">Asynchronous Task Queue</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="export.html"
+                        title="next chapter">Export Options</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/workspace_specification.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="export.html" title="Export Options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="async_task_queue.html" title="Asynchronous Task Queue"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

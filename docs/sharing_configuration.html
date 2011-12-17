@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sharing Features and Collections &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Managing Users in Madrona" href="managing_users.html" />
+    <link rel="prev" title="Deployment" href="deployment.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="managing_users.html" title="Managing Users in Madrona"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="deployment.html" title="Deployment"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sharing-features-and-collections">
+<span id="sharing-configuration"></span><h1>Sharing Features and Collections<a class="headerlink" href="#sharing-features-and-collections" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Users can create Features and FeatureCollections, perform analyses on them, etc. But the ability for the user to share these ideas to various groups is where the true collaborative value lies.</p>
+<p>The most common use case would be: A user creates a Feature and wants others to comment on it. This user is a member of several groups. They can choose to share the Feature (i.e. to make the feature available read-only) to any one of the groups which has sharing permissions. If a user decides to organize their Features into FeatureCollections, those collections can be shared as well.</p>
+<dl class="docutils">
+<dt>The rules are as follows:</dt>
+<dd><ul class="first last simple">
+<li>Any user can create any type of Feature or FeatureCollection.</li>
+<li>All Features and FeatureCollections are shareable.</li>
+<li>If a user belongs to a group or groups with sharing permissions, they can share any of their features to those groups.</li>
+<li>If a user organizes their features into collections and shares those collections, all features in the heirarchy are implictly shared.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="out-of-the-box-setup">
+<h2>Out-of-the-box Setup<a class="headerlink" href="#out-of-the-box-setup" title="Permalink to this headline">¶</a></h2>
+<p>By default, new users are not assigned to any groups nor are groups assigned sharing permissions. Adding a user to a group is currently not automated and requests for group memebership must be made directly to the site administrator.</p>
+<p>Groups can be given sharing permissions through the admin interface</p>
+<blockquote>
+<div><ul class="simple">
+<li>Navigate to Home › Auth › Groups</li>
+<li>Select the Group</li>
+<li>Add the &#8216;auth | group | Can Share Features&#8217; permission</li>
+</ul>
+</div></blockquote>
+<p>Or through python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.common.utils</span> <span class="kn">import</span> <span class="n">enable_sharing</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">Group</span>
+
+<span class="n">mygroup</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;My Group&quot;</span><span class="p">)</span>
+<span class="n">enable_sharing</span><span class="p">(</span><span class="n">mygroup</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="collections">
+<h2>Collections<a class="headerlink" href="#collections" title="Permalink to this headline">¶</a></h2>
+<p>Consider the following heirarchy of Features/FeatureCollections:</p>
+<div class="highlight-python"><pre>folder1
+ |-array1
+   |-pipeline
+   |-mpa1</pre>
+</div>
+<p>If a user were to share folder1, array1, pipeline and mpa1 would all implicitly be shared as well. Even if mpa1 were explicitly unshared, it would still be viewable by group members by virtue of it&#8217;s belonging to array1 (which in turn belongs to folder1 which is shared).</p>
+</div>
+<div class="section" id="sharing-ui">
+<h2>Sharing UI<a class="headerlink" href="#sharing-ui" title="Permalink to this headline">¶</a></h2>
+<p>The sharing app provides a form and views for editing an object&#8217;s sharing status. The url for a feature can be determined by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">url</span> <span class="o">=</span> <span class="n">Folder</span><span class="o">.</span><span class="n">get_options</span><span class="p">()</span><span class="o">.</span><span class="n">get_share_form</span><span class="p">(</span><span class="n">folder1</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+<span class="c"># /features/folder/1/share/</span>
+</pre></div>
+</div>
+<p>A GET request to this URL will give access to this form (assuming that a user with the appropriate permissions is logged in), while a POST request to the same URL with the sharing_groups parameter specified will attempt to share the object with the specified groups. Appropriate error messages and status response codes are used and will hopefully be helpful and smooth things over in the case of errors.</p>
+</div>
+<div class="section" id="using-the-sharing-functionality">
+<h2>Using the sharing functionality<a class="headerlink" href="#using-the-sharing-functionality" title="Permalink to this headline">¶</a></h2>
+<p>This section describes the various components of the madrona API related to sharing.</p>
+<p>First, there is the object manager which allows you to quickly obtain a queryset of all objects that have been shared with a user:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MyFeature</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">MyFeature</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">shared_with_user</span><span class="p">(</span><span class="n">user1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The groups_users_sharing_with() utility function returns the groups and users which are currently sharing feature instances with a given user:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.features</span> <span class="kn">import</span> <span class="n">groups_users_sharing_with</span>
+<span class="n">sharing_with_me</span> <span class="o">=</span> <span class="n">groups_users_sharing_with</span><span class="p">(</span><span class="n">user1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To find out which groups a user can potentially share with, use the user_sharing_groups() utility function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.features</span> <span class="kn">import</span> <span class="n">user_sharing_groups</span>
+<span class="n">my_sharing_groups</span> <span class="o">=</span> <span class="n">user_sharing_groups</span><span class="p">(</span><span class="n">user1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A common use case will be to determine if an object is readable by a user. In other words, is the object owned by OR shared with a given user. You can use the is_viewable() Feature method which returns two items: A boolean indicating if the user has read access and an appropriate HttpResponse object. It&#8217;s up to the implementation whether or not you return the HttpResponse or not but the common scenario would be to check if the object were readable by the user and, if not, return the HttpResponse. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">some_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">feature1</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">MyFeature</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+
+    <span class="n">viewable</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="n">feature1</span><span class="o">.</span><span class="n">is_viewable</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">viewable</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">do_stuff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In order to control sharing of an object with a given group using python code, you can use the share_with Feature method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">feature1</span> <span class="o">=</span> <span class="n">MyFeature</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Feature 1&quot;</span><span class="p">)</span>
+<span class="c"># By default this overrides all previous sharing groups</span>
+<span class="n">feature1</span><span class="o">.</span><span class="n">share_with</span><span class="p">(</span><span class="n">mygroup</span><span class="p">)</span>
+<span class="c"># You can choose to append it</span>
+<span class="n">feature1</span><span class="o">.</span><span class="n">share_with</span><span class="p">(</span><span class="n">mygroup</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c"># You can also pass a list of groups</span>
+<span class="n">feature1</span><span class="o">.</span><span class="n">share_with</span><span class="p">([</span><span class="n">group1</span><span class="p">,</span><span class="n">group2</span><span class="p">])</span>
+<span class="c"># To remove all sharing groups, pass None</span>
+<span class="n">feature1</span><span class="o">.</span><span class="n">share_with</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="special-cases">
+<h2>Special Cases<a class="headerlink" href="#special-cases" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>The sharing app provides two groups which are handled differently in that the sharing is one-way:</dt>
+<dd><ul class="first last simple">
+<li>Share with Public : Allows selected staff members the ability to make an object available to the public. This means everyone, including non-authenicated users, can view it but only the short list of staff members can actually make it available.</li>
+<li>Share with Staff : Allows selected users the ability to share objects with staff. Only staff can view the shared objects but any user in this type of group can submit something.</li>
+</ul>
+</dd>
+<dt>The groups which belong to these cases are defined by a list of group names in the settings by:</dt>
+<dd><ul class="first last simple">
+<li>settings.SHARING_TO_PUBLIC_GROUPS</li>
+<li>settings.SHARING_TO_STAFF_GROUPS</li>
+</ul>
+</dd>
+</dl>
+<p>Just like any other sharing group, these groups must exist and have the appropriate permissions. The only difference with normal bi-directional sharing is that the viewing of shared object is more tightly controlled (in the case of sharing to staff) or the viewing is made available to anyone (in the case of sharing to public). Other than that, they are shared to the specified groups in the exact same way.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sharing Features and Collections</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#out-of-the-box-setup">Out-of-the-box Setup</a></li>
+<li><a class="reference internal" href="#collections">Collections</a></li>
+<li><a class="reference internal" href="#sharing-ui">Sharing UI</a></li>
+<li><a class="reference internal" href="#using-the-sharing-functionality">Using the sharing functionality</a></li>
+<li><a class="reference internal" href="#special-cases">Special Cases</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deployment.html"
+                        title="previous chapter">Deployment</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="managing_users.html"
+                        title="next chapter">Managing Users in Madrona</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/sharing_configuration.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="managing_users.html" title="Managing Users in Madrona"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="deployment.html" title="Deployment"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

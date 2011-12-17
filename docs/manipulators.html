@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.manipulators: Manipulators &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.news: Display news items, announcements, etc" href="news.html" />
+    <link rel="prev" title="madrona.loadshp: Load Shapefile (loadshp) App" href="loadshp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="news.html" title="madrona.news: Display news items, announcements, etc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp: Load Shapefile (loadshp) App"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-manipulators-manipulators">
+<span id="manipulators"></span><h1><cite>madrona.manipulators</cite>: Manipulators<a class="headerlink" href="#madrona-manipulators-manipulators" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-a-manipulator">
+<h2>What is a Manipulator?<a class="headerlink" href="#what-is-a-manipulator" title="Permalink to this headline">¶</a></h2>
+<p>There are many cases in which a user-defined geometry, whether MPA or other,
+needs to be modified by an automated process. This process can either be
+initiated by the user as a tool or context action, or as part of the initial
+creation of a new object. Typically, the user is provided an opportunity to review
+any changes made to their geometry and given the chance to accept or reject those
+changes or to modify the parameters that went into the manipulations.</p>
+<p>Use cases might include clipping an MPA to the study region or to a specified
+graticule.  Both of these manipulations are already included in Madrona and
+can easily be accessed by additional applications.  Instructions for
+accessing such built-in manipulators follow, as do instructions for adding your
+own manipulators.</p>
+</div>
+<div class="section" id="specifying-or-changing-the-manipulators">
+<h2>Specifying or Changing the Manipulators<a class="headerlink" href="#specifying-or-changing-the-manipulators" title="Permalink to this headline">¶</a></h2>
+<p>Any number of manipulative actions can be assigned to an MPA.</p>
+<p>Typically, when a shape is drawn, a series of manipulations is executed on that
+shape.  Which manipulators are executed, and the order in which those manipulators
+are executed are determined by an assignment in the Options class for a given model.
+To specify one or more mandatory manipultors, provide a list of strings containing
+python paths to the desired manipulator classes (strings are used to avoid any
+potential circular imports).  Within the Model, the Options class should contain
+a line similar to the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="s">&#39;madrona.manipulators.maniplators.ClipToStudyRegionManipulator&#39;</span> <span class="p">,</span>
+       <span class="s">&#39;madrona.manipulators.maniplators.EastWestManipulator&#39;</span> <span class="p">,</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>In the above example from the <tt class="docutils literal"><span class="pre">simple_app/models.py</span></tt> file, we can see that 2 manipulators
+are listed for the Mpa model, <tt class="docutils literal"><span class="pre">ClipToStudyRegionManipulator</span></tt>, and <tt class="docutils literal"><span class="pre">EastWestManipulator</span></tt>.</p>
+<p>The first of these is a predefined manipulator, the second is more of a sample
+manipulator that is provided within the simple_app application to demonstrate how you
+might create your own manipulators (see the next section for more details on creating your own
+manipulators).  These manipulators will be executed in the same order given in the
+<tt class="docutils literal"><span class="pre">manipulators</span></tt> assignment statement.</p>
+<p>To summarize, both built-in and user-defined manipulators can be designated to a model by assigning a list of manipulators,
+in the desired sequence, to <tt class="docutils literal"><span class="pre">Options.manipulators</span></tt> within the model that contains the shape to be manipulated.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;yourproject.yourapp.YourManipulator1&#39;</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-new-manipulator">
+<h2>Creating a New Manipulator<a class="headerlink" href="#creating-a-new-manipulator" title="Permalink to this headline">¶</a></h2>
+<p>The basic manipulators provided by Lingcod may not provide all the necessary
+manipulations for your needs.  Creating your own manipulators is somewhat
+straightforward and we have provided a sample manipulator, <tt class="docutils literal"><span class="pre">EastWestManipulator</span></tt>,
+in <tt class="docutils literal"><span class="pre">example_projects/simple/simple_app/manipulators.py</span></tt> to get you started.</p>
+<p>To create your own manipulator, you&#8217;ll want to add a <tt class="docutils literal"><span class="pre">manipulators.py</span></tt> file to your base
+application (server-side).  This file will house your newly defined manipulators, each accompanied by a
+<tt class="docutils literal"><span class="pre">manipulatorsDict</span></tt> dictionary entry that serves to notify the manipulators app of your manipulators.</p>
+<p>Things to keep in mind as you create your own manipulators:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Your manipulator should inherit from <tt class="docutils literal"><span class="pre">BaseManipulator</span></tt></dt>
+<dd><ul class="first last simple">
+<li>this inheritance will provide various helper functions, templates, and Exceptions, as well
+as enabling your manipulator to work seemlessly within the Lingcod application</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python"><pre>class YourManipulator(BaseManipulator):</pre>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>Your manipulator constructor should expect at least one parameter, which will be the target shape geometry in
+the client-side projection/srid (this srid value is defined by settings.GEOMETRY_CLIENT_SRID).</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_shape</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">target_shape</span> <span class="o">=</span> <span class="n">target_shape</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul>
+<li><p class="first">The inherited <tt class="docutils literal"><span class="pre">BaseManipulator</span></tt> class provides the following commonly used Exceptions, each of which
+triggers a relevant template when raised</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">InternalException</span></tt> can be raised when an unexpected error out of your control occurs,
+such as when code that is not yours raises an exception.</li>
+<li><tt class="docutils literal"><span class="pre">InvalidGeometryException</span></tt> can be raised when the user-drawn geometry is not a
+valid geometry.  Such situations are automatically handled for you when you use
+the <tt class="docutils literal"><span class="pre">BaseManipulator.target_to_valid_geom()</span></tt> function to generate a geometry from
+the target shape parameter.</li>
+<li><tt class="docutils literal"><span class="pre">HaltManipulations</span></tt> is typically raised when your function recognizes that it is no
+longer necessary for additional manipulations to take place (such as when the
+clipped shape is reduced to an empty geometry).</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">BaseManipulator</span></tt> also provides the following inherited functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">target_to_valid_geom(self,</span> <span class="pre">shape)</span></tt>, is used to build a valid geometry from the target
+shape.</li>
+<li><tt class="docutils literal"><span class="pre">do_template(self,</span> <span class="pre">key,</span> <span class="pre">internal_message='',</span> <span class="pre">extra_context{})</span></tt>, which uses as context,
+the <tt class="docutils literal"><span class="pre">internal_message</span></tt> and any <tt class="docutils literal"><span class="pre">extra_context</span></tt>, in rendering a particular template
+(identified by <tt class="docutils literal"><span class="pre">'key'</span></tt>) in <tt class="docutils literal"><span class="pre">Options.html_templates</span></tt> (inherited or not).  The result of
+this function can be used as the second argument to the <tt class="docutils literal"><span class="pre">result()</span></tt> function which
+we&#8217;ll describe next...</li>
+<li><tt class="docutils literal"><span class="pre">result(self,</span> <span class="pre">clipped_shape,</span> <span class="pre">html=&quot;&quot;,</span> <span class="pre">success=&quot;1&quot;)</span></tt>, should be used as the return
+value for your manipulator&#8217;s <tt class="docutils literal"><span class="pre">manipulate()</span></tt> function (talked about next).
+This function ensures that the required keys are provided, and suitable default values are given.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Your manipulator should provide a definition for a <tt class="docutils literal"><span class="pre">manipulate()</span></tt> function (overriding the empty
+definition in <tt class="docutils literal"><span class="pre">BaseManipulator</span></tt>).</p>
+<blockquote>
+<div><ul class="simple">
+<li>This is the function that will be called by the manipulators app to execute your manipulator.</li>
+<li>This function should return a call to self.result() (inherited from BaseManipulator) with required parameter
+<tt class="docutils literal"><span class="pre">'clipped_shape'</span></tt>, a geometry in the projection/srid of the client (defined by GEOMETRY_CLIENT_SRID in settings).
+This function also allows two optional parameters, <tt class="docutils literal"><span class="pre">'html'</span></tt> and <tt class="docutils literal"><span class="pre">'success'</span></tt>.  The former being a template
+generally used to explain the manipulative action to the client, and the latter an indication of success
+(either &#8216;1&#8217; or &#8216;0&#8217;).</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">manipulate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">target_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_to_valid_geom</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_shape</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="c">#target_shape is manipulated in some way</span>
+    <span class="o">...</span>
+    <span class="n">status_html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_template</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">manipulated_shape</span><span class="p">,</span> <span class="n">status_html</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">BaseManipulator</span></tt> provides access to some error-related templates in <tt class="docutils literal"><span class="pre">Options.html_templates</span></tt>,
+and defining such a dictionary in your own manipulators Options class will enable your code to use the
+inherited <tt class="docutils literal"><span class="pre">do_template()</span></tt> function described above.</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;YourManipulatorClass&#39;</span>
+    <span class="n">html_templates</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;1&#39;</span><span class="p">:</span><span class="s">&#39;manipulators/template1.html&#39;</span><span class="p">,</span>
+        <span class="s">&#39;2&#39;</span><span class="p">:</span><span class="s">&#39;manipulators/template2.html&#39;</span><span class="p">,</span>
+        <span class="s">&#39;3&#39;</span><span class="p">:</span><span class="s">&#39;manipulators/template3.html&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>The manipulators.Options class can optionally specify a <tt class="docutils literal"><span class="pre">display_name</span></tt> and <tt class="docutils literal"><span class="pre">description</span></tt> which
+will provide a nicer UI when using user-specified manipulators. If they are not specified, the <tt class="docutils literal"><span class="pre">name</span></tt>
+will be shown verbatim in the html form.</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;YourManipulatorClass&#39;</span>
+    <span class="n">display_name</span> <span class="o">=</span> <span class="s">&#39;Your Manipulator Class&#39;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s">&#39;Check it out. This is my brand new manipulator.&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">manipulatorsDict</span><span class="p">[</span><span class="n">YourManipulator</span><span class="o">.</span><span class="n">Options</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">YourManipulator</span>
+</pre></div>
+</div>
+<p>We invite you to use the manipulator provided by simple_app (or any of our manipulators defined in
+<tt class="docutils literal"><span class="pre">madrona/manipulators</span></tt>) as a template for generating your own manipulators.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In addition to <tt class="docutils literal"><span class="pre">BaseManipulator</span></tt>, we also provide a <tt class="docutils literal"><span class="pre">ClipToShapeManipulator</span></tt> and a <tt class="docutils literal"><span class="pre">DifferenceFromShapeManipulator</span></tt> that can be subclassed to simplify your own manipulator.</p>
+<p class="last">Both of these classes inherit from <tt class="docutils literal"><span class="pre">BaseManipulator</span></tt> while also providing a ready-made <tt class="docutils literal"><span class="pre">manipulate()</span></tt> method that will take the respective interesection of or difference from any two shapes.</p>
+</div>
+</div>
+<div class="section" id="optional-manipulators">
+<h2>Optional Manipulators<a class="headerlink" href="#optional-manipulators" title="Permalink to this headline">¶</a></h2>
+<p>There may be cases where certain manipulators should be optional and user-selectable depending on the purpose of their MPA.
+In this case we can specify <cite>optional_manipulators</cite> in the MPA model Options.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;madrona.manipulators.manipulators.ClipToStudyRegionManipulator&#39;</span><span class="p">,</span> <span class="p">]</span>
+    <span class="n">optional_manipulators</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;madrona.manipulators.manipulators.EastWestManipulator&#39;</span><span class="p">,</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>On the user-interface side, when a user creates or edits a shape, there will be a form with checkboxes allowing them to select from these optional manipulators.</p>
+<p>On the database side, the <cite>active manipulators</cite> that are applied to a given MPA are stored as a comma-separated string in the MPA table.
+When and if the geometry needs to be saved again, the previously selected manipulators will be applied.
+The required manipulators will always be applied regardless of the content of the MPA.manipulators field.
+In other words, the MPA.manipulators field serves only to trigger the application of optional manipulators.</p>
+<p>If there are no required manipulators, you must still provide an empty list for Options.manipulators</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">optional_manipulators</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="s">&#39;madrona.manipulators.maniplators.ClipToStudyRegionManipulator&#39;</span> <span class="p">,</span>
+       <span class="s">&#39;madrona.manipulators.maniplators.EastWestManipulator&#39;</span> <span class="p">,</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>If the user doesn&#8217;t select any other optional manipulators and there are none required, a special case is triggered. We can&#8217;t allow any arbitrary input so the shape needs to be checked as a valid geometry at the very least. For this case, the <cite>NullManipulator</cite> is triggered which does nothing except ensure that the geometry is clean. Note that the NullManipulator should <em>not</em> appear in either your manipulators or optional_manipulators lists.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>There are several steps that a madrona-based project must take in order to ensure that optional manipulators function correctly.</p>
+<p class="last">First, make sure that the MPA superclass is migrated to reflect the MPA schema change.
+Secondly, make sure to run manage.py install_media
+Third, the superclass of MPAForm must include &#8216;manipulators&#8217; in the fields list.
+Lastly, the map.html template must include the manipulators div as specified in the common/map.html template.</p>
+</div>
+</div>
+<div class="section" id="manipulator-models">
+<h2>Manipulator Models<a class="headerlink" href="#manipulator-models" title="Permalink to this headline">¶</a></h2>
+<p>You may want to store a pre-defined shape in the database that will be used by your manipulator.</p>
+<p>For this purpose we provide an abstract model, <tt class="docutils literal"><span class="pre">BaseManipulatorGeometry</span></tt>, that can be used to simplify your manipulator model building.</p>
+<p>There are also two management commands that can be used to load a geometry from a shapefile into the database provided certain fields and methods are present in the model (all of which are provided by <tt class="docutils literal"><span class="pre">BaseManipulatorGeometry</span></tt>).</p>
+<p>First, create your own manipulator model such as the one below (be sure to inherit from <tt class="docutils literal"><span class="pre">BaseManipulatorGeometry</span></tt>, as well as provide <tt class="docutils literal"><span class="pre">name</span></tt> and <tt class="docutils literal"><span class="pre">geometry</span></tt> fields):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyClippingLayer</span><span class="p">(</span><span class="n">BaseManipulatorGeometry</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">verbose_name</span><span class="o">=</span><span class="s">&quot;My Clipping Layer Name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">MultiPolygonField</span><span class="p">(</span><span class="n">srid</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">GEOMETRY_DB_SRID</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s">&quot;My Clipping Layer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;MyClippingLayer data, created: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">creation_date</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Second, use <tt class="docutils literal"><span class="pre">syncdb</span></tt> or <tt class="docutils literal"><span class="pre">migrate</span></tt> to generate the associated database table.</p>
+<p>Finally, load your own geometry layer with the following management commands:</p>
+<div class="highlight-python"><pre>manage.py create_manipulator_geom &lt;path to shapefile&gt;/my_clipping_region.shp &lt;module name&gt;.models.MyClippingLayer
+manage.py change_manipulator_geom 1 MyClippingLayer</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.manipulators</cite>: Manipulators</a><ul>
+<li><a class="reference internal" href="#what-is-a-manipulator">What is a Manipulator?</a></li>
+<li><a class="reference internal" href="#specifying-or-changing-the-manipulators">Specifying or Changing the Manipulators</a></li>
+<li><a class="reference internal" href="#creating-a-new-manipulator">Creating a New Manipulator</a></li>
+<li><a class="reference internal" href="#optional-manipulators">Optional Manipulators</a></li>
+<li><a class="reference internal" href="#manipulator-models">Manipulator Models</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="loadshp.html"
+                        title="previous chapter"><cite>madrona.loadshp</cite>: Load Shapefile (loadshp) App</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="news.html"
+                        title="next chapter"><cite>madrona.news</cite>: Display news items, announcements, etc</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/manipulators.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="news.html" title="madrona.news: Display news items, announcements, etc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp: Load Shapefile (loadshp) App"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

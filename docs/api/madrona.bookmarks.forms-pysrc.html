@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.bookmarks.forms</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.bookmarks-module.html">Package&nbsp;bookmarks</a> ::
+        Module&nbsp;forms
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.bookmarks.forms-module.html">Module madrona.bookmarks.forms</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-0', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package madrona.features=madrona.features-module.html"><a title="madrona.features" class="py-name" href="#" onclick="return doclink('link-1', 'features', 'link-1');">features</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module madrona.analysistools.forms=madrona.analysistools.forms-module.html,Module madrona.bookmarks.forms=madrona.bookmarks.forms-module.html,Module madrona.common.forms=madrona.common.forms-module.html,Module madrona.common.registration_backend.forms=madrona.common.registration_backend.forms-module.html,Module madrona.features.forms=madrona.features.forms-module.html,Module madrona.intersection.forms=madrona.intersection.forms-module.html,Module madrona.loadshp.forms=madrona.loadshp.forms-module.html,Module madrona.manipulators.forms=madrona.manipulators.forms-module.html,Module madrona.openid.forms=madrona.openid.forms-module.html,Module madrona.shapes.forms=madrona.shapes.forms-module.html,Module madrona.user_profile.forms=madrona.user_profile.forms-module.html"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-2', 'forms', 'link-2');">forms</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Class madrona.features.forms.FeatureForm=madrona.features.forms.FeatureForm-class.html"><a title="madrona.features.forms.FeatureForm" class="py-name" href="#" onclick="return doclink('link-3', 'FeatureForm', 'link-3');">FeatureForm</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-4" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-4', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Package madrona.bookmarks=madrona.bookmarks-module.html"><a title="madrona.bookmarks" class="py-name" href="#" onclick="return doclink('link-5', 'bookmarks', 'link-5');">bookmarks</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bioeconomic_model.models
+madrona.bioregions.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.data_distributor.models
+madrona.data_manager.models
+madrona.depth_range.models
+madrona.features.models
+madrona.geographic_report.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.intersection.models
+madrona.kmlapp.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.pg_spacing.models
+madrona.raster_stats.models
+madrona.replication.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.spacing.models
+madrona.staticmap.models
+madrona.straightline_spacing.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-6', 'models', 'link-6');">models</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Variable madrona.bookmarks.models.Bookmark=madrona.bookmarks.models-module.html#Bookmark"><a title="madrona.bookmarks.models.Bookmark" class="py-name" href="#" onclick="return doclink('link-7', 'Bookmark', 'link-7');">Bookmark</a></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-8', 'forms', 'link-2');">forms</a></tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="BookmarkForm"></a><div id="BookmarkForm-def"><a name="L5"></a><tt class="py-lineno"> 5</tt> <a class="py-toggle" href="#" id="BookmarkForm-toggle" onclick="return toggle('BookmarkForm');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.bookmarks.forms.BookmarkForm-class.html">BookmarkForm</a><tt class="py-op">(</tt><tt class="py-base-class">FeatureForm</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BookmarkForm-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="BookmarkForm-expanded"><a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.name=madrona.bioeconomic_model.models.Extent-class.html#name,Variable madrona.bioeconomic_model.models.GridAttributes.name=madrona.bioeconomic_model.models.GridAttributes-class.html#name,Variable madrona.bioeconomic_model.models.StudyRegion.name=madrona.bioeconomic_model.models.StudyRegion-class.html#name,Variable madrona.bioregions.models.Bioregion.name=madrona.bioregions.models.Bioregion-class.html#name,Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.data_distributor.models.LoadSetup.name=madrona.data_distributor.models.LoadSetup-class.html#name,Variable madrona.data_distributor.models.PotentialTarget.name=madrona.data_distributor.models.PotentialTarget-class.html#name,Variable madrona.data_distributor.models.PotentialTargetField.name=madrona.data_distributor.models.PotentialTargetField-class.html#name,Variable madrona.data_manager.models.DataLayer.name=madrona.data_manager.models.DataLayer-class.html#name,Variable madrona.data_manager.models.GeneralFile.name=madrona.data_manager.models.GeneralFile-class.html#name,Variable madrona.data_manager.models.ShapefileField.name=madrona.data_manager.models.ShapefileField-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.geographic_report.models.GeographicReport.name=madrona.geographic_report.models.GeographicReport-class.html#name,Variable madrona.intersection.models.CommonFeatureInfo.name=madrona.intersection.models.CommonFeatureInfo-class.html#name,Variable madrona.intersection.models.FeatureMapping.name=madrona.intersection.models.FeatureMapping-class.html#name,Variable madrona.intersection.models.IntersectionFeature.name=madrona.intersection.models.IntersectionFeature-class.html#name,Variable madrona.intersection.models.OrganizationScheme.name=madrona.intersection.models.OrganizationScheme-class.html#name,Variable madrona.intersection.models.Shapefile.name=madrona.intersection.models.Shapefile-class.html#name,Variable madrona.intersection.models.ShapefileField.name=madrona.intersection.models.ShapefileField-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.pg_spacing.models.Land.name=madrona.pg_spacing.models.Land-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.replication.models.ThresholdRule.name=madrona.replication.models.ThresholdRule-class.html#name,Variable madrona.spacing.models.Land.name=madrona.spacing.models.Land-class.html#name,Variable madrona.spacing.models.SpacingPoint.name=madrona.spacing.models.SpacingPoint-class.html#name,Variable madrona.straightline_spacing.models.SpacingPoint.name=madrona.straightline_spacing.models.SpacingPoint-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bioeconomic_model.models.Extent.name
+madrona.bioeconomic_model.models.GridAttributes.name
+madrona.bioeconomic_model.models.StudyRegion.name
+madrona.bioregions.models.Bioregion.name
+madrona.bookmarks.forms.BookmarkForm.name
+madrona.data_distributor.models.LoadSetup.name
+madrona.data_distributor.models.PotentialTarget.name
+madrona.data_distributor.models.PotentialTargetField.name
+madrona.data_manager.models.DataLayer.name
+madrona.data_manager.models.GeneralFile.name
+madrona.data_manager.models.ShapefileField.name
+madrona.features.models.Feature.name
+madrona.geographic_report.models.GeographicReport.name
+madrona.intersection.models.CommonFeatureInfo.name
+madrona.intersection.models.FeatureMapping.name
+madrona.intersection.models.IntersectionFeature.name
+madrona.intersection.models.OrganizationScheme.name
+madrona.intersection.models.Shapefile.name
+madrona.intersection.models.ShapefileField.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.pg_spacing.models.Land.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.replication.models.ThresholdRule.name
+madrona.spacing.models.Land.name
+madrona.spacing.models.SpacingPoint.name
+madrona.straightline_spacing.models.SpacingPoint.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-9', 'name', 'link-9');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-10', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt id="link-11" class="py-name" targets="Variable madrona.geographic_report.models.Annotation.label=madrona.geographic_report.models.Annotation-class.html#label"><a title="madrona.geographic_report.models.Annotation.label" class="py-name" href="#" onclick="return doclink('link-11', 'label', 'link-11');">label</a></tt><tt class="py-op">=</tt><tt class="py-string">'Bookmark Name'</tt><tt class="py-op">)</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line">    <tt id="link-12" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.latitude=madrona.bookmarks.forms.BookmarkForm-class.html#latitude"><a title="madrona.bookmarks.forms.BookmarkForm.latitude" class="py-name" href="#" onclick="return doclink('link-12', 'latitude', 'link-12');">latitude</a></tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-13', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-14" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-14', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.longitude=madrona.bookmarks.forms.BookmarkForm-class.html#longitude"><a title="madrona.bookmarks.forms.BookmarkForm.longitude" class="py-name" href="#" onclick="return doclink('link-15', 'longitude', 'link-15');">longitude</a></tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-16', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-17" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-17', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt id="link-18" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.altitude=madrona.bookmarks.forms.BookmarkForm-class.html#altitude"><a title="madrona.bookmarks.forms.BookmarkForm.altitude" class="py-name" href="#" onclick="return doclink('link-18', 'altitude', 'link-18');">altitude</a></tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-19', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-20" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-20', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.heading=madrona.bookmarks.forms.BookmarkForm-class.html#heading"><a title="madrona.bookmarks.forms.BookmarkForm.heading" class="py-name" href="#" onclick="return doclink('link-21', 'heading', 'link-21');">heading</a></tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-22', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-23" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-23', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt id="link-24" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.tilt=madrona.bookmarks.forms.BookmarkForm-class.html#tilt"><a title="madrona.bookmarks.forms.BookmarkForm.tilt" class="py-name" href="#" onclick="return doclink('link-24', 'tilt', 'link-24');">tilt</a></tt> <tt class="py-op">=</tt> <tt id="link-25" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-25', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-26" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-26', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">    <tt id="link-27" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.roll=madrona.bookmarks.forms.BookmarkForm-class.html#roll"><a title="madrona.bookmarks.forms.BookmarkForm.roll" class="py-name" href="#" onclick="return doclink('link-27', 'roll', 'link-27');">roll</a></tt> <tt class="py-op">=</tt> <tt id="link-28" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-28', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-29" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-29', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt id="link-30" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.altitudeMode=madrona.bookmarks.forms.BookmarkForm-class.html#altitudeMode"><a title="madrona.bookmarks.forms.BookmarkForm.altitudeMode" class="py-name" href="#" onclick="return doclink('link-30', 'altitudeMode', 'link-30');">altitudeMode</a></tt> <tt class="py-op">=</tt> <tt id="link-31" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-31', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-32" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-32', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt id="link-33" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.publicstate=madrona.bookmarks.forms.BookmarkForm-class.html#publicstate"><a title="madrona.bookmarks.forms.BookmarkForm.publicstate" class="py-name" href="#" onclick="return doclink('link-33', 'publicstate', 'link-33');">publicstate</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-34', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-35', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">    <tt id="link-36" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.ip=madrona.bookmarks.forms.BookmarkForm-class.html#ip"><a title="madrona.bookmarks.forms.BookmarkForm.ip" class="py-name" href="#" onclick="return doclink('link-36', 'ip', 'link-36');">ip</a></tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-37', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">CharField</tt><tt class="py-op">(</tt><tt class="py-name">widget</tt><tt class="py-op">=</tt><tt id="link-38" class="py-name"><a title="madrona.analysistools.forms
+madrona.bookmarks.forms
+madrona.common.forms
+madrona.common.registration_backend.forms
+madrona.features.forms
+madrona.intersection.forms
+madrona.loadshp.forms
+madrona.manipulators.forms
+madrona.openid.forms
+madrona.shapes.forms
+madrona.user_profile.forms" class="py-name" href="#" onclick="return doclink('link-38', 'forms', 'link-2');">forms</a></tt><tt class="py-op">.</tt><tt class="py-name">HiddenInput</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">initial</tt><tt class="py-op">=</tt><tt class="py-string">"0.0.0.0"</tt><tt class="py-op">,</tt> <tt class="py-name">required</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="BookmarkForm.Meta"></a><div id="BookmarkForm.Meta-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="BookmarkForm.Meta-toggle" onclick="return toggle('BookmarkForm.Meta');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.bookmarks.forms.BookmarkForm.Meta-class.html">Meta</a><tt class="py-op">(</tt><tt class="py-base-class">FeatureForm</tt><tt class="py-op">.</tt><tt class="py-base-class">Meta</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BookmarkForm.Meta-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="BookmarkForm.Meta-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt id="link-39" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.Meta.model=madrona.bookmarks.forms.BookmarkForm.Meta-class.html#model,Variable madrona.common.admin.GroupMembersInline.model=madrona.common.admin.GroupMembersInline-class.html#model,Variable madrona.data_manager.admin.GeneralFileInline.model=madrona.data_manager.admin.GeneralFileInline-class.html#model,Variable madrona.data_manager.admin.ShapefileFieldInline.model=madrona.data_manager.admin.ShapefileFieldInline-class.html#model,Variable madrona.data_manager.admin.ShapefileInline.model=madrona.data_manager.admin.ShapefileInline-class.html#model,Variable madrona.google-analytics.admin.AnalyticsInline.model=madrona.google-analytics.admin.AnalyticsInline-class.html#model,Variable madrona.google-analytics.admin.SiteAdminGA.model=madrona.google-analytics.admin.SiteAdminGA-class.html#model,Variable madrona.intersection.admin.FeatureMappingInline.model=madrona.intersection.admin.FeatureMappingInline-class.html#model,Variable madrona.intersection.admin.ShapefileFieldInline.model=madrona.intersection.admin.ShapefileFieldInline-class.html#model,Variable madrona.intersection.forms.TestIntersectionForm.Meta.model=madrona.intersection.forms.TestIntersectionForm.Meta-class.html#model,Variable madrona.intersection.forms.TestPolygonIntersectionForm.Meta.model=madrona.intersection.forms.TestPolygonIntersectionForm.Meta-class.html#model,Variable madrona.replication.admin.HabitatThresholdInline.model=madrona.replication.admin.HabitatThresholdInline-class.html#model,Variable madrona.user_profile.forms.UserForm.Meta.model=madrona.user_profile.forms.UserForm.Meta-class.html#model,Variable madrona.user_profile.forms.UserProfileForm.Meta.model=madrona.user_profile.forms.UserProfileForm.Meta-class.html#model"><a title="madrona.bookmarks.forms.BookmarkForm.Meta.model
+madrona.common.admin.GroupMembersInline.model
+madrona.data_manager.admin.GeneralFileInline.model
+madrona.data_manager.admin.ShapefileFieldInline.model
+madrona.data_manager.admin.ShapefileInline.model
+madrona.google-analytics.admin.AnalyticsInline.model
+madrona.google-analytics.admin.SiteAdminGA.model
+madrona.intersection.admin.FeatureMappingInline.model
+madrona.intersection.admin.ShapefileFieldInline.model
+madrona.intersection.forms.TestIntersectionForm.Meta.model
+madrona.intersection.forms.TestPolygonIntersectionForm.Meta.model
+madrona.replication.admin.HabitatThresholdInline.model
+madrona.user_profile.forms.UserForm.Meta.model
+madrona.user_profile.forms.UserProfileForm.Meta.model" class="py-name" href="#" onclick="return doclink('link-39', 'model', 'link-39');">model</a></tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name"><a title="madrona.bookmarks.models.Bookmark" class="py-name" href="#" onclick="return doclink('link-40', 'Bookmark', 'link-7');">Bookmark</a></tt> </tt>
+</div></div><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:23 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

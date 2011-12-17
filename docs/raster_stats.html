@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.raster_stats: Raster Statistics &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.replication" href="replication.html" />
+    <link rel="prev" title="madrona.pg_spacing" href="pg_spacing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="replication.html" title="madrona.replication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pg_spacing.html" title="madrona.pg_spacing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-raster-stats-raster-statistics">
+<span id="raster-stats"></span><h1><cite>madrona.raster_stats</cite>: Raster Statistics<a class="headerlink" href="#madrona-raster-stats-raster-statistics" title="Permalink to this headline">¶</a></h1>
+<p>The <cite>madrona.raster_stats</cite> app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection.</p>
+<p>The app uses an optional caching mechanism so that any geometry/raster combination only needs to be run once.</p>
+<p>The raster_stats app provides a model to register raster datasets, a utility function to quickly calculate stats programatically and a webservice which returns the statistics in json format.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The raster_stats app relies on the <cite>starspan</cite> executable. This C++ app must be installed from src and requires GDAL and GEOS header files:</p>
+<div class="highlight-python"><pre>hg clone https://code.google.com/p/starspan/
+cd starspan
+./configure
+make
+sudo make install</pre>
+</div>
+<p>The above technique should be sufficient if you have GEOS 3.2.2 or earlier. However, starspan uses geos C++ api which is a moving target and the 3.3 version of GEOS is not fully compatible with starspan.
+This means if your system is build on GEOS 3.3+, you must compile starspan against seperate versions of GEOS 3.2.2 and GDAL 1.8.1 and keep them isolated (the starspan shell script uses environment variables to ensure the correct libaries are loaded at runtime). The procedure below should cover all the bases:</p>
+<div class="highlight-python"><pre>#geos 3.2.2
+cd /usr/local/src
+wget http://download.osgeo.org/geos/geos-3.2.2.tar.bz2
+tar -xjvf geos-3.2.2.tar.bz2
+cd geos-3.2.2
+./configure --prefix=/usr/local/starspan
+make
+sudo make install
+
+#gdal 1.8.1
+cd /usr/local/src
+wget http://download.osgeo.org/gdal/gdal-1.8.1.tar.gz
+tar -xzvf gdal-1.8.1.tar.gz
+cd gdal-1.8.1
+./configure --prefix=/usr/local/starspan --with-geos=/usr/local/starspan/bin/geos-config
+make
+sudo make install
+
+#starspan 1.2.06
+cd /usr/local/src
+hg clone https://code.google.com/p/starspan/
+cd starspan
+./configure --with-gdal=/usr/local/starspan/bin/gdal-config --with-geos=/usr/local/starspan/bin/geos-config --prefix=/usr/local/starspan
+make
+sudo make install
+
+# settings.py
+# Finally, in settings_local.py, set STARSPAN_BIN to '/usr/local/starspan/bin/starspan'</pre>
+</div>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>You can set the <cite>STARSPAN_BIN</cite> setting to point to your starspan executable and the <cite>RASTER_DIR</cite> setting for the filepath to the directory containing your raster files.</p>
+<p>If you want to keep the temporary files around after starspan is done, set <cite>STARSPAN_REMOVE_TMP</cite> to False (default is True which clears disc space after each run).</p>
+<p>Then just add to your installed apps:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span> <span class="s">&#39;madrona.raster_stats&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-raster">
+<h2>Adding a Raster<a class="headerlink" href="#adding-a-raster" title="Permalink to this headline">¶</a></h2>
+<p>Simple as it gets. Type is used to define the raster as <cite>continuous</cite> (e.g. elevation):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.raster_stats.models</span> <span class="kn">import</span> <span class="n">RasterDataset</span>
+<span class="n">elev</span> <span class="o">=</span> <span class="n">RasterDataset</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;test_elevation&quot;</span><span class="p">,</span><span class="n">filepath</span><span class="o">=</span><span class="s">&#39;/tmp/data/elevation.tif&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;continuous&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or discrete categorical values (e.g. land use):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">land</span> <span class="o">=</span> <span class="n">RasterDataset</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;landuse&quot;</span><span class="p">,</span><span class="n">filepath</span><span class="o">=</span><span class="s">&#39;/tmp/data/landuse.tif&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;categorical&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-zonal-stats">
+<h2>Running zonal stats<a class="headerlink" href="#running-zonal-stats" title="Permalink to this headline">¶</a></h2>
+<p>Use the utility function which will first check the cache. If nothing is in the cache, the full starspan analysis is run. Otherwise the cache hit is returned:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.raster_stats.models</span> <span class="kn">import</span> <span class="n">zonal_stats</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span><span class="n">geos_polygon_geom</span><span class="p">,</span> <span class="n">elev</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">from_cache</span> <span class="c"># False</span>
+
+<span class="n">stats</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span><span class="n">geos_polygon_geom</span><span class="p">,</span> <span class="n">elev</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">from_cache</span> <span class="c"># True</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">min</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">max</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">median</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">mode</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">nulls</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">pixels</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">avg</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">stdev</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="categorical-rasters">
+<h2>Categorical rasters<a class="headerlink" href="#categorical-rasters" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the zonal statistics calculated for a continuous raster, categorical rasters can access the pixel counts for each discrete category of raster values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stats</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span><span class="n">geos_polygon_geom</span><span class="p">,</span> <span class="n">landuse</span><span class="p">)</span>
+<span class="n">total_pixels</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pixels</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># returns a queryset of ZonalCategories</span>
+<span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;Category&quot;</span><span class="p">,</span> <span class="n">cat</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="s">&quot;has&quot;</span><span class="p">,</span> <span class="n">cat</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="s">&quot;pixels out of a total of&quot;</span><span class="p">,</span> <span class="n">total_pixels</span>
+    <span class="c"># ex: &quot;Category 42 has 1866 pixels out of a total of 7866&quot;</span>
+</pre></div>
+</div>
+<p>It is the programmers responsibility to account for mapping the category raster code to a meaningful category name (i.e. 42 == &#8216;Douglas Fir&#8217;) as well as handling any null cells that might affect the total pixel count; check <cite>stats.nulls</cite> and adjust accordingly. For example if stats.pixels == 7866 and stats.nulls == 1000, you may consider the total pixel count to be 6866 depending on your analysis needs.</p>
+</div>
+<div class="section" id="specifying-the-pixel-proportion">
+<h2>Specifying the pixel proportion<a class="headerlink" href="#specifying-the-pixel-proportion" title="Permalink to this headline">¶</a></h2>
+<p>Starspan allows you to define the threshold of cell inclusion based on the percentage of the pixel that is covered by the polygon. By default, a raster cell is included if the geometry overlaps &gt;= 50% of the cell. You can adjust this value by assigning an alternate <cite>pixprop</cite> value between 0 and 1:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stats</span> <span class="o">=</span> <span class="n">zonal_stats</span><span class="p">(</span><span class="n">geos_polygon_geom</span><span class="p">,</span> <span class="n">landuse</span><span class="p">,</span> <span class="n">pixprop</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span> <span class="c"># cell must be 85% covered to be included</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-web-service">
+<h2>Using the web service<a class="headerlink" href="#using-the-web-service" title="Permalink to this headline">¶</a></h2>
+<p>The app provides a urls.py file; just point your main URLCONF file to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="s">r&#39;^zonal/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;madrona.raster_stats.urls&#39;</span><span class="p">)),</span>
+</pre></div>
+</div>
+<p>You can get a json list of the rasters at this url:</p>
+<div class="highlight-python"><pre>http://localhost/zonal/</pre>
+</div>
+<p>And you can append the raster name and supply a <cite>geom_txt</cite> parameter (either wkt or json) which returns the rasters stats as json:</p>
+<div class="highlight-python"><pre>http://localhost/zonal/sst/?geom_txt=POLYGON ((-122.735420504497029 37.238868044757552,-122.516579972608298 37.245550198403009,-122.50822728055148 37.043415050627928,-122.730408889262932 37.046756127450656,-122.735420504497029 37.238868044757552))
+
+[
+ {"pk": 764, "model": "raster_stats.zonalstatscache",
+  "fields": {"raster": 23, "min": 0.0, "max": 1.5440739999999999, "geom_hash": "-8107990604081680573",
+             "nulls": 0.0, "median": 0.28777199999999997, "mode": 0.0, "stdev": 0.44484400000000002,
+             "date_modified": "2010-06-23 19:00:30", "avg": 0.40776400000000002, "pixels": 531.0}
+ }
+]</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.raster_stats</cite>: Raster Statistics</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#settings">Settings</a></li>
+<li><a class="reference internal" href="#adding-a-raster">Adding a Raster</a></li>
+<li><a class="reference internal" href="#running-zonal-stats">Running zonal stats</a></li>
+<li><a class="reference internal" href="#categorical-rasters">Categorical rasters</a></li>
+<li><a class="reference internal" href="#specifying-the-pixel-proportion">Specifying the pixel proportion</a></li>
+<li><a class="reference internal" href="#using-the-web-service">Using the web service</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pg_spacing.html"
+                        title="previous chapter"><cite>madrona.pg_spacing</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="replication.html"
+                        title="next chapter"><cite>madrona.replication</cite></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/raster_stats.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="replication.html" title="madrona.replication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pg_spacing.html" title="madrona.pg_spacing"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

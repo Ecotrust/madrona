@@ -1,0 +1,150 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.openid: Authentication System &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.screencasts" href="screencasts.html" />
+    <link rel="prev" title="madrona.news: Display news items, announcements, etc" href="news.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="screencasts.html" title="madrona.screencasts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="news.html" title="madrona.news: Display news items, announcements, etc"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-openid-authentication-system">
+<span id="openid"></span><h1><cite>madrona.openid</cite>: Authentication System<a class="headerlink" href="#madrona-openid-authentication-system" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Madrona instances require local accounts for all users. By default, logging on requires nothing more than
+supplying the username and password for the local account.</p>
+<p>To use a single logon for mutliple madrona instances, you can optionally turn
+on <a class="reference external" href="http://openid.net">OpenID</a> consumer support. This allows you to use a third-party openid provider to authenticate. Once your
+identity is verified by the OpenID Identity Provider, you can associate that openid with a local account.</p>
+<p>When you have multiple madrona accounts, all associated with a single openid, you get the
+benefits of app-to-app communication (TBD).</p>
+</div>
+<div class="section" id="decision-chart">
+<h2>Decision Chart<a class="headerlink" href="#decision-chart" title="Permalink to this headline">¶</a></h2>
+<p>Rough overview of the login workflow:</p>
+<img alt="_images/newauth2.png" src="_images/newauth2.png" />
+</div>
+<div class="section" id="underlying-implementation">
+<h2>Underlying Implementation<a class="headerlink" href="#underlying-implementation" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>madrona.openid</cite> app is a fork of the <a class="reference external" href="http://bitbucket.org/benoitc/django-authsopenid/wiki/Home">django-authopenid</a> project. <cite>django-authopenid</cite> provided a good starting point for an openid consumer integrated with django auth, registration and legacy auth. Unfortunately it was no longer being maintained and required updates and customization - hence the fork.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>You can use the <cite>OPENID_ENABLED</cite> setting to turn on/off the OpenID Login. The default is <cite>False</cite> or local
+&#8220;legacy&#8221; authentication system only. Setting to <cite>True</cite> enables openid features on the signin and user profile screens.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><cite>madrona.openid</cite>: Authentication System</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#decision-chart">Decision Chart</a></li>
+<li><a class="reference internal" href="#underlying-implementation">Underlying Implementation</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="news.html"
+                        title="previous chapter"><cite>madrona.news</cite>: Display news items, announcements, etc</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="screencasts.html"
+                        title="next chapter"><cite>madrona.screencasts</cite></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/openid.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="screencasts.html" title="madrona.screencasts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="news.html" title="madrona.news: Display news items, announcements, etc"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

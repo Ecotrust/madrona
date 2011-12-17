@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.middleware</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        Module&nbsp;middleware
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.middleware-module.html">Module madrona.common.middleware</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt class="py-name">connection</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">template</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Template</tt><tt class="py-op">,</tt> <tt class="py-name">Context</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># Log all SQL statements direct to the console (when running in DEBUG)</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"># Intended for use with the django development server.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="SQLLogToConsoleMiddleware"></a><div id="SQLLogToConsoleMiddleware-def"><a name="L10"></a><tt class="py-lineno">10</tt> <a class="py-toggle" href="#" id="SQLLogToConsoleMiddleware-toggle" onclick="return toggle('SQLLogToConsoleMiddleware');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.middleware.SQLLogToConsoleMiddleware-class.html">SQLLogToConsoleMiddleware</a><tt class="py-op">:</tt> </tt>
+</div><div id="SQLLogToConsoleMiddleware-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="SQLLogToConsoleMiddleware-expanded"><a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">    Add to settings_local like so to log sql commands:</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">    </tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">    from madrona.common.default_settings import MIDDLEWARE_CLASSES</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">    MIDDLEWARE_CLASSES += (</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">        'madrona.common.middleware.SQLLogToConsoleMiddleware',</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">    )</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="SQLLogToConsoleMiddleware.process_response"></a><div id="SQLLogToConsoleMiddleware.process_response-def"><a name="L20"></a><tt class="py-lineno">20</tt> <a class="py-toggle" href="#" id="SQLLogToConsoleMiddleware.process_response-toggle" onclick="return toggle('SQLLogToConsoleMiddleware.process_response');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.middleware.SQLLogToConsoleMiddleware-class.html#process_response">process_response</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">,</tt> <tt class="py-param">response</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  </tt>
+</div><a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable madrona.common.default_settings.DEBUG=madrona.common.default_settings-module.html#DEBUG"><a title="madrona.common.default_settings.DEBUG" class="py-name" href="#" onclick="return doclink('link-0', 'DEBUG', 'link-0');">DEBUG</a></tt> <tt class="py-keyword">and</tt> <tt class="py-name">connection</tt><tt class="py-op">.</tt><tt class="py-name">queries</tt><tt class="py-op">:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">            <tt class="py-name">time</tt> <tt class="py-op">=</tt> <tt id="link-1" class="py-name" targets="Variable madrona.raster_stats.models.ZonalStatsCache.sum=madrona.raster_stats.models.ZonalStatsCache-class.html#sum"><a title="madrona.raster_stats.models.ZonalStatsCache.sum" class="py-name" href="#" onclick="return doclink('link-1', 'sum', 'link-1');">sum</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">q</tt><tt class="py-op">[</tt><tt class="py-string">'time'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">q</tt> <tt class="py-keyword">in</tt> <tt class="py-name">connection</tt><tt class="py-op">.</tt><tt class="py-name">queries</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>         </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">            <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">Template</tt><tt class="py-op">(</tt><tt class="py-string">"{{count}} quer{{count|pluralize:\"y,ies\"}} in {{time}} seconds:\n\n{% for sql in sqllog %}[{{forloop.counter}}] {{sql.time}}s: {{sql.sql|safe}}{% if not forloop.last %}\n\n{% endif %}{% endfor %}"</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-name">t</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method madrona.analysistools.widgets.DualSliderWidget.render()=madrona.analysistools.widgets.DualSliderWidget-class.html#render,Method madrona.analysistools.widgets.SimplePoint.render()=madrona.analysistools.widgets.SimplePoint-class.html#render,Method madrona.analysistools.widgets.SliderWidget.render()=madrona.analysistools.widgets.SliderWidget-class.html#render,Method madrona.bookmarks.widgets.BookmarkWidget.render()=madrona.bookmarks.widgets.BookmarkWidget-class.html#render,Method madrona.common.forms.ShortTextarea.render()=madrona.common.forms.ShortTextarea-class.html#render,Method madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.render()=madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode-class.html#render,Method madrona.common.templatetags.absurl.AbsoluteURLNode.render()=madrona.common.templatetags.absurl.AbsoluteURLNode-class.html#render,Method madrona.common.templatetags.layout_tags.BackLinkNode.render()=madrona.common.templatetags.layout_tags.BackLinkNode-class.html#render,Method madrona.common.templatetags.layout_tags.FooterNode.render()=madrona.common.templatetags.layout_tags.FooterNode-class.html#render,Method madrona.common.templatetags.layout_tags.HomeLinkNode.render()=madrona.common.templatetags.layout_tags.HomeLinkNode-class.html#render,Method madrona.common.templatetags.layout_tags.PanelNode.render()=madrona.common.templatetags.layout_tags.PanelNode-class.html#render,Method madrona.common.templatetags.layout_tags.PrintableNode.render()=madrona.common.templatetags.layout_tags.PrintableNode-class.html#render,Method madrona.common.templatetags.layout_tags.TabNode.render()=madrona.common.templatetags.layout_tags.TabNode-class.html#render,Method madrona.common.templatetags.layout_tags.TabPanelNode.render()=madrona.common.templatetags.layout_tags.TabPanelNode-class.html#render,Method madrona.common.templatetags.relurl.RelativeURLNode.render()=madrona.common.templatetags.relurl.RelativeURLNode-class.html#render,Method madrona.common.templatetags.set_var.SetVarNode.render()=madrona.common.templatetags.set_var.SetVarNode-class.html#render,Method madrona.data_manager.templatetags.smart_if.SmartIfNode.render()=madrona.data_manager.templatetags.smart_if.SmartIfNode-class.html#render,Method madrona.features.forms.ShapeInput.render()=madrona.features.forms.ShapeInput-class.html#render,Method madrona.geographic_report.templatetags.geographic_report.GeographicReportNode.render()=madrona.geographic_report.templatetags.geographic_report.GeographicReportNode-class.html#render,Method madrona.google-analytics.templatetags.analytics.AnalyticsNode.render()=madrona.google-analytics.templatetags.analytics.AnalyticsNode-class.html#render"><a title="madrona.analysistools.widgets.DualSliderWidget.render
+madrona.analysistools.widgets.SimplePoint.render
+madrona.analysistools.widgets.SliderWidget.render
+madrona.bookmarks.widgets.BookmarkWidget.render
+madrona.common.forms.ShortTextarea.render
+madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.render
+madrona.common.templatetags.absurl.AbsoluteURLNode.render
+madrona.common.templatetags.layout_tags.BackLinkNode.render
+madrona.common.templatetags.layout_tags.FooterNode.render
+madrona.common.templatetags.layout_tags.HomeLinkNode.render
+madrona.common.templatetags.layout_tags.PanelNode.render
+madrona.common.templatetags.layout_tags.PrintableNode.render
+madrona.common.templatetags.layout_tags.TabNode.render
+madrona.common.templatetags.layout_tags.TabPanelNode.render
+madrona.common.templatetags.relurl.RelativeURLNode.render
+madrona.common.templatetags.set_var.SetVarNode.render
+madrona.data_manager.templatetags.smart_if.SmartIfNode.render
+madrona.features.forms.ShapeInput.render
+madrona.geographic_report.templatetags.geographic_report.GeographicReportNode.render
+madrona.google-analytics.templatetags.analytics.AnalyticsNode.render" class="py-name" href="#" onclick="return doclink('link-2', 'render', 'link-2');">render</a></tt><tt class="py-op">(</tt><tt class="py-name">Context</tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">'sqllog'</tt><tt class="py-op">:</tt><tt class="py-name">connection</tt><tt class="py-op">.</tt><tt class="py-name">queries</tt><tt class="py-op">,</tt><tt class="py-string">'count'</tt><tt class="py-op">:</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">connection</tt><tt class="py-op">.</tt><tt class="py-name">queries</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-string">'time'</tt><tt class="py-op">:</tt><tt class="py-name">time</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt>                 </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">response</tt> </tt>
+</div></div><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="IgnoreCsrfMiddleware"></a><div id="IgnoreCsrfMiddleware-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="IgnoreCsrfMiddleware-toggle" onclick="return toggle('IgnoreCsrfMiddleware');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.middleware.IgnoreCsrfMiddleware-class.html">IgnoreCsrfMiddleware</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IgnoreCsrfMiddleware-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="IgnoreCsrfMiddleware-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-docstring">    http://djangosnippets.org/snippets/2069/</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-docstring">    CSRF protection requires updating all forms</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-docstring">    Meanwhile the crsf middleware is required for admin to work.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-docstring">    This middleware class will just ignore csrf, allowing the current views and admin to work</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="IgnoreCsrfMiddleware.process_request"></a><div id="IgnoreCsrfMiddleware.process_request-def"><a name="L34"></a><tt class="py-lineno">34</tt> <a class="py-toggle" href="#" id="IgnoreCsrfMiddleware.process_request-toggle" onclick="return toggle('IgnoreCsrfMiddleware.process_request');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.middleware.IgnoreCsrfMiddleware-class.html#process_request">process_request</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IgnoreCsrfMiddleware.process_request-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="IgnoreCsrfMiddleware.process_request-expanded"><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">csrf_processing_done</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+</div></div><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
