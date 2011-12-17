@@ -33,6 +33,10 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in .build/html."
 
+install:
+	mkdir -p ../../madrona.gh-pages/docs/
+	cp -r .build/html/* ../../madrona.gh-pages/docs/
+
 pickle:
 	mkdir -p .build/pickle .build/doctrees
 	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) .build/pickle
