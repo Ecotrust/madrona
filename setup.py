@@ -10,16 +10,16 @@ except:
 
 from setuptools import setup, find_packages
 
-readme_text = file('README.txt', 'rb').read()
+readme_text = file('README.md', 'rb').read()
 
 from madrona.common.default_settings import RELEASE
 
 setup_args = dict(
     name                = 'madrona',
     version             = RELEASE,
-    description         = 'A framework for building decisison support tools supporting marine spatial planning',
+    description         = 'A framework for building spatial decisison support tools',
     author              = 'MarineMap Consortium, Ecotrust',
-    author_email        = 'mcclintock@msi.ucsb.edu',
+    author_email        = 'mperry@ecotrust.org',
     maintainer          = 'Ecotrust',
     maintainer_email    = 'ksdev@ecotrust.org',
     url                 = 'http://ecotrust.github.com/madrona',
@@ -28,7 +28,7 @@ setup_args = dict(
     long_description    = readme_text,
     packages            = ['madrona.%s' % x for x in find_packages('madrona')],
     classifiers         = [
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
