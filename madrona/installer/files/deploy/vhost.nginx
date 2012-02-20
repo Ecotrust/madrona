@@ -1,0 +1,34 @@
+upstream app_server_wp {
+    server localhost:8001 fail_timeout=0;
+}
+
+server {
+    server_name  wp.hestia.ecotrust.org;
+    access_log  /var/log/nginx/wp.access.log;
+    error_log  /var/log/nginx/wp.error.log info;
+    keepalive_timeout 5;
+    client_max_body_size 20M;
+    root /var/www/;
+
+    location /media/admin {
+       alias /usr/local/src/django/django/contrib/admin/media/;
+    }
+
+    location /media {
+       alias /usr/local/media/usfw/; 
+    }
+    
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_read_timeout 1200;
+        proxy_connect_timeout 1200;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass http://app_server_wp;
+            break;
+        }
+    }
+}
+

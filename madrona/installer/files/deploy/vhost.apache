@@ -1,0 +1,46 @@
+<VirtualHost *:80>
+  ServerName murdock.labs.ecotrust.org
+
+  WSGIScriptAlias / /usr/local/apps/murdock/wsgi.py
+  WSGIDaemonProcess murdock user=www-data group=www-data threads=3 processes=2
+  WSGIProcessGroup murdock
+
+  ErrorLog "/usr/local/apps/murdock/apache-error.log"
+  CustomLog "/usr/local/apps/murdock/apache-access.log" combined
+
+  Alias /media/admin /usr/local/apps/murdock/env/src/django/django/contrib/admin/static/admin
+
+  ServerAdmin webmaster@localhost
+
+  DocumentRoot /var/www
+  <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+  </Directory>
+  <Directory /var/www/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+  </Directory>
+
+  <Location /admin-media>
+    Order allow,deny
+    Allow from all
+  </Location>
+
+  Alias /media /usr/local/apps/murdock/mediaroot
+
+  <Location /media>
+    #GZIP media files just not images or for IE6
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI \
+    \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    BrowserMatch \bMSIE\s6 no-gzip
+
+    Order allow,deny
+    Allow from all
+  </Location>
+
+</VirtualHost>
+
