@@ -21,16 +21,16 @@ sort of collaborative spatial planning process or decision support tool.
 
 ## Developer Quick Start
 
-Install Madrona and requirements
+Install Madrona and requirements into a virtualenv
 
-    git clone https://perrygeo@github.com/Ecotrust/madrona.git
-    pip install -r madrona/madrona_requirements.txt
-    cd madrona
-    python setup.py develop
+    cd /usr/local/apps
+    mkdir newapp && cd newapp
+    wget https://github.com/downloads/Ecotrust/madrona/create-madrona-env
+    bash create-madrona-env
+    source env/bin/activate
 
 Start your madrona-based project
 
-    cd ~/src
     create-madrona-project.py your_project
     cd your_project
     python manage.py prepsite
