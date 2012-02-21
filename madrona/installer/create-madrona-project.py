@@ -7,33 +7,88 @@ import shutil
 import re
 from distutils.dir_util import copy_tree
 import optparse
+import psycopg2
 
+def replace_file(infile, outfile, search_replace, remove=True):
+    infh = open( infile, 'r')
+    outfh = open( outfile, 'w')
+    for line in infh:
+        out = line
+        for s, r in search_replace.iteritems():
+            out = out.replace(s,r)
+        outfh.write(out)
+    infh.close()
+    outfh.close()
+    if remove:
+        os.remove(infile)
+
+def check_db_connection(conn_string):
+    print "Connecting to database\n ->%s" % (conn_string)
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        cursor.execute("SELECT PostGIS_Version();")
+        records = cursor.fetchone()
+        print "Connected! (postgis version ", records[0], ")\n"
+        return True
+    except psycopg2.ProgrammingError:
+        sys.exit("""Database does not have postgis installed
+        Try http://postgis.refractions.net/documentation/manual-svn/postgis_installation.html#create_new_db
+        """)
+    except:
+        exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
+        sys.exit("Database connection failed!\n ->%s" % (exceptionValue))
+    conn.close()
+    return True
+
+def parse_conn(conn_string):
+    d = {'host': 'localhost',
+        'password': '',
+        'dbname': '',
+        'user': 'postgres',
+        'port': '5432'}
+    for p in conn_string.split(" "):
+        k,v = p.split("=")
+        d[k] = v.replace("'","")
+    return (d['host'], d['password'], d['dbname'], d['user'], d['port'])
 
 def main():
-    parser = optparse.OptionParser()
-    parser.add_option('-d', '--dest', help='Destination directory', action='store', 
-            dest='dest_dir', type='string', default='.')
+    parser = optparse.OptionParser(
+            usage="create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com>")
     parser.add_option('-p', '--project', help='Name of django project', action='store', 
             dest='project_name', type='string')
     parser.add_option('-a', '--app', help='Name of django application', action='store', 
             dest='app_name', type='string')
-    parser.add_option('-s', '--srid', help='Database spatial reference ID', action='store', 
+    parser.add_option('-d', '--domain', help='Full domain name of server', action='store', 
+            dest='domain', type='string')
+    parser.add_option('-c', '--connection', help='Full connection string to existing postgis db', action='store', 
+            dest='conn_string', type='string')
+    parser.add_option('-o', '--outdir', help='Output/destination directory (default = ".")', action='store', 
+            dest='dest_dir', type='string', default='.')
+    parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
             dest='dbsrid', type='string', default='3857')
     (opts, args) = parser.parse_args()
 
     if not opts.project_name:
-        print "Please specify the project name\nexample:\n   python %s -p myproject" % sys.argv[0]
-        exit(-1)
+        parser.print_help()
+        parser.error("Please specify the project name")
     if not opts.app_name:
-        print "Please specify the app name\nexample:\n   python %s -a myapp" % sys.argv[0]
-        exit(-1)
+        parser.print_help()
+        parser.error("Please specify the app name")
+    if not opts.domain:
+        parser.print_help()
+        parser.error("Please specify the full domain name")
+    if not opts.conn_string:
+        parser.print_help()
+        parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='postgres' password='secret'\"")
 
+    check_db_connection(opts.conn_string)
     source_dir = os.path.join(os.path.dirname(__file__),'files')
     dest_dir = os.path.abspath(opts.dest_dir)
-    print " Step 1 of 4: copy template from %s to %s" % (source_dir, dest_dir)
+    print " * copy template from %s to %s" % (source_dir, dest_dir)
     copy_tree(source_dir,dest_dir)
 
-    print " Step 2 of 4: Rename project and app files"
+    print " * Rename project and app files"
     old_project_dir = os.path.join(dest_dir, '_project')
     project_dir = os.path.join(dest_dir, opts.project_name)
     os.rename(old_project_dir, project_dir)
@@ -42,33 +97,96 @@ def main():
     app_dir = os.path.join(project_dir, opts.app_name)
     os.rename(old_app_dir, app_dir)
 
-    print " Step 3 of 4: Adjust settings"
-    infh = open( os.path.join(project_dir, '_settings.py'), 'r')
-    outfh = open( os.path.join(project_dir, 'settings.py'), 'w')
+    print " * Adjust settings"
+    infile = os.path.join(project_dir, '_settings.py')
+    outfile = os.path.join(project_dir, 'settings.py')
     search_replace = {
             '_project': opts.project_name,
             '_app': opts.app_name,
             '_srid': opts.dbsrid
     }
-    for line in infh:
-        out = line
-        for s, r in search_replace.iteritems():
-            out = out.replace(s,r)
-        outfh.write(out)
-    infh.close()
-    outfh.close()
-    os.remove(os.path.join(project_dir, '_settings.py'))
+    replace_file(infile, outfile, search_replace)
 
-    print "Generating secret key"
+    print " * Generating secret key"
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
     secret_key = ''.join([choice(chars) for i in range(50)])
-    lsfh = open(os.path.join(project_dir, 'settings_local.py'),'w+')
+    lsfh = open(os.path.join(project_dir, 'settings_local.py'),'w')
     lsfh.write("""
 SECRET_KEY = '%s'
 """ % secret_key)
     lsfh.close()
 
-    print " Step 4 of 4: Adjust deployment files, etc."
+    print " * Adjust deployment files, etc."
+    infile = os.path.join(dest_dir, 'deploy', 'vhost.apache')
+    outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-apache")
+    search_replace = {
+            '_project': opts.project_name,
+            '_domain': opts.domain,
+            '_root': dest_dir
+    }
+    replace_file(infile, outfile, search_replace)
+
+    infile = os.path.join(dest_dir, 'deploy', 'vhost.nginx')
+    outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-nginx")
+    search_replace = {
+            '_project': opts.project_name,
+            '_domain': opts.domain,
+            '_root': dest_dir
+    }
+    replace_file(infile, outfile, search_replace)
+
+    # gitignore
+    infile = os.path.join(dest_dir, '_.gitignore')
+    outfile = os.path.join(dest_dir, '.gitignore')
+    search_replace = { '_project': opts.project_name }
+    replace_file(infile, outfile, search_replace)
+
+    # wsgi
+    infile = os.path.join(dest_dir, 'deploy', '_wsgi.py')
+    outfile = os.path.join(dest_dir, 'deploy', 'wsgi.py')
+    import sys
+    vi = sys.version_info
+    pyver = '%d.%d' % (vi.major, vi.minor) 
+    search_replace = {
+            '_project': opts.project_name,
+            '_pyversion': pyver,
+            '_root': dest_dir
+    }
+    replace_file(infile, outfile, search_replace)
+
+    # db settings
+    lsfh = open(os.path.join(project_dir, 'settings_local.py'),'a')
+    host, passwd, name, user, port = parse_conn(opts.conn_string)
+    lsfh.write("""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'PORT': '%s',
+        'HOST': '%s',
+        'PASSWORD': '%s',
+        'NAME': '%s',
+        'USER': '%s',
+    }
+}
+""" % (port, host, passwd, name, user))
+    lsfh.close()
+
+    print " * syncing database"
+    #syncdb
+    #migrate
+    #install_cleangeometry
+
+    print " * installing media"
+    #install_media
+
+    print """
+Now you need to:
+
+    check the site into git or other version control system
+    run tests 
+    install deployment files
+      sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
+""" % (opts.domain, opts.domain)
 
 if __name__ == "__main__":
     main()

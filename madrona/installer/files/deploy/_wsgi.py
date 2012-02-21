@@ -2,10 +2,10 @@ import sys
 import site
 import os
 
-project ='/usr/local/apps/murdock/lot'
-ve ='/usr/local/apps/murdock/env'
-vepath = os.path.join(ve,'lib/python2.6/site-packages')
-local_path = os.path.join('/usr/local/lib/python2.6/site-packages')
+project ='_root/_project'
+ve ='_root/env'
+vepath = os.path.join(ve,'lib/python_pyversion/site-packages')
+local_path = os.path.join('/usr/local/lib/python_pyversion/site-packages')
 
 prev_sys_path = list(sys.path)
 # add the site-packages of our virtualenv as a site dir

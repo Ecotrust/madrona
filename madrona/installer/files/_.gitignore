@@ -1,0 +1,7 @@
+*.pyc
+_project/settings_local.py
+logs/*
+mediaroot/*
+deploy/*
+data/*
+env/*
