@@ -169,9 +169,21 @@ DATABASES = {
     }
 }
 """ % (port, host, passwd, name, user))
-    lsfh.close()
 
-    print " * syncing database"
+    # while we're at it, write more stuff out
+    lsfh.write("""
+LOG_FILE = "%s"
+# The following Google key is for localhost:
+####### CHANGE ME !!!!!!!!!
+GOOGLE_API_KEY = 'R$3jifj)(#jf,m.eapnisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
+
+MEDIA_ROOT = '%s/mediaroot/'
+MEDIA_URL = 'http://%s/media/'
+STATIC_URL = 'http://%s/media/'
+""" % (os.path.join(dest_dir, 'logs', 'app.log'),
+       dest_dir, opts.domain, opts.domain))
+
+    lsfh.close()
 
     os.chdir(opts.project_name)
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -180,22 +192,29 @@ DATABASES = {
     sys.path.extend(old_sys_path)
     import settings
 
-
-    #syncdb
+    print " * syncing database"
     management.execute_manager(settings, ['manage.py','syncdb'])
-    #migrate
+
+    print " * migrating data models"
     management.execute_manager(settings, ['manage.py','migrate'])
 
     print " * installing media"
-    #install_media
     management.execute_manager(settings, ['manage.py','install_media'])
 
-    #install_cleangeometry
+    print " * enabling sharing "
+    management.execute_manager(settings, ['manage.py','enable_sharing'])
+
+    print " * site setup "
+    management.execute_manager(settings, ['manage.py','site',opts.domain])
+
+    print " * installing cleangeometry"
     management.execute_manager(settings, ['manage.py','install_cleangeometry'])
 
     print """
 Now you need to:
-
+    
+    deal with the cleangeometry per above
+    google earth API key
     check the site into git or other version control system
     run tests 
     install deployment files
