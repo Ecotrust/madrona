@@ -23,16 +23,16 @@ sort of collaborative spatial planning process or decision support tool.
 
 Install Madrona and requirements into a virtualenv
 
-    cd /usr/local/apps
-    mkdir newapp && cd newapp
+    cd /usr/local/sites
+    mkdir newsite && cd newsite
     wget https://github.com/downloads/Ecotrust/madrona/create-madrona-env
     bash create-madrona-env
     source env/bin/activate
 
 Start your madrona-based project
 
-    create-madrona-project.py your_project
-    cd your_project
+    create-madrona-project.py -p myproject -a myapp
+    cd myproject
     python manage.py prepsite
     python manage.py runserver
 
