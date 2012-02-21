@@ -9,7 +9,7 @@ source bin/activate
 mkdir src
 cd src
 git clone git@github.com:Ecotrust/madrona.git
-pip install -r madrona/madrona_requirements.txt
+pip install --upgrade -r madrona/madrona_requirements.txt
 cd madrona
 python setup.py develop
 
