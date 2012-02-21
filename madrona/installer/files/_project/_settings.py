@@ -30,4 +30,7 @@ APP_NAME = "_project"
 
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
+import logging
+logging.getLogger('django.db.backends').setLevel(logging.ERROR)
+
 from settings_local import *

@@ -80,7 +80,7 @@ def main():
         parser.error("Please specify the full domain name")
     if not opts.conn_string:
         parser.print_help()
-        parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='postgres' password='secret'\"")
+        parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
 
     check_db_connection(opts.conn_string)
     source_dir = os.path.join(os.path.dirname(__file__),'files')
@@ -172,12 +172,26 @@ DATABASES = {
     lsfh.close()
 
     print " * syncing database"
+
+    os.chdir(opts.project_name)
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+    old_sys_path = sys.path
+    sys.path = [project_dir]
+    sys.path.extend(old_sys_path)
+    import settings
+
+
     #syncdb
+    management.execute_manager(settings, ['manage.py','syncdb'])
     #migrate
-    #install_cleangeometry
+    management.execute_manager(settings, ['manage.py','migrate'])
 
     print " * installing media"
     #install_media
+    management.execute_manager(settings, ['manage.py','install_media'])
+
+    #install_cleangeometry
+    management.execute_manager(settings, ['manage.py','install_cleangeometry'])
 
     print """
 Now you need to:
