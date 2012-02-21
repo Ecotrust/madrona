@@ -29,11 +29,20 @@ Install Madrona and requirements into a virtualenv
     bash create-madrona-env
     source env/bin/activate
 
+Create a db
+
+    sudo su postgres
+    create user dbuser -s -P 
+    exit
+    createdb -U dbuser -h localhost -W newsite
+    psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"
+
 Start your madrona-based project
 
-    create-madrona-project.py -p myproject -a myapp
+    create-madrona-project.py -p myproject -a myapp -d myproject.example.com \
+      -c "host='localhost' user='dbuser' password='secret' dbname='newsite'"
+
     cd myproject
-    python manage.py prepsite
     python manage.py runserver
 
 ## Learn more
