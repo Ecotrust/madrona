@@ -3,8 +3,6 @@
 # make sure virtualenv exists first
 command -v virtualenv 2>&- || { echo >&2 "I require virtualenv but it's not installed.  Aborting."; exit 1;  }
 
-mkdir repo
-cd repo
 virtualenv env
 cd env
 source bin/activate
@@ -15,7 +13,7 @@ pip install -r madrona/madrona_requirements.txt
 cd madrona
 python setup.py develop
 
-django-admin.py startproject myproject
-cd myproject
-django-admin.py startapp myapp
-
+echo
+echo "Your virtualenv is ready"
+echo "  source env/bin/activate"
+echo "  create-madrona-project.py --help"
