@@ -224,6 +224,8 @@ Now you need to:
     google earth API key
     check the site into git or other version control system
     run tests 
+    set permissions on mediaroot
+      sudo chgrp -R www-data ./mediaroot && sudo chmod -R 775 ./mediaroot
     install deployment files
       sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
 """ % (opts.domain, opts.domain)
