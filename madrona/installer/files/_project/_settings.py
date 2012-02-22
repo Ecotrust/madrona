@@ -3,7 +3,7 @@ from madrona.common.default_settings import *
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TIME_ZONE = 'America/Vancouver'
-ROOT_URLCONF = '_project.urls'
+ROOT_URLCONF = 'urls' # '_project.urls'
 
 DATABASES = {
     'default': {
@@ -13,11 +13,11 @@ DATABASES = {
     }
 }
 
-COMPRESS_CSS['application']['source_filenames'] = (
+COMPRESS_CSS['application']['source_filenames'] += (
     'css/project.css',
 )
 
-COMPRESS_JS['application']['source_filenames'] = (
+COMPRESS_JS['application']['source_filenames'] += (
     'js/project.js',
 )
 

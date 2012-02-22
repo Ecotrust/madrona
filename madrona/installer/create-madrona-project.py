@@ -146,7 +146,14 @@ SECRET_KEY = '%s'
     outfile = os.path.join(dest_dir, 'deploy', 'wsgi.py')
     import sys
     vi = sys.version_info
-    pyver = '%d.%d' % (vi.major, vi.minor) 
+    try:
+        major = vi.major
+        minor = vi.minor
+    except AttributeError:
+        major = vi[0]
+        minor = vi[1]
+
+    pyver = '%d.%d' % (major, minor) 
     search_replace = {
             '_project': opts.project_name,
             '_pyversion': pyver,
