@@ -25,16 +25,17 @@ Install Madrona and requirements into a virtualenv
 
     cd /usr/local/sites
     mkdir newsite && cd newsite
-    wget https://github.com/downloads/Ecotrust/madrona/create-madrona-env
+    wget https://github.com/downloads/Ecotrust/ecotrust.github.com/create-madrona-env
     bash create-madrona-env
     source env/bin/activate
 
 Create a db
 
     sudo su postgres
-    create user dbuser -s -P 
+    createuser dbuser -s -P 
     exit
     createdb -U dbuser -h localhost -W newsite
+    # For postgres 9.1 (for older versions, see the postgis docs)
     psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"
 
 Start your madrona-based project
