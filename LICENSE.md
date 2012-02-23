@@ -1,4 +1,5 @@
 Copyright (c) The Regents of the University of California, Ecotrust
+
 All rights reserved.
 
 Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
