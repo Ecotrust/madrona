@@ -26,10 +26,10 @@ class RasterDataset(models.Model):
     full_name = models.CharField(max_length=255, default="")
     filepath = models.FilePathField(max_length=255, path=RASTDIR, recursive=True)
     type = models.CharField(max_length=30, choices=RASTER_TYPES)
-    
+
     def __unicode__(self):
         return unicode(self.name + " raster at " + self.filepath)
-    
+
 class ZonalCategory(models.Model):
     category = models.IntegerField()
     count = models.IntegerField()
@@ -180,7 +180,7 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
         return None
 
     hash = geom.wkt.__hash__()
-     
+
     cached = None
     if read_cache:
         try:
@@ -204,5 +204,5 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
         else:
             result = run_starspan_zonal(geom, rasterds, write_cache=write_cache, pixprop=pixprop)
         result.from_cache = False
-    
+
     return result

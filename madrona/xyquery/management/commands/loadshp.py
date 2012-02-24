@@ -36,7 +36,7 @@ class Command(BaseCommand):
             the_layer.save()
         except:
             raise Exception('Unable to create layer named %s' % layername)
-        
+
         wgs84 = SpatialReference(4326)
         pctdone = 0
         for feat in lyr:
@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
         if not os.path.exists(shapefile):
             return "%s not found; Specify the path to an existing .shp file" % shapefile
-        
+
         layername = options.get('name',None)
         if not layername:
             layername = os.path.splitext(os.path.basename(shapefile))[0]

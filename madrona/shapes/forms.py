@@ -31,7 +31,7 @@ class UploadForm(forms.Form):
         # ensure the upload directory exists
         if not os.path.exists(settings.SHP_UPLOAD_DIR):
             os.makedirs(settings.SHP_UPLOAD_DIR) 
-        
+
         # contruct the full filepath and filename
         downloaded_file = os.path.normpath(os.path.join(settings.SHP_UPLOAD_DIR, filefield_data.name))
 
@@ -71,7 +71,7 @@ class UploadForm(forms.Form):
 
         # create zip object
         zfile = zipfile.ZipFile(tmp.name)
-        
+
         # ensure proper file contents by extensions inside
         if not self.check_zip_contents('shp', zfile):
             return False, 'Found Zip Archive but no file with a .shp extension found inside.'
@@ -81,7 +81,7 @@ class UploadForm(forms.Form):
             return False, 'You must supply a .dbf file with the Shapefile to supply attribute data.'
         elif not self.check_zip_contents('shx', zfile):
             return False, 'You must supply a .shx file for the Shapefile to have a valid index.'
-        
+
         # unpack contents into tmp directory
         tmp_dir = tempfile.gettempdir()
         for info in zfile.infolist():
@@ -90,7 +90,7 @@ class UploadForm(forms.Form):
             fout = open(shp_part, "wb")
             fout.write(data)
             fout.close()
-        
+
         # get the datasource name without extension
         ds_name = os.path.splitext(zfile.namelist()[0])[0]
 
@@ -99,7 +99,7 @@ class UploadForm(forms.Form):
 
         # shapefiles have just one layer, so grab the first...
         layer = ds[0]
-        
+
         # one way of testing a sane shapefile...
         # further tests should be able to be plugged in here...
         if layer.test_capability('RandomRead'):

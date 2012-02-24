@@ -12,11 +12,11 @@ for model in registered_models:
         url(r'^%s/form/$' % (options.slug,), 'form_resources', 
             kwargs={'model': model}, 
             name="%s_create_form" % (options.slug, )),
-            
+
         url(r'^%s/(?P<uid>[\w_]+)/$' % (options.slug, ), 'resource', 
             kwargs={'model': model}, 
             name='%s_resource' % (options.slug, )),
-            
+
         url(r'^%s/(?P<uid>[\w_]+)/form/$' % (options.slug, ), 
             'form_resources', kwargs={'model': model}, 
             name='%s_update_form' % (options.slug,)),
@@ -51,4 +51,3 @@ urlpatterns += patterns('madrona.features.views',
     url(r'^workspace-public.json', 'workspace', kwargs={"is_owner": False, "username": ''}, name='workspace-public-json'),
     url(r'^feature_tree.css', 'feature_tree_css', name='feature-tree-css'),
 )
-

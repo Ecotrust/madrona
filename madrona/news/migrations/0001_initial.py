@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'Tag'
         db.create_table('news_tag', (
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, db_index=True)),
@@ -37,10 +37,10 @@ class Migration(SchemaMigration):
             ('tag', models.ForeignKey(orm['news.tag'], null=False))
         ))
         db.create_unique('news_entry_tags', ['entry_id', 'tag_id'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'Tag'
         db.delete_table('news_tag')
 
@@ -49,8 +49,8 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field tags on 'Entry'
         db.delete_table('news_entry_tags')
-    
-    
+
+
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -108,5 +108,5 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'})
         }
     }
-    
+
     complete_apps = ['news']

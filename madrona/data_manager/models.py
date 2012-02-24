@@ -20,12 +20,12 @@ SHP_EXTENSIONS = ['shp','dbf','prj','sbn','sbx','shx','shp.xml','qix','fix']
 
 def endswithshp(string):
     return string.endswith('.shp')
-        
+
 def zip_check(ext, zip_file):
     if not True in [info.filename.endswith(ext) for info in zip_file.infolist()]:
         return False
     return True
-    
+
 def validate_zipped_shp(file_path):
     # Just check to see if it's a valid zip and that it has the four necessary parts.
     # We're not checking to make sure it can be read as a shapefile  probably should somewhere.
@@ -71,7 +71,7 @@ def clean_geometry(geom):
     newgeom = geos.fromstr(row[0])
     # sometimes, clean returns a multipolygon
     geometry = largest_poly_from_multi(newgeom)
-    
+
     if not geometry.valid or geometry.num_coords < 2:
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
     else:
@@ -81,7 +81,7 @@ def clean_geometry(geom):
 def zip_from_shp(shp_path):
     # given a path to a '.shp' file, zip it and return the filename and a file object
     from django.core.files import File
-    
+
     directory, file_with_ext = os.path.split(shp_path)
     if file_with_ext.count('.') != 1:
         raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
@@ -96,19 +96,19 @@ def zip_from_shp(shp_path):
         if part_ext in SHP_EXTENSIONS:
             zfile.write(name, bn, zipfile.ZIP_DEFLATED)
     zfile.close()
-    
+
     return filename, File( open(zfile_path) )
-        
+
 class DataLayer(models.Model):
     name = models.CharField(max_length=255, unique=True, null=True)
     description = models.TextField(null=True, blank=True)
     metadata = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    
+
     def __unicode__(self):
         return self.name
-        
+
     @property
     def active_shapefile(self):
         """Return the active shapefile (or None if there aren't any). Raise a stink if there is more than one shapefile marked as active."""
@@ -118,7 +118,7 @@ class DataLayer(models.Model):
             raise Exception("The %s data layer has more than one shapefile marked as active.  That is bad.  There can be only one!" % self.name)
         except Shapefile.DoesNotExist:
             return None
-            
+
     @property
     def active_generalfile(self):
         """Return the active general file (or None if there aren't any). Raise a stink if there is more than one general file marked as active."""
@@ -128,7 +128,7 @@ class DataLayer(models.Model):
             raise Exception("The %s data layer has more than one general file marked as active.  That is bad.  There can be only one!" % self.name)
         except GeneralFile.DoesNotExist:
             return None
-            
+
     @property 
     def has_active_shapefile(self):
         """Returns true if there's an active shapefile associated with this data layer.  Returns False otherwise.  I just realize this is kind of useless
@@ -140,7 +140,7 @@ class DataLayer(models.Model):
             raise Exception("The %s data layer has more than one shapefile marked as active.  That is bad.  There can be only one!" % self.name)
         except Shapefile.DoesNotExist:
             return False
-    
+
 class GeneralFile(models.Model):
     active = models.BooleanField(default=False,help_text="The general file marked as active will be used as the current version.")
     name = models.CharField(max_length=255)
@@ -149,10 +149,10 @@ class GeneralFile(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     file = models.FileField(upload_to='data_manager/general_files')
-    
+
     def __unicode__(self):
         return self.name
-    
+
 class Shapefile(models.Model):
     active = models.BooleanField(default=False,help_text="The shapefile marked as active will be used to represent this data layer.")
     comment = models.TextField()
@@ -166,10 +166,10 @@ class Shapefile(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     shapefile = models.FileField(upload_to='data_manager/shapefiles')
     field_description = models.TextField(null=True, blank=True, help_text='This is list of field names within the shapefile.  It is generated automatically when the shapefile is saved.  There is no need to edit this.')
-    
+
     class Meta:
         ordering = ['-date_created']
-    
+
     def save(self):
         # create a truncated comment to use as a title for the comment in the admin tool
         trunc_com = self.comment[0:25]
@@ -190,28 +190,28 @@ class Shapefile(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.data_layer.name, self.shapefile.name)
-    
+
     def new_filename_and_path(self):
         import time
         from django.template.defaultfilters import slugify
         time_str = time.strftime('%y%m%d', time.localtime() )
         old_path = self.shapefile.path
-        
+
         dir = os.path.dirname(self.shapefile.name)
         newbasename = '%s_%s.zip' % (slugify(self.data_layer.name), time_str)
         self.shapefile.name = os.path.join(dir, newbasename)
-        
+
         #dir = os.path.dirname(self.shapefile.path)
         #self.shapefile.path = os.path.join(dir, newbasename)
         # turns out that you can't do that but magically, you don't need to.  the magical
         # ponies inside django do it for you!
-        
+
         if os.path.exists(old_path):
             from django.core.files.move import file_move_safe
             file_move_safe(old_path,self.shapefile.path)
-        
+
         return self.shapefile
-    
+
     def unzip_to_temp(self):
         # unzip to a temp directory and return the path to the .shp file
         valid, error = validate_zipped_shp(self.shapefile.path)
@@ -220,7 +220,7 @@ class Shapefile(models.Model):
             name = self.shapefile.name
             path = self.shapefile.path
             raise Exception(error)
-        
+
         tmpdir = tempfile.gettempdir()
         zfile = zipfile.ZipFile(self.shapefile.path)
         for info in zfile.infolist():
@@ -233,7 +233,7 @@ class Shapefile(models.Model):
                 if shp_part.endswith('.shp'):
                     shp_file = shp_part
         return shp_file
-    
+
     def read_xml_metadata(self):
         shpfile = self.unzip_to_temp()
         xmlfile = shpfile + '.xml'
@@ -244,7 +244,7 @@ class Shapefile(models.Model):
         else:
             xml_text = None
         return xml_text
-    
+
     def field_info(self):
         fpath = self.unzip_to_temp()
         result = {}
@@ -256,23 +256,23 @@ class Shapefile(models.Model):
             distinct_values_count = dict.fromkeys(field).keys().__len__()
             result[fname] = distinct_values_count
         return result
-    
+
     def field_info_str(self):
         dict = self.field_info()
         return_str = ''
         for key in dict.keys():
             return_str += '%s: %i distinct values, ' % (key, dict[key])
         return return_str
-    
+
     def link_field_names(self):
         info_dict = self.field_info()
         for f in info_dict.keys():
             sf = ShapefileField(name=f,distinct_values=info_dict[f],shapefile=self)
             sf.save()
-    
+
     def load_field_info(self):
         self.field_description = self.field_info_str()
-     
+
     @transaction.commit_on_success  
     def load_to_model(self, feature_model, geometry_only=True, origin_field_name=None, target_field_name=None, verbose=False):
         shpfile = self.unzip_to_temp()
@@ -282,7 +282,7 @@ class Shapefile(models.Model):
         #Data source objects can have different layers of geospatial features; however, 
         #shapefiles are only allowed to have one layer
         lyr = ds[0]
-        
+
         # Treat feature models with multigeometry fields different that those without
         if has_multi_geometry(feature_model):
             for feat in lyr:
@@ -290,7 +290,7 @@ class Shapefile(models.Model):
                 load_single_record(feat.geom, fm, geometry_only, feat, origin_field_name, target_field_name)
                 # print fm.geometry.__class__.__name__
                 fm.save()
-            
+
         else: # Target Feature Model has non-multi geometry (Polygon and so forth)
             for feat in lyr:
                 if feat.geom.__class__.__name__.startswith('Multi'):
@@ -319,13 +319,13 @@ def has_multi_geometry(feature_model,field_name='geometry'):
         return True
     else:
         return False
-        
+
 def is_multi_geometry(geom):
     if geom.__class__.__name__.lower().startswith('multi'):
         return True
     else:
         return False
-        
+
 def convert_to_2d(geom):
     """Convert a geometry from 3D to 2D"""
     from django.contrib.gis.geos import WKBWriter, WKBReader
@@ -342,7 +342,7 @@ def load_single_record(geom,target_model_instance,geometry_only=True,origin_feat
         target_model_instance.__setattr__(target_field_name,origin_feature.__getitem__(origin_field_name).value)
     target_model_instance = load_single_geometry(geom,target_model_instance)
     return target_model_instance    
-                    
+
 def load_single_geometry(geom, target_model_instance):
     """Take a geometry and a model_instance.  Check the projections.  If different from the srid defined in settings, transform the geom to match.
     Check the validity of the geometry.  Clean if neccessary.  Return the model_instance with the geometry loaded.  For now, I'm assuming
@@ -350,10 +350,10 @@ def load_single_geometry(geom, target_model_instance):
     tmi = target_model_instance
     if not geom.srid == settings.GEOMETRY_DB_SRID:
         geom.transform(settings.GEOMETRY_DB_SRID)
-        
+
     tmi_multi = has_multi_geometry(tmi.__class__)
     geom_multi = is_multi_geometry(geom)
-    
+
     if tmi_multi == geom_multi:
         tmi.geometry = geom.geos
     elif tmi_multi:
@@ -366,22 +366,22 @@ def load_single_geometry(geom, target_model_instance):
     elif geom_multi:
         raise Exception("I am a multi geometry.")
         #pass # uh, actually this shouldn't ever happen because this is load_SINGLE_geometry, right?
-    
+
     if not tmi.geometry.valid:
         tmi.geometry = clean_geometry(tmi.geometry)
     return tmi
-    
+
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
     name = models.CharField(max_length=255)
     distinct_values = models.IntegerField()
     type = models.CharField(max_length=255, null=True, blank=True)
     shapefile = models.ForeignKey(Shapefile)
-    
+
     def __unicode__(self):
         return '%s: %i distinct values' % (self.name, self.distinct_values)
 
-    
+
 #class GeneralShapeComment(models.Model):
 #    comment = models.TextField()
 #    truncated_comment = models.CharField(max_length=255, editable=False) 

@@ -35,7 +35,7 @@ def create_test_geometries():
     for geom in geoms.values():
         geom.srid = 3310
     return geoms
-    
+
 def meter_measurements(geoms):
     rdict = {}
     for k,v in geoms.iteritems():
@@ -44,7 +44,7 @@ def meter_measurements(geoms):
         else:
             rdict[k] = v.area
     return rdict
-    
+
 def meter_dict_convert(mdict,unit):
     con_dict = {}
     for k,v in mdict.iteritems():
@@ -63,10 +63,10 @@ class SettingsTest(TestCase):
         dau = settings.DISPLAY_AREA_UNITS
         gds = settings.GEOMETRY_DB_SRID
         self.failIf(None in [dlu,dau,gds])
-        
+
         for unit in [dlu,dau]:
             self.failIf( unit not in D.UNITS.keys() + A.UNITS.keys() )
-            
+
 class AppendedMethodsTest(TestCase):
     def test_appended_methods(self):
         geoms = create_test_geometries()
@@ -83,7 +83,7 @@ class AppendedMethodsTest(TestCase):
             settings.DISPLAY_LENGTH_UNITS: display_dict,
         }
         add_conversion_methods_to_GEOSGeometry()
-        
+
         for unit, result_dict in units_dict.iteritems():
             for key, geom in geoms.iteritems():
                 fail_str = "unit = %s, key = %s, dict value = %f" % (unit,key,result_dict[key])
@@ -93,14 +93,14 @@ class AppendedMethodsTest(TestCase):
                     att_name = 'area_sq_' + unit
                 fail_str += ', appended method value = %f' % getattr(geom,att_name)
                 self.assertAlmostEqual(result_dict[key],getattr(geom,att_name),NUM_DIGITS,fail_str)
-            
+
 class OtherMethodsTest(TestCase):
     def test_other_methods(self):
         unit = settings.DISPLAY_LENGTH_UNITS
         geoms = create_test_geometries()
         m_dict = meter_measurements(geoms)
         result_dict = meter_dict_convert(m_dict,unit)
-        
+
         for key, geom in geoms.iteritems():
             fail_str = "unit = %s, key = %s, dict value = %f" % (unit,key,result_dict[key])
             if key.find('line') > -1:
@@ -109,6 +109,3 @@ class OtherMethodsTest(TestCase):
                 att_name = 'area_sq_' + unit
             fail_str += ', appended method value = %f' % getattr(geom,att_name)
             self.assertAlmostEqual(result_dict[key],getattr(geom,att_name),NUM_DIGITS,fail_str)
-
-
-

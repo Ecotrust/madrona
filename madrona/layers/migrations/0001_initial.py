@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'UserLayerList'
         db.create_table('layers_userlayerlist', (
             ('active', self.gf('django.db.models.fields.BooleanField')(default=True, blank=True)),
@@ -33,10 +33,10 @@ class Migration(SchemaMigration):
             ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
         db.send_create_signal('layers', ['PublicLayerList'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'UserLayerList'
         db.delete_table('layers_userlayerlist')
 
@@ -45,8 +45,8 @@ class Migration(SchemaMigration):
 
         # Deleting model 'PublicLayerList'
         db.delete_table('layers_publiclayerlist')
-    
-    
+
+
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -100,5 +100,5 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['layers']

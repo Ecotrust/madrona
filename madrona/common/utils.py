@@ -26,7 +26,7 @@ def get_logger(caller_name=None):
             level = logging.DEBUG
         else:
             level = logging.WARNING 
-    
+
     format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     if logfile:
         logging.basicConfig(level=level, format=format, filename=logfile)
@@ -50,8 +50,8 @@ log = get_logger()
 
 def KmlWrap( string ):
     return '<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">' + string + '</kml>'
-    
-    
+
+
 def LookAtKml( geometry ):
     lookAtParams = ComputeLookAt( geometry )
     return '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (lookAtParams['latitude'], lookAtParams['longitude'], lookAtParams['range'], lookAtParams['tilt'], lookAtParams['heading'] )
@@ -79,7 +79,7 @@ def LargestLineFromMulti(geom):
     else:
         largest_geom = geom
     return largest_geom  
-   
+
 def angle(pnt1,pnt2,pnt3):
     """
     Return the angle in radians between line(pnt2,pnt1) and line(pnt2,pnt3)
@@ -93,7 +93,7 @@ def angle(pnt1,pnt2,pnt3):
     cursor.execute(query)
     row = cursor.fetchone()
     return row[0]
-    
+
 def angle_degrees(pnt1,pnt2,pnt3):
     """
     Return the angle in degrees between line(pnt2,pnt1) and line(pnt2,pnt3)
@@ -115,7 +115,7 @@ def spike_ring_indecies(line_ring,threshold=0.01):
             break
         else:
             p1_coords = line_ring.coords[i - 1]
-            
+
         # set up the points for the angle test.
         p1_str = 'POINT (%f %f), %i' % (p1_coords[0], p1_coords[1], settings.GEOMETRY_DB_SRID)
         p1 = fromstr(p1_str)
@@ -126,7 +126,7 @@ def spike_ring_indecies(line_ring,threshold=0.01):
         p3 = fromstr(p3_str)
         if( angle(p1,p2,p3) <= radian_thresh ):
             spike_indecies.append(i)
-    
+
     return spike_indecies
 
 def remove_spikes(poly,threshold=0.01):
@@ -134,7 +134,7 @@ def remove_spikes(poly,threshold=0.01):
     Looks for spikes (angles < threshold degrees) in the polygons exterior ring.  If there are spikes,
     they will be removed and a polygon (without spikes) will be returned.  If no spikes are found, method
     will return original geometry.
-    
+
     NOTE: This method does not examine or fix interior rings.  So far those haven't seemed to have been a problem.
     """
     line_ring = poly.exterior_ring
@@ -156,7 +156,7 @@ def remove_spikes(poly,threshold=0.01):
                 line_ring.remove(line_ring.coords[org_index])
         poly.exterior_ring = line_ring
     return poly
-    
+
 def clean_geometry(geom):
     """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
     cursor = connection.cursor()
@@ -190,7 +190,7 @@ def ensure_clean(geo, srid):
         if not geo.valid:
             raise Exception("ensure_clean could not produce a valid geometry.")
     return geo
-   
+
 def ComputeLookAt( geometry ):
 
     lookAtParams = {}
@@ -205,20 +205,20 @@ def ComputeLookAt( geometry ):
     s = trans_geom.extent[1]
     e = trans_geom.extent[2]
     n = trans_geom.extent[3]
-    
+
     center_lon = trans_geom.centroid.y
     center_lat = trans_geom.centroid.x
-    
+
     lngSpan = (Point(w, center_lat)).distance(Point(e, center_lat)) 
     latSpan = (Point(center_lon, n)).distance(Point(center_lon, s))
-    
+
     aspectRatio = 1.0
 
     PAD_FACTOR = 1.5 # add 50% to the computed range for padding
-    
+
     aspectUse = max( aspectRatio, min((lngSpan / latSpan),1.0))
     alpha = (45.0 / (aspectUse + 0.4) - 2.0) * DEGREES # computed experimentally;
-  
+
     # create LookAt using distance formula
     if lngSpan > latSpan:
         # polygon is wide
@@ -226,25 +226,25 @@ def ComputeLookAt( geometry ):
     else:
         # polygon is taller
         beta = min(DEGREES * 90.0, alpha + latSpan / 2.0 / EARTH_RADIUS)
-  
+
     lookAtParams['range'] = PAD_FACTOR * EARTH_RADIUS * (sin(beta) *
         sqrt(1.0 / pow(tan(alpha),2.0) + 1.0) - 1.0)
-        
+
     trans_geom.transform(4326)
-    
+
     lookAtParams['latitude'] = trans_geom.centroid.y
     lookAtParams['longitude'] = trans_geom.centroid.x
     lookAtParams['tilt'] = 0
     lookAtParams['heading'] = 0
 
     return lookAtParams
-    
+
 def get_class(path):
     from django.utils import importlib
     module,dot,klass = path.rpartition('.')
     m = importlib.import_module(module)
     return m.__getattribute__(klass)
-    
+
 def kml_errors(kmlstring):
     import feedvalidator
     from feedvalidator import compatibility
@@ -303,7 +303,7 @@ def hex8_to_rgba(hex8):
     rgba_values = [int(x,16) for x in hex_values]
     rgba_values.reverse()
     return rgba_values
-    
+
 from django.utils.importlib import import_module
 
 def load_session(request, session_key):
@@ -349,7 +349,7 @@ class KMZUtil:
     """
     Recursively adds a directory to a zipfile
     modified from http://stackoverflow.com/questions/458436/adding-folders-to-a-zip-file-using-python
-    
+
     from madrona.common.utils import ZipUtil
     zu = ZipUtil()
     filename = 'TEMP.zip'
@@ -494,7 +494,7 @@ def asKml(input_geom, altitudeMode=None, uid=''):
 
     if geom.geom_type == 'Polygon':
         geom = forceLHR(geom)
-        
+
     kml = geom.kml
 
     if altitudeMode and geom.geom_type == 'Polygon':
@@ -522,13 +522,13 @@ def enable_sharing(group=None):
         gct = ContentType.objects.get(name="group")
         p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
         p.save()
- 
+
     # Set up default sharing groups
     for groupname in settings.SHARING_TO_PUBLIC_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
         g.permissions.add(p)
         g.save()
-    
+
     for groupname in settings.SHARING_TO_STAFF_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
         g.permissions.add(p)

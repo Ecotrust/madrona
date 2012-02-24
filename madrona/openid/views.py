@@ -59,13 +59,13 @@ def _build_context(request, extra_context=None):
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
     return context    
-    
+
 def ask_openid(request, openid_url, redirect_to, on_failure=None):
     """ basic function to ask openid and return response """
     on_failure = on_failure or signin_failure
     sreg_req = None
     ax_req = None
-    
+
     trust_root = getattr(
         settings, 'OPENID_TRUST_ROOT', get_url_host(request) + '/'
     )
@@ -80,7 +80,7 @@ def ask_openid(request, openid_url, redirect_to, on_failure=None):
     except DiscoveryFailure:
         msg = _("The OpenID %s was invalid") % openid_url
         return on_failure(request, msg)
-    
+
     # get capabilities
     use_ax, use_sreg = discover_extensions(openid_url)
     if use_sreg:
@@ -97,7 +97,7 @@ def ask_openid(request, openid_url, redirect_to, on_failure=None):
                                 alias='email', required=True))
         ax_req.add(ax.AttrInfo('http://schema.openid.net/namePerson/friendly', 
                                 alias='nickname', required=True))
-                      
+
         # add custom ax attrs          
         ax_attrs = getattr(settings, 'OPENID_AX', [])
         for attr in ax_attrs:
@@ -105,12 +105,12 @@ def ask_openid(request, openid_url, redirect_to, on_failure=None):
                 ax_req.add(ax.AttrInfo(attr[0], required=alias[1]))
             else:
                 ax_req.add(ax.AttrInfo(attr[0]))
-       
+
     if sreg_req is not None:
         auth_request.addExtension(sreg_req)
     if ax_req is not None:
         auth_request.addExtension(ax_req)
-    
+
     redirect_url = auth_request.redirectURL(trust_root, redirect_to)
     return HttpResponseRedirect(redirect_url)
 
@@ -119,12 +119,12 @@ def complete(request, on_success=None, on_failure=None, return_to=None,
     """ complete openid signin """
     on_success = on_success or default_on_success
     on_failure = on_failure or default_on_failure
-    
+
     consumer = Consumer(request.session, DjangoOpenIDStore())
     # make sure params are encoded in utf8
     params = dict((k,smart_unicode(v)) for k, v in request.GET.items())
     openid_response = consumer.complete(params, return_to)
-            
+
     if openid_response.status == SUCCESS:
         return on_success(request, openid_response.identity_url,
                 openid_response, **kwargs)
@@ -172,7 +172,7 @@ def signin_success(request, identity_url, openid_response,
     """
 
     openid_ = from_openid_response(openid_response)
-    
+
     openids = request.session.get('openids', [])
     openids.append(openid_)
     request.session['openids'] = openids
@@ -192,18 +192,18 @@ def signin_success(request, identity_url, openid_response,
     if user_.is_active:
         user_.backend = "django.contrib.auth.backends.ModelBackend"
         login(request, user_)
-        
+
     redirect_to = request.GET.get(redirect_field_name, '')
     if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
         redirect_to = settings.LOGIN_REDIRECT_URL
     return HttpResponseRedirect(redirect_to)
-    
+
 def signin_failure(request, message, template_name='authopenid/signin.html',
         redirect_field_name=REDIRECT_FIELD_NAME, openid_form=OpenidSigninForm, 
         auth_form=AuthenticationForm, extra_context=None, **kwargs):
     """
     falure with openid signin. Go back to signin page.
-    
+
     :attr request: request object
     :attr template_name: string, name of template to use, default is 
     'authopenid/signin.html'
@@ -245,7 +245,7 @@ def signin(request, template_name='authopenid/signin.html',
     """
     if on_failure is None:
         on_failure = signin_failure
-        
+
     from madrona.common.utils import get_logger
     log = get_logger()
 
@@ -315,7 +315,7 @@ def is_association_exist(openid_url):
     except:
         is_exist = False
     return is_exist
-    
+
 def register_account(form, _openid):
     """ create an account """
     user = User.objects.create_user(form.cleaned_data['username'], 
@@ -374,8 +374,8 @@ def register(request, template_name='authopenid/complete.html',
             nickname = openid_.ax.get('http://schema.openid.net/namePerson/friendly')[0]
         if openid_.ax.get('http://schema.openid.net/contact/email', False):
             email = openid_.ax.get('http://schema.openid.net/contact/email')[0]
-        
-    
+
+
     form1 = register_form(initial={
         'username': nickname,
         'email': email,
@@ -383,7 +383,7 @@ def register(request, template_name='authopenid/complete.html',
     form2 = auth_form(initial={ 
         'username': nickname,
     })
-    
+
     if request.POST:
         user_ = None
         if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
@@ -405,7 +405,7 @@ def register(request, template_name='authopenid/complete.html',
             uassoc.save(send_email=send_email)
             login(request, user_)    
             return HttpResponseRedirect(redirect_to) 
-    
+
     return render(template_name, {
         'form1': form1,
         'form2': form2,
@@ -431,16 +431,16 @@ def signout(request, next_page=None, template_name='registration/logged_out.html
     logout(request)
     if next is not None:
         return HttpResponseRedirect(next)
-    
+
     if next_page is None:
         return render(template_name, {
             'title': _('Logged out')}, context_instance=RequestContext(request))
-            
+
     return HttpResponseRedirect(next_page or request.path)
-    
+
 def xrdf(request, template_name='authopenid/yadis.xrdf'):
     """ view used to process the xrdf file"""
-    
+
     url_host = get_url_host(request)
     return_to = [
         "%s%s" % (url_host, reverse('user_complete_signin'))
@@ -448,12 +448,12 @@ def xrdf(request, template_name='authopenid/yadis.xrdf'):
     response = render(template_name, { 
         'return_to': return_to 
         }, context_instance=RequestContext(request))
-        
-        
+
+
     response['Content-Type'] = "application/xrds+xml"
     response['X-XRDS-Location']= request.build_absolute_uri(reverse('oid_xrdf'))
     return response    
-        
+
 @login_required
 def password_change(request, 
         template_name='authopenid/password_change_form.html', 
@@ -508,9 +508,9 @@ def associate_failure(request, message,
         template_failure="authopenid/associate.html", 
         openid_form=AssociateOpenID, redirect_name=None, 
         extra_context=None, **kwargs):
-        
+
     """ function used when new openid association fail"""
-    
+
     return render(template_failure, {
         'form': openid_form(request.user),
         'msg': message,
@@ -531,7 +531,7 @@ def associate_success(request, identity_url, openid_response,
                 user_id=request.user.id
     )
     uassoc.save(send_email=send_email)
-    
+
     redirect_to = request.GET.get(redirect_field_name, '')
     if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
         redirect_to = settings.LOGIN_REDIRECT_URL
@@ -543,22 +543,22 @@ def complete_associate(request, redirect_field_name=REDIRECT_FIELD_NAME,
         openid_form=AssociateOpenID, redirect_name=None, 
         on_success=associate_success, on_failure=associate_failure,
         send_email=True, extra_context=None):
-        
+
     """ in case of complete association with openid """
-        
+
     return complete(request, on_success, on_failure,
             get_url_host(request) + reverse('user_complete_associate'),
             redirect_field_name=redirect_field_name, openid_form=openid_form, 
             template_failure=template_failure, redirect_name=redirect_name, 
             send_email=send_email, extra_context=extra_context)
-    
+
 @login_required
 def associate(request, template_name='authopenid/associate.html', 
         openid_form=AssociateOpenID, redirect_field_name=REDIRECT_FIELD_NAME,
         on_failure=associate_failure, extra_context=None):
-        
+
     """View that allow a user to associate a new openid to its account.
-    
+
     :attr request: request object
     :attr template_name: string, name of template to use, 
     'authopenid/associate.html' by default
@@ -573,7 +573,7 @@ def associate(request, template_name='authopenid/associate.html',
     context. A callable object in this dictionary will be called to produce 
     the end result which appears in the context.
     """
-    
+
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     if request.POST:            
         form = openid_form(request.user, data=request.POST)
@@ -595,18 +595,18 @@ def associate(request, template_name='authopenid/associate.html',
         'form': form,
         redirect_field_name: redirect_to
     }, context_instance=_build_context(request, extra_context=extra_context))     
-    
+
 @login_required
 def dissociate(request, template_name="authopenid/dissociate.html",
         dissociate_form=OpenidDissociateForm, 
         redirect_field_name=REDIRECT_FIELD_NAME, 
         default_redirect=settings.LOGIN_REDIRECT_URL, extra_context=None):
-        
+
     """ view used to dissociate an openid from an account """
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
         redirect_to = default_redirect
-        
+
     # get list of associated openids
     rels = UserAssociation.objects.filter(user__id=request.user.id)
     associated_openids = [rel.openid_url for rel in rels]
@@ -615,7 +615,7 @@ def dissociate(request, template_name="authopenid/dissociate.html",
         "You should set a password first.")
         return HttpResponseRedirect("%s?%s" % (redirect_to,
             urllib.urlencode({ "msg": msg })))
-    
+
     if request.POST:
         form = dissociate_form(request.POST)
         if form.is_valid():
@@ -623,7 +623,7 @@ def dissociate(request, template_name="authopenid/dissociate.html",
             msg = ""
             if openid_url not in associated_openids:
                 msg = _("%s is not associated to your account") % openid_url
-            
+
             if not msg:
                 UserAssociation.objects.get(openid_url__exact=openid_url).delete()
                 if openid_url == request.session.get('openid_url'):

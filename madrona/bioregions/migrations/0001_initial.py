@@ -6,9 +6,9 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'Bioregion'
         db.create_table('bioregions_bioregion', (
             ('geometry', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)),
@@ -18,14 +18,14 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
         ))
         db.send_create_signal('bioregions', ['Bioregion'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'Bioregion'
         db.delete_table('bioregions_bioregion')
-    
-    
+
+
     models = {
         'bioregions.bioregion': {
             'Meta': {'object_name': 'Bioregion'},
@@ -36,5 +36,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['bioregions']

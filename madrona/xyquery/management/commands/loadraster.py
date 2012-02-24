@@ -43,12 +43,12 @@ class Command(BaseCommand):
                 pass
         the_layer = Layer(name=layername)
         the_layer.save()
-        
+
         # Make a vrt copy of the dataset
         vrtpath = os.path.abspath(os.path.join(settings.MEDIA_ROOT,"xyquery_rasters",layername+".vrt"))
         command = "gdal_translate %s -of VRT '%s' '%s'" % (srscmdpart, rast, vrtpath)
         output = Popen(command, shell=True).communicate()[0]
-        
+
         ds = gdal.Open(vrtpath)
         if not ds or not os.path.exists(vrtpath):
             raise Exception("%s does not exist .. somthing went screwy in the gdal_translate command \n\n %s" % (vrtpath, command))
@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
         if not os.path.exists(rast):
             return "%s not found; Specify the path to an existing raster file" % rast
-        
+
         srs = options.get('srs',None)
         layername = options.get('name',None)
         if not layername:

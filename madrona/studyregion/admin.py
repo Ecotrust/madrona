@@ -18,5 +18,5 @@ class StudyRegionAdmin(admin.GeoModelAdmin):
             'fields': ('active',)
         }),
     )
-    
+
 admin.site.register(StudyRegion, StudyRegionAdmin)

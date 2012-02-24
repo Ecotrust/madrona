@@ -6,9 +6,9 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'StudyRegion'
         db.create_table(u'mm_study_region', (
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -25,14 +25,14 @@ class Migration(SchemaMigration):
             ('lookAt_Tilt', self.gf('django.db.models.fields.FloatField')(default=0)),
         ))
         db.send_create_signal('studyregion', ['StudyRegion'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'StudyRegion'
         db.delete_table(u'mm_study_region')
-    
-    
+
+
     models = {
         'studyregion.studyregion': {
             'Meta': {'object_name': 'StudyRegion', 'db_table': "u'mm_study_region'"},
@@ -50,5 +50,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         }
     }
-    
+
     complete_apps = ['studyregion']

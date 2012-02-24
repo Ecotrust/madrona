@@ -10,7 +10,7 @@ import time
 class Command(BaseCommand):
     help = "Switches from one study region to another, reprocessing MPAs and expiring report caches."
     args = '[pk]'
-    
+
     def handle(self, pk, **options):
         # new_study_region = StudyRegion.objects.get(pk=pk)
         # old_study_region = StudyRegion.objects.current()

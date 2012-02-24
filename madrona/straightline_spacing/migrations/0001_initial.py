@@ -6,9 +6,9 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'SpacingPoint'
         db.create_table('straightline_spacing_spacingpoint', (
             ('geometry', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=settings.GEOMETRY_DB_SRID)),
@@ -16,14 +16,14 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
         ))
         db.send_create_signal('straightline_spacing', ['SpacingPoint'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'SpacingPoint'
         db.delete_table('straightline_spacing_spacingpoint')
-    
-    
+
+
     models = {
         'straightline_spacing.spacingpoint': {
             'Meta': {'object_name': 'SpacingPoint'},
@@ -32,5 +32,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         }
     }
-    
+
     complete_apps = ['straightline_spacing']

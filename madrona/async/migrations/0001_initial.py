@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'URLtoTaskID'
         db.create_table('async_urltotaskid', (
             ('url', self.gf('django.db.models.fields.TextField')()),
@@ -15,14 +15,14 @@ class Migration(SchemaMigration):
             ('task_id', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('async', ['URLtoTaskID'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'URLtoTaskID'
         db.delete_table('async_urltotaskid')
-    
-    
+
+
     models = {
         'async.urltotaskid': {
             'Meta': {'object_name': 'URLtoTaskID'},
@@ -31,5 +31,5 @@ class Migration(SchemaMigration):
             'url': ('django.db.models.fields.TextField', [], {})
         }
     }
-    
+
     complete_apps = ['async']

@@ -16,13 +16,13 @@ def LandKML(request):
     response = HttpResponse(kml_doc_from_queryset(land), mimetype='application/vnd.google-earth.kml+xml')
     response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'land'
     return response
-    
+
 def SpacingPointKML(request):
     sp_points = SpacingPoint.objects.all()
     response = HttpResponse(kml_doc_from_queryset(sp_points), mimetype='application/vnd.google-earth.kml+xml')
     response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'SpacingPoints'
     return response
-    
+
 def SpacingNetworkKML(request):
     sp_graph = PickledGraph.objects.all()[0].graph
     geometries = points_from_graph(sp_graph)
@@ -47,20 +47,20 @@ def FishDistanceKML(request):
     response = HttpResponse('<Placemark>' + line.kml + '</Placemark>', mimetype='application/vnd.google-earth.kml+xml')
     response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'line'
     return response
-    
+
 def create_pickled_graph_from_all_land(request):
     if request.user.is_staff:
         create_pickled_graph()
         return HttpResponseRedirect('/admin/spacing/pickledgraph/')
     else:
         return HttpResponseForbidden
-    
+
 def spacing_workbook(in_dict, ws_title):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('spacing_matrix')
     ws = spacing_worksheet(in_dict, ws_title,ws)
     return wb
-    
+
 def spacing_worksheet(in_dict,ws_title,ws):
     results = distance_matrix_and_labels(in_dict, straight_line=False)
     straight_results = distance_matrix_and_labels(in_dict, straight_line=True)
@@ -72,7 +72,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
     if ws_title is not None:
         ws.row(current_row).write(0,unicode(ws_title))
         current_row += 2
-        
+
     for title, results in results_dict.items():
         ws.row(current_row).write(0,title)
         current_row += 1
@@ -82,7 +82,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
         for i,lab in enumerate(label_list):
             ws.row(current_row).write(i+1,unicode(lab) )
         current_row += 1
-    
+
         # write the rest of the matrix
         for i,row in enumerate(dist_mat):
             # write the label in the first column

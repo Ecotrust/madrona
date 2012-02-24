@@ -7,13 +7,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Changing field 'PrivateKml.base_kml'
         db.alter_column('layers_privatekml', 'base_kml', self.gf('django.db.models.fields.FilePathField')(path='/usr/local/privatekml', max_length=255, recursive=True, match='.kml$'))
 
 
     def backwards(self, orm):
-        
+
         # Changing field 'PrivateKml.base_kml'
         db.alter_column('layers_privatekml', 'base_kml', self.gf('django.db.models.fields.FilePathField')(path='/mnt/EBS_superoverlays/display', max_length=100, recursive=True, match='^*.kml$'))
 

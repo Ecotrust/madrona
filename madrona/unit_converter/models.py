@@ -11,7 +11,7 @@ def srid_list():
     cursor.execute(query)
     results = cursor.fetchall()
     return [ a[0] for a in results ]
-    
+
 def units_from_srid(srid):
     """Get the linear units name from the srid definition."""
     srs = osr.SpatialReference()
@@ -20,17 +20,17 @@ def units_from_srid(srid):
     if units.lower() == 'meter' or units.lower() == 'metre':
         units = 'meter'
     return units
-    
+
 def area_unit_code_from_srid_unit(srid_unit):
     """Look at Area.LALIAS (a dictionary of lower case aliases found in srid definitions for units) and return the proper unit
     abbreviation used in the django.contrib.gis.measure.Area class."""
     return Area.LALIAS[srid_unit.lower()]
-    
+
 def distance_unit_code_from_srid_unit(srid_unit):
     """Look at Distance.LALIAS (a dictionary of lower case aliases found in srid definitions for units) and return the proper unit
     abbreviation used in the django.contrib.gis.measure.Distance class."""
     return Distance.LALIAS[srid_unit.lower()]
-    
+
 def area_unit_code_from_srid(srid):
     """Return the unit code used in django.contrib.gis.measure.Area to represent the units of the given srid.  For example srid
     3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Area uses 'sq_m' to represent square
@@ -42,7 +42,7 @@ def distance_unit_code_from_srid(srid):
     3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Distance uses 'm' to represent 
     meters so that's what this method will return for srid 3310."""
     return distance_unit_code_from_srid_unit( units_from_srid(srid) )
-    
+
 def units_list():
     """Return a non repeating list of all the linear units from the spatial_ref_sys table."""
     units = []
@@ -51,7 +51,7 @@ def units_list():
         if not unit in units:
             units.append(unit)
     return units
-    
+
 def units_count_dict():
     """Return a dictionary with linear units as keys and a count of how many projections in the spatial_ref_sys table use 
     those units as values."""
@@ -72,7 +72,7 @@ def units(self):
         return units_from_srid(self.srid)
     else:
         raise Exception("This geometry must have an srid if you want to know the units.")
-        
+
 @property
 def distance_object(self):
     """Return the django.contrib.gis.measure.Distance object for a given geometry with origin units determined by 
@@ -80,7 +80,7 @@ def distance_object(self):
     For instance if you want to see the distance in miles, call distance_object.mi"""
     eval_str = "Distance(%s=%f)" % (distance_unit_code_from_srid(self.srid),self.length)
     return eval(eval_str)
-        
+
 @property
 def area_object(self):
     """Return the django.contrib.gis.measure.Area object for a given geometry with origin units determined by 
@@ -131,8 +131,8 @@ def add_conversion_methods_to_GEOSGeometry():
         GG.area_units = settings.DISPLAY_AREA_UNITS
         a_meth_name = 'area_' + settings.DISPLAY_AREA_UNITS
         GG.area_in_display_units = getattr(GG,a_meth_name)
-        
-        
+
+
 ##################################################
 #  The following methods do not depend on the ones above.
 #  They're generally much simpler and easier to use but
@@ -144,13 +144,13 @@ def convert_float_to_length_display_units(float_value):
     to the units defined in settings.DISPLAY_LENGTH_UNITS."""
     eval_str = "Distance(%s=%f).%s" % (distance_unit_code_from_srid( settings.GEOMETRY_DB_SRID ), float_value, settings.DISPLAY_LENGTH_UNITS)
     return eval(eval_str)
-    
+
 def convert_float_to_area_display_units(float_value):
     """Given a float value, this method will convert from the units found in settings.GEOMETRY_DB_SRID
     to the units defined in settings.DISPLAY_AREA_UNITS."""
     eval_str = "Area(%s=%f).%s" % (area_unit_code_from_srid( settings.GEOMETRY_DB_SRID ), float_value, settings.DISPLAY_AREA_UNITS)
     return eval(eval_str)
-    
+
 def geometry_length_in_display_units(geom):
     """For a given geometry, return the geometry length in the units specified as settings.DISPLAY_LENGTH_UNITS. If the geometry has
     an srid, assume the origin units are the ones appropriate to that srid.  If there is no assigned srid, assume the srid is the one
@@ -161,7 +161,7 @@ def geometry_length_in_display_units(geom):
         srid = settings.GEOMETRY_DB_SRID
     eval_str = "Distance(%s=%f).%s" % (distance_unit_code_from_srid(srid),geom.length,settings.DISPLAY_LENGTH_UNITS)
     return eval(eval_str)
-    
+
 def geometry_area_in_display_units(geom):
     """For a given geometry, return the geometry area in the units specified as settings.DISPLAY_AREA_UNITS. If the geometry has
     an srid, assume the origin units are the ones appropriate to that srid.  If there is no assigned srid, assume the srid is the one
@@ -172,7 +172,7 @@ def geometry_area_in_display_units(geom):
         srid = settings.GEOMETRY_DB_SRID
     eval_str = "Area(%s=%f).%s" % (area_unit_code_from_srid(srid),geom.area,settings.DISPLAY_AREA_UNITS)
     return eval(eval_str)
-    
+
 def length_in_display_units(geom_or_num):
     """Take either a geometry or a numeric length value and convert to display units."""
     from django.contrib.gis.geos import GEOSGeometry as GG
@@ -180,7 +180,7 @@ def length_in_display_units(geom_or_num):
         return geometry_length_in_display_units(geom_or_num)
     else:
         return convert_float_to_length_display_units(geom_or_num)
-        
+
 def area_in_display_units(geom_or_num):
     """Take either a geometry or a numeric area value and convert to display units."""
     from django.contrib.gis.geos import GEOSGeometry as GG
@@ -188,4 +188,3 @@ def area_in_display_units(geom_or_num):
         return geometry_area_in_display_units(geom_or_num)
     else:
         return convert_float_to_area_display_units(geom_or_num)
-    

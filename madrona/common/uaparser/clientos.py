@@ -55,4 +55,3 @@ def client_os(user_agent):
         'full_platform': full_platform,
         'platform': platform,
     }   
-

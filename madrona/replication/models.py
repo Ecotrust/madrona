@@ -12,22 +12,22 @@ def use_sort_as_key(results):
     for hab,sub_dict in results.iteritems():
         sub_dict.update( {'name':hab} )
         sort_results.update( {results[hab]['sort']:sub_dict} )
-    
+
     return sort_results
-    
+
 class ReplicationSetup(models.Model):
     org_scheme = models.ForeignKey(int_models.OrganizationScheme)
-    
+
     def __unicode__(self):
         return self.org_scheme.name
-        
+
     def save(self, *args, **kwargs):
         super(ReplicationSetup,self).save(*args, **kwargs)
         for fm in self.org_scheme.featuremapping_set.all():
             # calling fm.units on the next line triggers a featuremapping validation method
             ht, created = HabitatThreshold.objects.get_or_create(replication_setup=self,habitat=fm,units=fm.units)
             ht.save()
-            
+
     def analyze(self, in_dict):
         """
         in_dict should be like: { id: hab_result_dict, id2: hab_result_dict2, etc. }.  this method will return the same 
@@ -40,7 +40,7 @@ class ReplicationSetup(models.Model):
             else:
                 results[k] = self.analyze_single_item(geom)
         return results
-            
+
     def analyze_single_item(self,geom):
         """
         Get the habitat representation results for the geom (this could be for a cluster (geom collection) or for
@@ -54,7 +54,7 @@ class ReplicationSetup(models.Model):
             sub_dict = ht.analyze(value=results[ht.habitat.name]['result'],geom=geom)
             results[ht.habitat.name].update(sub_dict)
         return results
-        
+
 class HabitatThreshold(models.Model):
     replication_setup = models.ForeignKey(ReplicationSetup)
     habitat = models.ForeignKey(int_models.FeatureMapping)
@@ -62,16 +62,16 @@ class HabitatThreshold(models.Model):
     rule = models.ForeignKey('ThresholdRule', null=True, blank=True)
     units = models.CharField(blank=True, max_length=255)
     date_modified = models.DateTimeField(null=True, auto_now=True, verbose_name="Date Modified")
-    
+
     def __unicode__(self):
         return self.habitat.name
-    
+
     def save(self, *args, **kwargs):
         if self.minimum_quantity!=None and self.rule!=None:
             raise Exception("You can specify minimum quantity or a rule.  You may not specify both.")
         else:
             super(HabitatThreshold, self).save(*args, **kwargs)
-            
+
     def analyze(self, value=0.0, geom=fromstr('POLYGON EMPTY')):
         results = {}
         if self.minimum_quantity:
@@ -119,7 +119,7 @@ def rule_for_soft_30_100m(geom):
     else:
         reason = 'None of the replication requirements were met: IF area 30-100m soft bottom >= 7 sq mi OR total area soft bottom >= 7 sq mi AND area 30-100m soft bottom >= 5 sq mi AND [length 0-30m soft proxy >= 1.1 mi OR area >100m soft bottom >= 1 sq mi]'
     return replicate, reason
-    
+
 def rule_for_soft_100_3000m(geom):
     """
     IF area 100-3000m soft bottom >= 17 sq mi
@@ -162,13 +162,13 @@ def sub_rule_for_0_30_area(geom):
         reason = 'Sufficient 0-30m proxy and sufficient 0-30m depth range area.'
         replicate = True
         return replicate, reason
-        
+
 def sub_rule_for_shoreline_length(geom):
     from report.models import ShoreLine
     sl = ShoreLine.objects.all()[0]
     sl_segment = sl.segment_proxy_parallel(geom)
     # I don't really think this method will work either.  I think I'm just giving up on this whole idea.
-    
+
 def sub_rule_for_inshore_area(geom):
     from report.models import construct_inshore_poly
     replicate = False
@@ -186,7 +186,7 @@ def sub_rule_for_inshore_area(geom):
     else:
         reason = 'Insufficient area captured between proxy line and shore.'
         return replicate, reason
-    
+
 def sub_rule_for_boundary_angle(geom):
     from madrona.intersection.models import OrganizationScheme, FeatureMapping
     from report.models import angle_test
@@ -199,7 +199,7 @@ def sub_rule_for_boundary_angle(geom):
     else:
         reason = 'Boundary problems. In addition to containing the 0-30m proxy line, the shape must contain a corresponding amount of 0-30m depth zone area.'
         return replicate, reason
-        
+
 def sub_rule_for_0_30m_proxies(geom):
     from report.models import touches_30m_contour_test
     area_result, reason = sub_rule_for_0_30_area(geom)
@@ -229,9 +229,9 @@ def rule_for_soft_0_30m(geom):
         return replicate, reason
     else:
         return sub_rule_for_0_30m_proxies(geom)
-            
+
 ### End Rule Functions ###
-    
+
 def rule_functions(module=__name__):
     all_funcs = functions_in_module(module)
     for key in all_funcs.keys():
@@ -243,12 +243,10 @@ class ThresholdRule(models.Model):
     name_choices = zip(rule_functions().keys(),rule_functions().keys())
     name = models.CharField(max_length=180, choices=name_choices)
     description = models.TextField(blank=True,null=True)
-    
+
     def __unicode__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         self.description = rule_functions()[self.name].__doc__
         super(ThresholdRule,self).save(*args, **kwargs)
-
-        

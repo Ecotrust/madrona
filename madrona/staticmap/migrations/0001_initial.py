@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'MapConfig'
         db.create_table('staticmap_mapconfig', (
             ('mapfile', self.gf('django.db.models.fields.files.FileField')(max_length=510)),
@@ -22,14 +22,14 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
         ))
         db.send_create_signal('staticmap', ['MapConfig'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'MapConfig'
         db.delete_table('staticmap_mapconfig')
-    
-    
+
+
     models = {
         'staticmap.mapconfig': {
             'Meta': {'object_name': 'MapConfig'},
@@ -45,5 +45,5 @@ class Migration(SchemaMigration):
             'mapname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'})
         }
     }
-    
+
     complete_apps = ['staticmap']

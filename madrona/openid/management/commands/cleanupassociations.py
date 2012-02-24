@@ -19,7 +19,7 @@ from madrona.openid import DjangoOpenIDStore
 
 class Command(NoArgsCommand):
     help = "Delete expired openid associations"
-    
+
     def handle_noargs(self, **options):
         openid = DjangoOpenIDStore()
         openid.cleanupAssociations()

@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'ZonalStatsCache.sum'
         db.add_column('raster_stats_zonalstatscache', 'sum', self.gf('django.db.models.fields.FloatField')(null=True, blank=True), keep_default=False)
 
@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting field 'ZonalStatsCache.sum'
         db.delete_column('raster_stats_zonalstatscache', 'sum')
 

@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Deleting field 'PrivateSuperOverlay.creation_date'
         db.delete_column('layers_privatesuperoverlay', 'creation_date')
 
@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # User chose to not deal with backwards NULL issues for 'PrivateSuperOverlay.creation_date'
         raise RuntimeError("Cannot reverse this migration. 'PrivateSuperOverlay.creation_date' and its values cannot be restored.")
 

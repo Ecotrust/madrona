@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Deleting field 'PrivateLayerList.kml'
         db.delete_column('layers_privatelayerlist', 'kml')
 
@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # User chose to not deal with backwards NULL issues for 'PrivateLayerList.kml'
         raise RuntimeError("Cannot reverse this migration. 'PrivateLayerList.kml' and its values cannot be restored.")
 

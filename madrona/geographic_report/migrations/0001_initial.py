@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'GeographicReport'
         db.create_table('geographic_report_geographicreport', (
             ('max_scale', self.gf('django.db.models.fields.IntegerField')()),
@@ -26,17 +26,17 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
         ))
         db.send_create_signal('geographic_report', ['Annotation'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'GeographicReport'
         db.delete_table('geographic_report_geographicreport')
 
         # Deleting model 'Annotation'
         db.delete_table('geographic_report_annotation')
-    
-    
+
+
     models = {
         'geographic_report.annotation': {
             'Meta': {'object_name': 'Annotation'},
@@ -54,5 +54,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
-    
+
     complete_apps = ['geographic_report']

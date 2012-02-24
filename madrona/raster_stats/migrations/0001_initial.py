@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'RasterDataset'
         db.create_table('raster_stats_rasterdataset', (
             ('filepath', self.gf('django.db.models.fields.FilePathField')(path='/Users/perry/src/madrona/madrona/raster_stats/test_data', max_length=100, recursive=True)),
@@ -36,10 +36,10 @@ class Migration(SchemaMigration):
 
         # Adding unique constraint on 'ZonalStatsCache', fields ['geom_hash', 'raster']
         db.create_unique('raster_stats_zonalstatscache', ['geom_hash', 'raster_id'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'RasterDataset'
         db.delete_table('raster_stats_rasterdataset')
 
@@ -48,8 +48,8 @@ class Migration(SchemaMigration):
 
         # Removing unique constraint on 'ZonalStatsCache', fields ['geom_hash', 'raster']
         db.delete_unique('raster_stats_zonalstatscache', ['geom_hash', 'raster_id'])
-    
-    
+
+
     models = {
         'raster_stats.rasterdataset': {
             'Meta': {'object_name': 'RasterDataset'},
@@ -74,5 +74,5 @@ class Migration(SchemaMigration):
             'stdev': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['raster_stats']

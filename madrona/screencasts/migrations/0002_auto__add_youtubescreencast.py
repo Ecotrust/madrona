@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'YoutubeScreencast'
         db.create_table('screencasts_youtubescreencast', (
             ('description', self.gf('django.db.models.fields.CharField')(max_length=350)),
@@ -22,14 +22,14 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
         ))
         db.send_create_signal('screencasts', ['YoutubeScreencast'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'YoutubeScreencast'
         db.delete_table('screencasts_youtubescreencast')
-    
-    
+
+
     models = {
         'screencasts.screencast': {
             'Meta': {'object_name': 'Screencast', 'db_table': "'mm_screencast'"},
@@ -56,5 +56,5 @@ class Migration(SchemaMigration):
             'youtube_id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '24'})
         }
     }
-    
+
     complete_apps = ['screencasts']

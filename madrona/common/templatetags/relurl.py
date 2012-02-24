@@ -12,7 +12,7 @@ class RelativeURLNode(URLNode):
     """Only works with python 2.6
     """
     request_path = None
-    
+
     def render(self, context):
         req = Variable(self.request_path).resolve(context).rpartition('/')[0]
         path = super(RelativeURLNode, self).render(context)
@@ -33,5 +33,5 @@ def relurl(parser, token, node_cls=RelativeURLNode):
         asvar=node_instance.asvar)
     node.request_path = request_path
     return node
-        
+
 relurl = register.tag(relurl)

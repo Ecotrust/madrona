@@ -32,5 +32,3 @@ class SimpleFaqTest(TestCase):
         """
         response = self.client.get('/faq/', {})
         self.assertEquals(response.status_code, 200)
-        
-   

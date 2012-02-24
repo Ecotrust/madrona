@@ -24,7 +24,7 @@ def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
     except AttributeError:
         name = qs_item.model.__name__
     name = '<Name>%s</Name>' % name
-    
+
     style = '<styleUrl>%s</styleUrl>' % styleUrl
     return_kml = '<Placemark>%s%s%s</Placemark>' % (name,style,geom.kml)
     return return_kml
@@ -33,7 +33,7 @@ class Land(models.Model): #may want to simplify geometry before storing in this 
     name = models.TextField(null=True, blank=True)
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True)
     objects = models.GeoManager()
-    
+
 def add_geometry_to_network(qs):
     # gather polygon vertices from a query set (qs) and add the lines connecting those vertices that do not intersect
     # the geometries within the qs to the Network models.  This will typically be used with Land.objects.all() as the 
@@ -66,20 +66,20 @@ def add_point_to_network(point, qs=Land.objects.all() ):
             nw_id = nw.pk
     assign_vertex_ids()
     return Network.objects.get(pk=nw_id).source
-    
+
 def fish_distance(source,target):
     try:
         source_id = Vertices.objects.get(the_geom__equals=source).pk
     except Vertices.DoesNotExist:
         add_point_to_network(source)
         source_id = Vertices.objects.get(the_geom__equals=source).pk
-    
+
     try:
         target_id = Vertices.objects.get(the_geom__equals=target).pk
     except Vertices.DoesNotExist:
         add_point_to_network(target)
         target_id = Vertices.objects.get(the_geom__equals=target).pk
-        
+
     query = """
         DROP TABLE IF EXISTS dijsktra_result;
         CREATE TABLE dijsktra_result(gid int4) with oids;
@@ -90,7 +90,7 @@ def fish_distance(source,target):
     cursor = connection.cursor()
     cursor.execute(query)
     cursor.db._commit()
-        
+
 def line_crosses_land(line,qs):
     crosses = False
     for l in qs:
@@ -104,7 +104,7 @@ class Network(models.Model):
     length = models.FloatField()
     geometry = models.MultiLineStringField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     def save(self):
         self.length = self.geometry.length
         super(Network,self).save()
@@ -112,7 +112,7 @@ class Network(models.Model):
 class Vertices(models.Model):
     the_geom = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     class Meta:
         db_table = 'vertices_tmp'
         managed = False

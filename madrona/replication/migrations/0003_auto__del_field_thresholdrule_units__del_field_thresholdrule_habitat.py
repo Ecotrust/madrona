@@ -5,25 +5,25 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Deleting field 'ThresholdRule.units'
         db.delete_column('replication_thresholdrule', 'units')
 
         # Deleting field 'ThresholdRule.habitat'
         db.delete_column('replication_thresholdrule', 'habitat_id')
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Adding field 'ThresholdRule.units'
         db.add_column('replication_thresholdrule', 'units', self.gf('django.db.models.fields.CharField')(default='porkchop', max_length=255, blank=True), keep_default=False)
 
         # Adding field 'ThresholdRule.habitat'
         db.add_column('replication_thresholdrule', 'habitat', self.gf('django.db.models.fields.related.ForeignKey')(default='porkchop', to=orm['intersection.FeatureMapping']), keep_default=False)
-    
-    
+
+
     models = {
         'intersection.featuremapping': {
             'Meta': {'object_name': 'FeatureMapping'},
@@ -98,5 +98,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '180'})
         }
     }
-    
+
     complete_apps = ['replication']

@@ -129,4 +129,3 @@ class ZonalCategoriesTest(TestCase):
         for zc in zonal.categories.all():
             sumpix += zc.count
         self.assertEqual(zonal.pixels, sumpix)
-

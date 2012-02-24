@@ -37,4 +37,3 @@ urlpatterns = patterns('madrona.kmlapp.views',
         'create_shared_kml', {'kmz': True}, name='kmlapp-sharedlinks-kmz'),
 
 )
-

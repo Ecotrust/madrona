@@ -6,4 +6,3 @@ urlpatterns = patterns('madrona.bookmarks.views',
     url(r'^statejson/(?P<bookmark_id>\d+)$', 'bookmark_state_json', name="bookmark-state-json"),
     url(r'^tool/$', 'save_tool_bookmark', name="bookmark-tool"),
 )
-

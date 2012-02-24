@@ -14,7 +14,7 @@ run_load_setups.short_description = 'Run the selected Load Setups'
 class PotentialTargetsAdmin(admin.ModelAdmin):
     list_display = ('name','module_text')
     #actions = [load_potential_targets]
-    
+
 admin.site.register(PotentialTarget,PotentialTargetsAdmin)
 
 class LoadSetupAdmin(admin.ModelAdmin):
@@ -24,5 +24,5 @@ class LoadSetupAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['origin_field_choices','target_field_choices']
     actions = [run_load_setups]
-    
+
 admin.site.register(LoadSetup,LoadSetupAdmin)

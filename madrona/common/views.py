@@ -80,13 +80,13 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     #         user_layers = True
     #     except:
     #         pass
-            
+
     # Check if the user is a member of any sharing groups (not including public shares)
     member_of_sharing_group = False
     user = request.user
     if user.is_authenticated() and user_sharing_groups(user):
         member_of_sharing_group = True
-    
+
     context = RequestContext(request,{
         'api_key':settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,
@@ -103,7 +103,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
 
     context.update(extra_context)
     response = render_to_response(template_name, context)
-    
+
     if set_news_cookie:
         now = datetime.datetime.strftime(datetime.datetime.now(), timeformat)
         response.set_cookie("mm_last_checked_news", now)
@@ -137,4 +137,3 @@ def get_publicstate(request):
     except KeyError:
         s = None
     return s
-

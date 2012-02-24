@@ -6,10 +6,9 @@ from django.db import models
 from django.core.management import call_command
 
 class Migration(DataMigration):
-    
+
     def forwards(self, orm):
         call_command('loaddata', 'youtube_screencasts.json')
 
     def backwards(self, orm):
         pass
-    

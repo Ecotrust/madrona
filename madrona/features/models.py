@@ -28,7 +28,7 @@ class Feature(models.Model):
         ``user``                Creator
 
         ``name``                Name of the object
-                                
+
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
@@ -107,7 +107,7 @@ class Feature(models.Model):
                 left: -22px;
                 height: 16px;
             } """ % (klass.model_uid(), url, klass.model_uid(), url)
-    
+
     @property
     def options(self):
         return get_model_options(self.__class__.__name__)
@@ -129,7 +129,7 @@ class Feature(models.Model):
         """
         important = "%s%s" % (self.date_modified, self.uid)
         return important.__hash__()
-        
+
     @property
     def uid(self):
         """
@@ -165,7 +165,7 @@ class Feature(models.Model):
             </Placemark>
             """ % (self.uid, self.name, e.message)
 
-    
+
     def add_to_collection(self, collection):
         """
         Add feature to specified FeatureCollection
@@ -200,7 +200,7 @@ class Feature(models.Model):
         if groups is None or groups == []:
             # Nothing to do here
             return True
-            
+
         if isinstance(groups,Group):
             # Only a single group was provided, make a 1-item list
             groups = [groups]
@@ -238,7 +238,7 @@ class Feature(models.Model):
         # Does the user own it?
         if self.user == user:
             return True, HttpResponse("Object owned by user",status=202)
-        
+
         # Next see if its shared with the user
         try: 
             # Instead having the sharing logic here, use the shared_with_user
@@ -281,10 +281,10 @@ class Feature(models.Model):
         for fname in m2m.keys():
             for obj in m2m[fname]:
                 the_feature.__getattribute__(fname).add(obj)
-    
+
         # Reassign User
         the_feature.user = user
-        
+
         # Clear everything else 
         the_feature.sharing_groups.clear()
         the_feature.remove_from_collection()
@@ -304,11 +304,11 @@ class SpatialFeature(Feature):
         ``user``                Creator
 
         ``name``                Name of the object
-                                
+
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
-        
+
         ``manipulators``        List of manipulators to be applied when geom
                                 is saved.
         ======================  ==============================================
@@ -324,14 +324,14 @@ class SpatialFeature(Feature):
         if self.geometry_final:
             self.geometry_final = clean_geometry(self.geometry_final)
         super(SpatialFeature, self).save(*args, **kwargs) # Call the "real" save() method
-    
+
     @property
     def geom_kml(self):
         """
         Basic KML representation of the feature geometry
         """
         return asKml(self.geometry_final, uid=self.uid)
-    
+
     @classmethod
     def mapnik_style(self):
         """
@@ -479,11 +479,11 @@ class PolygonFeature(SpatialFeature):
         ``user``                Creator
 
         ``name``                Name of the object
-                                
+
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
-        
+
         ``manipulators``        List of manipulators to be applied when geom
                                 is saved.
 
@@ -496,7 +496,7 @@ class PolygonFeature(SpatialFeature):
             null=True, blank=True, verbose_name="Original Polygon Geometry")
     geometry_final = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Final Polygon Geometry")
-    
+
     @property
     def centroid_kml(self):
         """
@@ -504,7 +504,7 @@ class PolygonFeature(SpatialFeature):
         """
         geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
         return geom.kml
- 
+
     @classmethod
     def mapnik_style(self):
         polygon_style = mapnik.Style()
@@ -531,11 +531,11 @@ class LineFeature(SpatialFeature):
         ``user``                Creator
 
         ``name``                Name of the object
-                                
+
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
-        
+
         ``manipulators``        List of manipulators to be applied when geom
                                 is saved.
 
@@ -572,11 +572,11 @@ class PointFeature(SpatialFeature):
         ``user``                Creator
 
         ``name``                Name of the object
-                                
+
         ``date_created``        When it was created
 
         ``date_modified``       When it was last updated.
-        
+
         ``manipulators``        List of manipulators to be applied when geom
                                 is saved.
 
@@ -589,7 +589,7 @@ class PointFeature(SpatialFeature):
             null=True, blank=True, verbose_name="Original Point Geometry")
     geometry_final = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Final Point Geometry")
-    
+
     @classmethod
     def mapnik_style(self):
         point_style = mapnik.Style()
@@ -607,11 +607,11 @@ class FeatureCollection(Feature):
     """
     class Meta:
         abstract = True
-    
+
     def add(self, f):
         """Adds a specified Feature to the Collection"""
         f.add_to_collection(self)
-    
+
     def remove(self, f):
         """Removes a specified Feature from the Collection"""
         if f.collection == self:
@@ -711,10 +711,10 @@ class FeatureCollection(Feature):
         for fname in m2m.keys():
             for obj in m2m[fname]:
                 the_collection.__getattribute__(fname).add(obj)
-    
+
         # Reassign User
         the_collection.user = user
-        
+
         # Clear everything else 
         the_collection.sharing_groups.clear()
         the_collection.remove_from_collection()

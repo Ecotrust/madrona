@@ -24,43 +24,43 @@ class Command(BaseCommand):
     help = """Populates the raster_stats_rasterdataset model with rasters
 
     Use the --dirpath with --ext option when providing a directory of rasters
-    
+
         python manage.py update_rasterdatasets --dirpath path_to_rasters/raster_dir --ext .tif
-        
+
     Use -ext grid when using ESRI Grid raster types
-        
+
         python manage.py update_rasterdatasets --dirpath path_to_rasters/raster_dir --ext grid 
-        
+
     Use the --filepath option (without the --ext option) when providing a path to a single file
-        
+
         python manage.py update_rasterdatasets --filepath path_to_rasters/raster_dir/my_raster.tif
-        
+
     The --force option can be used with the --filepath option for times when the filepath does not actually exist on your system
-    
+
         python manage.py update_rasterdatasets --filepath path_to_rasters/raster_dir/my_raster.tif --force 
-        
+
     Use the --name option with the --filepath option to provide a name value to the RasterDataset
-    
+
         python manage.py update_rasterdatasets --filepath path_to_rasters/raster_dir/my_raster.tif --name "my favorite raster"
-        
+
     Use the --type option with either the --filepath or the --dirpath options to denote raster type (default is 'continuous')
-    
+
         python manage.py update_rasterdatasets --filepath path_to_rasters/raster_dir/my_raster.tif --name "my favorite raster" --type "continuous"
-        
+
     The --storepath option can be used as an alternative filepath value.  Generally used with --dirpath, the value of this option will be joined with the filenames to create new filepaths used when creating the RasterDataset
-    
+
         python manage.py update_rasterdatasets --dirpath path_to_rasters/raster_dir --ext .tif --storepath server_path/raster_dir
-    
+
     The --prefix option can be used in conjunction with --dirpath to prepend a string to the raster names
-    
+
         python manage.py update_rasterdatasets --dirpath path_to_rasters/raster_dir --ext .tif --prefix my_
-    
+
     NOTE:  The RasterDataset model expects absolute paths.  Absolute paths will be stored regardless of whether filepath or dirpath is absolute or relative.
     NOTE:  This function is not recursive, it loads only rasters found in the immediate directory 
-    
+
     """
     args = '[ext, dirpath, filepath, name, type, force, storepath, prefix]'
-    
+
     def handle(self, **options):
         from madrona.raster_stats.models import RasterDataset
         ext = options.get('ext')
@@ -120,6 +120,6 @@ class Command(BaseCommand):
             else:
                 print "Either --filepath or --dirpath is required."
                 raise
-                
+
         except Exception as inst:
             print 'No rasterdatasets were loaded.'

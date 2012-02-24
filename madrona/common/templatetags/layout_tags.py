@@ -25,12 +25,12 @@ class HomeLinkNode(template.Node):
     def __init__(self, href, text):
         self.href = href
         self.text = text
-    
+
     def render(self, context):
         return """
             <a class="back_link" href="%s">%s</a>
         """ % (self.href, self.text)
-        
+
 @register.tag(name="back_link")
 def do_back_link(parser, token):
     """Provides a back button linking to the given url, displaying the specified title.
@@ -38,13 +38,13 @@ def do_back_link(parser, token):
     tokens = token.split_contents()
     if len(tokens) < 3:
         raise template.TemplateSyntaxError, "%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0]
-    
+
     title = tokens[1]
     urlvar = tokens[2]
-    
+
     if not (title[0] == title[-1] and title[0] in ('"', "'")):
         raise template.TemplateSyntaxError, "%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0]
-    
+
     if len(tokens) == 4:
         tabid = tokens[3]
         if not (tabid[0] == tabid[-1] and tabid[0] in ('"', "'")):
@@ -59,7 +59,7 @@ class BackLinkNode(template.Node):
         self.title = title
         self.urlvar = urlvar
         self.tab = tab
-    
+
     def render(self, context):
         url = resolve_variable(self.urlvar, context)
         if self.tab != None:
@@ -67,7 +67,7 @@ class BackLinkNode(template.Node):
         return """
             <a class="back_link" href="%s">%s</a>
         """ % (url, self.title)
-        
+
 
 @register.tag(name="footer")
 def do_footer(parser, token):
@@ -84,8 +84,8 @@ class FooterNode(template.Node):
         print self.nodelist
         output = self.nodelist.render(context)
         return '<div class="sidebar-footer">%s</div>' % (output,)
-        
-        
+
+
 @register.tag(name="panel")
 def do_panel(parser, token):
     """Creates markup for a panel displayed using the panelManager widget.
@@ -122,7 +122,7 @@ class PanelNode(template.Node):
             </div>
         </div>
         """ % (self.title, output)
-        
+
 @register.tag(name="printable")
 def do_printable(parser, token):
     """Use this tag to specify that the current panel should be accessible via
@@ -183,7 +183,7 @@ class TabPanelNode(template.Node):
             </div>
         </div>
         """ % (self.title, list_items, output)
-                
+
 @register.tag(name="tab")
 def do_tab(parser, token):
     """Create a tab within a tab_panel.

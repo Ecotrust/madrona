@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'ReplicationSetup'
         db.create_table('replication_replicationsetup', (
             ('org_scheme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.OrganizationScheme'])),
@@ -24,17 +24,17 @@ class Migration(SchemaMigration):
             ('replication_setup', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['replication.ReplicationSetup'])),
         ))
         db.send_create_signal('replication', ['HabitatThreshold'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'ReplicationSetup'
         db.delete_table('replication_replicationsetup')
 
         # Deleting model 'HabitatThreshold'
         db.delete_table('replication_habitatthreshold')
-    
-    
+
+
     models = {
         'intersection.featuremapping': {
             'Meta': {'object_name': 'FeatureMapping'},
@@ -102,5 +102,5 @@ class Migration(SchemaMigration):
             'org_scheme': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['intersection.OrganizationScheme']"})
         }
     }
-    
+
     complete_apps = ['replication']

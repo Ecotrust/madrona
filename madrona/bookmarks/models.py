@@ -15,7 +15,7 @@ class Bookmark(Feature):
     altitudeMode = models.FloatField(default=1)
     ip = models.IPAddressField(default="0.0.0.0", null=True, blank=True)
     publicstate = models.TextField(default="{}")
-    
+
     @property
     def kml(self):
         camera = "<Camera>\n"
@@ -25,7 +25,7 @@ class Bookmark(Feature):
             if val is not None:
                 camera += "                <%s>%s</%s>\n" % (p, val, p)
         camera += "            </Camera>\n"
-          
+
         return """
         <Placemark id="%s">
             <visibility>1</visibility>

@@ -16,5 +16,5 @@ class Command(BaseCommand):
         s.domain = dname
         s.name = dname
         s.save()
-        
+
         print "Site ID %s is now configured to run at %s. \n  (Your current settings point to SITE_ID = %s)" % (siteid, dname, settings.SITE_ID)

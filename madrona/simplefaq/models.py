@@ -2,10 +2,10 @@ from django.contrib.gis.db import models
 
 
 class FaqGroup(models.Model):
-    
+
     def __unicode__(self):
         return u"%s" % (self.faq_group_name)
-    
+
     IMPORTANCE_CHOICES = (
         (1,'1'),
         (2,'2'),
@@ -18,10 +18,10 @@ class FaqGroup(models.Model):
         (9,'9'),
         (10,'10')                      
     )
-        
+
     faq_group_name = models.CharField(max_length=50)
     importance = models.IntegerField(choices=IMPORTANCE_CHOICES, blank=True, null=True)
-    
+
 class Faq(models.Model):
 
     def __unicode__(self):
@@ -39,7 +39,7 @@ class Faq(models.Model):
         (9,'9'),
         (10,'10')                      
     )
-                                    
+
     question = models.TextField(max_length=200)
     answer = models.TextField(max_length=2000)
     importance = models.IntegerField(choices=IMPORTANCE_CHOICES)

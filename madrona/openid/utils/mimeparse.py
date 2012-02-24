@@ -83,9 +83,9 @@ def quality_parsed(mime_type, parsed_ranges):
             if fitness > best_fitness:
                 best_fitness = fitness
                 best_fit_q = params['q']
-            
+
     return float(best_fit_q)
-    
+
 def quality(mime_type, ranges):
     """Returns the quality 'q' of a mime_type when compared
     against the media-ranges in ranges. For example:
@@ -93,7 +93,7 @@ def quality(mime_type, ranges):
     >>> quality('text/html','text/*;q=0.3, text/html;q=0.7, text/html;level=1, '
     'text/html;level=2;q=0.4, */*;q=0.5')
     0.7
-    
+
     """ 
     parsed_ranges = [parse_media_range(r) for r in ranges.split(",")]
     return quality_parsed(mime_type, parsed_ranges)
@@ -104,7 +104,7 @@ def best_match(supported, header):
     header must be a string that conforms to the format of the 
     HTTP Accept: header. The value of 'supported' is a list of
     mime-types.
-    
+
     >>> best_match(['application/xbel+xml', 'text/xml'], 'text/*;q=0.5,*/*; q=0.1')
     'text/xml'
     """

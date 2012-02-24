@@ -5,19 +5,19 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding field 'HabitatThreshold.date_modified'
         db.add_column('replication_habitatthreshold', 'date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True), keep_default=False)
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting field 'HabitatThreshold.date_modified'
         db.delete_column('replication_habitatthreshold', 'date_modified')
-    
-    
+
+
     models = {
         'intersection.featuremapping': {
             'Meta': {'object_name': 'FeatureMapping'},
@@ -93,5 +93,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '180'})
         }
     }
-    
+
     complete_apps = ['replication']

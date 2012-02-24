@@ -33,9 +33,9 @@ urlpatterns = patterns('',
 #        {'backend': 'registration.backends.default.DefaultBackend'},
 #        name='registration_activate'
 #    ),
-    
+
     # user profile
-    
+
     url(r'^password/reset/$', auth_views.password_reset, name='auth_password_reset'),
     url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.password_reset_confirm,
@@ -47,7 +47,7 @@ urlpatterns = patterns('',
         auth_views.password_reset_done,
         name='auth_password_reset_done'),
     url(r'^password/$',oid_views.password_change, name='auth_password_change'),
-    
+
     # manage account registration
     url(r'^associate/complete/$', oid_views.complete_associate, name='user_complete_associate'),
     url(r'^associate/$', oid_views.associate, name='user_associate'),
@@ -93,7 +93,7 @@ urlpatterns = patterns('',
         direct_to_template,
         { 'template': 'registration/registration_closed.html' },
         name='registration_disallowed'),
-        
+
     # yadis uri
     url(r'^yadis.xrdf$', oid_views.xrdf, name='oid_xrdf'),
 )

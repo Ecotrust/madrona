@@ -19,7 +19,7 @@ from madrona.openid import DjangoOpenIDStore
 
 class Command(NoArgsCommand):
     help = "Delete expired openid nonces"
-    
+
     def handle_noargs(self, **options):
         openid = DjangoOpenIDStore()
         openid.cleanupNonce()

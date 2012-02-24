@@ -23,7 +23,7 @@ class StaticMapTest(TestCase):
         self.password = 'iluvmapnik'
         self.user = User.objects.create_user('user1', 'test@madrona.org', password=self.password)
         self.user2 = User.objects.create_user('user2', 'test@madrona.org', password=self.password)
-        
+
         self.group1 = Group.objects.create(name="Test Group 1")
         self.group1.save()
         self.user.groups.add(self.group1)
@@ -70,7 +70,7 @@ class StaticMapTest(TestCase):
         response = self.client.get('/staticmap/default/', {})
         self.assertEquals(response.status_code, 200)
         blank_map = response.content
-        
+
         # User 1 should see these
         self.client.login(username=self.user.username, password=self.password)
         uidcsv = ','.join(self.mpa_uids)
@@ -83,18 +83,18 @@ class StaticMapTest(TestCase):
         response = self.client.get('/staticmap/default/', {})
         self.assertEquals(response.status_code, 200)
         blank_map = response.content
-        
+
         # User 2 shouldnt have access to mpa3
         self.client.login(username=self.user2.username, password=self.password)
         response = self.client.get('/staticmap/default/?uids=%s' % self.mpa_uids[2], {})
         self.assertEquals(response.status_code, 200)
         #self.assertEquals(response.content, blank_map)
- 
+
     def test_sharing(self):
         response = self.client.get('/staticmap/default/', {})
         self.assertEquals(response.status_code, 200)
         blank_map = response.content
-        
+
         # User 2 should see these
         response = self.client.get('/staticmap/default/?uids=%s' % ','.join(self.mpa_uids), {})
         self.assertEquals(response.status_code, 200)
@@ -104,7 +104,7 @@ class StaticMapTest(TestCase):
         response = self.client.get('/staticmap/default/', {})
         self.assertEquals(response.status_code, 200)
         blank_map = response.content
-        
+
         # Anon user shouldnt have access to mpa3, but yes to mpa2
         response = self.client.get('/staticmap/default/?uids=%s' % self.mpa_uids[2], {})
         self.assertEquals(response.status_code, 200)
@@ -112,5 +112,3 @@ class StaticMapTest(TestCase):
         response = self.client.get('/staticmap/default/?uids=%s' % self.mpa_uids[1], {})
         self.assertEquals(response.status_code, 200)
         #self.assertNotEquals(response.content, blank_map)
-           
-        

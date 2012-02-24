@@ -5,17 +5,17 @@ from django.conf import settings
 
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
         # can't call this yet since columns havent been made 
         # migrations are out of order essentially - we'll do this in 0004
         #call_command('loaddata','south_initial_data.json')
         #create_pickled_graph()
         pass
-        
+
     def backwards(self, orm):
         pass
-        
+
     models = {
         'spacing.land': {
             'Meta': {'object_name': 'Land'},
@@ -35,6 +35,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         }
     }
-    
+
     complete_apps = ['spacing']
-        

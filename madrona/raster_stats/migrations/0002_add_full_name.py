@@ -7,13 +7,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'RasterDataset.full_name'
         db.add_column('raster_stats_rasterdataset', 'full_name', self.gf('django.db.models.fields.CharField')(default='', max_length=255), keep_default=False)
 
 
     def backwards(self, orm):
-        
+
         # Deleting field 'RasterDataset.full_name'
         db.delete_column('raster_stats_rasterdataset', 'full_name')
 

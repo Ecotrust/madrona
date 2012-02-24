@@ -6,9 +6,9 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'MultiFeatureShapefile'
         db.create_table('intersection_multifeatureshapefile', (
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
@@ -143,10 +143,10 @@ class Migration(SchemaMigration):
 
         # Adding unique constraint on 'ResultCache', fields ['wkt_hash', 'intersection_feature']
         db.create_unique('intersection_resultcache', ['wkt_hash', 'intersection_feature_id'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'MultiFeatureShapefile'
         db.delete_table('intersection_multifeatureshapefile')
 
@@ -185,8 +185,8 @@ class Migration(SchemaMigration):
 
         # Removing unique constraint on 'ResultCache', fields ['wkt_hash', 'intersection_feature']
         db.delete_unique('intersection_resultcache', ['wkt_hash', 'intersection_feature_id'])
-    
-    
+
+
     models = {
         'intersection.arealfeature': {
             'Meta': {'object_name': 'ArealFeature'},
@@ -292,5 +292,5 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         }
     }
-    
+
     complete_apps = ['intersection']

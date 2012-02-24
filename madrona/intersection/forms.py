@@ -3,7 +3,7 @@ from django import forms
 from madrona.intersection.models import *
 from django.contrib.gis.admin import GeoModelAdmin, site as admin_site
 
-        
+
 class SplitToSingleFeaturesForm(forms.Form):
     def __init__(self, initial_pk, *args, **kwargs):
         super(SplitToSingleFeaturesForm, self).__init__(*args, **kwargs)
@@ -35,7 +35,7 @@ class TestIntersectionForm(forms.ModelForm):
         model = TestPolygon
     class Media:
         js = ("http://openlayers.org/api/2.6/OpenLayers.js",)
-        
+
 class TestPolygonIntersectionForm(forms.ModelForm):
     OrganizationScheme_Choices = [('None', 'Default')]
     [OrganizationScheme_Choices.append((osc.pk,osc.name)) for osc in OrganizationScheme.objects.all()]

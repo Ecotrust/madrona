@@ -26,7 +26,7 @@ class AssetsTest(TestCase):
 
 class TestRequest:
     session = None
-    
+
 class UtilsTest(TestCase):
     def test_angle_method(self):
         # try without srids
@@ -35,19 +35,19 @@ class UtilsTest(TestCase):
         pnt3 = Point(0,1)
         result = angle(pnt1,pnt2,pnt3)
         self.assertEquals(result,1.5707963267949001)
-        
+
         # with srids
         pnt1.srid = 3310
         pnt2.srid = 3310
         pnt3.srid = 3310
         result2 = angle(pnt1,pnt2,pnt3)
         self.assertEquals(result2,1.5707963267949001)
-        
+
     def test_spike_ring_indecies(self):
         poly = geos.fromstr('POLYGON((3480407.01 5483810.171,3480407.01 5483810.17,3480409.11 5483777.431,3480407.348 5483777.421,3480405.15 5483777.409,3480404.816 5483777.407,3480394.58 5483777.35,3480395.36 5483811.12,3480404.55 5483810.46,3480405.951 5483810.295,3480406.312 5483795.106,3480405.951 5483810.296,3480406.903 5483810.184,3480407.01 5483810.171))')
         indecies = spike_ring_indecies(poly.exterior_ring, 0.01)
         self.assertEquals(indecies[0],10)
-        
+
     def test_remove_spikes(self):
         poly = geos.fromstr('POLYGON ((3415632.4900000002235174 5291021.4900000002235174, 3415632.4879999998956919 5291021.4939999999478459, 3415632.4900000002235174 5291021.4939999999478459, 3415628.9300000001676381 5291028.2800000002607703, 3415642.9500000001862645 5291001.5599999995902181, 3415651.1800000001676381 5290985.8600000003352761, 3415659.2700000000186265 5290984.6100000003352761, 3415644.7099999999627471 5290947.8099999995902181, 3415629.1699999999254942 5290921.8300000000745058, 3415621.2799999997951090 5290929.7199999997392297, 3415640.2099999999627471 5290959.4299999997019768, 3415625.3799999998882413 5290971.4100000001490116, 3415627.7900000000372529 5290983.9400000004097819, 3415629.4900000002235174 5290992.1900000004097819, 3415630.1400000001303852 5290995.3600000003352761, 3415625.6499999999068677 5291022.5000000000000000, 3415632.4900000002235174 5291021.4900000002235174))')
         result = remove_spikes(poly, 0.01)
@@ -88,7 +88,7 @@ class BrowserUserAgentTest(TestCase):
             self.assertEquals(valid_browser(ua),False)
 
 class AccessTest(TestCase):
-    
+
     def test_upload_dir_access(self):
         """ Ensure that the upload directory is not web accessible """
 
@@ -172,7 +172,7 @@ class GeometryOpsTest(TestCase):
     def test_askml(self):
         g = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
         kml = asKml(g)
-        
+
     def test_simplify(self):
         # Note second coordinate in relation to the first, simplify will remove it if the tolerance is large enough
         gcomplex = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -120.422 34.372, -119.64 34.32, -119.63 34.12, -122.44 34.15, -120.42 34.37))')
@@ -183,4 +183,3 @@ class GeometryOpsTest(TestCase):
 
         gsimplified_small = gcomplex.simplify(0.000001)
         self.assertEqual(gcomplex, gsimplified_small)
-

@@ -219,7 +219,7 @@ STATIC_URL = 'http://%s/media/'
 
     print """
 Now you need to:
-    
+
     deal with the cleangeometry per above
     google earth API key
     check the site into git or other version control system

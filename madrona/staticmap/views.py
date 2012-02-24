@@ -102,7 +102,7 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         except TypeError as e:
             log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e)) 
             pass
-    
+
     width = maxx - minx
     height = maxy - miny  
     buffer = .15
@@ -118,7 +118,7 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
             height = 0.1
         else: 
             height = 1000
-    
+
     # If the following settings variables are not defined (or set to None), then the original method
     # for determining width_buffer and heigh_buffer is used
     try:
@@ -130,7 +130,7 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
     except AttributeError:
         width_buffer = width * buffer
         height_buffer = height * buffer
-        
+
     return minx-width_buffer, miny-height_buffer, maxx+width_buffer, maxy+height_buffer
 
 
@@ -208,7 +208,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     if not height: 
         height = map.default_height
     mapfile = str(map.mapfile.path)
-    
+
     # Create a blank image and map
     draw = mapnik.Image(width,height)
     m = mapnik.Map(width,height)
@@ -227,7 +227,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
             geomfield = model.mapnik_geomfield()
         except AttributeError:
             geomfield = 'geometry_final'
-        
+
         if geomfield not in [str(x.name) for x in model._meta.fields]:
             continue
 
@@ -247,7 +247,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     # first, assume default image extent
     x1, y1 = map.default_x1, map.default_y1
     x2, y2 = map.default_x2, map.default_y2
-    
+
     if not bbox and autozoom and features and len(features)>0:
         x1, y1, x2, y2 = auto_extent(features, map.default_srid)
     if bbox:
@@ -286,7 +286,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
                 extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
         lyr.styles.append('extent_style')
         m.layers.append(lyr)
-    
+
     # Render image and send out the response
     m.zoom_to_box(bbox)
 
@@ -299,4 +299,3 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
         del m
 
     return img
-

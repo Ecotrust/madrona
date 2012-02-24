@@ -5,4 +5,3 @@ class UserProfileAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(UserProfile, UserProfileAdmin)
-

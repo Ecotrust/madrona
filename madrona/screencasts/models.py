@@ -21,14 +21,14 @@ class Screencast(models.Model):
         (10,'10')                      
     )
     importance = models.IntegerField(choices=IMPORTANCE_CHOICES, blank=True, null=True)
-    
+
     class Meta:
         db_table = 'mm_screencast'
-        
+
     def __unicode__(self):
         return self.title
 
-    
+
 class YoutubeScreencast(models.Model):
     youtube_id = models.CharField(max_length=24, unique=True, help_text="Youtube video id (hint: http://www.youtube.com/watch?v=<YOUTUBE_VIDEO_ID>)")
     image = models.ImageField(upload_to=settings.SCREENCAST_IMAGES)
@@ -51,7 +51,6 @@ class YoutubeScreencast(models.Model):
     video_width = models.IntegerField(default=853)
     video_height = models.IntegerField(default=505)
     play_hd = models.BooleanField(default=True)
-    
+
     def __unicode__(self):
         return self.title
-

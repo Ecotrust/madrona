@@ -36,7 +36,7 @@ __version__ = "1.0.1"
 # get openidstore to use.
 if not hasattr(settings, 'OPENID_STORE') or not settings.OPENID_STORE:
     settings.OPENID_STORE = 'madrona.openid.openid_store.DjangoOpenIDStore'
-    
+
 def load_store(path):
     i = path.rfind('.')
     module, attr = path[:i], path[i+1:]
@@ -53,5 +53,5 @@ def load_store(path):
         raise ImproperlyConfigured('Module "%s" does not define a "%s" '
         'openid store' % (module, attr))
     return cls
-    
+
 DjangoOpenIDStore = load_store(settings.OPENID_STORE)

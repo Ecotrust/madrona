@@ -10,7 +10,7 @@ from django.conf import settings
 class SQLLogToConsoleMiddleware:
     """
     Add to settings_local like so to log sql commands:
-    
+
     from madrona.common.default_settings import MIDDLEWARE_CLASSES
 
     MIDDLEWARE_CLASSES += (

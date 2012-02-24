@@ -12,7 +12,7 @@ class Command(BaseCommand):
         make_option('-a', '--all', action='store_true', dest='all',
             help="Enable sharing for ALL current groups"),
         )
-    
+
 
     def handle(self, *groupnames, **options):
         self.all = options.get('all', False)

@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'PrivateLayerList.name'
         db.add_column('layers_privatelayerlist', 'name', self.gf('django.db.models.fields.CharField')(default='', max_length=50), keep_default=False)
 
@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting field 'PrivateLayerList.name'
         db.delete_column('layers_privatelayerlist', 'name')
 

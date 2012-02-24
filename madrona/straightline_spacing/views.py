@@ -8,7 +8,7 @@ def spacing_workbook(in_dict, ws_title):
     ws = wb.add_sheet('spacing_matrix')
     ws = spacing_worksheet(in_dict, ws_title,ws)
     return wb
-    
+
 def spacing_worksheet(in_dict,ws_title,ws):
     results = distance_matrix_and_labels(in_dict)
     label_list = results['labels']
@@ -18,12 +18,12 @@ def spacing_worksheet(in_dict,ws_title,ws):
     if ws_title is not None:
         ws.row(current_row).write(0,unicode(ws_title))
         current_row += 2
-    
+
     # write the header labels row across the top
     for i,lab in enumerate(label_list):
         ws.row(current_row).write(i+1,unicode(lab) )
     current_row += 1
-    
+
     # write the rest of the matrix
     for i,row in enumerate(dist_mat):
         # write the label in the first column

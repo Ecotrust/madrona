@@ -33,7 +33,7 @@ class OpenIDMiddleware(object):
     def process_request(self, request):
         request.openid = request.session.get('openid', None)
         request.openids = request.session.get('openids', [])
-        
+
         # The code below seems benign and perfectly understandable (just grabs the openids and attaches a list to the request object)
         # But for some unknown reason, this filter interacts with sessions in such a way that 
         # load_sessions fails to work on requests from the GE plugin
@@ -44,7 +44,7 @@ class OpenIDMiddleware(object):
         rels = []
         request.associated_openids = [rel.openid_url for rel in rels]
 
-    
+
     def process_response(self, request, response):
         if response.status_code != 200 or len(response.content) < 200:
             return response

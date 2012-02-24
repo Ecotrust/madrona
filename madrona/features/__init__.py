@@ -26,77 +26,77 @@ class FeatureOptions:
     developer-specified options within the Options inner-class. These 
     properties drive the features of the spatial content managment system, 
     such as CRUD operations, copy, sharing, etc.
-    
+
     """
     def __init__(self, model):
-        
+
         # Import down here to avoid circular reference
         from madrona.features.models import Feature, FeatureCollection    
 
         # call this here to ensure that permsissions get created
         #enable_sharing()
-       
+
         if not issubclass(model, Feature):
             raise FeatureConfigurationError('Is not a subclass of \
 madrona.features.models.Feature')
-        
+
         self._model = model
         name = model.__name__
-        
+
         if not getattr(model, 'Options', False):
             raise FeatureConfigurationError(
                 'Have not defined Options inner-class on registered feature \
 class %s' % (name, ))
-        
+
         self._options = model.Options
-    
+
         if not hasattr(self._options, 'form'):
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a form class. \
 To specify, add a `form` property to its Options inner-class." % (name,))
-        
+
         if not isinstance(self._options.form, str):
             raise FeatureConfigurationError(
                 "Feature class %s is configured with a form property that is \
 not a string path." % (name,))
-                
+
         self.form = self._options.form
         """
         Path to FeatureForm used to edit this class.
         """
-        
-        
+
+
         self.slug = slugify(name)
         """
         Name used in the url path to this feature as well as part of 
         the Feature's uid
         """
-        
+
         self.verbose_name = getattr(self._options, 'verbose_name', name)
         """
         Name specified or derived from the feature class name used 
         in the user interface for representing this feature class.
         """
-        
+
         self.form_template = getattr(self._options, 'form_template', 
             'features/form.html')
         """
         Location of the template that should be used to render forms
         when editing or creating new instances of this feature class.
         """
-        
+
         self.form_context = getattr(self._options, 'form_context', {})
         """
         Context to merge with default context items when rendering
         templates to create or modify features of this class.
         """
-        
+
         self.show_context = getattr(self._options, 'show_context', {})
         """
         Context to merge with default context items when rendering
         templates to view information about instances of this feature class.
         """
-        
+
         self.icon_url = getattr(self._options, 'icon_url', None)
         """
         Optional; URL to 16x16 icon to use in kmltree
@@ -107,26 +107,26 @@ not a string path." % (name,))
         """
         Links associated with this class.
         """
-        
+
         opts_links = getattr(self._options, 'links', False)
         if opts_links:
             self.links.extend(opts_links)
-        
+
         self.enable_copy = getattr(self._options, 'disable_copy', True)
         """
         Enable copying features. Uses the feature class' copy() method. 
         Defaults to True.
         """
-        
+
         # Add a copy method unless disabled
         if self.enable_copy:
             self.links.insert(0, edit('Copy', 
                 'madrona.features.views.copy', 
                 select='multiple single',
                 edits_original=False))
-        
+
         confirm = "Are you sure you want to delete this feature and it's contents?"
-            
+
         # Add a multi-share generic link
         # TODO when the share_form view takes multiple instances
         #  we can make sharing a generic link 
@@ -154,7 +154,7 @@ not a string path." % (name,))
                 select='multiple single',
                 method='GET',
             ))
-            
+
 
         self.valid_children = getattr(self._options, 'valid_children', None)
         """
@@ -180,10 +180,10 @@ not a string path." % (name,))
             if geom_field not in manip.Options.supported_geom_fields:
                 raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
                         (m, geom_field, manip.Options.supported_geom_fields))
-            
+
             #logger.debug("Added required manipulator %s" % m)
             self.manipulators.append(manip)
-        
+
         self.optional_manipulators = []
         """
         Optional manipulators that may be applied to user input geometries
@@ -204,7 +204,7 @@ not a string path." % (name,))
             except AttributeError:
                 raise FeatureConfigurationError("%s is not set up properly; must have "
                         "Options.supported_geom_fields list." % m)
-            
+
             #logger.debug("Added optional manipulator %s" % m)
             self.optional_manipulators.append(manip)
 
@@ -224,7 +224,7 @@ not a string path." % (name,))
         for link in self.links:
             if self._model not in link.models:
                 link.models.append(self._model)
-    
+
     def get_show_template(self):
         """
         Returns the template used to render this Feature Class' attributes
@@ -239,7 +239,7 @@ not a string path." % (name,))
             # some documentation on how to override the default template
             t = loader.get_template('features/show.html')
         return t
-    
+
     def get_link(self,linkname):
         """
         Returns the FeatureLink with the specified name
@@ -262,7 +262,7 @@ not a string path." % (name,))
             except:
                 raise FeatureConfigurationError(
                         "Error trying to import module %s" % vc) 
-            
+
             from madrona.features.models import Feature
             if not issubclass(vc_class, Feature):
                 raise FeatureConfigurationError(
@@ -296,9 +296,9 @@ not a string path." % (name,))
         for direct_parent in direct_parents:
             if direct_parent != self._model: 
                 potential_parents.extend(direct_parent.get_options().get_potential_parents())
-            
+
         return potential_parents 
-                
+
     def get_form_class(self):
         """
         Returns the form class for this Feature Class.
@@ -316,7 +316,7 @@ Could not import %s." % (self._model.__name__, self.form))
 madrona.features.forms.FeatureForm." % (self._model.__name__, ))
 
         return klass
-    
+
     def dict(self,user,is_owner):
         """
         Returns a json representation of this feature class configuration
@@ -372,16 +372,16 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
 
             }
         return link_rels
-    
+
     def json(self):
         return json.dumps(self.dict())
-        
+
     def get_create_form(self):
         """
         Returns the path to a form for creating new instances of this model
         """
         return reverse('%s_create_form' % (self.slug, ))
-    
+
     def get_update_form(self, pk):
         """
         Given a primary key, returns the path to a form for updating a Feature
@@ -394,7 +394,7 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
         Given a primary key, returns path to a form for sharing a Feature inst
         """
         return reverse('%s_share_form' % (self.slug, ), args=['%s_%d' % (self._model.model_uid(), pk)])
-    
+
     def get_resource(self, pk):
         """
         Returns the primary url for a feature. This url supports GET, POST, 
@@ -407,11 +407,11 @@ class Link:
         type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
         confirm=False, edits_original=None, must_own=False, 
         limit_to_groups=None):
-        
+
         self.rel = rel
         """Type of link - alternate, related, edit, or edit_form.
         """
-        
+
         try:
             self.view = get_class(view)
             """
@@ -420,57 +420,57 @@ class Link:
         except:
             raise FeatureConfigurationError('Link "%s" configured with \
 invalid path to view %s' % (title, view))
-        
+
         self.title = title
         """
         Human-readable title for the link to be shown in the user interface.
         """
-        
+
         self.method = method
         """
         For rel=edit links, identifies whether a form should be requested or 
         that url should just be POST'ed to.
         """
-        
+
         self.type = type
         """
         MIME type of this link, useful for alternate links. May in the future
         be used to automatically assign an icon in the dropdown Export menu.
         """
-        
+
         self.slug = slug
         """
         Part of this link's path.
         """
-        
+
         self.select = select
         """
         Determines whether this link accepts requests with single or multiple
         instances of a feature class. Valid values are "single", "multiple",
         "single multiple", and "multiple single". 
         """
-        
+
         self.extra_kwargs = extra_kwargs
         """
         Extra keyword arguments to pass to the view.
         """
-        
+
         self.generic = generic
         """
         Whether this view can be applied to multiple feature classes.
         """
-        
+
         self.models = models
         """
         List of feature classes that a this view can be applied to, if it is 
         generic.
         """
-        
+
         self.confirm = confirm
         """
         Confirmation message to show the user before POSTing to rel=edit link
         """
-        
+
         self.edits_original = edits_original
         """
         Set to false for editing links that create a copy of the original. 
@@ -494,10 +494,10 @@ invalid path to view %s' % (title, view))
         that should have access to the link.
         Default is None; i.e. All users have link access regardless of group membership
         """
-        
+
         if self.models is None:
             self.models = []
-        
+
         # Make sure title isn't empty
         if self.title is '':
             raise FeatureConfigurationError('Link title is empty')
@@ -513,12 +513,12 @@ invalid path to view %s' % (title, view))
             self.slug = slugify(title)
         # Make sure the view has the right signature
         self._validate_view(self.view)
-    
+
     def _validate_view(self, view):
         """
         Ensures view has a compatible signature to be able to hook into the 
         features app url registration facilities
-        
+
         For single-select views
             must accept a second argument named instance
         For multiple-select views
@@ -541,7 +541,7 @@ self.title, ))
                 raise FeatureConfigurationError('Link "%s" not configured \
 with a valid view. View must take a second argument named instances.' % (
 self.title, ))
-            
+
     def can_user_view(self, user, is_owner):
         """
         Returns True/False depending on whether user can view the link. 
@@ -569,7 +569,7 @@ self.title, ))
         that name so that it can be used in calls to reverse().
         """
         return "%s-%s" % (self.parent_slug, self.slug)
-    
+
     @property
     def parent_slug(self):
         """
@@ -580,11 +580,11 @@ self.title, ))
             return self.models[0].get_options().slug
         else:
             return 'generic-links'
-        
-        
+
+
     def reverse(self, instances):
         """Can be used to get the url for this link. 
-        
+
         In the case of select=single links, just pass in a single instance. In
         the case of select=multiple links, pass in an array.
         """
@@ -592,13 +592,13 @@ self.title, ))
             instances = [instances]
         uids = ','.join([instance.uid for instance in instances])
         return reverse(self.url_name, kwargs={'uids': uids})
-    
+
     def __str__(self):
         return self.title
-    
+
     def __unicode__(self):
         return str(self)
-    
+
     def dict(self,user,is_owner):
         d = {
             'rel': self.rel,
@@ -615,11 +615,11 @@ self.title, ))
         if self.confirm:
             d['confirm'] = self.confirm
         return d
-    
+
     def json(self):
         return json.dumps(self.dict())
-        
-        
+
+
 def create_link(rel, *args, **kwargs):
     nargs = [rel]
     nargs.extend(args)
@@ -665,7 +665,7 @@ def register(model):
             if link not in registered_links:
                 registered_links.append(link)
     return model
-            
+
 def get_model_options(model_name):
     return registered_model_options[model_name]
 

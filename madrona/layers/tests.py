@@ -44,7 +44,7 @@ class PrivateLayerListTest(TestCase):
         self.user1 = User.objects.create_user('user1', 'test@madrona.org', password=self.password)
         self.user2 = User.objects.create_user('user2', 'test@madrona.org', password=self.password)
         self.user3 = User.objects.create_user('user3', 'test@madrona.org', password=self.password)
-       
+
         # Create some groups
         # Group 1 has user1 and user2 and can share features
         self.group1 = Group.objects.create(name="Test Group 1")
@@ -56,7 +56,7 @@ class PrivateLayerListTest(TestCase):
         path = os.path.dirname(os.path.abspath(__file__))
         f = File(open(kml_path))
         settings.MEDIA_URL = ''
-        
+
         # User1 creates Layer1 and shares with Group1
         self.layer1 = TestUserKml.objects.create(user=self.user1)
         self.layer1.save()
@@ -79,7 +79,7 @@ class PrivateLayerListTest(TestCase):
 
         # User 3 can't view Layer 1
         self.assertFalse(self.layer1.is_viewable(self.user3)[0])
-        
+
         # User 1 can't view Layer 2 (User 2 hasnt shared it)
         self.assertFalse(self.layer2.is_viewable(self.user1)[0])
 
@@ -128,7 +128,7 @@ class PublicLayerListTest(TestCase):
         # 2 because the initial_data fixture loads one
         self.assertEquals(PublicLayerList.objects.count(), 2)
         self.assertTrue(layer.kml_file.size > 0)
-    
+
     def testOnlyOneActiveLayer(self):
         layer = PublicLayerList.objects.create(active=True)
         self.assertTrue(layer.active)
@@ -145,7 +145,7 @@ class PublicLayerListTest(TestCase):
         active = PublicLayerList.objects.filter(active=True)
         self.assertEqual(active.count(), 1)
         self.assertEqual(active[0].pk, new_active_layer.pk)
-    
+
     def testLayerService(self):
         #urls = 'madrona.layers.tests'
         # Should fail with a 404 when no layers are specified
@@ -168,7 +168,7 @@ class PublicLayerListTest(TestCase):
         client = Client()
         response = client.get('/layers/public/')
         self.failUnlessEqual(response.status_code, 200)
-    
+
     def tearDown(self):
         layer = PublicLayerList.objects.create(active=True)
         path = os.path.dirname(os.path.abspath(__file__))

@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'Bookmark'
         db.create_table('bookmarks_bookmark', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -38,7 +38,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'Bookmark'
         db.delete_table('bookmarks_bookmark')
 

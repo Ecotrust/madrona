@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'KmlCache'
         db.create_table('common_kmlcache', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'KmlCache'
         db.delete_table('common_kmlcache')
 

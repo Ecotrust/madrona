@@ -25,7 +25,7 @@ class StudyRegionTest(TestCase):
         """
         self.assertTrue(StudyRegion.objects.count() >= 1)
         self.assertEquals(StudyRegion.objects.all()[0].id, 1)
-        
+
     def testComputeLookAt(self):
         """
         Check computing of lookat values
@@ -38,14 +38,14 @@ class StudyRegionTest(TestCase):
         lookat_kml = region.lookAtKml()
         self.assertEquals(round(region.lookAt_Lat, 9), 33.670316680)
         self.assertEquals(round(region.lookAt_Lon, 9), -118.995360206)
-        
+
     def testLookAtView(self):
         """
         test views.regionLookAtKml
         """
         response = self.client.get('/studyregion/lookAtKml/', {})
         self.assertEquals(response.status_code, 200)
-        
+
 # This test is not really necessary and takes forever to run so lets just comment it out for now
 #    def testKmlChunkView(self):
 #        """
@@ -53,30 +53,30 @@ class StudyRegionTest(TestCase):
 #        """
 #        response = self.client.get('/studyregion/kml_chunk/34.473517/32.530798/-117.093325/-120.580374/', {})
 #        self.assertEquals(response.status_code, 200)
-        
+
     def testKmlView(self):
         """
         test views.kml
         """
         response = self.client.get('/studyregion/kml/', {})
         self.assertEquals(response.status_code, 200)
-    
-    
+
+
     # this is a non-critical test, which is failing on the server, but not local dev boxes, with:
     # TemplateSyntaxError: Caught an exception while rendering: compress/css.html
-        
+
     # disabling test 
-        
+
     #def testStudyRegionSandboxView(self):
         #"""
         #test views.studyregion
         #"""
-        
+
         #response = self.client.get('/studyregion/', {})
         #self.assertEquals(response.status_code, 200)
-        
 
-        
+
+
     def testExternalKmlStyle(self):
         settings.DEBUG = True
         response = self.client.get('/media/studyregion/styles.kml', {})

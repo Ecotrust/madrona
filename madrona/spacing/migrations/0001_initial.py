@@ -6,9 +6,9 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'PickledGraph'
         db.create_table('spacing_pickledgraph', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -31,10 +31,10 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
         ))
         db.send_create_signal('spacing', ['SpacingPoint'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'PickledGraph'
         db.delete_table('spacing_pickledgraph')
 
@@ -43,8 +43,8 @@ class Migration(SchemaMigration):
 
         # Deleting model 'SpacingPoint'
         db.delete_table('spacing_spacingpoint')
-    
-    
+
+
     models = {
         'spacing.land': {
             'Meta': {'object_name': 'Land'},
@@ -64,5 +64,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         }
     }
-    
+
     complete_apps = ['spacing']

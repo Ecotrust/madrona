@@ -26,4 +26,3 @@ def img_from_params(params, user=None):
     # that request.user has permissions to view uids!!
     img = draw_map(x.uids.split(','), user, int(x.width), int(x.height), x.autozoom, x.bbox, x.show_extent, x.map_name)
     return img
-     

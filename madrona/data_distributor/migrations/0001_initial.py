@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'PotentialTarget'
         db.create_table('data_distributor_potentialtarget', (
             ('module_text', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -37,10 +37,10 @@ class Migration(SchemaMigration):
             ('origin_field', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
         ))
         db.send_create_signal('data_distributor', ['LoadSetup'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'PotentialTarget'
         db.delete_table('data_distributor_potentialtarget')
 
@@ -49,8 +49,8 @@ class Migration(SchemaMigration):
 
         # Deleting model 'LoadSetup'
         db.delete_table('data_distributor_loadsetup')
-    
-    
+
+
     models = {
         'data_distributor.loadsetup': {
             'Meta': {'object_name': 'LoadSetup'},
@@ -86,5 +86,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'unique': 'True', 'null': 'True'})
         }
     }
-    
+
     complete_apps = ['data_distributor']

@@ -25,7 +25,7 @@ def get_object_for_editing(request, uid, target_klass=None):
     the item is not found, a 404 Response will be returned. If the user is 
     not authorized to edit the item (not the owner or a staff user), a 403 Not
     Authorized Response will be returned.
-    
+
     usage:
 
     instance = get_object_for_editing(request, 'mlpa_mpa_12', target_klass=Mpa)
@@ -91,14 +91,14 @@ def handle_link(request, uids, link=None):
     """
     Handles all requests to views setup via features.register using Link 
     objects.
-    
+
     Assuming a valid request, this generic view will call the view specified 
     by the link including an instance or instances argument containing the 
     relavent Feature(s).
 
     If the incoming request is invalid, any one of the following errors may be
     returned:
-    
+
     401: login required
     403: user does not have permission (not admin user or doesn't own object 
          to be edited)
@@ -147,19 +147,19 @@ def handle_link(request, uids, link=None):
 generic link only supports requests for feature classes %s' % (
                 instance.__class__.__name__, 
                 ', '.join([m.__name__ for m in link.models])), status=400)
-                
+
     if link.select is 'single':
         return link.view(request, instances[0], **link.extra_kwargs)
     else:
         return link.view(request, instances, **link.extra_kwargs)
-    
+
 def delete(request, model=None, uid=None):
     """
     When calling, provide the request object, reference to the resource
     class, and the primary key of the object to delete.
 
     Possible response codes:
-    
+
     200: delete operation successful
     401: login required
     403: user does not have permission (not admin user or doesn't own object)
@@ -195,12 +195,12 @@ def multi_delete(request, instances):
     else:
         return HttpResponse('DELETE http method must be used to delete', 
                 status=405)
-    
+
 
 def create(request, model, action):
     """
     When calling, provide the request object and a ModelForm class
-            
+
         POST:   Create a new instance from filled out ModelForm
 
             201: Created. Response body includes representation of resource
@@ -230,7 +230,7 @@ def create(request, model, action):
             kwargs = {}
             kwargs['form']=form
             m.save(**kwargs)
-            
+
             return to_response(
                 status=201, 
                 location=m.get_absolute_url(),
@@ -260,7 +260,7 @@ def create(request, model, action):
 def create_form(request, model, action=None):
     """
     Serves a form for creating new objects
-    
+
     GET only
     """
     config = model.get_options()
@@ -331,11 +331,11 @@ def update(request, model, uid):
     """
         When calling, provide the request object, a model class, and the
         primary key of the instance to be updated.
-                
+
             POST: Update instance.
-            
+
                 possible response codes:
-                
+
                 200: OK. Object updated and in response body.
                 400: Form validation error. Present form back to user.
                 401: Not logged in.
@@ -356,7 +356,7 @@ def update(request, model, uid):
         instance.name
     except:
         raise Exception('Model to be edited must have a name attribute.')
-        
+
     if request.method == 'POST':
         values = request.POST.copy()
         # Even if request.user is different (ie request.user is staff)
@@ -374,7 +374,7 @@ def update(request, model, uid):
             kwargs = {}
             kwargs['form']=form
             m.save(**kwargs)
-            
+
             return to_response(
                 status=200,
                 select=m.uid,
@@ -400,15 +400,15 @@ def update(request, model, uid):
         return HttpResponse("""Invalid http method. 
         Yes we know, PUT is supposed to be used rather than POST, 
         but it was much easier to implement as POST :)""", status=405)
-        
-    
+
+
 def resource(request, model=None, uid=None):
     """
     Provides a resource for a django model that can be utilized by the 
     madrona.features client module.
-    
+
     Implements actions for the following http actions:
-    
+
         POST:   Update an object
         DELETE: Delete it
         GET:    Provide a page representing the model. For MPAs, this is the 
@@ -418,7 +418,7 @@ def resource(request, model=None, uid=None):
                 To implement GET, this view needs to be passed a view function
                 that returns an HttpResponse or a template can be specified
                 that will be passed the instance and an optional extra_context
-        
+
     Uses madrona.features.views.update and madrona.feature.views.delete
     """
     if model is None:
@@ -432,7 +432,7 @@ def resource(request, model=None, uid=None):
             # Object is not viewable so we return httpresponse
             # should contain the appropriate error code
             return instance
-            
+
         t = config.get_show_template()
         context = config.show_context
         context.update({
@@ -445,7 +445,7 @@ def resource(request, model=None, uid=None):
         return HttpResponse(t.render(RequestContext(request, context)))
     elif request.method == 'POST':
         return update(request, model, uid)
-        
+
 def form_resources(request, model=None, uid=None):
     if model is None:
         return HttpResponse('Model not specified in feature urls', status=500)
@@ -481,12 +481,12 @@ def copy(request, instances):
     """
     Generic view that can be used to copy any feature classes. Supports 
     requests referencing multiple instances.
-    
+
     To copy, this view will call the copy() method with the request's user as
     it's sole argument. The Feature base class has a generic copy method, but
     developers can override it. A poorly implemented copy method that does not
     return the copied instance will raise an exception here.
-    
+
     This view returns a space-delimited list of the Feature uid's for 
     selection in the user-interface after this operation via the 
     X-Madrona-Select response header.
@@ -569,7 +569,7 @@ def kml_core(request, instances, kmz):
         viewable, response = instance.is_viewable(user)
         if not viewable:
             return viewable, response
-        
+
         if isinstance(instance, FeatureCollection):
             collections.append(instance)
         else:
@@ -668,7 +668,7 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
             target_klass=collection_model)
     if isinstance(collection_instance, HttpResponse):
         return instance
-        
+
     if request.method == 'POST':
         uids = uids.split(',')
         instances = []
@@ -688,7 +688,7 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
                 instance.add_to_collection(collection_instance)
         else:
             return HttpResponse("Invalid action %s." % action, status=500)
-        
+
         return to_response(
             status=200,
             select=instances,
@@ -733,25 +733,25 @@ def to_response(status=200, select=None, show=None, parent=None,
     untoggle=None, location=None):
     """Will return an appropriately structured response that the client can 
     interpret to carry out the following actions:
-    
+
         select
             Accepts a list of features. Tells the client to select these 
             features in the user interface after an editing operation
-        
+
         show
             Accepts a single feature. Client will show that feature's 
             attribute window in the sidebar
-        
+
         untoggle
             Accepts a list of features. Useful for toggling the visibility of
             original features that are being copied so there are not multiple
             overlapping copies on the map
-        
+
         parent
             Gives a hint to the client that the edited feature falls within a
             particular FeatureCollection. Without this hint the client may not
             in all cases be able to perform select and show behaviors.
-            
+
     These behaviors are intended to be specified to the client using 
     X-Madrona- style headers in the response. Unfortunately, we have to post
     some forms via an iframe in order to upload files. This makes it 
@@ -773,7 +773,7 @@ def to_response(status=200, select=None, show=None, parent=None,
         if k != 'status' and k != 'Location':
             response[k] = v
     return response
-    
+
 def to_csv(features):
     if not features or isinstance(features, unicode):
         return features

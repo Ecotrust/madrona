@@ -12,7 +12,7 @@ def get_js_files():
     for f in tree.findall('file'):
         files.append(ROOT_PATH + f.get('path'))
     return files
-    
+
 def get_js_test_files():
     """Returns a list of all the javascript test files listed in 
     media/js_includes.xml"""
@@ -22,7 +22,7 @@ def get_js_test_files():
     for f in tree.findall('test'):
         files.append(ROOT_PATH + f.get('path'))
     return files
-    
+
 def get_css_files():
     """Returns a list of all css files listed in 
     media/css_includes.xml"""

@@ -38,5 +38,3 @@ class LingcodBackend(DefaultBackend):
         new_user.save()
         signals.user_registered.send(sender=self.__class__, user=new_user, request=request)
         return new_user
-
-

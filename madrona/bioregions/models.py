@@ -12,7 +12,7 @@ class BioregionManager(models.GeoManager):
             return None
         else:
             return qs[0]
-            
+
     def spans_multiple(self,geom):
         """Will return True if geometry spans multiple bioregions.  False otherwise."""
         qs = super(BioregionManager,self).get_query_set().filter(geometry__intersects=geom)
@@ -34,13 +34,13 @@ class Bioregion(models.Model):
         ======================  ==============================================
 
         ``name``                Name of the bioregion
-                                
+
         ``creation_date``       Automatically assigned
 
         ``modification_date``   Automatically assigned
-                                
+
         ``geometry``            PolygonField representing the bioregion boundary
-                                
+
         ======================  ==============================================
 """   
     name = models.CharField(verbose_name="Study Region Name", max_length=255, null=True, blank=True)   
@@ -48,8 +48,7 @@ class Bioregion(models.Model):
     modification_date = models.DateTimeField(auto_now=True)     
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Study region boundary")
     objects = BioregionManager()
-    
+
     def __unicode__(self):
         """docstring for __unicode__"""
         return self.name
-        

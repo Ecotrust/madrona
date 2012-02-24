@@ -41,7 +41,7 @@ class Nonce(models.Model):
     server_url = models.CharField(max_length=255)
     timestamp = models.IntegerField()
     salt = models.CharField(max_length=40)
-    
+
     def __unicode__(self):
         return u"Nonce: %s" % self.id
 
@@ -53,7 +53,7 @@ class Association(models.Model):
     issued = models.IntegerField()
     lifetime = models.IntegerField()
     assoc_type = models.TextField(max_length=64)
-    
+
     def __unicode__(self):
         return u"Association: %s, %s" % (self.server_url, self.handle)
 
@@ -64,10 +64,10 @@ class UserAssociation(models.Model):
     openid_url = models.CharField(primary_key=True, blank=False,
                             max_length=255, verbose_name=_('OpenID URL'))
     user = models.ForeignKey(User, verbose_name=_('User'))
-    
+
     def __unicode__(self):
         return "Openid %s with user %s" % (self.openid_url, self.user)
-        
+
     def save(self, send_email=True):
         super(UserAssociation, self).save()
         if send_email:
@@ -85,7 +85,7 @@ class UserAssociation(models.Model):
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                     [self.user.email], fail_silently=True)
         oid_associate.send(sender=self, user=self.user, openid=self.openid_url)
-        
+
 
     class Meta:
         verbose_name = _('user association')

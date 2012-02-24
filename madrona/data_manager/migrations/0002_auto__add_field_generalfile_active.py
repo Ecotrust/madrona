@@ -5,19 +5,19 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding field 'GeneralFile.active'
         db.add_column('data_manager_generalfile', 'active', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting field 'GeneralFile.active'
         db.delete_column('data_manager_generalfile', 'active')
-    
-    
+
+
     models = {
         'data_manager.datalayer': {
             'Meta': {'object_name': 'DataLayer'},
@@ -64,5 +64,5 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['data_manager']

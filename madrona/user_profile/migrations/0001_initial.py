@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'UserProfile'
         db.create_table('user_profile_userprofile', (
             ('about', self.gf('django.db.models.fields.TextField')(blank=True)),
@@ -15,14 +15,14 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
         ))
         db.send_create_signal('user_profile', ['UserProfile'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'UserProfile'
         db.delete_table('user_profile_userprofile')
-    
-    
+
+
     models = {
         'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -67,5 +67,5 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
         }
     }
-    
+
     complete_apps = ['user_profile']

@@ -23,7 +23,7 @@ def get_kml_file(request, uid, session_key='0', input_username=None):
 
     if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
-    
+
     instance = get_object_for_viewing(request, uid)
     if isinstance(instance, HttpResponse):
         return instance
@@ -147,4 +147,3 @@ def get_public_layers(request):
     response = HttpResponse(layer.kml_file.read(), mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=public.kml'
     return response
-

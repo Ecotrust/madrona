@@ -111,4 +111,3 @@ USER_AGENT_PARSERS = (
   _P(r'(Teleca Q7)'),
   _P(r'(MSIE) (\d+)\.(\d+)', family_replacement='IE'),
 )
-

@@ -21,5 +21,3 @@ class GroupManagementTest(TestCase):
         gr1 = GroupRequest.objects.all()
         self.assertEqual(len(gr1),1)
         self.assertEqual(gr1[0].user, user1)
-
-

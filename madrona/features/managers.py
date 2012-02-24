@@ -8,7 +8,7 @@ class ShareableGeoManager(models.GeoManager):
         """
         Returns a queryset containing any objects that have been 
         shared with a group the user belongs to.
-        
+
         Assumes that the model has been setup according to the instructions
         for implementing a shared model.
         """
@@ -58,7 +58,7 @@ class ShareableGeoManager(models.GeoManager):
                 # Avoid infinite recursion
                 if exclude_models and collection_model in exclude_models:
                     continue
-                
+
                 exclude_models = None
                 if collection_model == self.model:
                     # On the next recurisive go-round, avoid infinite recursion
@@ -75,7 +75,7 @@ class ShareableGeoManager(models.GeoManager):
                     #contained = sc.__getattribute__(shared_content_type.container_set_property)
                     contained = sc.feature_set(recurse=True,feature_classes=[self.model])
                     contained_ids.extend([x.id for x in contained])
-           
+
             return self.filter(
                 models.Q(
                     sharing_groups__permissions=perm, 

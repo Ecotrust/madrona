@@ -10,12 +10,12 @@ def stats_for_geom(request, raster_name):
         geom_txt = str(request.REQUEST['geom_txt'])
     else:
         return HttpResponse("Must supply a geom_txt parameter", status=404)
-    
+
     try:
         geom = fromstr(geom_txt)
     except:
         return HttpResponse("Must supply a parsable geom_txt parameter (wkt or json)", status=404)
- 
+
     # Confirm raster with pk exists
     try:
         raster = RasterDataset.objects.get(name=raster_name)

@@ -9,59 +9,59 @@ class Organism(models.Model):
     common_name = models.CharField(max_length=255,null=True,blank=True)
     genus = models.CharField(max_length=255)
     species = models.CharField(max_length=255)
-    
+
     def __unicode__(self):
         return "%s %s" % (self.genus.title(),self.species.lower())
-    
+
 class OrganizationScheme(models.Model):
     from madrona.intersection.models import OrganizationScheme as OrgScheme
     scheme = models.ForeignKey(OrgScheme)
-    
+
     def __unicode__(self):
         return self.scheme.name
-    
+
     def save(self):
         super(OrganizationScheme,self).save()
         for fm in self.scheme.featuremapping_set.all():
             habitat, created = Habitat.objects.get_or_create(org_scheme=self,habitat=fm)
             habitat.save()
-    
+
 class Habitat(models.Model):
     from madrona.intersection.models import FeatureMapping as FeatMap
     org_scheme = models.ForeignKey(OrganizationScheme)
     habitat = models.ForeignKey(FeatMap)
-    
+
     class Meta:
         ordering = ('org_scheme__scheme__name','habitat__sort')
-    
+
     def __unicode__(self):
         return '%s (%s)' % (self.habitat.name,self.org_scheme.scheme.name,)
-    
+
 class Extent(models.Model):
     name = models.CharField(max_length=255, help_text="Very brief description of the area.")
     description = models.TextField(help_text="A full description of the area.")
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return self.name
-    
+
 class Reference(models.Model):
     author = models.CharField(max_length=255, help_text="Author(s) name(s) as you want them to appear in a short citation. Examples: 'Burt, C et al', 'Burt, C', 'McClintock, W and Burt, C'")
     year = models.IntegerField()
     citation = models.TextField(help_text="Full citation")
     url = models.URLField(null=True,blank=True)
     document = models.FileField(upload_to="bioeconomic_model/references/",null=True,blank=True)
-    
+
     def __unicode__(self):
         return "%s %s" % (self.author,self.year)
-    
+
 class LengthUnit(models.Model):
     description = models.CharField(max_length=255)
-    
+
     def __unicode__(self):
         return self.description
-    
+
 class OrganismParameters(models.Model):
     organism = models.ForeignKey(Organism)
     habitat = models.ForeignKey(Habitat)
@@ -100,16 +100,16 @@ class OrganismParameters(models.Model):
     natural_mortality_references = models.ManyToManyField(Reference,null=True,blank=True,related_name='natural_mortality_ref')
     compensation_ratio = models.FloatField()
     compensation_ratio_references = models.ManyToManyField(Reference,null=True,blank=True,related_name='compensation_ratio_ref')
-    
+
     def __unicode__(self):
         return '%s Parameters' % self.organism.__unicode__()
-    
+
     @property
     def array(self):
         return np.array([self.organism.pk,self.habitat.pk,self.range.pk,self.biogeography.pk,self.pelagic_larval_duration,self.spawn_start,self.spawn_end,self.home_range,
                          self.length_units.pk,self.asymtotic_length,self.instantaneous_growth,self.age_at_length_zero,self.c_one,self.c_two, self.age_at_maturity,self.maximum_age,
                          self.natural_mortality,self.compensation_ratio])
-        
+
     def relevant_habitat_grid(self,with_geometries=False):
         if with_geometries:
             return GridAttributes.objects.filter(habitat=self.habitat,value__gt=0.0)
@@ -117,46 +117,46 @@ class OrganismParameters(models.Model):
             return GridAttributes.objects.filter(habitat=self.habitat,value__gt=0.0).defer('grid__geometry')
 
 class StudyRegionManager(models.GeoManager):
-    
+
     def multigeometry(self):
         # Returns a multipolygon of the whole study region
         mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
         for sr in self.iterator():
             mgeom.append(sr.geometry)
         return mgeom
-    
+
     def convex_hull_multigeometry(self):
         mgeom = geos.fromstr('MULTIPOLYGON EMPTY').convex_hull
         for sr in self.iterator():
             mgeom.append(sr.geometry)
         return mgeom
-    
+
     def extent(self):
         # Returns the extent of the entire study region in the format (xmin, ymin, xmax, ymax)
         mgeom = self.multigeometry()
         return mgeom.extent
- 
+
 class StudyRegion(models.Model):
     name = models.CharField(max_length=255,null=True,blank=True)
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True)
     objects = StudyRegionManager()
-    
+
     def __unicode__(self):
         return 'Study Region: %s'  % self.name
 
 class PolygonGridManager(models.GeoManager):
-    
+
     def load_attributes(self, habitat_list=None):
         if not habitat_list:
             habitat_list = Habitat.objects.all()
         for pg in self.iterator():
             pg.load_attributes(habitat_list)
-        
+
 
 class PolygonGrid(models.Model):
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID)
     objects = PolygonGridManager()
-    
+
     def load_attributes(self, habitat_list):
         for habitat in habitat_list:
             result = habitat.habitat.transformed_results(self.geometry)
@@ -166,7 +166,7 @@ class PolygonGrid(models.Model):
             ga.habitat = habitat
             ga.value = result['result']
             ga.save()
-    
+
 class GridAttributes(models.Model):
     name = models.CharField(max_length=255)
     grid = models.ForeignKey(PolygonGrid)
@@ -187,7 +187,7 @@ def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_s
     ydist = ymax - ymin
     xcells = int(xdist/cell_size) + 1
     ycells = int(ydist/cell_size) + 1
-    
+
     x_current = xmin
     y_current = ymin
     points = []
@@ -238,7 +238,7 @@ def create_full_study_region_grid(cell_size=1000):
     ydist = ymax - ymin
     xcells = int(xdist/cell_size) + 1
     ycells = int(ydist/cell_size) + 1
-    
+
     x_current = xmin
     y_current = ymin
     count = 0

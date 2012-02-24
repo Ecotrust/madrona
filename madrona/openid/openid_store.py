@@ -23,7 +23,7 @@ try:
 except ImportError:
     import md5
     _md5 = md5.new
-   
+
 from django.db.models.query import Q
 from django.conf import settings
 from openid.association import Association as OIDAssociation
@@ -36,7 +36,7 @@ from madrona.openid.utils import OpenID
 class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
     def __init__(self):
         self.max_nonce_age = 6 * 60 * 60 # Six hours
-    
+
     def storeAssociation(self, server_url, association):
         assoc = Association(
             server_url = server_url,
@@ -47,7 +47,7 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
             assoc_type = association.assoc_type
         )
         assoc.save()
-    
+
     def getAssociation(self, server_url, handle=None):
         assocs = []
         if handle is not None:
@@ -71,14 +71,14 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
                 expired.append(assoc)
             else:
                 associations.append((association.issued, association))
-                
+
         for assoc in expired:
             assoc.delete()
         if not associations:
             return None
         associations.sort()
         return associations[-1][1]
-    
+
     def removeAssociation(self, server_url, handle):
         assocs = list(Association.objects.filter(
             server_url = server_url, handle = handle
@@ -91,7 +91,7 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
     def useNonce(self, server_url, timestamp, salt):
         if abs(timestamp - time.time()) > openid.store.nonce.SKEW:
             return False
-        
+
         query = [
                 Q(server_url__exact=server_url),
                 Q(timestamp__exact=timestamp),
@@ -109,7 +109,7 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
             return True
 
         return False
-   
+
     def cleanupNonces(self, _now=None):
         if _now is None:
             _now = int(time.time())
@@ -131,6 +131,6 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
     def getAuthKey(self):
         # Use first AUTH_KEY_LEN characters of md5 hash of SECRET_KEY
         return _md5(settings.SECRET_KEY).hexdigest()[:self.AUTH_KEY_LEN]
-    
+
     def isDumb(self):
         return False

@@ -11,7 +11,7 @@ class Command(BaseCommand):
     )
     help = "Creates a new study region from a shapefile containing a single multigeometry"
     args = '[shapefile]'
-    
+
     def handle(self, shapefile, *args, **options):
         ds = DataSource(shapefile)
         if len(ds) != 1:
@@ -43,6 +43,6 @@ class Command(BaseCommand):
             study_region.save()
         print ""
         print "Study region created: %s, primary key = %s" % (study_region.name, study_region.pk)
-        
+
         print "To switch to this study region, you will need to run 'python manage.py change_study_region %s'" % (study_region.pk, )
         print ""

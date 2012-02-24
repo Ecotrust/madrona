@@ -8,16 +8,16 @@ class DepthSounding(models.Model):
     depth_ft = models.IntegerField(blank=True,null=True)
     geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return unicode(self.depth_ft)
-    
+
 def soundings_in_geom(geom):
     """
     Return a query set of depthsoundings that fall within the supplied geometry.
     """
     return DepthSounding.objects.filter(geometry__within=geom)
-    
+
 def translate_to_positive_numbers(ds_min,ds_max):
     """
     Take a min and max depth as either negavite elevations or positive depths and
@@ -32,7 +32,7 @@ def translate_to_positive_numbers(ds_min,ds_max):
     if shallowest_positive and shallowest_positive < 10:
         shallowest_positive = 0
     return shallowest_positive, deepest_positive
-    
+
 def depth_range(geom):
     """
     Return the Minimum and Maximum depth for a geometry.  If the minimum is less than
@@ -44,7 +44,7 @@ def depth_range(geom):
     ds_max = ds.aggregate(Max('depth_ft'))['depth_ft__max']
     # Account for the fact that soundings may be negative or positive
     return translate_to_positive_numbers(ds_min,ds_max)
-    
+
 def total_depth_range():
     """
     Return the shallowest and deepest depth for the whole depth sounding data set.

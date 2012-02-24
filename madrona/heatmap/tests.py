@@ -39,4 +39,3 @@ class HeatmapTest(TestCase):
 
         response = self.client.get(self.kmz_url)
         self.assertEqual(response.status_code, 200)
-

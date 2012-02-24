@@ -17,4 +17,3 @@ admin.site.register(Raster, RasterAdmin)
 admin.site.register(Layer, LayerAdmin)
 admin.site.register(Feature, FeatureAdmin)
 admin.site.register(Attribute, AttributeAdmin)
-

@@ -32,7 +32,7 @@ class UploadForm(forms.Form):
         upload_dir = os.path.join(settings.MEDIA_ROOT,'upload','loadshp',user.username)
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir) 
-        
+
         # contruct the full filepath and filename
         downloaded_file = os.path.normpath(os.path.join(upload_dir, filefield_data.name))
 
@@ -54,7 +54,7 @@ class UploadForm(forms.Form):
             fout = open(shp_part, "wb")
             fout.write(data)
             fout.close()
-        
+
         # get the datasource name without extension
         ds_name = os.path.splitext(zfile.namelist()[0])[0]
         ds = gdal.DataSource('%s%s%s.shp' % (tmp_dir,os.path.sep,ds_name))
@@ -85,7 +85,7 @@ class UploadForm(forms.Form):
 
         # create zip object
         zfile = zipfile.ZipFile(tmp.name)
-        
+
         # ensure proper file contents by extensions inside
         if not self.check_zip_contents('shp', zfile):
             return False, 'Found Zip Archive but no file with a .shp extension found inside.'
@@ -93,7 +93,7 @@ class UploadForm(forms.Form):
             return False, 'You must supply a .dbf file with the Shapefile to supply attribute data.'
         elif not self.check_zip_contents('shx', zfile):
             return False, 'You must supply a .shx file for the Shapefile to have a valid index.'
-        
+
         # unpack contents into tmp directory
         tmp_dir = tempfile.gettempdir()
         for info in zfile.infolist():
@@ -102,7 +102,7 @@ class UploadForm(forms.Form):
             fout = open(shp_part, "wb")
             fout.write(data)
             fout.close()
-        
+
         # get the datasource name without extension
         ds_name = os.path.splitext(zfile.namelist()[0])[0]
 
@@ -135,7 +135,7 @@ class UploadForm(forms.Form):
         if layer.geom_type.name not in self.supported_geomtypes:
             return False, "Sorry, %s geometries are not supported. Try uploading a zipped shapefile with %s geometries" % \
                     (layer.geom_type.name, ', '.join(self.supported_geomtypes))
-        
+
         if not self.multi_feature and layer.num_feat != 1:
             return False, "We can only support shapefiles with a single feature"
 

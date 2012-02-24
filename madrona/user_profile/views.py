@@ -20,7 +20,7 @@ def profile_form(request,username,use_openid=False):
             user_profile = UserProfile.objects.create(user=user)
 
     user_assoc = UserAssociation.objects.filter(user__id=user.id)
-    
+
     if request.method == 'GET':
         uform = UserForm(instance=user)
         pform = UserProfileForm(instance=user_profile)

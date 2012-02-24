@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'DataLayer'
         db.create_table('data_manager_datalayer', (
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
@@ -58,10 +58,10 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
         db.send_create_signal('data_manager', ['ShapefileField'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'DataLayer'
         db.delete_table('data_manager_datalayer')
 
@@ -73,8 +73,8 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ShapefileField'
         db.delete_table('data_manager_shapefilefield')
-    
-    
+
+
     models = {
         'data_manager.datalayer': {
             'Meta': {'object_name': 'DataLayer'},
@@ -120,5 +120,5 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['data_manager']

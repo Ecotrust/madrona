@@ -29,7 +29,7 @@ class GeographicReportNode(template.Node):
         self.area = area
         self.persist = persist
         self.tab_id = tab_id
-    
+
     def render(self, context):
         report = GeographicReport.objects.get(name=self.name)
         area = Area(sq_m=Variable(self.area).resolve(context))
@@ -45,7 +45,7 @@ class GeographicReportNode(template.Node):
                 'min': annotation.min,
                 'max': annotation.max,
                 'color': '#%s' % (annotation.color, ) })
-                
+
         json = simplejson.dumps(json)
         return """
             <div id="%s" class="geographic_report"></div>

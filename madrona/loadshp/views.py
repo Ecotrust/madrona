@@ -48,6 +48,3 @@ def load_single_shp(request):
 
     else:
         raise Exception("This URL does not support %s requests" % request.method)
-
-
-

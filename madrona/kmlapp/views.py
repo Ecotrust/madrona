@@ -52,7 +52,7 @@ def get_user_data(user):
     for fmodel in get_feature_models():
         unattached = list(fmodel.objects.filter(user=user, content_type=None, object_id=None))
         toplevel_features.extend(unattached)
-        
+
     for cmodel in get_collection_models():
         collections_top = list(cmodel.objects.filter(user=user, content_type=None, object_id=None))
         toplevel_collections.extend(collections_top)
@@ -79,7 +79,7 @@ def get_data_for_feature(user, uid):
         for fmodel in get_feature_models():
             unattached = list(fmodel.objects.filter(content_type=ct,object_id=obj_id))
             features.extend(unattached)
-            
+
         for cmodel in get_collection_models():
             collections_top = list(cmodel.objects.filter(content_type=ct,object_id=obj_id))
             collections.extend(collections_top)
@@ -101,13 +101,13 @@ def get_public_data():
     for fmodel in get_feature_models():
         unattached = list(fmodel.objects.filter(sharing_groups__in=public_groups))
         features.extend(unattached)
-        
+
     for cmodel in get_collection_models():
         collections_top = list(cmodel.objects.filter(sharing_groups__in=public_groups))
         collections.extend(collections_top)
 
     return features, collections
-        
+
 def get_shared_data(shareuser, sharegroup, user):
     sg = Group.objects.get(pk=sharegroup)
     su = User.objects.get(pk=shareuser)
@@ -124,7 +124,7 @@ def get_shared_data(shareuser, sharegroup, user):
                  .filter(user=su, content_type=None,object_id=None)
         )
         features.extend(unattached)
-        
+
     for cmodel in get_collection_models():
         collections_top = list(
                 cmodel.objects.shared_with_user(user,filter_groups=[sg])
@@ -164,7 +164,7 @@ def create_kmz(kml, zippath):
     kmlfile.flush()
     if python26:
         kmlfile.close() 
-    
+
     # zip it up into a kmz
     kmzbuffer = StringIO()
     zipout = zipfile.ZipFile(kmzbuffer,'w',zipfile.ZIP_DEFLATED)
@@ -245,7 +245,7 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     user = request.user
     if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
-    
+
     from madrona.features import groups_users_sharing_with 
     sharing_with = groups_users_sharing_with(user)
 

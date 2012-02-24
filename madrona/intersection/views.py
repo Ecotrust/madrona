@@ -24,7 +24,7 @@ def split_to_single_shapefiles(request, mfshp_pk):
             form = SplitToSingleFeaturesForm(mfshp_pk)
     else:
         return HttpResponseForbidden
-    
+
     c = csrf(request)
     c.update({'form': form, 'mfshp_pk_key': mfshp_pk}, current_app='intersection.admin')
     return render_to_response('split_to_single_feature_shapefiles.html', c)
@@ -68,7 +68,7 @@ def build_csv_response(results, file_name, leave_out=['feature_map_id','org_sche
     header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
     header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out] )
     row_matrix = [header_row]
-        
+
     for result in results:
         for hab,sub_dict in result.iteritems():
             new_row = [hab]
@@ -78,12 +78,12 @@ def build_csv_response(results, file_name, leave_out=['feature_map_id','org_sche
                     wanted_values.append(v)
             new_row.extend(wanted_values)
             row_matrix.append(new_row)
-    
+
     for row in row_matrix:
         writer.writerow(row)
-        
+
     return response
-    
+
 def build_excel_response(file_name, workbook):
     """
     This method assumes you've built an excel workbook elsewhere and just want to build a response object from it.
@@ -93,7 +93,7 @@ def build_excel_response(file_name, workbook):
     workbook.save(response)
 
     return response
-    
+
 def build_array_mpa_csv_response(results, file_name, feature_name, feature_type='MPA', leave_out=['feature_map_id','org_scheme_id']):
     response = HttpResponse(mimetype='application/csv')
     response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
@@ -123,7 +123,7 @@ def build_array_mpa_csv_response(results, file_name, feature_name, feature_type=
         writer.writerow(row)
 
     return response
-    
+
 def remove_elements(the_list,remove_list):
     for r in remove_list:
         try:
@@ -175,7 +175,7 @@ def default_intersection(request, format, geom_wkt):
         return render_to_response('generic_results.html', {'result': result})
     elif format=='csv':
         return build_csv_response(result, str(hash(geom)) )
-        
+
 def organized_intersection(request, org_scheme, format, geom_wkt):
     geom = geos.fromstr(geom_wkt)
     geom.transform(settings.GEOMETRY_DB_SRID)
@@ -187,7 +187,7 @@ def organized_intersection(request, org_scheme, format, geom_wkt):
         return build_csv_response(result, str(hash(geom)) )
     elif format=='json':
         return HttpResponse(json_encode(result), mimetype='text/json')
-        
+
 def organized_intersection_by_name(request, org_scheme_name, format, geom_wkt):
     org_scheme_pk = OrganizationScheme.objects.get(name=org_scheme_name).pk
     return organized_intersection(request, org_scheme_pk, format, geom_wkt)
@@ -196,7 +196,7 @@ def org_scheme_info(request, org_id):
     osc = OrganizationScheme.objects.get(pk=org_id)
     subdict = osc.info
     return HttpResponse(json_encode(subdict), mimetype='text/json')
-    
+
 def org_scheme_pk_from_name(request, name):
     osc_pk = OrganizationScheme.objects.get(name=name).pk
     result = {'pk': osc_pk}
@@ -209,7 +209,7 @@ def all_org_scheme_info(request):
         subdict = osc.info
         dict[str(osc.pk)] = subdict
     return HttpResponse(json_encode(dict), mimetype='text/json')
-    
+
 #def test_poly_intersect_csv(request, type):
 #    if request.method == 'POST':
 #        form = TestPolygonIntersectionForm(request.POST)

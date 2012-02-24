@@ -30,7 +30,7 @@ def showVideoByPk(request, pk, demo_template='demo_video.html'):
     player_path = settings.MEDIA_ROOT + "../" + settings.VIDEO_PLAYER
     if not os.path.exists(player_path):
         return HttpResponse( "Server error - VIDEO_PLAYER does not exist <br/> should live at %s" % settings.VIDEO_PLAYER, status=500 )
-    
+
     return render_to_response(demo_template, {'videoplayer':settings.VIDEO_PLAYER, 'screencast':screencast}, context_instance=RequestContext(request)) 
 
 def showYoutubeVideo(request, pk):

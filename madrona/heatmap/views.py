@@ -30,7 +30,7 @@ def overlap_geotiff(collection_uids, user=None):
 
     temp_geotiff = create_heatmap(filenames)
     return temp_geotiff
-    
+
 def overlap_geotiff_response(request, collection_uids):
     import cStringIO
     buff = cStringIO.StringIO()
@@ -57,7 +57,7 @@ def overlap_kmz_response(request, collection_uids):
     temp_geotiff = overlap_geotiff(collection_uids, request.user)
     if isinstance(temp_geotiff, HttpResponse):
         return response
-    
+
     tempdir = os.path.join(tempfile.gettempdir(),str(collection_uids.__hash__()))
     if os.path.exists(tempdir):
         shutil.rmtree(tempdir)
@@ -79,7 +79,7 @@ def overlap_kmz_response(request, collection_uids):
     cmd = "gdal_translate -of vrt -a_nodata 0 %s %s" % (outrgb, outvrt)
     print cmd
     print os.popen(cmd).read()
-         
+
     # Split into wgs84 tiles
     cmd = "gdal2tiles.py -k -z 6-10 -p geodetic %s %s" % (outvrt, outkmldir)
     print cmd
@@ -106,5 +106,3 @@ def overlap_kmz_response(request, collection_uids):
     response['Content-Type'] = mimetypes.KMZ
     response.write(stream)
     return response
-
-

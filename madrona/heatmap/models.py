@@ -6,14 +6,14 @@ import sys
 import numpy
 import tempfile
 from osgeo import gdal, osr
-    
+
 CELL_SIZE = 50
 
 def readArray(input):
     """Borrowed from Matt Perry"""
     data = gdal.Open(input)
     band = data.GetRasterBand(1)
-    
+
     return band.ReadAsArray()
 
 def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB_SRID):
@@ -42,12 +42,12 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     gt = (extent[0],cellsize,0,extent[3],0,(cellsize*-1.))
     dst_ds.SetGeoTransform(gt)
     dst_ds.SetProjection( srs.ExportToWkt() )
-    
+
     dst_band = dst_ds.GetRasterBand(1)
     dst_band.WriteArray(outArray,0,0)
     dst_ds = None
     return outfile
-    
+
 def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,format='GTiff',srid=settings.GEOMETRY_DB_SRID):
     """
     Creates a raster dataset with all 1s where there are shapes in the shapefile.
@@ -96,7 +96,7 @@ def shapefile_to_matrix(shapefile,cellsize=CELL_SIZE,extent=None):
     matrix = readArray(tf)
     os.remove(tf)
     return matrix
-    
+
 def create_heatmap(shp_list):
     matrices = []
     for shp in shp_list:
@@ -109,6 +109,3 @@ def create_heatmap(shp_list):
     outfile = tempfile.NamedTemporaryFile(suffix='.tif', mode='w+b')
     outfile.close()
     return create_raster_from_matrix(mat,outfile.name)
-        
-
-

@@ -5,4 +5,3 @@ class MapAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(MapConfig, MapAdmin)
-

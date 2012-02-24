@@ -57,7 +57,7 @@ class Grass:
                  gisdbase=None, gisbase=None, autoclean=True):
         self.autoclean = autoclean
         self.verbose = False
-            
+
         self.location = location
         if tmpMapset == True:
             # unique name not specified, autogenerate it
@@ -66,7 +66,7 @@ class Grass:
             self.tmpMapset = tmpMapset
         self.srcMapset = srcMapset
         self.templateMapset = 'mm_template_mapset'
-                
+
         if DJANGO and not gisdbase:
             self.gisdbase = settings.GRASS_GISDBASE
         else:
@@ -167,7 +167,7 @@ class Grass:
             'GIS_LOCK': str(os.getpid()),
             'GISRC': self.grassRcFile        
         }
-        
+
         for key in grassenv.keys():
             self.setEnv(key, grassenv[key])
 
@@ -221,7 +221,7 @@ class Grass:
         gisrc.write("GRASS_GUI: text\n")
         gisrc.close()        
         os.environ['GISRC'] = self.grassRcFile        
-            
+
     '''
     Set a single environment variable to the given value
     '''
@@ -232,13 +232,13 @@ class Grass:
         os.putenv(key,value)
         os.environ[key] = value
         return
-    
+
     '''
     Returns the raster path for the current mapset
     '''
     def getRastPath(self):
         return self.gisdbase+self.location+'/'+self.curMapset+'/cell/'        
-    
+
     def run(self, cmd, nice=None):
         if nice:
             cmd = 'nice -n %d %s' % (nice,cmd)
@@ -250,22 +250,22 @@ class Grass:
                     env=self.setupTmpGrassEnv(),)
         out, err = proc.communicate()
         returncode = proc.returncode
-        
+
         if returncode != 0:
             raise Exception("\nCommand failed with return code %s: \n %s \n %s" % (returncode, cmd, err))
         elif err and self.verbose:
             log.debug(err)
         return out    
-         
+
     ############ Shortcut Commands ############
-    
+
     '''
     Copy a vector map from the base mapset to the temporary mapset
     '''
     def copyMap(self, type, mapName):
         command = "g.copy %s=%s@%s,%s" % (type, mapName, self.srcMapset, mapName)
         self.run(command)
-    
+
     '''
     Input a vector ogr datasource (input) and save as a grass vector map (output) 
     '''
@@ -279,7 +279,7 @@ class Grass:
     def r_in_gdal(self, input, output):
         command = 'r.in.gdal -o input=%s output=%s' % (input, output)
         self.run(command)
-    
+
     '''
     Calculates the sum of all cell values where input is the map name
     '''
@@ -301,7 +301,7 @@ class Grass:
         #Change all value cells to 1 for counting
         maskCmd = 'r.mapcalc "maskMap=if(%s, 1)"' % (input)
         self.run(maskCmd, nice=1)
-        
+
         #Calculate total fishing area
         area = 0.0
         cells = 0
@@ -320,7 +320,7 @@ class Grass:
     def r_intersect(self, result, m1, m2):
         intersectCmd = 'r.mapcalc "%s=if(%s,%s)"' % (result, m1, m2)
         self.run(intersectCmd, nice=1)
-    
+
     '''
     Converts vMap a vector map, to rMap a raster map.  Where vectors overlap, raster cells
     are given the value of val
@@ -353,4 +353,3 @@ class Grass:
         cmd = 'g.mlist type=vect'
         vects = self.run(cmd)
         return {'rast': rasts.split(), 'vect': vects.split()}
-

@@ -11,7 +11,7 @@ def do_absolute_media_url(parser, token):
     """Provides MEDIA_URL, but adds the hostname if necessary
     """
     return AbsoluteMediaUrlNode(settings.MEDIA_URL)
-        
+
 class AbsoluteMediaUrlNode(template.Node):
     def __init__(self, media_url):
         self.media_url = media_url

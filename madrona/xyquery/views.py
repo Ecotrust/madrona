@@ -18,7 +18,7 @@ def query(request):
         attribs = Attribute.objects.filter(feature=poly.pk)
         for attrib in attribs:
             results['%s :: %s' % (poly.layer, attrib.key)] = attrib.value
- 
+
     # Query all the raster layers
     rasters = Raster.objects.all()
     for rast in rasters:
@@ -30,7 +30,7 @@ def query(request):
             val = getRasterValue(pnt_proj.x, pnt_proj.y, ds, band)
             if val:
                 results["%s :: %s" % (rast.layer, "Band %s" % band)] = val
-    
+
     return render_to_response('query.html', {'x': x, 'y':y, 'results': results}) 
 
 def getRasterValue(x,y,ds,bandnum=1):

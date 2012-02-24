@@ -6,15 +6,15 @@ from django.db import models
 from django.core.management import call_command
 
 class Migration(DataMigration):
-    
+
     def forwards(self, orm):
         # This migration used to load some data but we decided it shouldn't but we don't want to delete it because that fucks everything up so now it just sits here and does absolutely nothing.  It's like a state employee!
         pass
-    
-    
+
+
     def backwards(self, orm):
         pass
-    
+
     models = {
         'intersection.featuremapping': {
             'Meta': {'object_name': 'FeatureMapping'},
@@ -90,5 +90,5 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '180'})
         }
     }
-    
+
     complete_apps = ['replication']

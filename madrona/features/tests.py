@@ -53,34 +53,34 @@ class TestForm:
 class TestSlugFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
-                
+
 @register
 class TestDefaultVerboseNameFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
-        
+
 @register 
 class TestCustomVerboseNameFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
         verbose_name = 'vb-name'
-        
+
 @register
 class TestDefaultShowTemplateFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
-        
+
 @register
 class TestCustomShowTemplateFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
         show_template = 'location/show.html'
-        
+
 @register
 class TestMissingDefaultShowFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
-        
+
 @register
 class TestMissingCustomShowFeature(Feature):
     class Options:
@@ -88,14 +88,14 @@ class TestMissingCustomShowFeature(Feature):
         show_template = 'location/show.html'
 
 class FeatureOptionsTest(TestCase):
-    
+
     def test_check_for_subclass(self):
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
             @register
             class NotAFeature:
                 pass
             NotAFeature.get_options()
-    
+
     def test_check_for_inner_class(self):
         with self.assertRaisesRegexp(FeatureConfigurationError,'not defined'):
             @register
@@ -121,17 +121,17 @@ class FeatureOptionsTest(TestCase):
 
     def test_slug(self):
         self.assertEqual(TestSlugFeature.get_options().slug, 'testslugfeature')
-    
+
     def test_default_verbose_name(self):
         self.assertEqual(
             TestDefaultVerboseNameFeature.get_options().verbose_name, 
             'TestDefaultVerboseNameFeature')
-    
+
     def test_custom_verbose_name(self):
         self.assertEqual(
             TestCustomVerboseNameFeature.get_options().verbose_name, 
             'vb-name')
-        
+
     def test_default_show_template(self):
         options = TestDefaultShowTemplateFeature.get_options()
         path = options.slug + '/show.html'
@@ -141,7 +141,7 @@ class FeatureOptionsTest(TestCase):
             options.get_show_template().name, 
             path)
         delete_template(path)
-    
+
     def test_custom_show_template(self):
         options = TestCustomShowTemplateFeature.get_options()
         path = TestCustomShowTemplateFeature.Options.show_template
@@ -151,7 +151,7 @@ class FeatureOptionsTest(TestCase):
             options.get_show_template().name, 
             path)
         delete_template(path)
-    
+
     def test_missing_default_show_template(self):
         options = TestMissingDefaultShowFeature.get_options()
         path = options.slug + '/show.html'
@@ -165,23 +165,23 @@ class FeatureOptionsTest(TestCase):
         self.assertEqual(
             options.get_show_template().name, 
             'features/show.html')
-    
+
     def test_get_form_class(self):
         self.assertEqual(
             TestGetFormClassFeature.get_options().get_form_class(),
             TestFeatureForm)
-    
+
     def test_get_form_not_subclass(self):
         with self.assertRaisesRegexp(FeatureConfigurationError, 'subclass'):
             TestGetFormClassFailFeature.get_options().get_form_class()
-    
+
 # Generic view tests
 
 @register
 class TestDeleteFeature(Feature):
     class Options:
         form = 'madrona.features.form.FeatureForm'
-        
+
 class DeleteTest(TestCase):
 
     def setUp(self):
@@ -240,7 +240,7 @@ class DeleteTest(TestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TestDeleteFeature.objects.filter(pk=pk).count(), 0)
-        
+
     def test_delete_collection(self):
         """
         Users can delete collections that belong to them
@@ -505,19 +505,19 @@ def valid_multiple_select_view(request, instances):
     return HttpResponse(', '.join([i.name for i in instances]))
 
 class LinkViewValidationTest(TestCase):
-    
+
     def test_single_select_view_requires_instance_argument(self):
         # Must accept at least a second argument for the instance
         with self.assertRaises(FeatureConfigurationError):
             link = alternate(
                 'test title',
                 'madrona.features.tests.invalid_single_select_view')
-                
+
         # Accepts the instance argument
         link = alternate('test title',
             'madrona.features.tests.valid_single_select_view')
         self.assertIsInstance(link, Link)
-    
+
     def test_multiple_select_view_requires_instance_argument(self):
         # Must accept at least a second argument for the instances
         with self.assertRaises(FeatureConfigurationError):
@@ -530,7 +530,7 @@ class LinkViewValidationTest(TestCase):
             'madrona.features.tests.valid_multiple_select_view', 
             select='multiple')
         self.assertIsInstance(link, Link)
-        
+
     def test_check_extra_kwargs_allowed(self):
         pass
         # TODO: Test that Link validates extra_kwargs option is compatible 
@@ -544,16 +544,16 @@ class LinkTestFeature(Feature):
             alternate('Single Select View',
                 'madrona.features.tests.valid_single_select_view',  
                 type="application/shapefile"),
-                
+
             alternate('Spreadsheet of all Features',
                 'madrona.features.tests.valid_multiple_select_view',
                 type="application/xls", 
                 select='multiple single'),
-            
+
             edit('Edit single feature',
                 'madrona.features.tests.valid_single_select_view'
             ),
-            
+
             edit_form('Edit multiple features',
                 'madrona.features.tests.valid_multiple_select_view',
                 select='multiple single'
@@ -566,7 +566,7 @@ class LinkTestFeatureForm(FeatureForm):
 
 
 class LinkTest(TestCase):
-    
+
     def setUp(self):
         self.options = LinkTestFeature.get_options()
         self.client = Client()
@@ -581,7 +581,7 @@ class LinkTest(TestCase):
         self.instance_url = self.test_instance.get_absolute_url()
         self.i2 = LinkTestFeature(user=self.user, name="I2")
         self.i2.save()
-        
+
     def test_get_link(self):
         link = LinkTestFeature.get_options().get_link('Delete')
         self.assertEqual(link.title, 'Delete')
@@ -605,7 +605,7 @@ class LinkTest(TestCase):
         path = link2.reverse([self.test_instance, self.i2])
         response = self.client.get(path)
         self.assertRegexpMatches(response.content, r'My Name, I2')
-        
+
     def test_401_response(self):
         """Should not be able to perform editing actions without login.
         """
@@ -618,7 +618,7 @@ class LinkTest(TestCase):
         self.client.login(username='featuretest', password='pword')
         response = self.client.get(link2.reverse(self.test_instance))
         self.assertEqual(response.status_code, 200)        
-    
+
     def test_cant_GET_edit_links(self):
         """For links of rel=edit, a post request should be required.
         """
@@ -627,7 +627,7 @@ class LinkTest(TestCase):
         response = self.client.get(link.reverse(self.test_instance))
         self.assertEqual(response.status_code, 405,response.content)
         self.assertEqual(response['Allow'], 'POST')
-        
+
     def test_403_response(self):
         """Should not be able to edit shapes a user doesn't own.
         """
@@ -635,8 +635,8 @@ class LinkTest(TestCase):
         self.client.login(username='other', password='pword')
         response = self.client.get(link.reverse(self.test_instance))
         self.assertEqual(response.status_code, 403)        
-        
-    
+
+
     def test_403_response_multiple_instances(self):
         """Should not be able to edit shapes a user doesn't own. Test to make
         sure every feature in a request is checked.
@@ -649,7 +649,7 @@ class LinkTest(TestCase):
         response = self.client.get(
             link.reverse([inst, self.test_instance]))
         self.assertEqual(response.status_code, 403, response.content)
-        
+
     def test_404_response(self):
         link = self.options.get_link('Edit multiple features')
         self.client.login(username='featuretest', password='pword')
@@ -713,7 +713,7 @@ class LastGenericLinksTestFeature(Feature):
         )
 
 class GenericLinksTest(TestCase):
-    
+
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
@@ -727,7 +727,7 @@ class GenericLinksTest(TestCase):
         self.generic_instance.save()
         self.other_instance.save()
         self.last_instance.save()
-    
+
     def test_generic_links_reused_by_create_link(self):
         """Test that the calls to madrona.features.create_link return 
         references to generic links when appropriate."""
@@ -736,7 +736,7 @@ class GenericLinksTest(TestCase):
         self.assertNotEqual(
             OtherGenericLinksTestFeature.get_options().get_link("Generic Link"),
             LastGenericLinksTestFeature.get_options().get_link("Different Name"))
-            
+
     def test_generic_links_work(self):
         """Test that a generic view can recieve a request related to more than
         one feature class."""
@@ -747,7 +747,7 @@ class GenericLinksTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRegexpMatches(response.content, r'Generic')
         self.assertRegexpMatches(response.content, r'Other')
-        
+
     def test_generic_links_deny_unconfigured_models(self):
         """Generic links shouldn't work for any model, only those that have 
         the link configured in their Options class."""
@@ -773,10 +773,10 @@ def viewshed_map(request, instance):
 
 def kml(request, instances):
     return HttpResponse('<kml />')
-    
+
 # Lets use the following as a canonical example of how to use all the features
 # of this framework (will be kept up to date as api changes):
-        
+
 DESIGNATION_CHOICES = (
     ('R', 'Reserve'), 
     ('P', 'Park'),
@@ -813,7 +813,7 @@ class TestMpa(PolygonFeature):
                 must_own=True
             )
         )
-        
+
 class MpaForm(FeatureForm):
     class Meta:
         model = TestMpa
@@ -833,13 +833,13 @@ class TestArrayForm(FeatureForm):
 
 @register
 class TestFolder(FeatureCollection):
-    
+
     def copy(self, user):
         copy = super(TestFolder, self).copy(user)
         copy.name = copy.name.replace(' (copy)', '-Copy')
         copy.save()
         return copy
-    
+
     class Options:
         form = 'madrona.features.tests.TestFolderForm'
         valid_children = (
@@ -899,7 +899,7 @@ class RenewableEnergySite(PolygonFeature):
 class RenewableEnergySiteForm(FeatureForm):
     class Meta:
         model = RenewableEnergySite
-        
+
 @register
 class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
@@ -925,7 +925,7 @@ class ShipwreckForm(FeatureForm):
 
 
 class JsonSerializationTest(TestCase):
-    
+
     def setUp(self):
         self.user = User.objects.create_user(
             'featuretest', 'featuretest@madrona.org', password='pword')
@@ -942,7 +942,7 @@ class JsonSerializationTest(TestCase):
             fcdict['link-relations']['alternate']
         with self.assertRaises(KeyError):
             fcdict['link-relations']['related']
-         
+
     def test_generic(self):
         linkdict = [x for x in self.dict['generic-links'] if x['title'] == 'Generic Link'][0]
         for f in ["features_genericlinkstestfeature", "features_othergenericlinkstestfeature"]:
@@ -1001,7 +1001,7 @@ class JsonSerializationTest(TestCase):
 
     def test_limit_to_groups(self):
         self.assertEquals(len(self.user.groups.filter(name="SuperSpecialTestGroup")),0)
-       
+
         dict_pre = json.loads(workspace_json(self.user, True))
         fcdict = [x for x in dict_pre['feature-classes'] 
                      if x['id'] == 'features_testmpa'][0]
@@ -1033,9 +1033,9 @@ class JsonSerializationTest(TestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, self.json_shared)
-        
+
 class CopyTest(TestCase):
-    
+
     def setUp(self):
         self.client = Client()
 
@@ -1053,14 +1053,14 @@ class CopyTest(TestCase):
         self.folder = TestFolder(user=self.user, name="My Folder")
         self.folder.save()
         self.mpa.save()
-    
+
     def test_login_required(self):
         self.client.logout()
         link = self.mpa.options.get_link("Copy")
         self.assertEqual(Link, getattr(link, '__class__', None))
         response = self.client.post(link.reverse([self.mpa]))
         self.assertEqual(response.status_code, 401, response)
-            
+
     def test_copy(self):
         self.client.login(username='featuretest', password='pword')
         link = self.mpa.options.get_link("Copy")
@@ -1070,7 +1070,7 @@ class CopyTest(TestCase):
         #self.assertRegexpMatches(response.content, r'(copy)')
         self.assertRegexpMatches(response['X-Madrona-Select'], 
             r'features_testmpa_\d+')
-    
+
     def test_copy_multiple_and_custom_copy_method(self):
         self.client.login(username='featuretest', password='pword')
         link = self.mpa.options.get_link("Copy")
@@ -1082,7 +1082,7 @@ class CopyTest(TestCase):
         #self.assertRegexpMatches(response.content, r'Folder-Copy')
         self.assertRegexpMatches(response['X-Madrona-Select'], 
             r'features_testmpa_\d+ features_testfolder_\d+')
-    
+
     def test_other_users_can_copy_if_shared(self):
         self.mpa.share_with(self.group1) 
         self.client.login(username='othertest', password='pword')
@@ -1102,7 +1102,7 @@ class SpatialTest(TestCase):
         self.user = User.objects.create_user(
             'featuretest', 'featuretest@madrona.org', password='pword')
         self.client.login(username='featuretest', password='pword')
-        
+
         g3 = GEOSGeometry('SRID=4326;POINT(-120.45 34.32)')
         g3.transform(settings.GEOMETRY_DB_SRID)
         self.wreck = Shipwreck(user=self.user, name="Nearby Wreck", geometry_final=g3)
@@ -1135,7 +1135,7 @@ class SpatialTest(TestCase):
         response = self.client.get(url)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
-        
+
     def test_line_defaultkml_url(self):
         link = self.pipeline.options.get_link('KML')
         url = link.reverse(self.pipeline)
@@ -1152,7 +1152,7 @@ class SpatialTest(TestCase):
 
 
 class CollectionTest(TestCase):
-    
+
     def setUp(self):
         self.client = Client()
 
@@ -1182,7 +1182,7 @@ class CollectionTest(TestCase):
         self.mpa1.remove_from_collection()
         self.assertEqual(self.mpa1.collection, None)
         self.assertTrue(self.mpa1 not in self.folder1.feature_set())
-        
+
         self.assertRaises(AssertionError, self.mpa3.add_to_collection, self.folder1)
 
     def test_add_remove_at_collection_level(self):
@@ -1279,7 +1279,7 @@ class CollectionTest(TestCase):
             Folder (of which TestArray is a valid child but Pipeline is NOT)
             TestArray (of which Pipeline is a valid child)
             Therefore, Folder is also a potential parent of Pipeline
-            
+
             folder1
              |-my_array
                |-self.pipeline
@@ -1325,7 +1325,7 @@ class CollectionTest(TestCase):
         children = folder1_copy.feature_set(recurse=True)
         self.assertEqual(len(children),3, 
            "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
-        
+
 
 class SharingTestCase(TestCase):
 
@@ -1357,7 +1357,7 @@ class SharingTestCase(TestCase):
         self.user1.groups.add(self.group3)
 
         enable_sharing(self.group1)
-        
+
         # Create some necessary objects
         g1 = GEOSGeometry('SRID=4326;POLYGON ((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g1.transform(settings.GEOMETRY_DB_SRID)
@@ -1421,7 +1421,7 @@ class SharingTestCase(TestCase):
 
         sgs = user_sharing_groups(self.user3)
         self.assertEquals(len(sgs),0)
-        
+
     def test_nothing_shared(self):
         """
         Make sure nothing is shared yet
@@ -1570,7 +1570,7 @@ class SharingTestCase(TestCase):
         self.client.login(username=self.user2.username, password=self.password)
         response = self.client.get(self.folder1_resource_url)
         self.assertEqual(response.status_code, 403)
- 
+
         # user 1 shares it
         self.client.logout()
         self.client.login(username=self.user1.username, password=self.password)
@@ -1582,5 +1582,3 @@ class SharingTestCase(TestCase):
         self.client.login(username=self.user2.username, password=self.password)
         response = self.client.get(self.folder1_resource_url)
         self.assertEqual(response.status_code, 200)
-
-

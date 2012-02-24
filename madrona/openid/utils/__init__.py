@@ -36,13 +36,13 @@ class OpenID(object):
         self.sreg = sreg_ or {}
         self.ax = ax_ or {}
         self.is_iname = (xri.identifierScheme(openid_) == 'XRI')
-    
+
     def __repr__(self):
         return '<OpenID: %s>' % self.openid
-    
+
     def __str__(self):
         return self.openid
-    
+
 def discover_extensions(openid_url):
     service = discover(openid_url)
     use_ax = False
@@ -85,7 +85,7 @@ def from_openid_response(openid_response):
         openid_response.identity_url, issued, openid_response.signed_fields, 
         dict(sreg_resp), ax_args
     )
-    
+
 def get_url_host(request):
     if request.is_secure():
         protocol = 'https'
@@ -96,4 +96,3 @@ def get_url_host(request):
 
 def get_full_url(request):
     return get_url_host(request) + request.get_full_path()
-    

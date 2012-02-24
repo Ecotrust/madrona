@@ -99,12 +99,12 @@ class KMLAppTest(TestCase):
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
-            
+
         # test for session key url
         url = reverse('kmlapp-user-kml', kwargs={'session_key': self.client.session.session_key, 'input_username': self.user.username})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
-    
+
     def test_array_kml(self):
         """ 
         Tests that Array can be represented as valid KML
@@ -136,7 +136,7 @@ class KMLAppTest(TestCase):
         url = reverse('kmlapp-feature-kml', kwargs={'session_key': self.client.session.session_key, 'input_uid': self.mpa1.uid})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
-        
+
 
 
     def test_user_kml_links(self):
@@ -153,7 +153,7 @@ class KMLAppTest(TestCase):
         url = reverse('kmlapp-userlinks-kml', kwargs={'session_key': self.client.session.session_key, 'input_username': self.user.username})
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
-            
+
     def test_public_kml_auth(self):
         """
         Tests that user can retrieve valid KML file for public shared mpas and arrays
@@ -215,7 +215,7 @@ class KMLAppTest(TestCase):
         self.client.logout()
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 401)
-        
+
     def test_nonexistant_feature(self):
         self.client.login(username=self.user.username, password=self.password)
         url = reverse('kmlapp-feature-kmz', kwargs={'session_key': self.client.session.session_key, 'input_uid': 'blah_blah_12345678910'})

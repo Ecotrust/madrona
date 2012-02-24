@@ -38,4 +38,3 @@ def group_request(request):
         return HttpResponseRedirect(reverse('group_management-request-sent'))
     else:
         return HttpResponse( "Received unexpected " + request.method + " request.", status=400 )
-

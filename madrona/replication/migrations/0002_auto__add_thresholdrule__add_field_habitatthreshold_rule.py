@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'ThresholdRule'
         db.create_table('replication_thresholdrule', (
             ('units', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
@@ -20,17 +20,17 @@ class Migration(SchemaMigration):
 
         # Adding field 'HabitatThreshold.rule'
         db.add_column('replication_habitatthreshold', 'rule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['replication.ThresholdRule'], null=True, blank=True), keep_default=False)
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'ThresholdRule'
         db.delete_table('replication_thresholdrule')
 
         # Deleting field 'HabitatThreshold.rule'
         db.delete_column('replication_habitatthreshold', 'rule_id')
-    
-    
+
+
     models = {
         'intersection.featuremapping': {
             'Meta': {'object_name': 'FeatureMapping'},
@@ -107,5 +107,5 @@ class Migration(SchemaMigration):
             'units': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         }
     }
-    
+
     complete_apps = ['replication']

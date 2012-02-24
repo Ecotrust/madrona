@@ -33,7 +33,7 @@ class ShapeInput(forms.HiddenInput):
         </script>
         %s
         """ % (type, name, kml, output))
-            
+
 class FeatureForm(ModelForm):
     user = forms.ModelChoiceField(User.objects.all(),widget=forms.HiddenInput())
     class Meta:

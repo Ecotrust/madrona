@@ -37,7 +37,7 @@ def validate_feature_mapping(modeladmin,request,queryset):
     return render_to_response('featuremap_validation.html', {'mismatch_errors': mismatch_errors, 'missing_errors': missing_errors,})
 validate_feature_mapping.short_description = "Validate Feature Mapping"
 
-        
+
 def create_organization_scheme(modeladmin,request,queryset):
     osc = OrganizationScheme(name='New Scheme')
     osc.save()
@@ -63,7 +63,7 @@ def copy_organization_scheme(modeladmin,request,queryset):
     ret_path = '../organizationscheme/'
     return HttpResponseRedirect(ret_path)
 copy_organization_scheme.short_description = 'Copy Organization Scheme'
-        
+
 class TestPolygonAdmin(admin.GeoModelAdmin):
     pass
 
@@ -99,13 +99,13 @@ class FeatureMappingInline(admin.TabularInline):
     filter_horizontal = ('feature',)
     model = FeatureMapping
     extra = 1
-    
+
 class OrganizationSchemeAdmin(admin.ModelAdmin):
     actions = [validate_feature_mapping, copy_organization_scheme]
     inlines = [FeatureMappingInline]
 
 admin.site.register(OrganizationScheme, OrganizationSchemeAdmin)
-    
+
 class MultiFeatureShapefileAdmin(admin.ModelAdmin):
     list_display = ('name','date_created','date_modified')
     fieldsets = [
@@ -114,7 +114,7 @@ class MultiFeatureShapefileAdmin(admin.ModelAdmin):
     ]
     actions = [process_continuous_proxy_line]
     #inlines = [ShapefileFieldInline]
-    
+
     def get_urls(self):
         from madrona.intersection.views import split_to_single_shapefiles as splitview
         urls = super(MultiFeatureShapefileAdmin, self).get_urls()
@@ -122,7 +122,7 @@ class MultiFeatureShapefileAdmin(admin.ModelAdmin):
             url(r'^splitonfield/(\d+)$', splitview, name='split_to_single_shapefiles')
         )
         return my_urls + urls
-    
+
 admin.site.register(MultiFeatureShapefile, MultiFeatureShapefileAdmin)
 
 class SingleFeatureShapefileAdmin(admin.ModelAdmin):
@@ -132,6 +132,6 @@ class SingleFeatureShapefileAdmin(admin.ModelAdmin):
         (None,               {'fields': (('name','parent_shapefile'),('shapefile','clip_to_study_region'))}),
         ('Descriptive information', {'fields': ('description','metadata')}),
     ]
-    
+
 admin.site.register(SingleFeatureShapefile, SingleFeatureShapefileAdmin)
 #admin.site.register(LinearFeature)

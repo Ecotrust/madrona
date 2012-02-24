@@ -17,7 +17,7 @@ class SliderWidget(forms.TextInput):
         self.step = step
         self.image = image
         self.show_number = show_number
-    
+
     def get_step(self):
         if self.step:
             return "step : %s," % self.step
@@ -62,7 +62,7 @@ class SliderWidget(forms.TextInput):
                     field.val(slidy.slider('value'));
                 }
             });
-           
+
             // Initialize the slider bar to the current value
             slidy.slider("value", field.val() ); 
 
@@ -78,7 +78,7 @@ class SliderWidget(forms.TextInput):
                 'max' : self.max, 
                 'hide_js': hide_js,
                 'step' : self.get_step()}
-        
+
         return mark_safe(image_html+field+slider)
 
 
@@ -169,7 +169,7 @@ class DualSliderWidget(forms.TextInput):
         self.image = image
         self.min_field = min_field
         self.max_field = max_field
-    
+
     def get_step(self):
         if self.step:
             return "step : %s," % self.step
@@ -182,7 +182,7 @@ class DualSliderWidget(forms.TextInput):
         slider_id = 'slider-'+name
 
         #field = super(DualSliderWidget, self).render(name, value, attrs)
-        
+
         field = """<input style="display:none;" type="text" name="%(name)s" value="0" id="id_%(name)s" />""" % {'name':name}
 
         image_html = ""
@@ -235,6 +235,5 @@ class DualSliderWidget(forms.TextInput):
                 'min' : self.min, 
                 'max' : self.max, 
                 'step' : self.get_step()}
-        
-        return mark_safe(image_html+field+slider)
 
+        return mark_safe(image_html+field+slider)

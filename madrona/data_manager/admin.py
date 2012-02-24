@@ -20,7 +20,7 @@ class ShapefileFieldInline(admin.TabularInline):
     model = ShapefileField
 #    sort = sort
     extra = 0
-    
+
 class GeneralFileInline(admin.TabularInline):
     model = GeneralFile
     extra = 1

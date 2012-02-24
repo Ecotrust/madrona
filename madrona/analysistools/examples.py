@@ -118,4 +118,3 @@ class BufferPointsForm(FeatureForm):
         exclude = list(FeatureForm.Meta.exclude)
         for f in BufferPoint.output_fields():
             exclude.append(f.attname)
-

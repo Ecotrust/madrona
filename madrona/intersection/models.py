@@ -27,12 +27,12 @@ SHP_EXTENSIONS = ['shp','dbf','prj','sbn','sbx','shx','shp.xml','qix','fix']
 
 def endswithshp(string):
     return string.endswith('.shp')
-        
+
 def zip_check(ext, zip_file):
     if not True in [info.filename.endswith(ext) for info in zip_file.infolist()]:
         return False
     return True
-    
+
 def validate_zipped_shp(file_path):
     # Just check to see if it's a valid zip and that it has the four necessary parts.
     # We're not checking to make sure it can be read as a shapefile  probably should somewhere.
@@ -76,7 +76,7 @@ def clean_geometry(geom):
     newgeom = geos.fromstr(row[0])
     # sometimes, clean returns a multipolygon
     geometry = largest_poly_from_multi(newgeom)
-    
+
     if not geometry.valid or geometry.num_coords < 2:
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
     else:
@@ -95,7 +95,7 @@ def line_substring(linestring, startfraction, endfraction):
 def zip_from_shp(shp_path):
     # given a path to a '.shp' file, zip it and return the filename and a file object
     from django.core.files import File
-    
+
     directory, file_with_ext = os.path.split(shp_path)
     if file_with_ext.count('.') != 1:
         raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
@@ -110,7 +110,7 @@ def zip_from_shp(shp_path):
         if part_ext in SHP_EXTENSIONS:
             zfile.write(name, bn, zipfile.ZIP_DEFLATED)
     zfile.close()
-    
+
     return filename, File( open(zfile_path) )
 
 def use_sort_as_key(results):
@@ -121,13 +121,13 @@ def use_sort_as_key(results):
     for hab,sub_dict in results.iteritems():
         sub_dict.update( {'name':hab} )
         sort_results.update( {results[hab]['sort']:sub_dict} )
-    
+
     return sort_results
 
 def sum_results(results):
     """
     Take a list of dictionaries and sum them appropriately into a single dictionary.
-    
+
     Example of expected format:
     results = \
     [{u'Beaches': {'feature_map_id': 1,                                                     \
@@ -158,7 +158,7 @@ def sum_results(results):
                         'result': 0.0,                                                      \
                         'sort': 2.0,                                                        \
                         'units': u'miles'}}]                                                \
-                        
+
     from that we would expect this result:
     {u'Beaches': {'feature_map_id': 1,
                   'org_scheme_id': 1,
@@ -172,11 +172,11 @@ def sum_results(results):
                         'result': 0.0,
                         'sort': 2.0,
                         'units': u'miles'}}
-    
+
     in other words:
     >>> sum_results( [{u'Beaches': {'feature_map_id': 1, 'org_scheme_id': 1, 'percent_of_total': 6.9427176904575987, 'result': 27.874960403097003, 'sort': 1.0, 'units': u'miles'}, u'Coastal Marsh': {'feature_map_id': 2, 'org_scheme_id': 1, 'percent_of_total': 0.0, 'result': 0.0, 'sort': 2.0, 'units': u'miles'}}, {u'Beaches': {'feature_map_id': 1, 'org_scheme_id': 1, 'percent_of_total': 6.9427176904575987, 'result': 27.874960403097003, 'sort': 1.0, 'units': u'miles'}, u'Coastal Marsh': {'feature_map_id': 2, 'org_scheme_id': 1, 'percent_of_total': 0.0, 'result': 0.0, 'sort': 2.0, 'units': u'miles'}}] )
     {u'Coastal Marsh': {'sort': 2.0, 'result': 0.0, 'units': u'miles', 'percent_of_total': 0.0, 'feature_map_id': 2, 'org_scheme_id': 1}, u'Beaches': {'sort': 1.0, 'result': 55.749920806194005, 'units': u'miles', 'percent_of_total': 13.885435380915197, 'feature_map_id': 1, 'org_scheme_id': 1}}
-    
+
     """
     # These keys will be summed.  Any other key will be set to the first value encountered.
     sum_keys = ['result','percent_of_total','geo_collection']
@@ -186,14 +186,14 @@ def sum_results(results):
     null_if_not_equal = ['feature_map_id','org_scheme_id']
     # I don't know how to sum kml in any convenient way
     cant_handle = ['kml']
-    
+
     # make dictionary to hold the summed results and a list of all the unique habitat keys
     summed = {}
     for result in results:
         for r_key in result.keys():
             summed[r_key] = {}
     hab_key_list = summed.keys()
-    
+
     for hab in hab_key_list:
         for result in results:
             if hab not in result.keys():
@@ -217,7 +217,7 @@ def sum_results(results):
                     except: raise Exception('sum_results has been passed an incorrect results matrix.')
     return summed
 
-    
+
 class Shapefile(models.Model):
     #shapefile = models.FileField(upload_to='intersection/shapefiles')
     name = models.CharField(max_length=255, unique=True, null=True)
@@ -225,21 +225,21 @@ class Shapefile(models.Model):
     metadata = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         abstract = True
-        
+
 #    def save(self, *args, **kwargs):
 #        super(Shapefile, self).save(*args, **kwargs)
 #        self.metadata = self.read_xml_metadata()
 #        super(Shapefile, self).save(*args, **kwargs)
-        
+
     def unzip_to_temp(self):
         '''unzip to a temp directory and return the path to the .shp file'''
         valid, error = validate_zipped_shp(self.shapefile.path)
         if not valid:
             raise Exception(error)
-        
+
         tmpdir = tempfile.gettempdir()
         zfile = zipfile.ZipFile(self.shapefile.path)
         for info in zfile.infolist():
@@ -252,7 +252,7 @@ class Shapefile(models.Model):
                 if shp_part.endswith('.shp'):
                     shp_file = shp_part
         return shp_file
-    
+
     def read_xml_metadata(self):
         shpfile = self.unzip_to_temp()
         xmlfile = shpfile + '.xml'
@@ -263,7 +263,7 @@ class Shapefile(models.Model):
         else:
             xml_text = None
         return xml_text
-    
+
     def field_info(self):
         fpath = self.unzip_to_temp()
         result = {}
@@ -275,7 +275,7 @@ class Shapefile(models.Model):
             distinct_values_count = dict.fromkeys(field).keys().__len__()
             result[fname] = distinct_values_count
         return result
-    
+
     @transaction.commit_on_success
     def load_geometry_to_model(self, feature_model, verbose=False):
         shpfile = self.unzip_to_temp()
@@ -308,27 +308,27 @@ class Shapefile(models.Model):
                 fm.save()
                 if verbose:
                     print '.',
-        
+
 class MultiFeatureShapefile(Shapefile):
     """These shape files may contain geometries that we want to turn into multiple intersection features.
     An example would be the ESI shoreline layer.  It contains a line that is classified into many different
     habitat types."""
     shapefile = models.FileField(upload_to='intersection/shapefiles/multifeature')
-    
+
     def __unicode__(self):
         return self.name
-    
+
     def save(self):
         super(MultiFeatureShapefile, self).save()
         self.link_field_names()
-    
+
     def link_field_names(self):
         self.shapefilefield_set.all().delete()
         info_dict = self.field_info()
         for f,dv in info_dict.iteritems():
             sf = ShapefileField(name=f,distinct_values=dv,shapefile=self)
             sf.save()
-    
+
     @transaction.commit_on_success
     def process_proxy_line(self, field_name='Aj_pct_rck', hard_name='hard', soft_name='soft'):
         """This function is rather specific to the North Coast MLPA but could concievably be useful elsewhere.  This method
@@ -339,8 +339,8 @@ class MultiFeatureShapefile(Shapefile):
         driver = ogr.GetDriverByName('ESRI Shapefile')
         shpfile = self.unzip_to_temp()
         tempdir = tempfile.gettempdir()
-        
-        
+
+
         #determine what geometry type we're dealing with
         # feat = lyr_in.GetFeature(0)
         # geom = feat.GetGeometryRef()
@@ -353,14 +353,14 @@ class MultiFeatureShapefile(Shapefile):
             # create a new data source and layer
             fn = slugify(file_name) + '.shp'
             fn = str(os.path.abspath(os.path.join(tempdir, fn)))
-        
+
             if os.path.exists(fn):
                 driver.DeleteDataSource(fn)
             ds_out = driver.CreateDataSource(fn)
             if ds_out is None:
                 raise 'Could not create file: %s' % fn
             files.update({file_name: ds_out})
-        
+
         zipped_files = {}
         for name,ds_out in files.iteritems():
             #open input data source
@@ -387,7 +387,7 @@ class MultiFeatureShapefile(Shapefile):
                 percent_hard = inFeature.GetField(field_name)
                 #create a new feature
                 outFeature = ogr.Feature(featureDefn)
-                
+
                 # set the geometry
                 oldGeom = geos.fromstr(inFeature.GetGeometryRef().ExportToWkt())
                 # print oldGeom.__class__.__name__
@@ -404,7 +404,7 @@ class MultiFeatureShapefile(Shapefile):
                 outFeature.Destroy()
                 inFeature.Destroy()
                 inFeature = lyr_in.GetNextFeature()
-        
+
             # get the projection from the input shapefile and write a .prj file for the output
             spatial_ref = lyr_in.GetSpatialRef()
             fn_prj = slugify(name) + '.prj'
@@ -418,18 +418,18 @@ class MultiFeatureShapefile(Shapefile):
             ds_out.Destroy()
             new_name, zip_o_rama = zip_from_shp(zip_file_name)
             zipped_files.update({name:zip_o_rama})
-            
-            
+
+
         for file_name, zipped_file in zipped_files.iteritems():
             sfsf, created = SingleFeatureShapefile.objects.get_or_create(name=file_name)
-            
+
             if not created and sfsf.shapefile: #get rid of the old shapefile so it's not hangin around
                 print 'I am deleting'
                 sfsf.shapefile.delete()
             sfsf.shapefile = zipped_file
             sfsf.save()
-        
-        
+
+
     def split_to_single_feature_shapefiles(self, field_name):
         file_path = self.unzip_to_temp()
         ds = DataSource(file_path)
@@ -438,7 +438,7 @@ class MultiFeatureShapefile(Shapefile):
             raise Exception('Specified field (%s) not found in %s' % (field_name,self.name) )
         field = lyr.get_fields(field_name)
         distinct_values = dict.fromkeys(field).keys()
-        
+
         for dv in distinct_values:
             new_name, file = self.single_shapefile_from_field_value(field_name, dv)
             sfsf, created = SingleFeatureShapefile.objects.get_or_create(name=dv)
@@ -449,7 +449,7 @@ class MultiFeatureShapefile(Shapefile):
 #                os.remove(sfsf.shapefile.path)
             sfsf.parent_shapefile = self
             sfsf.save()
-            
+
     def single_shapefile_from_field_value(self, field_name, field_value):
         driver = ogr.GetDriverByName('ESRI Shapefile')
         shpfile = self.unzip_to_temp()
@@ -459,22 +459,22 @@ class MultiFeatureShapefile(Shapefile):
         if ds_in is None:
             raise 'Could not open input shapefile'
         lyr_in = ds_in.GetLayer()
-        
+
         #determine what geometry type we're dealing with
         feat = lyr_in.GetFeature(0)
         geom = feat.GetGeometryRef()
         gname = geom.GetGeometryName()
-            
+
         # create a new data source and layer
         fn = slugify(field_value) + '.shp'
         fn = str(os.path.abspath(os.path.join(tempdir, fn)))
-        
+
         if os.path.exists(fn):
             driver.DeleteDataSource(fn)
         ds_out = driver.CreateDataSource(fn)
         if ds_out is None:
             raise 'Could not create file: %s' % fn
-        
+
         if gname.lower().endswith('polygon'):
             geometry_type = ogr.wkbMultiPolygon
         elif gname.lower().endswith('linestring'):
@@ -483,23 +483,23 @@ class MultiFeatureShapefile(Shapefile):
             geometry_type = ogr.wkbMultiPoint
         else:
             raise 'Unregonized geometry type'
-        
+
         lyr_out = ds_out.CreateLayer(str(slugify(field_value)), geom_type=geometry_type)
-        
+
         # get the FieldDefn's for the fields in the input shapefile
         transferFieldDefn = feat.GetFieldDefnRef(field_name)
-        
+
         #create new fields in the output shapefile
         lyr_out.CreateField(transferFieldDefn)
-        
+
         #get the FeatureDefn for the output
         feat_defn = lyr_out.GetLayerDefn()
-        
+
         # loop through the input features
         feat_in = lyr_in.GetNextFeature()
         while feat_in:
             field = feat_in.GetField(field_name)
-            
+
             if field==field_value:
                 # create new feature
                 feat_out = ogr.Feature(feat_defn)
@@ -514,11 +514,11 @@ class MultiFeatureShapefile(Shapefile):
                 lyr_out.CreateFeature(feat_out)
                 # destroy the output feature
                 feat_out.Destroy()
-            
+
             #destroy the input feature and get a new one
             feat_in.Destroy()
             feat_in = lyr_in.GetNextFeature()
-        
+
         # get the projection from the input shapefile and write a .prj file for the output
         spatial_ref = lyr_in.GetSpatialRef()
         fn_prj = slugify(field_value) + '.prj'
@@ -527,21 +527,21 @@ class MultiFeatureShapefile(Shapefile):
         spatial_ref.MorphToESRI()
         file.write(spatial_ref.ExportToWkt())
         file.close()
-        
+
         ds_in.Destroy()
         ds_out.Destroy()
-        
+
         return zip_from_shp(fn)
-    
+
 class SingleFeatureShapefile(Shapefile):
     # These shape files contain geometries that represent only one intersection feature.
     shapefile = models.FileField(upload_to='intersection/shapefiles/singlefeature')
     parent_shapefile = models.ForeignKey(MultiFeatureShapefile, null=True, blank=True)
     clip_to_study_region = models.BooleanField(default=True,help_text="Clip to the active study region to ensure accuracy of study region totals.")
-    
+
     def __unicode__(self):
         return self.name
-    
+
     @transaction.commit_on_success
     def load_to_features(self, verbose=False):
         """
@@ -555,7 +555,7 @@ class SingleFeatureShapefile(Shapefile):
         #Data source objects can have different layers of geospatial features; however, 
         #shapefiles are only allowed to have one layer
         lyr = ds[0] 
-        
+
         # make or update the intersection feature in the IntersectionFeature model
         try:
             intersection_feature = IntersectionFeature.objects.get(name=feature_name)
@@ -568,7 +568,7 @@ class SingleFeatureShapefile(Shapefile):
         intersection_feature.save() # we need the pk value
         if created:
             intersection_feature = IntersectionFeature.objects.get(name=feature_name)
-        
+
         if lyr.geom_type=='LineString':
             feature_model = LinearFeature
             out_units = LINEAR_OUT_UNITS
@@ -584,17 +584,17 @@ class SingleFeatureShapefile(Shapefile):
             #mgeom = geos.fromstr('MULTILIPOINT EMPTY')
         else:
             raise 'Unrecognized type for load_features.'
-        
+
         # get rid of old stuff if it's there
         feature_model.objects.filter(feature_type=intersection_feature).delete()
-        
+
         if verbose:
             print 'Loading %s from %s' % (feature_name,file_name)
-        
+
         area = 0.0
         length = 0.0
         count = 0
-        
+
         # gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         # for feat in lyr:
         #     gc.append(feat.geom.geos)
@@ -606,7 +606,7 @@ class SingleFeatureShapefile(Shapefile):
         #     int_result = gc.intersection(sr.geometry)
         #     new_gc.append(int_result)
         #     gc = new_gc
-            
+
         for feat in lyr:
             if feat.geom.__class__.__name__.startswith('Multi'):
                 if verbose:
@@ -643,8 +643,8 @@ class SingleFeatureShapefile(Shapefile):
                 fm.save()
                 if verbose:
                     print '.',
-        
-        
+
+
         if out_units==AREAL_OUT_UNITS:
             intersection_feature.study_region_total = area_in_display_units(area)
         elif out_units==LINEAR_OUT_UNITS:
@@ -656,20 +656,20 @@ class SingleFeatureShapefile(Shapefile):
         intersection_feature.multi_shapefile = self.parent_shapefile
         intersection_feature.feature_model = feature_model.__name__
         intersection_feature.save()
-        
+
         # This is super slow.  I'm giving up on it for now and just declaring that hab data needs to be clipped
         # to the study region before it's loaded into the tool.  I'll look into making this work later.
         # if self.clip_to_study_region:
         #     intersection_feature.study_region_total = intersection_feature.calculate_study_region_total()
         #     intersection_feature.save()
-    
+
 class ShapefileField(models.Model):
     # We'll need information about the fields of multi feature shapefiles so we can turn them into single feature shapefiles
     name = models.CharField(max_length=255)
     distinct_values = models.IntegerField()
     type = models.CharField(max_length=255, null=True, blank=True)
     shapefile = models.ForeignKey(MultiFeatureShapefile)
-    
+
     def __unicode__(self):
         return self.name
 
@@ -694,29 +694,29 @@ class IntersectionFeature(models.Model):
                    )
     feature_model = models.CharField(null=True, blank=True, max_length=20, choices=TYPE_CHOICES)
     objects = models.GeoManager()
-    
+
     class Meta:
         ordering = ('name',)
-   
+
     def __unicode__(self):
         return self.name
-    
+
     def save(self):
         self.expire_cached_results()
         super(IntersectionFeature,self).save()
-    
+
     @property
     def model_with_my_geometries(self):
         appname = os.path.dirname(__file__).split(os.path.sep).pop()
         model_with_geom = models.get_model(appname,self.feature_model)
         return model_with_geom
-    
+
     @property
     def geometry(self):
         # Returns a multigeometry of the appropriate type containing all geometries for this intersection feature.
         # Don't bother to call this on the large polygon features.  It takes far too long.
         individual_features = self.model_with_my_geometries.objects.filter(feature_type=self)
-        
+
         if self.model_with_my_geometries==ArealFeature:
             mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
         elif self.model_with_my_geometries==LinearFeature:
@@ -725,17 +725,17 @@ class IntersectionFeature(models.Model):
             mgeom = geos.fromstr('MULTIPOINT EMPTY')
         else:
             raise 'Could not figure out what geometry type to use.'
-        
+
         if individual_features:
             for feature in individual_features:
                 mgeom.append(feature.geometry)
         return mgeom
-    
+
     @property
     def geometries_set(self):
         # Returns a query set of all the ArealFeature, LinearFeature, or PointFeature objects related to this intersection feature.
         return self.model_with_my_geometries.objects.filter(feature_type=self)
-    
+
     def calculate_study_region_total_old(self):
         from madrona.studyregion.models import StudyRegion
         sr = StudyRegion.objects.current()
@@ -746,7 +746,7 @@ class IntersectionFeature(models.Model):
             return length_in_display_units(result.length)
         else:
             return result.count
-    
+
     def calculate_study_region_total(self):
         from madrona.studyregion.models import StudyRegion
         sr = StudyRegion.objects.current()
@@ -774,10 +774,10 @@ class IntersectionFeature(models.Model):
 class OrganizationScheme(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True,blank=True,help_text="Description of this organization scheme and what it is used for.")
-    
+
     def __unicode__(self):
         return self.name
-        
+
     def copy(self):
         new_name = '%s_copy' % self.name
         new = OrganizationScheme(name=new_name)
@@ -785,7 +785,7 @@ class OrganizationScheme(models.Model):
         for fm in self.featuremapping_set.all():
             fm.copy_to_org_scheme(new)
         return new
-        
+
     @property
     def info(self):
         subdict = {}
@@ -796,13 +796,13 @@ class OrganizationScheme(models.Model):
         for f in self.featuremapping_set.all().order_by('sort'):
             subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
         return subdict
-    
+
     def my_validate(self):
         for fm in self.featuremapping_set.all():
             if not fm.my_validate(quiet=True):
                 return False
         return True
-    
+
     @transaction.commit_on_success
     def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
         if geom_or_collection.empty: # If we've been given empty
@@ -819,7 +819,7 @@ class OrganizationScheme(models.Model):
             return summed_results
         else:
             raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
-    
+
     def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
         new_results = {}
         for fm in self.featuremapping_set.all():
@@ -831,8 +831,8 @@ class OrganizationScheme(models.Model):
             else:
                 raise Exception('You are getting the same key more than once in your dictionary.  You need to sum instead of update.')
         return new_results
-            
-    
+
+
 class FeatureMapping(models.Model):
     organization_scheme = models.ForeignKey(OrganizationScheme)
     feature = models.ManyToManyField(IntersectionFeature)
@@ -840,13 +840,13 @@ class FeatureMapping(models.Model):
     sort = models.FloatField()
     description = models.TextField(null=True,blank=True)
     date_modified = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ('sort','name')
-    
+
     def __unicode__(self):
         return self.name
-        
+
     def copy_to_org_scheme(self, org_scheme):
         new = FeatureMapping(organization_scheme=org_scheme)
         new.name = self.name
@@ -856,7 +856,7 @@ class FeatureMapping(models.Model):
         for f in self.feature.all():
             new.feature.add(f)
         new.save()
-    
+
     def transformed_results(self, geom_or_collection, with_geometries=False, with_kml=False):
         if geom_or_collection.geom_type.lower().endswith('polygon'):
             return self.transformed_results_single_geom(geom_or_collection, with_geometries=with_geometries, with_kml=with_kml)
@@ -870,7 +870,7 @@ class FeatureMapping(models.Model):
             return summed_results
         else:
             raise Exception('transformed results only available for Polygons and geometry collections.  something else was submitted.')
-    
+
     def transformed_results_single_geom(self, geom, with_geometries=False, with_kml=False):
         return_dict = {}
         return_dict[self.name] = {}
@@ -898,16 +898,16 @@ class FeatureMapping(models.Model):
             return_dict[self.name]['geo_collection'] = f_gc
         if with_kml:
             return_dict[self.name]['kml'] = f_gc.kml
-            
+
         return return_dict
-    
+
     @property
     def study_region_total(self):
         total = 0.0
         for feature in self.feature.all().only('study_region_total'):
             total += feature.study_region_total
         return total
-    
+
     def calculate_study_region_total(self,sr_geom):
         if self.type == 'linear':
             return length_in_display_units(self.geometry_collection_within(sr_geom).length)
@@ -915,28 +915,28 @@ class FeatureMapping(models.Model):
             return area_in_display_units(self.geometry_collection_within(sr_geom).area)
         else:
             return self.geometry_collection_within(sr_geom).num_points
-        
+
     @property
     def units(self):
         if self.my_validate():
             return self.feature.all()[0].output_units
-        
+
     @property
     def type(self):
         if self.my_validate():
             return self.feature.all()[0].feature_model.lower().replace('feature','')
-            
+
     @property
     def geometry_collection(self):
         gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         for feature in self.feature.all():
             gc.append(feature.geometry)
         return gc
-    
+
     ##transaction.commit_on_success    
     def geometry_collection_within(self,geom):
         return self.geometry_collection.intersection(geom)
-    
+
     def my_validate(self, quiet=False):
         if not self.pk:
             return True # I'm gonna punt if there's no pk yet
@@ -944,7 +944,7 @@ class FeatureMapping(models.Model):
             return True
         else:
             return False
-    
+
     def validate_feature_count(self, quiet=False):
         if self.feature.all().count() < 1:
             if quiet:
@@ -954,7 +954,7 @@ class FeatureMapping(models.Model):
                 raise Exception(error)
         else:
             return True
-    
+
     def validate_units(self, quiet=False):
         # Make sure that if there are multiple features to be combined that they all have the 
         # same units.
@@ -967,7 +967,7 @@ class FeatureMapping(models.Model):
                 raise Exception(error)
         else:
             return True
-    
+
     def validate_type(self, quiet=False):
         # Make sure that if there are multiple features to be combined that they all have the 
         # same type.
@@ -980,35 +980,35 @@ class FeatureMapping(models.Model):
                 raise Exception(error)
         else:
             return True
-    
+
 class CommonFeatureInfo(models.Model):
     name = models.CharField(max_length=255)
     feature_type = models.ForeignKey(IntersectionFeature)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True) # updating also handled by a trigger defined in madrona/intersection/sql. manage.py creates the trigger.  This will let us modify features in qgis if we need to and still know when features were updated.
     objects = models.GeoManager()
-    
+
     class Meta:
         abstract = True
-        
+
 class ArealFeature(CommonFeatureInfo):
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     def intersection(self,geom):
         return self.geometry.intersection(geom)
-    
+
 class LinearFeature(CommonFeatureInfo):
     geometry = models.LineStringField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     def intersection(self,geom):
         return self.geometry.intersection(geom)
-    
+
 class PointFeature(CommonFeatureInfo):
     geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
 class ResultCache(models.Model):
     wkt_hash = models.CharField(max_length=255)
     intersection_feature = models.ForeignKey(IntersectionFeature)
@@ -1018,14 +1018,14 @@ class ResultCache(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     geometry = models.GeometryCollectionField()
     objects = models.GeoManager()
-    
+
     class Meta:
         unique_together = ('wkt_hash','intersection_feature',)
-    
+
 def delete_cached_results(geom):
     results = ResultCache.objects.filter(wkt_hash=str(geom.wkt.__hash__()))
     results.delete()
-    
+
 def intersect_the_features(geom, feature_list=None, with_geometries=False, with_kml=False):
     # if no feature list is specified, get all the features
     if not feature_list:
@@ -1046,7 +1046,7 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                 result_dict[int_feature.name]['geo_collection'] = rc.geometry
             if with_kml:
                 result_dict[int_feature.name]['kml'] = rc.geometry.kml 
-                
+
         except ResultCache.DoesNotExist: # Calculate if cached results doen't exist
             if not int_feature.feature_model=='PointFeature':
                 geom_set = int_feature.geometries_set.filter(geometry__intersects=geom)
@@ -1071,21 +1071,21 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                 geom_set = int_feature.geometries_set.filter(geometry__within=geom)
                 for p in geom_set:
                     f_gc.append(p.geometry)
-                
+
             if with_geometries:
                 result_dict[int_feature.name]['geo_collection'] = f_gc
             if with_kml:
                 result_dict[int_feature.name]['kml'] = f_gc.kml    
-                
+
             if int_feature.feature_model=='ArealFeature':
                 result_dict[int_feature.name]['result'] = area_in_display_units(f_gc.area)
             elif int_feature.feature_model=='LinearFeature':
                 result_dict[int_feature.name]['result'] = length_in_display_units(f_gc.length)
             elif int_feature.feature_model=='PointFeature':
                 result_dict[int_feature.name]['result'] = f_gc.num_geom
-                
+
             result_dict[int_feature.name]['percent_of_total'] = (result_dict[int_feature.name]['result'] / int_feature.study_region_total) * 100
-            
+
             # Cache the results we've calculated
             rc = ResultCache( wkt_hash=geom.wkt.__hash__(), intersection_feature=int_feature )
             rc.result = result_dict[int_feature.name]['result']
@@ -1093,6 +1093,5 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
             rc.percent_of_total = result_dict[int_feature.name]['percent_of_total']
             rc.geometry = f_gc
             rc.save()
-        
+
     return result_dict
-    

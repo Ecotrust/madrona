@@ -46,7 +46,7 @@ def display_kml(geom):
         """ % (coords, )
     else:
         geom_kml = geom.kml
-    
+
     return """<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
     <Placemark>
@@ -62,7 +62,7 @@ def display_kml(geom):
         %s
     </Placemark>
 </kml>""" % (geom_kml, )
-    
+
 
 def parsekmlpoly(kmlstring):
     e = fromstring(kmlstring)
@@ -76,7 +76,7 @@ def parsekmlpoly(kmlstring):
     lr = LinearRing(lra)
     poly = Polygon(lr)
     return poly
-    
+
 def parsekmllinestring(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}LineString/{http://www.opengis.net/kml/2.2}coordinates').text
@@ -88,7 +88,7 @@ def parsekmllinestring(kmlstring):
             lra.append((float(a[0]), float(a[1])))
     linestring = LineString(lra)
     return linestring
-    
+
 def parsekmlpoint(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Point/{http://www.opengis.net/kml/2.2}coordinates').text
@@ -100,7 +100,7 @@ def parsekmlpoint(kmlstring):
             lra.append((float(a[0]), float(a[1])))
     point = Point(lra[0])
     return point
-    
+
 
 def parsekml(shape):
     if shape.find('Polygon') is not -1:
@@ -140,10 +140,10 @@ class BaseManipulator(object):
     '''
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-     
+
     def manipulate(self):
         raise NotImplementedError()
-        
+
     def do_template(self, key, internal_message='', extra_context={}):
         context = {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': internal_message}
         context.update(extra_context)
@@ -162,14 +162,14 @@ class BaseManipulator(object):
         # if target.srid != settings.GEOMETRY_DB_SRID:
         target.set_srid(settings.GEOMETRY_CLIENT_SRID)
         return target
-  
+
     def result(self, clipped_shape, html="", success="1"):
         clipped_shape = ensure_clean(clipped_shape, settings.GEOMETRY_DB_SRID)
         return {"clipped_shape": clipped_shape, "html": html, "success": success}
-    
+
     class Form:
         available = False
-        
+
     class Options:
         name = 'Manipulator base class'
         template_name = 'manipulators/manipulator_default.html'
@@ -178,7 +178,7 @@ class BaseManipulator(object):
             'internal':'manipulators/internal_error.html',
             'unexpected':'manipulators/unexpected_error.html'
         }
-    
+
     class InternalException(Exception):
         def __init__(self, message="", status_html=None, success="0"):
             self._message = message
@@ -190,7 +190,7 @@ class BaseManipulator(object):
             self.success = success
         def __str__(self):
             return repr(self._message)
-    
+
     class InvalidGeometryException(Exception):
         def __init__(self, message="", status_html=None, success="0"):
             self._message = message
@@ -202,7 +202,7 @@ class BaseManipulator(object):
             self.success = success
         def __str__(self):
             return repr(self._message)   
-    
+
     class HaltManipulations(Exception):
         def __init__(self, message="", status_html="", success="0"):
             self._message = message
@@ -210,7 +210,7 @@ class BaseManipulator(object):
             self.success = success
         def __str__(self):
             return repr(self._message)
-           
+
 class ClipToShapeManipulator(BaseManipulator):
     '''
         required arguments:
@@ -245,39 +245,39 @@ class ClipToShapeManipulator(BaseManipulator):
         html_templates==2   clipped shape is empty (no overlap with "clip_against")
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
- 
+
     def __init__(self, target_shape, clip_against=None, zero=0.0, **kwargs):
         self.target_shape = target_shape
         self.clip_against = clip_against
         self.zero = zero
-    
+
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
-        
+
         #extract clip_against geometry
         try:
             clip_against = GEOSGeometry(self.clip_against)
             clip_against.set_srid(settings.GEOMETRY_CLIENT_SRID)
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToShapeManipulator while initializing geometry on self.clip_against: " + e.message)
-        
+
         if not clip_against.valid:
             raise self.InternalException("ClipToShapeManipulator: 'clip_against' is not a valid geometry")
-        
+
         #intersect the two geometries
         try:
             clipped_shape = target_shape.intersection( clip_against )
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToShapeManipulator while intersecting geometries: " + e.message)  
-        
+
         #if there was no overlap (intersection was empty)
         if clipped_shape.area <= self.zero:
             status_html = self.do_template("2")
             message = "intersection resulted in empty geometry"  #ALTERATION #1
             #return self.result(clipped_shape, target_shape, status_html, message)
             raise self.HaltManipulations(message, status_html)   #ALTERATION #2
-         
+
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
         status_html = self.do_template("0")
@@ -291,15 +291,15 @@ class ClipToShapeManipulator(BaseManipulator):
         available = True
         target_shape = forms.CharField( widget=forms.HiddenInput )
         clip_against = forms.CharField( widget=forms.HiddenInput, required=False )
-        
+
         def clean(self):
             data = self.cleaned_data
-            
+
             #used for sandbox testing
             clippy = StudyRegion.objects.current().geometry
             clippy.transform(settings.GEOMETRY_CLIENT_SRID)
             data["clip_against"] = clippy.wkt 
-            
+
             #my_manipulator = ClipToShapeManipulator( **kwargs )
             my_manipulator = ClipToShapeManipulator( data['target_shape'], data['clip_against'] )
             self.manipulation = my_manipulator.manipulate()
@@ -349,12 +349,12 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         html_templates==2   clipped shape is empty (no overlap with "clip_against")
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
- 
+
     def __init__(self, target_shape, clip_against=None, zero=0.0, **kwargs):
         self.target_shape = target_shape
         self.diff_geom = clip_against
         self.zero = zero
-    
+
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
@@ -365,27 +365,27 @@ class DifferenceFromShapeManipulator(BaseManipulator):
             diff_geom.set_srid(settings.GEOMETRY_CLIENT_SRID)
         except Exception, e:
             raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while initializing geometry on self.diff_geom: " + e.message)
-        
+
         if not diff_geom.valid:
             raise self.InternalException("DifferenceFromShapeManipulator: 'diff_geom' is not a valid geometry")
-        
+
         #determine the difference in the two geometries
         try:
             clipped_shape = target_shape.difference( diff_geom )
         except Exception, e:
             raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while intersecting geometries: " + e.message)  
-        
+
         #if there is no geometry left (difference was empty)
         if clipped_shape.area <= self.zero:
             status_html = self.do_template("2")
             message = "difference resulted in empty geometry"
             raise self.HaltManipulations(message, status_html)
-         
+
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
         status_html = self.do_template("0")
         return self.result(largest_poly, status_html)
-        
+
     class Options:
         name = 'DifferenceFromShape'
         html_templates = {
@@ -394,8 +394,8 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         }
 
 manipulatorsDict[DifferenceFromShapeManipulator.Options.name] = DifferenceFromShapeManipulator
-        
-        
+
+
 class ClipToStudyRegionManipulator(BaseManipulator):
     '''
         required argument: 
@@ -415,7 +415,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
-            
+
         html_templates=='internal'   
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
@@ -431,11 +431,11 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         html_templates==2   clipped shape is empty (no overlap with Study Region)
         html_templates==0   if target_shape is successfully clipped to Study Region
     '''  
-     
+
     def __init__(self, target_shape, study_region=None, **kwargs):
         self.target_shape = target_shape
         self.study_region = study_region
-        
+
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
@@ -454,7 +454,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
                 study_region = StudyRegion.objects.current().geometry
             except Exception, e:
                 raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while obtaining study region geometry from database: " + e.message)    
-        
+
         #intersect the two geometries
         try:
             target_shape.transform(settings.GEOMETRY_DB_SRID)
@@ -463,7 +463,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
             clipped_shape.transform(settings.GEOMETRY_CLIENT_SRID)
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while intersecting geometries: " + e.message)  
-        
+
         out_geom = None
         if target_shape.geom_type == 'Polygon' and clipped_shape.area > 0:
             out_geom = LargestPolyFromMulti(clipped_shape)
@@ -479,8 +479,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
 
         status_html = self.do_template("0")
         return self.result(out_geom, status_html)
-        
-        
+
+
     class Options:
         name = 'ClipToStudyRegion'
         supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
@@ -490,11 +490,11 @@ class ClipToStudyRegionManipulator(BaseManipulator):
             '0':'manipulators/studyregion_clip.html', 
             '2':'manipulators/outside_studyregion.html', 
         }
-        
-      
+
+
 manipulatorsDict[ClipToStudyRegionManipulator.Options.name] = ClipToStudyRegionManipulator
-    
-    
+
+
 class ClipToGraticuleManipulator(BaseManipulator):
     '''
         required argument: 
@@ -513,7 +513,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
-            
+
         html_templates=='invalid'   
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
@@ -536,15 +536,15 @@ class ClipToGraticuleManipulator(BaseManipulator):
         self.south = south
         self.east = east
         self.west = west
-        
+
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
-        
+
         #construct graticule box
         box_builder = self.GraticuleBoxBuilder(self, target_shape)
         graticule_box = box_builder.build_box()
-        
+
         #intersect the two geometries
         try:
             clipped_shape = target_shape.intersection(graticule_box)
@@ -557,14 +557,14 @@ class ClipToGraticuleManipulator(BaseManipulator):
             status_html = render_to_string(self.Options.html_templates["2"], {'MEDIA_URL':settings.MEDIA_URL})
             #return {"message": "clipped geometry is empty (there was no intersection/overlap with the graticules)", "html": status_html, "clipped_shape": clipped_shape, "original_shape": target_shape}
             return self.result(clipped_shape, status_html)
-        
+
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
         #message = "Graticule clipping was a success"
         status_html = render_to_string(self.Options.html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
         #return {"message": "Graticule clipping was a success", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
         return self.result(largest_poly, status_html)        
-    
+
     class GraticuleBoxBuilder():
         '''
             required argument: 
@@ -574,11 +574,11 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 missing north, south, east, or west values with the extent of the target shape geometry
                 returned shape geometry will be in srid GEOMETRY_CLIENT_SRID (4326) 
         '''
-        
+
         def __init__(self, parent, shape):
             self.__extract_dirs(parent)
             self.__build_extent(shape)
-            
+
         def build_box(self):
             '''
                 top_left = (west, north)
@@ -592,14 +592,14 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 return box
             except Exception, e:
                 raise self.InternalException("Exception raised in ClipToGraticuleManipulator while initializing graticule geometry: " + e.message)
-        
+
         def __extract_dirs(self, parent):
             self.parent = parent
             self.north = self.parent.north
             self.south = self.parent.south
             self.east = self.parent.east
             self.west = self.parent.west
-        
+
         def __build_extent(self, shape):
             #we will use target_shape.extent to fill in any missing graticule values
             geom_extent = shape.extent
@@ -612,8 +612,8 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 self.east = geom_extent[2]
             if self.west is None:
                 self.west = geom_extent[0]
-    
-    
+
+
     class Form(forms.Form):
         available = True
         n = forms.FloatField( label='Northern boundary', required=False ) 
@@ -621,21 +621,21 @@ class ClipToGraticuleManipulator(BaseManipulator):
         e = forms.FloatField( label='Eastern boundary', required=False )
         w = forms.FloatField( label='Western boundary', required=False )
         target_shape = forms.CharField( widget=forms.HiddenInput )
-        
+
         def clean(self):
             data = self.cleaned_data
-            
+
             #the following is used for manipulators testing only
             #data["n"] = 33.75
             #data["e"] = -118.75 
             #data["s"] = 33.25
             #data["w"] = -119.25
-            
+
             my_manipulator = ClipToGraticuleManipulator( data['target_shape'], data['n'], data['s'], data['e'], data['w'] )
             self.manipulation = my_manipulator.manipulate()
             return self.cleaned_data
 
-        
+
     class Options:
         name = 'ClipToGraticule'
         supported_geom_fields = ['PolygonField', 'LineStringField']
@@ -713,7 +713,7 @@ def get_manipulators_for_model(model):
     manip = {'manipulators': required}
     if optional:
         manip['optional_manipulators'] = optional
-    
+
     if len(required) > 0:
         url = reverse('manipulate', args=[','.join(required)])
     else:

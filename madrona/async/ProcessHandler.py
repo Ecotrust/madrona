@@ -10,7 +10,7 @@ NOTES:
     check_status_or_begin does not check to see if process is already complete
     if the caller wants the process to be run ONLY IF it hasn't been completed already,
     the caller should check process_is_complete instead
-    
+
     process_is_running (called on its own or from check_status_or_begin or process_is_running_or_complete) checks
     only if status == 'STARTED', this seems like the safest strategy although it does have it's shortcomings.
     When a task is triggered, it is stored in the celery_taskmeta table with status == PENDING, as soon as 
@@ -76,14 +76,14 @@ def check_status_or_begin(task_method, task_args=(), task_kwargs={}, polling_url
     else:
         task_id = __begin_process(task_method, task_args, task_kwargs, polling_url)
         return render_to_string('starting_process.html', {}), task_id
-  
+
 #returns boolean based on process.status == 'STARTED' or 'SUCCESS' (currently running or complete)
 def process_is_running_or_complete(polling_url=None, task_id=None):
     if process_is_running(polling_url, task_id) or process_is_complete(polling_url, task_id):
         return True
     else:
         return False
-  
+
 #returns boolean based on whether process is in cache and marked as STARTED
 def process_is_running(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
@@ -91,7 +91,7 @@ def process_is_running(polling_url=None, task_id=None):
         return True
     else:
         return False
-        
+
 #returns boolean based on whether process is in cache and marked as PENDING
 # i.e. it has been sent to the queue but processing has not yet begun
 def process_is_pending(polling_url=None, task_id=None):
@@ -108,7 +108,7 @@ def process_is_complete(polling_url=None, task_id=None):
         return True
     else:
         return False
-    
+
 #returns result.result from celery table
 def get_process_result(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
@@ -116,7 +116,7 @@ def get_process_result(polling_url=None, task_id=None):
         return result.result
     else:
         return None
-    
+
 #get task_id from URLtoTaskID table
 def get_taskid_from_url(polling_url):
     try:
@@ -125,7 +125,7 @@ def get_taskid_from_url(polling_url):
     except:
         #raise ValueError("Given URL does not map to any known task_id")
         return None
-    
+
 #get url from URLtoTaskID table    
 def get_url_from_taskid(task_id):
     try:
@@ -146,6 +146,3 @@ def __get_asyncresult(polling_url=None, task_id=None):
     if result.task_id == None:
         return None
     return result    
-    
-
-    

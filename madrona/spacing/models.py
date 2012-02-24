@@ -26,7 +26,7 @@ def kml_doc_from_geometry_list(geom_list, template='general.kml'):
     t = get_template(template)
     response = t.render(Context({ 'kml': out_dict }))
     return response
-    
+
 def kml_doc_from_queryset(qs, template='general.kml'):
     dict = {}
     placemarks = []
@@ -53,12 +53,12 @@ def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
     except AttributeError:
         name = qs_item.model.__name__
     name = '<Name>%s</Name>' % name
-    
+
     style = '<styleUrl>%s</styleUrl>' % styleUrl
     return_kml = '<Placemark>%s%s%s</Placemark>' % (name,style,geom.kml)
     return return_kml
 ### End Display Methods ###
-    
+
 class PickledGraph(models.Model):
     """
     This model gives us someplace to put our pickle.  No, really that's 
@@ -67,7 +67,7 @@ class PickledGraph(models.Model):
     """
     pickled_graph = models.FileField(upload_to='spacing/pickled_graphs')
     date_modified = models.DateTimeField(auto_now_add=True,auto_now=True,default=datetime.datetime.now())
-    
+
     @property
     def graph(self):
         f = open(self.pickled_graph.path,'r')
@@ -89,7 +89,7 @@ def create_pickled_graph(verbose=False):
     pg.save()
     tf.close()
     return graph
-    
+
 class Land(models.Model):
     """
     This is where a simplified polygon representation of land gets stored.  The greater the number of verticies, the slower the distance analysis
@@ -99,23 +99,23 @@ class Land(models.Model):
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,null=True, blank=True)
     date_modified = models.DateTimeField(auto_now_add=True,auto_now=True,default=datetime.datetime.now())
     objects = models.GeoManager()
-    
+
     def add_hull_nodes_to_graph(self, graph):
         """
         This is for only adding the nodes of the convex hull to the graph.  I don't think this will be used in most cases but,
         in some cases, it could be effective at reducing the number of nodes in the graph and speeding things up.
         """
         poly = self.geometry#.buffer(5).simplify(1)
-        
+
         graph.add_nodes_from([geos.Point(p) for p in poly.convex_hull.shell])
         return graph
-    
+
     def add_nodes_to_graph(self, graph):
         poly = self.geometry
-        
+
         graph.add_nodes_from([geos.Point(p) for p in poly.shell])
         return graph
-    
+
     def create_hull(self): 
         """
         probably don't need this method in the long run because we won't really need to keep the hull
@@ -123,19 +123,19 @@ class Land(models.Model):
         hull, created = Hull.objects.get_or_create(land=self)
         hull.geometry = self.geometry.convex_hull
         hull.save()
-        
+
     def geometry_kml(self):
         geom = self.geometry
         geom.transform(4326)
         return geom.kml
-        
+
     def kml(self):
         from django.template import Context, Template
         from django.template.loader import get_template
         t = get_template('land.kml')
         response = t.render(Context({ 'land': self }))
         return response
-    
+
     def simplify(self, tolerance=500):
         self.geometry = self.geometry.simplify(tolerance=tolerance, preserve_topology=True)
         self.geometry = geos.Polygon(self.geometry.exterior_ring)
@@ -155,13 +155,13 @@ class SpacingPoint(models.Model):
 
     def __unicode__(self):
         return unicode(self.name)
-        
+
 def all_spacing_points_dict():
     """
     Returns a dictionary of the form: { point: 'name' } for all objects in SpacingPoint
     """
     return dict( [ (p.geometry,p.name) for p in SpacingPoint.objects.all() ] )
-    
+
 def add_all_spacing_points(in_dict):
     """
     Takes a dictionary of the form: { point: 'name' }, and adds all the objects in SpacingPoint
@@ -187,7 +187,7 @@ def distance_row_dict(from_dict, to_dict):
             'sort': point.y
         }
     return result
-    
+
 def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
     """
     NOTE: This method assumes that the projection units are meters.  This should be changed.  Check out
@@ -209,20 +209,20 @@ def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
             point_pair_dict.update( {'geometry': line} )
         result.append(point_pair_dict)
     return result
-    
+
 def distance_matrix(point_list, straight_line=False, with_geom=False):
     result = []
     for point in point_list:
         result.append(distance_row_list(point,point_list,straight_line=straight_line,with_geom=with_geom))
     return result
-    
+
 def sorted_points_and_labels(in_dict):
     """
     in_dict will look like:
     { point: 'name' }
     sorted_points, sorted_labels (both lists) will be returned in a dictionary and they'll be 
     ordered from North to South.
-    
+
     I added in an if statement that makes this method work with other geometry types aside from
     points.  I should change the name of the method to make for sense but I'm going to put that
     off until later.
@@ -242,7 +242,7 @@ def sorted_points_and_labels(in_dict):
         sorted_points.append(y_dict[y])
         sorted_labels.append(in_dict[y_dict[y]])
     return { 'points': sorted_points, 'labels': sorted_labels }
-    
+
 def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=False,with_geom=False):
     """
     in_dict will look like:
@@ -254,7 +254,7 @@ def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=Fal
     spl_dict = sorted_points_and_labels(in_dict)
     dist_mat = distance_matrix(spl_dict['points'], straight_line=straight_line, with_geom=with_geom)
     return { 'labels': spl_dict['labels'], 'matrix': dist_mat }
-    
+
 ### End of spacing matrix methods ###
 
 def add_points_to_graph(points,graph):
@@ -265,18 +265,18 @@ def add_points_to_graph(points,graph):
     for pnt in points:
         graph = add_ocean_edges_for_node(graph,get_node_from_point(graph, pnt))
     return graph
-    
+
 def fish_distance(point1,point2):
     """
     Returns the shortest distance around land (see the Land model) between the two points.  Returns the distance in miles and
     the geos linestring that represents the path.
-    
+
     NOTE: I'm assuming that the native units of the points and line is meters.  This is true for the MLPA project but may
     not be true for other processes.
     """
     # This is the straight line between the two points
     line = geos.LineString(point1,point2)
-    
+
     # See if the straight line crosses land
     if line_crosses_land(line): 
         # The straight line cut across land so we have to do it the hard way.
@@ -288,18 +288,18 @@ def fish_distance(point1,point2):
         # Replace the straight line with the shortest path around land
         line = geos.LineString( nx.dijkstra_path(G,get_node_from_point(G,point1),get_node_from_point(G,point2)) )
         line.srid = settings.GEOMETRY_DB_SRID
-    
+
     # Figure out the distance of the line (straight or otherwise) in miles
     distance = length_in_display_units(line)
     return distance, line
-    
+
 def fish_distance_from_edges(geom1,geom2):
     """
-    
+
     """
     # Straight line between geoms
     line = shortest_line(geom1,geom2)
-    
+
     # See if the line crosses land
     if line_crosses_land(line):
         # Get shortest centroid to centroid fish_distance line
@@ -330,7 +330,7 @@ def position_dictionary(graph):
     for n in graph.nodes_iter():
         pos[n] = (n.x, n.y)
     return pos
-    
+
 def add_land_to_graph(graph, hull_only=False, verbose=False):
     if verbose:
         print 'Adding land nodes to graph'
@@ -339,7 +339,7 @@ def add_land_to_graph(graph, hull_only=False, verbose=False):
             graph = l.add_hull_nodes_to_graph(graph)
         else:
             graph = l.add_nodes_to_graph(graph)
-    
+
     graph = add_ocean_edges_complete(graph,verbose=verbose)
     return graph    
 
@@ -352,7 +352,7 @@ def points_from_graph(graph):
         if point.srid == None:
             point.srid = settings.GEOMETRY_DB_SRID
     return g_nodes
-    
+
 def lines_from_graph(graph):
     """
     Return a list of lines made from the edges of a graph.
@@ -363,7 +363,7 @@ def lines_from_graph(graph):
         line.srid = settings.GEOMETRY_DB_SRID
         lines.append(line)
     return lines        
-    
+
 def line_crosses_land(line):
     land = Land.objects.all()
     crosses = False
@@ -400,7 +400,7 @@ def add_ocean_edges_complete(graph, verbose=False):
     if verbose:
         print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges() )
     return graph
-    
+
 def shortest_line(geom1,geom2):
     """
     Use the PostGIS function st_shortestline() to find the shortest line between two geometries.  This requires
@@ -411,7 +411,7 @@ def shortest_line(geom1,geom2):
     query = "select st_astext( st_shortestline('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
     cursor.execute(query)
     return geos.fromstr(cursor.fetchone()[0])
-    
+
 def closest_point(geom1,geom2):
     """
     Use the PostGIS function ST_ClosestPoint() to return the 2-dimensional point on geom1 that is closest to geom2.  This requires

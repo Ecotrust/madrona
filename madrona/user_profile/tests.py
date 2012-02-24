@@ -7,7 +7,7 @@ class UserProfileTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user("user1", "user1@madrona.org",password="pword")
         self.user2 = User.objects.create_user("user2", "user2@madrona.org",password="pword")
-        
+
     def test_login_required(self):
         url = reverse('user_profile-form',args=['nomatter'])
         response = self.client.get(url)

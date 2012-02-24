@@ -6,19 +6,19 @@ from django.db import models
 from django.conf import settings
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Changing field 'IntersectionFeature.multi_shapefile'
         db.alter_column('intersection_intersectionfeature', 'multi_shapefile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.MultiFeatureShapefile'], null=True, blank=True))
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Changing field 'IntersectionFeature.multi_shapefile'
         db.alter_column('intersection_intersectionfeature', 'multi_shapefile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.MultiFeatureShapefile'], null=True))
-    
-    
+
+
     models = {
         'intersection.arealfeature': {
             'Meta': {'object_name': 'ArealFeature'},
@@ -124,5 +124,5 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         }
     }
-    
+
     complete_apps = ['intersection']

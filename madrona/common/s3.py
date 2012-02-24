@@ -22,7 +22,7 @@ def s3_bucket(bucket=None):
             raise Exception("No bucket specified and no settings.AWS_MEDIA_BUCKET")
 
     return conn.create_bucket(bucket)
-    
+
 
 def get_s3_url(b,k):
     """
@@ -37,7 +37,7 @@ def upload_to_s3(local_path, keyname, mimetype=None, bucket=None, acl='public-re
     Defaults to public-read
     """
     b = s3_bucket(bucket)
- 
+
     if not os.path.exists(local_path):
         raise Exception("%s does not exist; can't upload to S3" % local_path)
 
@@ -51,6 +51,5 @@ def upload_to_s3(local_path, keyname, mimetype=None, bucket=None, acl='public-re
     k.set_metadata("Content-Type", mimetype)
     k.set_contents_from_filename(local_path)
     k.set_acl(acl)
-    
-    return get_s3_url(b,k)
 
+    return get_s3_url(b,k)

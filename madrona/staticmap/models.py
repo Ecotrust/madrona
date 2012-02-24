@@ -9,11 +9,11 @@ class MapConfig(models.Model):
 
         ``mapname``             Name of the map. Will be refered to by URL so 
                                 use http friendly names (no spaces, slashes, etc)
-        
+
         ``mapfile``             Mapnik xml configuration file that defines data 
                                 sources and styles. All paths within xml must be 
                                 relative to media/staticmap/
-                                
+
         ``default_x1``          LL X coordinate
 
         ``default_y1``          LL Y coordinate
@@ -27,10 +27,10 @@ class MapConfig(models.Model):
         ``default_height``      Default image height (pixels)
         ======================  ==============================================
 """   
-    
+
     def __unicode__(self):
         return u"%s" % (self.mapfile)
-    
+
     mapname = models.CharField(max_length=50,unique=True)
     mapfile = models.FileField(upload_to='staticmap/', help_text="""
         Mapnik xml configuration file that defines data sources and styles. 

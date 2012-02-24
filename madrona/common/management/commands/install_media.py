@@ -30,7 +30,7 @@ class Command(BaseCommand):
             help="Create a symbolic link to each file instead of copying.")
         )
     help = 'Collect media files into a single media directory.'
-    
+
     def handle(self, *app_labels, **options):
         self.dry_run = options.get('dry_run', False)
         self.media_root = options.get('media_root', settings.MEDIA_ROOT)
@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
         if self.dry_run:
             print "    DRY RUN! NO FILES WILL BE MODIFIED."
-            
+
         if os.path.abspath(os.path.realpath(madrona_media_dir)) == os.path.abspath(os.path.realpath(self.media_root)) or \
            os.path.abspath(os.path.realpath(project_media_dir)) == os.path.abspath(os.path.realpath(self.media_root)):
             raise Exception("Your MEDIA_ROOT setting has to be a directory other than your madrona or project media folder!")
@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
         if settings.AWS_USE_S3_MEDIA:
             self.copy_mediaroot_to_s3()
-    
+
 
     def get_madrona_dir(self):
         # We know madrona/../media is relative to this file
@@ -78,7 +78,7 @@ class Command(BaseCommand):
         copy_tree(source_dir, self.media_root)
 
         return
-    
+
     def compile_media(self):
         if self.dry_run:
             print "    This would compile all the media assets in %s" % (self.media_root)
@@ -100,7 +100,7 @@ class Command(BaseCommand):
 
         print "    Removing uncompressed media (not yet implemented)"
         return
-       
+
     def change_mediaroot_owner(self):
         if self.dry_run:
             print "    This would change the ownership of MEDIA_ROOT to the WSGI_USER"
@@ -116,7 +116,7 @@ class Command(BaseCommand):
                 print "    **** WARNING: UID for user %s can't be found; %s ownership not changing" % \
                         (settings.WSGI_USER, self.media_root)
                 return
-             
+
             try:
                 os.chown(self.media_root, uid, -1)
                 for root, dirs, files in os.walk(self.media_root):  
@@ -166,4 +166,3 @@ class Command(BaseCommand):
                 s3.upload_to_s3(fpath, key)
 
         return
-

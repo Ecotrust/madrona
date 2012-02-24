@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'PrivateSuperOverlay'
         db.create_table('layers_privatesuperoverlay', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -29,7 +29,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'PrivateSuperOverlay'
         db.delete_table('layers_privatesuperoverlay')
 

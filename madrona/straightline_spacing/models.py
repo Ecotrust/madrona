@@ -7,16 +7,16 @@ class SpacingPoint(models.Model):
     name = models.CharField(max_length=200)
     geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID)
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return unicode(self.name)
-        
+
 def all_spacing_points_dict():
     """
     Returns a dictionary of the form: { point: 'name' } for all objects in SpacingPoint
     """
     return dict( [ (p.geometry,p.name) for p in SpacingPoint.objects.all() ] )
-    
+
 def add_all_spacing_points(in_dict):
     """
     Takes a dictionary of the form: { point: 'name' }, and adds all the objects in SpacingPoint
@@ -42,7 +42,7 @@ def distance_row_dict(from_dict, to_dict):
             'sort': point.y
         }
     return result
-    
+
 def distance_row_list(from_pnt, to_list):
     """
     NOTE: This method assumes that the projection units are meters.
@@ -51,13 +51,13 @@ def distance_row_list(from_pnt, to_list):
     for point in to_list:
         result.append(length_in_display_units(point.distance(from_pnt)))
     return result
-    
+
 def distance_matrix(point_list):
     result = []
     for point in point_list:
         result.append(distance_row_list(point,point_list))
     return result
-    
+
 def sorted_points_and_labels(in_dict):
     """
     in_dict will look like:
@@ -76,7 +76,7 @@ def sorted_points_and_labels(in_dict):
         sorted_points.append(y_dict[y])
         sorted_labels.append(in_dict[y_dict[y]])
     return { 'points': sorted_points, 'labels': sorted_labels }
-    
+
 def distance_matrix_and_labels(in_dict,add_spacing_points=True):
     """
     in_dict will look like:

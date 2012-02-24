@@ -7,10 +7,10 @@ class HabitatThresholdInline(admin.TabularInline):
     fields = ['habitat','minimum_quantity','units','rule']
     sort = ['habitat__sort']
     extra = 0
-    
+
 class ReplicationSetupAdmin(admin.ModelAdmin):
     inlines = [HabitatThresholdInline]
-    
+
 admin.site.register(ReplicationSetup, ReplicationSetupAdmin)
 
 class ThresholdRuleAdmin(admin.ModelAdmin):

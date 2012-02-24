@@ -5,9 +5,9 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-    
+
     def forwards(self, orm):
-        
+
         # Adding model 'Analytics'
         db.create_table('google-analytics_analytics', (
             ('analytics_code', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
@@ -15,14 +15,14 @@ class Migration(SchemaMigration):
             ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
         ))
         db.send_create_signal('google-analytics', ['Analytics'])
-    
-    
+
+
     def backwards(self, orm):
-        
+
         # Deleting model 'Analytics'
         db.delete_table('google-analytics_analytics')
-    
-    
+
+
     models = {
         'google-analytics.analytics': {
             'Meta': {'object_name': 'Analytics'},
@@ -37,5 +37,5 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
-    
+
     complete_apps = ['google-analytics']
