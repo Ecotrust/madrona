@@ -12,9 +12,9 @@ from madrona.common.utils import asKml, clean_geometry, ensure_clean
 from madrona.common.utils import get_logger, get_class, enable_sharing
 from madrona.manipulators.manipulators import manipulatorsDict, NullManipulator
 try:
-	import mapnik
+    import mapnik
 except:
-	import mapnik2 as mapnik
+    import mapnik2 as mapnik
 import re
 
 logger = get_logger()

@@ -1,5 +1,5 @@
 import unittest
-	
+
 def suite():
     suite = unittest.TestSuite()
     for name in ['test_store']:
