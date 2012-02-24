@@ -35,7 +35,7 @@ class ReplicationSetup(models.Model):
         """
         results = {}
         for k,geom in in_dict.iteritems():
-            if geom.__class__.__name__<>'GeometryCollection': # This will allow us to include other info in the dict
+            if geom.__class__.__name__ != 'GeometryCollection': # This will allow us to include other info in the dict
                 results[k] = geom # pass whatever this is on to the results
             else:
                 results[k] = self.analyze_single_item(geom)

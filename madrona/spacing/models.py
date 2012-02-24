@@ -393,7 +393,7 @@ def add_ocean_edges_complete(graph, verbose=False):
             print str(cnt) + ' ',
             cnt += 1
         for n in graph.nodes_iter():
-            if node <> n:
+            if node != n:
                 line = geos.LineString(node,n)
                 if not line_crosses_land(line):
                     graph.add_edge(node,n,{'weight': length_in_display_units(node.distance(n))})

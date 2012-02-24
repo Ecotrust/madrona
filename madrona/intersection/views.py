@@ -62,7 +62,7 @@ def build_csv_response(results, file_name, leave_out=['feature_map_id','org_sche
     response = HttpResponse(mimetype='application/csv')
     response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
     writer = csv.writer(response)
-    if results.__class__.__name__<>'list':
+    if results.__class__.__name__ != 'list':
         results = [results]
     header_row = ['Habitat']
     header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
@@ -98,7 +98,7 @@ def build_array_mpa_csv_response(results, file_name, feature_name, feature_type=
     response = HttpResponse(mimetype='application/csv')
     response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
     writer = csv.writer(response)
-    if results.__class__.__name__<>'list':
+    if results.__class__.__name__ != 'list':
         results = [results]
     if feature_type.lower()=='mpa':
         feature_type = 'MPA'

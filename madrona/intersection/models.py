@@ -97,7 +97,7 @@ def zip_from_shp(shp_path):
     from django.core.files import File
     
     directory, file_with_ext = os.path.split(shp_path)
-    if file_with_ext.count('.') <> 1:
+    if file_with_ext.count('.') != 1:
         raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
     else:
         filename, ext = file_with_ext.split('.')
@@ -209,7 +209,7 @@ def sum_results(results):
                 elif k in sum_keys:
                     # these are the things we need to actually sum so add it to what we've got so far
                     summed[hab][k] += v
-                elif k in null_if_not_equal and summed[hab][k]<>v:
+                elif k in null_if_not_equal and summed[hab][k] != v:
                     summed[hab][k] = None
                 elif k in must_be_equal:
                     # we've gotten this key in already and it must be equal across all sub_dicts that we're summing

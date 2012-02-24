@@ -83,7 +83,7 @@ def zip_from_shp(shp_path):
     from django.core.files import File
     
     directory, file_with_ext = os.path.split(shp_path)
-    if file_with_ext.count('.') <> 1:
+    if file_with_ext.count('.') != 1:
         raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
     else:
         filename, ext = file_with_ext.split('.')

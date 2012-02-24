@@ -45,7 +45,7 @@ def add_geometry_to_network(qs):
     matrix = []
     for point in points:
         for pnt in points:
-            if point <> pnt and (pnt,point) not in matrix: # if (1,2) has been dealt with, we don't need to consider (2,1)
+            if point != pnt and (pnt,point) not in matrix: # if (1,2) has been dealt with, we don't need to consider (2,1)
                 matrix.append( (point,pnt) )
                 line = geos.MultiLineString( geos.LineString(point,pnt) )
                 if not line_crosses_land(line,qs):
