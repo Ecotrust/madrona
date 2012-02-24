@@ -5,7 +5,6 @@ from madrona.unit_converter.models import length_in_display_units, area_in_displ
 from madrona.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
 
-
 class StudyRegionManager(models.GeoManager):
     """Returns the currently active study region. The active study region is 
     determined by the active attribute.
@@ -14,7 +13,6 @@ class StudyRegionManager(models.GeoManager):
         return self.get(active=True)
         #or should the above line now be changed to:
         #return self.current()
-
 
 class StudyRegion(models.Model):
     """Model used for representing study regions
@@ -127,7 +125,6 @@ class StudyRegion(models.Model):
 
             return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
 
-
     # NOTE: not currently used, LOD system overhead not justified by performance
     def kml_chunk(self, n, s, e, w ):
         """
@@ -174,7 +171,6 @@ class StudyRegion(models.Model):
         if bLastLodLevel:
             max_lod_pixels = -1
 
-
         retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>%f</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % ( n, s, e, w, min_lod_pixels, max_lod_pixels ) + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml, )
 
         # conditionally add sub-regions
@@ -191,7 +187,6 @@ class StudyRegion(models.Model):
 
         return retval 
 
-
     def lookAtKml(self):
         """
         Get the kml for the region's lookat values saved in the DB,
@@ -203,7 +198,6 @@ class StudyRegion(models.Model):
 
         retval = '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
         return retval
-
 
     def cacheLookAt(self):
         """
@@ -219,10 +213,6 @@ class StudyRegion(models.Model):
         self.lookAt_Heading = lookAtParams['heading']
 
         self.save()
-
-
-
-
 
 #    def updated(self):
 

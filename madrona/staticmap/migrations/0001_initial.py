@@ -23,12 +23,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('staticmap', ['MapConfig'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'MapConfig'
         db.delete_table('staticmap_mapconfig')
-
 
     models = {
         'staticmap.mapconfig': {

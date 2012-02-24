@@ -21,12 +21,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('screencasts', ['Screencast'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'Screencast'
         db.delete_table('mm_screencast')
-
 
     models = {
         'screencasts.screencast': {

@@ -10,7 +10,6 @@ try:
 except NameError:
     from sets import Set as set # Python 2.3 fallback
 
-
 class Command(BaseCommand):
     media_dirs = ['media']
     ignore_apps = ['django.contrib.admin']
@@ -57,7 +56,6 @@ class Command(BaseCommand):
 
         if settings.AWS_USE_S3_MEDIA:
             self.copy_mediaroot_to_s3()
-
 
     def get_madrona_dir(self):
         # We know madrona/../media is relative to this file
@@ -134,7 +132,6 @@ class Command(BaseCommand):
         else:
             print "    Ownership of %s not altered (WSGI_USER not set)" % (self.media_root)
 
-
     def copy_mediaroot_to_s3(self):
         if settings.AWS_USE_S3_MEDIA and \
            settings.AWS_MEDIA_BUCKET and \
@@ -144,7 +141,6 @@ class Command(BaseCommand):
         else:
             print " AWS_USE_S3_MEDIA and associated settings are not found; Files will not be uploaded to S3" 
             return None
-
 
         if self.dry_run:
             print "    This would publish all the media in %s to your S3 bucket at %s and be accessible at url %s" % \

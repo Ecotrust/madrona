@@ -14,7 +14,6 @@ class Migration(SchemaMigration):
         # Adding field 'PrivateLayerList.kml_file'
         db.add_column('layers_privatelayerlist', 'kml_file', self.gf('django.db.models.fields.files.FileField')(default='', max_length=510), keep_default=False)
 
-
     def backwards(self, orm):
 
         # User chose to not deal with backwards NULL issues for 'PrivateLayerList.kml'
@@ -22,7 +21,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'PrivateLayerList.kml_file'
         db.delete_column('layers_privatelayerlist', 'kml_file')
-
 
     models = {
         'auth.group': {

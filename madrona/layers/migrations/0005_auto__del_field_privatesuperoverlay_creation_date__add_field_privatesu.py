@@ -47,7 +47,6 @@ class Migration(SchemaMigration):
         # Changing field 'PrivateLayerList.name'
         db.alter_column('layers_privatelayerlist', 'name', self.gf('django.db.models.fields.CharField')(max_length='255'))
 
-
     def backwards(self, orm):
 
         # User chose to not deal with backwards NULL issues for 'PrivateSuperOverlay.creation_date'
@@ -88,7 +87,6 @@ class Migration(SchemaMigration):
 
         # Changing field 'PrivateLayerList.name'
         db.alter_column('layers_privatelayerlist', 'name', self.gf('django.db.models.fields.CharField')(max_length=50))
-
 
     models = {
         'auth.group': {

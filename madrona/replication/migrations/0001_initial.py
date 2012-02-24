@@ -25,7 +25,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('replication', ['HabitatThreshold'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'ReplicationSetup'
@@ -33,7 +32,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'HabitatThreshold'
         db.delete_table('replication_habitatthreshold')
-
 
     models = {
         'intersection.featuremapping': {

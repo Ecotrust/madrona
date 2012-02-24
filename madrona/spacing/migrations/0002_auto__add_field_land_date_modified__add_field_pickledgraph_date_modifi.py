@@ -14,7 +14,6 @@ class Migration(SchemaMigration):
         # Adding field 'PickledGraph.date_modified'
         db.add_column('spacing_pickledgraph', 'date_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 9, 1, 15, 42, 35, 765338), auto_now=True, auto_now_add=True, blank=True), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'Land.date_modified'
@@ -22,7 +21,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'PickledGraph.date_modified'
         db.delete_column('spacing_pickledgraph', 'date_modified')
-
 
     models = {
         'spacing.land': {

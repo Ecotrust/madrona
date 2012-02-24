@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
         # Adding field 'Bookmark.publicstate'
         db.add_column('bookmarks_bookmark', 'publicstate', self.gf('django.db.models.fields.TextField')(default='{}'), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'Bookmark.publicstate'
         db.delete_column('bookmarks_bookmark', 'publicstate')
-
 
     models = {
         'auth.group': {

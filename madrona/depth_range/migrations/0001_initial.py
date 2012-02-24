@@ -17,12 +17,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('depth_range', ['DepthSounding'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'DepthSounding'
         db.delete_table('depth_range_depthsounding')
-
 
     models = {
         'depth_range.depthsounding': {

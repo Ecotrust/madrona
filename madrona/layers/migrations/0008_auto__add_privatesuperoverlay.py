@@ -17,12 +17,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('layers', ['PrivateSuperOverlay'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'PrivateSuperOverlay'
         db.delete_table('layers_privatesuperoverlay')
-
 
     models = {
         'layers.privatesuperoverlay': {

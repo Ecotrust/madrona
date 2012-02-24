@@ -36,7 +36,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('bookmarks_bookmark_sharing_groups', ['bookmark_id', 'group_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'Bookmark'
@@ -44,7 +43,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field sharing_groups on 'Bookmark'
         db.delete_table('bookmarks_bookmark_sharing_groups')
-
 
     models = {
         'auth.group': {

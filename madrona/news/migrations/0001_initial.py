@@ -38,7 +38,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('news_entry_tags', ['entry_id', 'tag_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'Tag'
@@ -49,7 +48,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field tags on 'Entry'
         db.delete_table('news_entry_tags')
-
 
     models = {
         'auth.group': {

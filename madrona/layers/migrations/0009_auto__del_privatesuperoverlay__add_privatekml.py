@@ -28,7 +28,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('layers_privatekml_sharing_groups', ['privatekml_id', 'group_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'PrivateKml'
@@ -36,7 +35,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field sharing_groups on 'PrivateKml'
         db.delete_table('layers_privatekml_sharing_groups')
-
 
     models = {
         'auth.group': {

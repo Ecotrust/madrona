@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
         # Adding field 'Bookmark.ip'
         db.add_column('bookmarks_bookmark', 'ip', self.gf('django.db.models.fields.IPAddressField')(default='0.0.0.0', max_length=15), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'Bookmark.ip'
         db.delete_column('bookmarks_bookmark', 'ip')
-
 
     models = {
         'auth.group': {

@@ -11,7 +11,6 @@ from elementtree.ElementTree import fromstring
 from django.contrib.gis.geos import LinearRing, Polygon
 from madrona.common.utils import clean_geometry, ensure_clean
 
-
 def simplify(geom):
     if geom.srid != settings.GEOMETRY_DB_SRID:
         geom.transform(settings.GEOMETRY_DB_SRID)
@@ -63,7 +62,6 @@ def display_kml(geom):
     </Placemark>
 </kml>""" % (geom_kml, )
 
-
 def parsekmlpoly(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Polygon/{http://www.opengis.net/kml/2.2}outerBoundaryIs/{http://www.opengis.net/kml/2.2}LinearRing/{http://www.opengis.net/kml/2.2}coordinates').text
@@ -100,7 +98,6 @@ def parsekmlpoint(kmlstring):
             lra.append((float(a[0]), float(a[1])))
     point = Point(lra[0])
     return point
-
 
 def parsekml(shape):
     if shape.find('Polygon') is not -1:
@@ -314,7 +311,6 @@ class ClipToShapeManipulator(BaseManipulator):
 
 manipulatorsDict[ClipToShapeManipulator.Options.name] = ClipToShapeManipulator
 
-
 class DifferenceFromShapeManipulator(BaseManipulator):
     '''
         required arguments:
@@ -394,7 +390,6 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         }
 
 manipulatorsDict[DifferenceFromShapeManipulator.Options.name] = DifferenceFromShapeManipulator
-
 
 class ClipToStudyRegionManipulator(BaseManipulator):
     '''
@@ -480,7 +475,6 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         status_html = self.do_template("0")
         return self.result(out_geom, status_html)
 
-
     class Options:
         name = 'ClipToStudyRegion'
         supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
@@ -491,9 +485,7 @@ class ClipToStudyRegionManipulator(BaseManipulator):
             '2':'manipulators/outside_studyregion.html', 
         }
 
-
 manipulatorsDict[ClipToStudyRegionManipulator.Options.name] = ClipToStudyRegionManipulator
-
 
 class ClipToGraticuleManipulator(BaseManipulator):
     '''
@@ -613,7 +605,6 @@ class ClipToGraticuleManipulator(BaseManipulator):
             if self.west is None:
                 self.west = geom_extent[0]
 
-
     class Form(forms.Form):
         available = True
         n = forms.FloatField( label='Northern boundary', required=False ) 
@@ -635,7 +626,6 @@ class ClipToGraticuleManipulator(BaseManipulator):
             self.manipulation = my_manipulator.manipulate()
             return self.cleaned_data
 
-
     class Options:
         name = 'ClipToGraticule'
         supported_geom_fields = ['PolygonField', 'LineStringField']
@@ -645,7 +635,6 @@ class ClipToGraticuleManipulator(BaseManipulator):
         }
 
 manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
-
 
 class NullManipulator(BaseManipulator):
     """ 
@@ -668,7 +657,6 @@ class NullManipulator(BaseManipulator):
         }
 
 manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
-
 
 def get_url_for_model(model):
     names = []

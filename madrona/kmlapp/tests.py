@@ -137,8 +137,6 @@ class KMLAppTest(TestCase):
         response = self.other_client.get(url)
         self.assertEquals(response.status_code, 200)
 
-
-
     def test_user_kml_links(self):
         """
         Tests that user can retrieve valid KML file with network links to arrays

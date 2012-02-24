@@ -32,7 +32,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('spacing', ['SpacingPoint'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'PickledGraph'
@@ -43,7 +42,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'SpacingPoint'
         db.delete_table('spacing_spacingpoint')
-
 
     models = {
         'spacing.land': {

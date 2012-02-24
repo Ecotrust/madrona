@@ -19,7 +19,6 @@
 import re
 import regexes
 
-
 class UserAgent(object):
     def __init__(self, user_agent_string, js_user_agent_string=None):
         self.user_agent_string = user_agent_string
@@ -69,7 +68,6 @@ class UserAgent(object):
                     v3 = version_bits.pop(0)
         return family, v1, v2, v3
 
-
     @staticmethod
     def pretty_print(family, v1=None, v2=None, v3=None):
         """Pretty browser string."""
@@ -83,7 +81,6 @@ class UserAgent(object):
         elif v1:
             return '%s %s' % (family, v1)
         return family
-
 
 class UserAgentParser(object):
     def __init__(self, pattern, family_replacement=None, v1_replacement=None):

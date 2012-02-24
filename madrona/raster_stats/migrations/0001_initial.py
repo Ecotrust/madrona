@@ -37,7 +37,6 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'ZonalStatsCache', fields ['geom_hash', 'raster']
         db.create_unique('raster_stats_zonalstatscache', ['geom_hash', 'raster_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'RasterDataset'
@@ -48,7 +47,6 @@ class Migration(SchemaMigration):
 
         # Removing unique constraint on 'ZonalStatsCache', fields ['geom_hash', 'raster']
         db.delete_unique('raster_stats_zonalstatscache', ['geom_hash', 'raster_id'])
-
 
     models = {
         'raster_stats.rasterdataset': {

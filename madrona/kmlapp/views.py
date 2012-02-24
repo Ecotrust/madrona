@@ -72,7 +72,6 @@ def get_data_for_feature(user, uid):
     features = []
     collections = []
 
-
     if isinstance(f, FeatureCollection):
         obj_id = f.pk
         ct = ContentType.objects.get_for_model(f.__class__)

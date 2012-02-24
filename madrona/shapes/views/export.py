@@ -132,7 +132,6 @@ class ShpResponder(object):
             #OGR_F_SetFieldStrin
             #OFTString => CharField
 
-
             # OGR_F_SetFieldDateTime()
             #OFTDateTime => DateTimeField
             #OFTDate => TimeField
@@ -178,7 +177,6 @@ class ShpResponder(object):
                 # Case where geometry object is not found because of null value for field
                 # effectively looses whole record in shapefile if geometry does not exist
                 pass
-
 
             # creat the feature in the layer.
             ###check_err(ogr.OGR_L_SetFeature(layer, feat))

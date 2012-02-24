@@ -25,7 +25,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('layers_privatelayerlist_sharing_groups', ['privatelayerlist_id', 'group_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'PrivateLayerList'
@@ -33,7 +32,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field sharing_groups on 'PrivateLayerList'
         db.delete_table('layers_privatelayerlist_sharing_groups')
-
 
     models = {
         'auth.group': {

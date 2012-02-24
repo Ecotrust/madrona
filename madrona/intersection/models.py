@@ -219,7 +219,6 @@ def sum_results(results):
                         raise Exception('sum_results has been passed an incorrect results matrix.')
     return summed
 
-
 class Shapefile(models.Model):
     #shapefile = models.FileField(upload_to='intersection/shapefiles')
     name = models.CharField(max_length=255, unique=True, null=True)
@@ -342,7 +341,6 @@ class MultiFeatureShapefile(Shapefile):
         shpfile = self.unzip_to_temp()
         tempdir = tempfile.gettempdir()
 
-
         #determine what geometry type we're dealing with
         # feat = lyr_in.GetFeature(0)
         # geom = feat.GetGeometryRef()
@@ -421,7 +419,6 @@ class MultiFeatureShapefile(Shapefile):
             new_name, zip_o_rama = zip_from_shp(zip_file_name)
             zipped_files.update({name:zip_o_rama})
 
-
         for file_name, zipped_file in zipped_files.iteritems():
             sfsf, created = SingleFeatureShapefile.objects.get_or_create(name=file_name)
 
@@ -430,7 +427,6 @@ class MultiFeatureShapefile(Shapefile):
                 sfsf.shapefile.delete()
             sfsf.shapefile = zipped_file
             sfsf.save()
-
 
     def split_to_single_feature_shapefiles(self, field_name):
         file_path = self.unzip_to_temp()
@@ -646,7 +642,6 @@ class SingleFeatureShapefile(Shapefile):
                 if verbose:
                     print '.',
 
-
         if out_units==AREAL_OUT_UNITS:
             intersection_feature.study_region_total = area_in_display_units(area)
         elif out_units==LINEAR_OUT_UNITS:
@@ -833,7 +828,6 @@ class OrganizationScheme(models.Model):
             else:
                 raise Exception('You are getting the same key more than once in your dictionary.  You need to sum instead of update.')
         return new_results
-
 
 class FeatureMapping(models.Model):
     organization_scheme = models.ForeignKey(OrganizationScheme)

@@ -16,12 +16,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('user_profile', ['UserProfile'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'UserProfile'
         db.delete_table('user_profile_userprofile')
-
 
     models = {
         'auth.group': {

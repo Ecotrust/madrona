@@ -14,7 +14,6 @@ class Migration(SchemaMigration):
         # Adding field 'PrivateLayerList.priority'
         db.add_column('layers_privatelayerlist', 'priority', self.gf('django.db.models.fields.FloatField')(default=0.0), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'PrivateLayerList.name'
@@ -22,7 +21,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'PrivateLayerList.priority'
         db.delete_column('layers_privatelayerlist', 'priority')
-
 
     models = {
         'auth.group': {

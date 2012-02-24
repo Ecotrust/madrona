@@ -12,12 +12,10 @@ class Migration(SchemaMigration):
         # Changing field 'IntersectionFeature.multi_shapefile'
         db.alter_column('intersection_intersectionfeature', 'multi_shapefile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.MultiFeatureShapefile'], null=True, blank=True))
 
-
     def backwards(self, orm):
 
         # Changing field 'IntersectionFeature.multi_shapefile'
         db.alter_column('intersection_intersectionfeature', 'multi_shapefile_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['intersection.MultiFeatureShapefile'], null=True))
-
 
     models = {
         'intersection.arealfeature': {

@@ -59,7 +59,6 @@ class Bookmark(Feature):
         </Style>
         """ % (self.model_uid())
 
-
     class Options:
         manipulators = []
         optional_manipulators = [ ]

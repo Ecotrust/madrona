@@ -15,7 +15,6 @@ urlpatterns = patterns('',
     (r'/studyregion/', include('madrona.studyregion.urls')),
 )
 
-
 class StudyRegionTest(TestCase):
     fixtures = ['example_data']
 
@@ -61,7 +60,6 @@ class StudyRegionTest(TestCase):
         response = self.client.get('/studyregion/kml/', {})
         self.assertEquals(response.status_code, 200)
 
-
     # this is a non-critical test, which is failing on the server, but not local dev boxes, with:
     # TemplateSyntaxError: Caught an exception while rendering: compress/css.html
 
@@ -75,13 +73,10 @@ class StudyRegionTest(TestCase):
         #response = self.client.get('/studyregion/', {})
         #self.assertEquals(response.status_code, 200)
 
-
-
     def testExternalKmlStyle(self):
         settings.DEBUG = True
         response = self.client.get('/media/studyregion/styles.kml', {})
         self.assertEquals(response.status_code, 200)
-
 
     def testOnlyOneActive(self):
         # Only need to create one to test since there is an active study 

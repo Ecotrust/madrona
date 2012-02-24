@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
         # Adding field 'GeneralFile.active'
         db.add_column('data_manager_generalfile', 'active', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'GeneralFile.active'
         db.delete_column('data_manager_generalfile', 'active')
-
 
     models = {
         'data_manager.datalayer': {

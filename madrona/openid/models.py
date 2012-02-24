@@ -24,7 +24,6 @@ except ImportError:
     import md5
     _md5 = md5.new
 
-
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
@@ -85,7 +84,6 @@ class UserAssociation(models.Model):
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
                     [self.user.email], fail_silently=True)
         oid_associate.send(sender=self, user=self.user, openid=self.openid_url)
-
 
     class Meta:
         verbose_name = _('user association')

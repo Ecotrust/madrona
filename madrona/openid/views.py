@@ -25,7 +25,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response as render
 from django.template import RequestContext, loader, Context
 
-
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext as _
@@ -148,7 +147,6 @@ def default_on_failure(request, message, **kwargs):
         'message': message
     })
 
-
 def not_authenticated(func):
     """ decorator that redirect user to next page if
     he is already logged."""
@@ -222,7 +220,6 @@ def signin_failure(request, message, template_name='authopenid/signin.html',
         'form2': auth_form(),
         redirect_field_name: request.REQUEST.get(redirect_field_name, '')
     }, context_instance=_build_context(request, extra_context))
-
 
 @not_authenticated
 def signin(request, template_name='authopenid/signin.html', 
@@ -375,7 +372,6 @@ def register(request, template_name='authopenid/complete.html',
         if openid_.ax.get('http://schema.openid.net/contact/email', False):
             email = openid_.ax.get('http://schema.openid.net/contact/email')[0]
 
-
     form1 = register_form(initial={
         'username': nickname,
         'email': email,
@@ -448,7 +444,6 @@ def xrdf(request, template_name='authopenid/yadis.xrdf'):
     response = render(template_name, { 
         'return_to': return_to 
         }, context_instance=RequestContext(request))
-
 
     response['Content-Type'] = "application/xrds+xml"
     response['X-XRDS-Location']= request.build_absolute_uri(reverse('oid_xrdf'))

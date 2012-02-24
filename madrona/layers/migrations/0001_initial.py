@@ -34,7 +34,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('layers', ['PublicLayerList'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'UserLayerList'
@@ -45,7 +44,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'PublicLayerList'
         db.delete_table('layers_publiclayerlist')
-
 
     models = {
         'auth.group': {

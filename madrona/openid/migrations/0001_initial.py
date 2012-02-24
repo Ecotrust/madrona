@@ -36,7 +36,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('openid', ['UserAssociation'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'Nonce'
@@ -47,7 +46,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'UserAssociation'
         db.delete_table('openid_userassociation')
-
 
     models = {
         'auth.group': {

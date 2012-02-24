@@ -65,7 +65,6 @@ not a string path." % (name,))
         Path to FeatureForm used to edit this class.
         """
 
-
         self.slug = slugify(name)
         """
         Name used in the url path to this feature as well as part of 
@@ -154,7 +153,6 @@ not a string path." % (name,))
                 select='multiple single',
                 method='GET',
             ))
-
 
         self.valid_children = getattr(self._options, 'valid_children', None)
         """
@@ -581,7 +579,6 @@ self.title, ))
         else:
             return 'generic-links'
 
-
     def reverse(self, instances):
         """Can be used to get the url for this link. 
 
@@ -619,7 +616,6 @@ self.title, ))
     def json(self):
         return json.dumps(self.dict())
 
-
 def create_link(rel, *args, **kwargs):
     nargs = [rel]
     nargs.extend(args)
@@ -653,7 +649,6 @@ def edit_form(*args, **kwargs):
     if 'method' not in kwargs.keys():
         kwargs['method'] = 'GET'
     return create_link('edit', *args, **kwargs)
-
 
 def register(model):
     options = FeatureOptions(model)

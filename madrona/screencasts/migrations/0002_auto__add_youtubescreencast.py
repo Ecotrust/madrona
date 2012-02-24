@@ -23,12 +23,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('screencasts', ['YoutubeScreencast'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'YoutubeScreencast'
         db.delete_table('screencasts_youtubescreencast')
-
 
     models = {
         'screencasts.screencast': {

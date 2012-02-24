@@ -44,7 +44,6 @@ class OpenIDMiddleware(object):
         rels = []
         request.associated_openids = [rel.openid_url for rel in rels]
 
-
     def process_response(self, request, response):
         if response.status_code != 200 or len(response.content) < 200:
             return response

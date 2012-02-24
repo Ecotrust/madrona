@@ -38,7 +38,6 @@ from openid.store.nonce import SKEW
 from madrona.openid.models import Association, Nonce
 from madrona.openid.openid_store import DjangoOpenIDStore
 
-
 class OpenIDStoreTests(TestCase):
 
     def setUp(self):
@@ -169,13 +168,11 @@ class OpenIDStoreTests(TestCase):
             'server-url', OIDAssociation('handle2', 'secret', timestamp,
                                          200, 'HMAC-SHA1'))
 
-
         self.assertEquals(self.store.cleanupAssociations(), 1)
 
         # The second (non-expired) association is left behind.
         self.assertNotEqual(self.store.getAssociation('server-url', 'handle2'),
                             None)
-
 
 def suite():
     return unittest.TestLoader().loadTestsFromName(__name__)

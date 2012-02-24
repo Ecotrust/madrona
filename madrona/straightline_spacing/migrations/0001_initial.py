@@ -17,12 +17,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('straightline_spacing', ['SpacingPoint'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'SpacingPoint'
         db.delete_table('straightline_spacing_spacingpoint')
-
 
     models = {
         'straightline_spacing.spacingpoint': {

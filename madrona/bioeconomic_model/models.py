@@ -152,7 +152,6 @@ class PolygonGridManager(models.GeoManager):
         for pg in self.iterator():
             pg.load_attributes(habitat_list)
 
-
 class PolygonGrid(models.Model):
     geometry = models.PolygonField(srid=settings.GEOMETRY_DB_SRID)
     objects = PolygonGridManager()
@@ -172,8 +171,6 @@ class GridAttributes(models.Model):
     grid = models.ForeignKey(PolygonGrid)
     value = models.FloatField()
     habitat = models.ForeignKey(Habitat,null=True,blank=True)
-
-
 
 def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_size=1000):
     # returns an array of points that are within sqrt(2) * cell_size of mgeom

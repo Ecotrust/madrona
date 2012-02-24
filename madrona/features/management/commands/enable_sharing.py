@@ -3,7 +3,6 @@ from optparse import make_option
 from django.contrib.auth.models import Group
 from madrona.common.utils import enable_sharing 
 
-
 class Command(BaseCommand):
     help = "Configures the permissions to allow sharing between groups"
     args = '[Group names to grant sharing permissions to ...]'
@@ -12,7 +11,6 @@ class Command(BaseCommand):
         make_option('-a', '--all', action='store_true', dest='all',
             help="Enable sharing for ALL current groups"),
         )
-
 
     def handle(self, *groupnames, **options):
         self.all = options.get('all', False)

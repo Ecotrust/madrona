@@ -19,12 +19,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('bioregions', ['Bioregion'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'Bioregion'
         db.delete_table('bioregions_bioregion')
-
 
     models = {
         'bioregions.bioregion': {

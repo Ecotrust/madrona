@@ -59,7 +59,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('data_manager', ['ShapefileField'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'DataLayer'
@@ -73,7 +72,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ShapefileField'
         db.delete_table('data_manager_shapefilefield')
-
 
     models = {
         'data_manager.datalayer': {

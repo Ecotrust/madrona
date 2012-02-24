@@ -84,7 +84,6 @@ class ManipulatorsTest(TestCase):
 
         self.client = None
 
-
     def test_clipToGraticule(self):
         '''
             Tests the following:
@@ -127,7 +126,6 @@ class ManipulatorsTest(TestCase):
         except InvalidGeometryException:
             pass
 
-
     def test_multipleManipulators(self):
         '''
             Tests the following:
@@ -141,7 +139,6 @@ class ManipulatorsTest(TestCase):
         #clip to study region and clip to graticules test
         response1 = self.client.post('/manipulators/ClipToStudyRegion,ClipToGraticule/', {'target_shape': display_kml(self.code1_poly), 'east': .5})
         self.assertEquals(response1.status_code, 200)
-
 
     def test_studyregion(self):
         '''
@@ -165,7 +162,6 @@ class ManipulatorsTest(TestCase):
         #clip to study region
         response0 = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': display_kml(target_shape)})
         self.assertEquals(response0.status_code, 200)
-
 
 @register
 class TestPoly(PolygonFeature):

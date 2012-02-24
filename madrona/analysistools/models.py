@@ -143,6 +143,5 @@ class Analysis(Feature):
         else:
             super(Analysis, self).save(*args, **kwargs) # have to save first so it has a pk
 
-
     class Meta:
         abstract = True

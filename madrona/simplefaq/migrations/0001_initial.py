@@ -26,7 +26,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('simplefaq', ['Faq'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'FaqGroup'
@@ -34,7 +33,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Faq'
         db.delete_table('simplefaq_faq')
-
 
     models = {
         'simplefaq.faq': {

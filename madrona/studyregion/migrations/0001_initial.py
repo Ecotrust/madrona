@@ -26,12 +26,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('studyregion', ['StudyRegion'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'StudyRegion'
         db.delete_table(u'mm_study_region')
-
 
     models = {
         'studyregion.studyregion': {

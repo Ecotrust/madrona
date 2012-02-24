@@ -38,7 +38,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('data_distributor', ['LoadSetup'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'PotentialTarget'
@@ -49,7 +48,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'LoadSetup'
         db.delete_table('data_distributor_loadsetup')
-
 
     models = {
         'data_distributor.loadsetup': {

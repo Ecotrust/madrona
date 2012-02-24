@@ -27,7 +27,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('geographic_report', ['Annotation'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'GeographicReport'
@@ -35,7 +34,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Annotation'
         db.delete_table('geographic_report_annotation')
-
 
     models = {
         'geographic_report.annotation': {

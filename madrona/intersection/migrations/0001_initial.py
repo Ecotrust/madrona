@@ -144,7 +144,6 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'ResultCache', fields ['wkt_hash', 'intersection_feature']
         db.create_unique('intersection_resultcache', ['wkt_hash', 'intersection_feature_id'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'MultiFeatureShapefile'
@@ -185,7 +184,6 @@ class Migration(SchemaMigration):
 
         # Removing unique constraint on 'ResultCache', fields ['wkt_hash', 'intersection_feature']
         db.delete_unique('intersection_resultcache', ['wkt_hash', 'intersection_feature_id'])
-
 
     models = {
         'intersection.arealfeature': {

@@ -165,7 +165,6 @@ class Feature(models.Model):
             </Placemark>
             """ % (self.uid, self.name, e.message)
 
-
     def add_to_collection(self, collection):
         """
         Add feature to specified FeatureCollection

@@ -158,8 +158,6 @@ class PublicLayerList(models.Model):
             # There can be only one!
             PublicLayerList.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
 
-
-
 class PrivateLayerList(UserUploadedKml):
     """
     Note: This is just a wrapper to avoid breaking 

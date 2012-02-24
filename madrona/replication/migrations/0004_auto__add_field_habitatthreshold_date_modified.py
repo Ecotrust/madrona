@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
         # Adding field 'HabitatThreshold.date_modified'
         db.add_column('replication_habitatthreshold', 'date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting field 'HabitatThreshold.date_modified'
         db.delete_column('replication_habitatthreshold', 'date_modified')
-
 
     models = {
         'intersection.featuremapping': {

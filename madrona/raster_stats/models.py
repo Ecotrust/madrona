@@ -20,7 +20,6 @@ try:
 except:
     STARSPAN_BIN = 'starspan'
 
-
 class RasterDataset(models.Model):
     name = models.CharField(max_length=30, unique=True)
     full_name = models.CharField(max_length=255, default="")
@@ -166,7 +165,6 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
         for fname in glob.glob(os.path.join(tmpdir, 'output_%s_*' % timestamp)):
             if os.path.exists(fname): 
                 os.remove(fname)
-
 
     return zonal
 

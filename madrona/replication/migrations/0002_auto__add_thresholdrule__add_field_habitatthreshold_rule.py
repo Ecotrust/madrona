@@ -21,7 +21,6 @@ class Migration(SchemaMigration):
         # Adding field 'HabitatThreshold.rule'
         db.add_column('replication_habitatthreshold', 'rule', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['replication.ThresholdRule'], null=True, blank=True), keep_default=False)
 
-
     def backwards(self, orm):
 
         # Deleting model 'ThresholdRule'
@@ -29,7 +28,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'HabitatThreshold.rule'
         db.delete_column('replication_habitatthreshold', 'rule_id')
-
 
     models = {
         'intersection.featuremapping': {

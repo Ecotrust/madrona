@@ -12,7 +12,6 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.gis.geos import GEOSGeometry 
 from django.conf import settings
 
-
 # used by some of the tests to temporarily create a template file
 def create_template(path):
     d = os.path.dirname(__file__)
@@ -273,7 +272,6 @@ class DeleteTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(TestDeleteFeature.objects.all().count(), 0)
 
-
 @register
 class CreateFormTestFeature(Feature):
     class Options:
@@ -314,7 +312,6 @@ class CreateTestFeature(Feature):
 class CreateTestForm(FeatureForm):
     class Meta:
         model = CreateTestFeature
-
 
 class CreateTest(TestCase):
 
@@ -564,7 +561,6 @@ class LinkTestFeatureForm(FeatureForm):
     class Meta:
         model = LinkTestFeature
 
-
 class LinkTest(TestCase):
 
     def setUp(self):
@@ -636,7 +632,6 @@ class LinkTest(TestCase):
         response = self.client.get(link.reverse(self.test_instance))
         self.assertEqual(response.status_code, 403)        
 
-
     def test_403_response_multiple_instances(self):
         """Should not be able to edit shapes a user doesn't own. Test to make
         sure every feature in a request is checked.
@@ -683,7 +678,6 @@ class GenericLinksTestForm(FeatureForm):
     class Meta:
         model = GenericLinksTestFeature
 
-
 @register
 class OtherGenericLinksTestFeature(Feature):
     class Options:
@@ -694,7 +688,6 @@ class OtherGenericLinksTestFeature(Feature):
                 type="application/shapefile",
                 select='multiple single'),
         )
-
 
 class OtherGenericLinksTestForm(FeatureForm):
     class Meta:
@@ -759,8 +752,6 @@ class GenericLinksTest(TestCase):
         self.assertRegexpMatches(response.content, r'GenericLinksTestFeature')
         self.assertRegexpMatches(response.content, 
             r'OtherGenericLinksTestFeature')
-
-
 
 def delete_w_contents(request, instances):
     return HttpResponse('Deleted')
@@ -872,7 +863,6 @@ class TestFolderForm(FeatureForm):
     class Meta:
         model = TestFolder
 
-
 TYPE_CHOICES = (
     ('W', 'Wind'),
     ('H', 'Hydrokinetic'),
@@ -922,7 +912,6 @@ class Shipwreck(PointFeature):
 class ShipwreckForm(FeatureForm):
     class Meta:
         model = Shipwreck
-
 
 class JsonSerializationTest(TestCase):
 
@@ -1094,7 +1083,6 @@ class CopyTest(TestCase):
         self.assertRegexpMatches(response['X-Madrona-Select'], 
             r'features_testmpa_\d')
 
-
 class SpatialTest(TestCase):
 
     def setUp(self):
@@ -1149,7 +1137,6 @@ class SpatialTest(TestCase):
         response = self.client.get(url)
         errors = kml_errors(response.content)
         self.assertFalse(errors,"invalid KML %s" % str(errors))
-
 
 class CollectionTest(TestCase):
 
@@ -1325,7 +1312,6 @@ class CollectionTest(TestCase):
         children = folder1_copy.feature_set(recurse=True)
         self.assertEqual(len(children),3, 
            "Folder1_copy should contain copies folder2, mpa1, mpa2 but doesn't")
-
 
 class SharingTestCase(TestCase):
 
@@ -1516,7 +1502,6 @@ class SharingTestCase(TestCase):
         # User3 should not see it (since they're not part of Group1)
         viewable, response = self.mpa1.is_viewable(self.user3)
         self.assertEquals( viewable, False )
-
 
     def test_groups_users_sharing_with(self):
         """

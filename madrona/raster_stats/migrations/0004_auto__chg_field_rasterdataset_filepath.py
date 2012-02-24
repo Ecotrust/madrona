@@ -11,12 +11,10 @@ class Migration(SchemaMigration):
         # Changing field 'RasterDataset.filepath'
         db.alter_column('raster_stats_rasterdataset', 'filepath', self.gf('django.db.models.fields.FilePathField')(path='c:\\dev\\bioregions\\madrona\\madrona\\raster_stats\\test_data', max_length=255, recursive=True))
 
-
     def backwards(self, orm):
 
         # Changing field 'RasterDataset.filepath'
         db.alter_column('raster_stats_rasterdataset', 'filepath', self.gf('django.db.models.fields.FilePathField')(path='c:\\dev\\bioregions\\madrona\\madrona\\raster_stats\\test_data', max_length=100, recursive=True))
-
 
     models = {
         'raster_stats.rasterdataset': {

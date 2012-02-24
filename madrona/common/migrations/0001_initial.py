@@ -16,12 +16,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('common', ['KmlCache'])
 
-
     def backwards(self, orm):
 
         # Deleting model 'KmlCache'
         db.delete_table('common_kmlcache')
-
 
     models = {
         'common.kmlcache': {
