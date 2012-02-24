@@ -633,7 +633,7 @@ class FeatureCollection(Feature):
           <open>0</open>
           %s
         </Folder>
-        """ %  (self.uid, self.name, ''.join(kmls))
+        """ % (self.uid, self.name, ''.join(kmls))
 
     @property
     def kml_style(self):
