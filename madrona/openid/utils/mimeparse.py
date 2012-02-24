@@ -52,7 +52,7 @@ def parse_media_range(range):
        in with a proper default if necessary.
        """
     (type, subtype, params) = parse_mime_type(range)
-    if not params.has_key('q') or not params['q'] or \
+    if not 'q' in params or not params['q'] or \
             not float(params['q']) or float(params['q']) > 1\
             or float(params['q']) < 0:
         params['q'] = '1'
@@ -74,7 +74,7 @@ def quality_parsed(mime_type, parsed_ranges):
     for (type, subtype, params) in parsed_ranges:
         param_matches = reduce(lambda x, y: x+y, [1 for (key, value) in \
                 target_params.iteritems() if key != 'q' and \
-                params.has_key(key) and value == params[key]], 0)
+                key in params and value == params[key]], 0)
         if (type == target_type or type == '*' or target_type == '*') and \
                 (subtype == target_subtype or subtype == '*' or target_subtype == '*'):
             fitness = (type == target_type) and 100 or 0
