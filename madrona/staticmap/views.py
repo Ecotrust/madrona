@@ -95,10 +95,14 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         try:
             ugeom = model.objects.filter(pk__in=pks).collect(field_name=geomfield).transform(srid,clone=True)
             bbox = ugeom.extent
-            if bbox[0] < minx: minx = bbox[0]
-            if bbox[1] < miny: miny = bbox[1]
-            if bbox[2] > maxx: maxx = bbox[2]
-            if bbox[3] > maxy: maxy = bbox[3]
+            if bbox[0] < minx: 
+                minx = bbox[0]
+            if bbox[1] < miny: 
+                miny = bbox[1]
+            if bbox[2] > maxx: 
+                maxx = bbox[2]
+            if bbox[3] > maxy: 
+                maxy = bbox[3]
         except TypeError as e:
             log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e)) 
             pass

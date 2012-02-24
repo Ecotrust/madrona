@@ -52,7 +52,8 @@ def discover_extensions(openid_url):
             use_sreg = sreg.supportsSReg(endpoint)
         if not use_ax:
             use_ax = endpoint.usesExtension("http://openid.net/srv/ax/1.0")
-        if use_ax and use_sreg: break
+        if use_ax and use_sreg: 
+            break
     if not use_sreg and not use_ax:
         use_sreg = True
     return use_ax, use_sreg

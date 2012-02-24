@@ -213,8 +213,10 @@ def sum_results(results):
                     summed[hab][k] = None
                 elif k in must_be_equal:
                     # we've gotten this key in already and it must be equal across all sub_dicts that we're summing
-                    try: assert(summed[hab][k]==v)
-                    except: raise Exception('sum_results has been passed an incorrect results matrix.')
+                    try: 
+                        assert(summed[hab][k]==v)
+                    except: 
+                        raise Exception('sum_results has been passed an incorrect results matrix.')
     return summed
 
 

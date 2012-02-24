@@ -9,7 +9,8 @@ from django.contrib import admin
 def roles(self):
     #short_name = unicode # function to get group name
     p = sorted([u"<a title='%s'>%s</a>" % (x, x) for x in self.groups.all()]) 
-    if self.user_permissions.count(): p += ['+']
+    if self.user_permissions.count():
+        p += ['+']
     value = ' | '.join(p)
     return mark_safe("%s" % value)
 roles.allow_tags = True
