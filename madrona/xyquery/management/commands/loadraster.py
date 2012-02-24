@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from osgeo import gdal
 from subprocess import Popen
 from django.core.management.base import BaseCommand, CommandError

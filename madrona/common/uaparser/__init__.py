@@ -1,4 +1,5 @@
-import regexes, parser
+import regexes
+import parser
 import clientos
 
 def int_or_zero(x):

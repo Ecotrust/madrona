@@ -59,7 +59,8 @@ class Command(BaseCommand):
                 # BEGIN profiling
                 import cProfile
                 import pstats
-                import time, tempfile
+                import time
+                import tempfile
 
                 profile_temp_dir = None
                 if profile_temp_dir is not None:
