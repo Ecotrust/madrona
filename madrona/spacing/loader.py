@@ -3,7 +3,7 @@ from madrona.spacing.models import *
 
 def load_land(file_name, verbose=True):
     mapping = {
-        'geometry' : 'POLYGON',
+        'geometry': 'POLYGON',
     }
     lm = prep_layer_mapping(file_name, Land, mapping)
     lm.save(strict=True, verbose=verbose)

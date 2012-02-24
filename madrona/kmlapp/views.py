@@ -63,7 +63,7 @@ def get_data_for_feature(user, uid):
     try:
         f = get_feature_by_uid(uid)
     except:
-        return False , HttpResponse("Feature %s does not exist" % uid, status=404)
+        return False, HttpResponse("Feature %s does not exist" % uid, status=404)
 
     viewable, response = f.is_viewable(user)
     if not viewable:

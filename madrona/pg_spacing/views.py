@@ -1,4 +1,4 @@
-from django.template import RequestContext, loader, Context , Template
+from django.template import RequestContext, loader, Context, Template
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings

@@ -155,17 +155,17 @@ class Grass:
     '''
     def setupTmpGrassEnv(self, mktmp=True):
         grassenv = {
-            'HOME' : self.grass_tmp,
-            'PATH' : self.grass_path,
-            'GRASS_VERSION' : self.grass_version,
+            'HOME': self.grass_tmp,
+            'PATH': self.grass_path,
+            'GRASS_VERSION': self.grass_version,
             'GISBASE': self.gisbase,
-            'LD_LIBRARY_PATH' : self.grass_lib_path,                        
-            'LOCATION_NAME' : self.location,
-            'MAPSET' : self.srcMapset,
-            'GISDBASE' : self.gisdbase,
-            'GRASS_GUI' : 'text',
-            'GIS_LOCK' : str(os.getpid()),
-            'GISRC' : self.grassRcFile        
+            'LD_LIBRARY_PATH': self.grass_lib_path,                        
+            'LOCATION_NAME': self.location,
+            'MAPSET': self.srcMapset,
+            'GISDBASE': self.gisdbase,
+            'GRASS_GUI': 'text',
+            'GIS_LOCK': str(os.getpid()),
+            'GISRC': self.grassRcFile        
         }
         
         for key in grassenv.keys():
