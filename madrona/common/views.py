@@ -109,7 +109,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         response.set_cookie("mm_last_checked_news", now)
 
     if set_viewed_cookie:
-        max_age = 365*24*60*60  #one year
+        max_age = 365*24*60*60  # one year
         expire_stamp = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
         response.set_cookie("mm_already_viewed","True", expires=expire_stamp)
 

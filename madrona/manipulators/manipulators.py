@@ -271,9 +271,9 @@ class ClipToShapeManipulator(BaseManipulator):
         #if there was no overlap (intersection was empty)
         if clipped_shape.area <= self.zero:
             status_html = self.do_template("2")
-            message = "intersection resulted in empty geometry"  #ALTERATION #1
+            message = "intersection resulted in empty geometry"  # ALTERATION #1
             #return self.result(clipped_shape, target_shape, status_html, message)
-            raise self.HaltManipulations(message, status_html)   #ALTERATION #2
+            raise self.HaltManipulations(message, status_html)   # ALTERATION #2
 
         #if there was overlap
         largest_poly = LargestPolyFromMulti(clipped_shape)
