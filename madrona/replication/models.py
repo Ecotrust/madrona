@@ -68,7 +68,7 @@ class HabitatThreshold(models.Model):
     
     def save(self, *args, **kwargs):
         if self.minimum_quantity!=None and self.rule!=None:
-            raise Exception, "You can specify minimum quantity or a rule.  You may not specify both."
+            raise Exception("You can specify minimum quantity or a rule.  You may not specify both.")
         else:
             super(HabitatThreshold, self).save(*args, **kwargs)
             
