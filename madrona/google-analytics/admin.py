@@ -10,7 +10,7 @@ if getattr(settings, 'GOOGLE_ANALYTICS_MODEL', False):
         extra = 1
     class SiteAdminGA(admin.ModelAdmin):
         list_display = ('domain', 'name')
-        model        = Site 
-        inlines      = [AnalyticsInline]
+        model = Site 
+        inlines = [AnalyticsInline]
     admin.site.unregister(Site)
     admin.site.register(Site, SiteAdminGA)

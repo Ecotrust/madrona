@@ -13,7 +13,7 @@ from django.contrib.gis import gdal
 
 class UploadForm(forms.Form):
 
-    file_obj  = forms.FileField(label=_('Upload a Zipped Shapefile'))
+    file_obj = forms.FileField(label=_('Upload a Zipped Shapefile'))
     # TODO:
     # collect attribute info to stick in potential model
     #title = forms.CharField(max_length=50,label=_('Title'))

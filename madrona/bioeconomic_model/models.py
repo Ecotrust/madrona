@@ -142,7 +142,7 @@ class StudyRegion(models.Model):
     objects = StudyRegionManager()
 
     def __unicode__(self):
-        return 'Study Region: %s'  % self.name
+        return 'Study Region: %s' % self.name
 
 class PolygonGridManager(models.GeoManager):
 
