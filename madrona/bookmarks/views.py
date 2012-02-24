@@ -25,8 +25,8 @@ def show_bookmark(request, bookmark_id):
     get = request.GET.copy()
     camera_params = ["Latitude", "Longitude", "Altitude", "Heading", "Tilt", "Roll", "AltitudeMode", 'publicstate']
     for p in camera_params:
-        get[p] = b.__dict__[lower_first(p)];
-    request.GET = get;
+        get[p] = b.__dict__[lower_first(p)]
+    request.GET = get
     return map(request)
 
 def bookmark_state_json(request, bookmark_id):

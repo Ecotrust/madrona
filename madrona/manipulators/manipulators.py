@@ -67,7 +67,7 @@ def display_kml(geom):
 def parsekmlpoly(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Polygon/{http://www.opengis.net/kml/2.2}outerBoundaryIs/{http://www.opengis.net/kml/2.2}LinearRing/{http://www.opengis.net/kml/2.2}coordinates').text
-    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '')
     lra = []
     for yxz in coords.split(' '):
         a = yxz.split(',')
@@ -80,7 +80,7 @@ def parsekmlpoly(kmlstring):
 def parsekmllinestring(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}LineString/{http://www.opengis.net/kml/2.2}coordinates').text
-    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '')
     lra = []
     for yxz in coords.split(' '):
         a = yxz.split(',')
@@ -92,7 +92,7 @@ def parsekmllinestring(kmlstring):
 def parsekmlpoint(kmlstring):
     e = fromstring(kmlstring)
     coords = coords = e.find('{http://www.opengis.net/kml/2.2}Placemark/{http://www.opengis.net/kml/2.2}Point/{http://www.opengis.net/kml/2.2}coordinates').text
-    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '');
+    coords = coords.lstrip(' ').rstrip(' ').replace('\n', '').replace('\t', '')
     lra = []
     for yxz in coords.split(' '):
         a = yxz.split(',')
