@@ -202,8 +202,8 @@ class Feature(models.Model):
             return True
             
         if isinstance(groups,Group):
-             # Only a single group was provided, make a 1-item list
-             groups = [groups]
+            # Only a single group was provided, make a 1-item list
+            groups = [groups]
 
         for group in groups:
             assert isinstance(group, Group)

@@ -339,9 +339,9 @@ def valid_browser(ua):
 
     for sb in supported_browsers:
         if bp.family == sb[0] and \
-           ((bp.v1 == sb[1] and bp.v2 >= sb[2]) or bp.v1 > sb[1]) and \
-           bp.platform == sb[3]:
-               return True
+            ((bp.v1 == sb[1] and bp.v2 >= sb[2]) or bp.v1 > sb[1]) and \
+            bp.platform == sb[3]:
+                return True
 
     return False
 

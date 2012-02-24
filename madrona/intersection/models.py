@@ -355,10 +355,10 @@ class MultiFeatureShapefile(Shapefile):
             fn = str(os.path.abspath(os.path.join(tempdir, fn)))
         
             if os.path.exists(fn):
-              driver.DeleteDataSource(fn)
+                driver.DeleteDataSource(fn)
             ds_out = driver.CreateDataSource(fn)
             if ds_out is None:
-              raise 'Could not create file: %s' % fn
+                raise 'Could not create file: %s' % fn
             files.update({file_name: ds_out})
         
         zipped_files = {}
@@ -470,10 +470,10 @@ class MultiFeatureShapefile(Shapefile):
         fn = str(os.path.abspath(os.path.join(tempdir, fn)))
         
         if os.path.exists(fn):
-          driver.DeleteDataSource(fn)
+            driver.DeleteDataSource(fn)
         ds_out = driver.CreateDataSource(fn)
         if ds_out is None:
-          raise 'Could not create file: %s' % fn
+            raise 'Could not create file: %s' % fn
         
         if gname.lower().endswith('polygon'):
             geometry_type = ogr.wkbMultiPolygon
