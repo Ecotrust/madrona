@@ -16,7 +16,8 @@
             {% if user.is_authenticated %}profile_url: '{% url user_profile-form user.username %}',{% endif %}
             registration_url: '{% url registration_register %}',
             help_url: '{% url help-main %}',
-            signin_url: '{% url user_signin %}'
+            signin_url: '{% url user_signin %}',
+            refreshButton: false
         };
         
         // Used to identify whether the about or news panel should be shown
@@ -33,7 +34,7 @@
         {% if camera %}
             options.rememberMapExtent = false; 
         {% endif %}
- 
+           
         {% block enhancedContent %}
             options.displayEnhancedContent = false;
         {% endblock enhancedContent %}

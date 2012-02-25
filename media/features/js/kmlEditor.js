@@ -66,24 +66,29 @@ madrona.features.kmlEditor = (function(){
         tbar = new goog.ui.Toolbar();
         // tbar.setEnabled(false);
         
-        // add refresh button
-        refresh_button = new goog.ui.ToolbarButton('Refresh');
-        refresh_button.setEnabled(false);
-        goog.events.listen(refresh_button, 'action', function(e) {
-            that.refresh();
-        });
-        tbar.addChild(refresh_button, true);
-        buttons.push(refresh_button);
-        
-        tbar.addChild(new goog.ui.ToolbarSeparator(), true);
+        if (options.refreshButton === true) {
+            // add refresh button
+            refresh_button = new goog.ui.ToolbarButton('Refresh');
+            refresh_button.setEnabled(false);
+            goog.events.listen(refresh_button, 'action', function(e) {
+                that.refresh();
+            });
+            tbar.addChild(refresh_button, true);
+            buttons.push(refresh_button);
+            
+            tbar.addChild(new goog.ui.ToolbarSeparator(), true);
+        }
         
         // add the create button and menu
         create_menu = new goog.ui.Menu();
-        create_button = new goog.ui.ToolbarMenuButton('Create New', create_menu);
+        create_button = new goog.ui.ToolbarMenuButton('Create', create_menu);
         create_button.setVisible(false);
         menus.push(create_menu);
         tbar.addChild(create_button, true);
         goog.events.listen(create_menu, 'action', onAction);
+
+        // Separator
+        tbar.addChild(new goog.ui.ToolbarSeparator(), true);
         
         // Add attributes button
         attr = new goog.ui.ToolbarButton('');
@@ -93,6 +98,9 @@ madrona.features.kmlEditor = (function(){
         goog.events.listen(attr, 'action', onAction);
         tbar.addChild(attr, true);
 
+        // Separator
+        //tbar.addChild(new goog.ui.ToolbarSeparator(), true);
+
         // Add edit menu
         edit_menu = new goog.ui.Menu();
         edit_button = new goog.ui.ToolbarMenuButton('Edit', edit_menu);
@@ -100,6 +108,9 @@ madrona.features.kmlEditor = (function(){
         edit_button.setVisible(false);
         tbar.addChild(edit_button, true);
         goog.events.listen(edit_menu, 'action', onAction);
+
+        // Separator
+        //tbar.addChild(new goog.ui.ToolbarSeparator(), true);
         
         
         // Add Downloads/export menu
@@ -198,7 +209,9 @@ madrona.features.kmlEditor = (function(){
             attr.action = that.workspace.actions.getByRel('self')[0];
             attr.setCaption(that.workspace.actions.getByRel('self')[0].title);
             attr.setVisible(true);
-            refresh_button.setEnabled(true);
+            if(typeof refresh_button != 'undefined'){
+                refresh_button.setEnabled(true);
+            }
             enableDragDrop();
         }
         
@@ -215,7 +228,6 @@ madrona.features.kmlEditor = (function(){
                 button.setVisible(true);
                 // button.setEnabled(true);
                 jQuery.each(createActions, function(i, action){
-                    var img = 'http://wp.hestia.ecotrust.org/media/common/images/watershed.png'; 
                     var cls = action.links[0].featureClass.id;
                     var item = new goog.ui.MenuItem(action.title);
                     item.addClassName(cls);
@@ -319,8 +331,13 @@ madrona.features.kmlEditor = (function(){
             var i = tbar.getChildCount();
             while(i){
                 i--;
-                if(child === attr || child === refresh_button){
+                if (child === attr){
                     continue;
+                }
+                if (typeof refresh_button !== 'undefined') {
+                    if (child === refresh_button){
+                        continue;
+                    }
                 }
                 var child = tbar.getChildAt(i);
                 if(child instanceof goog.ui.ToolbarMenuButton){

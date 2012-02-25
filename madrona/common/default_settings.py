@@ -231,7 +231,7 @@ HELP_EMAIL = 'help@madrona.org'
 STATICMAP_AUTOZOOM = True
 
 TITLES = {
-    'self': 'Attributes',
+    'self': 'View',
 }
 
 # Do you want bookmarks to show up in the kmleditor (True) or just the tool panel (False)?

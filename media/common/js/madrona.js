@@ -245,7 +245,8 @@ var madrona = (function(){
                     appendTo: '#myshapestree',
                     url: options.myshapes[i].url,
                     enhancedContent: options.displayEnhancedContent,
-                    panel: panel
+                    panel: panel,
+                    refreshButton: options.refreshButton
                 });
                 if(callback){
                     $(editor).bind('kmlLoaded', function(event, e, kmlObject){
@@ -291,7 +292,8 @@ var madrona = (function(){
                     appendTo: '#sharedshapestree',
                     url: options.sharedshapes[i],
                     enhancedContent: options.displayEnhancedContent,
-                    panel: panel
+                    panel: panel,
+                    refreshButton: options.refreshButton
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
                     $('#sidebar').tabs('select', "#MyShapes");
