@@ -44,6 +44,11 @@ madrona.features.kmlEditor = (function(){
         var menus = [];
         var buttons = [];
         var selection;
+        var textLookup = {
+            'saving': 'Saving Changes'
+        }
+        $.extend( textLookup, options.textLookup );
+
         // Keep track of previously selected items turned off for editing, in
         // case the user chooses to cancel
         var previousSelection;
@@ -528,8 +533,8 @@ madrona.features.kmlEditor = (function(){
                             manipulator.destroy();
                         }
                     }
-                    panel.spin('Saving changes');
-                    $(that).trigger('saving', ["Saving changes"]);
+                    panel.spin(textLookup['saving']);
+                    $(that).trigger('saving', [textLookup['saving']]);
                     return true;
                 },
                 success: function(text, status, req, formel){

@@ -246,6 +246,7 @@ var madrona = (function(){
                     url: options.myshapes[i].url,
                     enhancedContent: options.displayEnhancedContent,
                     panel: panel,
+                    textLookup: options.textLookup,
                     refreshButton: options.refreshButton
                 });
                 if(callback){
@@ -293,6 +294,7 @@ var madrona = (function(){
                     url: options.sharedshapes[i],
                     enhancedContent: options.displayEnhancedContent,
                     panel: panel,
+                    textLookup: options.textLookup,
                     refreshButton: options.refreshButton
                 });
                 $(editor.tree).bind('copyDone', function(e, location) {
