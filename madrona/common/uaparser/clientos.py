@@ -32,7 +32,7 @@ def client_os(user_agent):
         result_dict = result.groupdict()
         full_platform = result_dict['platform_token']
         platform_values = full_platform.split(' ')
-        if platform_values[0] in ('Windows', 'Linux', 'Mac'):
+        if platform_values[0] in ('Windows', 'Linux', 'Mac', 'Ubuntu'):
             platform = platform_values[0]
         elif platform_values[1] in ('Mac',):
             # Mac is given as "PPC Mac" or "Intel Mac"
