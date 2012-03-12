@@ -10,3 +10,4 @@
 * Matthew McClintock (UCSB)
 * Chris MacDonald (UCSB)
 * Ken Vollmer (Ecotrust)
+* Alexi Peters (Farallon Geographics)
