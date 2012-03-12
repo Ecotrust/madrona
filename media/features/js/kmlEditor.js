@@ -515,14 +515,14 @@ madrona.features.kmlEditor = (function(){
                         var errMsg = false;
                         if(manipulator.isDefiningShape()){
                             if(manipulator.isInvalidGeometry()){
-                                errMsg = 'The shape you defined is invalid. Please correct any mistakes using the Geometry form.';
+                                errMsg = 'The shape you defined is invalid. Return to Step 1 and click "Edit Shape" to correct any mistakes.';
                             }else if(manipulator.isDefiningNewShape()){
                                 errMsg = 'You must finish defining your shape before creating this feature. Double-Click on the last vertex to finish drawing your shape.';
                             }else{
-                                errMsg = 'You must finish defining your shape before creating this feature. Click "Done Editing", when you are finished';
+                                errMsg = 'You must finish defining your shape before creating this feature. Return to Step 1 and click "Done Editing", when you are finished.';
                             }
                         }else if(manipulator.isShapeDefined() === false){
-                            errMsg = 'You must create a geometry for this feature before continuing. Click on "Draw Shape" to begin.';
+                            errMsg = 'You must create a geometry for this feature before continuing. Return to Step 1 and click on "Draw Shape" to begin.';
                         }
                         if(errMsg){
                             tabs.tabs('select', '#PanelGeometry');

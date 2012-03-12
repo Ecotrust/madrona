@@ -354,7 +354,6 @@ class DifferenceFromShapeManipulator(BaseManipulator):
     def manipulate(self):
         #extract target_shape geometry
         target_shape = self.target_to_valid_geom(self.target_shape)
-
         #extract diff_geom geometry
         try:
             diff_geom = GEOSGeometry(self.diff_geom)
