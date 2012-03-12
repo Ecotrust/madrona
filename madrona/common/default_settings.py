@@ -137,7 +137,7 @@ LOGIN_URL = '/accounts/signin/'
 
 LOGIN_REDIRECT_URL = '/'
 
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+STATIC_URL = '/media/admin/'
 
 # KML SETTINGS
 KML_SIMPLIFY_TOLERANCE = 20 # meters
