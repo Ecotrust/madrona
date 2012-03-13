@@ -29,6 +29,13 @@ class RasterDataset(models.Model):
     def __unicode__(self):
         return unicode(self.name + " raster at " + self.filepath)
 
+    @property
+    def is_valid(self):
+        # TODO is there a CHEAP way to check for GDAL open?
+        if not os.path.exists(self.filepath):
+            return False
+        return True
+
 class ZonalCategory(models.Model):
     category = models.IntegerField()
     count = models.IntegerField()
