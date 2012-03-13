@@ -109,6 +109,14 @@ def process_is_complete(polling_url=None, task_id=None):
     else:
         return False
 
+#returns status string
+def get_process_status(polling_url=None, task_id=None):
+    result = __get_asyncresult(polling_url, task_id)
+    if result is not None:
+        return result.status
+    else:
+        return None
+
 #returns result.result from celery table
 def get_process_result(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
