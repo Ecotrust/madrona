@@ -4,7 +4,7 @@
 {% block content %}
 
 {% for object in latest %}
-{% url 'news-detail' object.published_on.year,object.published_on.month,object.published_on.day,object.slug as the_url %}
+{% url 'news-detail' object.published_on.year object.published_on.month object.published_on.day object.slug as the_url %}
 
 <div>
     <h2><a href="{{the_url}}" class="panel_link" title="{{ object.summary }}">{{ object.title }}</a></h2>
