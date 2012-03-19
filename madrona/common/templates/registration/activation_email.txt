@@ -2,7 +2,7 @@
 {% load appname %}
 Welcome to {% appname %}. To begin, please go to the following web address to activate your account:
 
-{% absurl registration_activate activation_key %} 
+{% absurl 'registration_activate' activation_key %} 
 
 Thanks,
 The {% appname %} Team

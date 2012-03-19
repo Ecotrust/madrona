@@ -28,7 +28,7 @@
             <script src="{{MEDIA_URL}}wave/js/gadgetMessenger.js" type="text/javascript" charset="utf-8"></script>
             <script src="{{MEDIA_URL}}wave/js/snapshot.js" type="text/javascript" charset="utf-8"></script>
             <script type="text/javascript" charset="utf-8">
-                window.app_url = '{% absurl map %}';
+                window.app_url = '{% absurl 'map' %}';
                 window.media_url = '{{MEDIA_URL}}';
             </script>
         ]]>

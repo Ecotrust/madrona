@@ -15,7 +15,7 @@
     <open>0</open>
     <visibility>0</visibility>
     <Link>
-    <href>{% absurl kmlapp-publicshared-kmz session_key %}</href>
+    <href>{% absurl 'kmlapp-publicshared-kmz' session_key %}</href>
     </Link>
     </NetworkLink>
 
@@ -35,7 +35,7 @@
         <open>0</open>
         <visibility>0</visibility>
         <Link>
-         <href>{% absurl kmlapp-sharedby-kmz input_shareuser=user.id input_sharegroup=group_user.group.id session_key=session_key %}</href>
+         <href>{% absurl 'kmlapp-sharedby-kmz' input_shareuser=user.id input_sharegroup=group_user.group.id session_key=session_key %}</href>
         </Link>
       </NetworkLink>
   {% endfor %}

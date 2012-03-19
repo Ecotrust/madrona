@@ -1,6 +1,7 @@
 import urlparse
 from django.template import Library
-from django.template.defaulttags import URLNode, url
+from django.template.defaulttags import URLNode
+from django.templatetags.future import url
 from django.contrib.sites.models import Site
 
 register = Library()

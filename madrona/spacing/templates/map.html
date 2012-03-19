@@ -28,7 +28,7 @@ function fishPath(pnt1, pnt2) {
 	var netLink = ge.createNetworkLink('');
 	netLink.setDescription('NetworkLink open to get path');
 	netLink.setName('Fish Path NetworkLink');
-	var url_string = "{% absurl fish_distance_kml %}"
+	var url_string = "{% absurl 'fish_distance_kml' %}"
 	url_string += '?lat1=' + pnt1.getLatitude();
 	url_string += '&lon1=' + pnt1.getLongitude();
 	url_string += '&lat2=' + pnt2.getLatitude();
@@ -49,7 +49,7 @@ function addLand() {
 
 	// NetworkLink/Link
 	var link = ge.createLink('');
-	link.setHref('{% absurl land_kml %}');
+	link.setHref('{% absurl 'land_kml' %}');
 	networkLink.setLink(link);
 	// add the network link to earth
 	ge.getFeatures().appendChild(networkLink);
