@@ -1,5 +1,6 @@
 {% extends 'common/panel.html' %}
 {% load absurl %}
+{% load url from future %} 
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
 <script type="text/javascript">
@@ -14,7 +15,7 @@
         }
         if (tree) { 
             $('#bookmark_loading').show();
-            $.getJSON('{% url bookmark-state-json instance.pk %}', function(data) {
+            $.getJSON('{% url 'bookmark-state-json' instance.pk %}', function(data) {
                 tree.previousState = data;
                 tree.refresh();
                 $('#bookmark_loading').hide();

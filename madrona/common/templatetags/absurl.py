@@ -12,7 +12,7 @@ class AbsoluteURLNode(URLNode):
         return urlparse.urljoin(domain, path)
 
 def absurl(parser, token, node_cls=AbsoluteURLNode):
-    """Just like {% url %} but ads the domain of the current site."""
+    """Just like {% url 'urlname' %} but ads the domain of the current site."""
     node_instance = url(parser, token)
     return node_cls(view_name=node_instance.view_name,
         args=node_instance.args,

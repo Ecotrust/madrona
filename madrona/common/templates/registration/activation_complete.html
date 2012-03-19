@@ -1,4 +1,5 @@
 {% extends "registration/reg_base.html" %}
+{% load url from future %}
 {% load appname %}
 
 {% block title %}Congratulations - Your account with {% appname %} is activated.{% endblock %}
@@ -6,7 +7,7 @@
 {% block content %}
 <p>Your account is now ready to use.</p>
 
-<p>If you're ready to begin, please <a href="{% url auth_login %}">login</a>.</p>
+<p>If you're ready to begin, please <a href="{% url 'auth_login' %}">login</a>.</p>
 
 {% if group_request_email %}
 <p>You may also request to be added to a group. Group membership allows sharing and collaboration between group members through {% appname %} but requires an approval process. Please send an email to <a href="mailto:{{group_request_email}}">{{group_request_email}}</a> with your username and group requests.

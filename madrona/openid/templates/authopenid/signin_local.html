@@ -1,6 +1,7 @@
 {# extends "authopenid/base.html" #}
 {% extends 'common/panel.html' %}
 {% load appname %}
+{% load url from future %}
 {% block title %}Sign In{% endblock title %}
 
 {% block panel %}
@@ -35,7 +36,7 @@
 
 <div class="login" style="margin-top:25px">
 
-<form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
+<form id="auth_form" name="auth_form" action="{% url 'user_signin' %}" method="post">
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
         <legend><strong>Sign In To {% appname %}</strong></legend> 
@@ -45,7 +46,7 @@
 	</fieldset>	
 </form>
 
-<p><a class="panel_link" href="{% url auth_password_reset %}">Forgot your password?</a></p>
+<p><a class="panel_link" href="{% url 'auth_password_reset' %}">Forgot your password?</a></p>
 </div>	
 {% endblock panel %}
 

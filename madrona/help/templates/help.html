@@ -1,5 +1,6 @@
 {% extends 'common/panel.html' %}
 {% load appname %}
+{% load url from future %} 
 {% block title %}{% appname %} Help{% endblock %}
 
 {% block panel %}
@@ -22,7 +23,7 @@
     <div id="movies">
         {% for screencast in screencast_list %}
         <p class="screencast-link" style="margin-bottom:85px;">
-        <a href="{% url screencasts-show-youtube-video screencast.pk %}" target="_blank">
+        <a href="{% url 'screencasts-show-youtube-video' screencast.pk %}" target="_blank">
             <img src="{{screencast.image.url}}" height="160" align="left" />
             <span>{{screencast.title}}</span>
             <br />

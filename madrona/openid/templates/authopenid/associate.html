@@ -1,5 +1,6 @@
 {% extends "authopenid/base.html" %}
 {% load i18n %}
+{% load url from future %}
 
 {% block content %}
 {% if msg %}
@@ -12,7 +13,7 @@
 
 <div class="login">
 
-<form name="openid_form" id="openid_form" action="{% url user_associate %}" method="post">
+<form name="openid_form" id="openid_form" action="{% url 'user_associate' %}" method="post">
     <input type="hidden" name="action" value="verify" />
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>

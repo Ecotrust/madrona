@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 {% load analytics %}
+{% load url from future %}
 {% load appname %}
 <html lang="en">
 <head>
@@ -14,7 +15,7 @@
     <script src="{{MEDIA_URL}}kmltree/dist/kmltree.min.js" type="text/javascript" charset="utf-8"></script>
 
     <link rel="stylesheet" href="{{MEDIA_URL}}kmltree/dist/kmltree.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="{% url feature-tree-css %}" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="{% url 'feature-tree-css' %}" type="text/css" media="screen" charset="utf-8">
 
     {% load compressed %}
     {% compressed_css 'application' %}

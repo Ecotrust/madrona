@@ -1,5 +1,6 @@
 {% extends "common/base.html" %}
 {% load appname absurl %}
+{% load url from future %}
 {% block head %}
     <script type="text/javascript">
 
@@ -11,12 +12,12 @@
         
         var options = {
             media_url: "{{MEDIA_URL}}",
-            news_url: '{% url news-main %}',
-            about_url: '{% url news-about %}',
-            {% if user.is_authenticated %}profile_url: '{% url user_profile-form user.username %}',{% endif %}
-            registration_url: '{% url registration_register %}',
-            help_url: '{% url help-main %}',
-            signin_url: '{% url user_signin %}',
+            news_url: '{% url 'news-main' %}',
+            about_url: '{% url 'news-about' %}',
+            {% if user.is_authenticated %}profile_url: '{% url 'user_profile-form' user.username %}',{% endif %}
+            registration_url: '{% url 'registration_register' %}',
+            help_url: '{% url 'help-main' %}',
+            signin_url: '{% url 'user_signin' %}',
             textLookup: {},
             refreshButton: false
         };
@@ -43,29 +44,29 @@
         {% block layersConfig %}
             // setup which kml files are shown in the data layers panel
             {% if is_studyregion %}
-                madrona.addLayer('{% url studyregion-kml %}', {setExtent: true});            
+                madrona.addLayer('{% url 'studyregion-kml' %}', {setExtent: true});            
             {% endif %}
             {% if is_public_layers %}        
-                madrona.addLayer('{% url public-data-layers %}');            
+                madrona.addLayer('{% url 'public-data-layers' %}');            
             {% endif %}
             {% if user.is_authenticated and is_privatekml %}
-                madrona.addLayer('{% url layers-privatekml-list session_key=session_key %}');            
+                madrona.addLayer('{% url 'layers-privatekml-list' session_key=session_key %}');            
             {% endif %}
         {% endblock layersConfig %}
 
         {% block sharedshapes %}
             {% if user.is_authenticated %}
-                options.sharedshapes = ["{% url kmlapp-sharedlinks-kmz input_username=user.username session_key=session_key %}"];
+                options.sharedshapes = ["{% url 'kmlapp-sharedlinks-kmz' input_username=user.username session_key=session_key %}"];
                 options.allow_copy = true;
             {% else %}
-                options.sharedshapes = ["{% url kmlapp-publicshared-kmz 0 %}"];
+                options.sharedshapes = ["{% url 'kmlapp-publicshared-kmz' 0 %}"];
                 options.allow_copy = false;
             {% endif %}
         {% endblock sharedshapes %}
 
         {% block myshapes %}
             {% if user.is_authenticated %}
-                options.myshapes = [{url: "{% url kmlapp-userlinks-kmz input_username=user.username session_key=session_key %}"}];
+                options.myshapes = [{url: "{% url 'kmlapp-userlinks-kmz' input_username=user.username session_key=session_key %}"}];
             {% endif %}
         {% endblock myshapes %}
         {% block addToOptions %}{% endblock addToOptions %}
@@ -118,10 +119,10 @@
             <li><a href="#" id="help">help</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="#" id="profile">my profile</a> | </li>
-            <li><a href="{% url user_signout %}">sign out</a></li>
+            <li><a href="{% url 'user_signout' %}">sign out</a></li>
             {% else %}
             <li><a href="#" id="register">register</a> | </li>
-            <!-- <li><a href="{% url user_signin %}" id="signin">sign in</a></li> -->
+            <!-- <li><a href="{% url 'user_signin' %}" id="signin">sign in</a></li> -->
             <li><a href="#" id="signin">sign in</a></li>
             {% endif %}                
             {% endblock metanavigation %}

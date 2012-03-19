@@ -1,10 +1,8 @@
 {% extends "authopenid/base.html" %}
 {% load i18n %}
-
-
+{% load url from future %}
 
 {% block head %}{% endblock %}
-
 
 {% block content %}
 
@@ -16,7 +14,7 @@
       <div class="login">
           <p> 
           New to this site?
-          <a href="{% url registration_register %}">Register for a new local account</a>.
+          <a href="{% url 'registration_register' %}">Register for a new local account</a>.
           </p>
       </div>
 
@@ -24,7 +22,7 @@
 
       <div class="login" style="width:400px;">
         <p> Associate with existing account </p>
-        <form name="fverify" action="{% url user_register %}" method="POST">
+        <form name="fverify" action="{% url 'user_register' %}" method="POST">
             <input type="hidden" name="next" value="{{ next }}" />
 			<fieldset>
 				<legend>{% trans "An existing account" %}</legend>

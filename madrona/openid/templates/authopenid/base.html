@@ -1,4 +1,5 @@
 {% load appname %}<!DOCTYPE html>
+{% load url from future %}
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
@@ -18,9 +19,9 @@
         </script>
         <![endif]-->
         {% if request.is_secure %}
-        <meta http-equiv="X-XRDS-Location" content="https://{{ request.get_host }}{% url oid_xrdf %}" />
+        <meta http-equiv="X-XRDS-Location" content="https://{{ request.get_host }}{% url 'oid_xrdf' %}" />
         {% else %}
-        <meta http-equiv="X-XRDS-Location" content="http://{{ request.get_host }}{% url oid_xrdf %}" />  
+        <meta http-equiv="X-XRDS-Location" content="http://{{ request.get_host }}{% url 'oid_xrdf' %}" />  
         {% endif %}
 
         <link rel="stylesheet" href="{{ MEDIA_URL }}/openid/css/openid.css" />

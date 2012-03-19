@@ -1,5 +1,6 @@
 {#% extends "registration/reg_base.html" %#}
 {% extends 'common/panel.html' %}
+{% load url from future %} 
 {% load order_by %}
 
 {% block title %}User Profile{% endblock title %}
@@ -11,24 +12,24 @@
 </style>
 
 <h2> Personal Info </h2>
-<form action="{% url user_profile-form profile.user.username%}" method="post">
+<form action="{% url 'user_profile-form' profile.user.username%}" method="post">
     <p><label>Username:</label> <input type="text" readonly value="{{ profile.user.username }}" /> </p>
     {{ uform.as_p }}
     {{ pform.as_p }}
-    <p><label>Password:</label> <a class="panel_link" href="{% url auth_password_change %}">Change password</a></p>
+    <p><label>Password:</label> <a class="panel_link" href="{% url 'auth_password_change' %}">Change password</a></p>
     <input type="submit" value="Submit Changes" />
 </form>
 
 {% if use_openid %}
 <hr/>
 <h2> Identification Providers </h2>
-<p>[<a href="{% url user_associate %}">Associate with an OpenID</a>]</p>
+<p>[<a href="{% url 'user_associate' %}">Associate with an OpenID</a>]</p>
 {% if assoc %}
 <div>
     <p> Your are currently associated with the following OpenID providers.  </p>
     <ul class="groups">
     {% for openid in assoc %}
-    <li class="group"> <span> {{openid.openid_url}}</span><span>[<a href="{% url user_dissociate %}?openid_url={{openid.openid_url}}">Remove</a>]</span> </li>
+    <li class="group"> <span> {{openid.openid_url}}</span><span>[<a href="{% url 'user_dissociate' %}?openid_url={{openid.openid_url}}">Remove</a>]</span> </li>
     {% endfor %}        
     </ul>
 </div>

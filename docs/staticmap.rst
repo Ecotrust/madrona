@@ -95,7 +95,7 @@ Accessing maps by URL
 *********************
 The staticmap can be accessed by url template tags::
 
-    <img align="top" src="{% url staticmap-show 'default' %}">
+    <img align="top" src="{% url 'staticmap-show' 'default' %}">
 
 The staticmap view also takes several parameters to configure the map
 
@@ -112,5 +112,5 @@ The staticmap view also takes several parameters to configure the map
 
 You could incorporate these into a django template as follows::
 
-    <img align="top" src="{% url staticmap-show 'default' %}?uids={{ feature.uid }}&amp;width=154&amp;height=200&amp;show_extent=True">
+    <img align="top" src="{% url 'staticmap-show' 'default' %}?uids={{ feature.uid }}&amp;width=154&amp;height=200&amp;show_extent=True">
 

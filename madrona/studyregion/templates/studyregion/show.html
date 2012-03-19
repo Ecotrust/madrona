@@ -1,4 +1,5 @@
 {% extends "common/base.html" %}
+{% load url from future %} 
 
 {% block head %}
 <script type="text/javascript">
@@ -19,7 +20,7 @@
         
         gex = new GEarthExtensions(pluginInstance);
         $.ajax({
-            url: '{% url madrona.studyregion.views.kml pk %}',
+            url: '{% url 'madrona.studyregion.views.kml' pk %}',
             success: function(data){
                 gex.util.displayKmlString( data, {flyToView: true} );
             },
