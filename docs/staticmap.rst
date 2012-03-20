@@ -83,11 +83,11 @@ As an alternative to editing xml text files, you can try `Quantumnik <http://bit
 
 Variable substitution
 ---------------------
-You may not always know the full path to a local datasource and using relative paths is problematic since deployment details will change the current working directory. To avoid hardcoding paths, you can set use variable substitution to leverage the `MEDIA_ROOT`::
+You may not always know the full path to a local datasource and using relative paths is problematic since deployment details will change the current working directory. To avoid hardcoding paths, you can set use variable substitution to leverage the ``MEDIA_ROOT`` setting::
 
       <Parameter name="file">[[MEDIA_ROOT]]/world_borders</Parameter>
 
-staticmap will load the mapfile text and replace `[[MEDIA_ROOT]]` with settings.MEDIA_ROOT before mapnik loads the mapfile.
+staticmap will load the mapfile text and replace ``[[MEDIA_ROOT]]`` with settings.MEDIA_ROOT before mapnik loads the mapfile.
     
 
 Note on spatial reference systems
