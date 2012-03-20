@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.features: Spatial Content Management &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
-    
+    <title>madrona.features: Spatial Content Management &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.google-analytics: Web traffic analytics" href="google-analytics.html" />
     <link rel="prev" title="madrona.common: Misc Goodies" href="common.html" /> 
@@ -43,7 +40,7 @@
         <li class="right" >
           <a href="common.html" title="madrona.common: Misc Goodies"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -254,17 +251,387 @@ While the base Feature classes define reasonable default styling, it&#8217;s lik
 <h2>Base Classes<a class="headerlink" href="#base-classes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="feature">
 <h3>Feature<a class="headerlink" href="#feature" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="madrona.features.models.Feature">
+<em class="property">class </em><tt class="descname">Feature</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model used for representing user-generated features</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<td>Creator</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<td>Name of the object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<td>When it was created</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<td>When it was last updated.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="madrona.features.models.Feature.add_to_collection">
+<tt class="descname">add_to_collection</tt><big>(</big><em>collection</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.add_to_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add feature to specified FeatureCollection</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.Feature.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.Feature.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.Feature.copy">
+<tt class="descname">copy</tt><big>(</big><em>user=None</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of this feature, setting the user to the specified 
+owner. Copies many-to-many relations</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="madrona.features.models.Feature.css">
+<em class="property">classmethod </em><tt class="descname">css</tt><big>(</big><em>klass</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.css" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the CSS for representing features in kmltree, specifically the icon
+Works one of two ways:
+1. Use the icon_url Option and this default css() classmethod 
+2. Override the css() classmethod for more complex cases</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="madrona.features.models.Feature.get_options">
+<em class="property">classmethod </em><tt class="descname">get_options</tt><big>(</big><em>klass</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.get_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns model class Options object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.Feature.hash">
+<tt class="descname">hash</tt><a class="headerlink" href="#madrona.features.models.Feature.hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>For caching. This string represents a hash of all 
+attributes that may influence reporting results. 
+i.e. if this property changes, reports for the feature get rerun.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.Feature.is_viewable">
+<tt class="descname">is_viewable</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.is_viewable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this feauture viewable by the specified user? 
+Either needs to own it or have it shared with them.
+returns : Viewable(boolean), HttpResponse</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.Feature.kml_safe">
+<tt class="descname">kml_safe</tt><a class="headerlink" href="#madrona.features.models.Feature.kml_safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>A safety valve for kmlapp...
+If one feature&#8217;s .kml  property fails, 
+it won&#8217;t bring down the entire request.
+This property is never to be overridden!</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="madrona.features.models.Feature.model_uid">
+<em class="property">classmethod </em><tt class="descname">model_uid</tt><big>(</big><em>klass</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.model_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>class method providing the uid for the model class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.Feature.remove_from_collection">
+<tt class="descname">remove_from_collection</tt><big>(</big><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.remove_from_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove feature from FeatureCollection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.Feature.share_with">
+<tt class="descname">share_with</tt><big>(</big><em>groups</em>, <em>append=False</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.share_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>Share this feature with the specified group/groups.
+Owner must be a member of the group/groups.
+Group must have &#8216;can_share&#8217; permissions else an Exception is raised</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.Feature.uid">
+<tt class="descname">uid</tt><a class="headerlink" href="#madrona.features.models.Feature.uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unique identifier for this feature.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="spatial-feature">
 <h3>Spatial Feature<a class="headerlink" href="#spatial-feature" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="madrona.features.models.SpatialFeature">
+<em class="property">class </em><tt class="descname">SpatialFeature</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.SpatialFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract Model used for representing user-generated geometry features. 
+Inherits from Feature and adds geometry-related methods/properties
+common to all geometry types.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<td>Creator</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<td>Name of the object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<td>When it was created</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<td>When it was last updated.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<td>List of manipulators to be applied when geom
+is saved.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="attribute">
+<dt id="madrona.features.models.SpatialFeature.active_manipulators">
+<tt class="descname">active_manipulators</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.active_manipulators" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method contains all the logic to determine which manipulators get applied to a feature</p>
+<dl class="docutils">
+<dt>If self.manipulators doesnt exist or is null or blank, </dt>
+<dd>apply the required manipulators (or the NullManipulator if none are required)</dd>
+<dt>If there is a self.manipulators string and there are optional manipulators contained in it,</dt>
+<dd>apply the required manipulators PLUS the specified optional manipulators</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.SpatialFeature.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.SpatialFeature.geom_kml">
+<tt class="descname">geom_kml</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.geom_kml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic KML representation of the feature geometry</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.SpatialFeature.kml">
+<tt class="descname">kml</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.kml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fully-styled KML placemark representation of the feature.
+The Feature&#8217;s kml property MUST</p>
+<blockquote>
+<div><ul class="simple">
+<li>return a string containing a valid KML placemark element</li>
+<li>the placemark must have id= [the feature&#8217;s uid]</li>
+<li>if it references any style URLs, the corresponding Style element(s)
+must be provided by the feature&#8217;s .kml_style property</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.SpatialFeature.kml_style">
+<tt class="descname">kml_style</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.kml_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must return a string with one or more KML Style elements
+whose id&#8217;s may be referenced by relative URL
+from within the feature&#8217;s .kml string
+In any given KML document, each <em>unique</em> kml_style string will get included 
+so don&#8217;t worry if you have 10 million features with &#8220;blah-default&#8221; style...
+only one will appear in the final document and all the placemarks can refer
+to it. BEST TO TREAT THIS LIKE A CLASS METHOD - no instance specific vars.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="madrona.features.models.SpatialFeature.mapnik_style">
+<em class="property">classmethod </em><tt class="descname">mapnik_style</tt><big>(</big><big>)</big><a class="headerlink" href="#madrona.features.models.SpatialFeature.mapnik_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapnik style object containing rules for symbolizing features in staticmap</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="section" id="pointfeature">
 <h4>PointFeature<a class="headerlink" href="#pointfeature" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="madrona.features.models.PointFeature">
+<em class="property">class </em><tt class="descname">PointFeature</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.PointFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model used for representing user-generated point features. Inherits from SpatialFeature.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<td>Creator</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<td>Name of the object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<td>When it was created</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<td>When it was last updated.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<td>List of manipulators to be applied when geom
+is saved.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<td>Original geometry as input by the user.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<td>Geometry after manipulators are applied.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="attribute">
+<dt id="madrona.features.models.PointFeature.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.PointFeature.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="linestringfeature">
 <h4>LineStringFeature<a class="headerlink" href="#linestringfeature" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="madrona.features.models.LineFeature">
+<em class="property">class </em><tt class="descname">LineFeature</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.LineFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model used for representing user-generated linestring features. Inherits from SpatialFeature.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<td>Creator</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<td>Name of the object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<td>When it was created</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<td>When it was last updated.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<td>List of manipulators to be applied when geom
+is saved.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<td>Original geometry as input by the user.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<td>Geometry after manipulators are applied.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="attribute">
+<dt id="madrona.features.models.LineFeature.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.LineFeature.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="polygonfeature">
 <h4>PolygonFeature<a class="headerlink" href="#polygonfeature" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="madrona.features.models.PolygonFeature">
+<em class="property">class </em><tt class="descname">PolygonFeature</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.PolygonFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model used for representing user-generated polygon features. Inherits from SpatialFeature.</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<td>Creator</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<td>Name of the object</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<td>When it was created</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<td>When it was last updated.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<td>List of manipulators to be applied when geom
+is saved.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<td>Original geometry as input by the user.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<td>Geometry after manipulators are applied.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="attribute">
+<dt id="madrona.features.models.PolygonFeature.centroid_kml">
+<tt class="descname">centroid_kml</tt><a class="headerlink" href="#madrona.features.models.PolygonFeature.centroid_kml" title="Permalink to this definition">¶</a></dt>
+<dd><p>KML geometry representation of the centroid of the polygon</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.PolygonFeature.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.PolygonFeature.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="featurecollection-base-class">
@@ -280,6 +647,52 @@ collection, all the features/collections contained within it are implicitly shar
         <span class="n">valid_children</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;mlpa.models.Mpa&#39;</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 </div>
+<dl class="class">
+<dt id="madrona.features.models.FeatureCollection">
+<em class="property">class </em><tt class="descname">FeatureCollection</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Folder/Collection of Features</p>
+<dl class="method">
+<dt id="madrona.features.models.FeatureCollection.add">
+<tt class="descname">add</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a specified Feature to the Collection</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.models.FeatureCollection.collection">
+<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.FeatureCollection.collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a generic relation to any object through content-type/object-id
+fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.FeatureCollection.copy">
+<tt class="descname">copy</tt><big>(</big><em>user=None</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of this feature collection, setting the user to the specified 
+owner. Recursively copies all children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.FeatureCollection.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all features in the set</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.FeatureCollection.feature_set">
+<tt class="descname">feature_set</tt><big>(</big><em>recurse=False</em>, <em>feature_classes=None</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.feature_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Features belonging to the Collection
+Optionally recurse into all child containers
+or limit/filter for a list of feature classes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="madrona.features.models.FeatureCollection.remove">
+<tt class="descname">remove</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a specified Feature from the Collection</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="the-options-inner-class">
@@ -380,7 +793,49 @@ modify a selected feature, create a copy, or some other
 action.</li>
 </ul>
 </div></blockquote>
-<p>Here&#8217;s an example of links in use:</p>
+<div class="section" id="default-links">
+<h4>Default links<a class="headerlink" href="#default-links" title="Permalink to this headline">¶</a></h4>
+<p>There are several links that are provided by default specific for every feature:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">self</span></tt> links return html attributes</li>
+<li><tt class="docutils literal"><span class="pre">edit</span></tt> links return html form for editing</li>
+<li><tt class="docutils literal"><span class="pre">create</span></tt> links return html form for creating new feature</li>
+</ul>
+</div></blockquote>
+<p>And several generic links that are, by default, applied to all feature types:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Copy</span></tt> link creates a copy of the feature (see &#8220;Implementing A Custom Copy Method&#8221; for more)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Delete</span></tt> links removes the feature permanantly</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">KML</span></tt> links return KML representation of the feature</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">KMZ</span></tt> links return zipped KML (ie KMZ) representation of the feature (see <tt class="docutils literal"><span class="pre">kmlapp</span></tt>)</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">PNG</span></tt> links return a PNG image of the feature (see <tt class="docutils literal"><span class="pre">staticmap</span></tt>). Note that this feature can be turned off by specifying:</p>
+<dl class="docutils">
+<dt>class Options:</dt>
+<dd><p class="first last">...
+export_png = False</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>FeatureCollections also get</dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal"><span class="pre">collection-add</span></tt> link to add feature(s) to this collection</li>
+<li><tt class="docutils literal"><span class="pre">collection-remove</span></tt> link to remove feature(s) to this collection</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="custom-links">
+<h4>Custom Links<a class="headerlink" href="#custom-links" title="Permalink to this headline">¶</a></h4>
+<p>Here&#8217;s an example of custom links in use:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
 <span class="k">class</span> <span class="nc">RenewableEnergySite</span><span class="p">(</span><span class="n">Feature</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">TYPE_CHOICES</span><span class="p">)</span>
@@ -409,6 +864,7 @@ action.</li>
         <span class="p">)</span>
 </pre></div>
 </div>
+</div>
 <div class="section" id="creating-compatible-views">
 <h4>creating compatible views<a class="headerlink" href="#creating-compatible-views" title="Permalink to this headline">¶</a></h4>
 <p>Views that are wired up to features using links must accept a second argument
@@ -421,6 +877,104 @@ configured views.</p>
 </div>
 <div class="section" id="link-properties">
 <h4>link properties<a class="headerlink" href="#link-properties" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="madrona.features.Link">
+<em class="property">class </em><tt class="descname">Link</tt><big>(</big><em>rel</em>, <em>title</em>, <em>view</em>, <em>method='GET'</em>, <em>select='single'</em>, <em>type=None</em>, <em>slug=None</em>, <em>generic=False</em>, <em>models=None</em>, <em>extra_kwargs={}</em>, <em>confirm=False</em>, <em>edits_original=None</em>, <em>must_own=False</em>, <em>limit_to_groups=None</em><big>)</big><a class="headerlink" href="#madrona.features.Link" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="madrona.features.Link.can_user_view">
+<tt class="descname">can_user_view</tt><big>(</big><em>user</em>, <em>is_owner</em><big>)</big><a class="headerlink" href="#madrona.features.Link.can_user_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True/False depending on whether user can view the link.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.confirm">
+<tt class="descname">confirm</tt><a class="headerlink" href="#madrona.features.Link.confirm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Confirmation message to show the user before POSTing to rel=edit link</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.edits_original">
+<tt class="descname">edits_original</tt><a class="headerlink" href="#madrona.features.Link.edits_original" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to false for editing links that create a copy of the original.
+This will allow users who do not own the instance(s) but can view them
+perform the action.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.extra_kwargs">
+<tt class="descname">extra_kwargs</tt><a class="headerlink" href="#madrona.features.Link.extra_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extra keyword arguments to pass to the view.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.generic">
+<tt class="descname">generic</tt><a class="headerlink" href="#madrona.features.Link.generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this view can be applied to multiple feature classes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.limit_to_groups">
+<tt class="descname">limit_to_groups</tt><a class="headerlink" href="#madrona.features.Link.limit_to_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows you to specify groups (a list of group names)
+that should have access to the link.
+Default is None; i.e. All users have link access regardless of group membership</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.method">
+<tt class="descname">method</tt><a class="headerlink" href="#madrona.features.Link.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>For rel=edit links, identifies whether a form should be requested or
+that url should just be POST&#8217;ed to.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.models">
+<tt class="descname">models</tt><a class="headerlink" href="#madrona.features.Link.models" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of feature classes that a this view can be applied to, if it is
+generic.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.rel">
+<tt class="descname">rel</tt><a class="headerlink" href="#madrona.features.Link.rel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of link - alternate, related, edit, or edit_form.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.select">
+<tt class="descname">select</tt><a class="headerlink" href="#madrona.features.Link.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether this link accepts requests with single or multiple
+instances of a feature class. Valid values are &#8220;single&#8221;, &#8220;multiple&#8221;,
+&#8220;single multiple&#8221;, and &#8220;multiple single&#8221;.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.slug">
+<tt class="descname">slug</tt><a class="headerlink" href="#madrona.features.Link.slug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part of this link&#8217;s path.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.title">
+<tt class="descname">title</tt><a class="headerlink" href="#madrona.features.Link.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Human-readable title for the link to be shown in the user interface.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.type">
+<tt class="descname">type</tt><a class="headerlink" href="#madrona.features.Link.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>MIME type of this link, useful for alternate links. May in the future
+be used to automatically assign an icon in the dropdown Export menu.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="madrona.features.Link.view">
+<tt class="descname">view</tt><a class="headerlink" href="#madrona.features.Link.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>View function handling requests to this link.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 </div>
@@ -463,6 +1017,8 @@ configured views.</p>
 </li>
 <li><a class="reference internal" href="#the-options-inner-class">The Options inner-class</a><ul>
 <li><a class="reference internal" href="#specifying-links">Specifying Links</a><ul>
+<li><a class="reference internal" href="#default-links">Default links</a></li>
+<li><a class="reference internal" href="#custom-links">Custom Links</a></li>
 <li><a class="reference internal" href="#creating-compatible-views">creating compatible views</a></li>
 <li><a class="reference internal" href="#link-properties">link properties</a></li>
 </ul>
@@ -487,7 +1043,7 @@ configured views.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -513,13 +1069,13 @@ configured views.</p>
         <li class="right" >
           <a href="common.html" title="madrona.common: Misc Goodies"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

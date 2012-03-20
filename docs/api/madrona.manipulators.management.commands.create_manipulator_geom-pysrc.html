@@ -141,13 +141,13 @@ madrona.studyregion.management.commands.create_study_region.Command.args
 madrona.studyregion.management.commands.summarize_study_region_changes.Command.args
 madrona.xyquery.management.commands.loadraster.Command.args
 madrona.xyquery.management.commands.loadshp.Command.args" class="py-name" href="#" onclick="return doclink('link-10', 'args', 'link-10');">args</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'[shapefile, manipulator]'</tt> </tt>
-<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">     </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
 <a name="Command.handle"></a><div id="Command.handle-def"><a name="L18"></a><tt class="py-lineno">18</tt> <a class="py-toggle" href="#" id="Command.handle-toggle" onclick="return toggle('Command.handle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.manipulators.management.commands.create_manipulator_geom.Command-class.html#handle">handle</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">shapefile</tt><tt class="py-op">,</tt> <tt class="py-param">manipulator</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">options</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="Command.handle-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Command.handle-expanded"><a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
 <a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">            <tt class="py-name">manip_model</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="madrona.common.utils.get_class" class="py-name" href="#" onclick="return doclink('link-11', 'get_class', 'link-5');">get_class</a></tt><tt class="py-op">(</tt><tt class="py-name">manipulator</tt><tt class="py-op">)</tt> </tt>
 <a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
 <a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"The %s model could not be found.  \nBe sure and provide the complete description: &lt;module name&gt;.models.&lt;manipulator model name&gt;"</tt> <tt class="py-op">%</tt><tt class="py-name">manipulator</tt><tt class="py-op">)</tt> </tt>
-<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">             </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
 <a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">ds</tt> <tt class="py-op">=</tt> <tt class="py-name">DataSource</tt><tt class="py-op">(</tt><tt id="link-12" class="py-name" targets="Variable madrona.data_manager.models.Shapefile.shapefile=madrona.data_manager.models.Shapefile-class.html#shapefile,Variable madrona.data_manager.models.ShapefileField.shapefile=madrona.data_manager.models.ShapefileField-class.html#shapefile,Variable madrona.intersection.models.IntersectionFeature.shapefile=madrona.intersection.models.IntersectionFeature-class.html#shapefile,Variable madrona.intersection.models.MultiFeatureShapefile.shapefile=madrona.intersection.models.MultiFeatureShapefile-class.html#shapefile,Variable madrona.intersection.models.ShapefileField.shapefile=madrona.intersection.models.ShapefileField-class.html#shapefile,Variable madrona.intersection.models.SingleFeatureShapefile.shapefile=madrona.intersection.models.SingleFeatureShapefile-class.html#shapefile"><a title="madrona.data_manager.models.Shapefile.shapefile
 madrona.data_manager.models.ShapefileField.shapefile
 madrona.intersection.models.IntersectionFeature.shapefile
@@ -156,7 +156,7 @@ madrona.intersection.models.ShapefileField.shapefile
 madrona.intersection.models.SingleFeatureShapefile.shapefile" class="py-name" href="#" onclick="return doclink('link-12', 'shapefile', 'link-12');">shapefile</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ds</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
 <a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"Data source should only contain a single layer. Aborting."</tt><tt class="py-op">)</tt> </tt>
-<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">         </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
 <a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt id="link-13" class="py-name" targets="Variable madrona.xyquery.models.Feature.layer=madrona.xyquery.models.Feature-class.html#layer,Variable madrona.xyquery.models.Raster.layer=madrona.xyquery.models.Raster-class.html#layer"><a title="madrona.xyquery.models.Feature.layer
 madrona.xyquery.models.Raster.layer" class="py-name" href="#" onclick="return doclink('link-13', 'layer', 'link-13');">layer</a></tt> <tt class="py-op">=</tt> <tt class="py-name">ds</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
 <a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-14" class="py-name"><a title="madrona.xyquery.models.Feature.layer
@@ -240,7 +240,7 @@ madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return docl
 <a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"This geometry must be a polygon"</tt><tt class="py-op">)</tt> </tt>
 <a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"> </tt>
 <a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-name">mapping</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'geometry'</tt><tt class="py-op">:</tt> <tt class="py-string">'MULTIPOLYGON'</tt><tt class="py-op">}</tt> </tt>
-<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">             </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
 <a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">lm</tt> <tt class="py-op">=</tt> <tt class="py-name">LayerMapping</tt><tt class="py-op">(</tt><tt class="py-name">manip_model</tt><tt class="py-op">,</tt> <tt id="link-19" class="py-name"><a title="madrona.data_manager.models.Shapefile.shapefile
 madrona.data_manager.models.ShapefileField.shapefile
 madrona.intersection.models.IntersectionFeature.shapefile
@@ -439,7 +439,7 @@ madrona.replication.models.HabitatThreshold.save
 madrona.replication.models.ReplicationSetup.save
 madrona.replication.models.ThresholdRule.save
 madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-30', 'save', 'link-20');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
-<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">         </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
 <a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">""</tt> </tt>
 <a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">"The manipulaotr geometry, %s, has been added to the %s model with primary key = %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">manip_geom</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
 madrona.bioeconomic_model.models.GridAttributes.name
@@ -477,7 +477,7 @@ madrona.spacing.models.SpacingPoint.name
 madrona.straightline_spacing.models.SpacingPoint.name
 madrona.studyregion.models.StudyRegion.name
 madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-31', 'name', 'link-16');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">manipulator</tt><tt class="py-op">,</tt> <tt class="py-name">manip_geom</tt><tt class="py-op">.</tt><tt class="py-name">pk</tt><tt class="py-op">)</tt> </tt>
-<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">         </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"> </tt>
 <a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">"To switch to this geometry, you will need to run 'manage.py change_manipulator_geom %s %s'"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">manip_geom</tt><tt class="py-op">.</tt><tt class="py-name">pk</tt><tt class="py-op">,</tt> <tt class="py-name">manipulator</tt><tt class="py-op">)</tt> </tt>
 <a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-string">""</tt> </tt>
 </div></div><a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"> </tt><script type="text/javascript">
@@ -513,7 +513,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:22 2011
+    Generated by Epydoc 3.0.1 on Tue Mar 20 10:36:35 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

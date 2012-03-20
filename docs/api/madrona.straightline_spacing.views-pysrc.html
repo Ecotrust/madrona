@@ -133,7 +133,7 @@ madrona.xyquery.views" class="py-name" href="#" onclick="return doclink('link-5'
 <a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt class="py-name">ws</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name" targets="Function madrona.spacing.views.spacing_worksheet()=madrona.spacing.views-module.html#spacing_worksheet,Function madrona.straightline_spacing.views.spacing_worksheet()=madrona.straightline_spacing.views-module.html#spacing_worksheet"><a title="madrona.spacing.views.spacing_worksheet
 madrona.straightline_spacing.views.spacing_worksheet" class="py-name" href="#" onclick="return doclink('link-6', 'spacing_worksheet', 'link-6');">spacing_worksheet</a></tt><tt class="py-op">(</tt><tt class="py-name">in_dict</tt><tt class="py-op">,</tt> <tt class="py-name">ws_title</tt><tt class="py-op">,</tt><tt class="py-name">ws</tt><tt class="py-op">)</tt> </tt>
 <a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">wb</tt> </tt>
-</div><a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">     </tt>
+</div><a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
 <a name="spacing_worksheet"></a><div id="spacing_worksheet-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="spacing_worksheet-toggle" onclick="return toggle('spacing_worksheet');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.straightline_spacing.views-module.html#spacing_worksheet">spacing_worksheet</a><tt class="py-op">(</tt><tt class="py-param">in_dict</tt><tt class="py-op">,</tt><tt class="py-param">ws_title</tt><tt class="py-op">,</tt><tt class="py-param">ws</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="spacing_worksheet-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="spacing_worksheet-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-name">results</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name" targets="Function madrona.spacing.models.distance_matrix_and_labels()=madrona.spacing.models-module.html#distance_matrix_and_labels,Function madrona.straightline_spacing.models.distance_matrix_and_labels()=madrona.straightline_spacing.models-module.html#distance_matrix_and_labels"><a title="madrona.spacing.models.distance_matrix_and_labels
 madrona.straightline_spacing.models.distance_matrix_and_labels" class="py-name" href="#" onclick="return doclink('link-7', 'distance_matrix_and_labels', 'link-7');">distance_matrix_and_labels</a></tt><tt class="py-op">(</tt><tt class="py-name">in_dict</tt><tt class="py-op">)</tt> </tt>
@@ -144,12 +144,12 @@ madrona.straightline_spacing.models.distance_matrix_and_labels" class="py-name" 
 <a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">ws_title</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
 <a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">ws_title</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">current_row</tt> <tt class="py-op">+=</tt> <tt class="py-number">2</tt> </tt>
-<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">     </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
 <a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-comment"># write the header labels row across the top</tt> </tt>
 <a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">lab</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">label_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">ws</tt><tt class="py-op">.</tt><tt class="py-name">row</tt><tt class="py-op">(</tt><tt class="py-name">current_row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">write</tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">+</tt><tt class="py-number">1</tt><tt class="py-op">,</tt><tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">lab</tt><tt class="py-op">)</tt> <tt class="py-op">)</tt> </tt>
 <a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">    <tt class="py-name">current_row</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
-<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">     </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
 <a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">    <tt class="py-comment"># write the rest of the matrix</tt> </tt>
 <a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-name">row</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">dist_mat</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-comment"># write the label in the first column</tt> </tt>
@@ -192,7 +192,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    Generated by Epydoc 3.0.1 on Tue Mar 20 10:36:37 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

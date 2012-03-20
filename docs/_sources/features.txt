@@ -326,7 +326,35 @@ interface. There are 4 types of Links:
     `non-idempotent <http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html>`_
     action.
 
-Here's an example of links in use::
+Default links
+-------------
+There are several links that are provided by default specific for every feature:
+
+  * ``self`` links return html attributes 
+  * ``edit`` links return html form for editing 
+  * ``create`` links return html form for creating new feature
+
+And several generic links that are, by default, applied to all feature types:
+
+  * ``Copy`` link creates a copy of the feature (see "Implementing A Custom Copy Method" for more)
+  * ``Delete`` links removes the feature permanantly
+  * ``KML`` links return KML representation of the feature
+  * ``KMZ`` links return zipped KML (ie KMZ) representation of the feature (see ``kmlapp``)
+  * ``PNG`` links return a PNG image of the feature (see ``staticmap``). Note that this feature can be turned off by specifying::
+
+    class Options:
+        ...
+        export_png = False
+
+FeatureCollections also get
+  * ``collection-add`` link to add feature(s) to this collection
+  * ``collection-remove`` link to remove feature(s) to this collection
+  
+  
+
+Custom Links
+------------
+Here's an example of custom links in use::
     
     @register
     class RenewableEnergySite(Feature):
@@ -367,6 +395,7 @@ The features app will handle requests
 Generic views will handle cases where a user is not authorized to view or edit
 a feature, requests related to features that cannot be found, and improperly 
 configured views. 
+
 
 link properties
 ---------------

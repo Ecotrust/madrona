@@ -97,7 +97,7 @@ Accepts the url of a panel as a variable, as well as the title of the link.
 
 .. code-block:: django
 
-    {% url mpa_attributes mpa.pk as my_url %}
+    {% url 'mpa_attributes' mpa.pk as my_url %}
     {% back_link my_url "MPA Attributes" %}
 
 .. _tag_home_link:

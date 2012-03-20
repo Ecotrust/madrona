@@ -276,10 +276,10 @@ madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
 madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-8', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">GeoManager</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
-<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">     </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
 <a name="DepthSounding.__unicode__"></a><div id="DepthSounding.__unicode__-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="DepthSounding.__unicode__-toggle" onclick="return toggle('DepthSounding.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.depth_range.models.DepthSounding-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="DepthSounding.__unicode__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="DepthSounding.__unicode__-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="madrona.depth_range.models.DepthSounding.depth_ft" class="py-name" href="#" onclick="return doclink('link-9', 'depth_ft', 'link-2');">depth_ft</a></tt><tt class="py-op">)</tt> </tt>
-</div></div><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">     </tt>
+</div></div><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"> </tt>
 <a name="soundings_in_geom"></a><div id="soundings_in_geom-def"><a name="L15"></a><tt class="py-lineno">15</tt> <a class="py-toggle" href="#" id="soundings_in_geom-toggle" onclick="return toggle('soundings_in_geom');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.depth_range.models-module.html#soundings_in_geom">soundings_in_geom</a><tt class="py-op">(</tt><tt class="py-param">geom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="soundings_in_geom-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="soundings_in_geom-expanded"><a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
 <a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">    Return a query set of depthsoundings that fall within the supplied geometry.</tt> </tt>
@@ -308,7 +308,7 @@ madrona.spacing.models.SpacingPoint.objects
 madrona.straightline_spacing.models.SpacingPoint.objects
 madrona.studyregion.models.StudyRegion.objects
 madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-11', 'objects', 'link-7');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt class="py-name">geometry__within</tt><tt class="py-op">=</tt><tt id="link-12" class="py-name" targets="Variable madrona.xyquery.models.Feature.geom=madrona.xyquery.models.Feature-class.html#geom"><a title="madrona.xyquery.models.Feature.geom" class="py-name" href="#" onclick="return doclink('link-12', 'geom', 'link-12');">geom</a></tt><tt class="py-op">)</tt> </tt>
-</div><a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">     </tt>
+</div><a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
 <a name="translate_to_positive_numbers"></a><div id="translate_to_positive_numbers-def"><a name="L21"></a><tt class="py-lineno">21</tt> <a class="py-toggle" href="#" id="translate_to_positive_numbers-toggle" onclick="return toggle('translate_to_positive_numbers');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.depth_range.models-module.html#translate_to_positive_numbers">translate_to_positive_numbers</a><tt class="py-op">(</tt><tt class="py-param">ds_min</tt><tt class="py-op">,</tt><tt class="py-param">ds_max</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="translate_to_positive_numbers-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="translate_to_positive_numbers-expanded"><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
 <a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">    Take a min and max depth as either negavite elevations or positive depths and</tt> </tt>
@@ -325,7 +325,7 @@ madrona.raster_stats.models.ZonalStatsCache.max" class="py-name" href="#" onclic
 <a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">shallowest_positive</tt> <tt class="py-keyword">and</tt> <tt class="py-name">shallowest_positive</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">10</tt><tt class="py-op">:</tt> </tt>
 <a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-name">shallowest_positive</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
 <a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">shallowest_positive</tt><tt class="py-op">,</tt> <tt class="py-name">deepest_positive</tt> </tt>
-</div><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">     </tt>
+</div><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"> </tt>
 <a name="depth_range"></a><div id="depth_range-def"><a name="L36"></a><tt class="py-lineno">36</tt> <a class="py-toggle" href="#" id="depth_range-toggle" onclick="return toggle('depth_range');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.depth_range.models-module.html#depth_range">depth_range</a><tt class="py-op">(</tt><tt class="py-param">geom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="depth_range-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="depth_range-expanded"><a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
 <a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">    Return the Minimum and Maximum depth for a geometry.  If the minimum is less than</tt> </tt>
@@ -337,7 +337,7 @@ madrona.raster_stats.models.ZonalStatsCache.max" class="py-name" href="#" onclic
 <a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt class="py-name">ds_max</tt> <tt class="py-op">=</tt> <tt class="py-name">ds</tt><tt class="py-op">.</tt><tt class="py-name">aggregate</tt><tt class="py-op">(</tt><tt class="py-name">Max</tt><tt class="py-op">(</tt><tt class="py-string">'depth_ft'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-string">'depth_ft__max'</tt><tt class="py-op">]</tt> </tt>
 <a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt class="py-comment"># Account for the fact that soundings may be negative or positive</tt> </tt>
 <a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-17" class="py-name" targets="Function madrona.depth_range.models.translate_to_positive_numbers()=madrona.depth_range.models-module.html#translate_to_positive_numbers"><a title="madrona.depth_range.models.translate_to_positive_numbers" class="py-name" href="#" onclick="return doclink('link-17', 'translate_to_positive_numbers', 'link-17');">translate_to_positive_numbers</a></tt><tt class="py-op">(</tt><tt class="py-name">ds_min</tt><tt class="py-op">,</tt><tt class="py-name">ds_max</tt><tt class="py-op">)</tt> </tt>
-</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">     </tt>
+</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
 <a name="total_depth_range"></a><div id="total_depth_range-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="total_depth_range-toggle" onclick="return toggle('total_depth_range');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.depth_range.models-module.html#total_depth_range">total_depth_range</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="total_depth_range-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="total_depth_range-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
 <a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-docstring">    Return the shallowest and deepest depth for the whole depth sounding data set.</tt> </tt>
@@ -426,7 +426,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:19 2011
+    Generated by Epydoc 3.0.1 on Tue Mar 20 10:36:34 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -93,9 +93,9 @@ Setting up private KMLs
 
 #. The private will now be included in the private data layers list (assuming this is added to the map):: 
 
-    madrona.addLayer('{% url layers_privatekml_list session_key=session_key %}');            
+    madrona.addLayer('{% url 'layers_privatekml_list' session_key=session_key %}');            
    
 #. Alternatively, you can access each PrivateKml directly through a reverse url lookup like so::
 
-    {% url layers-privatekml pk=1 session_key=session_key %}            
+    {% url 'layers-privatekml' pk=1 session_key=session_key %}            
 

@@ -78,7 +78,7 @@ madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return d
 <a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"No bucket specified and no settings.AWS_MEDIA_BUCKET"</tt><tt class="py-op">)</tt> </tt>
 <a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
 <a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">conn</tt><tt class="py-op">.</tt><tt class="py-name">create_bucket</tt><tt class="py-op">(</tt><tt class="py-name">bucket</tt><tt class="py-op">)</tt> </tt>
-</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">     </tt>
+</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
 <a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
 <a name="get_s3_url"></a><div id="get_s3_url-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="get_s3_url-toggle" onclick="return toggle('get_s3_url');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.s3-module.html#get_s3_url">get_s3_url</a><tt class="py-op">(</tt><tt class="py-param">b</tt><tt class="py-op">,</tt><tt class="py-param">k</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="get_s3_url-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_s3_url-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
@@ -129,7 +129,7 @@ madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return d
 <a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">    Defaults to public-read</tt> </tt>
 <a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
 <a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">    <tt class="py-name">b</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name" targets="Function madrona.common.s3.s3_bucket()=madrona.common.s3-module.html#s3_bucket"><a title="madrona.common.s3.s3_bucket" class="py-name" href="#" onclick="return doclink('link-5', 's3_bucket', 'link-5');">s3_bucket</a></tt><tt class="py-op">(</tt><tt class="py-name">bucket</tt><tt class="py-op">)</tt> </tt>
-<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">  </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"> </tt>
 <a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">local_path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">"%s does not exist; can't upload to S3"</tt> <tt class="py-op">%</tt> <tt class="py-name">local_path</tt><tt class="py-op">)</tt> </tt>
 <a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt>
@@ -144,7 +144,7 @@ madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return d
 <a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt class="py-name">k</tt><tt class="py-op">.</tt><tt class="py-name">set_metadata</tt><tt class="py-op">(</tt><tt class="py-string">"Content-Type"</tt><tt class="py-op">,</tt> <tt class="py-name">mimetype</tt><tt class="py-op">)</tt> </tt>
 <a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt class="py-name">k</tt><tt class="py-op">.</tt><tt class="py-name">set_contents_from_filename</tt><tt class="py-op">(</tt><tt class="py-name">local_path</tt><tt class="py-op">)</tt> </tt>
 <a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-name">k</tt><tt class="py-op">.</tt><tt class="py-name">set_acl</tt><tt class="py-op">(</tt><tt class="py-name">acl</tt><tt class="py-op">)</tt> </tt>
-<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">     </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"> </tt>
 <a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-7" class="py-name" targets="Function madrona.common.s3.get_s3_url()=madrona.common.s3-module.html#get_s3_url"><a title="madrona.common.s3.get_s3_url" class="py-name" href="#" onclick="return doclink('link-7', 'get_s3_url', 'link-7');">get_s3_url</a></tt><tt class="py-op">(</tt><tt class="py-name">b</tt><tt class="py-op">,</tt><tt class="py-name">k</tt><tt class="py-op">)</tt> </tt>
 </div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
@@ -179,7 +179,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 17 10:00:23 2011
+    Generated by Epydoc 3.0.1 on Tue Mar 20 10:36:35 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.staticmap: Static Map Data Layers &mdash; Madrona Decision Support Tool 3.0dev documentation</title>
-    
+    <title>madrona.staticmap: Static Map Data Layers &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool 3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.studyregion: The Study Region" href="studyregion.html" />
     <link rel="prev" title="madrona.simplefaq: FAQ system" href="simplefaq.html" /> 
@@ -43,7 +40,7 @@
         <li class="right" >
           <a href="simplefaq.html" title="madrona.simplefaq: FAQ system"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -84,7 +81,7 @@
 </div>
 <div class="section" id="default-datasets">
 <h2>Default Datasets<a class="headerlink" href="#default-datasets" title="Permalink to this headline">¶</a></h2>
-<p>Madrona ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in &lt;MEDIA_ROOT&gt;/staticmap/data/.</p>
+<p>Madrona ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in [[MEDIA_ROOT]]/staticmap/data/.</p>
 <ol class="arabic simple">
 <li>Land Mask (Based on the &#8220;Global Self-consistent, Hierarchical, High-resolution Shoreline&#8221; dataset and clipped to southern california region - full dataset available from <a class="reference external" href="http://www.evs-islands.com/2007/11/data-global-land-mask-using-vectors.html">EVS Islands</a>.</li>
 <li>World ports dataset. (<a class="reference external" href="http://www.people.hofstra.edu/geotrans/eng/media.html">The Geography of Transport Systems</a>)</li>
@@ -129,6 +126,13 @@
 </div>
 <p>As an alternative to editing xml text files, you can try <a class="reference external" href="http://bitbucket.org/springmeyer/quantumnik/wiki/Home">Quantumnik</a> which allows you to use Quantum GIS to style the layers in a familiar GIS graphic interface and export the map as a mapnik XML.</p>
 </div>
+<div class="section" id="variable-substitution">
+<h3>Variable substitution<a class="headerlink" href="#variable-substitution" title="Permalink to this headline">¶</a></h3>
+<p>You may not always know the full path to a local datasource and using relative paths is problematic since deployment details will change the current working directory. To avoid hardcoding paths, you can set use variable substitution to leverage the <tt class="docutils literal"><span class="pre">MEDIA_ROOT</span></tt> setting:</p>
+<div class="highlight-python"><pre>&lt;Parameter name="file"&gt;[[MEDIA_ROOT]]/world_borders&lt;/Parameter&gt;</pre>
+</div>
+<p>staticmap will load the mapfile text and replace <tt class="docutils literal"><span class="pre">[[MEDIA_ROOT]]</span></tt> with settings.MEDIA_ROOT before mapnik loads the mapfile.</p>
+</div>
 <div class="section" id="note-on-spatial-reference-systems">
 <h3>Note on spatial reference systems<a class="headerlink" href="#note-on-spatial-reference-systems" title="Permalink to this headline">¶</a></h3>
 <p>The spatial reference system (SRS) of each layer should be explicitly defined using a <a class="reference external" href="http://trac.osgeo.org/proj/wiki/GenParms">proj4 string</a>. Its important to note that this is the SRS of the original data source - it is not necessarily the SRS of the output map. If the SRS defined in the Map element differs from the Layer SRS, mapnik will reproject each Layer to the common SRS of the Map.</p>
@@ -142,7 +146,7 @@
 <div class="section" id="accessing-maps-by-url">
 <h2>Accessing maps by URL<a class="headerlink" href="#accessing-maps-by-url" title="Permalink to this headline">¶</a></h2>
 <p>The staticmap can be accessed by url template tags:</p>
-<div class="highlight-python"><pre>&lt;img align="top" src="{% url staticmap-show 'default' %}"&gt;</pre>
+<div class="highlight-python"><pre>&lt;img align="top" src="{% url 'staticmap-show' 'default' %}"&gt;</pre>
 </div>
 <p>The staticmap view also takes several parameters to configure the map</p>
 <blockquote>
@@ -155,7 +159,7 @@
 </ul>
 </div></blockquote>
 <p>You could incorporate these into a django template as follows:</p>
-<div class="highlight-python"><pre>&lt;img align="top" src="{% url staticmap-show 'default' %}?uids={{ feature.uid }}&amp;amp;width=154&amp;amp;height=200&amp;amp;show_extent=True"&gt;</pre>
+<div class="highlight-python"><pre>&lt;img align="top" src="{% url 'staticmap-show' 'default' %}?uids={{ feature.uid }}&amp;amp;width=154&amp;amp;height=200&amp;amp;show_extent=True"&gt;</pre>
 </div>
 </div>
 </div>
@@ -175,6 +179,7 @@
 <li><a class="reference internal" href="#adding-datasets">Adding Datasets</a><ul>
 <li><a class="reference internal" href="#layer">Layer</a></li>
 <li><a class="reference internal" href="#style">Style</a></li>
+<li><a class="reference internal" href="#variable-substitution">Variable substitution</a></li>
 <li><a class="reference internal" href="#note-on-spatial-reference-systems">Note on spatial reference systems</a></li>
 </ul>
 </li>
@@ -198,7 +203,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -224,13 +229,13 @@
         <li class="right" >
           <a href="simplefaq.html" title="madrona.simplefaq: FAQ system"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool 3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, MarineMap Consortium, Ecotrust.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
