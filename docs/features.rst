@@ -310,6 +310,10 @@ The Options inner-class
     Specify links associated a Feature Class that point to related downloads, 
     export tools, and editing actions that can be performed.
 
+.. py:attribute:: export_png
+
+    Specify if the PNG link will be created for this Feature. Default is False.
+
 Specifying Links
 ================
 
@@ -343,7 +347,6 @@ And several generic links that are, by default, applied to all feature types:
   * ``PNG`` links return a PNG image of the feature (see ``staticmap``). Note that this feature can be turned off by specifying::
 
     class Options:
-        ...
         export_png = False
 
 FeatureCollections also get
