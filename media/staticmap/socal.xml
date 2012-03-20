@@ -1,5 +1,5 @@
 <!DOCTYPE Map>
-<Map bgcolor="steelblue" srs="+proj=latlong +datum=WGS84">
+<Map background-color="steelblue" srs="+proj=latlong +datum=WGS84">
 
 <Style name="land_style">
 <Rule>
@@ -27,10 +27,13 @@
 
 <Style name="port_style">
 <Rule>
-    <TextSymbolizer name="MAIN_PORT_" face_name="DejaVu Sans Bold" size="8" 
-        fill="black" halo_fill= "#DFDBE3" halo_radius="1" 
-        wrap_width="12" spacing="4" allow_overlap="false" avoid_edges="false" 
-        min_distance="6"/>
+    <TextSymbolizer face-name="DejaVu Sans Bold" size="8" 
+        fill="black" halo-fill= "#DFDBE3" halo-radius="1"
+        wrap-width="12" spacing="4" avoid-edges="false" 
+        allow-overlap="false" minimum-distance="6">
+        [MAIN_PORT_]
+    </TextSymbolizer>
+
 </Rule>
 </Style>
 
@@ -38,7 +41,7 @@
     <StyleName>land_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">/usr/local/madrona-media/staticmap/data/ca_or_stl</Parameter>
+        <Parameter name="file">[[MEDIA_ROOT]]/staticmap/data/ca_or_stl</Parameter>
     </Datasource>
 </Layer>
 
@@ -46,7 +49,7 @@
     <StyleName>port_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">/usr/local/madrona-media/staticmap/data/world_ports</Parameter>
+        <Parameter name="file">[[MEDIA_ROOT]]/staticmap/data/world_ports</Parameter>
     </Datasource>
 </Layer>
 

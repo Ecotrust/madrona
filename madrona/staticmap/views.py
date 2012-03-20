@@ -221,6 +221,8 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     # load_map_from_string appears to work
     #mapnik.load_map(m, mapfile)
     xmltext = open(mapfile).read()
+    # Replace mediaroot
+    xmltext = xmltext.replace("[[MEDIA_ROOT]]",settings.MEDIA_ROOT)
     mapnik.load_map_from_string(m, xmltext)
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
@@ -260,7 +262,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
         except:
             pass
 
-    bbox = mapnik.Envelope(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
+    bbox = mapnik.Box2d(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
 
     if show_extent and features and len(features)>0:
         # Shows a bounding box for the extent of all specified features
