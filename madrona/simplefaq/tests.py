@@ -10,12 +10,6 @@ from madrona.simplefaq.models import *
 from django.conf import settings
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('',
-    # Example:
-    (r'/faq/', include('madrona.simplefaq.urls')),
-)
-
-
 class SimpleFaqTest(TestCase):
     fixtures = ['example_data']
 
