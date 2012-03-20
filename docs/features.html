@@ -776,6 +776,12 @@ features.</p>
 export tools, and editing actions that can be performed.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="export_png">
+<tt class="descname">export_png</tt><a class="headerlink" href="#export_png" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify if the PNG link will be created for this Feature. Default is False.</p>
+</dd></dl>
+
 <div class="section" id="specifying-links">
 <h3>Specifying Links<a class="headerlink" href="#specifying-links" title="Permalink to this headline">¶</a></h3>
 <p>Links allow developers to extend the functionality of features by specifying
@@ -817,8 +823,7 @@ action.</li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">PNG</span></tt> links return a PNG image of the feature (see <tt class="docutils literal"><span class="pre">staticmap</span></tt>). Note that this feature can be turned off by specifying:</p>
 <dl class="docutils">
 <dt>class Options:</dt>
-<dd><p class="first last">...
-export_png = False</p>
+<dd><p class="first last">export_png = False</p>
 </dd>
 </dl>
 </li>
