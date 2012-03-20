@@ -9,6 +9,7 @@ from django.test import TestCase, Client
 from madrona.studyregion.models import StudyRegion
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.contrib.gis.geos import GEOSGeometry 
 
 urlpatterns = patterns('',
     # Example:
@@ -29,14 +30,17 @@ class StudyRegionTest(TestCase):
         """
         Check computing of lookat values
         """
-        region = StudyRegion.objects.get(pk=1)
+        g1 = GEOSGeometry(
+            'SRID=4326;MULTIPOLYGON(((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37)))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+        region = StudyRegion.objects.create(geometry=g1, name="Test region", active=True)
         region.lookAt_Lat = 0
         region.lookAt_Lon = 0
         self.assertEquals(region.lookAt_Lat, 0.0)
         self.assertEquals(region.lookAt_Lon, 0.0)
         lookat_kml = region.lookAtKml()
-        self.assertEquals(round(region.lookAt_Lat, 9), 33.670316680)
-        self.assertEquals(round(region.lookAt_Lon, 9), -118.995360206)
+        self.assertAlmostEquals(region.lookAt_Lat, 34.239691894000003)
+        self.assertAlmostEquals(region.lookAt_Lon, -120.03929305)
 
     def testLookAtView(self):
         """
