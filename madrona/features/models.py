@@ -11,11 +11,13 @@ from madrona.features import get_model_options
 from madrona.common.utils import asKml, clean_geometry, ensure_clean
 from madrona.common.utils import get_logger, get_class, enable_sharing
 from madrona.manipulators.manipulators import manipulatorsDict, NullManipulator
-try:
-    import mapnik
-except:
-    import mapnik2 as mapnik
 import re
+import mapnik
+try:
+    assert mapnik.mapnik_version >= 200000
+except:
+    import warnings
+    warnings.warn("Mapnik 2.0+ is required. Please upgrade.", DeprecationWarning)
 
 logger = get_logger()
 
@@ -336,6 +338,7 @@ class SpatialFeature(Feature):
         """
         Mapnik style object containing rules for symbolizing features in staticmap
         """
+        return None
         style = mapnik.Style()
         return style
 

@@ -26,13 +26,11 @@
 # Note that there are several hairy requirements that aren't handled 
 # by this file; these must be installed globally the hard way:
 #
-# GDAL >= 1.6 : just copy the gdal.pth file into your local site packages dir
-# Mapnik == 0.7.1 : just copy the entire mapnik dir into your local site packages dir
-# PIL : symlink the PIL directory to site-packages dir
-# Postgis : set up according to the geodjango and madrona docs
-#
-# numpy is also having issues with pip, install globally
-# numpy>=1.5.1
+# GDAL >= 1.6
+# Mapnik >= 2.0
+# PIL
+# Postgis (set up according to the geodjango and madrona docs)
+# numpy>=1.5.1 (numpy is also having issues with pip, install globally)
 #
 # Additionally, git, mercurial and subversion must be installed to grab several packages.
 #############################################################################
