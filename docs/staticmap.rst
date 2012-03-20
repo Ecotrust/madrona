@@ -32,7 +32,7 @@ The ``madrona.features`` app contains a generic link view that leverages staticm
 
 Default Datasets
 **********************
-Madrona ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in <MEDIA_ROOT>/staticmap/data/.
+Madrona ships with several example datasets. These default datasets are in ESRI Shapefile format and stored in [[MEDIA_ROOT]]/staticmap/data/.
 
 #. Land Mask (Based on the "Global Self-consistent, Hierarchical, High-resolution Shoreline" dataset and clipped to southern california region - full dataset available from `EVS Islands <http://www.evs-islands.com/2007/11/data-global-land-mask-using-vectors.html>`_.
 #. World ports dataset. (`The Geography of Transport Systems <http://www.people.hofstra.edu/geotrans/eng/media.html>`_)
@@ -80,6 +80,15 @@ This element defines "rules" which determine the colors, symbology, classificati
 
 
 As an alternative to editing xml text files, you can try `Quantumnik <http://bitbucket.org/springmeyer/quantumnik/wiki/Home>`_ which allows you to use Quantum GIS to style the layers in a familiar GIS graphic interface and export the map as a mapnik XML.
+
+Variable substitution
+---------------------
+You may not always know the full path to a local datasource and using relative paths is problematic since deployment details will change the current working directory. To avoid hardcoding paths, you can set use variable substitution to leverage the `MEDIA_ROOT`::
+
+      <Parameter name="file">[[MEDIA_ROOT]]/world_borders</Parameter>
+
+staticmap will load the mapfile text and replace `[[MEDIA_ROOT]]` with settings.MEDIA_ROOT before mapnik loads the mapfile.
+    
 
 Note on spatial reference systems
 ----------------------------------
