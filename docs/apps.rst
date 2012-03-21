@@ -45,5 +45,4 @@ Optional Apps
     replication
     spacing
     straightline_spacing
-    wave
     xyquery
