@@ -80,7 +80,7 @@ def do_footer(parser, token):
 class FooterNode(template.Node):
     def __init__(self, nodelist):
         self.nodelist = nodelist
-        
+
     def render(self, context):
         print self.nodelist
         output = self.nodelist.render(context)

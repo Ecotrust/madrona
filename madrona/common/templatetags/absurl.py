@@ -13,7 +13,7 @@ class AbsoluteURLNode(URLNode):
             None, 
             legacy_view_name)
         self.abs_asvar = asvar
-    
+
     def render(self, context):
         path = super(AbsoluteURLNode, self).render(context)
         domain = "http://%s" % Site.objects.get_current().domain
@@ -24,7 +24,7 @@ class AbsoluteURLNode(URLNode):
             return ''
         else:
             return url
-        
+
 def absurl(parser, token):
     """Just like {% url 'urlname' %} but ads the domain of the current site."""
     node_instance = url(parser, token)
