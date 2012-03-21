@@ -10,6 +10,7 @@ from madrona.features.models import Feature, PointFeature, LineFeature, PolygonF
 from madrona.features.forms import FeatureForm
 from madrona.features import register
 from django.contrib.auth.models import User
+from django.test.utils import override_settings
 import json
 import re
 
@@ -82,6 +83,7 @@ class ManipulatorsTest(TestCase):
 
         self.client = None
 
+    @override_settings(GEOMETRY_CLIENT_SRID=4326)
     def test_clipToGraticule(self):
         '''
             Tests the following:
@@ -92,8 +94,10 @@ class ManipulatorsTest(TestCase):
         self.assertEquals(response1.status_code, 200)
         graticule_clipper = ClipToGraticuleManipulator(target_shape=display_kml(self.code1_poly), west=.5, east=-.5)
         result = graticule_clipper.manipulate()
+        gclip = result['clipped_shape']
         self.assertAlmostEquals(result["clipped_shape"].area, 2, places=1)
 
+    @override_settings(GEOMETRY_CLIENT_SRID=4326)
     def test_clipToStudyRegion(self):
         '''
             Tests the following:
