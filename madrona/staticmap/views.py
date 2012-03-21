@@ -209,6 +209,12 @@ def show(request, map_name="default"):
 
 def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=False, map_name='default'):
     """Display a map with the study region geometry.  """
+    # if testing via django unit tests, close out the connection
+    conn = connection.settings_dict
+    testing = False
+    if conn['NAME'] != settings_dbname:
+        testing = True
+
     map = get_object_or_404(MapConfig,mapname=map_name)
     if not width:
         width = map.default_width
@@ -247,7 +253,10 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
                 style = default_style()
             style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
             m.append_style(style_name, style)
-            adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield)
+            if testing:
+                adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield, persist_connection=False)
+            else:
+                adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield)
             lyr = adapter.to_mapnik()
             lyr.styles.append(style_name)
             m.layers.append(lyr)
@@ -291,7 +300,8 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
                 dbname=connection.settings_dict['NAME'], 
                 table=bbox_sql,
                 geometry_field='geometry_final',
-                estimate_extent='False',
+                estimate_extent=False,
+                persist_connection=not testing,
                 extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
         lyr.styles.append('extent_style')
         m.layers.append(lyr)
@@ -302,9 +312,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     mapnik.render(m, draw)
     img = draw.tostring('png')
 
-    # if testing via django unit tests, close out the connection
-    conn = connection.settings_dict
-    if conn['NAME'] != settings_dbname:
+    if testing:
         del m
 
     return img
