@@ -75,7 +75,7 @@ accessible. Please shutdown the server or redirect users to a maintenance page
                 for i in range(50):
                     # Re-run the appropriate manipulators
                     time.sleep(0.1)
-                    pbar.update(i+1)
+                    pbar.update(i + 1)
                 print "Done processing shapes."
                 print "Would you like to send an email notifying users that their shapes have changed?"
                 email = raw_input("Type 'yes' or 'no': ")

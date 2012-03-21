@@ -8,7 +8,7 @@ def functions_in_module(module):
     mod = sys.modules[module]
     for k,v in mod.__dict__.items():
         try:
-            if v.__class__.__name__=='function':
+            if v.__class__.__name__ == 'function':
                 result.update({k:v})
         except AttributeError:
             continue

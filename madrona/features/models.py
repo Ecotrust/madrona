@@ -59,7 +59,7 @@ class Feature(models.Model):
         return u"%s_%s" % (self.model_uid(), self.pk)
 
     class Meta:
-        abstract=True
+        abstract = True
 
     '''
     Note on keyword args rerun and form: These are extracted from kwargs so that they will not cause an unexpected 
@@ -318,7 +318,7 @@ class SpatialFeature(Feature):
             blank=True, help_text='csv list of manipulators to be applied')
 
     class Meta(Feature.Meta):
-        abstract=True
+        abstract = True
 
     def save(self, *args, **kwargs):
         self.apply_manipulators()
@@ -521,7 +521,7 @@ class PolygonFeature(SpatialFeature):
         return polygon_style
 
     class Meta(Feature.Meta):
-        abstract=True
+        abstract = True
 
 class LineFeature(SpatialFeature):
     """
@@ -562,7 +562,7 @@ class LineFeature(SpatialFeature):
         return line_style
 
     class Meta(Feature.Meta):
-        abstract=True
+        abstract = True
 
 class PointFeature(SpatialFeature):
     """
@@ -601,7 +601,7 @@ class PointFeature(SpatialFeature):
         return point_style
 
     class Meta(Feature.Meta):
-        abstract=True
+        abstract = True
 
 class FeatureCollection(Feature):
     """

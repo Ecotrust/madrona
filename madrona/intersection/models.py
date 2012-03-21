@@ -214,7 +214,7 @@ def sum_results(results):
                 elif k in must_be_equal:
                     # we've gotten this key in already and it must be equal across all sub_dicts that we're summing
                     try: 
-                        assert(summed[hab][k]==v)
+                        assert(summed[hab][k] == v)
                     except: 
                         raise Exception('sum_results has been passed an incorrect results matrix.')
     return summed
@@ -245,7 +245,7 @@ class Shapefile(models.Model):
         zfile = zipfile.ZipFile(self.shapefile.path)
         for info in zfile.infolist():
             data = zfile.read(info.filename)
-            if not info.filename[-1]==os.path.sep and not info.filename.startswith('__MACOSX'):
+            if not info.filename[-1] == os.path.sep and not info.filename.startswith('__MACOSX'):
                 shp_part = os.path.join(tmpdir, info.filename.split(os.path.sep)[-1])             
                 fout = open(shp_part, "wb")
                 fout.write(data)
@@ -293,7 +293,7 @@ class Shapefile(models.Model):
                     print '(',
                 for f in feat.geom: #get the individual geometries
                     fm = feature_model()
-                    fm.geometry=f.geos
+                    fm.geometry = f.geos
                     if not fm.geometry.valid:
                         fm.geometry = clean_geometry(fm.geometry)
                     fm.save()
@@ -303,7 +303,7 @@ class Shapefile(models.Model):
                     print ')',
             else:
                 fm = feature_model()
-                fm.geometry=f.geos
+                fm.geometry = f.geos
                 if not fm.geometry.valid:
                     fm.geometry = clean_geometry(fm.geometry)
                 fm.save()
@@ -498,7 +498,7 @@ class MultiFeatureShapefile(Shapefile):
         while feat_in:
             field = feat_in.GetField(field_name)
 
-            if field==field_value:
+            if field == field_value:
                 # create new feature
                 feat_out = ogr.Feature(feat_defn)
                 #set the geometry
@@ -567,16 +567,16 @@ class SingleFeatureShapefile(Shapefile):
         if created:
             intersection_feature = IntersectionFeature.objects.get(name=feature_name)
 
-        if lyr.geom_type=='LineString':
+        if lyr.geom_type == 'LineString':
             feature_model = LinearFeature
             out_units = LINEAR_OUT_UNITS
             #mgeom = geos.fromstr('MULTILINESTRING EMPTY')
-        elif lyr.geom_type=='Polygon':
+        elif lyr.geom_type == 'Polygon':
             feature_model = ArealFeature
             out_units = AREAL_OUT_UNITS
             intersection_feature.native_units = 'Sq ' + intersection_feature.native_units
             #mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
-        elif lyr.geom_type=='Point':
+        elif lyr.geom_type == 'Point':
             feature_model = PointFeature
             out_units = POINT_OUT_UNITS
             #mgeom = geos.fromstr('MULTILIPOINT EMPTY')
@@ -615,9 +615,9 @@ class SingleFeatureShapefile(Shapefile):
                     if not fm.geometry.valid:
                         fm.geometry = clean_geometry(fm.geometry)
                     #mgeom.append(fm.geometry)
-                    if out_units==AREAL_OUT_UNITS:
+                    if out_units == AREAL_OUT_UNITS:
                         area += fm.geometry.area
-                    elif out_units==LINEAR_OUT_UNITS:
+                    elif out_units == LINEAR_OUT_UNITS:
                         length += fm.geometry.length
                     else:
                         count += 1
@@ -632,9 +632,9 @@ class SingleFeatureShapefile(Shapefile):
                 if not fm.geometry.valid:
                     fm.geometry = clean_geometry(fm.geometry)
                 #mgeom.append(fm.geometry)
-                if out_units==AREAL_OUT_UNITS:
+                if out_units == AREAL_OUT_UNITS:
                     area += fm.geometry.area
-                elif out_units==LINEAR_OUT_UNITS:
+                elif out_units == LINEAR_OUT_UNITS:
                     length += fm.geometry.length
                 else:
                     count += 1
@@ -642,9 +642,9 @@ class SingleFeatureShapefile(Shapefile):
                 if verbose:
                     print '.',
 
-        if out_units==AREAL_OUT_UNITS:
+        if out_units == AREAL_OUT_UNITS:
             intersection_feature.study_region_total = area_in_display_units(area)
-        elif out_units==LINEAR_OUT_UNITS:
+        elif out_units == LINEAR_OUT_UNITS:
             intersection_feature.study_region_total = length_in_display_units(length)
         else:
             intersection_feature.study_region_total = count
@@ -714,11 +714,11 @@ class IntersectionFeature(models.Model):
         # Don't bother to call this on the large polygon features.  It takes far too long.
         individual_features = self.model_with_my_geometries.objects.filter(feature_type=self)
 
-        if self.model_with_my_geometries==ArealFeature:
+        if self.model_with_my_geometries == ArealFeature:
             mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
-        elif self.model_with_my_geometries==LinearFeature:
+        elif self.model_with_my_geometries == LinearFeature:
             mgeom = geos.fromstr('MULTILINESTRING EMPTY')
-        elif self.model_with_my_geometries==PointFeature:
+        elif self.model_with_my_geometries == PointFeature:
             mgeom = geos.fromstr('MULTIPOINT EMPTY')
         else:
             raise 'Could not figure out what geometry type to use.'
@@ -878,7 +878,7 @@ class FeatureMapping(models.Model):
             f_gc = geos.fromstr('GEOMETRYCOLLECTION EMPTY')
         for pk in feature_pks:
             for hab, had_dict in results.iteritems():
-                if had_dict['hab_id']==pk:
+                if had_dict['hab_id'] == pk:
                     intersection_total += had_dict['result']
                     #percent_sr_total += result['percent_of_total'] #wrong, can't add these percentages up have to determine total/total available
                     #sr_total += IntersectionFeature.objects.get(pk=pk).study_region_total
@@ -955,7 +955,7 @@ class FeatureMapping(models.Model):
         # Make sure that if there are multiple features to be combined that they all have the 
         # same units.
         units = self.feature.all()[0].output_units
-        if False in [units==f.output_units for f in self.feature.all()]:
+        if False in [units == f.output_units for f in self.feature.all()]:
             if quiet:
                 return False
             else:
@@ -968,7 +968,7 @@ class FeatureMapping(models.Model):
         # Make sure that if there are multiple features to be combined that they all have the 
         # same type.
         type = self.feature.all()[0].feature_model
-        if False in [type==f.feature_model for f in self.feature.all()]:
+        if False in [type == f.feature_model for f in self.feature.all()]:
             if quiet:
                 return False
             else:
@@ -1044,7 +1044,7 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
                 result_dict[int_feature.name]['kml'] = rc.geometry.kml 
 
         except ResultCache.DoesNotExist: # Calculate if cached results doen't exist
-            if not int_feature.feature_model=='PointFeature':
+            if not int_feature.feature_model == 'PointFeature':
                 geom_set = int_feature.geometries_set.filter(geometry__intersects=geom)
                 for g in geom_set:
                     from django.contrib.gis.geos.error import GEOSException
@@ -1073,11 +1073,11 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
             if with_kml:
                 result_dict[int_feature.name]['kml'] = f_gc.kml    
 
-            if int_feature.feature_model=='ArealFeature':
+            if int_feature.feature_model == 'ArealFeature':
                 result_dict[int_feature.name]['result'] = area_in_display_units(f_gc.area)
-            elif int_feature.feature_model=='LinearFeature':
+            elif int_feature.feature_model == 'LinearFeature':
                 result_dict[int_feature.name]['result'] = length_in_display_units(f_gc.length)
-            elif int_feature.feature_model=='PointFeature':
+            elif int_feature.feature_model == 'PointFeature':
                 result_dict[int_feature.name]['result'] = f_gc.num_geom
 
             result_dict[int_feature.name]['percent_of_total'] = (result_dict[int_feature.name]['result'] / int_feature.study_region_total) * 100

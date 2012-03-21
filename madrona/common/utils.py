@@ -99,19 +99,19 @@ def angle_degrees(pnt1,pnt2,pnt3):
     Return the angle in degrees between line(pnt2,pnt1) and line(pnt2,pnt3)
     """
     rads = angle(pnt1,pnt2,pnt3)
-    return rads * (180/pi)
+    return rads * (180 / pi)
 
 def spike_ring_indecies(line_ring,threshold=0.01):
     """
     Returns a list of point indexes if ring contains spikes (angles of less than threshold degrees).
     Otherwise, an empty list.
     """
-    radian_thresh = threshold * (pi/180)
+    radian_thresh = threshold * (pi / 180)
     spike_indecies = []
     for i,pnt in enumerate(line_ring.coords):
-        if(i==0 and line_ring.num_points > 3): # The first point  ...which also equals the last point
+        if(i == 0 and line_ring.num_points > 3): # The first point  ...which also equals the last point
             p1_coords = line_ring.coords[len(line_ring.coords) - 2]
-        elif(i==line_ring.num_points-1): # The first and last point are the same in a line ring so we're done
+        elif(i == line_ring.num_points - 1): # The first and last point are the same in a line ring so we're done
             break
         else:
             p1_coords = line_ring.coords[i - 1]
@@ -141,7 +141,7 @@ def remove_spikes(poly,threshold=0.01):
     spike_indecies = spike_ring_indecies(line_ring,threshold=threshold)
     if(spike_indecies):
         for i,org_index in enumerate(spike_indecies):
-            if(org_index==0): # special case, must remove first and last point, and add end point that overlaps new first point
+            if(org_index == 0): # special case, must remove first and last point, and add end point that overlaps new first point
                 # get the list of points
                 pnts = list(line_ring.coords)
                 # remove the first point
@@ -265,19 +265,19 @@ def kml_errors(kmlstring):
     # so we ignore all related events
     events = [x for x in events if not (
                 (isinstance(x,feedvalidator.logging.UndefinedElement) 
-                    and x.params['element']==u'ExtendedData') or
+                    and x.params['element'] == u'ExtendedData') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
-                    and x.params['value']==u'madrona.update_form') or
+                    and x.params['value'] == u'madrona.update_form') or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
-                    and x.params['value']==u'madrona.create_form') or
+                    and x.params['value'] == u'madrona.create_form') or
                 (isinstance(x,feedvalidator.logging.UnknownNamespace) 
-                    and x.params['namespace']==u'http://madrona.org') or
+                    and x.params['namespace'] == u'http://madrona.org') or
                 (isinstance(x,feedvalidator.logging.UnknownNamespace) 
-                    and x.params['namespace']==u'http://www.google.com/kml/ext/2.2') or
+                    and x.params['namespace'] == u'http://www.google.com/kml/ext/2.2') or
                 (isinstance(x,feedvalidator.logging.InvalidItemIconState) 
-                    and x.params['element']==u'state' and ' ' in x.params['value']) or
+                    and x.params['element'] == u'state' and ' ' in x.params['value']) or
                 (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
-                    and x.params['element']==u'atom:link' and 'workspace' in x.params['value'])
+                    and x.params['element'] == u'atom:link' and 'workspace' in x.params['value'])
                 )]
 
     from feedvalidator.formatter.text_plain import Formatter
@@ -299,7 +299,7 @@ def hex8_to_rgba(hex8):
     hex8 = str(hex8.replace('#',''))
     if len(hex8) != 8:
         raise Exception("Hex8 value must be exactly 8 digits")
-    hex_values = [hex8[i:i+2:1] for i in xrange(0, len(hex8), 2)]
+    hex_values = [hex8[i:i + 2:1] for i in xrange(0, len(hex8), 2)]
     rgba_values = [int(x,16) for x in hex_values]
     rgba_values.reverse()
     return rgba_values
@@ -390,9 +390,9 @@ def isCCW(ring):
     Determines if a LinearRing is oriented counter-clockwise or not
     """
     area = 0.0
-    for i in range(0,len(ring)-1):
+    for i in range(0,len(ring) - 1):
         p1 = ring[i]
-        p2 = ring[i+1]
+        p2 = ring[i + 1]
         area += (p1[1] * p2[0]) - (p1[0] * p2[1])
 
     if area > 0:
@@ -487,7 +487,7 @@ def asKml(input_geom, altitudeMode=None, uid=''):
                 log.debug("%s ... Simplification failed ... tolerance=%s" % (key,toler))
                 if not geom.empty and geom.valid: 
                     break
-            if i == maxruns-1:
+            if i == maxruns - 1:
                 geom = latlon_geom
     else:
         geom = latlon_geom
@@ -619,6 +619,6 @@ def is_text(s):
 
     # If more than 30% non-text characters, then
     # this is considered a binary file
-    if float(len(t))/len(s) > 0.30:
+    if float(len(t)) / len(s) > 0.30:
         return False
     return True

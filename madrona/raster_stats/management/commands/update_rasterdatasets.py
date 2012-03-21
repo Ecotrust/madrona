@@ -84,16 +84,16 @@ class Command(BaseCommand):
                     else:
                         path = os.path.join(filepath, name)
                     abspath = os.path.abspath(path)
-                    RasterDataset.objects.create(name=prefix+name, filepath=abspath, type=type)
+                    RasterDataset.objects.create(name=prefix + name, filepath=abspath, type=type)
                 else:
-                    print 'Filepath: %s does not exist' %filepath
+                    print 'Filepath: %s does not exist' % filepath
                     raise
             elif dirpath:
                 if ext is None:
                     print "The --ext option is required for --dirpath uploads."
                     raise
                 if not os.path.exists(dirpath):
-                    print 'Dirpath: %s does not exist' %dirpath
+                    print 'Dirpath: %s does not exist' % dirpath
                     raise
                 for content in os.listdir(dirpath):
                     if ext == 'grid':
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                                 else:
                                     path = os.path.join(filepath)
                                 abspath = os.path.abspath(path)
-                                RasterDataset.objects.create(name=prefix+name, filepath=abspath, type=type)
+                                RasterDataset.objects.create(name=prefix + name, filepath=abspath, type=type)
                     else:
                         root, file_extension = os.path.splitext(content)
                         if file_extension == ext or file_extension.replace('.','') == ext:
@@ -116,7 +116,7 @@ class Command(BaseCommand):
                             else:
                                 path = os.path.join(dirpath, name)
                             abspath = os.path.abspath(path)
-                            RasterDataset.objects.create(name=prefix+name, filepath=abspath, type=type)
+                            RasterDataset.objects.create(name=prefix + name, filepath=abspath, type=type)
             else:
                 print "Either --filepath or --dirpath is required."
                 raise

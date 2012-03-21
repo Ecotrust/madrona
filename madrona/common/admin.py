@@ -48,7 +48,7 @@ class GroupMembersInline(admin.TabularInline):
 def allow_share_to_staff(modeladmin, request, queryset):
     from django.conf import settings
     sg = settings.SHARING_TO_STAFF_GROUPS
-    if hasattr(sg,'__iter__') and len(sg)>0:
+    if hasattr(sg,'__iter__') and len(sg) > 0:
         for g in sg:
             group_obj = Group.objects.get(name=g)
             for user in queryset:

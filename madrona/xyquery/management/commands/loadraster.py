@@ -46,7 +46,7 @@ class Command(BaseCommand):
         the_layer.save()
 
         # Make a vrt copy of the dataset
-        vrtpath = os.path.abspath(os.path.join(settings.MEDIA_ROOT,"xyquery_rasters",layername+".vrt"))
+        vrtpath = os.path.abspath(os.path.join(settings.MEDIA_ROOT,"xyquery_rasters",layername + ".vrt"))
         command = "gdal_translate %s -of VRT '%s' '%s'" % (srscmdpart, rast, vrtpath)
         output = Popen(command, shell=True).communicate()[0]
 

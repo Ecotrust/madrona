@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
             try:
                 for fld in lyr.fields:
-                    if fld in fields_of_interest or len(fields_of_interest)==0:
+                    if fld in fields_of_interest or len(fields_of_interest) == 0:
                         the_attribute = Attribute(key=fld, value=str(feat[fld]), feature=the_feature)
                         the_attribute.save()
             except:

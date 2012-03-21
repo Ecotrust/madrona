@@ -385,7 +385,7 @@ def add_ocean_edges_complete(graph, verbose=False):
         import time
         t0 = time.time()
         print "Starting at %s to add edges for %i nodes." % (time.asctime(time.localtime(t0)), graph.number_of_nodes())
-        edge_possibilities = graph.number_of_nodes() * (graph.number_of_nodes() -1)
+        edge_possibilities = graph.number_of_nodes() * (graph.number_of_nodes() - 1)
         print "We'll have to look at somewhere around %i edge possibilities." % (edge_possibilities)
         print "Node: ",
     for node in graph.nodes_iter():
@@ -398,7 +398,7 @@ def add_ocean_edges_complete(graph, verbose=False):
                 if not line_crosses_land(line):
                     graph.add_edge(node,n,{'weight': length_in_display_units(node.distance(n))})
     if verbose:
-        print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges())
+        print "It took %i minutes to load %i edges." % ((time.time() - t0) / 60, graph.number_of_edges())
     return graph
 
 def shortest_line(geom1,geom2):

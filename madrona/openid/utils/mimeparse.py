@@ -72,7 +72,7 @@ def quality_parsed(mime_type, parsed_ranges):
     (target_type, target_subtype, target_params) =\
             parse_media_range(mime_type)
     for (type, subtype, params) in parsed_ranges:
-        param_matches = reduce(lambda x, y: x+y, [1 for (key, value) in \
+        param_matches = reduce(lambda x, y: x + y, [1 for (key, value) in \
                 target_params.iteritems() if key != 'q' and \
                 key in params and value == params[key]], 0)
         if (type == target_type or type == '*' or target_type == '*') and \

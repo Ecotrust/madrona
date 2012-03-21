@@ -75,7 +75,7 @@ class UserUploadedKml(Feature):
             return """<kml xmlns="http://www.opengis.net/kml/2.2"><Document></Document></kml>"""
 
     class Meta:
-        abstract=True
+        abstract = True
 
 class PrivateKml(models.Model):
     """
@@ -164,4 +164,4 @@ class PrivateLayerList(UserUploadedKml):
     old code that relies on this class name
     """
     class Meta:
-        abstract=True
+        abstract = True

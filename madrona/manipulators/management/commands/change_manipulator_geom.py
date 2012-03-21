@@ -17,7 +17,7 @@ class Command(BaseCommand):
         try:
             manip_model = get_class(manipulator)
         except:
-            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" %manipulator)
+            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" % manipulator)
 
         # Turn them all off
         regions = manip_model.objects.all()
@@ -82,7 +82,7 @@ accessible. Please shutdown the server or redirect users to a maintenance page
                 for i in range(50):
                     # Re-run the appropriate manipulators
                     time.sleep(0.1)
-                    pbar.update(i+1)
+                    pbar.update(i + 1)
                 print "Done processing shapes."
                 print "Would you like to send an email notifying users that their shapes have changed?"
                 email = raw_input("Type 'yes' or 'no': ")

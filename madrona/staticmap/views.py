@@ -138,7 +138,7 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         width_buffer = width * buffer
         height_buffer = height * buffer
 
-    return minx-width_buffer, miny-height_buffer, maxx+width_buffer, maxy+height_buffer
+    return minx - width_buffer, miny - height_buffer, maxx + width_buffer, maxy + height_buffer
 
 
 def staticmap_link(request, instances, map_name="default"):
@@ -257,7 +257,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     x1, y1 = map.default_x1, map.default_y1
     x2, y2 = map.default_x2, map.default_y2
 
-    if not bbox and autozoom and features and len(features)>0:
+    if not bbox and autozoom and features and len(features) > 0:
         x1, y1, x2, y2 = auto_extent(features, map.default_srid)
     if bbox:
         try:
@@ -267,7 +267,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
 
     bbox = mapnik.Box2d(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
 
-    if show_extent and features and len(features)>0:
+    if show_extent and features and len(features) > 0:
         # Shows a bounding box for the extent of all specified features
         # Useful for overview maps
         x1, y1, x2, y2 = auto_extent(features, map.default_srid)

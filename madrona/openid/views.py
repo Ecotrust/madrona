@@ -446,7 +446,7 @@ def xrdf(request, template_name='authopenid/yadis.xrdf'):
         }, context_instance=RequestContext(request))
 
     response['Content-Type'] = "application/xrds+xml"
-    response['X-XRDS-Location']= request.build_absolute_uri(reverse('oid_xrdf'))
+    response['X-XRDS-Location'] = request.build_absolute_uri(reverse('oid_xrdf'))
     return response    
 
 @login_required

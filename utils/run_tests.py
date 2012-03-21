@@ -46,7 +46,7 @@ def use_exec(pdir):
 
     print "Executing from command line"
     
-    if len(sys.argv)>1:
+    if len(sys.argv) > 1:
         print
         print "   manage.py test %s --noinput --failfast -v 2" % sys.argv[1]
         print
@@ -79,12 +79,12 @@ sys.path.insert(0, hdir)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'test_project.settings'
 
-settings.TEST_RUNNER='xmlrunner.extra.djangotestrunner.XMLTestRunner'
+settings.TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 settings.TEST_OUTPUT_VERBOSE = True
-settings.DEBUG=True
+settings.DEBUG = True
 import logging
-settings.LOG_LEVEL=logging.WARNING
+settings.LOG_LEVEL = logging.WARNING
 settings.MEDIA_URL = '/media/'
-settings.POSTGIS_TEMPLATE='template1'
+settings.POSTGIS_TEMPLATE = 'template1'
 
 use_exec(pdir)

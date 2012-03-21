@@ -304,7 +304,7 @@ class FeaturesManipulatorTest(TestCase):
         kml = json.loads(response.content)['final_shape_kml'] 
         search = re.search('<coordinates>(.*)</coordinates>', kml)
         coords = search.groups()[0]
-        coords_count = coords.count(',')/2  # number of coordinates in final geom 
+        coords_count = coords.count(',') / 2  # number of coordinates in final geom 
         self.assertEqual(coords_count, g.num_coords, coords)
 
         # Next, POST to manipulators url with ClipToStudyRegionManipulator specified; should get clipped geom back
@@ -313,5 +313,5 @@ class FeaturesManipulatorTest(TestCase):
         kml = json.loads(response.content)['final_shape_kml'] 
         search = re.search('<coordinates>(.*)</coordinates>', kml)
         coords = search.groups()[0]
-        coords_count = coords.count(',')/2
+        coords_count = coords.count(',') / 2
         self.assertGreater(coords_count, g.num_coords)

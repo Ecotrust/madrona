@@ -39,20 +39,20 @@ def test_drawing_intersect(request):
             geom.transform(settings.GEOMETRY_DB_SRID)
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
-                if format=='html':
+                if format == 'html':
                     return render_to_response('generic_results.html', {'result': result})
-                elif format=='csv':
+                elif format == 'csv':
                     return build_csv_response(result, str(hash(geom)))
-                elif format=='json':
+                elif format == 'json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
             else:
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
-                if format=='html':
+                if format == 'html':
                     return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
-                elif format=='csv':
+                elif format == 'csv':
                     return build_csv_response(result, str(hash(geom)))
-                elif format=='json':
+                elif format == 'json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
     else:
         form = TestIntersectionForm()
@@ -100,7 +100,7 @@ def build_array_mpa_csv_response(results, file_name, feature_name, feature_type=
     writer = csv.writer(response)
     if results.__class__.__name__ != 'list':
         results = [results]
-    if feature_type.lower()=='mpa':
+    if feature_type.lower() == 'mpa':
         feature_type = 'MPA'
     else:
         feature_type = feature_type.title()
@@ -148,20 +148,20 @@ def test_poly_intersect(request):
             geom.transform(settings.GEOMETRY_DB_SRID)
             if org_scheme == 'None':
                 result = intersect_the_features(geom)
-                if format=='html':
+                if format == 'html':
                     return render_to_response('generic_results.html', {'result': result})
-                elif format=='csv':
+                elif format == 'csv':
                     return build_csv_response(result, str(hash(geom)))
-                elif format=='json':
+                elif format == 'json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
             else:
                 osc = OrganizationScheme.objects.get(pk=org_scheme)
                 result = osc.transformed_results(geom)
-                if format=='html':
+                if format == 'html':
                     return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
-                elif format=='csv':
+                elif format == 'csv':
                     return build_csv_response(result, str(hash(geom)))
-                elif format=='json':
+                elif format == 'json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
     else:
         form = TestPolygonIntersectionForm()
@@ -171,9 +171,9 @@ def default_intersection(request, format, geom_wkt):
     geom = geos.fromstr(geom_wkt)
     geom.transform(settings.GEOMETRY_DB_SRID)
     result = intersect_the_features(geom)
-    if format=='html':
+    if format == 'html':
         return render_to_response('generic_results.html', {'result': result})
-    elif format=='csv':
+    elif format == 'csv':
         return build_csv_response(result, str(hash(geom)))
 
 def organized_intersection(request, org_scheme, format, geom_wkt):
@@ -181,11 +181,11 @@ def organized_intersection(request, org_scheme, format, geom_wkt):
     geom.transform(settings.GEOMETRY_DB_SRID)
     osc = OrganizationScheme.objects.get(pk=int(org_scheme))
     result = osc.transformed_results(geom)
-    if format=='html':
+    if format == 'html':
         return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
-    elif format=='csv':
+    elif format == 'csv':
         return build_csv_response(result, str(hash(geom)))
-    elif format=='json':
+    elif format == 'json':
         return HttpResponse(json_encode(result), mimetype='text/json')
 
 def organized_intersection_by_name(request, org_scheme_name, format, geom_wkt):

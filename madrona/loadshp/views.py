@@ -38,10 +38,10 @@ def load_single_shp(request):
             json = simplejson.dumps({'input_kml': kml, 'status':'success'})
             # Jquery Form plugin requires that we wrap this in a textarea 
             # otherwise it mangles the kml  
-            return HttpResponse('<textarea>'+json+'</textarea>',mimetype="text/html")
+            return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
         else:
             json = simplejson.dumps({'error_html': form.errors['file_obj'][0], 'status':'errors'})
-            return HttpResponse('<textarea>'+json+'</textarea>',mimetype="text/html")
+            return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
 
     elif request.method == 'GET':
         return render_to_response('loadshp/upload.html', RequestContext(request,{'form': form,'action':request.path}))

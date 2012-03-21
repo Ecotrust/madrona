@@ -196,7 +196,7 @@ class ShpResponder(object):
             zip = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
             files = ['shp','shx','prj','dbf']
             for item in files:
-                filename= '%s.%s' % (tmp.name.replace('.shp',''), item)
+                filename = '%s.%s' % (tmp.name.replace('.shp',''), item)
                 zip.write(filename, arcname='%s.%s' % (self.file_name.replace('.shp',''), item))
             if self.readme:
                 zip.writestr('README.txt',self.readme)

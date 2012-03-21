@@ -80,7 +80,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
         dist_mat = results['matrix']
         # write the header labels row across the top
         for i,lab in enumerate(label_list):
-            ws.row(current_row).write(i+1,unicode(lab))
+            ws.row(current_row).write(i + 1,unicode(lab))
         current_row += 1
 
         # write the rest of the matrix
@@ -89,7 +89,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
             ws.row(current_row).write(0,unicode(label_list[i]))
             # write the distance values
             for x,distance in enumerate(row):
-                ws.row(current_row).write(x+1,distance['distance'])
+                ws.row(current_row).write(x + 1,distance['distance'])
             current_row += 1
         current_row += 1
     return ws

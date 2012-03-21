@@ -26,7 +26,7 @@ def query(request):
         numbands = ds.RasterCount
         srs = SpatialReference(ds.GetProjection())
         pnt_proj = pnt.transform(srs,clone=True)
-        for band in range(1,numbands+1):
+        for band in range(1,numbands + 1):
             val = getRasterValue(pnt_proj.x, pnt_proj.y, ds, band)
             if val:
                 results["%s :: %s" % (rast.layer, "Band %s" % band)] = val

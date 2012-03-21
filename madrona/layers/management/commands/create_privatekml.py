@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
             for kml in kmls:
                 basename = os.path.basename(kml).split('.')[0]
-                privatekml_name = d+'_'+basename
+                privatekml_name = d + '_' + basename
                 print "Creating", privatekml_name
                 try:
                     pkml = PrivateKml.objects.create(name=privatekml_name[:99],base_kml=kml)

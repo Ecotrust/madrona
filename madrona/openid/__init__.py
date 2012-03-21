@@ -39,7 +39,7 @@ if not hasattr(settings, 'OPENID_STORE') or not settings.OPENID_STORE:
 
 def load_store(path):
     i = path.rfind('.')
-    module, attr = path[:i], path[i+1:]
+    module, attr = path[:i], path[i + 1:]
     try:
         mod = import_module(module)
     except ImportError, e:

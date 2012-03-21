@@ -45,7 +45,7 @@ class ShareableGeoManager(models.GeoManager):
                             )
                         ).distinct().exclude(name__in=settings.SHARING_TO_STAFF_GROUPS)
 
-        if filter_groups and len(filter_groups)>0:
+        if filter_groups and len(filter_groups) > 0:
             groups = groups.filter(pk__in=[x.pk for x in filter_groups])
         else:
             filter_groups = None

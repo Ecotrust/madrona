@@ -8,7 +8,7 @@ def get_js_files():
     media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
-    tree = et.parse(path+'/../../media/js_includes.xml')
+    tree = et.parse(path + '/../../media/js_includes.xml')
     for f in tree.findall('file'):
         files.append(ROOT_PATH + f.get('path'))
     return files
@@ -18,7 +18,7 @@ def get_js_test_files():
     media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
-    tree = et.parse(path+'/../../media/js_includes.xml')
+    tree = et.parse(path + '/../../media/js_includes.xml')
     for f in tree.findall('test'):
         files.append(ROOT_PATH + f.get('path'))
     return files
@@ -28,7 +28,7 @@ def get_css_files():
     media/css_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
-    tree = et.parse(path+'/../../media/css_includes.xml')
+    tree = et.parse(path + '/../../media/css_includes.xml')
     for f in tree.findall('file'):
         files.append(ROOT_PATH + f.get('path'))
     return files

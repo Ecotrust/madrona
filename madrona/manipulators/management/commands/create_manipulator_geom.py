@@ -19,7 +19,7 @@ class Command(BaseCommand):
         try:
             manip_model = get_class(manipulator)
         except:
-            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" %manipulator)
+            raise Exception("The %s model could not be found.  \nBe sure and provide the complete description: <module name>.models.<manipulator model name>" % manipulator)
 
         ds = DataSource(shapefile)
         if len(ds) != 1:

@@ -182,8 +182,8 @@ def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_s
     ymax = bbox[3]
     xdist = xmax - xmin
     ydist = ymax - ymin
-    xcells = int(xdist/cell_size) + 1
-    ycells = int(ydist/cell_size) + 1
+    xcells = int(xdist / cell_size) + 1
+    ycells = int(ydist / cell_size) + 1
 
     x_current = xmin
     y_current = ymin
@@ -233,8 +233,8 @@ def create_full_study_region_grid(cell_size=1000):
     ymax = sr_extent[3]
     xdist = xmax - xmin
     ydist = ymax - ymin
-    xcells = int(xdist/cell_size) + 1
-    ycells = int(ydist/cell_size) + 1
+    xcells = int(xdist / cell_size) + 1
+    ycells = int(ydist / cell_size) + 1
 
     x_current = xmin
     y_current = ymin
@@ -253,20 +253,20 @@ def create_full_study_region_grid(cell_size=1000):
 def convert_to_color_ramp(the_list,base_color='green',alpha=0.5):
     # kml color format: aabbggrr
     # change the alpha to a hex value
-    hex_alpha = hex(int(alpha*255))[2:]
+    hex_alpha = hex(int(alpha * 255))[2:]
     min = np.min(the_list)
     max = np.max(the_list)
     # transform the list into a range of color values
     def color_int(x):
-        return int(((x-min)/(max-min))*255)
+        return int(((x - min) / (max - min)) * 255)
     color_int_list = map(color_int,the_list)
     def hex_string(x):
-        if x==0:
+        if x == 0:
             return '00'
         else:
             return hex(x)[2:]
     hex_mapped = map(hex_string,color_int_list)
-    if base_color=='green':
+    if base_color == 'green':
         def green(hex_num): 
             return '%s00%s00' % (str(hex_alpha),str(hex_num))
         color_hex_list = [green(x) for x in hex_mapped]

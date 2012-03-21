@@ -25,8 +25,8 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     srs.ImportFromEPSG(srid)
     ydist = extent[3] - extent[1]
     xdist = extent[2] - extent[0]
-    xcount = int((xdist/cellsize)+1)
-    ycount = int((ydist/cellsize)+1)
+    xcount = int((xdist / cellsize) + 1)
+    ycount = int((ydist / cellsize) + 1)
 
     # Create the blank numpy array
     outArray = numpy.zeros((ycount, xcount))
@@ -39,7 +39,7 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     # the GT(2) and GT(4) coefficients are zero,     
     # and the GT(1) is pixel width, and GT(5) is pixel height.     
     # The (GT(0),GT(3)) position is the top left corner of the top left pixel
-    gt = (extent[0],cellsize,0,extent[3],0,(cellsize*-1.))
+    gt = (extent[0],cellsize,0,extent[3],0,(cellsize * -1.))
     dst_ds.SetGeoTransform(gt)
     dst_ds.SetProjection(srs.ExportToWkt())
 
@@ -58,8 +58,8 @@ def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,form
     srs.ImportFromEPSG(srid)
     ydist = extent[3] - extent[1]
     xdist = extent[2] - extent[0]
-    xcount = int((xdist/cellsize)+1)
-    ycount = int((ydist/cellsize)+1)
+    xcount = int((xdist / cellsize) + 1)
+    ycount = int((ydist / cellsize) + 1)
 
     # Create output raster  
     driver = gdal.GetDriverByName(format)
@@ -69,7 +69,7 @@ def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,form
     # the GT(2) and GT(4) coefficients are zero,     
     # and the GT(1) is pixel width, and GT(5) is pixel height.     
     # The (GT(0),GT(3)) position is the top left corner of the top left pixel
-    gt = (extent[0],cellsize,0,extent[3],0,(cellsize*-1.))
+    gt = (extent[0],cellsize,0,extent[3],0,(cellsize * -1.))
     dst_ds.SetGeoTransform(gt)
     dst_ds.SetProjection(srs.ExportToWkt())
 
@@ -102,7 +102,7 @@ def create_heatmap(shp_list):
     for shp in shp_list:
         matrices.append(shapefile_to_matrix(shp))
     for i,matrix in enumerate(matrices):
-        if i==0:
+        if i == 0:
             mat = matrix
         else:
             mat += matrix

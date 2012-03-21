@@ -237,7 +237,7 @@ class Grass:
     Returns the raster path for the current mapset
     '''
     def getRastPath(self):
-        return self.gisdbase+self.location+'/'+self.curMapset+'/cell/'        
+        return self.gisdbase + self.location + '/' + self.curMapset + '/cell/'        
 
     def run(self, cmd, nice=None):
         if nice:
@@ -285,7 +285,7 @@ class Grass:
     '''
     def r_sum(self, input):
         value = 0.0
-        valueResult = self.run('r.sum '+input)
+        valueResult = self.run('r.sum ' + input)
         valueList = re.split('SUM = ', valueResult)
         if len(valueList) > 0:
             value = float(valueList[1])

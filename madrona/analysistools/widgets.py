@@ -27,7 +27,7 @@ class SliderWidget(forms.TextInput):
     def render(self, name, value, attrs=None):
         attrs['class'] = 'slidervalue'
         final_attrs = self.build_attrs(attrs, name=name)
-        slider_id = 'slider-'+name
+        slider_id = 'slider-' + name
 
         field = super(SliderWidget, self).render(name, value, attrs)
         hide_js = ""
@@ -79,7 +79,7 @@ class SliderWidget(forms.TextInput):
                 'hide_js': hide_js,
                 'step' : self.get_step()}
 
-        return mark_safe(image_html+field+slider)
+        return mark_safe(image_html + field + slider)
 
 
 class SimplePoint(forms.TextInput):
@@ -179,7 +179,7 @@ class DualSliderWidget(forms.TextInput):
     def render(self, name, value, attrs=None):
         attrs['class'] = 'slidervalue'
         final_attrs = self.build_attrs(attrs, name=name)
-        slider_id = 'slider-'+name
+        slider_id = 'slider-' + name
 
         #field = super(DualSliderWidget, self).render(name, value, attrs)
 
@@ -236,4 +236,4 @@ class DualSliderWidget(forms.TextInput):
                 'max' : self.max, 
                 'step' : self.get_step()}
 
-        return mark_safe(image_html+field+slider)
+        return mark_safe(image_html + field + slider)

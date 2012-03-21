@@ -16,16 +16,16 @@ def linear_regression(X, Y):
     for x, y in map(None, X, Y):
         Sx = Sx + x
         Sy = Sy + y
-        Sxx = Sxx + x*x
-        Syy = Syy + y*y
-        Sxy = Sxy + x*y
+        Sxx = Sxx + x * x
+        Syy = Syy + y * y
+        Sxy = Sxy + x * y
     det = Sxx * N - Sx * Sx
-    a, b = (Sxy * N - Sy * Sx)/det, (Sxx * Sy - Sx * Sxy)/det
+    a, b = (Sxy * N - Sy * Sx) / det, (Sxx * Sy - Sx * Sxy) / det
     meanerror = residual = 0.0
     for x, y in map(None, X, Y):
-        meanerror = meanerror + (y - Sy/N)**2
-        residual = residual + (y - a * x - b)**2
-    RR = 1 - residual/meanerror
-    ss = residual / (N-2)
+        meanerror = meanerror + (y - Sy / N) ** 2
+        residual = residual + (y - a * x - b) ** 2
+    RR = 1 - residual / meanerror
+    ss = residual / (N - 2)
     Var_a, Var_b = ss * N / det, ss * Sxx / det
     return a, b, RR

@@ -228,7 +228,7 @@ def create(request, model, action):
             We need to call form.save_m2m after save but before run, this is accomplished in the Feature model save method
             '''
             kwargs = {}
-            kwargs['form']=form
+            kwargs['form'] = form
             m.save(**kwargs)
 
             return to_response(
@@ -372,7 +372,7 @@ def update(request, model, uid):
         if form.is_valid():
             m = form.save(commit=False)
             kwargs = {}
-            kwargs['form']=form
+            kwargs['form'] = form
             m.save(**kwargs)
 
             return to_response(

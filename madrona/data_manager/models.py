@@ -225,7 +225,7 @@ class Shapefile(models.Model):
         zfile = zipfile.ZipFile(self.shapefile.path)
         for info in zfile.infolist():
             data = zfile.read(info.filename)
-            if not info.filename[-1]==os.path.sep and not info.filename.startswith('__MACOSX'):
+            if not info.filename[-1] == os.path.sep and not info.filename.startswith('__MACOSX'):
                 shp_part = os.path.join(tmpdir, info.filename.split(os.path.sep)[-1])             
                 fout = open(shp_part, "wb")
                 fout.write(data)

@@ -17,7 +17,7 @@ class BufferPoint(Analysis):
     input_buffer_distance = models.FloatField(verbose_name="Buffer Distance (m)")
 
     # All output fields should be allowed to be Null/Blank
-    output_area= models.FloatField(null=True,blank=True, 
+    output_area = models.FloatField(null=True,blank=True, 
             verbose_name="Buffer Area (meters)")
     output_point_geom = models.PointField(srid=settings.GEOMETRY_DB_SRID,
             null=True, blank=True, verbose_name="Point Geometry")
