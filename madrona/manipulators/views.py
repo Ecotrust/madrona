@@ -91,8 +91,8 @@ def multi_generic_manipulator_view(request, manipulators):
             return respond_with_template(e.html, submitted, None, e.success)
         except manipClass.HaltManipulations, e:
             return respond_with_template(e.html, submitted, None, e.success)
-        except Exception, e:
-            return respond_with_error(message=e.message)      
+        except Exception as e:
+            return respond_with_error(message=str(e))      
     #end manipulator for loop      
 
     #manipulators ran fine and the resulting shape is ready for outbound processing
@@ -119,7 +119,7 @@ def respond_with_template(status_html, submitted, final_shape, success="1"):
 
 def respond_with_error(key='unexpected', message=''):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": None, "success": "0"}))
+    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": None, "success": "0"}), status=500)
 
 def ensure_keys(values):
     values.setdefault("html", "")
