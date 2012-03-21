@@ -3,25 +3,15 @@
 
 <Style name="land_style">
 <Rule>
-    <PolygonSymbolizer>
-        <CssParameter name="fill">rgb(244,238,203)</CssParameter>
-    </PolygonSymbolizer>
-    <LineSymbolizer>
-        <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
-        <CssParameter name="stroke-width">0.6</CssParameter>
-    </LineSymbolizer>
+    <PolygonSymbolizer fill="rgb(244,238,203)" />
+    <LineSymbolizer stroke="rgb(50%,50%,50%)" stroke-width="0.6" />
 </Rule>
 </Style>
 
 <Style name="region_style">
 <Rule>
-    <PolygonSymbolizer>
-        <CssParameter name="fill">steelblue</CssParameter>
-    </PolygonSymbolizer>
-    <LineSymbolizer>
-        <CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
-        <CssParameter name="stroke-width">1</CssParameter>
-    </LineSymbolizer>
+    <PolygonSymbolizer fill="steelblue" />
+    <LineSymbolizer stroke="rgb(5%,5%,5%)" stroke-width="1" />
 </Rule>
 </Style>
 
