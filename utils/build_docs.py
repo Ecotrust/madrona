@@ -20,7 +20,9 @@ sys.path.insert(0, cwd)
 
 print options.docs_output
 print "Generating documentation..."
-os.system('cd ../docs; make clean; make html')
+os.system('cd %s; make clean; make html' % os.path.join(cwd,'..','docs'))
+print "Pylint..."
+os.system('pylint -f html madrona > %s' % os.path.join(cwd,'..','docs','.build','html','pylint.html'))
 if options.docs_output:
     src = os.path.join(cwd,'..','docs','.build','html','*')
     os.system('cp -r %s %s' % (src ,options.docs_output, ))
