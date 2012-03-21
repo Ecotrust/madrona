@@ -23,6 +23,9 @@ print "Generating documentation..."
 os.system('cd %s; make clean; make html' % os.path.join(cwd,'..','docs'))
 print "Pylint..."
 os.system('pylint -f html madrona > %s' % os.path.join(cwd,'..','docs','.build','html','pylint.html'))
+print "Coverage..."
+os.system('cd %s; coverage html --include=madrona* -d %s' % (os.path.join(cwd,'..'), 
+                                                             os.path.join(cwd,'..','docs','.build','html','coverage')))
 if options.docs_output:
     src = os.path.join(cwd,'..','docs','.build','html','*')
     os.system('cp -r %s %s' % (src, options.docs_output, ))
