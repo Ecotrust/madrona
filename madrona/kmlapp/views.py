@@ -195,8 +195,7 @@ def create_kml(request, input_username=None, input_uid=None,
     load_session(request, session_key)
     user = request.user
     if input_username and user.username != input_username:
-        log.warn(request.get_full_path())
-        log.warn("Failed: Input username from the URL is %r but the request.user.username is %r" % (input_username, user.username))
+        log.warn("Input username from URL is %r but request.user.username is %r" % (input_username, user.username))
         return HttpResponse('Access denied', status=401)
 
     if input_username:
