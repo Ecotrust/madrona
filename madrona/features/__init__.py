@@ -416,7 +416,7 @@ class Link:
             View function handling requests to this link.
             """
         except Exception as err:
-            msg =  'Link "%s" configured with invalid path to view %s' % (title, view)
+            msg = 'Link "%s" configured with invalid path to view %s' % (title, view)
             msg += '\n%s\n' % str(err)
             if "cannot import" in str(err):
                 msg += "(Possible cause: importing Features at the top level in views.py can cause"

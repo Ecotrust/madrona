@@ -791,7 +791,8 @@ class OrganizationScheme(models.Model):
         subdict['num_features'] = self.featuremapping_set.all().count()
         subdict['feature_info'] = {}
         for f in self.featuremapping_set.all().order_by('sort'):
-            subdict['feature_info'].update({f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
+            subdict['feature_info'].update({f.sort: {'name': f.name, 'pk': f.pk, 'sort': f.sort, 
+                'study_region_total': f.study_region_total, 'units': f.units}})
         return subdict
 
     def my_validate(self):

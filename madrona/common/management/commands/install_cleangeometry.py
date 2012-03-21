@@ -25,4 +25,3 @@ class Command(BaseCommand):
         cursor.db.commit()
         cursor.db.leave_transaction_management()
         print "CLEANGEOMETRY function installed successfully"
-

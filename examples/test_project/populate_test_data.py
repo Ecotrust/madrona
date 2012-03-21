@@ -111,8 +111,6 @@ def main():
     mpa4.add_to_collection(array4)
     array4.add_to_collection(folder4)
     folder4.share_with(group1)
-    
-
 
 if __name__ == '__main__':
     main()

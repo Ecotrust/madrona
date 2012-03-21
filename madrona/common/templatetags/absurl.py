@@ -19,7 +19,6 @@ class AbsoluteURLNode(URLNode):
         domain = "http://%s" % Site.objects.get_current().domain
         url = urlparse.urljoin(domain, path)
 
-        
         if self.abs_asvar:
             context[self.abs_asvar] = url
             return ''

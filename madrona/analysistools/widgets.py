@@ -72,12 +72,12 @@ class SliderWidget(forms.TextInput):
             }); 
         });
         </script>
-        """ % {'slider_id' : slider_id, 
-                'field_id' : "id_%s" % name, 
-                'min' : self.min, 
-                'max' : self.max, 
+        """ % {'slider_id': slider_id, 
+                'field_id': "id_%s" % name, 
+                'min': self.min, 
+                'max': self.max, 
                 'hide_js': hide_js,
-                'step' : self.get_step()}
+                'step': self.get_step()}
 
         return mark_safe(image_html + field + slider)
 
@@ -229,11 +229,11 @@ class DualSliderWidget(forms.TextInput):
             }); 
         });
         </script>
-        """ % {'slider_id' : slider_id, 
-                'low_field_id' : "id_%s" % self.min_field, 
-                'high_field_id' : "id_%s" % self.max_field, 
-                'min' : self.min, 
-                'max' : self.max, 
-                'step' : self.get_step()}
+        """ % {'slider_id': slider_id, 
+                'low_field_id': "id_%s" % self.min_field, 
+                'high_field_id': "id_%s" % self.max_field, 
+                'min': self.min, 
+                'max': self.max, 
+                'step': self.get_step()}
 
         return mark_safe(image_html + field + slider)

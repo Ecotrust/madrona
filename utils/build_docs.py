@@ -25,7 +25,7 @@ print "Pylint..."
 os.system('pylint -f html madrona > %s' % os.path.join(cwd,'..','docs','.build','html','pylint.html'))
 if options.docs_output:
     src = os.path.join(cwd,'..','docs','.build','html','*')
-    os.system('cp -r %s %s' % (src ,options.docs_output, ))
+    os.system('cp -r %s %s' % (src, options.docs_output, ))
     print "Docs copied to %s" % options.docs_output
 
     if options.jar:

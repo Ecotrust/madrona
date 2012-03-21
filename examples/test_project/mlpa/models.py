@@ -85,4 +85,3 @@ class UserKml(PrivateLayerList):
 class UserKmlForm(FeatureForm):
     class Meta(FeatureForm.Meta):
         model = UserKml
-

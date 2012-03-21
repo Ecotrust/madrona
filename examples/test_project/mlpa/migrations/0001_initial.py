@@ -143,7 +143,6 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('mlpa_userkml_sharing_groups', ['userkml_id', 'group_id'])
 
-
     def backwards(self, orm):
         
         # Deleting model 'Mpa'
@@ -181,7 +180,6 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field sharing_groups on 'UserKml'
         db.delete_table('mlpa_userkml_sharing_groups')
-
 
     models = {
         'auth.group': {

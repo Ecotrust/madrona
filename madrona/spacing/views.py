@@ -66,7 +66,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
     straight_results = distance_matrix_and_labels(in_dict, straight_line=True)
     title1 = "Shortest Distance Without Crossing Land From Edges"
     title2 = "Straight Line Distance From Edges"
-    results_dict = {title1 : results, title2 : straight_results }
+    results_dict = {title1: results, title2: straight_results}
     current_row = 0
     # put the title at the top
     if ws_title is not None:
