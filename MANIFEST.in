@@ -3,5 +3,5 @@ include *.md
 recursive-include docs *.txt
 recursive-include media *
 recursive-include utils *
-recursive-include example_projects *
-recursive-include example_cfg *
+recursive-include examples *
+recursive-exclude examples *.pyc

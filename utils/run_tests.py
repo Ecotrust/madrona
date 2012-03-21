@@ -71,8 +71,8 @@ def create_test_cmd():
     return cmd_dict
 
 hdir = os.path.dirname(os.path.abspath(__file__))
-pdir = os.path.join(hdir,'..','example_projects/test_project')
-spdir = os.path.join(hdir,'..','example_projects')
+pdir = os.path.join(hdir,'..','examples/test_project')
+spdir = os.path.join(hdir,'..','examples')
 sys.path.insert(0, pdir)
 sys.path.insert(0, spdir)
 sys.path.insert(0, hdir)

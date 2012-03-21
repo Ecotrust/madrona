@@ -2,7 +2,7 @@
 marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js
-example_projects/test_project/mediaroot/*
+examples/test_project/mediaroot/*
 env1/*
 docs/.build/*
 .coverage
@@ -15,7 +15,7 @@ dist/*
 media/layers/uploaded-kml/*.kml
 media/layers/uploaded-kml/*.kmz
 media/spacing/pickled_graphs/*
-example_projects/test_project/test.conf
-example_projects/test_project/test_wsgi.py
+examples/test_project/test.conf
+examples/test_project/test_wsgi.py
 *.orig
 *.egg-info
