@@ -36,6 +36,7 @@ class ShapeInput(forms.HiddenInput):
 
 class FeatureForm(ModelForm):
     user = forms.ModelChoiceField(User.objects.all(),widget=forms.HiddenInput())
+
     class Meta:
         exclude = ('sharing_groups','content_type','object_id',)
 

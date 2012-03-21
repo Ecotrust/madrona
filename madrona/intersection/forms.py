@@ -31,8 +31,10 @@ class TestIntersectionForm(forms.ModelForm):
     FormatChoices = [('html', 'HTML'), ('csv', 'CSV'), ('json','JSON')]
     format = forms.ChoiceField(choices=FormatChoices)
     geometry = forms.CharField(widget=PolygonWidget())
+
     class Meta:
         model = TestPolygon
+
     class Media:
         js = ("http://openlayers.org/api/2.6/OpenLayers.js",)
 
@@ -44,7 +46,9 @@ class TestPolygonIntersectionForm(forms.ModelForm):
     format = forms.ChoiceField(choices=FormatChoices)
     TestPoly_Choices = [(tp.geometry.wkt,tp.pk) for tp in TestPolygon.objects.all()]
     geometry = forms.ChoiceField(choices=TestPoly_Choices)
+
     class Meta:
         model = TestPolygon
+
     class Media:
         js = ("http://openlayers.org/api/2.6/OpenLayers.js",)

@@ -777,6 +777,7 @@ DESIGNATION_CHOICES = (
 @register
 class TestMpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+
     class Options:
         verbose_name = 'Marine Protected Area'
         form = 'madrona.features.tests.MpaForm'
@@ -871,6 +872,7 @@ TYPE_CHOICES = (
 @register
 class RenewableEnergySite(PolygonFeature):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
+
     class Options:
         verbose_name = 'Renewable Energy Site'
         form = 'madrona.features.tests.RenewableEnergySiteForm'
@@ -894,6 +896,7 @@ class RenewableEnergySiteForm(FeatureForm):
 class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
     diameter = models.FloatField(null=True)
+
     class Options:
         verbose_name = 'Pipeline'
         form = 'madrona.features.tests.PipelineForm'
@@ -905,6 +908,7 @@ class PipelineForm(FeatureForm):
 @register
 class Shipwreck(PointFeature):
     incident = models.CharField(max_length=100,default='')
+
     class Options:
         verbose_name = 'Shipwreck'
         form = 'madrona.features.tests.ShipwreckForm'

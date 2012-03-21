@@ -765,6 +765,7 @@ class IntersectionFeature(models.Model):
             return length_in_display_units(length_total)
         else:
             return features_within.count
+
     def expire_cached_results(self):
         self.resultcache_set.all().delete()
 

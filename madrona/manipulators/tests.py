@@ -172,6 +172,7 @@ class ManipulatorsTest(TestCase):
 @register
 class TestPoly(PolygonFeature):
     type = models.CharField(max_length=1)
+
     class Options:
         verbose_name = 'Test Poly'
         form = 'madrona.manipulators.tests.TestPolyForm'
@@ -183,11 +184,13 @@ class TestPolyForm(FeatureForm):
 @register
 class TestOptmanip(PolygonFeature):
     type = models.CharField(max_length=1)
+
     class Options:
         verbose_name = 'Feature to Test Optional Manipulators'
         form = 'madrona.manipulators.tests.TestOptmanipForm'
         optional_manipulators = ['madrona.manipulators.manipulators.ClipToStudyRegionManipulator']
         manipulators = []
+
 class TestOptmanipForm(FeatureForm):
     class Meta(FeatureForm.Meta):
         model = TestOptmanip
@@ -196,6 +199,7 @@ class TestOptmanipForm(FeatureForm):
 class TestLine(LineFeature):
     type = models.CharField(max_length=1)
     diameter = models.FloatField(null=True)
+
     class Options:
         verbose_name = 'TestLine'
         form = 'madrona.manipulators.tests.TestLineForm'
@@ -207,6 +211,7 @@ class TestLineForm(FeatureForm):
 @register
 class TestPoint(PointFeature):
     incident = models.CharField(max_length=1)
+
     class Options:
         verbose_name = 'TestPoint'
         form = 'madrona.manipulators.tests.TestPointForm'

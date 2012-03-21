@@ -14,23 +14,27 @@ DESIGNATION_CHOICES = (
 @register
 class Mpa(PolygonFeature):
     designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+
     class Options:
         verbose_name = 'Marine Protected Area'
         form = 'mlpa.models.MpaForm'
         manipulators = []
         
 class MpaForm(SpatialFeatureForm):
+
     class Meta(SpatialFeatureForm.Meta):
         model = Mpa
 
 ###########################
 @register
 class Array(FeatureCollection):
+
     class Options:
         form = 'mlpa.models.ArrayForm'
         valid_children = ('mlpa.models.Mpa', )
 
 class ArrayForm(FeatureForm):
+
     class Meta(FeatureForm.Meta):
         model = Array
 
@@ -38,6 +42,7 @@ class ArrayForm(FeatureForm):
 @register
 class Shipwreck(PointFeature):
     incident = models.CharField(max_length=100,default='')
+     
     class Options:
         verbose_name = 'Shipwreck'
         form = 'mlpa.models.ShipwreckForm'
@@ -51,6 +56,7 @@ class ShipwreckForm(SpatialFeatureForm):
 class Pipeline(LineFeature):
     type = models.CharField(max_length=30,default='')
     diameter = models.FloatField(null=True)
+
     class Options:
         verbose_name = 'Pipeline'
         form = 'mlpa.models.PipelineForm'

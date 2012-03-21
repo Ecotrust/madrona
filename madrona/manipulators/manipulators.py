@@ -185,6 +185,7 @@ class BaseManipulator(object):
             else:
                 self.html = status_html
             self.success = success
+
         def __str__(self):
             return repr(self._message)
 
@@ -197,6 +198,7 @@ class BaseManipulator(object):
             else:
                 self.html = status_html
             self.success = success
+
         def __str__(self):
             return repr(self._message)   
 
@@ -205,6 +207,7 @@ class BaseManipulator(object):
             self._message = message
             self.html = status_html
             self.success = success
+
         def __str__(self):
             return repr(self._message)
 

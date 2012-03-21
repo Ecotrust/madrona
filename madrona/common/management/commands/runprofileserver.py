@@ -65,6 +65,7 @@ class Command(BaseCommand):
                 profile_temp_dir = None
                 if profile_temp_dir is not None:
                     tempfile.tempdir = profile_temp_dir
+
                 def make_profiler_handler(inner_handler):
                     def handler(environ, start_response):
                         print "============= Starting response ===================="

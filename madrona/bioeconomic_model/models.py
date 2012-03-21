@@ -257,9 +257,11 @@ def convert_to_color_ramp(the_list,base_color='green',alpha=0.5):
     min = np.min(the_list)
     max = np.max(the_list)
     # transform the list into a range of color values
+
     def color_int(x):
         return int(((x - min) / (max - min)) * 255)
     color_int_list = map(color_int,the_list)
+
     def hex_string(x):
         if x == 0:
             return '00'

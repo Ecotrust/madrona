@@ -80,6 +80,7 @@ def do_footer(parser, token):
 class FooterNode(template.Node):
     def __init__(self, nodelist):
         self.nodelist = nodelist
+        
     def render(self, context):
         print self.nodelist
         output = self.nodelist.render(context)
@@ -203,6 +204,7 @@ class TabNode(template.Node):
         self.nodelist = nodelist
         self.title = title
         self.tab_id = title.replace("'", "").replace('"', '').replace(' ', '')
+
     def render(self, context):
         if not (self.title[0] == self.title[-1] and self.title[0] in ('"', "'")):
             self.title = resolve_variable(self.title, context)

@@ -18,6 +18,7 @@ from django.contrib.auth.models import Group
 
 class KMLAppTest(TestCase):
     fixtures = ['example_data']
+
     def setUp(self):
         self.client = Client()
         self.other_client = Client()
