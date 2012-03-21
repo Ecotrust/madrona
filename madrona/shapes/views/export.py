@@ -52,7 +52,7 @@ class ShpResponder(object):
 
         # create a temporary file to write the shapefile to
         # since we are ultimately going to zip it up
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
 

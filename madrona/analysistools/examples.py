@@ -106,9 +106,8 @@ class BufferPointsForm(FeatureForm):
             widget=SliderWidget(min=-180,max=180,step=0.00001,image='analysistools/img/lon.gif'),
             label="Longitude")
     input_buffer_distance = forms.FloatField(
-            widget=SliderWidget(min=10, max=50000,step=1,
-                image = 'analysistools/img/buffer.png'),
-            label = "Buffer Distance (m)",
+            widget=SliderWidget(min=10, max=50000,step=1,image='analysistools/img/buffer.png'),
+            label="Buffer Distance (m)",
             min_value=0.0001, max_value=50000)
 
     class Meta(FeatureForm.Meta):

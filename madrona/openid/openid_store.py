@@ -39,12 +39,12 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
 
     def storeAssociation(self, server_url, association):
         assoc = Association(
-            server_url = server_url,
-            handle = association.handle,
-            secret = base64.encodestring(association.secret),
-            issued = association.issued,
-            lifetime = association.lifetime,
-            assoc_type = association.assoc_type
+            server_url=server_url,
+            handle=association.handle,
+            secret=base64.encodestring(association.secret),
+            issued=association.issued,
+            lifetime=association.lifetime,
+            assoc_type=association.assoc_type
         )
         assoc.save()
 
@@ -52,11 +52,12 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
         assocs = []
         if handle is not None:
             assocs = Association.objects.filter(
-                server_url = server_url, handle = handle
+                server_url=server_url, 
+                handle=handle
             )
         else:
             assocs = Association.objects.filter(
-                server_url = server_url
+                server_url=server_url
             )
         if not assocs:
             return None
@@ -81,7 +82,8 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
 
     def removeAssociation(self, server_url, handle):
         assocs = list(Association.objects.filter(
-            server_url = server_url, handle = handle
+            server_url=server_url, 
+            handle=handle
         ))
         assocs_exist = len(assocs) > 0
         for assoc in assocs:

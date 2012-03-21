@@ -172,7 +172,7 @@ class GridAttributes(models.Model):
     value = models.FloatField()
     habitat = models.ForeignKey(Habitat,null=True,blank=True)
 
-def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_size=1000):
+def corner_point_array(bbox, mgeom=StudyRegion.objects.multigeometry(), cell_size=1000):
     # returns an array of points that are within sqrt(2) * cell_size of mgeom
     threshold = cell_size * np.sqrt(2)
     simp_mgeom = mgeom.simplify(cell_size / 3,preserve_topology=True).buffer(threshold)
@@ -199,7 +199,7 @@ def corner_point_array(bbox, mgeom = StudyRegion.objects.multigeometry(), cell_s
                 points.append(corner_pnt)
     return points
 
-def create_grid_cell(corner_pnt, cell_size, mgeom = StudyRegion.objects.multigeometry(), test_intersection=True, srid=settings.GEOMETRY_DB_SRID):
+def create_grid_cell(corner_pnt, cell_size, mgeom=StudyRegion.objects.multigeometry(), test_intersection=True, srid=settings.GEOMETRY_DB_SRID):
     bbox = (corner_pnt.x,corner_pnt.y,cell_size + corner_pnt.x,cell_size + corner_pnt.y)
     poly = geos.Polygon.from_bbox(bbox)
     if not test_intersection:

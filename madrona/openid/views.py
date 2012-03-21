@@ -176,7 +176,7 @@ def signin_success(request, identity_url, openid_response,
     request.session['openids'] = openids
     request.session['openid'] = openid_
     try:
-        rel = UserAssociation.objects.get(openid_url__exact = str(openid_))
+        rel = UserAssociation.objects.get(openid_url__exact=str(openid_))
     except:
         # try to register this new user
         redirect_to = request.REQUEST.get(redirect_field_name, '')
@@ -308,7 +308,7 @@ def is_association_exist(openid_url):
     """ test if an openid is already in database """
     is_exist = True
     try:
-        uassoc = UserAssociation.objects.get(openid_url__exact = str(openid_url))
+        uassoc = UserAssociation.objects.get(openid_url__exact=str(openid_url))
     except:
         is_exist = False
     return is_exist

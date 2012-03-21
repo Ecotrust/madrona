@@ -50,24 +50,24 @@ def save_tool_bookmark(request):
 
     # see if they've met the limit for this IP address
     if len(Bookmark.objects.filter(user=u,
-                                   date_created__gt = datetime.datetime.now() - settings.BOOKMARK_ANON_LIMIT[1],
+                                   date_created__gt=datetime.datetime.now() - settings.BOOKMARK_ANON_LIMIT[1],
                                    ip=ip)) >= settings.BOOKMARK_ANON_LIMIT[0]:
         log.error(ip + " has exceeded the anonymous bookmark limit")
         return HttpResponse("Bookmark Limit Exceeded. Try again later.", status=404)
 
     b = Bookmark(
-            user = u,
-            name = "",
-            ip = ip,
-            description = "",
-            latitude = p['Latitude'],
-            longitude = p['Longitude'],
-            altitude = p['Altitude'],
-            heading = p['Heading'],
-            tilt = p['Tilt'],
-            roll = p['Roll'],
-            altitudeMode = p['AltitudeMode'],
-            publicstate = p['publicstate'])
+            user=u,
+            name="",
+            ip=ip,
+            description="",
+            latitude=p['Latitude'],
+            longitude=p['Longitude'],
+            altitude=p['Altitude'],
+            heading=p['Heading'],
+            tilt=p['Tilt'],
+            roll=p['Roll'],
+            altitudeMode=p['AltitudeMode'],
+            publicstate=p['publicstate'])
     b.save()
 
     url = reverse('bookmark', args=[b.pk])

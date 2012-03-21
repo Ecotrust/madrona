@@ -66,7 +66,7 @@ class OpenidRegisterForm(forms.Form):
                     letters, numbers and underscores"))
             try:
                 user = User.objects.get(
-                        username__exact = self.cleaned_data['username']
+                        username__exact=self.cleaned_data['username']
                 )
             except User.DoesNotExist:
                 return self.cleaned_data['username']
@@ -82,7 +82,7 @@ class OpenidRegisterForm(forms.Form):
         """For security reason one unique email in database"""
         if 'email' in self.cleaned_data:
             try:
-                user = User.objects.get(email = self.cleaned_data['email'])
+                user = User.objects.get(email=self.cleaned_data['email'])
             except User.DoesNotExist:
                 return self.cleaned_data['email']
             except User.MultipleObjectsReturned:

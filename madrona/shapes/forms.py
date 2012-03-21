@@ -61,7 +61,7 @@ class UploadForm(forms.Form):
         """ Validate the uploaded, zipped shapefile by unpacking to a temporary sandbox.
         """
         # create a temporary file to write the zip archive to
-        tmp = tempfile.NamedTemporaryFile(suffix='.zip', mode = 'w')
+        tmp = tempfile.NamedTemporaryFile(suffix='.zip', mode='w')
 
         # write zip to tmp sandbox
         self.write_file(tmp.name,filefield_data)
