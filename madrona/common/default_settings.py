@@ -5,7 +5,7 @@ os.environ["CELERY_LOADER"] = "django"
 # DONT FORGET TO DOCUMENT ANY NEW SETTINGS IN /docs/settings.rst
 # !!!!!!!!!!!!!!!!!!!!!!
 
-RELEASE = '3.0dev' # The next milestone
+RELEASE = '4.0dev' # The next milestone
 APP_NAME = 'Madrona'
 
 LANGUAGE_CODE = 'en-us'
