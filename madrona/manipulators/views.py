@@ -24,11 +24,11 @@ def mpaManipulatorList(request, app_name, model_name):
         model = ContentType.objects.get(app_label=app_name, model=model_name)
         manipulators = model.model_class().Options.manipulators        
     except Exception, e:
-        return HttpResponse( "The following error was reported: '" + e.message + "', while generating manipulator list from application: " + app_name + " and model: " + model_name, status=404 )
+        return HttpResponse("The following error was reported: '" + e.message + "', while generating manipulator list from application: " + app_name + " and model: " + model_name, status=404)
 
     manip_text = [(manipulator.Options.name) for manipulator in manipulators]   
 
-    return HttpResponse( simplejson.dumps( manip_text )) 
+    return HttpResponse(simplejson.dumps(manip_text)) 
 
 def multi_generic_manipulator_view(request, manipulators):
     '''
@@ -42,7 +42,7 @@ def multi_generic_manipulator_view(request, manipulators):
     try:
         submitted = kwargs['target_shape']            
     except:
-        return HttpResponse( "Target shape not provided", status=500 )
+        return HttpResponse("Target shape not provided", status=500)
     # parse out which manipulators are requested
     if manipulators:
         manipulator_list = manipulators.split(',')
@@ -56,26 +56,26 @@ def multi_generic_manipulator_view(request, manipulators):
         # try to bind the incoming manipulator string to an existing class
         manipClass = manipulatorsDict.get(manipulator)
         if not manipClass:
-            return HttpResponse( "Manipulator " + manipulator + " does not exist.", status=404 )
+            return HttpResponse("Manipulator " + manipulator + " does not exist.", status=404)
 
         try:
             # 'GET' requests assume the intent is to get a related parameter-entry form
             if request.method == 'GET':
                 if manipClass.Form.available:
                     form = manipClass.Form()
-                    return render_to_response( 'common/base_form.html', RequestContext(request,{'form': form}))
+                    return render_to_response('common/base_form.html', RequestContext(request,{'form': form}))
                 else: # this manipulator has no form, just error out
-                    return HttpResponse( "Manipulator " + manipulator + " does not support GET requests.", status=501 )
+                    return HttpResponse("Manipulator " + manipulator + " does not support GET requests.", status=501)
 
             else: # 'POST' request: run this manipulator
                 if manipClass.Form.available: # validate a related form, if such exists
-                    form = manipClass.Form( kwargs )
+                    form = manipClass.Form(kwargs)
                     if form.is_valid():
                         initial_result = form.manipulation
                     else: # invalid parameters - bounce form back to user
-                        return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string( 'common/base_form.html', {'form': form}, RequestContext(request))}))
+                        return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string('common/base_form.html', {'form': form}, RequestContext(request))}))
                 else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
-                    manip_inst = manipClass( **kwargs )
+                    manip_inst = manipClass(**kwargs)
                     initial_result = manip_inst.manipulate()
 
                 result = ensure_keys(initial_result)
@@ -127,7 +127,7 @@ def ensure_keys(values):
     values.setdefault("success", "1")
     return values
 
-def testView( request ):
+def testView(request):
     trans_geom = StudyRegion.objects.current().geometry 
 
     w = trans_geom.extent[0]
@@ -138,7 +138,11 @@ def testView( request ):
     center_lat = trans_geom.centroid.y 
     center_lon = trans_geom.centroid.x
 
-    target_shape = Polygon( LinearRing([ Point( center_lon, center_lat ), Point( e, center_lat ), Point( e, s ), Point( center_lon, s ), Point( center_lon, center_lat)]))
+    target_shape = Polygon(LinearRing([Point(center_lon, center_lat), 
+                                       Point(e, center_lat), 
+                                       Point(e, s), 
+                                       Point(center_lon, s), 
+                                       Point(center_lon, center_lat)]))
 
     target_shape.set_srid(settings.GEOMETRY_DB_SRID)
     target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
@@ -146,6 +150,6 @@ def testView( request ):
     new_req = HttpRequest()
     new_req.method = 'POST'
     new_req.POST.update({'target_shape':target_shape.wkt, "north":"40", "south":"20", "east":"-117", "west":"-118"})
-    response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion,ClipToGraticule' )
+    response = multi_generic_manipulator_view(new_req, 'ClipToStudyRegion,ClipToGraticule')
     #response = multi_generic_manipulator_view( new_req, 'ClipToStudyRegion' )
     return response

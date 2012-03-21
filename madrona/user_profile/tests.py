@@ -31,7 +31,7 @@ class UserProfileTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
-        data = { 'first_name': 'Joe', 'last_name': 'Rando', 'email': 'joe@madrona.org', 'about': 'Joe Rando is a man of few words' }
+        data = {'first_name': 'Joe', 'last_name': 'Rando', 'email': 'joe@madrona.org', 'about': 'Joe Rando is a man of few words'}
         response = self.client.post(url, data)
         self.assertEquals(response.status_code, 302, response)
 

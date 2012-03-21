@@ -86,7 +86,7 @@ def ask_openid(request, openid_url, redirect_to, on_failure=None):
         # set sreg extension
         # we always ask for nickname and email
         sreg_attrs = getattr(settings, 'OPENID_SREG', {})
-        sreg_attrs.update({ "optional": ['nickname', 'email'] })
+        sreg_attrs.update({"optional": ['nickname', 'email']})
         sreg_req = sreg.SRegRequest(**sreg_attrs)
     if use_ax:
         # set ax extension
@@ -184,7 +184,7 @@ def signin_success(request, identity_url, openid_response,
             redirect_to = settings.LOGIN_REDIRECT_URL
         return HttpResponseRedirect(
             "%s?%s" % (reverse('user_register'),
-            urllib.urlencode({ redirect_field_name: redirect_to }))
+            urllib.urlencode({redirect_field_name: redirect_to}))
         )
     user_ = rel.user
     if user_.is_active:
@@ -259,7 +259,7 @@ def signin(request, template_name='authopenid/signin.html',
                 redirect_url = "%s%s?%s" % (
                         get_url_host(request),
                         reverse('user_complete_signin'), 
-                        urllib.urlencode({ redirect_field_name: redirect_to })
+                        urllib.urlencode({redirect_field_name: redirect_to})
                 )
                 return ask_openid(request, 
                         form1.cleaned_data['openid_url'], 
@@ -359,7 +359,7 @@ def register(request, template_name='authopenid/complete.html',
     if openid_ is None or not openid_:
         return HttpResponseRedirect("%s?%s" % (reverse('user_signin'),
                                 urllib.urlencode({ 
-                                redirect_field_name: redirect_to })))
+                                redirect_field_name: redirect_to})))
 
     nickname = ''
     email = ''
@@ -488,7 +488,7 @@ def password_change(request,
             form.save()
             msg = urllib.quote(_("Password changed"))
             redirect_to = "%s?%s" % (post_change_redirect, 
-                                urllib.urlencode({ "msg": msg }))
+                                urllib.urlencode({"msg": msg}))
             return HttpResponseRedirect(redirect_to)
     else:
         form = change_form(request.user)
@@ -578,7 +578,7 @@ def associate(request, template_name='authopenid/associate.html',
             redirect_url = "%s%s?%s" % (
                     get_url_host(request),
                     reverse('user_complete_associate'),
-                    urllib.urlencode({ redirect_field_name: redirect_to })
+                    urllib.urlencode({redirect_field_name: redirect_to})
             )
             return ask_openid(request, 
                     form.cleaned_data['openid_url'], 
@@ -609,7 +609,7 @@ def dissociate(request, template_name="authopenid/dissociate.html",
         msg = _("You can't remove this openid. "
         "You should set a password first.")
         return HttpResponseRedirect("%s?%s" % (redirect_to,
-            urllib.urlencode({ "msg": msg })))
+            urllib.urlencode({"msg": msg})))
 
     if request.POST:
         form = dissociate_form(request.POST)
@@ -625,14 +625,14 @@ def dissociate(request, template_name="authopenid/dissociate.html",
                     del request.session['openid_url']
                 msg = _("openid removed.")
             return HttpResponseRedirect("%s?%s" % (redirect_to,
-                urllib.urlencode({ "msg": msg })))
+                urllib.urlencode({"msg": msg})))
     else:
         openid_url = request.GET.get('openid_url', '')
         if not openid_url:
             msg = _("Invalid OpenID url.")
             return HttpResponseRedirect("%s?%s" % (redirect_to,
-                urllib.urlencode({ "msg": msg })))
-        form = dissociate_form(initial={ 'openid_url': openid_url })
+                urllib.urlencode({"msg": msg})))
+        form = dissociate_form(initial={'openid_url': openid_url})
     return render(template_name, {
             "form": form,
             "openid_url": openid_url

@@ -19,24 +19,24 @@ def kml_doc_from_geometry_list(geom_list, template='general.kml'):
     out_dict = {}
     placemarks = []
     for geom in geom_list:
-        placemarks.append( kml_placemark_from_geom(geom) )
+        placemarks.append(kml_placemark_from_geom(geom))
     out_dict['placemarks'] = placemarks
     from django.template import Context, Template
     from django.template.loader import get_template
     t = get_template(template)
-    response = t.render(Context({ 'kml': out_dict }))
+    response = t.render(Context({'kml': out_dict}))
     return response
 
 def kml_doc_from_queryset(qs, template='general.kml'):
     dict = {}
     placemarks = []
     for item in qs:
-        placemarks.append( kml_placemark(item) )
+        placemarks.append(kml_placemark(item))
     dict['placemarks'] = placemarks
     from django.template import Context, Template
     from django.template.loader import get_template
     t = get_template(template)
-    response = t.render(Context({ 'kml': dict }))
+    response = t.render(Context({'kml': dict}))
     return response
 
 def kml_placemark_from_geom(geom, styleUrl='#default'):
@@ -81,7 +81,7 @@ def create_pickled_graph(verbose=False):
     graph = nx.Graph()
     graph = add_land_to_graph(graph,verbose=verbose)
     # add spacing points to graph
-    points = [ sp.geometry for sp in SpacingPoint.objects.all() ]
+    points = [sp.geometry for sp in SpacingPoint.objects.all()]
     graph = add_points_to_graph(points,graph)
     pickle.dump(graph, tf)
     pg = PickledGraph()
@@ -133,7 +133,7 @@ class Land(models.Model):
         from django.template import Context, Template
         from django.template.loader import get_template
         t = get_template('land.kml')
-        response = t.render(Context({ 'land': self }))
+        response = t.render(Context({'land': self}))
         return response
 
     def simplify(self, tolerance=500):
@@ -160,7 +160,7 @@ def all_spacing_points_dict():
     """
     Returns a dictionary of the form: { point: 'name' } for all objects in SpacingPoint
     """
-    return dict( [ (p.geometry,p.name) for p in SpacingPoint.objects.all() ] )
+    return dict([(p.geometry,p.name) for p in SpacingPoint.objects.all()])
 
 def add_all_spacing_points(in_dict):
     """
@@ -199,14 +199,14 @@ def distance_row_list(from_pnt, to_list, straight_line=False, with_geom=False):
     for point in to_list:
         point_pair_dict = {}
         if straight_line:
-            point_pair_dict.update( {'distance': length_in_display_units(point.distance(from_pnt)) } )
+            point_pair_dict.update({'distance': length_in_display_units(point.distance(from_pnt))})
             if with_geom:
                 line = geos.LineString(point,from_pnt)
         else:
             distance, line = fish_distance_from_edges(from_pnt,point)
-            point_pair_dict.update( {'distance': distance} )
+            point_pair_dict.update({'distance': distance})
         if with_geom:
-            point_pair_dict.update( {'geometry': line} )
+            point_pair_dict.update({'geometry': line})
         result.append(point_pair_dict)
     return result
 
@@ -233,15 +233,15 @@ def sorted_points_and_labels(in_dict):
     for point, name in in_dict.iteritems():
         # adapt this to work with other geometry types:
         if point.__class__.__name__.lower() == 'point':
-            y_dict.update( { point.y: point } )
+            y_dict.update({point.y: point})
         else:
-            y_dict.update( { point.centroid.y: point })
+            y_dict.update({point.centroid.y: point})
     y_list = y_dict.keys()
     y_list.sort()
     for y in reversed(y_list):
         sorted_points.append(y_dict[y])
         sorted_labels.append(in_dict[y_dict[y]])
-    return { 'points': sorted_points, 'labels': sorted_labels }
+    return {'points': sorted_points, 'labels': sorted_labels}
 
 def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=False,with_geom=False):
     """
@@ -253,7 +253,7 @@ def distance_matrix_and_labels(in_dict,add_spacing_points=True,straight_line=Fal
         in_dict = add_all_spacing_points(in_dict)
     spl_dict = sorted_points_and_labels(in_dict)
     dist_mat = distance_matrix(spl_dict['points'], straight_line=straight_line, with_geom=with_geom)
-    return { 'labels': spl_dict['labels'], 'matrix': dist_mat }
+    return {'labels': spl_dict['labels'], 'matrix': dist_mat}
 
 ### End of spacing matrix methods ###
 
@@ -286,7 +286,7 @@ def fish_distance(point1,point2):
         # G = add_ocean_edges_for_node(G,get_node_from_point(G,point1))
         # G = add_ocean_edges_for_node(G,get_node_from_point(G,point2))
         # Replace the straight line with the shortest path around land
-        line = geos.LineString( nx.dijkstra_path(G,get_node_from_point(G,point1),get_node_from_point(G,point2)) )
+        line = geos.LineString(nx.dijkstra_path(G,get_node_from_point(G,point1),get_node_from_point(G,point2)))
         line.srid = settings.GEOMETRY_DB_SRID
 
     # Figure out the distance of the line (straight or otherwise) in miles
@@ -307,9 +307,9 @@ def fish_distance_from_edges(geom1,geom2):
         # Replace the first point in the fish path with the point on geom1
         # that lies closest to the second point on the path.
         #print c_line[1]
-        c_line[0] = closest_point(geom1, geos.Point( c_line.coords[1], srid=geom1.srid ) ).coords
+        c_line[0] = closest_point(geom1, geos.Point(c_line.coords[1], srid=geom1.srid)).coords
         # Do the same for the last point in the path
-        c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point( c_line.coords[c_line.num_points - 2], srid=geom2.srid ) ).coords
+        c_line[c_line.num_points - 1] = closest_point(geom2, geos.Point(c_line.coords[c_line.num_points - 2], srid=geom2.srid)).coords
         line = c_line
     # Adjust the distance
     distance = length_in_display_units(line)
@@ -384,9 +384,9 @@ def add_ocean_edges_complete(graph, verbose=False):
         cnt = 1
         import time
         t0 = time.time()
-        print "Starting at %s to add edges for %i nodes." % (time.asctime(time.localtime(t0)), graph.number_of_nodes() )
+        print "Starting at %s to add edges for %i nodes." % (time.asctime(time.localtime(t0)), graph.number_of_nodes())
         edge_possibilities = graph.number_of_nodes() * (graph.number_of_nodes() -1)
-        print "We'll have to look at somewhere around %i edge possibilities." % ( edge_possibilities )
+        print "We'll have to look at somewhere around %i edge possibilities." % (edge_possibilities)
         print "Node: ",
     for node in graph.nodes_iter():
         if verbose:
@@ -398,7 +398,7 @@ def add_ocean_edges_complete(graph, verbose=False):
                 if not line_crosses_land(line):
                     graph.add_edge(node,n,{'weight': length_in_display_units(node.distance(n))})
     if verbose:
-        print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges() )
+        print "It took %i minutes to load %i edges." % ((time.time() - t0)/60, graph.number_of_edges())
     return graph
 
 def shortest_line(geom1,geom2):
@@ -408,7 +408,7 @@ def shortest_line(geom1,geom2):
     given geometries.  Seems to work with any geometry type including geometry collections.
     """
     cursor = connection.cursor()
-    query = "select st_astext( st_shortestline('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
+    query = "select st_astext(st_shortestline('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.wkt, geom2.wkt)
     cursor.execute(query)
     return geos.fromstr(cursor.fetchone()[0])
 
@@ -418,7 +418,7 @@ def closest_point(geom1,geom2):
     PostGIS 1.5 or newer.  
     """
     cursor = connection.cursor()
-    query = "select st_asewkt( ST_ClosestPoint('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.ewkt, geom2.ewkt)
+    query = "select st_asewkt(ST_ClosestPoint('%s'::geometry, '%s'::geometry) ) as sline;" % (geom1.ewkt, geom2.ewkt)
     cursor.execute(query)
     return geos.fromstr(cursor.fetchone()[0])
 

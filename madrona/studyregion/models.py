@@ -111,7 +111,7 @@ class StudyRegion(models.Model):
             shape_kml = shape_kml.replace('<innerBoundaryIs>', '')
             shape_kml = shape_kml.replace('</innerBoundaryIs>', '')
 
-            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + '<Placemark><name>Study Region Boundaries</name>%s<styleUrl>http://%s/media/studyregion/styles.kml#StudyRegionStyle</styleUrl>%s</Placemark></Document>' % ( self.lookAtKml(), style_domain, shape_kml, )
+            return '<Document><name>%s</name>' % (self.name,) + self.lookAtKml() + '<Placemark><name>Study Region Boundaries</name>%s<styleUrl>http://%s/media/studyregion/styles.kml#StudyRegionStyle</styleUrl>%s</Placemark></Document>' % (self.lookAtKml(), style_domain, shape_kml,)
 
         else:
             # use the kml_chunk LOD system,
@@ -123,25 +123,25 @@ class StudyRegion(models.Model):
             e = trans_geom.extent[2]
             n = trans_geom.extent[3]
 
-            return '<Document><name>%s</name>' % (self.name, ) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
+            return '<Document><name>%s</name>' % (self.name,) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
 
     # NOTE: not currently used, LOD system overhead not justified by performance
-    def kml_chunk(self, n, s, e, w ):
+    def kml_chunk(self, n, s, e, w):
         """
         Get the kml of a lat/lon bounded part of the study region, 
         with geometry simplified in proportion to the visible % of the region
         """
 
-        bounds = Polygon( LinearRing([ Point( w, n ), Point( e, n ), Point( e, s ), Point( w, s ), Point( w, n)]))
+        bounds = Polygon(LinearRing([Point(w, n), Point(e, n), Point(e, s), Point(w, s), Point(w, n)]))
         bounds.set_srid(4326)
         center_lat = bounds.centroid.y # in 4326 because it is used only for setting up the subregion calls
         center_lon = bounds.centroid.x # in 4326 because it is used only for setting up the subregion calls
         bounds.transform(settings.GEOMETRY_DB_SRID)
 
         # all longitudinal width calcs should be done in GEOMETRY_DB_SRID - 4326 can fail across the date line
-        zoom_width = (Point( bounds.extent[0], bounds.centroid.y )).distance( Point( bounds.extent[2], bounds.centroid.y ))
+        zoom_width = (Point(bounds.extent[0], bounds.centroid.y)).distance(Point(bounds.extent[2], bounds.centroid.y))
 
-        full_shape_width = (Point( self.geometry.extent[0], self.geometry.centroid.y )).distance( Point( self.geometry.extent[2], self.geometry.centroid.y ))
+        full_shape_width = (Point(self.geometry.extent[0], self.geometry.centroid.y)).distance(Point(self.geometry.extent[2], self.geometry.centroid.y))
 
         # The following simplify values can be tuned to your preference
         # minimum geometry simplify value (highest detail) = 50 (arbitrary, based on observation)
@@ -149,10 +149,10 @@ class StudyRegion(models.Model):
         # value set by pecentage of study region width requested in this chunk
         min_simplify_val = 50.0
         max_simplify_val = 200.0
-        simplify_factor = max( min_simplify_val, min( max_simplify_val, max_simplify_val * zoom_width / full_shape_width))
+        simplify_factor = max(min_simplify_val, min(max_simplify_val, max_simplify_val * zoom_width / full_shape_width))
 
         transform_geom = self.geometry.simplify(simplify_factor, preserve_topology=True)
-        transform_geom = transform_geom.intersection( bounds )    
+        transform_geom = transform_geom.intersection(bounds)
         transform_geom.transform(4326)
 
         # Debugging info
@@ -171,17 +171,17 @@ class StudyRegion(models.Model):
         if bLastLodLevel:
             max_lod_pixels = -1
 
-        retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>%f</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % ( n, s, e, w, min_lod_pixels, max_lod_pixels ) + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml, )
+        retval = '<Region><LatLonAltBox><north>%f</north><south>%f</south><east>%f</east><west>%f</west></LatLonAltBox><Lod><minLodPixels>%f</minLodPixels><maxLodPixels>%f</maxLodPixels><minFadeExtent>0</minFadeExtent><maxFadeExtent>0</maxFadeExtent></Lod></Region>' % (n, s, e, w, min_lod_pixels, max_lod_pixels) + '<Placemark> <name>Study Region Boundaries</name><Style> <LineStyle> <color>ff00ffff</color> <width>2</width> </LineStyle> <PolyStyle> <color>8000ffff</color> </PolyStyle></Style>%s</Placemark>' % (transform_geom.kml,)
 
         # conditionally add sub-regions
         if not bLastLodLevel:
-            subregions = '<Folder><name>Study Region LODs</name>' + '<Folder><name>SE</name>' + self.kml_chunk( center_lat, s, e, center_lon ) + '</Folder>'
+            subregions = '<Folder><name>Study Region LODs</name>' + '<Folder><name>SE</name>' + self.kml_chunk(center_lat, s, e, center_lon) + '</Folder>'
 
-            subregions = subregions + '<Folder><name>NE</name>' + self.kml_chunk( n, center_lat, e, center_lon ) + '</Folder>'       
+            subregions = subregions + '<Folder><name>NE</name>' + self.kml_chunk(n, center_lat, e, center_lon) + '</Folder>'       
 
-            subregions = subregions + '<Folder><name>SW</name>' + self.kml_chunk( center_lat, s, center_lon, w ) + '</Folder>'    
+            subregions = subregions + '<Folder><name>SW</name>' + self.kml_chunk(center_lat, s, center_lon, w) + '</Folder>'    
 
-            subregions = subregions + '<Folder><name>NW</name>' + self.kml_chunk( n, center_lat, center_lon, w ) + '</Folder>'
+            subregions = subregions + '<Folder><name>NW</name>' + self.kml_chunk(n, center_lat, center_lon, w) + '</Folder>'
 
             retval = retval + subregions + '</Folder>'
 
@@ -196,7 +196,7 @@ class StudyRegion(models.Model):
         if self.lookAt_Lat == 0.0 and self.lookAt_Lon == 0.0:
             self.cacheLookAt()
 
-        retval = '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading )
+        retval = '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (self.lookAt_Lat, self.lookAt_Lon, self.lookAt_Range, self.lookAt_Tilt, self.lookAt_Heading)
         return retval
 
     def cacheLookAt(self):
@@ -204,7 +204,7 @@ class StudyRegion(models.Model):
         Compute and store the camera perspective that puts the whole study region in view
         """
 
-        lookAtParams = ComputeLookAt( self.geometry )
+        lookAtParams = ComputeLookAt(self.geometry)
 
         self.lookAt_Range = lookAtParams['range']
         self.lookAt_Lat = lookAtParams['latitude'] 

@@ -21,7 +21,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
 
     # write the header labels row across the top
     for i,lab in enumerate(label_list):
-        ws.row(current_row).write(i+1,unicode(lab) )
+        ws.row(current_row).write(i+1,unicode(lab))
     current_row += 1
 
     # write the rest of the matrix

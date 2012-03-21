@@ -10,8 +10,8 @@ import optparse
 import psycopg2
 
 def replace_file(infile, outfile, search_replace, remove=True):
-    infh = open( infile, 'r')
-    outfh = open( outfile, 'w')
+    infh = open(infile, 'r')
+    outfh = open(outfile, 'w')
     for line in infh:
         out = line
         for s, r in search_replace.iteritems():
@@ -138,7 +138,7 @@ SECRET_KEY = '%s'
     # gitignore
     infile = os.path.join(dest_dir, '_.gitignore')
     outfile = os.path.join(dest_dir, '.gitignore')
-    search_replace = { '_project': opts.project_name }
+    search_replace = {'_project': opts.project_name}
     replace_file(infile, outfile, search_replace)
 
     # wsgi

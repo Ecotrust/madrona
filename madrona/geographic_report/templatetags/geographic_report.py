@@ -44,7 +44,7 @@ class GeographicReportNode(template.Node):
                 'label': annotation.label,
                 'min': annotation.min,
                 'max': annotation.max,
-                'color': '#%s' % (annotation.color, ) })
+                'color': '#%s' % (annotation.color, )})
 
         json = simplejson.dumps(json)
         return """

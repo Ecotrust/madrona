@@ -780,8 +780,8 @@ class TestMpa(PolygonFeature):
     class Options:
         verbose_name = 'Marine Protected Area'
         form = 'madrona.features.tests.MpaForm'
-        manipulators = [ 'madrona.manipulators.tests.TestManipulator' ]
-        optional_manipulators = [ 'madrona.manipulators.manipulators.ClipToGraticuleManipulator' ]
+        manipulators = ['madrona.manipulators.tests.TestManipulator']
+        optional_manipulators = ['madrona.manipulators.manipulators.ClipToGraticuleManipulator']
         links = (
             related('Habitat Spreadsheet',
                 'madrona.features.tests.habitat_spreadsheet',
@@ -1349,13 +1349,13 @@ class SharingTestCase(TestCase):
         g1.transform(settings.GEOMETRY_DB_SRID)
 
         # Create three Mpas by different users
-        self.mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation='R', user=self.user1, geometry_final=g1)
+        self.mpa1 = TestMpa.objects.create(name='Test_MPA_1', designation='R', user=self.user1, geometry_final=g1)
         self.mpa1.save()
 
-        self.mpa2 = TestMpa.objects.create( name='Test_MPA_2', designation='R', user=self.user2, geometry_final=g1)
+        self.mpa2 = TestMpa.objects.create(name='Test_MPA_2', designation='R', user=self.user2, geometry_final=g1)
         self.mpa2.save()
 
-        self.mpa3 = TestMpa.objects.create( name='Test_MPA_3', designation='R', user=self.user3, geometry_final=g1)
+        self.mpa3 = TestMpa.objects.create(name='Test_MPA_3', designation='R', user=self.user3, geometry_final=g1)
         self.mpa3.save()
 
         # Create a pipeline
@@ -1367,7 +1367,7 @@ class SharingTestCase(TestCase):
         #       |-pipeline1
         #       |-mpa1
 
-        self.array1 = TestArray.objects.create( name='Test_Array_1', user=self.user1)
+        self.array1 = TestArray.objects.create(name='Test_Array_1', user=self.user1)
         self.array1.save()
         self.array1.add(self.mpa1)
         self.array1.add(self.pipeline1)
@@ -1382,21 +1382,21 @@ class SharingTestCase(TestCase):
     def test_nested_folder_sharing(self):
         # Not shared yet
         viewable, response = self.pipeline1.is_viewable(self.user2)
-        self.assertEquals( viewable, False)
+        self.assertEquals(viewable, False)
         viewable, response = self.pipeline1.is_viewable(self.user3)
-        self.assertEquals( viewable, False )
+        self.assertEquals(viewable, False)
 
         # Share folder1 with group1; now group1 should be able to see array1
         self.folder1.share_with(self.group1)
         viewable, response = self.array1.is_viewable(self.user2)
-        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        self.assertEquals(viewable, True, str(response.status_code) + str(response))
         viewable, response = self.array1.is_viewable(self.user3)
-        self.assertEquals( viewable, False )
+        self.assertEquals(viewable, False)
         # ... and group1 should be able to see pipeline
         viewable, response = self.pipeline1.is_viewable(self.user2)
-        self.assertEquals( viewable, True, str(response.status_code) + str(response) )
+        self.assertEquals(viewable, True, str(response.status_code) + str(response))
         viewable, response = self.pipeline1.is_viewable(self.user3)
-        self.assertEquals( viewable, False )
+        self.assertEquals(viewable, False)
 
     def test_user_sharing_groups(self):
         sgs = user_sharing_groups(self.user1)
@@ -1438,14 +1438,14 @@ class SharingTestCase(TestCase):
         self.mpa2.share_with(self.group1)
         # User 2 should be able to view it since they own it
         viewable, response = self.mpa2.is_viewable(self.user2)
-        self.assertEquals( viewable, True )
+        self.assertEquals(viewable, True)
         # User1 should see it (since they're part of Group1)
         viewable, response = self.mpa2.is_viewable(self.user1)
-        self.assertEquals( viewable, True )
+        self.assertEquals(viewable, True)
         # User3 should not see it since they're not part of Group1
         viewable, response = self.mpa2.is_viewable(self.user3)
         self.assertEquals(response.status_code, 403)
-        self.assertEquals(viewable, False )
+        self.assertEquals(viewable, False)
 
     def test_share_with_bad_group(self):
         """
@@ -1495,13 +1495,13 @@ class SharingTestCase(TestCase):
         self.array1.share_with(self.group1) 
         # User 1 should see it since they own it
         viewable, response = self.mpa1.is_viewable(self.user1)
-        self.assertEquals( viewable, True )
+        self.assertEquals(viewable, True)
         # User2 should see the mpa contained in array1 (since they're part of Group1)
         viewable, response = self.mpa1.is_viewable(self.user2)
-        self.assertEquals( viewable, True )
+        self.assertEquals(viewable, True)
         # User3 should not see it (since they're not part of Group1)
         viewable, response = self.mpa1.is_viewable(self.user3)
-        self.assertEquals( viewable, False )
+        self.assertEquals(viewable, False)
 
     def test_groups_users_sharing_with(self):
         """

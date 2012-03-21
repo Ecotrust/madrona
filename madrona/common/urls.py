@@ -39,5 +39,5 @@ urlpatterns += patterns('',
 # Useful for serving files when using the django dev server
 urlpatterns += patterns('',
     (r'^media(.*)/upload/', 'madrona.common.views.forbidden'),
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 )

@@ -24,7 +24,7 @@ def kml(request, pk):
     """Return kml for the requested StudyRegion
     """
     region = get_object_or_404(models.StudyRegion, pk=pk)    
-    return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type=mimetypes.KML) 
+    return HttpResponse(KmlWrap(region.kml(request.get_host())), content_type=mimetypes.KML) 
 
 @cache_page(60 * 60 * 24)
 def regionKml(request):
@@ -32,7 +32,7 @@ def regionKml(request):
     """
     region = models.StudyRegion.objects.current()
 
-    return HttpResponse( KmlWrap( region.kml(request.get_host()) ), content_type=mimetypes.KML) 
+    return HttpResponse(KmlWrap(region.kml(request.get_host())), content_type=mimetypes.KML) 
 
 
 def regionKmlChunk(request, n, s, e, w):
@@ -40,8 +40,8 @@ def regionKmlChunk(request, n, s, e, w):
     """
     region = models.StudyRegion.objects.current()
 
-    return HttpResponse( 
-        KmlWrap( '<Document>' + region.kml_chunk(float(n), float(s), float(e), float(w)) + '</Document>' ), content_type=mimetypes.KML) 
+    return HttpResponse(
+        KmlWrap('<Document>' + region.kml_chunk(float(n), float(s), float(e), float(w)) + '</Document>'), content_type=mimetypes.KML) 
 
 
 def regionLookAtKml(request):
@@ -49,4 +49,4 @@ def regionLookAtKml(request):
     """
     region = models.StudyRegion.objects.current()
 
-    return HttpResponse( KmlWrap( '<Document>' + region.lookAtKml() + '</Document>' ), content_type=mimetypes.KML )
+    return HttpResponse(KmlWrap('<Document>' + region.lookAtKml() + '</Document>'), content_type=mimetypes.KML)

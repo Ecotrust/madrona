@@ -29,11 +29,11 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     ycount = int((ydist/cellsize)+1)
 
     # Create the blank numpy array
-    outArray = numpy.zeros( (ycount, xcount) )
+    outArray = numpy.zeros((ycount, xcount))
 
     # Create output raster  
-    driver = gdal.GetDriverByName( format )
-    dst_ds = driver.Create( outfile, xcount, ycount, 1, gdal.GDT_UInt16 )
+    driver = gdal.GetDriverByName(format)
+    dst_ds = driver.Create(outfile, xcount, ycount, 1, gdal.GDT_UInt16)
 
     # This is bizzarly complicated
     # the GT(2) and GT(4) coefficients are zero,     
@@ -41,7 +41,7 @@ def create_blank_raster(extent,cellsize,outfile,format,srid=settings.GEOMETRY_DB
     # The (GT(0),GT(3)) position is the top left corner of the top left pixel
     gt = (extent[0],cellsize,0,extent[3],0,(cellsize*-1.))
     dst_ds.SetGeoTransform(gt)
-    dst_ds.SetProjection( srs.ExportToWkt() )
+    dst_ds.SetProjection(srs.ExportToWkt())
 
     dst_band = dst_ds.GetRasterBand(1)
     dst_band.WriteArray(outArray,0,0)
@@ -62,8 +62,8 @@ def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,form
     ycount = int((ydist/cellsize)+1)
 
     # Create output raster  
-    driver = gdal.GetDriverByName( format )
-    dst_ds = driver.Create( outfile, xcount, ycount, 1, gdal.GDT_UInt16 )
+    driver = gdal.GetDriverByName(format)
+    dst_ds = driver.Create(outfile, xcount, ycount, 1, gdal.GDT_UInt16)
 
     # This is bizzarly complicated
     # the GT(2) and GT(4) coefficients are zero,     
@@ -71,7 +71,7 @@ def create_raster_from_matrix(matrix,outfile,extent=None,cellsize=CELL_SIZE,form
     # The (GT(0),GT(3)) position is the top left corner of the top left pixel
     gt = (extent[0],cellsize,0,extent[3],0,(cellsize*-1.))
     dst_ds.SetGeoTransform(gt)
-    dst_ds.SetProjection( srs.ExportToWkt() )
+    dst_ds.SetProjection(srs.ExportToWkt())
 
     dst_band = dst_ds.GetRasterBand(1)
     dst_band.WriteArray(matrix,0,0)

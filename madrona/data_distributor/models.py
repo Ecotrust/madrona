@@ -69,7 +69,7 @@ def models_in_module_recursive(modules=settings.INSTALLED_APPS,exclude_django=Tr
     return result
 
 def fields_in_model(the_model):
-    result = [ f.name for f in the_model._meta.fields ]
+    result = [f.name for f in the_model._meta.fields]
     return result
 
 def load_potential_targets(modules=settings.INSTALLED_APPS,keep_previous=True,geometry_models_only=True):
@@ -146,7 +146,7 @@ class LoadSetup(models.Model):
     def save(self):
         super(LoadSetup,self).save()
         self.origin_field_choices = self.origin_data_layer.active_shapefile.field_info_str().replace('\n',',  ')
-        self.target_field_choices = ', '.join( [ ptf.name for ptf in self.target_model.potentialtargetfield_set.all() ] )
+        self.target_field_choices = ', '.join([ptf.name for ptf in self.target_model.potentialtargetfield_set.all()])
         super(LoadSetup,self).save()
 
     def run_load_setup(self):

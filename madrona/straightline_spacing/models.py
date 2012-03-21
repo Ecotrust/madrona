@@ -15,7 +15,7 @@ def all_spacing_points_dict():
     """
     Returns a dictionary of the form: { point: 'name' } for all objects in SpacingPoint
     """
-    return dict( [ (p.geometry,p.name) for p in SpacingPoint.objects.all() ] )
+    return dict([(p.geometry,p.name) for p in SpacingPoint.objects.all()])
 
 def add_all_spacing_points(in_dict):
     """
@@ -69,13 +69,13 @@ def sorted_points_and_labels(in_dict):
     sorted_labels = []
     y_dict = {}
     for point, name in in_dict.iteritems():
-        y_dict.update( { point.y: point } )
+        y_dict.update({point.y: point})
     y_list = y_dict.keys()
     y_list.sort()
     for y in reversed(y_list):
         sorted_points.append(y_dict[y])
         sorted_labels.append(in_dict[y_dict[y]])
-    return { 'points': sorted_points, 'labels': sorted_labels }
+    return {'points': sorted_points, 'labels': sorted_labels}
 
 def distance_matrix_and_labels(in_dict,add_spacing_points=True):
     """
@@ -87,4 +87,4 @@ def distance_matrix_and_labels(in_dict,add_spacing_points=True):
         in_dict = add_all_spacing_points(in_dict)
     spl_dict = sorted_points_and_labels(in_dict)
     dist_mat = distance_matrix(spl_dict['points'])
-    return { 'labels': spl_dict['labels'], 'matrix': dist_mat }
+    return {'labels': spl_dict['labels'], 'matrix': dist_mat}

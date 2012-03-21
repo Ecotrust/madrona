@@ -21,9 +21,9 @@ WAVE_ID = 'wavesandbox.com!q43w5q3w45taesrfgs' # Your Google Wave Account - may 
 
 ROOT_URLCONF = 'test_project.urls'
 
-TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
+TEMPLATE_DIRS = (os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')),)
 
-INSTALLED_APPS += ( 'madrona.raster_stats', 'mlpa', )
+INSTALLED_APPS += ('madrona.raster_stats', 'mlpa',)
 
 # For some reason, running the raster_stats tests causes
 # the xml test runner to fail to output the xml

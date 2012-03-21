@@ -98,12 +98,12 @@ def zip_from_shp(shp_path):
 
     directory, file_with_ext = os.path.split(shp_path)
     if file_with_ext.count('.') != 1:
-        raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
+        raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.'))
     else:
         filename, ext = file_with_ext.split('.')
-    zfile_path = os.path.join(directory, ('.').join([filename,'zip']) )    
+    zfile_path = os.path.join(directory, ('.').join([filename,'zip']))    
     zfile = zipfile.ZipFile(zfile_path, 'w')
-    for name in glob.glob( os.path.join(directory,filename + '.*') ):
+    for name in glob.glob(os.path.join(directory,filename + '.*')):
         bn = os.path.basename(name)
         part_filenam, part_ext = bn.split('.',1)
         # make sure we're only adding allowed shapefile extensions
@@ -111,7 +111,7 @@ def zip_from_shp(shp_path):
             zfile.write(name, bn, zipfile.ZIP_DEFLATED)
     zfile.close()
 
-    return filename, File( open(zfile_path) )
+    return filename, File(open(zfile_path))
 
 def use_sort_as_key(results):
     """
@@ -119,8 +119,8 @@ def use_sort_as_key(results):
     """
     sort_results = {}
     for hab,sub_dict in results.iteritems():
-        sub_dict.update( {'name':hab} )
-        sort_results.update( {results[hab]['sort']:sub_dict} )
+        sub_dict.update({'name':hab})
+        sort_results.update({results[hab]['sort']:sub_dict})
 
     return sort_results
 
@@ -433,7 +433,7 @@ class MultiFeatureShapefile(Shapefile):
         ds = DataSource(file_path)
         lyr = ds[0]
         if field_name not in lyr.fields:
-            raise Exception('Specified field (%s) not found in %s' % (field_name,self.name) )
+            raise Exception('Specified field (%s) not found in %s' % (field_name,self.name))
         field = lyr.get_fields(field_name)
         distinct_values = dict.fromkeys(field).keys()
 
@@ -750,16 +750,16 @@ class IntersectionFeature(models.Model):
         #result = self.geometry.intersection(sr.geometry)
         features_within = self.geometries_set.filter(geometry__within=sr.geometry)
         if self.feature_model == 'ArealFeature':
-            area_within = sum( [ a.geometry.area for a in features_within ] )
+            area_within = sum([a.geometry.area for a in features_within])
             mgeom = geos.fromstr('MULTIPOLYGON EMPTY')
-            [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__overlaps=sr.geometry) ]
+            [mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__overlaps=sr.geometry)]
             area_overlap = mgeom.intersection(sr.geometry).area
             area_total = area_overlap + area_within
             return area_in_display_units(area_total)
         elif self.feature_model == 'LinearFeature':
-            length_within = sum( [ a.geometry.length for a in features_within ] )
+            length_within = sum([a.geometry.length for a in features_within])
             mgeom = geos.fromstr('MULTILINESTRING EMPTY')
-            [ mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__crosses=sr.geometry) ]
+            [mgeom.append(a.geometry) for a in self.geometries_set.filter(geometry__crosses=sr.geometry)]
             length_overlap = mgeom.intersection(sr.geometry).length
             length_total = length_overlap + length_within
             return length_in_display_units(length_total)
@@ -791,7 +791,7 @@ class OrganizationScheme(models.Model):
         subdict['num_features'] = self.featuremapping_set.all().count()
         subdict['feature_info'] = {}
         for f in self.featuremapping_set.all().order_by('sort'):
-            subdict['feature_info'].update( { f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
+            subdict['feature_info'].update({f.sort : {'name':f.name, 'pk':f.pk, 'sort':f.sort, 'study_region_total':f.study_region_total, 'units': f.units} } )
         return subdict
 
     def my_validate(self):
@@ -821,7 +821,7 @@ class OrganizationScheme(models.Model):
         new_results = {}
         for fm in self.featuremapping_set.all():
             result_dict = fm.transformed_results_single_geom(geom,with_geometries=with_geometries,with_kml=with_kml)
-            if not True in [ k in result_dict.keys() for k in new_results.keys() ]:
+            if not True in [k in result_dict.keys() for k in new_results.keys()]:
                 for key in result_dict.keys():
                     result_dict[key].update({'org_scheme_id': self.pk})
                 new_results.update(result_dict)
@@ -1035,7 +1035,7 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
         result_dict[int_feature.name]['hab_id'] = f_pk
         result_dict[int_feature.name]['units'] = int_feature.output_units
         try: # get results from cache if they're there
-            rc = ResultCache.objects.get( wkt_hash=str(geom.wkt.__hash__()), intersection_feature=int_feature )
+            rc = ResultCache.objects.get(wkt_hash=str(geom.wkt.__hash__()), intersection_feature=int_feature)
             result_dict[int_feature.name]['result'] = rc.result
             result_dict[int_feature.name]['percent_of_total'] = rc.percent_of_total
             if with_geometries:
@@ -1083,7 +1083,7 @@ def intersect_the_features(geom, feature_list=None, with_geometries=False, with_
             result_dict[int_feature.name]['percent_of_total'] = (result_dict[int_feature.name]['result'] / int_feature.study_region_total) * 100
 
             # Cache the results we've calculated
-            rc = ResultCache( wkt_hash=geom.wkt.__hash__(), intersection_feature=int_feature )
+            rc = ResultCache(wkt_hash=geom.wkt.__hash__(), intersection_feature=int_feature)
             rc.result = result_dict[int_feature.name]['result']
             rc.units = int_feature.output_units
             rc.percent_of_total = result_dict[int_feature.name]['percent_of_total']

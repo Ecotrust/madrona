@@ -106,7 +106,7 @@ class ShpResponder(object):
                 field_defn = ogr.FieldDefn(str(field.name),ogr.OFTInteger)
             else:
                 field_defn = ogr.FieldDefn(str(field.name),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
@@ -117,7 +117,7 @@ class ShpResponder(object):
         # Loop through queryset creating features
         for item in self.queryset:
             ###feat = ogr.OGR_F_Create(feature_def)
-            feat = ogr.Feature( feature_def )
+            feat = ogr.Feature(feature_def)
 
             # For now, set all fields as strings
             # TODO: catch model types and convert to ogr fields

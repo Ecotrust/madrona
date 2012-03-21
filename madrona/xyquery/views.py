@@ -40,7 +40,7 @@ def getRasterValue(x,y,ds,bandnum=1):
     try:
         xoff = int((x - gt[0]) / gt[1])
         yoff = int((y - gt[3]) / gt[5]) 
-        a = band.ReadAsArray( xoff, yoff, 1, 1)
+        a = band.ReadAsArray(xoff, yoff, 1, 1)
         #return float(Numeric.sum( Numeric.sum(a) ) / Numeric.size(a))
         val = a[0][0]
         if val == nodata:

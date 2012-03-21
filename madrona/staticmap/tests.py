@@ -37,19 +37,19 @@ class StaticMapTest(TestCase):
         g1.transform(settings.GEOMETRY_DB_SRID)
 
         # Create 3 Mpas by different users
-        mpa1 = TestMpa.objects.create( name='Test_MPA_1', designation='R', user=self.user, geometry_orig=g1)
+        mpa1 = TestMpa.objects.create(name='Test_MPA_1', designation='R', user=self.user, geometry_orig=g1)
         mpa1.save()
-        mpa2 = TestMpa.objects.create( name='Test_MPA_2', designation='P', user=self.user, geometry_orig=g1)
+        mpa2 = TestMpa.objects.create(name='Test_MPA_2', designation='P', user=self.user, geometry_orig=g1)
         mpa2.save()
-        mpa3 = TestMpa.objects.create( name='Test_MPA_3', designation='C', user=self.user, geometry_orig=g1)
+        mpa3 = TestMpa.objects.create(name='Test_MPA_3', designation='C', user=self.user, geometry_orig=g1)
         mpa3.save()
         self.mpa_ids = [mpa1.pk, mpa2.pk, mpa3.pk]
         self.mpa_uids = ['%s_%s' % (mpa1.model_uid(), x) for x in self.mpa_ids]
 
         # User1 adds mpa to an array
-        array1 = TestArray.objects.create( name='Test_Array_1', user=self.user)
+        array1 = TestArray.objects.create(name='Test_Array_1', user=self.user)
         array1.save()
-        array2 = TestArray.objects.create( name='Test_Array_2', user=self.user)
+        array2 = TestArray.objects.create(name='Test_Array_2', user=self.user)
         array2.save()
         mpa1.add_to_collection(array1)
         mpa2.add_to_collection(array2)

@@ -72,7 +72,7 @@ class OrganismParameters(models.Model):
     biogeography_references = models.ManyToManyField(Reference,null=True,blank=True)
     pelagic_larval_duration = models.IntegerField(help_text="Pelagic Larval Duration in days")
     pelagic_larval_duration_references = models.ManyToManyField(Reference,null=True,blank=True,related_name='pelagic_larval_duration_ref')
-    month_choices = ( (1,'January'), (2,'February'), (3,'March'), (4,'April'), (5,'May'), (6,'June'), (7,'July'), (8,'August'), (9,'September'), (10,'October'), (11,'November'), (12,'December'),)
+    month_choices = ((1,'January'), (2,'February'), (3,'March'), (4,'April'), (5,'May'), (6,'June'), (7,'July'), (8,'August'), (9,'September'), (10,'October'), (11,'November'), (12,'December'),)
     spawn_start = models.IntegerField(choices=month_choices)
     spawn_start_references = models.ManyToManyField(Reference,null=True,blank=True,related_name='spawn_start_ref')
     spawn_end = models.IntegerField(choices=month_choices)
@@ -268,8 +268,8 @@ def convert_to_color_ramp(the_list,base_color='green',alpha=0.5):
     hex_mapped = map(hex_string,color_int_list)
     if base_color=='green':
         def green(hex_num): 
-            return '%s00%s00' % ( str(hex_alpha),str(hex_num) )
-        color_hex_list = [ green(x) for x in hex_mapped ]
+            return '%s00%s00' % (str(hex_alpha),str(hex_num))
+        color_hex_list = [green(x) for x in hex_mapped]
     return dict(zip(the_list,color_hex_list))
 
 class PointScrap(models.Model):

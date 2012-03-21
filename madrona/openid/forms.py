@@ -44,7 +44,7 @@ class OpenidSigninForm(forms.Form):
                 raise forms.ValidationError(_('i-names are not supported'))
             return self.cleaned_data['openid_url']
 
-attrs_dict = { 'class': 'required login' }
+attrs_dict = {'class': 'required login'}
 username_re = re.compile(r'^\w+$')
 
 class OpenidRegisterForm(forms.Form):

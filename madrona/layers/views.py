@@ -62,7 +62,7 @@ def get_privatekml_list(request, session_key='0'):
             accessible_kmls.append(kml)
 
     t = get_template('layers/private.kml')
-    kml = t.render(RequestContext( request, {'session_key': session_key, 
+    kml = t.render(RequestContext(request, {'session_key': session_key, 
                                              'kmls': accessible_kmls}))
     response = HttpResponse(kml, mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'filename=privatekml_%s.kml' % user.username

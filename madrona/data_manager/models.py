@@ -84,12 +84,12 @@ def zip_from_shp(shp_path):
 
     directory, file_with_ext = os.path.split(shp_path)
     if file_with_ext.count('.') != 1:
-        raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.') )
+        raise Exception('Shapefile name should only have one \'.\' in them.  This file name has %i.' % file_with_ext.count('.'))
     else:
         filename, ext = file_with_ext.split('.')
-    zfile_path = os.path.join(directory, ('.').join([filename,'zip']) )    
+    zfile_path = os.path.join(directory, ('.').join([filename,'zip']))    
     zfile = zipfile.ZipFile(zfile_path, 'w')
-    for name in glob.glob( os.path.join(directory,filename + '.*') ):
+    for name in glob.glob(os.path.join(directory,filename + '.*')):
         bn = os.path.basename(name)
         part_filenam, part_ext = bn.split('.',1)
         # make sure we're only adding allowed shapefile extensions
@@ -97,7 +97,7 @@ def zip_from_shp(shp_path):
             zfile.write(name, bn, zipfile.ZIP_DEFLATED)
     zfile.close()
 
-    return filename, File( open(zfile_path) )
+    return filename, File(open(zfile_path))
 
 class DataLayer(models.Model):
     name = models.CharField(max_length=255, unique=True, null=True)
@@ -194,7 +194,7 @@ class Shapefile(models.Model):
     def new_filename_and_path(self):
         import time
         from django.template.defaultfilters import slugify
-        time_str = time.strftime('%y%m%d', time.localtime() )
+        time_str = time.strftime('%y%m%d', time.localtime())
         old_path = self.shapefile.path
 
         dir = os.path.dirname(self.shapefile.name)

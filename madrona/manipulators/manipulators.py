@@ -264,7 +264,7 @@ class ClipToShapeManipulator(BaseManipulator):
 
         #intersect the two geometries
         try:
-            clipped_shape = target_shape.intersection( clip_against )
+            clipped_shape = target_shape.intersection(clip_against)
         except Exception, e:
             raise self.InternalException("Exception raised in ClipToShapeManipulator while intersecting geometries: " + e.message)  
 
@@ -367,7 +367,7 @@ class DifferenceFromShapeManipulator(BaseManipulator):
 
         #determine the difference in the two geometries
         try:
-            clipped_shape = target_shape.difference( diff_geom )
+            clipped_shape = target_shape.difference(diff_geom)
         except Exception, e:
             raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while intersecting geometries: " + e.message)  
 
@@ -579,7 +579,11 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 bottom_left = (west, south)
             '''
             try:
-                box = Polygon( LinearRing([ Point( float(self.west), float(self.north) ), Point( float(self.east), float(self.north) ), Point( float(self.east), float(self.south) ), Point( float(self.west), float(self.south) ), Point( float(self.west), float(self.north))]))
+                box = Polygon(LinearRing([Point(float(self.west), float(self.north)), 
+                                          Point(float(self.east), float(self.north)), 
+                                          Point(float(self.east), float(self.south)), 
+                                          Point(float(self.west), float(self.south)), 
+                                          Point(float(self.west), float(self.north))]))
                 box.set_srid(settings.GEOMETRY_CLIENT_SRID)
                 return box
             except Exception, e:
@@ -607,11 +611,11 @@ class ClipToGraticuleManipulator(BaseManipulator):
 
     class Form(forms.Form):
         available = True
-        n = forms.FloatField( label='Northern boundary', required=False ) 
-        s = forms.FloatField( label='Southern boundary', required=False )
-        e = forms.FloatField( label='Eastern boundary', required=False )
-        w = forms.FloatField( label='Western boundary', required=False )
-        target_shape = forms.CharField( widget=forms.HiddenInput )
+        n = forms.FloatField(label='Northern boundary', required=False) 
+        s = forms.FloatField(label='Southern boundary', required=False)
+        e = forms.FloatField(label='Eastern boundary', required=False)
+        w = forms.FloatField(label='Western boundary', required=False)
+        target_shape = forms.CharField(widget=forms.HiddenInput)
 
         def clean(self):
             data = self.cleaned_data
@@ -622,7 +626,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
             #data["s"] = 33.25
             #data["w"] = -119.25
 
-            my_manipulator = ClipToGraticuleManipulator( data['target_shape'], data['n'], data['s'], data['e'], data['w'] )
+            my_manipulator = ClipToGraticuleManipulator(data['target_shape'], data['n'], data['s'], data['e'], data['w'])
             self.manipulation = my_manipulator.manipulate()
             return self.cleaned_data
 

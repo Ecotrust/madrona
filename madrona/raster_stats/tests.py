@@ -71,34 +71,34 @@ class ZonalTest(TestCase):
         Test that the caching mechanism works and we can turn it on/off
         """
         clear_cache()
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 0)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 0)
 
         zonal = zonal_stats(self.polygons[0], self.rast)
-        self.assertEqual( zonal.from_cache, False)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 1)
+        self.assertEqual(zonal.from_cache, False)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
 
         zonal = zonal_stats(self.polygons[0], self.rast)
-        self.assertEqual( zonal.from_cache, True)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 1)
+        self.assertEqual(zonal.from_cache, True)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
 
         zonal = zonal_stats(self.polygons[0], self.rast, read_cache=False)
-        self.assertEqual( zonal.from_cache, False)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 1)
+        self.assertEqual(zonal.from_cache, False)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
 
         zonal = zonal_stats(self.polygons[3], self.rast, write_cache=False)
-        self.assertEqual( zonal.from_cache, False)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 1)
+        self.assertEqual(zonal.from_cache, False)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
 
         zonal = zonal_stats(self.polygons[3], self.rast)
-        self.assertEqual( zonal.from_cache, False)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 2)
+        self.assertEqual(zonal.from_cache, False)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 2)
 
         zonal = zonal_stats(self.polygons[3], self.rast)
-        self.assertEqual( zonal.from_cache, True)
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 2)
+        self.assertEqual(zonal.from_cache, True)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 2)
 
         clear_cache()
-        self.assertEqual( len(ZonalStatsCache.objects.all()), 0)
+        self.assertEqual(len(ZonalStatsCache.objects.all()), 0)
 
 class ZonalWebServiceTest(TestCase):
     urls = 'madrona.raster_stats.urls'

@@ -33,14 +33,14 @@ class KMLAppTest(TestCase):
         g2.transform(settings.GEOMETRY_DB_SRID)
         g3.transform(settings.GEOMETRY_DB_SRID)
 
-        self.mpa1 = Mpa.objects.create( name='Test_MPA_1', user=self.user, geometry_final=g1)
-        self.mpa2 = Mpa.objects.create( name=u'Test_MPA_2_with_some_uniçode', user=self.user, geometry_final=g2)
-        self.mpa3 = Mpa.objects.create( name='Test_MPA_3', user=self.user, geometry_final=g3)
+        self.mpa1 = Mpa.objects.create(name='Test_MPA_1', user=self.user, geometry_final=g1)
+        self.mpa2 = Mpa.objects.create(name=u'Test_MPA_2_with_some_uniçode', user=self.user, geometry_final=g2)
+        self.mpa3 = Mpa.objects.create(name='Test_MPA_3', user=self.user, geometry_final=g3)
         self.mpa1.save()
         self.mpa2.save()
         self.mpa3.save()
 
-        self.array1 = MpaArray.objects.create( name='Test_Array_1', user=self.user)
+        self.array1 = MpaArray.objects.create(name='Test_Array_1', user=self.user)
         self.array1.save()
         self.mpa1.add_to_collection(self.array1)
         self.mpa2.add_to_collection(self.array1)
@@ -126,7 +126,7 @@ class KMLAppTest(TestCase):
         Tests that single MPA can be represented as valid KML
         """
         self.client.login(username=self.user.username, password=self.password)
-        url = reverse('kmlapp-feature-kml', kwargs={'session_key': '0', 'input_uid': self.mpa1.uid })
+        url = reverse('kmlapp-feature-kml', kwargs={'session_key': '0', 'input_uid': self.mpa1.uid})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         errors = kml_errors(response.content)
@@ -191,7 +191,7 @@ class KMLAppTest(TestCase):
         Tests that user can view the sharedby_kml (mpas shared by a given group)
         """
         self.client.login(username=self.user2.username, password=self.password)
-        url = reverse('kmlapp-sharedby-kml', kwargs={'session_key':self.client.session.session_key, 'input_shareuser': self.user.pk, 'input_sharegroup':self.group1.pk })
+        url = reverse('kmlapp-sharedby-kml', kwargs={'session_key':self.client.session.session_key, 'input_shareuser': self.user.pk, 'input_sharegroup':self.group1.pk})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200, response)
         errors = kml_errors(response.content)

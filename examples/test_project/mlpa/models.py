@@ -28,7 +28,7 @@ class MpaForm(SpatialFeatureForm):
 class Array(FeatureCollection):
     class Options:
         form = 'mlpa.models.ArrayForm'
-        valid_children = ( 'mlpa.models.Mpa', )
+        valid_children = ('mlpa.models.Mpa', )
 
 class ArrayForm(FeatureForm):
     class Meta(FeatureForm.Meta):

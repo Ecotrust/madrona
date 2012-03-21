@@ -30,7 +30,7 @@ class TestIntersectionForm(forms.ModelForm):
     org_scheme = forms.ChoiceField(choices=OrganizationScheme_Choices)
     FormatChoices = [('html', 'HTML'), ('csv', 'CSV'), ('json','JSON')]
     format = forms.ChoiceField(choices=FormatChoices)
-    geometry = forms.CharField(widget=PolygonWidget() )
+    geometry = forms.CharField(widget=PolygonWidget())
     class Meta:
         model = TestPolygon
     class Media:

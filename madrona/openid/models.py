@@ -73,10 +73,10 @@ class UserAssociation(models.Model):
             from django.core.mail import send_mail
             current_site = Site.objects.get_current()
             subject = render_to_string('authopenid/associate_email_subject.txt',
-                                       { 'site': current_site,
+                                       {'site': current_site,
                                          'user': self.user})
             message = render_to_string('authopenid/associate_email.txt',
-                                       { 'site': current_site,
+                                       {'site': current_site,
                                          'user': self.user,
                                          'openid': self.openid_url
                                         })

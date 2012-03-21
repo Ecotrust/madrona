@@ -28,7 +28,7 @@ setup_args = dict(
     long_description    = readme_text,
     packages            = ['madrona.%s' % x for x in find_packages('madrona')],
     scripts             = ['madrona/installer/create-madrona-project.py',
-                           'madrona/installer/create-madrona-env' ],
+                           'madrona/installer/create-madrona-env'],
     classifiers         = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

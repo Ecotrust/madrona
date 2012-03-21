@@ -11,7 +11,7 @@ from madrona.openid.models import UserAssociation
 @login_required
 def profile_form(request,username,use_openid=False):
     if request.user.username != username:
-        return HttpResponse( "You cannot access another user's profile.", status=401)
+        return HttpResponse("You cannot access another user's profile.", status=401)
     else:
         user = User.objects.get(username=username)
         try:
@@ -39,4 +39,4 @@ def profile_form(request,username,use_openid=False):
         #return HttpResponseRedirect(reverse('user_profile-form', args=[username]))
         return HttpResponseRedirect(reverse('map'))
     else:
-        return HttpResponse( "Received unexpected " + request.method + " request.", status=400 )
+        return HttpResponse("Received unexpected " + request.method + " request.", status=400)

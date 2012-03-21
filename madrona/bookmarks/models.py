@@ -61,7 +61,7 @@ class Bookmark(Feature):
 
     class Options:
         manipulators = []
-        optional_manipulators = [ ]
+        optional_manipulators = []
         verbose_name = 'Bookmark'
         form = 'madrona.bookmarks.forms.BookmarkForm'
         icon_url = 'bookmarks/images/bookmark.png'

@@ -8,5 +8,5 @@ except:
     use_openid = False
 
 urlpatterns = patterns('madrona.user_profile.views',
-        url(r'^(?P<username>\w+)/$', 'profile_form', {'use_openid': use_openid}, name="user_profile-form" ),
+        url(r'^(?P<username>\w+)/$', 'profile_form', {'use_openid': use_openid}, name="user_profile-form"),
 )

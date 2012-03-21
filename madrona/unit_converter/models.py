@@ -10,7 +10,7 @@ def srid_list():
     query = "select auth_srid from spatial_ref_sys"
     cursor.execute(query)
     results = cursor.fetchall()
-    return [ a[0] for a in results ]
+    return [a[0] for a in results]
 
 def units_from_srid(srid):
     """Get the linear units name from the srid definition."""
@@ -35,13 +35,13 @@ def area_unit_code_from_srid(srid):
     """Return the unit code used in django.contrib.gis.measure.Area to represent the units of the given srid.  For example srid
     3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Area uses 'sq_m' to represent square
     meters so that's what this method will return for srid 3310."""
-    return area_unit_code_from_srid_unit( units_from_srid(srid) )
+    return area_unit_code_from_srid_unit(units_from_srid(srid))
 
 def distance_unit_code_from_srid(srid):
     """Return the unit code used in django.contrib.gis.measure.Distance to represent the units of the given srid.  For example srid
     3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Distance uses 'm' to represent 
     meters so that's what this method will return for srid 3310."""
-    return distance_unit_code_from_srid_unit( units_from_srid(srid) )
+    return distance_unit_code_from_srid_unit(units_from_srid(srid))
 
 def units_list():
     """Return a non repeating list of all the linear units from the spatial_ref_sys table."""
@@ -142,13 +142,13 @@ def add_conversion_methods_to_GEOSGeometry():
 def convert_float_to_length_display_units(float_value):
     """Given a float value, this method will convert from the units found in settings.GEOMETRY_DB_SRID
     to the units defined in settings.DISPLAY_LENGTH_UNITS."""
-    eval_str = "Distance(%s=%f).%s" % (distance_unit_code_from_srid( settings.GEOMETRY_DB_SRID ), float_value, settings.DISPLAY_LENGTH_UNITS)
+    eval_str = "Distance(%s=%f).%s" % (distance_unit_code_from_srid(settings.GEOMETRY_DB_SRID), float_value, settings.DISPLAY_LENGTH_UNITS)
     return eval(eval_str)
 
 def convert_float_to_area_display_units(float_value):
     """Given a float value, this method will convert from the units found in settings.GEOMETRY_DB_SRID
     to the units defined in settings.DISPLAY_AREA_UNITS."""
-    eval_str = "Area(%s=%f).%s" % (area_unit_code_from_srid( settings.GEOMETRY_DB_SRID ), float_value, settings.DISPLAY_AREA_UNITS)
+    eval_str = "Area(%s=%f).%s" % (area_unit_code_from_srid(settings.GEOMETRY_DB_SRID), float_value, settings.DISPLAY_AREA_UNITS)
     return eval(eval_str)
 
 def geometry_length_in_display_units(geom):

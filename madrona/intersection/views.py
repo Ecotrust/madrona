@@ -42,7 +42,7 @@ def test_drawing_intersect(request):
                 if format=='html':
                     return render_to_response('generic_results.html', {'result': result})
                 elif format=='csv':
-                    return build_csv_response(result, str(hash(geom)) )
+                    return build_csv_response(result, str(hash(geom)))
                 elif format=='json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
             else:
@@ -51,7 +51,7 @@ def test_drawing_intersect(request):
                 if format=='html':
                     return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
                 elif format=='csv':
-                    return build_csv_response(result, str(hash(geom)) )
+                    return build_csv_response(result, str(hash(geom)))
                 elif format=='json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
     else:
@@ -60,13 +60,13 @@ def test_drawing_intersect(request):
 
 def build_csv_response(results, file_name, leave_out=['feature_map_id','org_scheme_id']):
     response = HttpResponse(mimetype='application/csv')
-    response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
+    response['Content-Disposition'] = 'attachement; filename=%s.csv' % (file_name)
     writer = csv.writer(response)
     if results.__class__.__name__ != 'list':
         results = [results]
     header_row = ['Habitat']
-    header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
-    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out] )
+    header_row.extend([k.replace('_',' ').title() for k in results[0][results[0].keys()[0]].keys()])
+    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out])
     row_matrix = [header_row]
 
     for result in results:
@@ -89,14 +89,14 @@ def build_excel_response(file_name, workbook):
     This method assumes you've built an excel workbook elsewhere and just want to build a response object from it.
     """
     response = HttpResponse(mimetype='application/ms-excel')
-    response['Content-Disposition'] = 'attachement; filename=%s.xls' % ( file_name )
+    response['Content-Disposition'] = 'attachement; filename=%s.xls' % (file_name)
     workbook.save(response)
 
     return response
 
 def build_array_mpa_csv_response(results, file_name, feature_name, feature_type='MPA', leave_out=['feature_map_id','org_scheme_id']):
     response = HttpResponse(mimetype='application/csv')
-    response['Content-Disposition'] = 'attachement; filename=%s.csv' % ( file_name )
+    response['Content-Disposition'] = 'attachement; filename=%s.csv' % (file_name)
     writer = csv.writer(response)
     if results.__class__.__name__ != 'list':
         results = [results]
@@ -105,8 +105,8 @@ def build_array_mpa_csv_response(results, file_name, feature_name, feature_type=
     else:
         feature_type = feature_type.title()
     header_row = [feature_type,'Habitat']
-    header_row.extend( [ k.replace('_',' ').title() for k in results[0][ results[0].keys()[0] ].keys() ] )
-    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out] )
+    header_row.extend([k.replace('_',' ').title() for k in results[0][results[0].keys()[0]].keys()])
+    header_row = remove_elements(header_row,[lo.replace('_',' ').title() for lo in leave_out])
     row_matrix = [header_row]
 
     for result in results:
@@ -151,7 +151,7 @@ def test_poly_intersect(request):
                 if format=='html':
                     return render_to_response('generic_results.html', {'result': result})
                 elif format=='csv':
-                    return build_csv_response(result, str(hash(geom)) )
+                    return build_csv_response(result, str(hash(geom)))
                 elif format=='json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
             else:
@@ -160,7 +160,7 @@ def test_poly_intersect(request):
                 if format=='html':
                     return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
                 elif format=='csv':
-                    return build_csv_response(result, str(hash(geom)) )
+                    return build_csv_response(result, str(hash(geom)))
                 elif format=='json':
                     return HttpResponse(json_encode(result), mimetype='text/json')
     else:
@@ -174,17 +174,17 @@ def default_intersection(request, format, geom_wkt):
     if format=='html':
         return render_to_response('generic_results.html', {'result': result})
     elif format=='csv':
-        return build_csv_response(result, str(hash(geom)) )
+        return build_csv_response(result, str(hash(geom)))
 
 def organized_intersection(request, org_scheme, format, geom_wkt):
     geom = geos.fromstr(geom_wkt)
     geom.transform(settings.GEOMETRY_DB_SRID)
-    osc = OrganizationScheme.objects.get(pk=int(org_scheme) )
+    osc = OrganizationScheme.objects.get(pk=int(org_scheme))
     result = osc.transformed_results(geom)
     if format=='html':
         return render_to_response('transformed_results.html', {'result': use_sort_as_key(result)})
     elif format=='csv':
-        return build_csv_response(result, str(hash(geom)) )
+        return build_csv_response(result, str(hash(geom)))
     elif format=='json':
         return HttpResponse(json_encode(result), mimetype='text/json')
 

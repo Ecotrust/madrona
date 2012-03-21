@@ -10,8 +10,8 @@ def use_sort_as_key(results):
     """
     sort_results = {}
     for hab,sub_dict in results.iteritems():
-        sub_dict.update( {'name':hab} )
-        sort_results.update( {results[hab]['sort']:sub_dict} )
+        sub_dict.update({'name':hab})
+        sort_results.update({results[hab]['sort']:sub_dict})
 
     return sort_results
 
@@ -154,7 +154,7 @@ def sub_rule_for_0_30_area(geom):
     from report.models import construct_0_30_poly
     replicate = False
     all_0_30 = OrganizationScheme.objects.get(name='shallow030').featuremapping_set.filter(name='shallow030')[0].transformed_results(geom).values()[0]['result']
-    theoretical_0_30 = area_in_display_units( construct_0_30_poly(geom) )
+    theoretical_0_30 = area_in_display_units(construct_0_30_poly(geom))
     if all_0_30 < theoretical_0_30 * AREA_PROPORTION_THRESHOLD:
         reason = 'Area problems. In addition to containing the 0-30m proxy line, the shape must contain a corresponding amount of 0-30m depth zone area.'
         return replicate, reason

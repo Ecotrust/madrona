@@ -72,7 +72,7 @@ class SliderWidget(forms.TextInput):
             }); 
         });
         </script>
-        """ % { 'slider_id' : slider_id, 
+        """ % {'slider_id' : slider_id, 
                 'field_id' : "id_%s" % name, 
                 'min' : self.min, 
                 'max' : self.max, 
@@ -229,7 +229,7 @@ class DualSliderWidget(forms.TextInput):
             }); 
         });
         </script>
-        """ % { 'slider_id' : slider_id, 
+        """ % {'slider_id' : slider_id, 
                 'low_field_id' : "id_%s" % self.min_field, 
                 'high_field_id' : "id_%s" % self.max_field, 
                 'min' : self.min, 

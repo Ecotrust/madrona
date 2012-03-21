@@ -16,7 +16,7 @@ def group_request(request):
     if request.method == 'GET':
         groups = Group.objects.all()
         if len(groups) == 0:
-            return HttpResponse( "There are no potential groups at this time.", status=404)
+            return HttpResponse("There are no potential groups at this time.", status=404)
         return render_to_response('group_management/group_request_form.html', 
                 {'user':request.user, 'groups': groups, 'current_groups': current_groups, 'MEDIA_URL':settings.MEDIA_URL}) 
     elif request.method == 'POST':
@@ -37,4 +37,4 @@ def group_request(request):
 
         return HttpResponseRedirect(reverse('group_management-request-sent'))
     else:
-        return HttpResponse( "Received unexpected " + request.method + " request.", status=400 )
+        return HttpResponse("Received unexpected " + request.method + " request.", status=400)

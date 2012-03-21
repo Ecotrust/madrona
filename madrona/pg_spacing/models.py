@@ -8,12 +8,12 @@ def kml_doc_from_queryset(qs):
     dict = {}
     placemarks = []
     for item in qs:
-        placemarks.append( kml_placemark(item) )
+        placemarks.append(kml_placemark(item))
     dict['placemarks'] = placemarks
     from django.template import Context, Template
     from django.template.loader import get_template
     t = get_template('pg_spacing/general.kml')
-    response = t.render(Context({ 'kml': dict }))
+    response = t.render(Context({'kml': dict}))
     return response
 
 def kml_placemark(qs_item, styleUrl='#default', geo_field='geometry'):
@@ -46,20 +46,20 @@ def add_geometry_to_network(qs):
     for point in points:
         for pnt in points:
             if point != pnt and (pnt,point) not in matrix: # if (1,2) has been dealt with, we don't need to consider (2,1)
-                matrix.append( (point,pnt) )
-                line = geos.MultiLineString( geos.LineString(point,pnt) )
+                matrix.append((point,pnt))
+                line = geos.MultiLineString(geos.LineString(point,pnt))
                 if not line_crosses_land(line,qs):
                     nw = Network(geometry=line)
                     nw.save()
     assign_vertex_ids()
 
-def add_point_to_network(point, qs=Land.objects.all() ):
+def add_point_to_network(point, qs=Land.objects.all()):
     qs_coords = ()
     for item in qs:
         qs_coords += item.geometry.exterior_ring.coords
     qs_points = [geos.Point(p) for p in qs_coords]
     for qs_pnt in qs_points:
-        line = geos.MultiLineString( geos.LineString(point,qs_pnt) )
+        line = geos.MultiLineString(geos.LineString(point,qs_pnt))
         if not line_crosses_land(line,qs):
             nw = Network(geometry=line)
             nw.save()

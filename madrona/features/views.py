@@ -659,8 +659,8 @@ def share_form(request,model=None, uid=None):
                     status=500)
 
     else:
-        return HttpResponse( "Received unexpected " + request.method + 
-                " request.", status=400 )
+        return HttpResponse("Received unexpected " + request.method + 
+                " request.", status=400)
 
 def manage_collection(request, action, uids, collection_model, collection_uid):
     config = collection_model.get_options()

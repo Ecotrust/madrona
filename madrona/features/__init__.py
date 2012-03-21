@@ -340,14 +340,14 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
             }
 
             lr['edit'] = [
-                    { 'title': 'Edit',
+                    {'title': 'Edit',
                       'uri-template': reverse("%s_update_form" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}')
                     },
-                    { 'title': 'Share',
+                    {'title': 'Share',
                       'uri-template': reverse("%s_share_form" % (self.slug, ), 
                         args=[placeholder]).replace(placeholder, '{uid}')
-                    } ]
+                    }]
 
         for link in self.links:
             if not link.generic and link.can_user_view(user, is_owner):
@@ -657,7 +657,7 @@ def edit_form(*args, **kwargs):
 
 def register(model):
     options = FeatureOptions(model)
-    logger.debug('registering Feature %s' % (model.__name__,) )
+    logger.debug('registering Feature %s' % (model.__name__,))
     if model not in registered_models:
         registered_models.append(model)
         registered_model_options[model.__name__] = options

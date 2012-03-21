@@ -65,7 +65,7 @@ class SettingsTest(TestCase):
         self.failIf(None in [dlu,dau,gds])
 
         for unit in [dlu,dau]:
-            self.failIf( unit not in D.UNITS.keys() + A.UNITS.keys() )
+            self.failIf(unit not in D.UNITS.keys() + A.UNITS.keys())
 
 class AppendedMethodsTest(TestCase):
     def test_appended_methods(self):

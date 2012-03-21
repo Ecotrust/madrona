@@ -23,4 +23,4 @@ def get_vids():
 def help(request):
     vids = get_vids()
     faqs = get_faqs()
-    return render_to_response('help.html', {'faqs_by_group':faqs, 'screencast_list':vids, 'MEDIA_URL':settings.MEDIA_URL }) 
+    return render_to_response('help.html', {'faqs_by_group':faqs, 'screencast_list':vids, 'MEDIA_URL':settings.MEDIA_URL}) 

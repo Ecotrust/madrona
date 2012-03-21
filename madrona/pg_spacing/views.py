@@ -19,9 +19,9 @@ def FishDistanceKML(request):
     lon1 = float(request.GET.get('lon1'))
     lat2 = float(request.GET.get('lat2'))
     lon2 = float(request.GET.get('lon2'))
-    pnt1 = geos.GEOSGeometry( geos.Point(lon1,lat1), srid=4326 )
+    pnt1 = geos.GEOSGeometry(geos.Point(lon1,lat1), srid=4326)
     pnt1.transform(settings.GEOMETRY_DB_SRID)
-    pnt2 = geos.GEOSGeometry( geos.Point(lon2,lat2), srid=4326 )
+    pnt2 = geos.GEOSGeometry(geos.Point(lon2,lat2), srid=4326)
     pnt2.transform(settings.GEOMETRY_DB_SRID)
     distance, line = fish_distance(pnt1,pnt2)
     line.srid = settings.GEOMETRY_DB_SRID

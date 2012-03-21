@@ -48,13 +48,13 @@ def get_logger(caller_name=None):
 
 log = get_logger()
 
-def KmlWrap( string ):
+def KmlWrap(string):
     return '<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">' + string + '</kml>'
 
 
-def LookAtKml( geometry ):
-    lookAtParams = ComputeLookAt( geometry )
-    return '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (lookAtParams['latitude'], lookAtParams['longitude'], lookAtParams['range'], lookAtParams['tilt'], lookAtParams['heading'] )
+def LookAtKml(geometry):
+    lookAtParams = ComputeLookAt(geometry)
+    return '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (lookAtParams['latitude'], lookAtParams['longitude'], lookAtParams['range'], lookAtParams['tilt'], lookAtParams['heading'])
 
 def LargestPolyFromMulti(geom): 
     """ takes a polygon or a multipolygon geometry and returns only the largest polygon geometry"""
@@ -124,7 +124,7 @@ def spike_ring_indecies(line_ring,threshold=0.01):
         p3_coords = line_ring.coords[i + 1]
         p3_str = 'POINT (%f %f), %i' % (p3_coords[0], p3_coords[1], settings.GEOMETRY_DB_SRID)
         p3 = fromstr(p3_str)
-        if( angle(p1,p2,p3) <= radian_thresh ):
+        if(angle(p1,p2,p3) <= radian_thresh):
             spike_indecies.append(i)
 
     return spike_indecies
@@ -139,7 +139,7 @@ def remove_spikes(poly,threshold=0.01):
     """
     line_ring = poly.exterior_ring
     spike_indecies = spike_ring_indecies(line_ring,threshold=threshold)
-    if( spike_indecies ):
+    if(spike_indecies):
         for i,org_index in enumerate(spike_indecies):
             if(org_index==0): # special case, must remove first and last point, and add end point that overlaps new first point
                 # get the list of points
@@ -191,7 +191,7 @@ def ensure_clean(geo, srid):
             raise Exception("ensure_clean could not produce a valid geometry.")
     return geo
 
-def ComputeLookAt( geometry ):
+def ComputeLookAt(geometry):
 
     lookAtParams = {}
 
@@ -216,7 +216,7 @@ def ComputeLookAt( geometry ):
 
     PAD_FACTOR = 1.5 # add 50% to the computed range for padding
 
-    aspectUse = max( aspectRatio, min((lngSpan / latSpan),1.0))
+    aspectUse = max(aspectRatio, min((lngSpan / latSpan),1.0))
     alpha = (45.0 / (aspectUse + 0.4) - 2.0) * DEGREES # computed experimentally;
 
     # create LookAt using distance formula
@@ -286,7 +286,7 @@ def kml_errors(kmlstring):
     if output:
         errors = []
         for i in range(len(output)):
-            errors.append( (events[i],events[i].params,output[i],kmlstring.splitlines()[events[i].params['backupline']]) )
+            errors.append((events[i],events[i].params,output[i],kmlstring.splitlines()[events[i].params['backupline']]))
         return errors
     else:
         return None

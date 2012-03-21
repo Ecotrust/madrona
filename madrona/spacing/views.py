@@ -27,7 +27,7 @@ def SpacingNetworkKML(request):
     sp_graph = PickledGraph.objects.all()[0].graph
     geometries = points_from_graph(sp_graph)
     geometries.extend(lines_from_graph(sp_graph))
-    [ g.transform(settings.GEOMETRY_CLIENT_SRID) for g in geometries ]
+    [g.transform(settings.GEOMETRY_CLIENT_SRID) for g in geometries]
     response = HttpResponse(kml_doc_from_geometry_list(geometries), mimetype='application/vnd.google-earth.kml+xml')
     response['Content-Disposition'] = 'attachment; filename="%s.kml"' % 'SpacingPoints'
     return response
@@ -37,9 +37,9 @@ def FishDistanceKML(request):
     lon1 = float(request.GET.get('lon1'))
     lat2 = float(request.GET.get('lat2'))
     lon2 = float(request.GET.get('lon2'))
-    pnt1 = geos.GEOSGeometry( geos.Point(lon1,lat1), srid=4326 )
+    pnt1 = geos.GEOSGeometry(geos.Point(lon1,lat1), srid=4326)
     pnt1.transform(settings.GEOMETRY_DB_SRID)
-    pnt2 = geos.GEOSGeometry( geos.Point(lon2,lat2), srid=4326 )
+    pnt2 = geos.GEOSGeometry(geos.Point(lon2,lat2), srid=4326)
     pnt2.transform(settings.GEOMETRY_DB_SRID)
     distance, line = fish_distance(pnt1,pnt2)
     line.srid = settings.GEOMETRY_DB_SRID
@@ -66,7 +66,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
     straight_results = distance_matrix_and_labels(in_dict, straight_line=True)
     title1 = "Shortest Distance Without Crossing Land From Edges"
     title2 = "Straight Line Distance From Edges"
-    results_dict = { title1 : results, title2 : straight_results }
+    results_dict = {title1 : results, title2 : straight_results }
     current_row = 0
     # put the title at the top
     if ws_title is not None:
@@ -80,7 +80,7 @@ def spacing_worksheet(in_dict,ws_title,ws):
         dist_mat = results['matrix']
         # write the header labels row across the top
         for i,lab in enumerate(label_list):
-            ws.row(current_row).write(i+1,unicode(lab) )
+            ws.row(current_row).write(i+1,unicode(lab))
         current_row += 1
 
         # write the rest of the matrix
