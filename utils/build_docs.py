@@ -15,14 +15,16 @@ parser.add_option('-j', '--jar-path', dest='jar', metavar='PATH',
 (options, args) = parser.parse_args()
 
 # Add working directory to the module search path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+cwd = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, cwd)
 
 print options.docs_output
 print "Generating documentation..."
-os.system('cd docs; make clean; make html')
+os.system('cd ../docs; make clean; make html')
 if options.docs_output:
-    os.system('rm -rf %s/*' % (options.docs_output, ))
-    os.system('cp -r docs/.build/html/* %s/' % (options.docs_output, ))
+    src = os.path.join(cwd,'..','docs','.build','html','*')
+    os.system('cp -r %s %s' % (src ,options.docs_output, ))
+    print "Docs copied to %s" % options.docs_output
 
     if options.jar:
         print "Generating javascript documentation"
