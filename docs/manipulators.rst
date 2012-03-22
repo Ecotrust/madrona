@@ -1,7 +1,7 @@
 .. _manipulators:
 
 ``madrona.manipulators`` -  Manipulators
-====================================
+==========================================
 
 What is a Manipulator?
 **********************

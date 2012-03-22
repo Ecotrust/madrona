@@ -1,5 +1,5 @@
 ``madrona.shapes`` -  Shapefile tools
-===================================
+=======================================
 
 This is a fork of Dane Springmeyer's django-shapes app.
 

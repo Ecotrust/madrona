@@ -1,16 +1,24 @@
-Core Apps
-*********
+Madrona Apps
+============
 
+Core
+*********
+.. toctree::
+    :maxdepth: 2
+
+    features
+    kmlapp
+
+Required
+*********
 .. toctree::
     :maxdepth: 2
 
     async
     bookmarks
     common
-    features
     google-analytics
     help
-    kmlapp
     layers
     loadshp
     manipulators
@@ -24,7 +32,7 @@ Core Apps
     unit_converter
     user_profile
 
-Optional Apps
+Optional
 *************
 
 .. toctree::
@@ -35,14 +43,4 @@ Optional Apps
     group_management
     raster_stats
     xyquery
-
-Unsupported Apps 
-****************
-
-.. toctree::
-    :maxdepth: 2
-
-    data_distributor
-    data_manager
     heatmap
-    mlpa

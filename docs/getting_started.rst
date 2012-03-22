@@ -71,9 +71,6 @@ First you will need to checkout a copy of the default branch of madrona from the
      cd ~/src
      hg clone https://madrona.googlecode.com/hg/ madrona  
 
-.. note::
-     Though the top-level directory name is 'madrona', the python module provided by this code is called 'madrona'
-
 To install, use the setup.py script provided. We recommend using the 'develop' command instead of 'install' as this
 allows you to alter the madrona code in place without reinstalling.::
 

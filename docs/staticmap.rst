@@ -1,7 +1,7 @@
 .. _staticmap:
 
 ``madrona.staticmap`` -  Static Map Data Layers
-==============================================
+=================================================
 
 Customizing the Mapnik Rendering
 ********************************

@@ -1,5 +1,5 @@
-``madrona.features`` -  Spatial Content Management  
-##############################################
+``madrona.features`` -  Spatial Content Management of *Features* 
+################################################################
 
 The ``madrona.features`` app works along with other Madrona apps to create a 
 system that is best described as a content management system for user-designed
