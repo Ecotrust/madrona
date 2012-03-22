@@ -342,6 +342,7 @@ And several generic links that are, by default, applied to all feature types:
 
   * ``Copy`` link creates a copy of the feature (see "Implementing A Custom Copy Method" for more)
   * ``Delete`` links removes the feature permanantly
+  * ``Share`` links get forms for group-based sharing of features
   * ``KML`` links return KML representation of the feature
   * ``KMZ`` links return zipped KML (ie KMZ) representation of the feature (see ``kmlapp``)
   * ``PNG`` links return a PNG image of the feature (see ``staticmap``). Note that this feature can be turned off by specifying::
