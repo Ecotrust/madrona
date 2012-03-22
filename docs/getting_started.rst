@@ -63,7 +63,7 @@ By seperating the two codebases, we can more easily maintain multiple Madrona pr
 If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed 
 just like any other python module and you should't need to mess with any madrona code.
 
-Installing Lingcod
+Installing Madrona
 *******************
 
 First you will need to checkout a copy of the default branch of madrona from the `project page <http://code.google.com/p/madrona/source/checkout>`_ ::
