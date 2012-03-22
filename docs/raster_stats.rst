@@ -1,6 +1,6 @@
 .. _raster_stats:
 
-`madrona.raster_stats`: Raster Statistics
+``madrona.raster_stats`` -  Raster Statistics
 =========================================
 The `madrona.raster_stats` app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection. 
 

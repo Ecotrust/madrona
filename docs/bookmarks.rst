@@ -1,5 +1,5 @@
 
-`madrona.bookmarks`: Bookmark the map state
+``madrona.bookmarks`` -  Bookmark the map state
 ===========================================
 
 Introduction

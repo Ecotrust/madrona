@@ -1,2 +1,2 @@
-`madrona.geographic_report`
+``madrona.installer``
 =================================

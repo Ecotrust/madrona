@@ -1,4 +1,4 @@
-`madrona.features`: Spatial Content Management  
+``madrona.features`` -  Spatial Content Management  
 ##############################################
 
 The ``madrona.features`` app works along with other Madrona apps to create a 

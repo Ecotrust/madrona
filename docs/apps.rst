@@ -31,18 +31,18 @@ Optional Apps
     :maxdepth: 2
 
     analysistools
-    bioeconomic_model
-    bioregions
+    installer
+    group_management
+    raster_stats
+    xyquery
+
+Unsupported Apps 
+****************
+
+.. toctree::
+    :maxdepth: 2
+
     data_distributor
     data_manager
-    depth_range
-    geographic_report
-    group_management
     heatmap
-    intersection
-    pg_spacing
-    raster_stats
-    replication
-    spacing
-    straightline_spacing
-    xyquery
+    mlpa

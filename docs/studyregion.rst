@@ -1,6 +1,6 @@
 .. _studyregion:
 
-`madrona.studyregion`: The Study Region
+``madrona.studyregion`` -  The Study Region
 =======================================
 
 What is the Study Region?

@@ -1,2 +1,2 @@
-`madrona.simplefaq`: FAQ system 
-===============================
+``madrona.simplefaq`` -  FAQ system 
+=================================

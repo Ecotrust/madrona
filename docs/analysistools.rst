@@ -1,4 +1,4 @@
-`madrona.analysistools`
+``madrona.analysistools``
 =================================
 
 The analysistools module provides a toolkit to standardize interaction with external modeling/analysis software.

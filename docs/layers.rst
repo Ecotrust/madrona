@@ -1,6 +1,6 @@
 .. _layers:
 
-`madrona.layers`: KML Data Layers
+``madrona.layers`` -   KML Data Layers
 =================================
 This document outlines how KML base data layers are handled in Madrona. 
 

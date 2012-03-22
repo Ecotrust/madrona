@@ -1,2 +1,2 @@
-`madrona.heatmap`
+``madrona.heatmap``
 =================================

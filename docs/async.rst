@@ -1,7 +1,7 @@
 .. _async:
 
-`madrona.async`: Asyncronous Processing
-======================================
+``madrona.async`` -  Asyncronous Processing
+===========================================
 
 Madrona includes a strategy for runnning lengthy processes in the background.  
 To implement this strategy we use `Celery <http://celeryproject.org/>`_ as our distributed 

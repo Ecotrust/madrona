@@ -1,2 +1,2 @@
-`madrona.common`: Misc Goodies
+``madrona.common`` -  Misc Goodies
 =================================

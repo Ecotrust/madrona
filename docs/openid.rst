@@ -1,6 +1,6 @@
 .. _openid:
 
-`madrona.openid`: Authentication System
+``madrona.openid`` -  Authentication System
 =======================================
 
 Overview

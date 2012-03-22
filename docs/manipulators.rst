@@ -1,6 +1,6 @@
 .. _manipulators:
 
-`madrona.manipulators`: Manipulators
+``madrona.manipulators`` -  Manipulators
 ====================================
 
 What is a Manipulator?
