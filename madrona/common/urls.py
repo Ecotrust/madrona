@@ -25,11 +25,7 @@ urlpatterns += patterns('madrona',
     (r'^studyregion/', include('madrona.studyregion.urls')),
     (r'^bookmark/', include('madrona.bookmarks.urls')),
     # Optional
-    #(r'^spacing/', include('madrona.spacing.urls')),
     #(r'^heatmap/', include('madrona.heatmap.urls')),
-    #(r'^data_manager/', include('madrona.data_manager.urls')),
-    #(r'^admin/data_distributor', include('madrona.data_distributor.admin_urls')),
-    #(r'^intersection/', include('madrona.intersection.urls')),
 )
 
 urlpatterns += patterns('',

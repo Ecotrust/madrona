@@ -94,22 +94,10 @@ INSTALLED_APPS = (
     'djcelery', 
     'djkombu',
     ##### Optional Apps ####
-    #'madrona.intersection',
-    #'madrona.replication',
-    #'madrona.bioregions',
-    #'madrona.data_manager',
-    #'madrona.data_distributor',
-    #'madrona.depth_range',
-    #'madrona.geographic_report',
-    #'madrona.spacing',
     #'madrona.heatmap', 
     #'madrona.analysistools',
-    #'madrona.bioeconomic_model',
     #'madrona.raster_stats',
-    #'madrona.pg_spacing',
-    #'madrona.straightline_spacing',
     #'madrona.xyquery',
-    #'madrona.wave',
     #'madrona.group_management',
 )
 

@@ -13,7 +13,7 @@ from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils import simplejson
-from madrona.data_manager.models import clean_geometry
+from madrona.common.utils import clean_geometry
 
 
 def mpaManipulatorList(request, app_name, model_name):

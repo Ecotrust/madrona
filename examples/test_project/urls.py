@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^madrona/', RedirectView.as_view(url='/')),    
     url(r'^$', 'madrona.common.views.map', {'template_name': 'common/map_ext.html'}, name="map"),    
+    (r'^heatmap/', include('madrona.heatmap.urls')),
     (r'^tests/', TemplateView.as_view(template_name='common/tests.html'), 
         {'extra_context': {'api_key': settings.GOOGLE_API_KEY}}),
     
