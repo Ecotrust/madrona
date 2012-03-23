@@ -3,52 +3,28 @@
    contain the root `toctree` directive.
 
 Madrona Decision Support Tool Documentation
-=============================================
+############################################
 
-I manage a lot of Django projects that present slightly-different forms to 
-users depending on the site/domain they're visiting.  There's also a bunch of 
-custom submission code that differs from form to form, but that's neither here
-nor there.
+Madrona is a python web application framework for building spatial decision support tools. 
+Originally designed to support the :ref:`California Marine Life Protection Act Initiative<background>`, 
+Madrona has evolved into a reusable platform for marine and terrestrial applications. 
 
-I need different Google Analytics codes depending on the sites and after 
-sticking these tags into every single template, I thought it would be cool to 
-be able to manage these Google analytics accounts from the Django admin page. 
-I also added a mode of operation that excludes the admin interface altogether 
-(you can just use the template tag)
+.. image:: madrona_outline.png
 
-1. Add the `google_analytics` application to your `INSTALLED_APPS` 
-		section of your `settings.py`.  This mode requires that you be using 
-		the Django sites framework too, so make sure you have that set up as 
-		well.
+If your problem involves spatial data design, spatial analysis and multi-user collaboration, Madrona is the premier tool. 
 
-2. Add `GOOGLE_ANALYTICS_MODEL = True` to your `settings.py` 
-
-3. Run a `./manage.py syncdb` to add the database tables
-
-4. Go to your project's admin page (usually `/admin/`) and click into a site 
-		objects
-
-5. You'll now see a new field under the normal site information called 
-		"Analytics Code". In this box you put your unique analytics code for 
-		your project's domain.  It looks like `UA-xxxxxx-x` and save the site.
-
-6. In your base template (usually a `base.html`) insert this tag at the very 
-		top: `{% load analytics %}`
-
-7. In the same template, insert the following code right before the closing 
-		body tag: `{% analytics %}`
 
 Table of Contents
----------------------------------------------------------
+=================
 
 .. toctree::
    :maxdepth: 2
    
-   getting_started
-   creating_new_project
+   overview 
+   installation
+   tutorial 
    apps
    topics
-   background
    
 API
 ===

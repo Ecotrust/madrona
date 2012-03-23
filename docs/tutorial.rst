@@ -1,20 +1,31 @@
 .. _create_new_project:
 
-Creating a new Madrona project
-=================================
+Tutorial: Creating a custom Madrona project
+=============================================
 
-.. note::
+These instructions will walk you through developing a basic implementation of
+Madrona. This includes installing from the development repository, setting
+up a sample app, testing that everything installed smoothly, then doing some
+basic customization. By the end you'll have an application that will perform
+all the `basic functions <http://code.google.com/p/madrona/wiki/FeaturesAndRequirements>`_ 
+needed to start drawing MPAs on a map.
 
-   Though madrona includes several example projects, you are encouraged to 
-   create your Madrona instance as a seperate python package outside of the 
-   madrona source tree. This will allow for clear seperation between the underlying
-   libraries (madrona) and your implementation of Madrona (the "project")
+Project Structure
+-----------------
+It is important to understand how a Madrona application is structured. There are essentially two codebases:
+
+    * madrona - a python module providing a set of django apps that contain the core functionality common to all Madrona instances.
+    * the project code - a django project which implements and extends the functionality provided by madrona (specific to the particular project's needs).
+
+By seperating the two codebases, we can more easily maintain multiple Madrona projects while continuing to improve the underlying core functionality.
+If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed 
+just like any other python module and you should't need to mess with any madrona code.
 
 
 Install Dependencies
 ---------------------
 
-You will need to install madrona's dependencies and madrona itself. For detailed instructions, please follow :ref:`Getting Started <getting_started>`.
+You will need to install madrona's dependencies and madrona itself. For detailed instructions, please follow the :ref:`Installation <installation>` guide.
 
 Create new django project
 --------------------------
@@ -34,6 +45,14 @@ You should see the following directory structure::
     |-- manage.py
     |-- settings.py
     `-- urls.py
+
+.. note::
+
+   Though madrona includes several example projects, you are encouraged to 
+   create your Madrona instance as a seperate python package outside of the 
+   madrona source tree. This will allow for clear seperation between the underlying
+   libraries (madrona) and your implementation (the "project")
+
 
 We now need to configure the settings and urls for our oregon project.
 

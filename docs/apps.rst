@@ -1,7 +1,4 @@
-Madrona Apps
-============
-
-Core
+Core Apps
 *********
 .. toctree::
     :maxdepth: 2
@@ -9,8 +6,8 @@ Core
     features
     kmlapp
 
-Required
-*********
+Required Apps
+**************
 .. toctree::
     :maxdepth: 2
 
@@ -32,8 +29,8 @@ Required
     unit_converter
     user_profile
 
-Optional
-*************
+Optional Apps
+**************
 
 .. toctree::
     :maxdepth: 2
