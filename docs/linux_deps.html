@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Linux &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
+    <link rel="up" title="Installation" href="installation.html" />
+    <link rel="next" title="Tutorial: Creating a custom Madrona project" href="tutorial.html" />
+    <link rel="prev" title="Mac OSX" href="mac_deps.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial: Creating a custom Madrona project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mac_deps.html" title="Mac OSX"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
+          <li><a href="installation.html" accesskey="U">Installation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="linux">
+<h1>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-from-packages-on-ubuntu">
+<h2>Installing from packages on Ubuntu<a class="headerlink" href="#installing-from-packages-on-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>sudo apt-get install</p>
+</div>
+<div class="section" id="installing-from-source">
+<h2>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h2>
+<p>Use packages to some of the dependencies. On Ubuntu Natty:</p>
+<div class="highlight-python"><pre>sudo apt-get install htop checkinstall hardinfo sysstat language-pack-gnome-en \
+language-pack-gnome-en-base xorg xorg-docs xterm xserver-xorg x11-apps x11-session-utils \
+x11-utils libx11-dev x11proto-bigreqs-dev x11proto-core-dev x11proto-damage-dev \
+x11proto-dmx-dev x11proto-fixes-dev x11proto-fonts-dev x11proto-gl-dev x11proto-input-dev \
+x11proto-kb-dev x11proto-randr-dev x11proto-record-dev x11proto-render-dev x11proto-resource-dev \
+x11proto-video-dev x11proto-xcmisc-dev x11proto-xext-dev x11proto-xf86bigfont-dev \
+x11proto-xf86dga-dev x11proto-xf86dri-dev x11proto-xf86misc-dev x11proto-xf86vidmode-dev \
+x11proto-xinerama-dev x11-xfs-utils x11-xkb-utils x11-xserver-utils whois apachetop apache2 \
+apache2-mpm-prefork apache2-doc apache2-prefork-dev apache2-utils apache2.2-common idle-python2.6 \
+python-clientform python-crypto python-dbg python-docutils python-doc python-mechanize \
+python-numpy python-numpy-doc python-numpy-dbg python-psycopg2 python-psycopg2-dbg python-pydot \
+python-pyparsing python-roman python-setuptools python-tk python-twisted-conch python-twisted-web2 \
+python-tz python2.6-dbg python2.6-dev python2.6-doc automake1.9 automake1.9-doc g++ g++ \
+g++-multilib fail2ban flex flex-doc clex python-gtkglext1 bison bison-doc bisonc++ \
+bisonc++-doc gcc-4.4 gcc-4.4-doc gcc-4.4-locales gcc-4.4-multilib gcc-4.4-source libgcc1-dbg \
+java-common gcj-jre gcj-jre-headless cmake icmake make-doc mmake munin-node optipng p7zip-full \
+p7zip-rar perl-doc pgadmin3 pgadmin3-data subversion subversion-tools gawk zope-common pgagent \
+gsfonts-x11 libgl1-mesa-dri xutils byacc perl-byacc libtiff-doc libtiff-opengl libtiff-tools \
+libtiff4-dev libtiffxx0c2 libpng12-dev swig swig-doc ipython unzip spe libcunit1-doc \
+libcunit1-ncurses-dev python-zodb automake dblatex xsltproc docbook docbook-defguide \
+docbook-html-forms docbook-xsl-doc-html docbook-xsl-doc-pdf docbook-xsl-doc-text \
+docbook-xsl-saxon docbook-xsl-saxon-gcj docbook2x docbook-dsssl libfreetype6-dev libicu4j-java \
+xml2 python-libxml2-dbg libxml2-dbg libxml2-dev libxml2-doc libltdl-dev pkg-config \
+libboost1.46-all-dev libboost1.46-dev libboost1.46-doc \
+python-opengl libopengl-perl imagemagick imagemagick-dbg imagemagick-doc postgresql-plperl-9.1 \
+postgresql-pltcl-9.1 postgresql-server-dev-9.1 postgresql-plpython-9.1 subversion  \
+libcurses-perl libncurses5-dbg libncurses5-dev libncursesw5-dbg libncursesw5-dev libjpeg62-dbg \
+libjpeg62-dev libopenjpeg2 libopenjpeg2-dbg optipng fftw-dev fftw-docs libfftw3-3 libfftw3-dev \
+libfftw3-doc python-cairo python-cairo-dbg python-cairo-dev libcairo2-dbg libcairo2-dev \
+libcairo2-doc libcairomm-1.0-1 libcairomm-1.0-dev libcairomm-1.0-doc libapache2-mod-wsgi \
+libjava-gnome-jni python-cjson python-cjson-dbg python-pip mercurial python-dev \
+ruby libruby munin-plugins-extra libsigc++-dev libsigx-2.0-2 libsigx-2.0-dev \
+libsigx-2.0-doc python-nose libcurl-ocaml libcurl-ocaml-dev screen libgle3 libgle3-dev \
+git python-virtualenv</pre>
+</div>
+<p>DJANGO:</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo svn co http://code.djangoproject.com/svn/django/trunk/ django
+cd /usr/local/src/django
+sudo python setup.py install
+sudo ln -s /usr/local/src/django/ /usr/lib/python2.7/dist-packages/</pre>
+</div>
+<p>GEOS(3.3.2):</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo wget http://download.osgeo.org/geos/geos-3.3.2.tar.bz2
+sudo tar -xvf geos-3.3.2.tar.bz2
+sudo rm -rf geos-3.3.2.tar.bz2
+cd geos-3.3.2/
+sudo ./configure --enable-python
+sudo make
+sudo make install</pre>
+</div>
+<p>PROJ (4.8.0):</p>
+<div class="highlight-python"><pre>cd /usr/local/src
+sudo wget http://download.osgeo.org/proj/proj-4.8.0.tar.gz
+sudo tar -xvf proj-4.8.0.tar.gz
+sudo rm -rf proj-4.8.0.tar.gz
+sudo chmod 755 -R proj-4.8.0
+cd proj-4.8.0/nad/
+sudo wget http://download.osgeo.org/proj/proj-datumgrid-1.5.zip
+sudo unzip proj-datumgrid-1.5.zip
+sudo rm -rf proj-datumgrid-1.5.zip
+cd ../
+sudo ./configure
+sudo make
+sudo make install
+cd /etc/ld.so.conf.d/
+sudo ln -s /usr/local/lib/libproj.so.0
+sudo ldconfig</pre>
+</div>
+<p>GDAL (1.9.0):</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo wget http://download.osgeo.org/gdal/gdal-1.9.0.tar.gz
+sudo tar -xvf gdal-1.9.0.tar.gz
+sudo rm -rf gdal-1.9.0.tar.gz
+cd gdal-1.9.0/
+sudo ./configure --with-python
+sudo make
+sudo make install</pre>
+</div>
+<p>PostGIS (1.5.3):</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo wget http://postgis.refractions.net/download/postgis-1.5.3.tar.gz
+sudo tar -xvf postgis-1.5.3.tar.gz
+sudo rm -rf postgis-1.5.3.tar.gz
+cd postgis-1.5.3/
+sudo ./configure
+sudo make
+sudo make install</pre>
+</div>
+<p>MAPNIK:</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo git clone https://github.com/mapnik/mapnik.git
+cd mapnik/
+sudo ./configure
+sudo make
+sudo make install</pre>
+</div>
+<p>GRASS (6.4.2 RC3) &#8211; Optional:</p>
+<div class="highlight-python"><pre>cd /usr/local/src/
+sudo wget http://grass.osgeo.org/grass64/source/grass-6.4.2RC3.tar.gz
+sudo tar -xvf grass-6.4.2RC3.tar.gz
+sudo rm -rf grass-6.4.2RC3.tar.gz
+cd grass-6.4.2RC3.tar.gz/
+sudo ./configure --enable-64bit --with-cxx --with-python=/usr/bin/python2.7-config --without-tcltk --without-opengl --with-freetype-includes='/usr/include/freetype2' --with-postgres --with-postgres-includes='/usr/include/postgresql' --with-x --with-cairo --with-geos
+sudo make</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Linux</a><ul>
+<li><a class="reference internal" href="#installing-from-packages-on-ubuntu">Installing from packages on Ubuntu</a></li>
+<li><a class="reference internal" href="#installing-from-source">Installing from source</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mac_deps.html"
+                        title="previous chapter">Mac OSX</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Tutorial: Creating a custom Madrona project</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/linux_deps.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial: Creating a custom Madrona project"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mac_deps.html" title="Mac OSX"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
+          <li><a href="installation.html" >Installation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

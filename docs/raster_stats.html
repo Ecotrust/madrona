@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.raster_stats: Raster Statistics &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>madrona.raster_stats - Raster Statistics &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,10 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
-    <link rel="next" title="madrona.replication" href="replication.html" />
-    <link rel="prev" title="madrona.pg_spacing" href="pg_spacing.html" /> 
+    <link rel="next" title="madrona.xyquery - Fast raster point query" href="xyquery.html" />
+    <link rel="prev" title="madrona.group_management - Manage group membership" href="group_management.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="replication.html" title="madrona.replication"
+          <a href="xyquery.html" title="madrona.xyquery - Fast raster point query"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pg_spacing.html" title="madrona.pg_spacing"
+          <a href="group_management.html" title="madrona.group_management - Manage group membership"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,7 +51,7 @@
           <div class="body">
             
   <div class="section" id="madrona-raster-stats-raster-statistics">
-<span id="raster-stats"></span><h1><cite>madrona.raster_stats</cite>: Raster Statistics<a class="headerlink" href="#madrona-raster-stats-raster-statistics" title="Permalink to this headline">¶</a></h1>
+<span id="raster-stats"></span><h1><tt class="docutils literal"><span class="pre">madrona.raster_stats</span></tt> -  Raster Statistics<a class="headerlink" href="#madrona-raster-stats-raster-statistics" title="Permalink to this headline">¶</a></h1>
 <p>The <cite>madrona.raster_stats</cite> app allows you to analyze raster datasets based on a polygon geometry. For example, for a given polygon, you may want to know the average elevation or the maximum temperature, etc. Essentially this performs a vector-on-raster intersection.</p>
 <p>The app uses an optional caching mechanism so that any geometry/raster combination only needs to be run once.</p>
 <p>The raster_stats app provides a model to register raster datasets, a utility function to quickly calculate stats programatically and a webservice which returns the statistics in json format.</p>
@@ -188,7 +188,7 @@ sudo make install
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><cite>madrona.raster_stats</cite>: Raster Statistics</a><ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">madrona.raster_stats</span></tt> -  Raster Statistics</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#settings">Settings</a></li>
 <li><a class="reference internal" href="#adding-a-raster">Adding a Raster</a></li>
@@ -201,11 +201,11 @@ sudo make install
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pg_spacing.html"
-                        title="previous chapter"><cite>madrona.pg_spacing</cite></a></p>
+  <p class="topless"><a href="group_management.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">madrona.group_management</span></tt> - Manage group membership</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="replication.html"
-                        title="next chapter"><cite>madrona.replication</cite></a></p>
+  <p class="topless"><a href="xyquery.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">madrona.xyquery</span></tt> - Fast raster point query</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/raster_stats.txt"
@@ -235,12 +235,12 @@ sudo make install
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="replication.html" title="madrona.replication"
+          <a href="xyquery.html" title="madrona.xyquery - Fast raster point query"
              >next</a> |</li>
         <li class="right" >
-          <a href="pg_spacing.html" title="madrona.pg_spacing"
+          <a href="group_management.html" title="madrona.group_management - Manage group membership"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

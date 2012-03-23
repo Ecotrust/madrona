@@ -5,6 +5,7 @@ Topics
    
    deployment
    sharing_configuration
+   custom_projection
    managing_users
    reports
    sidebar

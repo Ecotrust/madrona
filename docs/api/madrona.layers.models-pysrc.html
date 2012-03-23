@@ -53,37 +53,26 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="madrona.layers.models-module.html">Module madrona.layers.models</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bioeconomic_model.models=madrona.bioeconomic_model.models-module.html,Module madrona.bioregions.models=madrona.bioregions.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.data_distributor.models=madrona.data_distributor.models-module.html,Module madrona.data_manager.models=madrona.data_manager.models-module.html,Module madrona.depth_range.models=madrona.depth_range.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.geographic_report.models=madrona.geographic_report.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.intersection.models=madrona.intersection.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.pg_spacing.models=madrona.pg_spacing.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.replication.models=madrona.replication.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.spacing.models=madrona.spacing.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.straightline_spacing.models=madrona.straightline_spacing.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -91,35 +80,24 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-0
 <a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
 <a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">auth</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -127,35 +105,24 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-1
 <a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-2', 'madrona', 'link-2');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package madrona.features=madrona.features-module.html"><a title="madrona.features" class="py-name" href="#" onclick="return doclink('link-3', 'features', 'link-3');">features</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module madrona.features.managers=madrona.features.managers-module.html"><a title="madrona.features.managers" class="py-name" href="#" onclick="return doclink('link-4', 'managers', 'link-4');">managers</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Class madrona.features.managers.ShareableGeoManager=madrona.features.managers.ShareableGeoManager-class.html"><a title="madrona.features.managers.ShareableGeoManager" class="py-name" href="#" onclick="return doclink('link-5', 'ShareableGeoManager', 'link-5');">ShareableGeoManager</a></tt> </tt>
 <a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-6', 'madrona', 'link-2');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="madrona.features" class="py-name" href="#" onclick="return doclink('link-7', 'features', 'link-3');">features</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -188,84 +155,53 @@ madrona.layers.models.logger" class="py-name" href="#" onclick="return doclink('
 <a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt id="link-19" class="py-name" targets="Variable madrona.layers.models.PublicLayerList.kml_file=madrona.layers.models.PublicLayerList-class.html#kml_file,Variable madrona.layers.models.UserUploadedKml.kml_file=madrona.layers.models.UserUploadedKml-class.html#kml_file"><a title="madrona.layers.models.PublicLayerList.kml_file
 madrona.layers.models.UserUploadedKml.kml_file" class="py-name" href="#" onclick="return doclink('link-19', 'kml_file', 'link-19');">kml_file</a></tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
 madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-20', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FileField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-string">'upload/private-kml-layers/%Y/%m/%d'</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"""</tt> </tt>
 <a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-string">        KML or KMZ file. Can use NetworkLinks pointing to remote kml datasets or WMS servers.</tt> </tt>
 <a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-string">    """</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">510</tt><tt class="py-op">)</tt> </tt>
-<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.description=madrona.bioeconomic_model.models.Extent-class.html#description,Variable madrona.bioeconomic_model.models.LengthUnit.description=madrona.bioeconomic_model.models.LengthUnit-class.html#description,Variable madrona.data_manager.models.DataLayer.description=madrona.data_manager.models.DataLayer-class.html#description,Variable madrona.data_manager.models.GeneralFile.description=madrona.data_manager.models.GeneralFile-class.html#description,Variable madrona.intersection.models.FeatureMapping.description=madrona.intersection.models.FeatureMapping-class.html#description,Variable madrona.intersection.models.IntersectionFeature.description=madrona.intersection.models.IntersectionFeature-class.html#description,Variable madrona.intersection.models.OrganizationScheme.description=madrona.intersection.models.OrganizationScheme-class.html#description,Variable madrona.intersection.models.Shapefile.description=madrona.intersection.models.Shapefile-class.html#description,Variable madrona.layers.models.UserUploadedKml.description=madrona.layers.models.UserUploadedKml-class.html#description,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#description,Variable madrona.replication.models.ThresholdRule.description=madrona.replication.models.ThresholdRule-class.html#description,Variable madrona.screencasts.models.Screencast.description=madrona.screencasts.models.Screencast-class.html#description,Variable madrona.screencasts.models.YoutubeScreencast.description=madrona.screencasts.models.YoutubeScreencast-class.html#description"><a title="madrona.bioeconomic_model.models.Extent.description
-madrona.bioeconomic_model.models.LengthUnit.description
-madrona.data_manager.models.DataLayer.description
-madrona.data_manager.models.GeneralFile.description
-madrona.intersection.models.FeatureMapping.description
-madrona.intersection.models.IntersectionFeature.description
-madrona.intersection.models.OrganizationScheme.description
-madrona.intersection.models.Shapefile.description
-madrona.layers.models.UserUploadedKml.description
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">    <tt id="link-21" class="py-name" targets="Variable madrona.layers.models.UserUploadedKml.description=madrona.layers.models.UserUploadedKml-class.html#description,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#description,Variable madrona.screencasts.models.Screencast.description=madrona.screencasts.models.Screencast-class.html#description,Variable madrona.screencasts.models.YoutubeScreencast.description=madrona.screencasts.models.YoutubeScreencast-class.html#description"><a title="madrona.layers.models.UserUploadedKml.description
 madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.description
-madrona.replication.models.ThresholdRule.description
 madrona.screencasts.models.Screencast.description
 madrona.screencasts.models.YoutubeScreencast.description" class="py-name" href="#" onclick="return doclink('link-21', 'description', 'link-21');">description</a></tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -328,18 +264,16 @@ madrona.layers.models.logger" class="py-name" href="#" onclick="return doclink('
 <a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">"""&lt;kml xmlns="http://www.opengis.net/kml/2.2"&gt;&lt;Document&gt;&lt;/Document&gt;&lt;/kml&gt;"""</tt> </tt>
 </div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
 <a name="UserUploadedKml.Meta"></a><div id="UserUploadedKml.Meta-def"><a name="L77"></a><tt class="py-lineno"> 77</tt> <a class="py-toggle" href="#" id="UserUploadedKml.Meta-toggle" onclick="return toggle('UserUploadedKml.Meta');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.layers.models.UserUploadedKml.Meta-class.html">Meta</a><tt class="py-op">:</tt> </tt>
-</div><div id="UserUploadedKml.Meta-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UserUploadedKml.Meta-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt id="link-34" class="py-name" targets="Variable madrona.analysistools.models.Analysis.Meta.abstract=madrona.analysistools.models.Analysis.Meta-class.html#abstract,Variable madrona.features.models.Feature.Meta.abstract=madrona.features.models.Feature.Meta-class.html#abstract,Variable madrona.features.models.FeatureCollection.Meta.abstract=madrona.features.models.FeatureCollection.Meta-class.html#abstract,Variable madrona.features.models.LineFeature.Meta.abstract=madrona.features.models.LineFeature.Meta-class.html#abstract,Variable madrona.features.models.PointFeature.Meta.abstract=madrona.features.models.PointFeature.Meta-class.html#abstract,Variable madrona.features.models.PolygonFeature.Meta.abstract=madrona.features.models.PolygonFeature.Meta-class.html#abstract,Variable madrona.features.models.SpatialFeature.Meta.abstract=madrona.features.models.SpatialFeature.Meta-class.html#abstract,Variable madrona.intersection.models.CommonFeatureInfo.Meta.abstract=madrona.intersection.models.CommonFeatureInfo.Meta-class.html#abstract,Variable madrona.intersection.models.Shapefile.Meta.abstract=madrona.intersection.models.Shapefile.Meta-class.html#abstract,Variable madrona.layers.models.PrivateLayerList.Meta.abstract=madrona.layers.models.PrivateLayerList.Meta-class.html#abstract,Variable madrona.layers.models.UserUploadedKml.Meta.abstract=madrona.layers.models.UserUploadedKml.Meta-class.html#abstract,Variable madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract=madrona.manipulators.models.BaseManipulatorGeometry.Meta-class.html#abstract"><a title="madrona.analysistools.models.Analysis.Meta.abstract
+</div><div id="UserUploadedKml.Meta-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="UserUploadedKml.Meta-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt id="link-34" class="py-name" targets="Variable madrona.analysistools.models.Analysis.Meta.abstract=madrona.analysistools.models.Analysis.Meta-class.html#abstract,Variable madrona.features.models.Feature.Meta.abstract=madrona.features.models.Feature.Meta-class.html#abstract,Variable madrona.features.models.FeatureCollection.Meta.abstract=madrona.features.models.FeatureCollection.Meta-class.html#abstract,Variable madrona.features.models.LineFeature.Meta.abstract=madrona.features.models.LineFeature.Meta-class.html#abstract,Variable madrona.features.models.PointFeature.Meta.abstract=madrona.features.models.PointFeature.Meta-class.html#abstract,Variable madrona.features.models.PolygonFeature.Meta.abstract=madrona.features.models.PolygonFeature.Meta-class.html#abstract,Variable madrona.features.models.SpatialFeature.Meta.abstract=madrona.features.models.SpatialFeature.Meta-class.html#abstract,Variable madrona.layers.models.PrivateLayerList.Meta.abstract=madrona.layers.models.PrivateLayerList.Meta-class.html#abstract,Variable madrona.layers.models.UserUploadedKml.Meta.abstract=madrona.layers.models.UserUploadedKml.Meta-class.html#abstract,Variable madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract=madrona.manipulators.models.BaseManipulatorGeometry.Meta-class.html#abstract"><a title="madrona.analysistools.models.Analysis.Meta.abstract
 madrona.features.models.Feature.Meta.abstract
 madrona.features.models.FeatureCollection.Meta.abstract
 madrona.features.models.LineFeature.Meta.abstract
 madrona.features.models.PointFeature.Meta.abstract
 madrona.features.models.PolygonFeature.Meta.abstract
 madrona.features.models.SpatialFeature.Meta.abstract
-madrona.intersection.models.CommonFeatureInfo.Meta.abstract
-madrona.intersection.models.Shapefile.Meta.abstract
 madrona.layers.models.PrivateLayerList.Meta.abstract
 madrona.layers.models.UserUploadedKml.Meta.abstract
-madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract" class="py-name" href="#" onclick="return doclink('link-34', 'abstract', 'link-34');">abstract</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt> </tt>
+madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract" class="py-name" href="#" onclick="return doclink('link-34', 'abstract', 'link-34');">abstract</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
 </div></div><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"> </tt>
 <a name="PrivateKml"></a><div id="PrivateKml-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="PrivateKml-toggle" onclick="return toggle('PrivateKml');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.layers.models.PrivateKml-class.html">PrivateKml</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="PrivateKml-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="PrivateKml-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
@@ -363,59 +297,31 @@ madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract" class="py-nam
 <a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
 <a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">    <tt id="link-35" class="py-name" targets="Variable madrona.layers.models.PrivateKml.priority=madrona.layers.models.PrivateKml-class.html#priority"><a title="madrona.layers.models.PrivateKml.priority" class="py-name" href="#" onclick="return doclink('link-35', 'priority', 'link-35');">priority</a></tt> <tt class="py-op">=</tt> <tt id="link-36" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
 madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-36', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt><tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Floating point. Higher number = appears higher up on the KML tree."</tt><tt class="py-op">,</tt> </tt>
 <a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">            <tt class="py-name">default</tt><tt class="py-op">=</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt> </tt>
-<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">    <tt id="link-37" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.name=madrona.bioeconomic_model.models.Extent-class.html#name,Variable madrona.bioeconomic_model.models.GridAttributes.name=madrona.bioeconomic_model.models.GridAttributes-class.html#name,Variable madrona.bioeconomic_model.models.StudyRegion.name=madrona.bioeconomic_model.models.StudyRegion-class.html#name,Variable madrona.bioregions.models.Bioregion.name=madrona.bioregions.models.Bioregion-class.html#name,Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.data_distributor.models.LoadSetup.name=madrona.data_distributor.models.LoadSetup-class.html#name,Variable madrona.data_distributor.models.PotentialTarget.name=madrona.data_distributor.models.PotentialTarget-class.html#name,Variable madrona.data_distributor.models.PotentialTargetField.name=madrona.data_distributor.models.PotentialTargetField-class.html#name,Variable madrona.data_manager.models.DataLayer.name=madrona.data_manager.models.DataLayer-class.html#name,Variable madrona.data_manager.models.GeneralFile.name=madrona.data_manager.models.GeneralFile-class.html#name,Variable madrona.data_manager.models.ShapefileField.name=madrona.data_manager.models.ShapefileField-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.geographic_report.models.GeographicReport.name=madrona.geographic_report.models.GeographicReport-class.html#name,Variable madrona.intersection.models.CommonFeatureInfo.name=madrona.intersection.models.CommonFeatureInfo-class.html#name,Variable madrona.intersection.models.FeatureMapping.name=madrona.intersection.models.FeatureMapping-class.html#name,Variable madrona.intersection.models.IntersectionFeature.name=madrona.intersection.models.IntersectionFeature-class.html#name,Variable madrona.intersection.models.OrganizationScheme.name=madrona.intersection.models.OrganizationScheme-class.html#name,Variable madrona.intersection.models.Shapefile.name=madrona.intersection.models.Shapefile-class.html#name,Variable madrona.intersection.models.ShapefileField.name=madrona.intersection.models.ShapefileField-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.pg_spacing.models.Land.name=madrona.pg_spacing.models.Land-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.replication.models.ThresholdRule.name=madrona.replication.models.ThresholdRule-class.html#name,Variable madrona.spacing.models.Land.name=madrona.spacing.models.Land-class.html#name,Variable madrona.spacing.models.SpacingPoint.name=madrona.spacing.models.SpacingPoint-class.html#name,Variable madrona.straightline_spacing.models.SpacingPoint.name=madrona.straightline_spacing.models.SpacingPoint-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bioeconomic_model.models.Extent.name
-madrona.bioeconomic_model.models.GridAttributes.name
-madrona.bioeconomic_model.models.StudyRegion.name
-madrona.bioregions.models.Bioregion.name
-madrona.bookmarks.forms.BookmarkForm.name
-madrona.data_distributor.models.LoadSetup.name
-madrona.data_distributor.models.PotentialTarget.name
-madrona.data_distributor.models.PotentialTargetField.name
-madrona.data_manager.models.DataLayer.name
-madrona.data_manager.models.GeneralFile.name
-madrona.data_manager.models.ShapefileField.name
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">    <tt id="link-37" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
-madrona.geographic_report.models.GeographicReport.name
-madrona.intersection.models.CommonFeatureInfo.name
-madrona.intersection.models.FeatureMapping.name
-madrona.intersection.models.IntersectionFeature.name
-madrona.intersection.models.OrganizationScheme.name
-madrona.intersection.models.Shapefile.name
-madrona.intersection.models.ShapefileField.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -425,44 +331,28 @@ madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
 madrona.manipulators.manipulators.NullManipulator.Options.name
 madrona.manipulators.tests.TestManipulator.Options.name
 madrona.news.models.Tag.name
-madrona.pg_spacing.models.Land.name
 madrona.raster_stats.models.RasterDataset.name
-madrona.replication.models.ThresholdRule.name
-madrona.spacing.models.Land.name
-madrona.spacing.models.SpacingPoint.name
-madrona.straightline_spacing.models.SpacingPoint.name
 madrona.studyregion.models.StudyRegion.name
 madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-37', 'name', 'link-37');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-38" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -480,35 +370,24 @@ madrona.openid.models.UserAssociation.Meta.verbose_name" class="py-name" href="#
 <a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt id="link-40" class="py-name" targets="Variable madrona.features.models.Feature.sharing_groups=madrona.features.models.Feature-class.html#sharing_groups,Variable madrona.layers.models.PrivateKml.sharing_groups=madrona.layers.models.PrivateKml-class.html#sharing_groups"><a title="madrona.features.models.Feature.sharing_groups
 madrona.layers.models.PrivateKml.sharing_groups" class="py-name" href="#" onclick="return doclink('link-40', 'sharing_groups', 'link-40');">sharing_groups</a></tt> <tt class="py-op">=</tt> <tt id="link-41" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -526,35 +405,24 @@ madrona.manipulators.tests.TestPoly.Options.verbose_name
 madrona.openid.models.UserAssociation.Meta.verbose_name" class="py-name" href="#" onclick="return doclink('link-42', 'verbose_name', 'link-39');">verbose_name</a></tt><tt class="py-op">=</tt><tt class="py-string">"Share layer with the following groups"</tt><tt class="py-op">)</tt> </tt>
 <a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt id="link-43" class="py-name" targets="Variable madrona.layers.models.PrivateKml.base_kml=madrona.layers.models.PrivateKml-class.html#base_kml"><a title="madrona.layers.models.PrivateKml.base_kml" class="py-name" href="#" onclick="return doclink('link-43', 'base_kml', 'link-43');">base_kml</a></tt> <tt class="py-op">=</tt> <tt id="link-44" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -568,25 +436,8 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-4
 <a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-string">        if the user has proper permissions on the base kml."""</tt><tt class="py-op">)</tt> </tt>
 <a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt>
 <a name="PrivateKml.__unicode__"></a><div id="PrivateKml.__unicode__-def"><a name="L114"></a><tt class="py-lineno">114</tt> <a class="py-toggle" href="#" id="PrivateKml.__unicode__-toggle" onclick="return toggle('PrivateKml.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layers.models.PrivateKml-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="PrivateKml.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PrivateKml.__unicode__-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">u'%s at %s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.name
-madrona.bioeconomic_model.models.GridAttributes.name
-madrona.bioeconomic_model.models.StudyRegion.name
-madrona.bioregions.models.Bioregion.name
-madrona.bookmarks.forms.BookmarkForm.name
-madrona.data_distributor.models.LoadSetup.name
-madrona.data_distributor.models.PotentialTarget.name
-madrona.data_distributor.models.PotentialTargetField.name
-madrona.data_manager.models.DataLayer.name
-madrona.data_manager.models.GeneralFile.name
-madrona.data_manager.models.ShapefileField.name
+</div><div id="PrivateKml.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PrivateKml.__unicode__-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">u'%s at %s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
-madrona.geographic_report.models.GeographicReport.name
-madrona.intersection.models.CommonFeatureInfo.name
-madrona.intersection.models.FeatureMapping.name
-madrona.intersection.models.IntersectionFeature.name
-madrona.intersection.models.OrganizationScheme.name
-madrona.intersection.models.Shapefile.name
-madrona.intersection.models.ShapefileField.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -596,12 +447,7 @@ madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
 madrona.manipulators.manipulators.NullManipulator.Options.name
 madrona.manipulators.tests.TestManipulator.Options.name
 madrona.news.models.Tag.name
-madrona.pg_spacing.models.Land.name
 madrona.raster_stats.models.RasterDataset.name
-madrona.replication.models.ThresholdRule.name
-madrona.spacing.models.Land.name
-madrona.spacing.models.SpacingPoint.name
-madrona.straightline_spacing.models.SpacingPoint.name
 madrona.studyregion.models.StudyRegion.name
 madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-46', 'name', 'link-37');">name</a></tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name"><a title="madrona.layers.models.PrivateKml.base_kml" class="py-name" href="#" onclick="return doclink('link-47', 'base_kml', 'link-43');">base_kml</a></tt><tt class="py-op">)</tt> </tt>
 </div></div><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"> </tt>
@@ -624,80 +470,55 @@ madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return docl
 <a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
 <a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt>     </tt>
 <a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
-<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt id="link-48" class="py-name" targets="Variable madrona.bioregions.models.Bioregion.creation_date=madrona.bioregions.models.Bioregion-class.html#creation_date,Variable madrona.layers.models.PublicLayerList.creation_date=madrona.layers.models.PublicLayerList-class.html#creation_date,Variable madrona.manipulators.models.BaseManipulatorGeometry.creation_date=madrona.manipulators.models.BaseManipulatorGeometry-class.html#creation_date,Variable madrona.studyregion.models.StudyRegion.creation_date=madrona.studyregion.models.StudyRegion-class.html#creation_date"><a title="madrona.bioregions.models.Bioregion.creation_date
-madrona.layers.models.PublicLayerList.creation_date
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt id="link-48" class="py-name" targets="Variable madrona.layers.models.PublicLayerList.creation_date=madrona.layers.models.PublicLayerList-class.html#creation_date,Variable madrona.manipulators.models.BaseManipulatorGeometry.creation_date=madrona.manipulators.models.BaseManipulatorGeometry-class.html#creation_date,Variable madrona.studyregion.models.StudyRegion.creation_date=madrona.studyregion.models.StudyRegion-class.html#creation_date"><a title="madrona.layers.models.PublicLayerList.creation_date
 madrona.manipulators.models.BaseManipulatorGeometry.creation_date
 madrona.studyregion.models.StudyRegion.creation_date" class="py-name" href="#" onclick="return doclink('link-48', 'creation_date', 'link-48');">creation_date</a></tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
 madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-49', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">DateTimeField</tt><tt class="py-op">(</tt><tt class="py-name">auto_now</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt>  </tt>
 <a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
-<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">    <tt id="link-50" class="py-name" targets="Variable madrona.data_manager.models.GeneralFile.active=madrona.data_manager.models.GeneralFile-class.html#active,Variable madrona.data_manager.models.Shapefile.active=madrona.data_manager.models.Shapefile-class.html#active,Variable madrona.layers.models.PublicLayerList.active=madrona.layers.models.PublicLayerList-class.html#active,Variable madrona.manipulators.models.BaseManipulatorGeometry.active=madrona.manipulators.models.BaseManipulatorGeometry-class.html#active,Variable madrona.studyregion.models.StudyRegion.active=madrona.studyregion.models.StudyRegion-class.html#active"><a title="madrona.data_manager.models.GeneralFile.active
-madrona.data_manager.models.Shapefile.active
-madrona.layers.models.PublicLayerList.active
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">    <tt id="link-50" class="py-name" targets="Variable madrona.layers.models.PublicLayerList.active=madrona.layers.models.PublicLayerList-class.html#active,Variable madrona.manipulators.models.BaseManipulatorGeometry.active=madrona.manipulators.models.BaseManipulatorGeometry-class.html#active,Variable madrona.studyregion.models.StudyRegion.active=madrona.studyregion.models.StudyRegion-class.html#active"><a title="madrona.layers.models.PublicLayerList.active
 madrona.manipulators.models.BaseManipulatorGeometry.active
 madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-50', 'active', 'link-50');">active</a></tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -710,35 +531,24 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-5
 <a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">    <tt id="link-52" class="py-name"><a title="madrona.layers.models.PublicLayerList.kml_file
 madrona.layers.models.UserUploadedKml.kml_file" class="py-name" href="#" onclick="return doclink('link-52', 'kml_file', 'link-19');">kml_file</a></tt> <tt class="py-op">=</tt> <tt id="link-53" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
-madrona.bioeconomic_model.models
-madrona.bioregions.models
 madrona.bookmarks.models
 madrona.common.models
-madrona.data_distributor.models
-madrona.data_manager.models
-madrona.depth_range.models
 madrona.features.models
-madrona.geographic_report.models
 madrona.google-analytics.models
 madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
-madrona.intersection.models
 madrona.kmlapp.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
 madrona.news.models
 madrona.openid.models
-madrona.pg_spacing.models
 madrona.raster_stats.models
-madrona.replication.models
 madrona.screencasts.models
 madrona.shapes.models
 madrona.simplefaq.models
-madrona.spacing.models
 madrona.staticmap.models
-madrona.straightline_spacing.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
@@ -750,30 +560,20 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-5
 <a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-string">    """</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">510</tt><tt class="py-op">)</tt> </tt>
 <a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"> </tt>
 <a name="PublicLayerList.__unicode__"></a><div id="PublicLayerList.__unicode__-def"><a name="L151"></a><tt class="py-lineno">151</tt> <a class="py-toggle" href="#" id="PublicLayerList.__unicode__-toggle" onclick="return toggle('PublicLayerList.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layers.models.PublicLayerList-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="PublicLayerList.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PublicLayerList.__unicode__-expanded"><a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"PublicLayerList, created: %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="madrona.bioregions.models.Bioregion.creation_date
-madrona.layers.models.PublicLayerList.creation_date
+</div><div id="PublicLayerList.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PublicLayerList.__unicode__-expanded"><a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"PublicLayerList, created: %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="madrona.layers.models.PublicLayerList.creation_date
 madrona.manipulators.models.BaseManipulatorGeometry.creation_date
 madrona.studyregion.models.StudyRegion.creation_date" class="py-name" href="#" onclick="return doclink('link-54', 'creation_date', 'link-48');">creation_date</a></tt><tt class="py-op">)</tt> </tt>
 </div><a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"> </tt>
 <a name="PublicLayerList.save"></a><div id="PublicLayerList.save-def"><a name="L154"></a><tt class="py-lineno">154</tt> <a class="py-toggle" href="#" id="PublicLayerList.save-toggle" onclick="return toggle('PublicLayerList.save');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layers.models.PublicLayerList-class.html#save">save</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="PublicLayerList.save-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PublicLayerList.save-expanded"><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-55" class="py-name" targets="Class madrona.layers.models.PublicLayerList=madrona.layers.models.PublicLayerList-class.html"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-55', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name" targets="Method madrona.analysistools.models.Analysis.save()=madrona.analysistools.models.Analysis-class.html#save,Method madrona.bioeconomic_model.models.OrganizationScheme.save()=madrona.bioeconomic_model.models.OrganizationScheme-class.html#save,Method madrona.data_distributor.models.LoadSetup.save()=madrona.data_distributor.models.LoadSetup-class.html#save,Method madrona.data_manager.models.Shapefile.save()=madrona.data_manager.models.Shapefile-class.html#save,Method madrona.features.models.Feature.save()=madrona.features.models.Feature-class.html#save,Method madrona.features.models.FeatureCollection.save()=madrona.features.models.FeatureCollection-class.html#save,Method madrona.features.models.SpatialFeature.save()=madrona.features.models.SpatialFeature-class.html#save,Method madrona.intersection.models.IntersectionFeature.save()=madrona.intersection.models.IntersectionFeature-class.html#save,Method madrona.intersection.models.MultiFeatureShapefile.save()=madrona.intersection.models.MultiFeatureShapefile-class.html#save,Method madrona.layers.models.PublicLayerList.save()=madrona.layers.models.PublicLayerList-class.html#save,Method madrona.manipulators.models.BaseManipulatorGeometry.save()=madrona.manipulators.models.BaseManipulatorGeometry-class.html#save,Method madrona.news.models.Entry.save()=madrona.news.models.Entry-class.html#save,Method madrona.news.models.Tag.save()=madrona.news.models.Tag-class.html#save,Method madrona.openid.models.UserAssociation.save()=madrona.openid.models.UserAssociation-class.html#save,Method madrona.pg_spacing.models.Network.save()=madrona.pg_spacing.models.Network-class.html#save,Method madrona.replication.models.HabitatThreshold.save()=madrona.replication.models.HabitatThreshold-class.html#save,Method madrona.replication.models.ReplicationSetup.save()=madrona.replication.models.ReplicationSetup-class.html#save,Method madrona.replication.models.ThresholdRule.save()=madrona.replication.models.ThresholdRule-class.html#save,Method madrona.studyregion.models.StudyRegion.save()=madrona.studyregion.models.StudyRegion-class.html#save"><a title="madrona.analysistools.models.Analysis.save
-madrona.bioeconomic_model.models.OrganizationScheme.save
-madrona.data_distributor.models.LoadSetup.save
-madrona.data_manager.models.Shapefile.save
+</div><div id="PublicLayerList.save-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PublicLayerList.save-expanded"><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-55" class="py-name" targets="Class madrona.layers.models.PublicLayerList=madrona.layers.models.PublicLayerList-class.html"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-55', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name" targets="Method madrona.analysistools.models.Analysis.save()=madrona.analysistools.models.Analysis-class.html#save,Method madrona.features.models.Feature.save()=madrona.features.models.Feature-class.html#save,Method madrona.features.models.FeatureCollection.save()=madrona.features.models.FeatureCollection-class.html#save,Method madrona.features.models.SpatialFeature.save()=madrona.features.models.SpatialFeature-class.html#save,Method madrona.layers.models.PublicLayerList.save()=madrona.layers.models.PublicLayerList-class.html#save,Method madrona.manipulators.models.BaseManipulatorGeometry.save()=madrona.manipulators.models.BaseManipulatorGeometry-class.html#save,Method madrona.news.models.Entry.save()=madrona.news.models.Entry-class.html#save,Method madrona.news.models.Tag.save()=madrona.news.models.Tag-class.html#save,Method madrona.openid.models.UserAssociation.save()=madrona.openid.models.UserAssociation-class.html#save,Method madrona.studyregion.models.StudyRegion.save()=madrona.studyregion.models.StudyRegion-class.html#save"><a title="madrona.analysistools.models.Analysis.save
 madrona.features.models.Feature.save
 madrona.features.models.FeatureCollection.save
 madrona.features.models.SpatialFeature.save
-madrona.intersection.models.IntersectionFeature.save
-madrona.intersection.models.MultiFeatureShapefile.save
 madrona.layers.models.PublicLayerList.save
 madrona.manipulators.models.BaseManipulatorGeometry.save
 madrona.news.models.Entry.save
 madrona.news.models.Tag.save
 madrona.openid.models.UserAssociation.save
-madrona.pg_spacing.models.Network.save
-madrona.replication.models.HabitatThreshold.save
-madrona.replication.models.ReplicationSetup.save
-madrona.replication.models.ThresholdRule.save
 madrona.studyregion.models.StudyRegion.save" class="py-name" href="#" onclick="return doclink('link-56', 'save', 'link-56');">save</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-57" class="py-name" targets="Variable madrona.common.management.commands.runprofileserver.Command.args=madrona.common.management.commands.runprofileserver.Command-class.html#args,Variable madrona.common.management.commands.site.Command.args=madrona.common.management.commands.site.Command-class.html#args,Variable madrona.features.management.commands.enable_sharing.Command.args=madrona.features.management.commands.enable_sharing.Command-class.html#args,Variable madrona.layers.management.commands.create_privatekml.Command.args=madrona.layers.management.commands.create_privatekml.Command-class.html#args,Variable madrona.manipulators.management.commands.change_manipulator_geom.Command.args=madrona.manipulators.management.commands.change_manipulator_geom.Command-class.html#args,Variable madrona.manipulators.management.commands.create_manipulator_geom.Command.args=madrona.manipulators.management.commands.create_manipulator_geom.Command-class.html#args,Variable madrona.raster_stats.management.commands.update_rasterdatasets.Command.args=madrona.raster_stats.management.commands.update_rasterdatasets.Command-class.html#args,Variable madrona.studyregion.management.commands.change_study_region.Command.args=madrona.studyregion.management.commands.change_study_region.Command-class.html#args,Variable madrona.studyregion.management.commands.create_study_region.Command.args=madrona.studyregion.management.commands.create_study_region.Command-class.html#args,Variable madrona.studyregion.management.commands.summarize_study_region_changes.Command.args=madrona.studyregion.management.commands.summarize_study_region_changes.Command-class.html#args,Variable madrona.xyquery.management.commands.loadraster.Command.args=madrona.xyquery.management.commands.loadraster.Command-class.html#args,Variable madrona.xyquery.management.commands.loadshp.Command.args=madrona.xyquery.management.commands.loadshp.Command-class.html#args"><a title="madrona.common.management.commands.runprofileserver.Command.args
 madrona.common.management.commands.site.Command.args
 madrona.features.management.commands.enable_sharing.Command.args
@@ -786,74 +586,26 @@ madrona.studyregion.management.commands.create_study_region.Command.args
 madrona.studyregion.management.commands.summarize_study_region_changes.Command.args
 madrona.xyquery.management.commands.loadraster.Command.args
 madrona.xyquery.management.commands.loadshp.Command.args" class="py-name" href="#" onclick="return doclink('link-57', 'args', 'link-57');">args</a></tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
-<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="madrona.data_manager.models.GeneralFile.active
-madrona.data_manager.models.Shapefile.active
-madrona.layers.models.PublicLayerList.active
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="madrona.layers.models.PublicLayerList.active
 madrona.manipulators.models.BaseManipulatorGeometry.active
-madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-58', 'active', 'link-50');">active</a></tt> <tt class="py-keyword">and</tt> <tt id="link-59" class="py-name"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-59', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name" targets="Variable madrona.bioeconomic_model.models.Extent.objects=madrona.bioeconomic_model.models.Extent-class.html#objects,Variable madrona.bioeconomic_model.models.PointScrap.objects=madrona.bioeconomic_model.models.PointScrap-class.html#objects,Variable madrona.bioeconomic_model.models.PolygonGrid.objects=madrona.bioeconomic_model.models.PolygonGrid-class.html#objects,Variable madrona.bioeconomic_model.models.Scrap.objects=madrona.bioeconomic_model.models.Scrap-class.html#objects,Variable madrona.bioeconomic_model.models.StudyRegion.objects=madrona.bioeconomic_model.models.StudyRegion-class.html#objects,Variable madrona.bioregions.models.Bioregion.objects=madrona.bioregions.models.Bioregion-class.html#objects,Variable madrona.depth_range.models.DepthSounding.objects=madrona.depth_range.models.DepthSounding-class.html#objects,Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.intersection.models.ArealFeature.objects=madrona.intersection.models.ArealFeature-class.html#objects,Variable madrona.intersection.models.CommonFeatureInfo.objects=madrona.intersection.models.CommonFeatureInfo-class.html#objects,Variable madrona.intersection.models.IntersectionFeature.objects=madrona.intersection.models.IntersectionFeature-class.html#objects,Variable madrona.intersection.models.LinearFeature.objects=madrona.intersection.models.LinearFeature-class.html#objects,Variable madrona.intersection.models.PointFeature.objects=madrona.intersection.models.PointFeature-class.html#objects,Variable madrona.intersection.models.ResultCache.objects=madrona.intersection.models.ResultCache-class.html#objects,Variable madrona.intersection.models.TestPolygon.objects=madrona.intersection.models.TestPolygon-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.pg_spacing.models.Land.objects=madrona.pg_spacing.models.Land-class.html#objects,Variable madrona.pg_spacing.models.Network.objects=madrona.pg_spacing.models.Network-class.html#objects,Variable madrona.pg_spacing.models.Vertices.objects=madrona.pg_spacing.models.Vertices-class.html#objects,Variable madrona.spacing.models.Land.objects=madrona.spacing.models.Land-class.html#objects,Variable madrona.spacing.models.SpacingPoint.objects=madrona.spacing.models.SpacingPoint-class.html#objects,Variable madrona.straightline_spacing.models.SpacingPoint.objects=madrona.straightline_spacing.models.SpacingPoint-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.bioeconomic_model.models.Extent.objects
-madrona.bioeconomic_model.models.PointScrap.objects
-madrona.bioeconomic_model.models.PolygonGrid.objects
-madrona.bioeconomic_model.models.Scrap.objects
-madrona.bioeconomic_model.models.StudyRegion.objects
-madrona.bioregions.models.Bioregion.objects
-madrona.depth_range.models.DepthSounding.objects
-madrona.features.models.Feature.objects
-madrona.intersection.models.ArealFeature.objects
-madrona.intersection.models.CommonFeatureInfo.objects
-madrona.intersection.models.IntersectionFeature.objects
-madrona.intersection.models.LinearFeature.objects
-madrona.intersection.models.PointFeature.objects
-madrona.intersection.models.ResultCache.objects
-madrona.intersection.models.TestPolygon.objects
+madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-58', 'active', 'link-50');">active</a></tt> <tt class="py-keyword">and</tt> <tt id="link-59" class="py-name"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-59', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name" targets="Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.features.models.Feature.objects
 madrona.manipulators.models.BaseManipulatorGeometry.objects
-madrona.pg_spacing.models.Land.objects
-madrona.pg_spacing.models.Network.objects
-madrona.pg_spacing.models.Vertices.objects
-madrona.spacing.models.Land.objects
-madrona.spacing.models.SpacingPoint.objects
-madrona.straightline_spacing.models.SpacingPoint.objects
 madrona.studyregion.models.StudyRegion.objects
-madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-60', 'objects', 'link-60');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="madrona.data_manager.models.GeneralFile.active
-madrona.data_manager.models.Shapefile.active
-madrona.layers.models.PublicLayerList.active
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-60', 'objects', 'link-60');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="madrona.layers.models.PublicLayerList.active
 madrona.manipulators.models.BaseManipulatorGeometry.active
 madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-61', 'active', 'link-50');">active</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name" targets="Variable madrona.raster_stats.models.ZonalCategory.count=madrona.raster_stats.models.ZonalCategory-class.html#count"><a title="madrona.raster_stats.models.ZonalCategory.count" class="py-name" href="#" onclick="return doclink('link-62', 'count', 'link-62');">count</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
 <a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-comment"># Ensure that any previously active layer is deactivated</tt> </tt>
 <a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">            <tt class="py-comment"># There can be only one!</tt> </tt>
-<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt id="link-63" class="py-name"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-63', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">.</tt><tt id="link-64" class="py-name"><a title="madrona.bioeconomic_model.models.Extent.objects
-madrona.bioeconomic_model.models.PointScrap.objects
-madrona.bioeconomic_model.models.PolygonGrid.objects
-madrona.bioeconomic_model.models.Scrap.objects
-madrona.bioeconomic_model.models.StudyRegion.objects
-madrona.bioregions.models.Bioregion.objects
-madrona.depth_range.models.DepthSounding.objects
-madrona.features.models.Feature.objects
-madrona.intersection.models.ArealFeature.objects
-madrona.intersection.models.CommonFeatureInfo.objects
-madrona.intersection.models.IntersectionFeature.objects
-madrona.intersection.models.LinearFeature.objects
-madrona.intersection.models.PointFeature.objects
-madrona.intersection.models.ResultCache.objects
-madrona.intersection.models.TestPolygon.objects
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt id="link-63" class="py-name"><a title="madrona.layers.models.PublicLayerList" class="py-name" href="#" onclick="return doclink('link-63', 'PublicLayerList', 'link-55');">PublicLayerList</a></tt><tt class="py-op">.</tt><tt id="link-64" class="py-name"><a title="madrona.features.models.Feature.objects
 madrona.manipulators.models.BaseManipulatorGeometry.objects
-madrona.pg_spacing.models.Land.objects
-madrona.pg_spacing.models.Network.objects
-madrona.pg_spacing.models.Vertices.objects
-madrona.spacing.models.Land.objects
-madrona.spacing.models.SpacingPoint.objects
-madrona.straightline_spacing.models.SpacingPoint.objects
 madrona.studyregion.models.StudyRegion.objects
-madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-64', 'objects', 'link-60');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt id="link-65" class="py-name"><a title="madrona.data_manager.models.GeneralFile.active
-madrona.data_manager.models.Shapefile.active
-madrona.layers.models.PublicLayerList.active
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-64', 'objects', 'link-60');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">filter</tt><tt class="py-op">(</tt><tt id="link-65" class="py-name"><a title="madrona.layers.models.PublicLayerList.active
 madrona.manipulators.models.BaseManipulatorGeometry.active
 madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-65', 'active', 'link-50');">active</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name" targets="Variable madrona.analysistools.examples.BufferPointsForm.Meta.exclude=madrona.analysistools.examples.BufferPointsForm.Meta-class.html#exclude,Variable madrona.common.management.commands.install_media.Command.exclude=madrona.common.management.commands.install_media.Command-class.html#exclude,Variable madrona.features.forms.FeatureForm.Meta.exclude=madrona.features.forms.FeatureForm.Meta-class.html#exclude,Variable madrona.features.forms.SpatialFeatureForm.Meta.exclude=madrona.features.forms.SpatialFeatureForm.Meta-class.html#exclude,Variable madrona.user_profile.forms.UserProfileForm.Meta.exclude=madrona.user_profile.forms.UserProfileForm.Meta-class.html#exclude"><a title="madrona.analysistools.examples.BufferPointsForm.Meta.exclude
 madrona.common.management.commands.install_media.Command.exclude
 madrona.features.forms.FeatureForm.Meta.exclude
 madrona.features.forms.SpatialFeatureForm.Meta.exclude
-madrona.user_profile.forms.UserProfileForm.Meta.exclude" class="py-name" href="#" onclick="return doclink('link-66', 'exclude', 'link-66');">exclude</a></tt><tt class="py-op">(</tt><tt class="py-name">pk</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pk</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name" targets="Function madrona.features.views.update()=madrona.features.views-module.html#update"><a title="madrona.features.views.update" class="py-name" href="#" onclick="return doclink('link-67', 'update', 'link-67');">update</a></tt><tt class="py-op">(</tt><tt id="link-68" class="py-name"><a title="madrona.data_manager.models.GeneralFile.active
-madrona.data_manager.models.Shapefile.active
-madrona.layers.models.PublicLayerList.active
+madrona.user_profile.forms.UserProfileForm.Meta.exclude" class="py-name" href="#" onclick="return doclink('link-66', 'exclude', 'link-66');">exclude</a></tt><tt class="py-op">(</tt><tt class="py-name">pk</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pk</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name" targets="Function madrona.features.views.update()=madrona.features.views-module.html#update"><a title="madrona.features.views.update" class="py-name" href="#" onclick="return doclink('link-67', 'update', 'link-67');">update</a></tt><tt class="py-op">(</tt><tt id="link-68" class="py-name"><a title="madrona.layers.models.PublicLayerList.active
 madrona.manipulators.models.BaseManipulatorGeometry.active
 madrona.studyregion.models.StudyRegion.active" class="py-name" href="#" onclick="return doclink('link-68', 'active', 'link-50');">active</a></tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
 </div></div><a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"> </tt>
@@ -870,11 +622,9 @@ madrona.features.models.LineFeature.Meta.abstract
 madrona.features.models.PointFeature.Meta.abstract
 madrona.features.models.PolygonFeature.Meta.abstract
 madrona.features.models.SpatialFeature.Meta.abstract
-madrona.intersection.models.CommonFeatureInfo.Meta.abstract
-madrona.intersection.models.Shapefile.Meta.abstract
 madrona.layers.models.PrivateLayerList.Meta.abstract
 madrona.layers.models.UserUploadedKml.Meta.abstract
-madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract" class="py-name" href="#" onclick="return doclink('link-69', 'abstract', 'link-34');">abstract</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt> </tt>
+madrona.manipulators.models.BaseManipulatorGeometry.Meta.abstract" class="py-name" href="#" onclick="return doclink('link-69', 'abstract', 'link-34');">abstract</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
 </div></div><a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
@@ -908,7 +658,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 20 10:36:32 2012
+    Generated by Epydoc 3.0.1 on Fri Mar 23 11:34:48 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

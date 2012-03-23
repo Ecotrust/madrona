@@ -1,7 +1,7 @@
 .. _staticmap:
 
-`madrona.staticmap`: Static Map Data Layers
-===========================================
+``madrona.staticmap`` -  Static Map Data Layers
+=================================================
 
 Customizing the Mapnik Rendering
 ********************************
@@ -68,13 +68,8 @@ This element defines "rules" which determine the colors, symbology, classificati
 
   <Style name="My Style">
     <Rule>
-      <PolygonSymbolizer>
-        <CssParameter name="fill">#f2eff9</CssParameter>
-      </PolygonSymbolizer>
-      <LineSymbolizer>
-        <CssParameter name="stroke">rgb(50%,50%,50%)</CssParameter>
-        <CssParameter name="stroke-width">0.1</CssParameter>
-      </LineSymbolizer>
+        <PolygonSymbolizer fill="steelblue" />
+        <LineSymbolizer stroke="rgb(5%,5%,5%)" stroke-width="1" />
     </Rule>
   </Style>
 

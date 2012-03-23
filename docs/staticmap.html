@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.staticmap: Static Map Data Layers &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>madrona.staticmap - Static Map Data Layers &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,10 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
-    <link rel="next" title="madrona.studyregion: The Study Region" href="studyregion.html" />
-    <link rel="prev" title="madrona.simplefaq: FAQ system" href="simplefaq.html" /> 
+    <link rel="next" title="madrona.studyregion - The Study Region" href="studyregion.html" />
+    <link rel="prev" title="madrona.simplefaq - FAQ system" href="simplefaq.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="studyregion.html" title="madrona.studyregion: The Study Region"
+          <a href="studyregion.html" title="madrona.studyregion - The Study Region"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="simplefaq.html" title="madrona.simplefaq: FAQ system"
+          <a href="simplefaq.html" title="madrona.simplefaq - FAQ system"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,7 +51,7 @@
           <div class="body">
             
   <div class="section" id="madrona-staticmap-static-map-data-layers">
-<span id="staticmap"></span><h1><cite>madrona.staticmap</cite>: Static Map Data Layers<a class="headerlink" href="#madrona-staticmap-static-map-data-layers" title="Permalink to this headline">¶</a></h1>
+<span id="staticmap"></span><h1><tt class="docutils literal"><span class="pre">madrona.staticmap</span></tt> -  Static Map Data Layers<a class="headerlink" href="#madrona-staticmap-static-map-data-layers" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="customizing-the-mapnik-rendering">
 <h2>Customizing the Mapnik Rendering<a class="headerlink" href="#customizing-the-mapnik-rendering" title="Permalink to this headline">¶</a></h2>
 <p>Each spatial feature type should provide a classmethod named <cite>mapnik_style</cite> which returns a mapnik Style object for that model. The Style object can contain rules for classification as well as symbolizers for controling the appearance of points, lines, polygons and labels:</p>
@@ -114,13 +114,8 @@
 <p>This element defines &#8220;rules&#8221; which determine the colors, symbology, classification and filtering of the data. In the simplest case, you will simply define a single style for all features in the layer:</p>
 <div class="highlight-python"><pre>&lt;Style name="My Style"&gt;
   &lt;Rule&gt;
-    &lt;PolygonSymbolizer&gt;
-      &lt;CssParameter name="fill"&gt;#f2eff9&lt;/CssParameter&gt;
-    &lt;/PolygonSymbolizer&gt;
-    &lt;LineSymbolizer&gt;
-      &lt;CssParameter name="stroke"&gt;rgb(50%,50%,50%)&lt;/CssParameter&gt;
-      &lt;CssParameter name="stroke-width"&gt;0.1&lt;/CssParameter&gt;
-    &lt;/LineSymbolizer&gt;
+      &lt;PolygonSymbolizer fill="steelblue" /&gt;
+      &lt;LineSymbolizer stroke="rgb(5%,5%,5%)" stroke-width="1" /&gt;
   &lt;/Rule&gt;
 &lt;/Style&gt;</pre>
 </div>
@@ -172,7 +167,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><cite>madrona.staticmap</cite>: Static Map Data Layers</a><ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">madrona.staticmap</span></tt> -  Static Map Data Layers</a><ul>
 <li><a class="reference internal" href="#customizing-the-mapnik-rendering">Customizing the Mapnik Rendering</a></li>
 <li><a class="reference internal" href="#png-generic-link">PNG Generic Link</a></li>
 <li><a class="reference internal" href="#default-datasets">Default Datasets</a></li>
@@ -191,10 +186,10 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="simplefaq.html"
-                        title="previous chapter"><cite>madrona.simplefaq</cite>: FAQ system</a></p>
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">madrona.simplefaq</span></tt> -  FAQ system</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="studyregion.html"
-                        title="next chapter"><cite>madrona.studyregion</cite>: The Study Region</a></p>
+                        title="next chapter"><tt class="docutils literal"><span class="pre">madrona.studyregion</span></tt> -  The Study Region</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/staticmap.txt"
@@ -224,12 +219,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="studyregion.html" title="madrona.studyregion: The Study Region"
+          <a href="studyregion.html" title="madrona.studyregion - The Study Region"
              >next</a> |</li>
         <li class="right" >
-          <a href="simplefaq.html" title="madrona.simplefaq: FAQ system"
+          <a href="simplefaq.html" title="madrona.simplefaq - FAQ system"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>Getting Started &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
     <link rel="next" title="Creating a new Madrona project" href="creating_new_project.html" />
     <link rel="prev" title="Madrona Decision Support Tool Documentation" href="index.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="Madrona Decision Support Tool Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -130,7 +130,7 @@ point releases but it&#8217;s safer to just track django with subversion.</p>
 -e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
 -e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
 -e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/src/#egg=feedvalidator
--e git+https://github.com/springmeyer/djmapnik.git#egg=djmapnik
+-e git+https://github.com/springmeyer/djmapnik.git#egg=djmapnik 
 BeautifulSoup&gt;=3.1.0
 Sphinx&gt;=0.6.3
 django-compress&gt;=1.0.1
@@ -172,15 +172,11 @@ pip install -r http://madrona.googlecode.com/hg/madrona_requirements.txt</pre>
 If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed
 just like any other python module and you should&#8217;t need to mess with any madrona code.</p>
 </div>
-<div class="section" id="installing-lingcod">
-<h2>Installing Lingcod<a class="headerlink" href="#installing-lingcod" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-madrona">
+<h2>Installing Madrona<a class="headerlink" href="#installing-madrona" title="Permalink to this headline">¶</a></h2>
 <p>First you will need to checkout a copy of the default branch of madrona from the <a class="reference external" href="http://code.google.com/p/madrona/source/checkout">project page</a></p>
 <div class="highlight-python"><pre>cd ~/src
 hg clone https://madrona.googlecode.com/hg/ madrona</pre>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Though the top-level directory name is &#8216;madrona&#8217;, the python module provided by this code is called &#8216;madrona&#8217;</p>
 </div>
 <p>To install, use the setup.py script provided. We recommend using the &#8216;develop&#8217; command instead of &#8216;install&#8217; as this
 allows you to alter the madrona code in place without reinstalling.:</p>
@@ -310,7 +306,7 @@ build your own customized Madrona instance.</p>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li><a class="reference internal" href="#project-structure">Project Structure</a></li>
-<li><a class="reference internal" href="#installing-lingcod">Installing Lingcod</a></li>
+<li><a class="reference internal" href="#installing-madrona">Installing Madrona</a></li>
 <li><a class="reference internal" href="#using-the-sample-app">Using the Sample App</a><ul>
 <li><a class="reference internal" href="#using-settings-py-and-settings-local-py">using settings.py and settings_local.py</a></li>
 <li><a class="reference internal" href="#handling-media">handling media</a></li>
@@ -363,7 +359,7 @@ build your own customized Madrona instance.</p>
         <li class="right" >
           <a href="index.html" title="Madrona Decision Support Tool Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

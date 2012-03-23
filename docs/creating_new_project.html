@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating a new Madrona project &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>Creating a new Madrona project &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
-    <link rel="next" title="madrona.features: Spatial Content Management" href="features.html" />
-    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,13 +31,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="features.html" title="madrona.features: Spatial Content Management"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="getting_started.html" title="Getting Started"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,16 +42,28 @@
             
   <div class="section" id="creating-a-new-madrona-project">
 <span id="create-new-project"></span><h1>Creating a new Madrona project<a class="headerlink" href="#creating-a-new-madrona-project" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Though madrona includes several example projects, you are encouraged to
-create your Madrona instance as a seperate python package outside of the
-madrona source tree. This will allow for clear seperation between the underlying
-libraries (madrona) and your implementation of Madrona (the &#8220;project&#8221;)</p>
+<p>These instructions will walk you through developing a basic implementation of
+Madrona. This includes installing from the development repository, setting
+up a sample app, testing that everything installed smoothly, then doing some
+basic customization. By the end you&#8217;ll have an application that will perform
+all the <a class="reference external" href="http://code.google.com/p/madrona/wiki/FeaturesAndRequirements">basic functions</a>
+needed to start drawing MPAs on a map.</p>
+<div class="section" id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<p>It is important to understand how a Madrona application is structured. There are essentially two codebases:</p>
+<blockquote>
+<div><ul class="simple">
+<li>madrona - a python module providing a set of django apps that contain the core functionality common to all Madrona instances.</li>
+<li>the project code - a django project which implements and extends the functionality provided by madrona (specific to the particular project&#8217;s needs).</li>
+</ul>
+</div></blockquote>
+<p>By seperating the two codebases, we can more easily maintain multiple Madrona projects while continuing to improve the underlying core functionality.
+If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed
+just like any other python module and you should&#8217;t need to mess with any madrona code.</p>
 </div>
 <div class="section" id="install-dependencies">
 <h2>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>You will need to install madrona&#8217;s dependencies and madrona itself. For detailed instructions, please follow <a class="reference internal" href="getting_started.html#getting-started"><em>Getting Started</em></a>.</p>
+<p>You will need to install madrona&#8217;s dependencies and madrona itself. For detailed instructions, please follow the <a class="reference internal" href="installation.html#installation"><em>Installation</em></a> guide.</p>
 </div>
 <div class="section" id="create-new-django-project">
 <h2>Create new django project<a class="headerlink" href="#create-new-django-project" title="Permalink to this headline">¶</a></h2>
@@ -76,6 +80,13 @@ cd oregon</pre>
 |-- manage.py
 |-- settings.py
 `-- urls.py</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Though madrona includes several example projects, you are encouraged to
+create your Madrona instance as a seperate python package outside of the
+madrona source tree. This will allow for clear seperation between the underlying
+libraries (madrona) and your implementation (the &#8220;project&#8221;)</p>
 </div>
 <p>We now need to configure the settings and urls for our oregon project.</p>
 </div>
@@ -141,34 +152,49 @@ cd oregon</pre>
 <p class="first admonition-title">Note</p>
 <p class="last">The python convention is to name your model classes using CapsCase. Just don&#8217;t use underscores _ in the feature class name.</p>
 </div>
-<p>Next create a file to hold the forms called <tt class="docutils literal"><span class="pre">forms.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.features.forms</span> <span class="kn">import</span> <span class="n">FeatureForm</span><span class="p">,</span> <span class="n">SpatialFeatureForm</span>
-<span class="kn">from</span> <span class="nn">omm.models</span> <span class="kn">import</span> <span class="n">Mpa</span><span class="p">,</span> <span class="n">Folder</span>
-
-<span class="k">class</span> <span class="nc">MpaForm</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="p">):</span>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Mpa</span>
-</pre></div>
-</div>
+<p>Next create a file to hold the forms called <tt class="docutils literal"><span class="pre">forms.py</span></tt> - :</p>
+<blockquote>
+<div><p>from madrona.features.forms import FeatureForm, SpatialFeatureForm
+from omm.models import Mpa, Folder</p>
+<dl class="docutils">
+<dt>class MpaForm(SpatialFeatureForm):</dt>
+<dd><dl class="first last docutils">
+<dt>class Meta(SpatialFeatureForm.Meta):</dt>
+<dd>model = Mpa</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
 <p>The above is a barebones MPA feature inherited from the <tt class="docutils literal"><span class="pre">PolygonFeature</span></tt> base class. All the basic attributes are included by default. A form for creating and editing Mpas is also provided; again inheriting from a <tt class="docutils literal"><span class="pre">SpatialFeatureForm</span></tt> base class so the default behavior takes only a few lines of code. The only additional information required is the Options class with a form property specifying the full python path to the associated Form (mandatory). Finally the &#64;register decorator at the top of the class is required to register the Mpa feature class with madrona.</p>
 <p>Similarly, we could group Mpas into collections; let&#8217;s call them &#8220;Folders&#8221; for now. We can inherit from the base <tt class="docutils literal"><span class="pre">FeatureCollection</span></tt> and specify the mandatory <tt class="docutils literal"><span class="pre">valid_children</span></tt> Option to configure which feature types can be placed in a folder.</p>
-<p>So, adding to <tt class="docutils literal"><span class="pre">models.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
-<span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">FeatureCollection</span><span class="p">):</span>
-    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;oregon.omm.forms.FolderForm&#39;</span>
-        <span class="n">valid_children</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s">&#39;oregon.omm.models.Mpa&#39;</span><span class="p">,</span>
-            <span class="s">&#39;oregon.omm.models.Folder&#39;</span><span class="p">,</span>
-        <span class="p">)</span>
-</pre></div>
-</div>
-<p>and adding to <tt class="docutils literal"><span class="pre">forms.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FolderForm</span><span class="p">(</span><span class="n">FeatureForm</span><span class="p">):</span>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">FeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Folder</span>
-</pre></div>
-</div>
+<p>So, adding to <tt class="docutils literal"><span class="pre">models.py</span></tt> - :</p>
+<blockquote>
+<div><p>&#64;register
+class Folder(FeatureCollection):</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>class Options:</dt>
+<dd><p class="first">form = &#8216;oregon.omm.forms.FolderForm&#8217;
+valid_children = (</p>
+<blockquote>
+<div>&#8216;oregon.omm.models.Mpa&#8217;,
+&#8216;oregon.omm.models.Folder&#8217;,</div></blockquote>
+<p class="last">)</p>
+</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p>and adding to <tt class="docutils literal"><span class="pre">forms.py</span></tt> - :</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>class FolderForm(FeatureForm):</dt>
+<dd><dl class="first last docutils">
+<dt>class Meta(FeatureForm.Meta):</dt>
+<dd>model = Folder</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
 <p>This is all that is necessary to begin managing MPA features and organizing them into Folders. With a few lines of code, we&#8217;ve defined the features and aspects of our application&#8217;s behavior. One of our goals is to make the customization and configuration of madrona as easy as possible - and its almost entirely driven by the model configurations you see above. There are few other things you need to do in order to get a fully functional application.</p>
 </div>
 <div class="section" id="urls">
@@ -191,10 +217,9 @@ cd oregon</pre>
 <div class="highlight-python"><pre>createdb oregon -U postgres</pre>
 </div>
 <p>It is recommended, though not required, to set up a <a class="reference internal" href="studyregion.html#studyregion"><em>study region</em></a>. At a minimum, you&#8217;ll need to decide on a spatial reference system to store your geographic data.  For the case of oregon, let&#8217;s say we have data in UTM Zone 10N, WGS84 datum which corresponds to the SRID 32610 (see <a class="reference external" href="http://www.spatialreference.org/ref/epsg/32610/">http://www.spatialreference.org/ref/epsg/32610/</a>). This is also the projection we want to use for storing our
-shapes so we&#8217;ll add this to our <tt class="docutils literal"><span class="pre">settings.py</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">GEOMETRY_DB_SRID</span> <span class="o">=</span> <span class="mi">32610</span>
-</pre></div>
-</div>
+shapes so we&#8217;ll add this to our <tt class="docutils literal"><span class="pre">settings.py</span></tt> - :</p>
+<blockquote>
+<div>GEOMETRY_DB_SRID = 32610</div></blockquote>
 <p>Finally, we&#8217;ll create the necessary tables in the database:</p>
 <div class="highlight-python"><pre>python manage.py syncdb
 python manage.py migrate</pre>
@@ -235,7 +260,7 @@ python manage.py runserver</pre>
 <div class="section" id="next-steps">
 <h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
 <p>Madrona has fixtures containing test data that is installed on database
-setup like an example <a class="reference internal" href="studyregion.html#studyregion"><em>Study Region</em></a> and <a class="reference internal" href="layers.html#layers"><em>madrona.layers: KML Data Layers</em></a>. This makes
+setup like an example <a class="reference internal" href="studyregion.html#studyregion"><em>Study Region</em></a> and <a class="reference internal" href="layers.html#layers"><em>madrona.layers -   KML Data Layers</em></a>. This makes
 it easy to verify the installation and learn how the tool works. For use in an
 actual planning session these default datasets will need to be replaced.</p>
 <p>While the above shows a minimal bare-bones project, it&#8217;s not a very interesting example. From here we might want to expand on the configuration of our features a bit, adding manipulators, attributes, verbose name, and custom links to the Options:</p>
@@ -264,14 +289,14 @@ actual planning session these default datasets will need to be replaced.</p>
 needed:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="features.html"><cite>madrona.features</cite>: Spatial Content Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="studyregion.html"><cite>madrona.studyregion</cite>: The Study Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html"><tt class="docutils literal"><span class="pre">madrona.features</span></tt> -  Spatial Content Management of <em>Features</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="studyregion.html"><tt class="docutils literal"><span class="pre">madrona.studyregion</span></tt> -  The Study Region</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="layers.html"><cite>madrona.layers</cite>: KML Data Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layers.html"><tt class="docutils literal"><span class="pre">madrona.layers</span></tt> -   KML Data Layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="managing_users.html">Managing Users in Madrona</a></li>
 <li class="toctree-l1"><a class="reference internal" href="migration.html">Migrations for Database Schema Changes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manipulators.html"><cite>madrona.manipulators</cite>: Manipulators</a></li>
-<li class="toctree-l1"><a class="reference internal" href="staticmap.html"><cite>madrona.staticmap</cite>: Static Map Data Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manipulators.html"><tt class="docutils literal"><span class="pre">madrona.manipulators</span></tt> -  Manipulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staticmap.html"><tt class="docutils literal"><span class="pre">madrona.staticmap</span></tt> -  Static Map Data Layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sharing_configuration.html">Sharing Features and Collections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="template_customization.html">Template Customization</a></li>
 </ul>
@@ -291,6 +316,7 @@ development server. To setup a public facing website using Apache, consult the
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Creating a new Madrona project</a><ul>
+<li><a class="reference internal" href="#project-structure">Project Structure</a></li>
 <li><a class="reference internal" href="#install-dependencies">Install Dependencies</a></li>
 <li><a class="reference internal" href="#create-new-django-project">Create new django project</a></li>
 <li><a class="reference internal" href="#settings">Settings</a></li>
@@ -306,12 +332,6 @@ development server. To setup a public facing website using Apache, consult the
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="getting_started.html"
-                        title="previous chapter">Getting Started</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="features.html"
-                        title="next chapter"><cite>madrona.features</cite>: Spatial Content Management</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/creating_new_project.txt"
@@ -340,13 +360,7 @@ development server. To setup a public facing website using Apache, consult the
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="features.html" title="madrona.features: Spatial Content Management"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="getting_started.html" title="Getting Started"
-             >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

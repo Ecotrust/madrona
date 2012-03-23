@@ -1,7 +1,7 @@
-`madrona.analysistools`
-=================================
+``madrona.analysistools`` - Analysis and Model-based Features
+=============================================================
 
-The analysistools module provides a toolkit to standardize interaction with external modeling/analysis software.
+The ``analysistools`` module provides a toolkit to standardize interaction with external modeling/analysis software.
 
 Eventually this will include:
 
@@ -15,7 +15,8 @@ Eventually this will include:
 * Default templates for input/output parameters
 * A Library of common bridge protocols (GRASS, starspan, Marxan, etc)
 
-Currently, it is in a very 'alpha' stage and will be rapidly evolving over the course of 2011. 
+.. note::
+    Why call it `analysistools` instead of simply `analysis`? That namespace conflicts with some other third party projects and we strive to play nice with existing software. 
 
 When to use an Analysis feature
 -------------------------------

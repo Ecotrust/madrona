@@ -1,7 +1,7 @@
 .. _kmlapp:
 
-`madrona.kmlapp`: KML Representation of Features and Collections
-================================================================
+``madrona.kmlapp`` -  KML Representation of Features and Collections
+=====================================================================
 
 .. note::
     Why call it `kmlapp` instead of simply `kml`? That namespace conflicts with the python bindings for libkml. 

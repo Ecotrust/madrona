@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.analysistools &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>madrona.analysistools - Analysis and Model-based Features &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,10 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
-    <link rel="next" title="madrona.bioeconomic_model" href="bioeconomic_model.html" />
-    <link rel="prev" title="madrona.user_profile" href="user_profile.html" /> 
+    <link rel="next" title="madrona.installer - Installer App" href="installer.html" />
+    <link rel="prev" title="madrona.user_profile - Details about Users" href="user_profile.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="bioeconomic_model.html" title="madrona.bioeconomic_model"
+          <a href="installer.html" title="madrona.installer - Installer App"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="user_profile.html" title="madrona.user_profile"
+          <a href="user_profile.html" title="madrona.user_profile - Details about Users"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -50,9 +50,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="madrona-analysistools">
-<h1><cite>madrona.analysistools</cite><a class="headerlink" href="#madrona-analysistools" title="Permalink to this headline">¶</a></h1>
-<p>The analysistools module provides a toolkit to standardize interaction with external modeling/analysis software.</p>
+  <div class="section" id="madrona-analysistools-analysis-and-model-based-features">
+<h1><tt class="docutils literal"><span class="pre">madrona.analysistools</span></tt> - Analysis and Model-based Features<a class="headerlink" href="#madrona-analysistools-analysis-and-model-based-features" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">analysistools</span></tt> module provides a toolkit to standardize interaction with external modeling/analysis software.</p>
 <p>Eventually this will include:</p>
 <ul class="simple">
 <li>The &#8216;Analysis&#8217; abstract base class; an API for instance properties/methods</li>
@@ -65,7 +65,10 @@
 <li>Default templates for input/output parameters</li>
 <li>A Library of common bridge protocols (GRASS, starspan, Marxan, etc)</li>
 </ul>
-<p>Currently, it is in a very &#8216;alpha&#8217; stage and will be rapidly evolving over the course of 2011.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Why call it <cite>analysistools</cite> instead of simply <cite>analysis</cite>? That namespace conflicts with some other third party projects and we strive to play nice with existing software.</p>
+</div>
 <div class="section" id="when-to-use-an-analysis-feature">
 <h2>When to use an Analysis feature<a class="headerlink" href="#when-to-use-an-analysis-feature" title="Permalink to this headline">¶</a></h2>
 <p>If your feature does not take a user-input geometry (only input parameters) and/or requires some significant processing on the server in order to populate certain fields (geometry or otherwise), then you could probably benefit from the analysistools goodies.</p>
@@ -97,7 +100,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><cite>madrona.analysistools</cite></a><ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">madrona.analysistools</span></tt> - Analysis and Model-based Features</a><ul>
 <li><a class="reference internal" href="#when-to-use-an-analysis-feature">When to use an Analysis feature</a></li>
 <li><a class="reference internal" href="#basics">Basics</a></li>
 </ul>
@@ -106,10 +109,10 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="user_profile.html"
-                        title="previous chapter"><cite>madrona.user_profile</cite></a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">madrona.user_profile</span></tt> - Details about Users</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="bioeconomic_model.html"
-                        title="next chapter"><cite>madrona.bioeconomic_model</cite></a></p>
+  <p class="topless"><a href="installer.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">madrona.installer</span></tt> - Installer App</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/analysistools.txt"
@@ -139,12 +142,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="bioeconomic_model.html" title="madrona.bioeconomic_model"
+          <a href="installer.html" title="madrona.installer - Installer App"
              >next</a> |</li>
         <li class="right" >
-          <a href="user_profile.html" title="madrona.user_profile"
+          <a href="user_profile.html" title="madrona.user_profile - Details about Users"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

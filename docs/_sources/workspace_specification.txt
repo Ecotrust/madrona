@@ -269,8 +269,8 @@ Indicates that this is a FeatureCollection subclass, and can have other
 Feature and/or FeatureCollection instances nested under it. This is an object
 containing the following properties:
 
-  * ``valid-children``: a list of Feature classes that can be nested within 
+  * ``valid-children`` -  a list of Feature classes that can be nested within 
     it.
-  * ``add-uri-template``: uri-template to send a POST request to when adding 
+  * ``add-uri-template`` -  uri-template to send a POST request to when adding 
     features to this collection.
-  * ``remove-uri-template``: for removing features.
+  * ``remove-uri-template`` -  for removing features.

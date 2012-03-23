@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.google-analytics: Web traffic analytics &mdash; Madrona Decision Support Tool v3.0dev documentation</title>
+    <title>madrona.google-analytics - Web traffic analytics &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '3.0dev',
+        VERSION:     '4.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,10 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Tool v3.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
-    <link rel="next" title="madrona.help: End user help system" href="help.html" />
-    <link rel="prev" title="madrona.features: Spatial Content Management" href="features.html" /> 
+    <link rel="next" title="madrona.help - End user help system" href="help.html" />
+    <link rel="prev" title="madrona.common - Misc Goodies" href="common.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="help.html" title="madrona.help: End user help system"
+          <a href="help.html" title="madrona.help - End user help system"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="features.html" title="madrona.features: Spatial Content Management"
+          <a href="common.html" title="madrona.common - Misc Goodies"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,7 +51,82 @@
           <div class="body">
             
   <div class="section" id="madrona-google-analytics-web-traffic-analytics">
-<h1><cite>madrona.google-analytics</cite>: Web traffic analytics<a class="headerlink" href="#madrona-google-analytics-web-traffic-analytics" title="Permalink to this headline">¶</a></h1>
+<h1><tt class="docutils literal"><span class="pre">madrona.google-analytics</span></tt> - Web traffic analytics<a class="headerlink" href="#madrona-google-analytics-web-traffic-analytics" title="Permalink to this headline">¶</a></h1>
+<p>I manage a lot of Django projects that present slightly-different forms to
+users depending on the site/domain they&#8217;re visiting.  There&#8217;s also a bunch of
+custom submission code that differs from form to form, but that&#8217;s neither here
+nor there.</p>
+<p>I need different Google Analytics codes depending on the sites and after
+sticking these tags into every single template, I thought it would be cool to
+be able to manage these Google analytics accounts from the Django admin page.
+I also added a mode of operation that excludes the admin interface altogether
+(you can just use the template tag)</p>
+<p>==Two modes of operation==</p>
+<div class="section" id="administering-and-associating-codes-with-django-sites">
+<h2>Administering and associating codes with Django sites<a class="headerlink" href="#administering-and-associating-codes-with-django-sites" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Add the <cite>google_analytics</cite> application to your <cite>INSTALLED_APPS</cite></dt>
+<dd><p class="first last">section of your <cite>settings.py</cite>.  This mode requires that you be using
+the Django sites framework too, so make sure you have that set up as
+well.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Add <cite>GOOGLE_ANALYTICS_MODEL = True</cite> to your <cite>settings.py</cite></p>
+</li>
+<li><p class="first">Run a <cite>./manage.py syncdb</cite> to add the database tables</p>
+</li>
+<li><dl class="first docutils">
+<dt>Go to your project&#8217;s admin page (usually <cite>/admin/</cite>) and click into a site</dt>
+<dd><p class="first last">objects</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>You&#8217;ll now see a new field under the normal site information called</dt>
+<dd><p class="first last">&#8220;Analytics Code&#8221;. In this box you put your unique analytics code for
+your project&#8217;s domain.  It looks like <cite>UA-xxxxxx-x</cite> and save the site.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>In your base template (usually a <cite>base.html</cite>) insert this tag at the very</dt>
+<dd><p class="first last">top: <cite>{% load analytics %}</cite></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>In the same template, insert the following code right before the closing</dt>
+<dd><p class="first last">body tag: <cite>{% analytics %}</cite></p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>===Just using the template tag===</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Add the <cite>google_analytics</cite> application to your <cite>INSTALLED_APPS</cite> section of</dt>
+<dd><p class="first last">your <cite>settings.py</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>In your base template, usually a <cite>base.html</cite>, insert this tag at the very</dt>
+<dd><p class="first last">top: <cite>{% load analytics %}</cite></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>In the same template, insert the following code right before the closing</dt>
+<dd><p class="first last">body tag: <cite>{% analytics &#8220;UA-xxxxxx-x&#8221; %}</cite> the <cite>UA-xxxxxx-x</cite> is a
+unique Google Analytics code for you domain when you sign up for a new
+account.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
 </div>
 
 
@@ -60,12 +135,20 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">madrona.google-analytics</span></tt> - Web traffic analytics</a><ul>
+<li><a class="reference internal" href="#administering-and-associating-codes-with-django-sites">Administering and associating codes with Django sites</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="features.html"
-                        title="previous chapter"><cite>madrona.features</cite>: Spatial Content Management</a></p>
+  <p class="topless"><a href="common.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">madrona.common</span></tt> -  Misc Goodies</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="help.html"
-                        title="next chapter"><cite>madrona.help</cite>: End user help system</a></p>
+                        title="next chapter"><tt class="docutils literal"><span class="pre">madrona.help</span></tt> -  End user help system</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/google-analytics.txt"
@@ -95,12 +178,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="help.html" title="madrona.help: End user help system"
+          <a href="help.html" title="madrona.help - End user help system"
              >next</a> |</li>
         <li class="right" >
-          <a href="features.html" title="madrona.features: Spatial Content Management"
+          <a href="common.html" title="madrona.common - Misc Goodies"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Tool v3.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

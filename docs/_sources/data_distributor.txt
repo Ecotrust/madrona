@@ -1,2 +1,4 @@
-`madrona.data_distributor`
-=================================
+``madrona.data_distributor`` - Data Distributor
+===============================================
+
+Distributes data .. I think? 

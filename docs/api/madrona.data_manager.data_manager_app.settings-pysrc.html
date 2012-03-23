@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.data_manager.data_manager_app.settings</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.data_manager-module.html">Package&nbsp;data_manager</a> ::
+        <a href="madrona.data_manager.data_manager_app-module.html">Package&nbsp;data_manager_app</a> ::
+        Module&nbsp;settings
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.data_manager.data_manager_app.settings-module.html">Module madrona.data_manager.data_manager_app.settings</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"># Django settings for data_manager project.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable madrona.common.default_settings.DEBUG=madrona.common.default_settings-module.html#DEBUG,Variable madrona.data_manager.data_manager_app.settings.DEBUG=madrona.data_manager.data_manager_app.settings-module.html#DEBUG"><a title="madrona.common.default_settings.DEBUG
+madrona.data_manager.data_manager_app.settings.DEBUG" class="py-name" href="#" onclick="return doclink('link-0', 'DEBUG', 'link-0');">DEBUG</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable madrona.common.default_settings.TEMPLATE_DEBUG=madrona.common.default_settings-module.html#TEMPLATE_DEBUG,Variable madrona.data_manager.data_manager_app.settings.TEMPLATE_DEBUG=madrona.data_manager.data_manager_app.settings-module.html#TEMPLATE_DEBUG"><a title="madrona.common.default_settings.TEMPLATE_DEBUG
+madrona.data_manager.data_manager_app.settings.TEMPLATE_DEBUG" class="py-name" href="#" onclick="return doclink('link-1', 'TEMPLATE_DEBUG', 'link-1');">TEMPLATE_DEBUG</a></tt> <tt class="py-op">=</tt> <tt id="link-2" class="py-name"><a title="madrona.common.default_settings.DEBUG
+madrona.data_manager.data_manager_app.settings.DEBUG" class="py-name" href="#" onclick="return doclink('link-2', 'DEBUG', 'link-0');">DEBUG</a></tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable madrona.common.default_settings.ADMINS=madrona.common.default_settings-module.html#ADMINS,Variable madrona.data_manager.data_manager_app.settings.ADMINS=madrona.data_manager.data_manager_app.settings-module.html#ADMINS"><a title="madrona.common.default_settings.ADMINS
+madrona.data_manager.data_manager_app.settings.ADMINS" class="py-name" href="#" onclick="return doclink('link-3', 'ADMINS', 'link-3');">ADMINS</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt class="py-comment"># ('Your Name', 'your_email@domain.com'),</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable madrona.common.default_settings.MANAGERS=madrona.common.default_settings-module.html#MANAGERS,Variable madrona.data_manager.data_manager_app.settings.MANAGERS=madrona.data_manager.data_manager_app.settings-module.html#MANAGERS"><a title="madrona.common.default_settings.MANAGERS
+madrona.data_manager.data_manager_app.settings.MANAGERS" class="py-name" href="#" onclick="return doclink('link-4', 'MANAGERS', 'link-4');">MANAGERS</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="madrona.common.default_settings.ADMINS
+madrona.data_manager.data_manager_app.settings.ADMINS" class="py-name" href="#" onclick="return doclink('link-5', 'ADMINS', 'link-3');">ADMINS</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt id="link-6" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_ENGINE=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_ENGINE"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_ENGINE" class="py-name" href="#" onclick="return doclink('link-6', 'DATABASE_ENGINE', 'link-6');">DATABASE_ENGINE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'postgresql_psycopg2'</tt>           <tt class="py-comment"># 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt id="link-7" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_NAME=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_NAME"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_NAME" class="py-name" href="#" onclick="return doclink('link-7', 'DATABASE_NAME', 'link-7');">DATABASE_NAME</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'simple_example'</tt>             <tt class="py-comment"># Or path to database file if using sqlite3.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_USER=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_USER"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_USER" class="py-name" href="#" onclick="return doclink('link-8', 'DATABASE_USER', 'link-8');">DATABASE_USER</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'postgres'</tt>             <tt class="py-comment"># Not used with sqlite3.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_PASSWORD=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_PASSWORD"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_PASSWORD" class="py-name" href="#" onclick="return doclink('link-9', 'DATABASE_PASSWORD', 'link-9');">DATABASE_PASSWORD</a></tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt>         <tt class="py-comment"># Not used with sqlite3.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_HOST=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_HOST"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_HOST" class="py-name" href="#" onclick="return doclink('link-10', 'DATABASE_HOST', 'link-10');">DATABASE_HOST</a></tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt>             <tt class="py-comment"># Set to empty string for localhost. Not used with sqlite3.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt id="link-11" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.DATABASE_PORT=madrona.data_manager.data_manager_app.settings-module.html#DATABASE_PORT"><a title="madrona.data_manager.data_manager_app.settings.DATABASE_PORT" class="py-name" href="#" onclick="return doclink('link-11', 'DATABASE_PORT', 'link-11');">DATABASE_PORT</a></tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt>             <tt class="py-comment"># Set to empty string for default. Not used with sqlite3.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-comment"># Local time zone for this installation. Choices can be found here:</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-comment"># http://en.wikipedia.org/wiki/List_of_tz_zones_by_name</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-comment"># although not all choices may be available on all operating systems.</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-comment"># If running in a Windows environment this must be set to the same as your</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-comment"># system time zone.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt id="link-12" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.TIME_ZONE=madrona.data_manager.data_manager_app.settings-module.html#TIME_ZONE"><a title="madrona.data_manager.data_manager_app.settings.TIME_ZONE" class="py-name" href="#" onclick="return doclink('link-12', 'TIME_ZONE', 'link-12');">TIME_ZONE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'America/Vancouver'</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-comment"># Language code for this installation. All choices can be found here:</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-comment"># http://www.i18nguy.com/unicode/language-identifiers.html</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt id="link-13" class="py-name" targets="Variable madrona.common.default_settings.LANGUAGE_CODE=madrona.common.default_settings-module.html#LANGUAGE_CODE,Variable madrona.data_manager.data_manager_app.settings.LANGUAGE_CODE=madrona.data_manager.data_manager_app.settings-module.html#LANGUAGE_CODE"><a title="madrona.common.default_settings.LANGUAGE_CODE
+madrona.data_manager.data_manager_app.settings.LANGUAGE_CODE" class="py-name" href="#" onclick="return doclink('link-13', 'LANGUAGE_CODE', 'link-13');">LANGUAGE_CODE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'en-us'</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt id="link-14" class="py-name" targets="Variable madrona.common.default_settings.SITE_ID=madrona.common.default_settings-module.html#SITE_ID,Variable madrona.data_manager.data_manager_app.settings.SITE_ID=madrona.data_manager.data_manager_app.settings-module.html#SITE_ID"><a title="madrona.common.default_settings.SITE_ID
+madrona.data_manager.data_manager_app.settings.SITE_ID" class="py-name" href="#" onclick="return doclink('link-14', 'SITE_ID', 'link-14');">SITE_ID</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-comment"># If you set this to False, Django will make some optimizations so as not</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-comment"># to load the internationalization machinery.</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt id="link-15" class="py-name" targets="Variable madrona.common.default_settings.USE_I18N=madrona.common.default_settings-module.html#USE_I18N,Variable madrona.data_manager.data_manager_app.settings.USE_I18N=madrona.data_manager.data_manager_app.settings-module.html#USE_I18N"><a title="madrona.common.default_settings.USE_I18N
+madrona.data_manager.data_manager_app.settings.USE_I18N" class="py-name" href="#" onclick="return doclink('link-15', 'USE_I18N', 'link-15');">USE_I18N</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-comment"># Absolute path to the directory that holds media.</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-comment"># Example: "/home/media/media.lawrence.com/"</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt id="link-16" class="py-name" targets="Variable madrona.common.default_settings.MEDIA_ROOT=madrona.common.default_settings-module.html#MEDIA_ROOT,Variable madrona.data_manager.data_manager_app.settings.MEDIA_ROOT=madrona.data_manager.data_manager_app.settings-module.html#MEDIA_ROOT"><a title="madrona.common.default_settings.MEDIA_ROOT
+madrona.data_manager.data_manager_app.settings.MEDIA_ROOT" class="py-name" href="#" onclick="return doclink('link-16', 'MEDIA_ROOT', 'link-16');">MEDIA_ROOT</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'/Users/jaredkibele/Documents/workspace/madrona_trunk/media/'</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-comment"># URL that handles the media served from MEDIA_ROOT. Make sure to use a</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt class="py-comment"># trailing slash if there is a path component (optional in other cases).</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"><tt class="py-comment"># Examples: "http://media.lawrence.com", "http://example.com/media/"</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"><tt id="link-17" class="py-name" targets="Variable madrona.common.default_settings.MEDIA_URL=madrona.common.default_settings-module.html#MEDIA_URL,Variable madrona.data_manager.data_manager_app.settings.MEDIA_URL=madrona.data_manager.data_manager_app.settings-module.html#MEDIA_URL"><a title="madrona.common.default_settings.MEDIA_URL
+madrona.data_manager.data_manager_app.settings.MEDIA_URL" class="py-name" href="#" onclick="return doclink('link-17', 'MEDIA_URL', 'link-17');">MEDIA_URL</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'http://127.0.0.1:8000'</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"><tt class="py-comment"># URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"><tt class="py-comment"># trailing slash.</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"><tt class="py-comment"># Examples: "http://foo.com/media/", "/media/".</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"><tt id="link-18" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.ADMIN_MEDIA_PREFIX=madrona.data_manager.data_manager_app.settings-module.html#ADMIN_MEDIA_PREFIX"><a title="madrona.data_manager.data_manager_app.settings.ADMIN_MEDIA_PREFIX" class="py-name" href="#" onclick="return doclink('link-18', 'ADMIN_MEDIA_PREFIX', 'link-18');">ADMIN_MEDIA_PREFIX</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'/media/admin/'</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-comment"># Make this unique, and don't share it with anybody.</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"><tt id="link-19" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.SECRET_KEY=madrona.data_manager.data_manager_app.settings-module.html#SECRET_KEY"><a title="madrona.data_manager.data_manager_app.settings.SECRET_KEY" class="py-name" href="#" onclick="return doclink('link-19', 'SECRET_KEY', 'link-19');">SECRET_KEY</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'tc_bot99@9y+5&amp;qkhjzp&amp;d#i4m*qag3e-iqsnikw*u_-lpfxrj'</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"><tt class="py-comment"># List of callables that know how to import templates from various sources.</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"><tt id="link-20" class="py-name" targets="Variable madrona.common.default_settings.TEMPLATE_LOADERS=madrona.common.default_settings-module.html#TEMPLATE_LOADERS,Variable madrona.data_manager.data_manager_app.settings.TEMPLATE_LOADERS=madrona.data_manager.data_manager_app.settings-module.html#TEMPLATE_LOADERS"><a title="madrona.common.default_settings.TEMPLATE_LOADERS
+madrona.data_manager.data_manager_app.settings.TEMPLATE_LOADERS" class="py-name" href="#" onclick="return doclink('link-20', 'TEMPLATE_LOADERS', 'link-20');">TEMPLATE_LOADERS</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">    <tt class="py-string">'django.template.loaders.filesystem.load_template_source'</tt><tt class="py-op">,</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">    <tt class="py-string">'django.template.loaders.app_directories.load_template_source'</tt><tt class="py-op">,</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"><tt class="py-comment">#     'django.template.loaders.eggs.load_template_source',</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt id="link-21" class="py-name" targets="Variable madrona.common.default_settings.MIDDLEWARE_CLASSES=madrona.common.default_settings-module.html#MIDDLEWARE_CLASSES,Variable madrona.data_manager.data_manager_app.settings.MIDDLEWARE_CLASSES=madrona.data_manager.data_manager_app.settings-module.html#MIDDLEWARE_CLASSES"><a title="madrona.common.default_settings.MIDDLEWARE_CLASSES
+madrona.data_manager.data_manager_app.settings.MIDDLEWARE_CLASSES" class="py-name" href="#" onclick="return doclink('link-21', 'MIDDLEWARE_CLASSES', 'link-21');">MIDDLEWARE_CLASSES</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">    <tt class="py-string">'django.middleware.common.CommonMiddleware'</tt><tt class="py-op">,</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.sessions.middleware.SessionMiddleware'</tt><tt class="py-op">,</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.auth.middleware.AuthenticationMiddleware'</tt><tt class="py-op">,</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt id="link-22" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.ROOT_URLCONF=madrona.data_manager.data_manager_app.settings-module.html#ROOT_URLCONF"><a title="madrona.data_manager.data_manager_app.settings.ROOT_URLCONF" class="py-name" href="#" onclick="return doclink('link-22', 'ROOT_URLCONF', 'link-22');">ROOT_URLCONF</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'data_manager.urls'</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"><tt id="link-23" class="py-name" targets="Variable madrona.data_manager.data_manager_app.settings.TEMPLATE_DIRS=madrona.data_manager.data_manager_app.settings-module.html#TEMPLATE_DIRS"><a title="madrona.data_manager.data_manager_app.settings.TEMPLATE_DIRS" class="py-name" href="#" onclick="return doclink('link-23', 'TEMPLATE_DIRS', 'link-23');">TEMPLATE_DIRS</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">    <tt class="py-comment"># Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">    <tt class="py-comment"># Always use forward slashes, even on Windows.</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">    <tt class="py-comment"># Don't forget to use absolute paths, not relative paths.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">dirname</tt><tt class="py-op">(</tt><tt class="py-name">__file__</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'templates'</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'\\'</tt><tt class="py-op">,</tt><tt class="py-string">'/'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line"><tt id="link-24" class="py-name" targets="Variable madrona.common.default_settings.INSTALLED_APPS=madrona.common.default_settings-module.html#INSTALLED_APPS,Variable madrona.data_manager.data_manager_app.settings.INSTALLED_APPS=madrona.data_manager.data_manager_app.settings-module.html#INSTALLED_APPS"><a title="madrona.common.default_settings.INSTALLED_APPS
+madrona.data_manager.data_manager_app.settings.INSTALLED_APPS" class="py-name" href="#" onclick="return doclink('link-24', 'INSTALLED_APPS', 'link-24');">INSTALLED_APPS</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.auth'</tt><tt class="py-op">,</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.admin'</tt><tt class="py-op">,</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.contenttypes'</tt><tt class="py-op">,</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.sessions'</tt><tt class="py-op">,</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">    <tt class="py-string">'django.contrib.sites'</tt><tt class="py-op">,</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">    <tt class="py-comment">#'django.contrib.comments',</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">    <tt class="py-string">'madrona.data_manager'</tt><tt class="py-op">,</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line"><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">settings_local</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Mar 22 16:16:24 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

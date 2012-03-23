@@ -1,0 +1,135 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.installer - Installer App &mdash; Madrona Decision Support Tool v4.0dev documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Tool v4.0dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.group_management - Manage group membership" href="group_management.html" />
+    <link rel="prev" title="madrona.analysistools - Analysis and Model-based Features" href="analysistools.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="group_management.html" title="madrona.group_management - Manage group membership"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analysistools.html" title="madrona.analysistools - Analysis and Model-based Features"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-installer-installer-app">
+<h1><tt class="docutils literal"><span class="pre">madrona.installer</span></tt> - Installer App<a class="headerlink" href="#madrona-installer-installer-app" title="Permalink to this headline">¶</a></h1>
+<p>This app contains several scripts (and eventually a full web-based bootstrapping system) all aimed at automating some common tasks and getting users started quickly.</p>
+<p>Install Madrona and requirements into a virtualenv:</p>
+<div class="highlight-python"><pre>cd /usr/local/sites
+mkdir newsite &amp;&amp; cd newsite
+wget https://github.com/downloads/Ecotrust/ecotrust.github.com/create-madrona-env
+bash create-madrona-env
+source env/bin/activate</pre>
+</div>
+<p>Create a db:</p>
+<div class="highlight-python"><pre>sudo su postgres
+createuser dbuser -s -P
+exit
+createdb -U dbuser -h localhost -W newsite
+# For postgres 9.1 (for older versions, see the postgis docs)
+psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"</pre>
+</div>
+<p>Start your madrona-based project:</p>
+<div class="highlight-python"><pre>create-madrona-project.py -p myproject -a myapp -d myproject.example.com \
+-c "host='localhost' user='dbuser' password='secret' dbname='newsite'"
+
+cd myproject
+python manage.py runserver</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analysistools.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">madrona.analysistools</span></tt> - Analysis and Model-based Features</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="group_management.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">madrona.group_management</span></tt> - Manage group membership</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/installer.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="group_management.html" title="madrona.group_management - Manage group membership"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analysistools.html" title="madrona.analysistools - Analysis and Model-based Features"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Tool v4.0dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
