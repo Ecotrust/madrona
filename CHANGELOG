@@ -3,6 +3,8 @@
 -------------
 Name change to Madrona (to distinguish between the software library and the implementation i.e. MarineMap)
 Added `analysistools` app
+Switched to new-style url and absurl template tags 
+  (Use `{% url 'url-name' %}` versus `{% url url-name %}` ) 
 Numerous bug fixes and lots of code cleanup
 
 # MarineMap 3.0
