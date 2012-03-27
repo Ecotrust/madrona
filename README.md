@@ -13,38 +13,33 @@ sort of collaborative spatial planning process or decision support tool.
 
 ## Examples
 
-* Oregon MarineMap
-* Washingtion Marine Planner
-* Bioregional Discovery Tool
-* USFWS Watershed Prioritization Tool
-* Oregon/Washington Forest Management Scenario Planner
+* [Oregon MarineMap](http://oregon.marinemap.org/)
+* [Washingtion Marine Planner](http://washington.marineplanning.org/)
+* [Bioregional Discovery Tool](http://bioregions.apps.ecotrust.org/)
+* [USFWS Aquatic Prioritization Tool](http://aquatic-priorities.apps.ecotrust.org/)
+* [Forest Management Scenario Planner](https://github.com/Ecotrust/land_owner_tools)
 
-## Developer Quick Start
+## Quick Start
 
-Install Madrona and requirements into a virtualenv
+#### Install on your system:
 
-    cd /usr/local/sites
-    mkdir newsite && cd newsite
-    wget https://github.com/downloads/Ecotrust/ecotrust.github.com/create-madrona-env
-    bash create-madrona-env
-    source env/bin/activate
+```bash
+    puppet
+    virtualenv
+    pip
+```
 
-Create a db
+-Link to install docs--
 
-    sudo su postgres
-    createuser dbuser -s -P 
-    exit
-    createdb -U dbuser -h localhost -W newsite
-    # For postgres 9.1 (for older versions, see the postgis docs)
-    psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"
+#### OR Use a preconfigured system:
 
-Start your madrona-based project
+* Virtual Box
+* Amazon AMI
 
-    create-madrona-project.py -p myproject -a myapp -d myproject.example.com \
-      -c "host='localhost' user='dbuser' password='secret' dbname='newsite'"
+#### Follow the tutorial:
 
-    cd myproject
-    python manage.py runserver
+* Tutorial: Creating a custom Madrona project
+
 
 ## Learn more
 
