@@ -21,25 +21,30 @@ sort of collaborative spatial planning process or decision support tool.
 
 ## Quick Start
 
-#### Install on your system:
+#### (Option 1) Install on _your_ system
 
 ```bash
-    puppet
-    virtualenv
-    pip
+    # Install global dependencies with puppet
+
+    # Create a virtualenv (optional)
+    
+    # Install python requirements with pip
+
+    # Install madrona
 ```
 
--Link to install docs--
+For more detail, visit the [installation docs](http://ecotrust.github.com/madrona/docs/installation.html)
 
-#### OR Use a preconfigured system:
+#### (Option 2) Download a _preconfigured_ system
 
 * Virtual Box
 * Amazon AMI
 
-#### Follow the tutorial:
+#### Create your project
 
-* Tutorial: Creating a custom Madrona project
+Once you've got madrona installed, you're ready to start developing your new project! 
 
+See the [Tutorial](http://ecotrust.github.com/madrona/docs/tutorial.html) for an example. 
 
 ## Learn more
 
