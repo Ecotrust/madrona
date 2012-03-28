@@ -2,7 +2,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Madrona Decision Support Tool Documentation
+Madrona Decision Support Framework Documentation
 ############################################
 
 Madrona is a framework for building web-based decision support tools for open and participatory spatial planning. Madrona offers a simple, flexible and powerful means of gathering expertise from resource managers, scientists, stakeholders and public in a process of collaborative decision making.
