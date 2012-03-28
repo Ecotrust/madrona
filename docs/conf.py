@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Madrona Decision Support Tool documentation build configuration file, created by
+# Madrona Decision Support Framework documentation build configuration file, created by
 # sphinx-quickstart on Tue Jun  9 12:49:50 2009.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Madrona Decision Support Tool'
+project = u'Madrona Decision Support Framework'
 from datetime import datetime
 current_year = datetime.now().year
 copyright = u'%s, MarineMap Consortium, Ecotrust' % current_year
@@ -98,7 +98,7 @@ pygments_style = 'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'default.css'
+#html_style = 'default.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -109,7 +109,7 @@ html_style = 'default.css'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+#html_logo = 'ecotrust.gif'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -157,8 +157,9 @@ html_use_smartypants = True
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MadronaDecisionSupportTooldoc'
+htmlhelp_basename = 'MadronaDecisionSupportFrameworkdoc'
 
+html_theme = "nature"
 
 # Options for LaTeX output
 # ------------------------
@@ -172,7 +173,7 @@ htmlhelp_basename = 'MadronaDecisionSupportTooldoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'MadronaDecisionSupportTool.tex', ur'Madrona Decision Support Tool Documentation',
+  ('index', 'MadronaDecisionSupport.tex', ur'Madrona Decision Support Framework Documentation',
    ur'Ecotrust', 'manual'),
 ]
 
