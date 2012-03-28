@@ -5,12 +5,12 @@
 Madrona Decision Support Tool Documentation
 ############################################
 
-Madrona is a python web application framework for building spatial decision support tools. 
-Madrona provides the building blocks to create marine, terrestrial and urban planning applications and allows you to focus on data and models that are important to your decision making process.
+Madrona is a framework for building web-based decision support tools for open and participatory spatial planning. Madrona offers a simple, flexible and powerful means of gathering expertise from resource managers, scientists, stakeholders and public in a process of collaborative decision making.
+
+Madrona is a python module providing a set of reusable apps for the django web framework. Using madrona, one can extend the framework for any sort of collaborative spatial planning process or decision support tool. Madrona provides the building blocks while allowing you to focus on data and models that are important to your decision making process.
 
 .. image:: madrona_outline.png
 
-If your problem involves spatial design, analysis and collaborative decision support, Madrona is the premier tool. 
 
 
 Table of Contents
