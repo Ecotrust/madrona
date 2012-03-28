@@ -127,7 +127,7 @@ We can ignore the tests and views for now; for now we'll focus on creating the M
 
    The python convention is to name your model classes using CapsCase. Just don't use underscores _ in the feature class name.
 
-Next create a file to hold the forms called ``forms.py`` - :
+Next create a file to hold the forms called ``forms.py`` ::
 
     from madrona.features.forms import FeatureForm, SpatialFeatureForm
     from omm.models import Mpa, Folder
@@ -140,7 +140,7 @@ The above is a barebones MPA feature inherited from the ``PolygonFeature`` base 
 
 Similarly, we could group Mpas into collections; let's call them "Folders" for now. We can inherit from the base ``FeatureCollection`` and specify the mandatory ``valid_children`` Option to configure which feature types can be placed in a folder.
 
-So, adding to ``models.py`` - :
+So, adding to ``models.py`` ::
 
     @register
     class Folder(FeatureCollection):
@@ -151,7 +151,7 @@ So, adding to ``models.py`` - :
                 'oregon.omm.models.Folder', 
             )
 
-and adding to ``forms.py`` - :
+and adding to ``forms.py`` ::
  
     class FolderForm(FeatureForm):
         class Meta(FeatureForm.Meta):
@@ -182,7 +182,7 @@ Next we'll create a new postgis-enabled database for this project and use django
     createdb oregon -U postgres
 
 It is recommended, though not required, to set up a :ref:`study region<studyregion>`. At a minimum, you'll need to decide on a spatial reference system to store your geographic data.  For the case of oregon, let's say we have data in UTM Zone 10N, WGS84 datum which corresponds to the SRID 32610 (see http://www.spatialreference.org/ref/epsg/32610/). This is also the projection we want to use for storing our 
-shapes so we'll add this to our ``settings.py`` - :
+shapes so we'll add this to our ``settings.py`` ::
 
     GEOMETRY_DB_SRID = 32610
 

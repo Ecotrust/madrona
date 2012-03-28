@@ -160,49 +160,34 @@ libraries (madrona) and your implementation (the &#8220;project&#8221;)</p>
 <p class="first admonition-title">Note</p>
 <p class="last">The python convention is to name your model classes using CapsCase. Just don&#8217;t use underscores _ in the feature class name.</p>
 </div>
-<p>Next create a file to hold the forms called <tt class="docutils literal"><span class="pre">forms.py</span></tt> - :</p>
-<blockquote>
-<div><p>from madrona.features.forms import FeatureForm, SpatialFeatureForm
-from omm.models import Mpa, Folder</p>
-<dl class="docutils">
-<dt>class MpaForm(SpatialFeatureForm):</dt>
-<dd><dl class="first last docutils">
-<dt>class Meta(SpatialFeatureForm.Meta):</dt>
-<dd>model = Mpa</dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
+<p>Next create a file to hold the forms called <tt class="docutils literal"><span class="pre">forms.py</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">madrona.features.forms</span> <span class="kn">import</span> <span class="n">FeatureForm</span><span class="p">,</span> <span class="n">SpatialFeatureForm</span>
+<span class="kn">from</span> <span class="nn">omm.models</span> <span class="kn">import</span> <span class="n">Mpa</span><span class="p">,</span> <span class="n">Folder</span>
+
+<span class="k">class</span> <span class="nc">MpaForm</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Mpa</span>
+</pre></div>
+</div>
 <p>The above is a barebones MPA feature inherited from the <tt class="docutils literal"><span class="pre">PolygonFeature</span></tt> base class. All the basic attributes are included by default. A form for creating and editing Mpas is also provided; again inheriting from a <tt class="docutils literal"><span class="pre">SpatialFeatureForm</span></tt> base class so the default behavior takes only a few lines of code. The only additional information required is the Options class with a form property specifying the full python path to the associated Form (mandatory). Finally the &#64;register decorator at the top of the class is required to register the Mpa feature class with madrona.</p>
 <p>Similarly, we could group Mpas into collections; let&#8217;s call them &#8220;Folders&#8221; for now. We can inherit from the base <tt class="docutils literal"><span class="pre">FeatureCollection</span></tt> and specify the mandatory <tt class="docutils literal"><span class="pre">valid_children</span></tt> Option to configure which feature types can be placed in a folder.</p>
-<p>So, adding to <tt class="docutils literal"><span class="pre">models.py</span></tt> - :</p>
-<blockquote>
-<div><p>&#64;register
-class Folder(FeatureCollection):</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>class Options:</dt>
-<dd><p class="first">form = &#8216;oregon.omm.forms.FolderForm&#8217;
-valid_children = (</p>
-<blockquote>
-<div>&#8216;oregon.omm.models.Mpa&#8217;,
-&#8216;oregon.omm.models.Folder&#8217;,</div></blockquote>
-<p class="last">)</p>
-</dd>
-</dl>
-</div></blockquote>
-</div></blockquote>
-<p>and adding to <tt class="docutils literal"><span class="pre">forms.py</span></tt> - :</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>class FolderForm(FeatureForm):</dt>
-<dd><dl class="first last docutils">
-<dt>class Meta(FeatureForm.Meta):</dt>
-<dd>model = Folder</dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
+<p>So, adding to <tt class="docutils literal"><span class="pre">models.py</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">FeatureCollection</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;oregon.omm.forms.FolderForm&#39;</span>
+        <span class="n">valid_children</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;oregon.omm.models.Mpa&#39;</span><span class="p">,</span>
+            <span class="s">&#39;oregon.omm.models.Folder&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>and adding to <tt class="docutils literal"><span class="pre">forms.py</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FolderForm</span><span class="p">(</span><span class="n">FeatureForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">FeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Folder</span>
+</pre></div>
+</div>
 <p>This is all that is necessary to begin managing MPA features and organizing them into Folders. With a few lines of code, we&#8217;ve defined the features and aspects of our application&#8217;s behavior. One of our goals is to make the customization and configuration of madrona as easy as possible - and its almost entirely driven by the model configurations you see above. There are few other things you need to do in order to get a fully functional application.</p>
 </div>
 <div class="section" id="urls">
@@ -225,9 +210,10 @@ valid_children = (</p>
 <div class="highlight-python"><pre>createdb oregon -U postgres</pre>
 </div>
 <p>It is recommended, though not required, to set up a <a class="reference internal" href="studyregion.html#studyregion"><em>study region</em></a>. At a minimum, you&#8217;ll need to decide on a spatial reference system to store your geographic data.  For the case of oregon, let&#8217;s say we have data in UTM Zone 10N, WGS84 datum which corresponds to the SRID 32610 (see <a class="reference external" href="http://www.spatialreference.org/ref/epsg/32610/">http://www.spatialreference.org/ref/epsg/32610/</a>). This is also the projection we want to use for storing our
-shapes so we&#8217;ll add this to our <tt class="docutils literal"><span class="pre">settings.py</span></tt> - :</p>
-<blockquote>
-<div>GEOMETRY_DB_SRID = 32610</div></blockquote>
+shapes so we&#8217;ll add this to our <tt class="docutils literal"><span class="pre">settings.py</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GEOMETRY_DB_SRID</span> <span class="o">=</span> <span class="mi">32610</span>
+</pre></div>
+</div>
 <p>Finally, we&#8217;ll create the necessary tables in the database:</p>
 <div class="highlight-python"><pre>python manage.py syncdb
 python manage.py migrate</pre>
