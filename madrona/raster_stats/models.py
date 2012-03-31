@@ -80,7 +80,7 @@ def geom_to_file(geom, filepath):
     fh.close()
     assert os.path.exists(filepath)
 
-def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
+def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     """
     Consider this a 'private' method .. dont call directly, use zonal_stats() instead
     Runs starspan and returns a ZonalStatsCache object
@@ -88,10 +88,13 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     """
     # Create tempdir and cd in 
     tmpdir = tempfile.gettempdir()
+    geom_hash = geom.wkt.__hash__()
+    timestamp = str(time.time())
+    tmpdir = os.path.join(tmpdir, 'madrona.raster_stats', str(geom_hash), timestamp, rasterds.name)
+    os.makedirs(tmpdir)
     os.chdir(tmpdir)
 
     # Output geom to temp dataset
-    timestamp = str(time.time())
     out_json = os.path.join(tmpdir, 'geom_%s.json' % timestamp)
     geom_to_file(geom, out_json)
 
@@ -116,8 +119,7 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     res = open(out_csv,'r').readlines()
 
     # Create zonal model
-    hash = geom.wkt.__hash__()
-    zonal = ZonalStatsCache(raster=rasterds, geom_hash=hash)
+    zonal = ZonalStatsCache(raster=rasterds, geom_hash=geom_hash)
 
     # Make sure we have valid results output by starspan
     if len(res) == 2 and "Intersecting features: 0" not in starspan_out:
@@ -162,16 +164,8 @@ def run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
         remove_tmp = True
 
     if remove_tmp:
-        if os.path.exists(out_csv): 
-            os.remove(out_csv)
-        if os.path.exists(out_json): 
-            os.remove(out_json)
-        if os.path.exists(out_categories): 
-            os.remove(out_categories)
-        import glob
-        for fname in glob.glob(os.path.join(tmpdir, 'output_%s_*' % timestamp)):
-            if os.path.exists(fname): 
-                os.remove(fname)
+        import shutil
+        shutil.rmtree(tmpdir)
 
     return zonal
 
@@ -190,12 +184,12 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
     if not geom.valid:
         return None
 
-    hash = geom.wkt.__hash__()
+    geom_hash = geom.wkt.__hash__()
 
     cached = None
     if read_cache:
         try:
-            cached = ZonalStatsCache.objects.get(geom_hash=hash, raster=rasterds)
+            cached = ZonalStatsCache.objects.get(geom_hash=geom_hash, raster=rasterds)
         except ZonalStatsCache.DoesNotExist:
             cached = None
         except DatabaseError:
@@ -211,9 +205,9 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
     else:
         if cache_only:
             # Return an empty result
-            result = ZonalStatsCache(geom_hash=hash, raster=rasterds)
+            result = ZonalStatsCache(geom_hash=geom_hash, raster=rasterds)
         else:
-            result = run_starspan_zonal(geom, rasterds, write_cache=write_cache, pixprop=pixprop)
+            result = _run_starspan_zonal(geom, rasterds, write_cache=write_cache, pixprop=pixprop)
         result.from_cache = False
 
     return result
