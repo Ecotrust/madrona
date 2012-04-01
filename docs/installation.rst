@@ -11,14 +11,14 @@ implement a Madrona-based project of their own. You should be familiar with
     * how web application are structured in `Django <http://djangoproject.com>`_
 
 There are four primary steps to creating a Madrona-based project:
-    #. Install :ref:`global dependencies<global_dependencies>`
+    #. Install :ref:`system requirements<system_requirements>`
     #. Install :ref:`python dependencies<python_dependencies>`
     #. Create a :ref:`sample project<sample_project>`
     #. :ref:`Setup and deploy<deploy>`
 
-.. _global_dependencies:
+.. _system_requirements:
 
-Global Dependencies
+System Requirements
 ********************
 You need the following software installed on your system in order to start running Madrona.
 
@@ -30,6 +30,7 @@ You need the following software installed on your system in order to start runni
     * Proj
     * Python 2.6+ 
     * Pip
+    * Virtualenv
     * Git, Mercurial and Subversion
     * Apache with mod_wsgi (or other suitable web server and application server)
 
@@ -53,20 +54,28 @@ Python Dependencies
 
     While you can install the python dependencies globally, we highly recomment :ref:`creating a 
     virtual environment<virtualenv>` and running these commands from within the activated virtualenv.
-    (i.e. Use ``/path/to/env/`` instead of ``/usr/local``).
-    This will allow you to isolate the python dependencies for multiple projects on the same
+    This will allow you to isolate the python dependencies from other projects on the same
     server. 
 
-First you will need to checkout a copy of the default branch of madrona from the `project page <http://github.com/Ecotrust/madrona>`_ ::
+Start by navigating to an appropriate base directory and creating a virtual python environment. You can skip this step if installing the python libraries globally:: 
 
-     cd /usr/local/src
-     git clone http://github.com/Ecotrust/madrona.git
+    virtualenv madrona-env
+    cd madrona-env
+    source bin/activate
 
-Most of the madrona python dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
-We have created the `pip requirements file <https://raw.github.com/Ecotrust/madrona/master/requirements.txt>`_ to automate the installation of most of the dependencies::
+There are two options to get madrona and it's supporting python libraries:
 
-    cd /usr/local # Assuming you want to put stuff in /usr/local/src
-    pip install -r src/madrona/requirements.txt
+1. Use PyPi package; the latest version of madrona and all of it's dependencies will be installed (note: compiling can make this a time-consuming step so grab a cup of coffee or take fido for a walk)::
+
+    pip install madrona
+
+2. Use the development master branch. Choose this option if you're thinking about working on the core madrona source code::
+
+    cd src
+    git clone http://github.com/Ecotrust/madrona.git
+    pip install -r madrona/requirements.txt
+    cd madrona
+    python setup.py develop
 
 To install madrona itself, use the setup.py script provided. We recommend using the 'develop' command instead of 'install' as this
 allows you to alter the madrona code in place without reinstalling.::

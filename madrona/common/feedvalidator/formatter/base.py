@@ -11,7 +11,7 @@ import os
 LANGUAGE = os.environ.get('LANGUAGE', 'en')
 lang = __import__('madrona.common.feedvalidator.i18n.%s' % LANGUAGE, globals(), locals(), LANGUAGE)
 
-from feedvalidator.logging import Info, Warning, Error
+from madrona.common.feedvalidator.logging import Info, Warning, Error
 
 class BaseFormatter(UserList):
   def __getitem__(self, i):

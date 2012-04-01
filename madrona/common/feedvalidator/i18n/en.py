@@ -4,8 +4,8 @@ __author__ = "Sam Ruby <http://intertwingly.net/> and Mark Pilgrim <http://divei
 __version__ = "$Revision: 1041 $"
 __copyright__ = "Copyright (c) 2002 Sam Ruby and Mark Pilgrim"
 
-import feedvalidator
-from feedvalidator.logging import *
+from madrona.common import feedvalidator
+from madrona.common.feedvalidator.logging import *
 
 line = "line %(line)s"
 column = "column %(column)s"
