@@ -5,12 +5,26 @@ Linux
 Installing from packages on Ubuntu
 ----------------------------------
 
-sudo apt-get install 
+On Ubuntu 11.10, most of the dependencies can be handled by the package management system::
+
+    # Ubuntu packages
+    sudo apt-get install python-dev gcc-4.4 \
+         postgresql-9.1-postgis postgresql-server-dev-9.1 \
+         python-gdal python-imaging python-pip \
+         apache2 libapache2-mod-wsgi
+     
+    # Mapnik
+    sudo add-apt-repository ppa:mapnik/nightly-2.0
+    sudo apt-get update
+    sudo apt-get install libmapnik mapnik-utils python-mapnik
+
+    # Python PyPi packages
+    sudo pip install virtualenv
 
 Installing from source
 ----------------------
 
-Use packages to some of the dependencies. On Ubuntu Natty::
+Use packages to some of the dependencies. On Ubuntu Oneric::
 
     sudo apt-get install htop checkinstall hardinfo sysstat language-pack-gnome-en \
     language-pack-gnome-en-base xorg xorg-docs xterm xserver-xorg x11-apps x11-session-utils \

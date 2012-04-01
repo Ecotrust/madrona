@@ -228,7 +228,7 @@ for any absolute urls created by our Madrona project. Then run the dev server to
 
 Our Oregon Madrona project should now be accessible at http://localhost:8000/ ...
 
-.. image:: http://madrona.googlecode.com/hg/media/common/images/mpa_demo.png?r=2.0-cms
+.. image:: http://marinemap.googlecode.com/hg/media/common/images/mpa_demo.png?r=2.0-cms
 
 
 Next steps

@@ -25,13 +25,6 @@ def parse_requirements(file_name):
             requirements.append(line)
     return requirements
 
-def parse_dependency_links(file_name):
-    dependency_links = []
-    for line in open(file_name, 'r').read().split('\n'):
-        if re.match(r'\s*-[ef]\s+', line):
-            dependency_links.append(re.sub(r'\s*-[ef]\s+', '', line))
-    return dependency_links
-
 setup_args = dict(
     name = 'madrona',
     version = '4.0dev',

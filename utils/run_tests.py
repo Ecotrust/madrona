@@ -9,10 +9,7 @@ def use_exec(pdir):
     """
     instead, employ the technique used by django.core.management.execute_manager()
     """
-    #import settings
     print "Installing media"
-#    execute_from_command_line(['manage.py','install_media'])
-#    execute_from_command_line(['manage.py','synccompress'])
 
     from madrona.common.management.commands.install_media import Command as InstallMediaCommand
     command = InstallMediaCommand()
@@ -87,5 +84,4 @@ settings.LOG_LEVEL = logging.WARNING
 settings.MEDIA_URL = '/media/'
 settings.POSTGIS_TEMPLATE = 'template1'
 
-call_command('install_cleangeometry')
 use_exec(pdir)

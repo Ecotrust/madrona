@@ -31,7 +31,6 @@ You need the following software installed on your system in order to start runni
     * Python 2.6+ 
     * Pip
     * Virtualenv
-    * Git, Mercurial and Subversion
     * Apache with mod_wsgi (or other suitable web server and application server)
 
 If you've already got these installed, proceed to the *python dependencies* section.
@@ -52,7 +51,7 @@ Python Dependencies
 
 .. note::
 
-    While you can install the python dependencies globally, we highly recomment :ref:`creating a 
+    While you can install the python dependencies globally, we highly recommend :ref:`creating a 
     virtual environment<virtualenv>` and running these commands from within the activated virtualenv.
     This will allow you to isolate the python dependencies from other projects on the same
     server. 
@@ -92,61 +91,69 @@ Finally, confirm that we can import the madrona module. This example simply prin
 Create a Sample Project
 ************************
 
-Inside the ``examples`` directory there are sample applications built
-using the Madrona components. These serve as useful documentation as well as
-practical tests. We'll be starting up ``example-projects/test_project`` here.
+You can download a sample application built using the Madrona components. 
+This basic project template is useful as documentation as well as for 
+practical tests. 
+
+We'll be starting up ``examples/test_project`` here. Download, extract ... TODO
 
 .. _deploy:
 
 Setup and Deployment
 *********************
 
-using settings.py and settings_local.py
+Using settings.py and settings_local.py
 ---------------------------------------
 
-Take a look at ``example-projects/test_project/settings_local.template`` and 
+Take a look at ``test_project/settings_local.template`` and 
 ``settings.py``. Madrona uses a simple splitsetting scheme as described 
-`here <http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother>`_. What this enables is the ability to specify standard 
-settings in settings.py and commit them to a public repository, but these
-don't correspond to any particular machine. You then create a 
-settings_local.py file on the machine for deployment or development from the
-template which contains your passwords and settings specific to your local machine.
+`here <http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother>`_. What this enables is the ability to specify standard settings in settings.py and commit them to a public repository. 
+You then create a settings_local.py file which contains your passwords and settings specific to your local machine.
+
+.. important::
+
+    It is very important for security that ``SECRET_KEY``, ``DATABASES``, passwords 
+    and other sensistive local settings are kept private and never published.
 
 Lets do that now. Copy settings_local.template to settings_local.py, then
-uncomment the following line::
+replace the SECRET_KEY with your own randomly-generated key::
 
-    # SECRET_KEY = '6c(kr8r%aqf#r8%arr=0py_7t9m)wgocwyp5g@!j7eb0erm(2+sdklj23'
+    SECRET_KEY = 'SOME_RANDOMLY_GENERATED_GOBBLYGOOK_VERY_SECRET'
 
-Alter ``SECRET_KEY`` to make it unique. Next uncomment and alter the following
-lines as needed to allow this application to connect to your local database::
+Add the following lines, altering as needed to allow connection to your local postgres database::
 
-    #DATABASES = {
-    #    'default': {
-    #        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-    #        'NAME': 'example',
-    #        'USER': 'postgres',
-    #    }
-    #}
+    DATABASES = {
+       'default': {
+           'ENGINE': 'django.contrib.gis.db.backends.postgis',
+           'NAME': 'example',
+           'USER': 'postgres',
+           'HOST': 'localhost',
+       }
+    }
     
-handling media
---------------
-Because a Madrona instance is split between madrona (core functionality) and the project-specific code, static media files such as html, javascript, css, images, etc. may exist in both. Django, however, expects all the static media to be in a single directory. In order to merge the madrona media with the project media, you need to create a third (empty) media directory and set it as your MEDIA_ROOT in the project settings_local.py ::
+Handling static media
+----------------------
+Because a Madrona instance is split between madrona (the core functionality) and the project-specific code, static media files such as html, javascript, css, images, etc. may exist in both. 
+Django expects all the static media to be in a single directory. 
+In order to merge the madrona media with the project media, 
+you need to create an empty `mediaroot` directory and set it as your MEDIA_ROOT in the project settings_local.py ::
 
-    mkdir /tmp/test_media
-    cd ~/src/madrona/example_projects/test_project/
-    echo "MEDIA_ROOT='/tmp/test_media'" >> settings_local.py
+    mkdir /path/to/test_media
+
+Now add the following to you ``settings_local.py``::
+
+    MEDIA_ROOT = '/path/to/test_media'
 
 Then use the 'install_media' management command to merge all the media files into the MEDIA_ROOT directory.:: 
 
     python manage.py install_media
 
 
-setup the database
+Database setup
 ------------------
 
-
-like `pgAdmin <http://www.pgadmin.org/>`_. It is very important that this
-database be created from a template with all the PostGIS functions installed. One approach
+It is very important that the postgres databases
+be created from a template with all the PostGIS and spatial functions installed. Our approach
 is to set up postgis in the default postgres database called template1::
 
    #run as postgres superuser
@@ -155,24 +162,17 @@ is to set up postgis in the default postgres database called template1::
    createlang -d template1 plpgsql # Adding PLPGSQL language support.
    psql -d template1 -f $POSTGIS_SQL_PATH/postgis.sql # Loading the PostGIS SQL routines
    psql -d template1 -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+   psql -d template1 -f /usr/local/src/madrona/madrona/common/cleangeometry.sql
    psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
    psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
    exit # back to regular user
 
-Next we'll need to install a postgresql stored procedure for geometry handling::
-
-    psql -d template1 -U postgres -f /usr/local/src/madrona/madrona/common/cleangeometry.sql
-
-Once the template is spatially enabled, create your project database::
+Once the template is spatially enabled, create your project database from this template::
 
    createdb example -U postgres
 
-Install the cleangeometry stored procedure in the database::
-
-    python manage.py install_cleangeometry 
-
 To setup the database schema and populate with some initial data, run the 
-django syncdb command from within the ``example-projects/test_project`` directory::
+django syncdb command from within the ``test_project`` directory::
 
     python manage.py syncdb
 
@@ -189,28 +189,20 @@ Set up the site to run under a particular domain, in this case just on localhost
 
     python manage.py site localhost:8000
 
-verify and run the dev server
------------------------------
+Test and run the development server
+------------------------------------
 
 Confirm that everything is working as expected by running the tests::
     
-    python /usr/local/src/madrona/utils/run_tests.py
-    
-.. note::
-
-    Django creates a test database that is different than the database specified 
-    in ``settings_local.py``. Depending on your database setup, PostGIS 
-    functions may not be added to this new database and cause errors at this
-    step related to the geometry columns. See the guide to using :ref:`django_test_database_and_postgis`.
+    python utils/run_tests.py
     
 If everything looks good, turn on the dev server::
     
     python manage.py runserver
     
-Go to http://localhost:8000/admin/ in a browser and use the authentication
-credentials specified when syncdb was run.
-
-At http://localhost:8000/ the interface should render with sample data.
+Go to ``http://localhost:8000/admin/`` in a browser and use the authentication
+credentials specified when syncdb was run.  
+At ``http://localhost:8000/`` the interface should render with sample data.
 
 Next Steps
 **********
