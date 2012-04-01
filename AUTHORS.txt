@@ -1,4 +1,4 @@
-## Madrona was written with contributions from the following individuals
+Madrona was written with contributions from the following individuals:
 
 * Matthew Perry (UCSB, Ecotrust)
 * Chad Burt (UCSB)
