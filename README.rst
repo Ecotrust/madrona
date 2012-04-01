@@ -40,7 +40,7 @@ Quick Start
 
     pip install madrona
 
-#. Alternately, checkout the development code::
+  Alternately, checkout the development code::
 
     mkdir src; cd src
     git clone https://github.com/Ecotrust/madrona.git
