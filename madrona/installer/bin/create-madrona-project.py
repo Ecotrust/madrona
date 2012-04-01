@@ -8,6 +8,7 @@ import re
 from distutils.dir_util import copy_tree
 import optparse
 import psycopg2
+import madrona
 
 def replace_file(infile, outfile, search_replace, remove=True):
     infh = open(infile, 'r')
@@ -83,7 +84,7 @@ def main():
         parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
 
     check_db_connection(opts.conn_string)
-    source_dir = os.path.join(os.path.dirname(__file__),'files')
+    source_dir = os.path.join(os.path.dirname(madrona.__file__),'installer','files')
     dest_dir = os.path.abspath(opts.dest_dir)
     print " * copy template from %s to %s" % (source_dir, dest_dir)
     copy_tree(source_dir,dest_dir)
@@ -218,20 +219,21 @@ STATIC_URL = 'http://%s/media/'
     management.execute_manager(settings, ['manage.py','install_cleangeometry'])
 
     print """
+******************************
+SUCCESS
+
 Next steps:
 
     1. set permissions on mediaroot
         sudo chgrp -R www-data ./mediaroot && sudo chmod -R 775 ./mediaroot
-
-    2. install deployment files
+    
+    2. Deploy 
         sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
-
-Optional:
 
     3. Check the site into git or other version control system
     
     4. Run tests 
-        sudo python utils/run_tests.py
+        sudo manage.py test
 """ % (opts.domain, opts.domain)
 
 if __name__ == "__main__":

@@ -1,6 +1,4 @@
 include *.txt
-include *.md
 include *.rst
-recursive-include docs *.txt
-recursive-include madrona/media *
+recursive-include docs *
 recursive-include utils *

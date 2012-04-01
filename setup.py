@@ -1,23 +1,28 @@
 import warnings
 import subprocess
 import re
+import os
 import sys
-from setuptools import find_packages
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
+from distutils.core import setup
+from distutils.command.install_data import install_data
+from distutils.command.install import INSTALL_SCHEMES
 
 readme_text = file('README.rst', 'rb').read()
-packages = ['madrona.%s' % x for x in find_packages('madrona')]
-packages.append('madrona')
 
 def parse_requirements(file_name):
+    '''
+    Scan the pip requirements file until you hit a line saying
+    # Optional
+    Packages before that are added to setup.py install_requires
+    '''
     requirements = []
     for line in open(file_name, 'r').read().split('\n'):
+        if line.startswith('# Optional') or line.startswith('#Optional'):
+            break
+
         if re.match(r'(\s*#)|(\s*$)', line):
             continue
+
         if re.match(r'\s*-e\s+', line):
             requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
         elif re.match(r'\s*-f\s+', line):
@@ -26,9 +31,47 @@ def parse_requirements(file_name):
             requirements.append(line)
     return requirements
 
+def fullsplit(path, result=None):
+    """
+    Split a pathname into components (the opposite of os.path.join) in a
+    platform-neutral way.
+    """
+    if result is None:
+        result = []
+    head, tail = os.path.split(path)
+    if head == '':
+        return [tail] + result
+    if head == path:
+        return result
+    return fullsplit(head, [tail] + result)
+
+# Tell distutils not to put the data_files in platform-specific installation
+# locations. See here for an explanation:
+# http://groups.google.com/group/comp.lang.python/browse_thread/thread/35ec7b2fed36eaec/2105ee4d9e8042cb
+for scheme in INSTALL_SCHEMES.values():
+    scheme['data'] = scheme['purelib']
+
+# Compile the list of packages available, because distutils doesn't have
+# an easy way to do this.
+packages, data_files = [], []
+root_dir = os.path.dirname(__file__)
+if root_dir != '':
+    os.chdir(root_dir)
+
+for dirpath, dirnames, filenames in os.walk('madrona'):
+    # Ignore dirnames that start with '.'
+    for i, dirname in enumerate(dirnames):
+        if dirname.startswith('.'): del dirnames[i]
+    if '__init__.py' in filenames:
+        packages.append('.'.join(fullsplit(dirpath)))
+    elif filenames:
+        data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
+
+version = __import__('madrona').get_version()
+
 setup_args = dict(
     name = 'madrona',
-    version = '4.0dev',
+    version = version,
     description = 'A framework for building spatial decisison support tools',
     author = 'MarineMap Consortium, Ecotrust',
     author_email = 'mperry@ecotrust.org',
@@ -39,6 +82,7 @@ setup_args = dict(
     keywords = 'kml marine decisionsupport science gis',
     long_description = readme_text,
     packages = packages,
+    data_files = data_files,
     scripts = [
         'madrona/installer/bin/create-madrona-project.py',
         ],
