@@ -1,13 +1,13 @@
 import warnings
+import subprocess
 import re
 import sys
-
+from setuptools import find_packages
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-from setuptools import setup, find_packages
 
 readme_text = file('README.rst', 'rb').read()
 packages = ['madrona.%s' % x for x in find_packages('madrona')]
@@ -78,6 +78,6 @@ try:
     sd = subprocess.check_output(["pg_config", "--sharedir"]).strip()
     # TODO check contrib/postgis*/ for sql files
 except Exception, e:
-    print "Failed to locate postgres installation."
+    print "Failed to locate postgres installation.\n", e
 
 setup(**setup_args)
