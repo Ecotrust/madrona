@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1055/trunk/feedvalidator/src/feedvalidator/formatter
+END
+text_html.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/988/trunk/feedvalidator/src/feedvalidator/formatter/text_html.py
+END
+base.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1055/trunk/feedvalidator/src/feedvalidator/formatter/base.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/988/trunk/feedvalidator/src/feedvalidator/formatter/__init__.py
+END
+application_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/988/trunk/feedvalidator/src/feedvalidator/formatter/application_test.py
+END
+text_xml.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/988/trunk/feedvalidator/src/feedvalidator/formatter/text_xml.py
+END
+text_plain.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/988/trunk/feedvalidator/src/feedvalidator/formatter/text_plain.py
+END
