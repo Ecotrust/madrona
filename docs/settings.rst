@@ -66,11 +66,6 @@ Madrona Settings
     Set to a ModelForm class for editing Arrays. Defaults to 
     ``'madrona.mpa.forms.ArrayForm'``
 
-.. _RELEASE:
-
-``RELEASE``
-    The next milestone or major revision number (ie ``'1.1'``)
-
 .. _GROUP_REQUEST_EMAIL:
 
 ``GROUP_REQUEST_EMAIL``

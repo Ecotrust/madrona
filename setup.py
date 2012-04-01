@@ -99,7 +99,6 @@ setup_args = dict(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering :: GIS',
         'Framework :: Django',
-        'Environment :: Web Development'
         ],
     )
 
