@@ -87,4 +87,5 @@ settings.LOG_LEVEL = logging.WARNING
 settings.MEDIA_URL = '/media/'
 settings.POSTGIS_TEMPLATE = 'template1'
 
+call_command('install_cleangeometry')
 use_exec(pdir)

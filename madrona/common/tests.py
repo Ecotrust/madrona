@@ -136,7 +136,6 @@ class DependenciesTest(TestCase):
             'elementtree',
             'sphinx',
             'mapnik',
-            'feedvalidator',
             'BeautifulSoup',
             'xlwt',
             'registration',

@@ -1,44 +1,22 @@
-#############################################################################
 # pip requirements file for madrona/madrona
-#
-# Automates the installation of most madrona python dependencies
-# To begin you need pip, virtualenv, hg, svn
-#
-# Usage:
-# -----------------------------------------
-# cd /usr/local
-# sudo pip install -r madrona_requirements.txt
-# # OR if you want to upgrade existing installations
-# sudo pip install --upgrade -r madrona_requirements.txt
-# # OR if you want to reference by URL
-# sudo pip install --upgrade -r http://madrona.googlecode.com/hg/madrona_requirements.txt
-# -----------------------------------------
-# 
-# You can also use this with virtualenv
-# -----------------------------------------
-# virtualenv MyMadrona
-# pip -E MyMadrona install -r madrona_requirements.txt
-# cd MyMadrona
-# source bin/activate
-# deactivate
-# -----------------------------------------
 #
 # Note that there are several hairy requirements that aren't handled 
 # by this file; these must be installed globally the hard way:
 #
-# GDAL >= 1.6
-# Mapnik >= 2.0
-# PIL
-# Postgis (set up according to the geodjango and madrona docs)
-# numpy>=1.5.1 (numpy is also having issues with pip, install globally)
+# GDAL >= 1.6 (including python bindings installed globally)
 #
-# Additionally, git, mercurial and subversion must be installed to grab several packages.
-#############################################################################
+# Mapnik >= 2.0 (including python bindings installed globally)
+#
+# Python Imaging Library (PIL is broken w/ setup.py; 
+#       use http://effbot.org/downloads/Imaging-1.1.6.tar.gz)
+#
+# Postgis (set up according to the geodjango and madrona docs; 
+#       or sudo apt-get install postgresql-9.1-postgis)
 
--e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
--e hg+http://bitbucket.org/ubernostrum/django-registration/#egg=django-registration
--e svn+http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/src/#egg=feedvalidator
--e git+https://github.com/springmeyer/djmapnik.git#egg=djmapnik 
+djmapnik==0.1.3
+numpy>=1.6.1
+django-registration==0.8
+Django==1.4
 BeautifulSoup>=3.1.0
 Sphinx>=0.6.3
 django-compress>=1.0.1
@@ -47,7 +25,7 @@ elementtree>=1.2.6
 xlwt>=0.7.2
 networkx==1.1
 boto>=2.2.2
-django-celery>=2.2.4
+django-celery>=2.5.1
 django-unittest-depth>=0.6
 python-openid>=2.2.5
 django-picklefield>=0.1.9

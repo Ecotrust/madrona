@@ -63,10 +63,10 @@ First you will need to checkout a copy of the default branch of madrona from the
      git clone http://github.com/Ecotrust/madrona.git
 
 Most of the madrona python dependencies are well-behaved python packages; They can be installed using standard python package management tools such as `pip <http://pip.openplans.org/>`_. 
-We have created the `pip requirements file <https://raw.github.com/Ecotrust/madrona/master/madrona_requirements.txt>`_ to automate the installation of most of the dependencies::
+We have created the `pip requirements file <https://raw.github.com/Ecotrust/madrona/master/requirements.txt>`_ to automate the installation of most of the dependencies::
 
     cd /usr/local # Assuming you want to put stuff in /usr/local/src
-    pip install -r src/madrona/madrona_requirements.txt
+    pip install -r src/madrona/requirements.txt
 
 To install madrona itself, use the setup.py script provided. We recommend using the 'develop' command instead of 'install' as this
 allows you to alter the madrona code in place without reinstalling.::

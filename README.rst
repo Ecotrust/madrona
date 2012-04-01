@@ -1,6 +1,8 @@
-# Madrona
+Madrona
+-------
 
-## Overview
+Overview
+========
 Madrona is a framework for building
 web-based decision support tools for open and participatory spatial 
 planning. Madrona offers a simple, flexible and powerful
@@ -11,7 +13,8 @@ Madrona is a python module providing a set of reusable apps for the django web f
 Using madrona, one can extend the framework for any
 sort of collaborative spatial planning process or decision support tool. 
 
-## Examples
+Examples
+========
 
 * [Oregon MarineMap](http://oregon.marinemap.org/)
 * [Washingtion Marine Planner](http://washington.marineplanning.org/)
@@ -19,33 +22,48 @@ sort of collaborative spatial planning process or decision support tool.
 * [USFWS Aquatic Prioritization Tool](http://aquatic-priorities.apps.ecotrust.org/)
 * [Forest Management Scenario Planner](https://github.com/Ecotrust/land_owner_tools)
 
-## Quick Start
+Quick Start
+===========
 
-#### (Option 1) Install on _your_ system
+(Option 1) Install on _your_ system
+***********************************
 
-```bash
-    # Install global dependencies with puppet
+1. Install global dependencies with puppet or apt
 
-    # Create a virtualenv (optional)
+1. Create a virtualenv (optional)::
+
+    virtualenv test_environment
+    cd test_environment
+    source bin/activate
     
-    # Install python requirements with pip
+1. Install the latest madrona release from PyPi::
 
-    # Install madrona
-```
+   pip install madrona
+
+OR checkout the development code::
+
+   mkdir src; cd src
+   git clone https://github.com/Ecotrust/madrona.git
+   cd madrona
+   python setup.py develop
 
 For more detail, visit the [installation docs](http://ecotrust.github.com/madrona/docs/installation.html)
 
-#### (Option 2) Download a _preconfigured_ system
+(Option 2) Download a _preconfigured_ system
+********************************************
 
-* Virtual Box
-* Amazon AMI
+Virtual Box
 
-#### Create your project
+Amazon AMI
 
-Once you've got madrona installed, you're ready to start developing your new project! 
+Create your Project 
+=========================
+
+Once you've got madrona installed, you're ready to start developing your new decision support tool! 
 
 See the [Tutorial](http://ecotrust.github.com/madrona/docs/tutorial.html) for an example. 
 
-## Learn more
+Learn more
+===========
 
 [Documentation](http://ecotrust.github.com/madrona/docs/)

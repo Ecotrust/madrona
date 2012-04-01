@@ -1,22 +1,40 @@
 import warnings
+import re
 
 try:
-    from distribute_setup import use_setuptools
-    use_setuptools()
-except:
-    warnings.warn(
-    "Failed to import distribute_setup, continuing without distribute.", 
-    Warning)
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 from setuptools import setup, find_packages
 
-readme_text = file('README.md', 'rb').read()
+readme_text = file('README.rst', 'rb').read()
+packages = ['madrona.%s' % x for x in find_packages('madrona')]
+packages.append('madrona')
 
-from madrona.common.default_settings import RELEASE
+def parse_requirements(file_name):
+    requirements = []
+    for line in open(file_name, 'r').read().split('\n'):
+        if re.match(r'(\s*#)|(\s*$)', line):
+            continue
+        if re.match(r'\s*-e\s+', line):
+            requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
+        elif re.match(r'\s*-f\s+', line):
+            pass
+        else:
+            requirements.append(line)
+    return requirements
+
+def parse_dependency_links(file_name):
+    dependency_links = []
+    for line in open(file_name, 'r').read().split('\n'):
+        if re.match(r'\s*-[ef]\s+', line):
+            dependency_links.append(re.sub(r'\s*-[ef]\s+', '', line))
+    return dependency_links
 
 setup_args = dict(
     name = 'madrona',
-    version = RELEASE,
+    version = '4.0dev',
     description = 'A framework for building spatial decisison support tools',
     author = 'MarineMap Consortium, Ecotrust',
     author_email = 'mperry@ecotrust.org',
@@ -26,9 +44,15 @@ setup_args = dict(
     license = 'New BSD License',
     keywords = 'kml marine decisionsupport science gis',
     long_description = readme_text,
-    packages = ['madrona.%s' % x for x in find_packages('madrona')],
-    scripts = ['madrona/installer/create-madrona-project.py',
-                           'madrona/installer/create-madrona-env'],
+    packages = packages,
+    scripts = [
+        'madrona/installer/create-madrona-project.py',
+        'madrona/installer/create-madrona-env'
+        ],
+    install_requires = parse_requirements('requirements.txt'),
+    dependency_links = [
+        'https://github.com/springmeyer/djmapnik/tarball/8d736a73470b/#egg=djmapnik-0.1.3',
+        ],
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
