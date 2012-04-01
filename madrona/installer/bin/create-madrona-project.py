@@ -218,16 +218,20 @@ STATIC_URL = 'http://%s/media/'
     management.execute_manager(settings, ['manage.py','install_cleangeometry'])
 
     print """
-Now you need to:
+Next steps:
 
-    deal with the cleangeometry per above
-    google earth API key
-    check the site into git or other version control system
-    run tests 
-    set permissions on mediaroot
-      sudo chgrp -R www-data ./mediaroot && sudo chmod -R 775 ./mediaroot
-    install deployment files
-      sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
+    1. set permissions on mediaroot
+        sudo chgrp -R www-data ./mediaroot && sudo chmod -R 775 ./mediaroot
+
+    2. install deployment files
+        sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
+
+Optional:
+
+    3. Check the site into git or other version control system
+    
+    4. Run tests 
+        sudo python utils/run_tests.py
 """ % (opts.domain, opts.domain)
 
 if __name__ == "__main__":

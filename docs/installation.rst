@@ -22,16 +22,16 @@ System Requirements
 ********************
 You need the following software installed on your system in order to start running Madrona.
 
-    * `Mapnik <http://mapnik.org/>`_ version 2.0+ 
-    * GDAL
-    * Postgresql 
-    * PostGIS 
-    * GEOS
+    * Mapnik 2.0+ 
+    * GDAL 1.7+
+    * Postgresql 9.1+
+    * PostGIS 1.5+
+    * GEOS 3.2+
     * Proj
     * Python 2.6+ 
     * Pip
     * Virtualenv
-    * Apache with mod_wsgi (or other suitable web server and application server)
+    * Apache2 with mod_wsgi (or other suitable web server and application server)
 
 If you've already got these installed, proceed to the *python dependencies* section.
 
@@ -76,15 +76,9 @@ There are two options to get madrona and it's supporting python libraries:
     cd madrona
     python setup.py develop
 
-To install madrona itself, use the setup.py script provided. We recommend using the 'develop' command instead of 'install' as this
-allows you to alter the madrona code in place without reinstalling.::
+Finally, confirm that we can import the madrona module.::
 
-    cd src/madrona
-    python setup.py develop
-
-Finally, confirm that we can import the madrona module. This example simply prints out the release number::
-
-    python -c "from madrona.common import default_settings; print default_settings.RELEASE"
+    python -c "import madrona"
     
 .. _sample_project:
 
@@ -112,7 +106,7 @@ You then create a settings_local.py file which contains your passwords and setti
 
 .. important::
 
-    It is very important for security that ``SECRET_KEY``, ``DATABASES``, passwords 
+    For security reasons, ``SECRET_KEY``, ``DATABASES``, passwords 
     and other sensistive local settings are kept private and never published.
 
 Lets do that now. Copy settings_local.template to settings_local.py, then
@@ -169,7 +163,7 @@ is to set up postgis in the default postgres database called template1::
 
 Once the template is spatially enabled, create your project database from this template::
 
-   createdb example -U postgres
+   createdb example -U postgres -T template1
 
 To setup the database schema and populate with some initial data, run the 
 django syncdb command from within the ``test_project`` directory::

@@ -1,5 +1,6 @@
 import warnings
 import re
+import sys
 
 try:
     from setuptools import setup
@@ -39,8 +40,7 @@ setup_args = dict(
     long_description = readme_text,
     packages = packages,
     scripts = [
-        'madrona/installer/create-madrona-project.py',
-        'madrona/installer/create-madrona-env'
+        'madrona/installer/bin/create-madrona-project.py',
         ],
     install_requires = parse_requirements('requirements.txt'),
     dependency_links = [
@@ -58,5 +58,26 @@ setup_args = dict(
         'Environment :: Web Development'
         ],
     )
+
+# Make sure we've got the other dependencies handled
+try:
+    from osgeo import ogr
+    from osgeo import gdal
+    import PIL 
+    import mapnik
+    try:
+        assert mapnik.mapnik_version >= 200000
+    except:
+        raise ImportError
+except ImportError, e:
+    print e
+    sys.exit(1)
+
+#Make sure postgres is ready
+try:
+    sd = subprocess.check_output(["pg_config", "--sharedir"]).strip()
+    # TODO check contrib/postgis*/ for sql files
+except Exception, e:
+    print "Failed to locate postgres installation."
 
 setup(**setup_args)
