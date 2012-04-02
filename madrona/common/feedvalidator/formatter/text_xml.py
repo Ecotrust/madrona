@@ -7,8 +7,8 @@ __copyright__ = "Copyright (c) 2002 Sam Ruby and Mark Pilgrim"
 """Output class for xml output"""
 
 from base import BaseFormatter
-from feedvalidator.logging import *
-import feedvalidator
+from madrona.common.feedvalidator.logging import *
+from madrona.common import feedvalidator
 
 def xmlEncode(value):
   value = value.replace('&', '&amp;')

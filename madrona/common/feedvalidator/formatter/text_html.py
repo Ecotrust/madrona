@@ -7,10 +7,10 @@ __copyright__ = "Copyright (c) 2002 Sam Ruby and Mark Pilgrim"
 """Output class for HTML text output"""
 
 from base import BaseFormatter
-import feedvalidator
+import madrona.common.feedvalidator
 from xml.sax.saxutils import escape
 
-from feedvalidator.logging import Message, Info, Warning, Error
+from madrona.common.feedvalidator.logging import Message, Info, Warning, Error
 
 from config import DOCSURL
 
