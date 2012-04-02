@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for madrona/heatmap/views: 94%</title>
+    <title>Coverage for madrona/heatmap/views: 96%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
     <script type='text/javascript' src='jquery.hotkeys.js'></script>
@@ -20,13 +20,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>madrona/heatmap/views</b> :
-            <span class='pc_cov'>94%</span>
+            <span class='pc_cov'>96%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             90 statements
-            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>85 run</span>
-            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>5 missing</span>
+            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>86 run</span>
+            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>4 missing</span>
             <span class='exc shortkey_x' onclick='coverage.toggle_lines(this, "exc")'>0 excluded</span>
             
         </h2>
@@ -122,7 +122,7 @@
 <p id='n60' class='pln'><a href='#n60'>60</a></p>
 <p id='n61' class='stm run hide_run'><a href='#n61'>61</a></p>
 <p id='n62' class='stm run hide_run'><a href='#n62'>62</a></p>
-<p id='n63' class='stm mis'><a href='#n63'>63</a></p>
+<p id='n63' class='stm run hide_run'><a href='#n63'>63</a></p>
 <p id='n64' class='stm run hide_run'><a href='#n64'>64</a></p>
 <p id='n65' class='stm run hide_run'><a href='#n65'>65</a></p>
 <p id='n66' class='stm run hide_run'><a href='#n66'>66</a></p>
@@ -233,7 +233,7 @@
 <p id='t60' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t61' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>tempdir</span> <span class='op'>=</span> <span class='nam'>os</span><span class='op'>.</span><span class='nam'>path</span><span class='op'>.</span><span class='nam'>join</span><span class='op'>(</span><span class='nam'>tempfile</span><span class='op'>.</span><span class='nam'>gettempdir</span><span class='op'>(</span><span class='op'>)</span><span class='op'>,</span><span class='nam'>str</span><span class='op'>(</span><span class='nam'>collection_uids</span><span class='op'>.</span><span class='nam'>__hash__</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t62' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>os</span><span class='op'>.</span><span class='nam'>path</span><span class='op'>.</span><span class='nam'>exists</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t63' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>shutil</span><span class='op'>.</span><span class='nam'>rmtree</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t63' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>shutil</span><span class='op'>.</span><span class='nam'>rmtree</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t64' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>os</span><span class='op'>.</span><span class='nam'>mkdir</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t65' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>outrgb</span> <span class='op'>=</span> <span class='nam'>os</span><span class='op'>.</span><span class='nam'>path</span><span class='op'>.</span><span class='nam'>join</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>,</span> <span class='str'>&quot;rgb.png&quot;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t66' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>outvrt</span> <span class='op'>=</span> <span class='nam'>os</span><span class='op'>.</span><span class='nam'>path</span><span class='op'>.</span><span class='nam'>join</span><span class='op'>(</span><span class='nam'>tempdir</span><span class='op'>,</span> <span class='str'>&quot;rgb.vrt&quot;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>

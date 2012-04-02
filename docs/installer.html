@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.installer - Installer App &mdash; Madrona Decision Support Framework v4.0dev documentation</title>
+    <title>madrona.installer - Installer App &mdash; Madrona Decision Support Framework v4.0.dev documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0dev',
+        VERSION:     '4.0.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0.dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.group_management - Manage group membership" href="group_management.html" />
     <link rel="prev" title="madrona.analysistools - Analysis and Model-based Features" href="analysistools.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="analysistools.html" title="madrona.analysistools - Analysis and Model-based Features"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,16 +55,16 @@
 <p>Install Madrona and requirements into a virtualenv:</p>
 <div class="highlight-python"><pre>cd /usr/local/sites
 mkdir newsite &amp;&amp; cd newsite
-wget https://github.com/downloads/Ecotrust/ecotrust.github.com/create-madrona-env
-bash create-madrona-env
-source env/bin/activate</pre>
+virtualenv env
+source env/bin/activate
+pip install madrona</pre>
 </div>
 <p>Create a db:</p>
 <div class="highlight-python"><pre>sudo su postgres
 createuser dbuser -s -P
 exit
 createdb -U dbuser -h localhost -W newsite
-# For postgres 9.1 (for older versions, see the postgis docs)
+# For postgres 9.1 and postgis 2.0 (for older versions, see the postgis docs)
 psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"</pre>
 </div>
 <p>Start your madrona-based project:</p>
@@ -72,6 +72,7 @@ psql -d newsite -h localhost -U dbuser -c "CREATE EXTENSION postgis;"</pre>
 -c "host='localhost' user='dbuser' password='secret' dbname='newsite'"
 
 cd myproject
+
 python manage.py runserver</pre>
 </div>
 </div>
@@ -122,7 +123,7 @@ python manage.py runserver</pre>
         <li class="right" >
           <a href="analysistools.html" title="madrona.analysistools - Analysis and Model-based Features"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

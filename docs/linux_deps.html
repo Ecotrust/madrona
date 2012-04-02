@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Linux &mdash; Madrona Decision Support Framework v4.0dev documentation</title>
+    <title>Linux &mdash; Madrona Decision Support Framework v4.0.dev documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0dev',
+        VERSION:     '4.0.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0.dev documentation" href="index.html" />
     <link rel="up" title="Installation" href="installation.html" />
     <link rel="next" title="Tutorial: Creating a custom Madrona project" href="tutorial.html" />
     <link rel="prev" title="Mac OSX" href="mac_deps.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="mac_deps.html" title="Mac OSX"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
           <li><a href="installation.html" accesskey="U">Installation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -53,11 +53,25 @@
 <h1>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing-from-packages-on-ubuntu">
 <h2>Installing from packages on Ubuntu<a class="headerlink" href="#installing-from-packages-on-ubuntu" title="Permalink to this headline">¶</a></h2>
-<p>sudo apt-get install</p>
+<p>On Ubuntu 11.10, most of the dependencies can be handled by the package management system:</p>
+<div class="highlight-python"><pre># Ubuntu packages
+sudo apt-get install python-dev gcc-4.4 \
+     postgresql-9.1-postgis postgresql-server-dev-9.1 \
+     python-gdal python-imaging python-pip \
+     apache2 libapache2-mod-wsgi
+
+# Mapnik
+sudo add-apt-repository ppa:mapnik/nightly-2.0
+sudo apt-get update
+sudo apt-get install libmapnik mapnik-utils python-mapnik
+
+# Python PyPi packages
+sudo pip install virtualenv</pre>
+</div>
 </div>
 <div class="section" id="installing-from-source">
 <h2>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this headline">¶</a></h2>
-<p>Use packages to some of the dependencies. On Ubuntu Natty:</p>
+<p>Use packages to some of the dependencies. On Ubuntu Oneric:</p>
 <div class="highlight-python"><pre>sudo apt-get install htop checkinstall hardinfo sysstat language-pack-gnome-en \
 language-pack-gnome-en-base xorg xorg-docs xterm xserver-xorg x11-apps x11-session-utils \
 x11-utils libx11-dev x11proto-bigreqs-dev x11proto-core-dev x11proto-damage-dev \
@@ -223,7 +237,7 @@ sudo make</pre>
         <li class="right" >
           <a href="mac_deps.html" title="Mac OSX"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
           <li><a href="installation.html" >Installation</a> &raquo;</li> 
       </ul>
     </div>
