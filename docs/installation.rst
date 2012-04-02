@@ -30,7 +30,7 @@ You need the following software installed on your system in order to start runni
     * Proj
     * Python 2.6+ 
     * Pip
-    * Virtualenv
+    * Virtualenv and virtualenvwrapper
     * Apache2 with mod_wsgi (or other suitable web server and application server)
 
 If you've already got these installed, proceed to the *python dependencies* section.
@@ -51,14 +51,14 @@ Python Dependencies
 
 .. note::
 
-    While you can install the python dependencies globally, we highly recommend :ref:`creating a 
-    virtual environment<virtualenv>` and running these commands from within the activated virtualenv.
-    This will allow you to isolate the python dependencies from other projects on the same
-    server. 
+    While you can install the python dependencies globally, we highly recommend creating a 
+    *virtual environment*. Running these commands from within a `virtualenv`
+    will allow you to isolate the python dependencies from other projects on the same
+    server. :ref:`Read more<virtualenv>`.
 
 Start by navigating to an appropriate base directory and creating a virtual python environment. You can skip this step if installing the python libraries globally:: 
 
-    virtualenv madrona-env
+    virtualenv --system-site-packages madrona-env
     cd madrona-env
     source bin/activate
 
@@ -78,7 +78,7 @@ There are two options to get madrona and it's supporting python libraries:
 
 Finally, confirm that we can import the madrona module.::
 
-    python -c "import madrona"
+    python -c "import madrona; print madrona.get_version()"
     
 .. _sample_project:
 
