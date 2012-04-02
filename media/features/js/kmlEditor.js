@@ -590,7 +590,7 @@ madrona.features.kmlEditor = (function(){
                 if ( $('#id_name').val() != "" ) {
                     form.trigger('submit');
                 } else {
-                    alert('Please provide a name for your feature.');
+                    alert('Please provide a name.');
                 }                
             });
             el.find('.cancel_button').click(function(){
