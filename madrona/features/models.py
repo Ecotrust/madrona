@@ -13,11 +13,6 @@ from madrona.common.utils import get_logger, get_class, enable_sharing
 from madrona.manipulators.manipulators import manipulatorsDict, NullManipulator
 import re
 import mapnik
-try:
-    assert mapnik.mapnik_version >= 200000
-except:
-    import warnings
-    warnings.warn("Mapnik 2.0+ is required. Please upgrade.", DeprecationWarning)
 
 logger = get_logger()
 

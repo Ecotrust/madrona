@@ -1,0 +1,22 @@
+# Madrona 4.0
+-------------
+Name change to Madrona (to distinguish between the software library and the implementation i.e. MarineMap)
+Added `analysistools` app
+Switched to new-style url and absurl template tags 
+  (Use `{% url 'url-name' %}` versus `{% url url-name %}` ) 
+Reorganization of setup code
+Numerous bug fixes and lots of code cleanup
+Overhaul of setup.py and associated installation procedures
+
+# MarineMap 3.0
+---------------
+Refactor into Spatial CMS
+
+# MarineMap 2.0
+---------------
+Switched to Google Earth client
+REST API
+
+# MarineMap 1.0
+---------------
+OpenLayers/GeoEXT interface 

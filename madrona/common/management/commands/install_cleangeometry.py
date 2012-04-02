@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = "Installs a cleangeometry function in postgres required for processing incoming geometries."
 
     def handle(self, **options):
-        path = os.path.abspath(os.path.join(__file__, '../../../cleangeometry.sql'))
+        path = os.path.abspath(os.path.join(__file__, '../../../sql/cleangeometry.sql'))
 
         sql = open(path,'r').read()
         # http://stackoverflow.com/questions/1734814/why-isnt-psycopg2-

@@ -1,5 +1,39 @@
 #!/usr/bin/env python
 # encoding: utf-8
+"""
+ANY sane programmer who looks at this script will have a serious case of the WTFs
+It is ugly. It reaches into dark corners of django testing madness that no human should
+be exposed to. 
+
+TL;DR; This is what we're *trying* to do
+
+    set sys.paths
+    set some settings
+    call the install_media command to collect static files into one place
+    construct a test command with select apps 
+    run the tests
+
+This shouldn't be too hard right? Wrong.
+
+RUNNING MANAGEMENT COMMANDS CAUSES WIERD STUFF
+ALL these management commands cause subsequent tests to fail
+due to breaking setttings, database sessions and other crazy stuff
+completely unrelated to the code:
+
+    command.execute()
+    execute_manager(settings,['manage.py','install_media'])
+    execute_from_command_line(['manage.py','install_media'])
+    call_command('install_media')
+
+The solution is a horrible, horrible hack
+We're forced to reimplement the install_media command 'by hand'
+and avoid using all handy managment commands at all costs.
+
+This is a hideous beast but make no mistake ... it is fragile! 
+Attempts to fix this script have been made and none of them have succeeded.
+When it comes down to it, we just don't want to spend our time struggling with a 
+broken test runner; we'd rather test our code in an ugly but reliable way.
+"""
 import sys
 import os
 from django.core.management import call_command, execute_manager, execute_from_command_line
@@ -9,23 +43,10 @@ def use_exec(pdir):
     """
     instead, employ the technique used by django.core.management.execute_manager()
     """
-    #import settings
     print "Installing media"
-#    execute_from_command_line(['manage.py','install_media'])
-#    execute_from_command_line(['manage.py','synccompress'])
 
     from madrona.common.management.commands.install_media import Command as InstallMediaCommand
     command = InstallMediaCommand()
-    # RUNNING COMMANDS CAUSES WIERD SETTINGS STUFF
-    # The solution is a horrible, horrible hack
-    # We're forced to reimplement the install_media command
-    # ALL these cause subsequent management commands to fail:
-    #
-    # command.execute()
-    # execute_manager(settings,['manage.py','install_media'])
-    # execute_from_command_line(['manage.py','install_media'])
-    # call_command('install_media')
-    #
     command.dry_run = False
     command.media_root = settings.MEDIA_ROOT
     command.force_compress = True

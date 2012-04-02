@@ -246,8 +246,8 @@ def get_class(path):
     return m.__getattribute__(klass)
 
 def kml_errors(kmlstring):
-    import feedvalidator
-    from feedvalidator import compatibility
+    from madrona.common import feedvalidator
+    from madrona.common.feedvalidator import compatibility
     events = feedvalidator.validateString(kmlstring, firstOccurrenceOnly=1)['loggedEvents'] 
 
     # Three levels of compatibility
@@ -280,7 +280,7 @@ def kml_errors(kmlstring):
                     and x.params['element'] == u'atom:link' and 'workspace' in x.params['value'])
                 )]
 
-    from feedvalidator.formatter.text_plain import Formatter
+    from madrona.common.feedvalidator.formatter.text_plain import Formatter
     output = Formatter(events)
 
     if output:

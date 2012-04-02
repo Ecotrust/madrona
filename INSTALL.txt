@@ -1,0 +1,2 @@
+Madrona runs on Linux, Windows and Mac OSX. 
+See http://ecotrust.github.com/madrona/docs/installation.html for complete instructions.

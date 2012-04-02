@@ -32,10 +32,6 @@ INSTALLED_APPS += (
     'mlpa',
 )
 
-# For some reason, running the raster_stats tests causes
-# the xml test runner to fail to output the xml
-EXCLUDE_FROM_TESTS.append('madrona.raster_stats')
-
 KML_EXTRUDE_HEIGHT = 700
 
 import os

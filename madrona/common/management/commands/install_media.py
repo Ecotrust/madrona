@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
     def get_madrona_dir(self):
         # We know madrona/../media is relative to this file
-        madrona_media_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..','..','media'))
+        madrona_media_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..','media'))
         return madrona_media_dir
 
     def get_project_dir(self):

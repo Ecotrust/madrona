@@ -19,3 +19,4 @@ examples/test_project/test.conf
 examples/test_project/test_wsgi.py
 *.orig
 *.egg-info
+MANIFEST
