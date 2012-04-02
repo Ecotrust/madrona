@@ -42,12 +42,8 @@ def tag():
 def upload():
     call('python setup.py sdist upload')
 
-def manifest():
-    call('python setup.py sdist --manifest-only')
-
 def main():
     cleanup()
-    manifest()
     tag()
     upload()
     cleanup()
