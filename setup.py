@@ -3,7 +3,10 @@ import subprocess
 import re
 import os
 import sys
-from distutils.core import setup
+try:
+    from setuptools import setup
+except:
+    from distutils.core import setup
 from distutils.command.install_data import install_data
 from distutils.command.install import INSTALL_SCHEMES
 
@@ -100,6 +103,17 @@ setup_args = dict(
         'Topic :: Scientific/Engineering :: GIS',
         'Framework :: Django',
         ],
+# Test suite from setup.py not yet functional
+# requires ./test_settings.py
+# challenge is, of course, install_media
+# might need to create custom test_suite entry point
+#    test_suite = 'setuptest.SetupTestSuite',
+#    tests_require = (
+#        'django-setuptest',
+#        'django-unittest-depth',
+#        'unittest-xml-reporting',
+#        'BeautifulSoup',
+#        ),
     )
 
 # Make sure we've got the other dependencies handled
