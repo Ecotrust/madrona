@@ -58,12 +58,12 @@
         
         $('#button_prev').click( function() { wizard('prev'); });
         $('#button_next').click( function() { wizard('next'); });
-        //$('.submit_button').click( function() { wizard('submit'); });
         if (is_spatial == "True") {
+            {% if form.errors %}
+            step = 2; // form errors exist
+            {% endif %}
             wizard();
         }
-        
-        
     });
 </script>
 

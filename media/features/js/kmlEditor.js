@@ -587,12 +587,9 @@ madrona.features.kmlEditor = (function(){
             $(form).ajaxForm(opts);
 
             el.find('.submit_button').click(function(){
-                if ( $('#id_name').val() != "" ) {
-                    form.trigger('submit');
-                } else {
-                    alert('Please provide a name.');
-                }                
+                form.trigger('submit');
             });
+
             el.find('.cancel_button').click(function(){
                 if(previouslySelected){
                     if(jQuery.isArray(previouslySelected)){
