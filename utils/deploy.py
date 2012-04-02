@@ -22,8 +22,12 @@ from subprocess import call as subcall
 
 app = 'madrona'
 version = __import__(app).get_version()
+debug = False
 
-def call(cmd):
+def call(cmd): 
+  print " * ", cmd
+  if debug:
+      return
   try:
     response = subcall(cmd,shell=True)
     print
