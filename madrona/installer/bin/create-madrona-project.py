@@ -55,7 +55,7 @@ def parse_conn(conn_string):
 
 def main():
     parser = optparse.OptionParser(
-            usage="create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com>")
+            usage="create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com> -c <postgres_connection>")
     parser.add_option('-p', '--project', help='Name of django project', action='store', 
             dest='project_name', type='string')
     parser.add_option('-a', '--app', help='Name of django application', action='store', 

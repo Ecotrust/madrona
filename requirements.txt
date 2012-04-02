@@ -12,6 +12,8 @@
 #
 # Postgis (set up according to the geodjango and madrona docs; 
 #       or sudo apt-get install postgresql-9.1-postgis)
+#
+# starspan, grass required for some optional apps
 
 boto>=2.3.0
 Django==1.4
