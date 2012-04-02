@@ -3,10 +3,9 @@ import subprocess
 import re
 import os
 import sys
-try:
-    from setuptools import setup
-except:
-    from distutils.core import setup
+
+# setuptools messes with several things, stick with distutils!
+from distutils.core import setup  
 from distutils.command.install_data import install_data
 from distutils.command.install import INSTALL_SCHEMES
 
@@ -106,6 +105,8 @@ setup_args = dict(
 # Test suite from setup.py not yet functional
 # requires ./test_settings.py
 # challenge is, of course, install_media
+# and using setuptools messes with 
+#   django's package and datafile handling 
 # might need to create custom test_suite entry point
 #    test_suite = 'setuptest.SetupTestSuite',
 #    tests_require = (

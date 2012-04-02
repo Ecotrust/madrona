@@ -6,6 +6,7 @@ Switched to new-style url and absurl template tags
   (Use `{% url 'url-name' %}` versus `{% url url-name %}` ) 
 Reorganization of setup code
 Numerous bug fixes and lots of code cleanup
+Overhaul of setup.py and associated installation procedures
 
 # MarineMap 3.0
 ---------------
