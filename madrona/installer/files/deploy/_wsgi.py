@@ -2,7 +2,7 @@ import sys
 import site
 import os
 
-project = '_root/_project'
+project = '_root/_project_slug'
 ve = '_root/env'
 vepath = os.path.join(ve,'lib/python_pyversion/site-packages')
 local_path = os.path.join('/usr/local/lib/python_pyversion/site-packages')

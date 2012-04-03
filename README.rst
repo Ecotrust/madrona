@@ -28,11 +28,15 @@ Quick Start
 (Option 1) Install on your system
 ***********************************
 
-#. Install global dependencies with puppet or apt
+#. Install global dependencies with puppet or apt::
+
+    GDAL
+    Mapnik
+    PIL
 
 #. Create a virtualenv (optional)::
 
-    virtualenv test_environment
+    virtualenv --system-site-packages test_environment
     cd test_environment
     source bin/activate
     

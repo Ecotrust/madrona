@@ -2,8 +2,8 @@
   ServerName _domain
 
   WSGIScriptAlias / _root/deploy/wsgi.py
-  WSGIDaemonProcess _project user=www-data group=www-data threads=3 processes=2
-  WSGIProcessGroup _project
+  WSGIDaemonProcess _project_slug user=www-data group=www-data threads=3 processes=2
+  WSGIProcessGroup _project_slug
 
   ErrorLog "_root/logs/error.log"
   CustomLog "_root/logs/access.log" combined

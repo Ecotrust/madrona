@@ -58,13 +58,18 @@ class Command(BaseCommand):
             self.copy_mediaroot_to_s3()
 
     def get_madrona_dir(self):
-        # We know madrona/../media is relative to this file
+        # We know madrona/media is relative to this file
         madrona_media_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..','media'))
         return madrona_media_dir
 
     def get_project_dir(self):
-        # We know project media is relative to the project base dir
-        return os.path.realpath(os.path.join(settings.BASE_DIR, '..', 'media'))
+        # project media may at the same level as the project base dir
+        trydir = os.path.realpath(os.path.join(settings.BASE_DIR, '..', 'media'))
+        if not os.path.exists(trydir):
+            # ... or it may be a subdir
+            trydir = os.path.realpath(os.path.join(settings.BASE_DIR, 'media'))
+        projdir = trydir
+        return projdir
 
     def copy_media_to_root(self, source_dir):
         if self.dry_run:

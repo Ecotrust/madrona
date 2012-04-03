@@ -17,4 +17,4 @@ class Command(BaseCommand):
         s.name = dname
         s.save()
 
-        print "Site ID %s is now configured to run at %s. \n  (Your current settings point to SITE_ID = %s)" % (siteid, dname, settings.SITE_ID)
+        print "Site ID %s is now configured to run at %s. \n  (Your current settings point to SITE_ID = %s)\n Note: you may still need to change MEDIA_URL and STATIC_URL in settings\n" % (siteid, dname, settings.SITE_ID)

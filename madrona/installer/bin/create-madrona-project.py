@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from django.core import management
+from django.template.defaultfilters import slugify
 from random import choice
 import sys
 import os
@@ -64,8 +65,8 @@ def main():
             dest='domain', type='string')
     parser.add_option('-c', '--connection', help='Full connection string to existing postgis db', action='store', 
             dest='conn_string', type='string')
-    parser.add_option('-o', '--outdir', help='Output/destination directory (default = ".")', action='store', 
-            dest='dest_dir', type='string', default='.')
+    parser.add_option('-o', '--outdir', help='Output/destination directory (default = "./<project_name>/")', action='store', 
+            dest='dest_dir', type='string', default='')
     parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
             dest='dbsrid', type='string', default='3857')
     (opts, args) = parser.parse_args()
@@ -83,15 +84,20 @@ def main():
         parser.print_help()
         parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
 
+    project_slug = slugify(opts.project_name)
+    app_slug = slugify(opts.app_name)
     check_db_connection(opts.conn_string)
     source_dir = os.path.join(os.path.dirname(madrona.__file__),'installer','files')
-    dest_dir = os.path.abspath(opts.dest_dir)
+    if opts.dest_dir == '':
+        dest_dir = os.path.abspath(os.path.join('.', project_slug))
+    else:
+        dest_dir = os.path.abspath(opts.dest_dir)
     print " * copy template from %s to %s" % (source_dir, dest_dir)
     copy_tree(source_dir,dest_dir)
 
     print " * Rename project and app files"
     old_project_dir = os.path.join(dest_dir, '_project')
-    project_dir = os.path.join(dest_dir, opts.project_name)
+    project_dir = os.path.join(dest_dir, project_slug)
     os.rename(old_project_dir, project_dir)
 
     old_app_dir = os.path.join(project_dir, '_app')
@@ -103,6 +109,7 @@ def main():
     outfile = os.path.join(project_dir, 'settings.py')
     search_replace = {
             '_project': opts.project_name,
+            '_project_slug': project_slug,
             '_app': opts.app_name,
             '_srid': opts.dbsrid
     }
@@ -122,6 +129,7 @@ SECRET_KEY = '%s'
     outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-apache")
     search_replace = {
             '_project': opts.project_name,
+            '_project_slug': project_slug,
             '_domain': opts.domain,
             '_root': dest_dir
     }
@@ -131,6 +139,7 @@ SECRET_KEY = '%s'
     outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-nginx")
     search_replace = {
             '_project': opts.project_name,
+            '_project_slug': project_slug,
             '_domain': opts.domain,
             '_root': dest_dir
     }
@@ -139,7 +148,10 @@ SECRET_KEY = '%s'
     # gitignore
     infile = os.path.join(dest_dir, '_.gitignore')
     outfile = os.path.join(dest_dir, '.gitignore')
-    search_replace = {'_project': opts.project_name}
+    search_replace = {
+            '_project': opts.project_name,
+            '_project_slug': project_slug,
+    }
     replace_file(infile, outfile, search_replace)
 
     # wsgi
@@ -157,6 +169,7 @@ SECRET_KEY = '%s'
     pyver = '%d.%d' % (major, minor) 
     search_replace = {
             '_project': opts.project_name,
+            '_project_slug': project_slug,
             '_pyversion': pyver,
             '_root': dest_dir
     }
@@ -193,7 +206,7 @@ STATIC_URL = 'http://%s/media/'
 
     lsfh.close()
 
-    os.chdir(opts.project_name)
+    os.chdir(project_slug)
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
     old_sys_path = sys.path
     sys.path = [project_dir]
@@ -222,19 +235,12 @@ STATIC_URL = 'http://%s/media/'
 ******************************
 SUCCESS
 
-Next steps:
+Next step... run the dev server:
 
-    1. set permissions on mediaroot
-        sudo chgrp -R www-data ./mediaroot && sudo chmod -R 775 ./mediaroot
-    
-    2. Deploy 
-        sudo cp ./deploy/%s-apache /etc/apache2/sites-available && sudo a2ensite %s-apache
+    cd %s/%s
+    python manage.py runserver %s
 
-    3. Check the site into git or other version control system
-    
-    4. Run tests 
-        sudo manage.py test
-""" % (opts.domain, opts.domain)
+""" % (project_slug, project_slug, opts.domain)
 
 if __name__ == "__main__":
     main()

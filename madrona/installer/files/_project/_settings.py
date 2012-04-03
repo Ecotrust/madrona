@@ -8,7 +8,7 @@ ROOT_URLCONF = 'urls' # '_project.urls'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': '_project',
+        'NAME': '_project_slug',
         'USER': 'postgres',
     }
 }

@@ -1,5 +1,5 @@
 *.pyc
-_project/settings_local.py
+_project_slug/settings_local.py
 logs/*
 mediaroot/*
 deploy/*
