@@ -73,4 +73,4 @@ Learn more
 ===========
 
 * Visit the `project documentation <http://ecotrust.github.com/madrona/docs/>`_ for more details.
-* Questions? Check out the mailing list (TODO coming soon) or the _#madrona_ IRC channel.
+* Questions? Check out the mailing list (TODO coming soon) or the #madrona IRC channel.
