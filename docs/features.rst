@@ -131,8 +131,6 @@ The default path to the show template can be changed using an optional
 Templates will be rendered with the following context:
     
     * ``instance`` - the feature class instance being being displayed
-    * ...
-    * ...
 
 You can add to this list using the `show_context`_ Option property.
 
