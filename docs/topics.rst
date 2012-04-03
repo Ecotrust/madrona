@@ -18,3 +18,4 @@ Topics
    async_task_queue
    workspace_specification
    export
+   management_commands
