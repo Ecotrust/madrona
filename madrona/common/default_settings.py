@@ -228,3 +228,5 @@ from datetime import timedelta
 BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks per IP every 30 minutes
 
 ENFORCE_SUPPORTED_BROWSER = True
+
+STARSPAN_BIN = 'starspan'

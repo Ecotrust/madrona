@@ -43,3 +43,9 @@ try:
     from settings_local import *
 except:
     pass
+
+import subprocess
+try:
+    subprocess.check_call(STARSPAN_BIN, stdout=None, stderr=None, shell=True)
+except subprocess.CalledProcessError:
+    EXCLUDE_FROM_TESTS.append('madrona.raster_stats')

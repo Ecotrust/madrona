@@ -30,6 +30,7 @@ You need the following software installed on your system in order to start runni
     * Proj
     * Python 2.6+ 
     * Pip
+    * CSSTidy
     * Virtualenv and virtualenvwrapper
     * Apache2 with mod_wsgi (or other suitable web server and application server)
 

@@ -15,10 +15,8 @@ RASTER_TYPES = (
                 ("continuous", "continuous"),
                 ("categorical", "catgorical"),
                )
-try:
-    STARSPAN_BIN = settings.STARSPAN_BIN
-except:
-    STARSPAN_BIN = 'starspan'
+
+STARSPAN_BIN = settings.STARSPAN_BIN
 
 class RasterDataset(models.Model):
     name = models.CharField(max_length=30, unique=True)
