@@ -92,6 +92,10 @@ def main():
         dest_dir = os.path.abspath(os.path.join('.', project_slug))
     else:
         dest_dir = os.path.abspath(opts.dest_dir)
+
+    if os.path.exists(dest_dir):
+        raise Exception("%s already exists." % dest_dir)
+
     print " * copy template from %s to %s" % (source_dir, dest_dir)
     copy_tree(source_dir,dest_dir)
 
@@ -101,8 +105,19 @@ def main():
     os.rename(old_project_dir, project_dir)
 
     old_app_dir = os.path.join(project_dir, '_app')
-    app_dir = os.path.join(project_dir, opts.app_name)
+    app_dir = os.path.join(project_dir, app_slug)
     os.rename(old_app_dir, app_dir)
+
+    print " * Adjust forms.py and models.py"
+    infile = os.path.join(app_dir, '_models.py')
+    outfile = os.path.join(app_dir, 'models.py')
+    search_replace = { '_app': app_slug, }
+    replace_file(infile, outfile, search_replace)
+
+    infile = os.path.join(app_dir, '_forms.py')
+    outfile = os.path.join(app_dir, 'forms.py')
+    search_replace = { '_app': app_slug, }
+    replace_file(infile, outfile, search_replace)
 
     print " * Adjust settings"
     infile = os.path.join(project_dir, '_settings.py')
@@ -110,7 +125,7 @@ def main():
     search_replace = {
             '_project': opts.project_name,
             '_project_slug': project_slug,
-            '_app': opts.app_name,
+            '_app': app_slug,
             '_srid': opts.dbsrid
     }
     replace_file(infile, outfile, search_replace)
@@ -226,10 +241,15 @@ STATIC_URL = 'http://%s/media/'
     management.execute_manager(settings, ['manage.py','enable_sharing'])
 
     print " * site setup "
-    management.execute_manager(settings, ['manage.py','site',opts.domain])
+    management.execute_manager(settings, ['manage.py','site', opts.domain])
 
     print " * installing cleangeometry"
     management.execute_manager(settings, ['manage.py','install_cleangeometry'])
+
+    try:
+        port = int(opts.domain.split(':')[-1])
+    except:
+        port = 80
 
     print """
 ******************************
@@ -238,9 +258,9 @@ SUCCESS
 Next step... run the dev server:
 
     cd %s/%s
-    python manage.py runserver %s
+    python manage.py runserver 0.0.0.0:%d
 
-""" % (project_slug, project_slug, opts.domain)
+""" % (project_slug, project_slug, port)
 
 if __name__ == "__main__":
     main()
