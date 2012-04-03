@@ -44,8 +44,10 @@ try:
 except:
     pass
 
+# If no starspan, don't bother testing raster_stats
 import subprocess
 try:
-    subprocess.check_call(STARSPAN_BIN, stdout=None, stderr=None, shell=True)
+    subprocess.check_call(STARSPAN_BIN, stdout=open(os.devnull,'w'), stderr=subprocess.STDOUT, shell=True)
 except subprocess.CalledProcessError:
+    print "Couldn't find starspan executable; not testing `madrona.raster_stats`"
     EXCLUDE_FROM_TESTS.append('madrona.raster_stats')
