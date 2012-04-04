@@ -19,3 +19,4 @@ Topics
    workspace_specification
    export
    management_commands
+   flatblocks
