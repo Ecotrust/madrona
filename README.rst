@@ -83,5 +83,5 @@ Learn more
 ===========
 
 * Visit the `project documentation <http://ecotrust.github.com/madrona/docs/>`_ for more details.
-* Questions? Check out the `mailing list <https://groups.google.com/d/forum/madrona>`_ or the ``#madrona`` IRC channel.
+* Questions? Check out the `mailing list <http://groups.google.com/group/madrona-users>`_ or the ``#madrona`` IRC channel.
 * Check us out at `the cheeseshop <http://pypi.python.org/pypi/madrona>`_.
