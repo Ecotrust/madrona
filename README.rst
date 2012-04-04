@@ -28,11 +28,21 @@ Quick Start
 (Option 1) Install on your system
 ***********************************
 
-#. Install global dependencies with puppet or apt::
+#. Install system requirements::
 
-    GDAL
-    Mapnik
-    PIL
+    * Mapnik 2.0+ 
+    * GDAL 1.7+
+    * Postgresql 9.1+
+    * PostGIS 1.5+
+    * GEOS 3.2+
+    * Proj
+    * Python 2.6+ 
+    * Pip
+    * CSSTidy
+    * Virtualenv
+    * Apache2 with mod_wsgi (or other web/application server such as nginx and gunicorn)
+
+   The procedure will differ depending on your operating system; see `docs <http://ecotrust.github.com/madrona/docs/installation.html#system-requirements>`_ for details.
 
 #. Create a virtualenv (optional)::
 
@@ -73,4 +83,5 @@ Learn more
 ===========
 
 * Visit the `project documentation <http://ecotrust.github.com/madrona/docs/>`_ for more details.
-* Questions? Check out the mailing list (TODO coming soon) or the #madrona IRC channel.
+* Questions? Check out the `mailing list <https://groups.google.com/d/forum/madrona>`_ or the ``#madrona`` IRC channel.
+* Check us out at `the cheeseshop <http://pypi.python.org/pypi/madrona>`_.
