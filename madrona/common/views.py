@@ -68,17 +68,6 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         # Haven't ever visited MM or cleared their cookies
         set_viewed_cookie = True
         show_panel = "about"
-    # 
-    # # Check if user has a single active UserLayerList
-    # from madrona.layers.models import UserLayerList
-    # user = request.user
-    # user_layers = False
-    # if user.is_authenticated():
-    #     try:
-    #         UserLayerList.objects.get(user=user.id, active=True)
-    #         user_layers = True
-    #     except:
-    #         pass
 
     # Check if the user is a member of any sharing groups (not including public shares)
     member_of_sharing_group = False
@@ -136,3 +125,11 @@ def get_publicstate(request):
     except KeyError:
         s = None
     return s
+
+def launch(request, template_name='common/launch.html', extra_context={}):
+    """
+    Launch screen / Home page for application
+    """
+    context = {}
+    context.update(extra_context)
+    return render_to_response(template_name, context)

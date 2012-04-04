@@ -2,12 +2,15 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
 
-urlpatterns = patterns('madrona.common.views',
-    # Main application window. Override by including another url pattern with 
-    # an extended template by defining a url pattern in your project before 
-    # including the common urls
-    url(r'^$', 'map', name='map'),
-)
+if settings.LAUNCH_PAGE:
+    urlpatterns = patterns('madrona.common.views',
+        url(r'^$', 'launch', name='launch'),
+        url(r'^map/', 'map', name='map'),
+    )
+else:
+    urlpatterns = patterns('madrona.common.views',
+        url(r'^$', 'map', name='map'),
+    )
 
 urlpatterns += patterns('madrona',
     (r'^accounts/', include('madrona.openid.urls')),
@@ -37,3 +40,4 @@ urlpatterns += patterns('',
     (r'^media(.*)/upload/', 'madrona.common.views.forbidden'),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 )
+

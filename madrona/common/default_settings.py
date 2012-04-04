@@ -118,12 +118,9 @@ GROUP_REGISTERED_BY_WEB = 'registered_by_web'  # Group name assigned to users wh
 
 MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
 
+# URLS
 MEDIA_URL = '/media/'
-
 LOGIN_URL = '/accounts/signin/'
-
-LOGIN_REDIRECT_URL = '/'
-
 STATIC_URL = '/media/admin/'
 
 # KML SETTINGS
@@ -177,7 +174,6 @@ CELERY_TRACK_STARTED = True
 BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 # Make sure to add any modules containing tasks
 #CELERY_IMPORT = ('myapp.tasks',)
-
 import djcelery
 djcelery.setup_loader()
 
@@ -188,6 +184,7 @@ AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
 
 OPENID_ENABLED = False
+
 LOG_FILE = None # write log to stdout
 
 PRIVATE_KML_ROOT = '/mnt/EBS_superoverlays/display'
@@ -202,7 +199,7 @@ DATABASES = {
 
 # UNIX username which owns the wsgi process.
 # Used to set ownership of MEDIA_ROOT 
-# None = MEDIA_ROOT is owned by whoever runs the install_media command
+# None implies MEDIA_ROOT is owned by whoever runs the install_media command
 WSGI_USER = None
 
 CACHES = {
@@ -230,3 +227,7 @@ BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks
 ENFORCE_SUPPORTED_BROWSER = True
 
 STARSPAN_BIN = 'starspan'
+
+LAUNCH_PAGE = False 
+from django.core.urlresolvers import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('map')
