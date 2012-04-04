@@ -7,6 +7,7 @@ Switched to new-style url and absurl template tags
 Reorganization of setup code
 Numerous bug fixes and lots of code cleanup
 Overhaul of setup.py and associated installation procedures
+Added flatblocks to manage content
 
 # MarineMap 3.0
 ---------------
