@@ -208,12 +208,18 @@ Django Settings
 .. _LOGIN_REDIRECT_URL:
 
 ``LOGIN_REDIRECT_URL``
-    Set to the map view at the root ( ``/`` )
+    Set to the map view. (Either ``/`` or ``/map/`` depending on the ``LAUNCH_PAGE`` setting.
+
+.. _LAUNCH_PAGE:
+
+``LAUNCH_PAGE``
+    Boolean to determine if the root url is a launch page. Default is False meaning ``/`` points directly to the map view.
 
 .. _CACHES:
 ``CACHES``
     see the `django docs <http://docs.djangoproject.com/en/dev/ref/settings/#caches>`_ for details on cache setup. defaults to local memory caching.
 
+ .. 
 
 Full settings list
 -------------------
