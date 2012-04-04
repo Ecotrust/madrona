@@ -4,8 +4,15 @@ import re
 import os
 import sys
 
-# setuptools messes with several things, stick with distutils!
-from distutils.core import setup  
+# setuptools messes up `sdist`
+# but it works for `develop`
+if len(sys.argv) > 1 and sys.argv[1] == 'develop':
+    print "using setuptools.setup"
+    from setuptools import setup
+else:
+    print "using distutils.setup"
+    from distutils.core import setup  
+
 from distutils.command.install_data import install_data
 from distutils.command.install import INSTALL_SCHEMES
 
