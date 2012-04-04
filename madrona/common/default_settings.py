@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.gis',
+    'flatblocks',
     'compress',
     'madrona.shapes',
     'madrona.google-analytics', 
@@ -121,7 +122,7 @@ MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../
 # URLS
 MEDIA_URL = '/media/'
 LOGIN_URL = '/accounts/signin/'
-STATIC_URL = '/media/admin/'
+STATIC_URL = '/media/'
 
 # KML SETTINGS
 KML_SIMPLIFY_TOLERANCE = 20 # meters
