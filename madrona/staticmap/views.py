@@ -1,10 +1,4 @@
 import mapnik
-try:
-    assert mapnik.mapnik_version >= 200000
-except:
-    import warnings
-    warnings.warn("Mapnik 2.0+ is required. Please upgrade.", DeprecationWarning)
-
 import settings
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext

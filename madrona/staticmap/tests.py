@@ -77,7 +77,27 @@ class StaticMapTest(TestCase):
         url = '/staticmap/default/?uids=%s' % uidcsv
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
-        #self.assertNotEquals(response.content, blank_map, 'Blank map == uids map for user 1. this should not be')
+
+    def test_params(self):
+        # User 1 should see these
+        self.client.login(username=self.user.username, password=self.password)
+        uidcsv = ','.join(self.mpa_uids)
+
+        url = '/staticmap/default/?autozoom=true&uids=%s' % uidcsv
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+        url = '/staticmap/default/?show_extent=true&uids=%s' % uidcsv
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_collection(self):
+        # User 1 should see these
+        self.client.login(username=self.user.username, password=self.password)
+        uidcsv = ','.join(self.array_uids)
+        url = '/staticmap/default/?uids=%s' % uidcsv
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
 
     def test_inaccessible(self):
         response = self.client.get('/staticmap/default/', {})
@@ -112,3 +132,16 @@ class StaticMapTest(TestCase):
         response = self.client.get('/staticmap/default/?uids=%s' % self.mpa_uids[1], {})
         self.assertEquals(response.status_code, 200)
         #self.assertNotEquals(response.content, blank_map)
+
+    def test_default_style(self):
+        from madrona.staticmap.views import default_style
+        style = default_style()
+        self.assertEquals(type(style).__name__, 'Style')
+
+    def test_staticmap_link(self):
+        self.client.login(username=self.user.username, password=self.password)
+        mpa = TestMpa.objects.get(pk=self.mpa_ids[1])
+        link = mpa.options.get_link('PNG Image')
+        url = link.reverse(mpa)
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)

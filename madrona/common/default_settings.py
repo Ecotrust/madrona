@@ -104,6 +104,7 @@ INSTALLED_APPS = (
 EXCLUDE_FROM_TESTS = [
     'south', 
     'registration',
+    'flatblocks',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
