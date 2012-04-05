@@ -49,7 +49,7 @@ def parse_conn(conn_string):
         'dbname': '',
         'user': 'postgres',
         'port': '5432'}
-    for p in conn_string.split(" "):
+    for p in conn_string.strip().split(" "):
         k,v = p.split("=")
         d[k] = v.replace("'","")
     return (d['host'], d['password'], d['dbname'], d['user'], d['port'])
@@ -65,10 +65,24 @@ def main():
             dest='domain', type='string')
     parser.add_option('-c', '--connection', help='Full connection string to existing postgis db', action='store', 
             dest='conn_string', type='string')
+
+    # Optional
     parser.add_option('-o', '--outdir', help='Output/destination directory (default = "./<project_name>/")', action='store', 
             dest='dest_dir', type='string', default='')
     parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
             dest='dbsrid', type='string', default='3857')
+    parser.add_option('-r', '--studyregion', help='Study region shape (ewkt)', action='store', 
+            dest='studyregion', type='string')
+    parser.add_option('-w', '--folder', help="Folder", action='append',
+            dest='folders', type='string')
+    parser.add_option('-x', '--aoi', help="Area/Polygon Feature", action='append', 
+            dest="aois", type='string')
+    parser.add_option('-y', '--loi', help="Line Feature", action='append', 
+            dest="lois", type='string')
+    parser.add_option('-z', '--poi', help="Point Feature", action='append', 
+            dest="pois", type='string')
+    parser.add_option('-k', '--kml', help="KML URL", action='append', 
+            dest="kmls", type='string')
     (opts, args) = parser.parse_args()
 
     if not opts.project_name:
@@ -83,6 +97,28 @@ def main():
     if not opts.conn_string:
         parser.print_help()
         parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
+    
+###############
+    aois = opts.aois
+    lois = opts.lois
+    pois = opts.pois
+    folders = opts.folders
+
+    if not aois and not lois and not pois:
+        aois = ['Area of Interest']
+
+    if not opts.folders:
+        folders = ['Folder']
+
+    kmls = opts.kmls
+
+    studyregion = opts.studyregion
+    if studyregion:
+        # write to initial_data as a madrona.studyregion model?
+        pass
+
+    #import ipdb; ipdb.set_trace()
+###############
 
     project_slug = slugify(opts.project_name)
     app_slug = slugify(opts.app_name)
