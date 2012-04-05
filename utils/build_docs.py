@@ -28,8 +28,8 @@ if options.pylint:
     print "Pylint..."
     os.system('pylint -f html madrona > %s' % os.path.join(cwd,'..','docs','.build','html','pylint.html'))
 print "Coverage..."
-os.system('cd %s; coverage html --include=madrona* -d %s' % (os.path.join(cwd,'..'), 
-                                                             os.path.join(cwd,'..','docs','.build','html','coverage')))
+os.system('cd %s; coverage html --omit=madrona/common/feedvalidator* --include=madrona* -d %s' % (os.path.join(cwd,'..'), 
+                os.path.join(cwd,'..','docs','.build','html','coverage')))
 outdir = options.docs_output
 trydir = os.path.join(cwd,'..','..','madrona_docs','docs')
 if not outdir and os.path.exists(trydir):
