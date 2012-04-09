@@ -1,0 +1,11 @@
+[
+  {
+    "pk": 1, 
+    "model": "layers.publiclayerlist", 
+    "fields": {
+      "active": true, 
+      "kml_file": "layers/uploaded-kml/public.kml",
+      "creation_date": "2012-04-09T11:35:21.080"
+    }
+  }
+]

@@ -83,6 +83,8 @@ def main():
             dest="pois", type='string')
     parser.add_option('-k', '--kml', help="KML URL", action='append', 
             dest="kmls", type='string')
+    parser.add_option('-u', '--superuser', help="create default superuser (madrona/madrona) ... NOT SECURE! ", action='store_true', 
+            dest="superuser", default=False)
     (opts, args) = parser.parse_args()
 
     if not opts.project_name:
@@ -98,27 +100,26 @@ def main():
         parser.print_help()
         parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
     
-###############
+    # Features
     aois = opts.aois
     lois = opts.lois
     pois = opts.pois
     folders = opts.folders
 
+    # Some default features
     if not aois and not lois and not pois:
         aois = ['Area of Interest']
-
     if not opts.folders:
         folders = ['Folder']
-
-    kmls = opts.kmls
 
     studyregion = opts.studyregion
     if studyregion:
         # write to initial_data as a madrona.studyregion model?
         pass
 
-    #import ipdb; ipdb.set_trace()
-###############
+    kmls = opts.kmls
+    if not kmls:
+        kmls = ["Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml",]
 
     project_slug = slugify(opts.project_name)
     app_slug = slugify(opts.app_name)
@@ -134,6 +135,33 @@ def main():
 
     print " * copy template from %s to %s" % (source_dir, dest_dir)
     copy_tree(source_dir,dest_dir)
+
+    print " * creating public KML doc"
+    outkml = os.path.join(dest_dir, 'media', 'layers', 'uploaded-kml', 'public.kml')
+    fh = open(outkml,'w')
+    fh.write("""<?xml version="1.0" encoding="UTF-8"?>
+    <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+    <Document>
+        <name>Base KML Data</name>
+        <visibility>0</visibility>
+        <open>1</open>
+    """)
+
+    for kml in kmls:
+        layername, url = kml.split('|')
+        link = """
+        <NetworkLink id="%s">
+            <name>%s</name>
+            <visibility>0</visibility>
+            <Link>
+            <href>%s</href>
+            </Link>
+        </NetworkLink>
+        """ % (slugify(layername), layername, url)
+        fh.write(link)
+
+    fh.write("""</Document></kml>""")
+    fh.close()
 
     print " * Rename project and app files"
     old_project_dir = os.path.join(dest_dir, '_project')
@@ -265,10 +293,23 @@ STATIC_URL = 'http://%s/media/'
     import settings
 
     print " * syncing database"
-    management.execute_manager(settings, ['manage.py','syncdb'])
+    syncdb = ['manage.py','syncdb','--noinput']
+    # maybe run without --noinput if opts.superuser is None??
+    management.execute_manager(settings, syncdb)
 
-    print " * migrating data models"
+    #print " * migrating data models"
     management.execute_manager(settings, ['manage.py','migrate'])
+    # run again to get initial_data.json loaded
+    management.execute_manager(settings, syncdb)
+
+    print " * creating superuser"
+    if opts.superuser:
+        management.execute_manager(settings, ['manage.py','createsuperuser',
+            '--username=madrona', '--email=madrona@ecotrust.org', '--noinput'])
+        from django.contrib.auth.models import User
+        m_user = User.objects.get(username="madrona")
+        m_user.set_password('madrona')
+        m_user.save()
 
     print " * installing media"
     management.execute_manager(settings, ['manage.py','install_media'])

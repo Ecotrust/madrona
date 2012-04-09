@@ -1,9 +1,9 @@
 dropdb example -U postgres
 createdb example -U postgres
-rm -rf myproject 
+rm -rf my-project 
 
 python ../bin/create-madrona-project.py    \
-  --project myproject \
+  --project "My Project" \
   --app testapp \
   --domain "hestia.ecotrust.org:8050" \
   --connection "dbname='example' user='postgres' " \
@@ -11,4 +11,5 @@ python ../bin/create-madrona-project.py    \
   --aoi "My Areas"  \
   --aoi "My Other Areas"  \
   --folder "Folder for Areas"  \
-  --kml "http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml"
+  --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml" \
+  --superuser
