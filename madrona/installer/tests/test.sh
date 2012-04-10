@@ -14,4 +14,5 @@ python ../bin/create-madrona-project.py    \
   --loi "Pipelines"  \
   --folder "Folder for Areas"  \
   --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml" \
+  --kml "http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml" \
   --superuser

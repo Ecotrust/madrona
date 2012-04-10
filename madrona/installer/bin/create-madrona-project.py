@@ -194,7 +194,18 @@ def main():
     """)
 
     for kml in kmls:
-        layername, url = kml.split('|')
+        try:
+            layername, url = kml.strip().split('|')
+        except:
+            url = kml.strip()
+            from urlparse import urlparse
+            from posixpath import basename
+            parsed = urlparse(url)
+            layername = basename(parsed.path)
+            names = re.split('[ ._-]', layername)
+            layername = ' '.join([x.title() for x in names if x.lower() not in ['kml','kmz']])
+            print layername
+
         link = """
         <NetworkLink id="%s">
             <name>%s</name>
@@ -345,10 +356,9 @@ STATIC_URL = 'http://%s/media/'
 
     print " * syncing database"
     syncdb = ['manage.py','syncdb','--noinput']
-    # maybe run without --noinput (ie prompt the user) if opts.superuser is None??
     management.execute_manager(settings, syncdb)
 
-    #print " * migrating data models"
+    print " * migrating data models"
     management.execute_manager(settings, ['manage.py','migrate'])
     # run again to get initial_data.json loaded
     management.execute_manager(settings, syncdb)
@@ -366,7 +376,13 @@ STATIC_URL = 'http://%s/media/'
         from madrona.news.models import Entry, Tag
         t = Tag.objects.create(name="Welcome")
         t.save()
-        e = Entry.objects.create(title="Welcome to " + opts.project_name, body="This application was automatically created by the Madrona App Generator (see <code>create-madrona-app.py</code>). If you're an adminstrator of the site and would like to customize it, please see the <a href='http://ecotrust.github.com/madrona/docs/tutorial.html' target='_blank'>tutorial</a>.", author=m_user)
+        e = Entry.objects.create(title="Welcome to " + opts.project_name, 
+            body="""This application was automatically created by the 
+        Madrona App Generator (see <code>create-madrona-app.py</code>). 
+        If you're an adminstrator of the site and would like to customize it, 
+        please see the <a href='http://ecotrust.github.com/madrona/docs/tutorial.html' 
+        target='_blank'>tutorial</a>.""", 
+            author=m_user)
         e.tags.add(t)
         e.save()
 
