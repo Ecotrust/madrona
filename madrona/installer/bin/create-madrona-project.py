@@ -72,7 +72,7 @@ def main():
     parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
             dest='dbsrid', type='string', default='3857')
     parser.add_option('-r', '--studyregion', help='Study region shape (ewkt)', action='store', 
-            dest='studyregion', type='string')
+            dest='studyregion', type='string', default=None)
     parser.add_option('-w', '--folder', help="Folder", action='append',
             dest='folders', type='string')
     parser.add_option('-x', '--aoi', help="Area/Polygon Feature", action='append', 
@@ -294,7 +294,7 @@ STATIC_URL = 'http://%s/media/'
 
     print " * syncing database"
     syncdb = ['manage.py','syncdb','--noinput']
-    # maybe run without --noinput if opts.superuser is None??
+    # maybe run without --noinput (ie prompt the user) if opts.superuser is None??
     management.execute_manager(settings, syncdb)
 
     #print " * migrating data models"
@@ -323,21 +323,27 @@ STATIC_URL = 'http://%s/media/'
     print " * installing cleangeometry"
     management.execute_manager(settings, ['manage.py','install_cleangeometry'])
 
+    print " * installing studyregion"
+    if opts.studyregion:
+        management.execute_manager(settings, ['manage.py','create_study_region', opts.studyregion, '--name', opts.app_name])
+
     try:
         port = int(opts.domain.split(':')[-1])
     except:
         port = 80
 
+    
     print """
 ******************************
 SUCCESS
-
-Next step... run the dev server:
-
     cd %s/%s
     python manage.py runserver 0.0.0.0:%d
-
 """ % (project_slug, project_slug, port)
+
+    if opts.superuser:
+        print "    # Note that a django superuser was created with user/pass of `madrona`/`madrona`"
+    else:
+        print "    # You also need to create a user to log in initially\n    python manage.py createsuperuser --username=<USER> --email=<EMAIL>"
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,9 @@
 from django.core.management.base import BaseCommand, AppCommand
 from optparse import make_option
-from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.geos import GEOSGeometry 
+from django.contrib.gis import geos
+from django.conf import settings
 from madrona.studyregion.models import StudyRegion
 
 class Command(BaseCommand):
@@ -10,39 +12,62 @@ class Command(BaseCommand):
             help='Give a name to the study region, otherwise the name attribute from the shapefile will be used.'),
     )
     help = "Creates a new study region from a shapefile containing a single multigeometry"
-    args = '[shapefile]'
+    args = '[input shapefile or wkt string]'
 
-    def handle(self, shapefile, *args, **options):
-        ds = DataSource(shapefile)
-        if len(ds) != 1:
-            raise Exception("Data source should only contain a single layer. Aborting.")
+    def handle_ogr(self, inshape, name):
+        ds = DataSource(inshape)
+        layer = ds[0]  # assume first layer
+        feature = layer[0]  #assume first feature
+        if not name:
+            try:
+                name = feature.name
+            except:
+                raise Exception("No `name` field or --name provided!")
 
-        layer = ds[0]
-        if len(layer) != 1: 
-            raise Exception("Layer should containing ONLY a single feature")
+        g1 = feature.geom
+        g1.transform(settings.GEOMETRY_DB_SRID)
+        region = StudyRegion.objects.create(geometry=g1, name=name, active=True)
+        region.save()
 
-        if not 'polygon' in layer.geom_type.name.lower():
-            print layer.geom_type.name
-            raise Exception("Study region must be a multigeometry")
+        print "Study region created: %s, primary key = %s" % (region.name, region.pk)
 
-        if options.get('region_name'):
-            mapping = {
-                'geometry': 'MULTIPOLYGON',
-            }
+    def handle_wkt(self, wkt, name):
+        g1 = GEOSGeometry(wkt)
+        srid = g1.srid
+        if not srid:
+            raise Exception("Unknown SRID. Try ewkt format; `SRID=4326;POLYGON((.....))`")
+        if g1 and isinstance(g1, geos.Polygon):
+            g1 = geos.MultiPolygon(g1)
+            g1.srid = srid
+
+        if not name:
+            raise Exception("No --name provided!")
+
+        g1.transform(settings.GEOMETRY_DB_SRID)
+        region = StudyRegion.objects.create(geometry=g1, name=name, active=True)
+        region.save()
+
+        print "Study region created: %s, primary key = %s" % (region.name, region.pk)
+
+    def handle(self, inshape, *args, **options):
+        """
+        `inshape` can be a wkt string or shapefile path
+        """
+        htype = ''
+        name = options.get('region_name')
+        try:
+            ds = DataSource(inshape)
+            htype = 'ogr'
+        except:
+            try:
+                g1 = GEOSGeometry(inshape)
+                htype = 'wkt'
+            except:
+                pass
+
+        if htype == 'ogr':
+            self.handle_ogr(inshape, name)
+        elif htype == 'wkt':
+            self.handle_wkt(inshape, name)
         else:
-            mapping = {
-                'geometry': 'MULTIPOLYGON',
-                'name': 'name',
-            }
-
-        lm = LayerMapping(StudyRegion, shapefile, mapping, transform=False)
-        lm.save()
-        study_region = StudyRegion.objects.order_by('-creation_date')[0]
-        if options.get('region_name'):
-            study_region.name = options.get('region_name')
-            study_region.save()
-        print ""
-        print "Study region created: %s, primary key = %s" % (study_region.name, study_region.pk)
-
-        print "To switch to this study region, you will need to run 'python manage.py change_study_region %s'" % (study_region.pk, )
-        print ""
+            raise Exception("Your input shape is not recognized as a valid datasource or geometry string")
