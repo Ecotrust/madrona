@@ -1,0 +1,36 @@
+{% extends 'common/panel.html' %}
+{% block title %}{{instance.name}}{% endblock title %}
+{% block panel %}
+    <h1>{{instance.name}}</h1>
+    
+    <ul class="metadata">
+        {% if instance.user.first_name and instance.user.last_name %} 
+        <li class="creator">Created By {{instance.user.first_name}} {{instance.user.last_name}}</li>
+        {% else %}
+        <li class="creator">Created By {{instance.user.username}}</li>
+        {% endif %}
+        <li class="created">Created {{instance.date_created|date:"d M, Y P"}}</li>
+        <li class="modified">Modified {{instance.date_modified|date:"d M, Y P"}}</li>
+        <li>Point location: x:{{instance.geometry_final.x}}, y:{{instance.geometry_final.y}} </li>
+        <br class="clear" />
+    </ul>
+
+    {% if instance.description %}
+    <h2>Description</h2>
+    <div class="box">
+        <p>{{instance.description}}</p>
+    </div>
+    {% endif %}
+     
+    <hr/>
+    <p class="unconfigured">
+        You are seeing this simplified attributes page because a template has
+        not been configured for use with this Feature Class. To replace this 
+        page with a more useful one, create a template at 
+        <code>{{template}}</code>
+        <br/>
+        <br/>
+        See the 
+        <a href="http://ecotrust.github.com/madrona/docs/features.html#creating-a-show-template">Feature Class documentation</a> for more information.
+    </p>
+{% endblock panel %}

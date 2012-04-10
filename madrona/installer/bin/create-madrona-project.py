@@ -24,6 +24,52 @@ def replace_file(infile, outfile, search_replace, remove=True):
     if remove:
         os.remove(infile)
 
+def append_to_file(infile, outfile, search_replace):
+    infh = open(infile, 'r')
+    outfh = open(outfile, 'a')
+    for line in infh:
+        out = line
+        for s, r in search_replace.iteritems():
+            out = out.replace(s,r)
+        outfh.write(out)
+    infh.close()
+    outfh.close()
+
+def camel_case(s, sep=' '):
+    tl = []
+    for t in s.split(sep):
+        tl.append(t.title())
+    return ''.join(tl)
+
+def add_feature(ftype, name, app_slug, app_dir, all_features_list=None):
+    class_name = camel_case(name)
+    if ftype == 'folder':
+        if not all_features_list:
+            all_features_list = [name]
+        all_features = ','.join(["('%s.models.%s')" % (app_slug, camel_case(f)) for f in all_features_list])
+    else:
+        all_features = ''
+
+    search_replace = {
+            '_app': app_slug,
+            '_all_features': all_features,
+            '_model': class_name,
+    }
+    # Add to models
+    infile = os.path.join(app_dir, "base", "_"+ftype+".models.py")
+    outfile = os.path.join(app_dir, 'models.py')
+    append_to_file(infile, outfile, search_replace)
+    # Add to forms
+    infile = os.path.join(app_dir, "base", "_"+ftype+".forms.py")
+    outfile = os.path.join(app_dir, 'forms.py')
+    append_to_file(infile, outfile, search_replace)
+    # Add show template
+    infile = os.path.join(app_dir, "base", "_"+ftype+".show.html")
+    outdir = os.path.join(app_dir, '..', 'templates', slugify(class_name))
+    os.makedirs(outdir)
+    outfile = os.path.join(outdir, 'show.html')
+    replace_file(infile, outfile, search_replace, remove=False)
+
 def check_db_connection(conn_string):
     print "Connecting to database\n ->%s" % (conn_string)
     try:
@@ -74,13 +120,13 @@ def main():
     parser.add_option('-r', '--studyregion', help='Study region shape (ewkt)', action='store', 
             dest='studyregion', type='string', default=None)
     parser.add_option('-w', '--folder', help="Folder", action='append',
-            dest='folders', type='string')
+            dest='folders', type='string', default=[])
     parser.add_option('-x', '--aoi', help="Area/Polygon Feature", action='append', 
-            dest="aois", type='string')
+            dest="aois", type='string', default=[])
     parser.add_option('-y', '--loi', help="Line Feature", action='append', 
-            dest="lois", type='string')
+            dest="lois", type='string', default=[])
     parser.add_option('-z', '--poi', help="Point Feature", action='append', 
-            dest="pois", type='string')
+            dest="pois", type='string', default=[])
     parser.add_option('-k', '--kml', help="KML URL", action='append', 
             dest="kmls", type='string')
     parser.add_option('-u', '--superuser', help="create default superuser (madrona/madrona) ... NOT SECURE! ", action='store_true', 
@@ -106,7 +152,7 @@ def main():
     pois = opts.pois
     folders = opts.folders
 
-    # Some default features
+    # Some default features if nothing was specified
     if not aois and not lois and not pois:
         aois = ['Area of Interest']
     if not opts.folders:
@@ -121,8 +167,8 @@ def main():
     if not kmls:
         kmls = ["Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml",]
 
-    project_slug = slugify(opts.project_name)
-    app_slug = slugify(opts.app_name)
+    project_slug = slugify(opts.project_name).replace('-', '_')
+    app_slug = slugify(opts.app_name).replace('-','_')
     check_db_connection(opts.conn_string)
     source_dir = os.path.join(os.path.dirname(madrona.__file__),'installer','files')
     if opts.dest_dir == '':
@@ -173,15 +219,20 @@ def main():
     os.rename(old_app_dir, app_dir)
 
     print " * Adjust forms.py and models.py"
-    infile = os.path.join(app_dir, '_models.py')
-    outfile = os.path.join(app_dir, 'models.py')
-    search_replace = { '_app': app_slug, }
-    replace_file(infile, outfile, search_replace)
+    all_features_list = []
+    for aoi in aois:
+        add_feature('aoi', aoi, app_slug, app_dir)
+        all_features_list.append(aoi)
+    for loi in lois:
+        add_feature('loi', loi, app_slug, app_dir)
+        all_features_list.append(loi)
+    for poi in pois:
+        add_feature('poi', poi, app_slug, app_dir)
+        all_features_list.append(poi)
 
-    infile = os.path.join(app_dir, '_forms.py')
-    outfile = os.path.join(app_dir, 'forms.py')
-    search_replace = { '_app': app_slug, }
-    replace_file(infile, outfile, search_replace)
+    for folder in folders:
+        all_features_list.append(folder)
+        add_feature('folder', folder, app_slug, app_dir, all_features_list)
 
     print " * Adjust settings"
     infile = os.path.join(project_dir, '_settings.py')
@@ -341,7 +392,7 @@ SUCCESS
 """ % (project_slug, project_slug, port)
 
     if opts.superuser:
-        print "    # Note that a django superuser was created with user/pass of `madrona`/`madrona`"
+        print "    # Note that a django superuser was created with user/pass of madrona/madrona"
     else:
         print "    # You also need to create a user to log in initially\n    python manage.py createsuperuser --username=<USER> --email=<EMAIL>"
 
