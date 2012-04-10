@@ -10,10 +10,10 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.name)
-        super(Tag, self).save()
+        super(Tag, self).save(*args, **kwargs)
 
 class Entry(models.Model):
     title = models.CharField(max_length=200)
@@ -34,7 +34,7 @@ class Entry(models.Model):
     def __unicode__(self):
         return self.title
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.title)
-        super(Entry, self).save()
+        super(Entry, self).save(*args, **kwargs)

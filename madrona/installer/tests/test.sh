@@ -5,7 +5,7 @@ rm -rf my_project
 python ../bin/create-madrona-project.py    \
   --project "My Project" \
   --app testapp \
-  --domain "hestia.ecotrust.org:8052" \
+  --domain "hestia.ecotrust.org:8053" \
   --connection "dbname='example' user='postgres' " \
   --studyregion "SRID=4326;POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))" \
   --aoi "My Areas"  \

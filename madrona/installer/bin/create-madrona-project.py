@@ -362,6 +362,14 @@ STATIC_URL = 'http://%s/media/'
         m_user.set_password('madrona')
         m_user.save()
 
+        # have to have a user to post a news item
+        from madrona.news.models import Entry, Tag
+        t = Tag.objects.create(name="Welcome")
+        t.save()
+        e = Entry.objects.create(title="Welcome to " + opts.project_name, body="This application was automatically created by the Madrona App Generator (see <code>create-madrona-app.py</code>). If you're an adminstrator of the site and would like to customize it, please see the <a href='http://ecotrust.github.com/madrona/docs/tutorial.html' target='_blank'>tutorial</a>.", author=m_user)
+        e.tags.add(t)
+        e.save()
+
     print " * installing media"
     management.execute_manager(settings, ['manage.py','install_media'])
 
