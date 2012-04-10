@@ -24,8 +24,26 @@ class Command(BaseCommand):
             except:
                 raise Exception("No `name` field or --name provided!")
 
-        g1 = feature.geom
+        g1 = feature.geom.geos
+        srid = g1.srid
+        if not srid:
+            # See if we can assume latlon
+            missing_srid = True
+            ext = list(g1.extent)
+            latlonmax = [180,90] * 2
+            latlonmin = [x * -1 for x in latlonmax]
+            overs = [a for a,b in zip(ext, latlonmax) if a > b]
+            unders = [a for a,b in zip(ext, latlonmin) if a < b]
+            if len(overs) == len(unders) == 0:
+                srid = 4326
+                g1.srid = 4326
+            else:
+                raise Exception("Unknown SRID. Try ewkt format; `SRID=4326;POLYGON((.....))`")
+        if g1 and isinstance(g1, geos.Polygon):
+            g1 = geos.MultiPolygon(g1)
+            g1.srid = srid
         g1.transform(settings.GEOMETRY_DB_SRID)
+
         region = StudyRegion.objects.create(geometry=g1, name=name, active=True)
         region.save()
 
