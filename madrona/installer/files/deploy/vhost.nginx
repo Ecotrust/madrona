@@ -3,19 +3,19 @@ upstream app_server {
 }
 
 server {
-    server_name  _domain;
-    access_log  _root/logs/access.log;
-    error_log  _root/logs/error.log debug;
+    server_name  {{domain}};
+    access_log  {{root}}/logs/access.log;
+    error_log  {{root}}/logs/error.log debug;
     keepalive_timeout 5;
     client_max_body_size 20M;
     root /var/www/;
 
     location /media/admin {
-       alias _root/env/src/django/django/contrib/admin/media/;
+       alias {{root}}/env/src/django/django/contrib/admin/media/;
     }
 
     location /media {
-       alias _root/mediaroot/; 
+       alias {{root}}/mediaroot/; 
     }
     
     location / {

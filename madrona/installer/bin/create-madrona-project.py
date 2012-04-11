@@ -51,9 +51,9 @@ def add_feature(ftype, name, app_slug, app_dir, all_features_list=None):
         all_features = ''
 
     search_replace = {
-            '_app': app_slug,
-            '_all_features': all_features,
-            '_model': class_name,
+            '{{app}}': app_slug,
+            '{{all_features}}': all_features,
+            '{{model}}': class_name,
     }
     # Add to models
     infile = os.path.join(app_dir, "base", "_"+ftype+".models.py")
@@ -180,7 +180,7 @@ def main():
         raise Exception("%s already exists." % dest_dir)
 
     print " * copy template from %s to %s" % (source_dir, dest_dir)
-    copy_tree(source_dir,dest_dir)
+    copy_tree(source_dir, dest_dir)
 
     print " * creating public KML doc"
     outkml = os.path.join(dest_dir, 'media', 'layers', 'uploaded-kml', 'public.kml')
@@ -249,10 +249,10 @@ def main():
     infile = os.path.join(project_dir, '_settings.py')
     outfile = os.path.join(project_dir, 'settings.py')
     search_replace = {
-            '_project': opts.project_name,
-            '_project_slug': project_slug,
-            '_app': app_slug,
-            '_srid': opts.dbsrid
+            '{{project}}': opts.project_name,
+            '{{project_slug}}': project_slug,
+            '{{app}}': app_slug,
+            '{{srid}}': opts.dbsrid
     }
     replace_file(infile, outfile, search_replace)
 
@@ -269,20 +269,20 @@ SECRET_KEY = '%s'
     infile = os.path.join(dest_dir, 'deploy', 'vhost.apache')
     outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-apache")
     search_replace = {
-            '_project': opts.project_name,
-            '_project_slug': project_slug,
-            '_domain': opts.domain,
-            '_root': dest_dir
+            '{{project}}': opts.project_name,
+            '{{project_slug}}': project_slug,
+            '{{domain}}': opts.domain,
+            '{{root}}': dest_dir
     }
     replace_file(infile, outfile, search_replace)
 
     infile = os.path.join(dest_dir, 'deploy', 'vhost.nginx')
     outfile = os.path.join(dest_dir, 'deploy', opts.domain + "-nginx")
     search_replace = {
-            '_project': opts.project_name,
-            '_project_slug': project_slug,
-            '_domain': opts.domain,
-            '_root': dest_dir
+            '{{project}}': opts.project_name,
+            '{{project_slug}}': project_slug,
+            '{{domain}}': opts.domain,
+            '{{root}}': dest_dir
     }
     replace_file(infile, outfile, search_replace)
 
@@ -290,8 +290,8 @@ SECRET_KEY = '%s'
     infile = os.path.join(dest_dir, '_.gitignore')
     outfile = os.path.join(dest_dir, '.gitignore')
     search_replace = {
-            '_project': opts.project_name,
-            '_project_slug': project_slug,
+            '{{project}}': opts.project_name,
+            '{{project_slug}}': project_slug,
     }
     replace_file(infile, outfile, search_replace)
 
@@ -309,10 +309,10 @@ SECRET_KEY = '%s'
 
     pyver = '%d.%d' % (major, minor) 
     search_replace = {
-            '_project': opts.project_name,
-            '_project_slug': project_slug,
-            '_pyversion': pyver,
-            '_root': dest_dir
+            '{{project}}': opts.project_name,
+            '{{project_slug}}': project_slug,
+            '{{pyversion}}': pyver,
+            '{{root}}': dest_dir
     }
     replace_file(infile, outfile, search_replace)
 
@@ -347,7 +347,7 @@ STATIC_URL = 'http://%s/media/'
 
     lsfh.close()
 
-    os.chdir(project_slug)
+    os.chdir(dest_dir)
     os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
     old_sys_path = sys.path
     sys.path = [project_dir]

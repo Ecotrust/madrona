@@ -1,7 +1,7 @@
 
 @register
-class _model(LineFeature):
+class {{model}}(LineFeature):
     description = models.TextField(null=True, blank=True)
     class Options:
-        form = '_app.forms._modelForm'
+        form = '{{app}}.forms.{{model}}Form'
 

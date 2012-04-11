@@ -1,7 +1,7 @@
 
 @register
-class _model(PointFeature):
+class {{model}}(PointFeature):
     description = models.TextField(null=True, blank=True)
     class Options:
-        form = '_app.forms._modelForm'
+        form = '{{app}}.forms.{{model}}Form'
 

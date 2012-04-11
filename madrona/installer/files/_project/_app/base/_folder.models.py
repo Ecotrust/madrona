@@ -1,10 +1,10 @@
 
 @register
-class _model(FeatureCollection):
+class {{model}}(FeatureCollection):
     description = models.TextField(null=True, blank=True)
     class Options:
-        form = '_app.forms._modelForm'
+        form = '{{app}}.forms.{{model}}Form'
         valid_children = (
-            _all_features
+            {{all_features}}
         )
 

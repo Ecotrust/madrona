@@ -1,6 +1,6 @@
 
-from models import _model
-class _modelForm(FeatureForm):
+from models import {{model}}
+class {{model}}Form(FeatureForm):
     class Meta(FeatureForm.Meta):
-        model = _model
+        model = {{model}}
 

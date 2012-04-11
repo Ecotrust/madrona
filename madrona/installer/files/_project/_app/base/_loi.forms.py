@@ -1,6 +1,6 @@
 
-from models import _model
-class _modelForm(SpatialFeatureForm):
+from models import {{model}}
+class {{model}}Form(SpatialFeatureForm):
     class Meta(SpatialFeatureForm.Meta):
-        model = _model
+        model = {{model}}
 

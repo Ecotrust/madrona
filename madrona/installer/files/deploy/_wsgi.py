@@ -2,10 +2,10 @@ import sys
 import site
 import os
 
-project = '_root/_project_slug'
-ve = '_root/env'
-vepath = os.path.join(ve,'lib/python_pyversion/site-packages')
-local_path = os.path.join('/usr/local/lib/python_pyversion/site-packages')
+project = '{{root}}/{{project_slug}}'
+ve = '{{root}}/env'
+vepath = os.path.join(ve,'lib/python{{pyversion}}/site-packages')
+local_path = os.path.join('/usr/local/lib/python{{pyversion}}/site-packages')
 
 prev_sys_path = list(sys.path)
 # add the site-packages of our virtualenv as a site dir

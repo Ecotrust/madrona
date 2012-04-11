@@ -1,14 +1,14 @@
 <VirtualHost *:80>
-  ServerName _domain
+  ServerName {{domain}}
 
-  WSGIScriptAlias / _root/deploy/wsgi.py
-  WSGIDaemonProcess _project_slug user=www-data group=www-data threads=3 processes=2
-  WSGIProcessGroup _project_slug
+  WSGIScriptAlias / {{root}}/deploy/wsgi.py
+  WSGIDaemonProcess {{project_slug}} user=www-data group=www-data threads=3 processes=2
+  WSGIProcessGroup {{project_slug}}
 
-  ErrorLog "_root/logs/error.log"
-  CustomLog "_root/logs/access.log" combined
+  ErrorLog "{{root}}/logs/error.log"
+  CustomLog "{{root}}/logs/access.log" combined
 
-  Alias /media/admin _root/env/src/django/django/contrib/admin/static/admin
+  Alias /media/admin {{root}}/env/src/django/django/contrib/admin/static/admin
 
   ServerAdmin madrona@ecotrust.org
 
@@ -29,7 +29,7 @@
     Allow from all
   </Location>
 
-  Alias /media _root/mediaroot
+  Alias /media {{root}}/mediaroot
 
   <Location /media>
     #GZIP media files just not images or for IE6
