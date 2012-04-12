@@ -3,15 +3,11 @@ Madrona
 
 Overview
 ========
-Madrona is a framework for building
-web-based decision support tools for open and participatory spatial 
-planning. Madrona offers a simple, flexible and powerful
-means of gathering expertise from resource managers, scientists, stakeholders and 
-public in a process of collaborative decision making.
+Madrona is a framework for creating tools for decision support and spatial planning at any geography and scale.  
 
-Madrona is a python module providing a set of reusable apps for the django web framework. 
-Using madrona, one can extend the framework for any
-sort of collaborative spatial planning process or decision support tool. 
+Madrona provides a set of building blocks and design patterns for software developers 
+to quickly create tools to meet unique decision making and spatial planning challenges. 
+They can be for individual use or support of a large group in a collaborative planning process.
 
 Examples
 ========
@@ -72,7 +68,7 @@ For more detail, visit the `installation docs <http://ecotrust.github.com/madron
 Create your Project 
 =========================
 
-Once you've got madrona installed, you're ready to start developing your new decision support tool! 
+Once you've got madrona installed, you're ready to start developing your new planning tool! 
 Depending on your style you may want to:
 
 * Hit the ground running with an `example application <https://github.com/Ecotrust/madrona/tree/master/examples/test_project/>`_.
