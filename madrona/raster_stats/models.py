@@ -85,11 +85,12 @@ def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     If not write_cache, just return an unsaved object
     """
     # Create tempdir and cd in 
-    tmpdir = tempfile.gettempdir()
+    tmpdir_base = tempfile.gettempdir()
     geom_hash = geom.wkt.__hash__()
     timestamp = str(time.time())
-    tmpdir = os.path.join(tmpdir, 'madrona.raster_stats', str(geom_hash), timestamp, rasterds.name)
+    tmpdir = os.path.join(tmpdir_base, 'madrona.raster_stats', str(geom_hash), timestamp, rasterds.name)
     os.makedirs(tmpdir)
+    old_dir = os.getcwd()
     os.chdir(tmpdir)
 
     # Output geom to temp dataset
@@ -117,7 +118,7 @@ def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     res = open(out_csv,'r').readlines()
 
     # Create zonal model
-    zonal = ZonalStatsCache(raster=rasterds, geom_hash=geom_hash)
+    zonal, created = ZonalStatsCache.objects.get_or_create(raster=rasterds, geom_hash=geom_hash)
 
     # Make sure we have valid results output by starspan
     if len(res) == 2 and "Intersecting features: 0" not in starspan_out:
@@ -156,12 +157,9 @@ def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
             # Most likely another zonal stats cache for this geom/raster
             # was saved to the cache before this one completed.
             pass
-    try:
-        remove_tmp = settings.STARSPAN_REMOVE_TMP
-    except:
-        remove_tmp = True
 
-    if remove_tmp:
+    if settings.STARSPAN_REMOVE_TMP:
+        os.chdir(old_dir)
         import shutil
         shutil.rmtree(tmpdir)
 

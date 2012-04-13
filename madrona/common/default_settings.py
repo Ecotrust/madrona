@@ -229,6 +229,7 @@ BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks
 ENFORCE_SUPPORTED_BROWSER = True
 
 STARSPAN_BIN = 'starspan'
+STARSPAN_REMOVE_TMP = True
 
 LAUNCH_PAGE = False 
 from django.core.urlresolvers import reverse_lazy
