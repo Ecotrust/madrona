@@ -9,9 +9,7 @@ Madrona provides a set of building blocks and design patterns for software devel
 to quickly create tools to meet unique decision making and spatial planning challenges. 
 They can be for individual use or support of a large group in a collaborative planning process.
 
-Madrona is based on Python and the Django web framework. It leverages server-side technolgy such as
-PostGIS, Mapnik and GDAL as well as client-side jQuery, KMLtree and the Google Earth API. The architecture is modular 
-and can be integrated with many third party applications, both proprietary and open-source. 
+Madrona is based on the Python programming language and the Django web framework.  It leverages server-side technology such as PostGIS, Mapnik and GDAL and client-side technology including JQuery.  Madrona provides robust support for 3D mapping using KMLtree and the Google Earth API. The architecture is modular and can be integrated with many third party applications, both proprietary and open-source.
 
 Examples
 ========
