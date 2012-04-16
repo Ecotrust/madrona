@@ -13,10 +13,11 @@ import tempfile
 
 def get_logger(caller_name=None):
     try:
-        fh = open(settings.LOG_FILE,'w')
+        fh = open(settings.LOG_FILE,'a')
         logfile = settings.LOG_FILE
     except:
-        print " NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stdout instead" 
+        import warnings
+        warnings.warn(" NOTICE: settings.LOG_FILE not specified or is not writeable; logging to stderr instead\n")
         logfile = None
 
     try:
@@ -41,7 +42,7 @@ def get_logger(caller_name=None):
 
     if logfile and settings.DEBUG:
         import sys
-        strm_out = logging.StreamHandler(sys.__stdout__)
+        strm_out = logging.StreamHandler(sys.__stderr__)
         logger.addHandler(strm_out)
 
     return logger
