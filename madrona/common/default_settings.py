@@ -231,6 +231,8 @@ ENFORCE_SUPPORTED_BROWSER = True
 STARSPAN_BIN = 'starspan'
 STARSPAN_REMOVE_TMP = True
 
+POSTGIS_TEMPLATE = 'template1'
+
 LAUNCH_PAGE = False 
 from django.core.urlresolvers import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('map')

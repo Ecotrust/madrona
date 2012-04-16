@@ -102,7 +102,21 @@ def parse_conn(conn_string):
 
 def main():
     parser = optparse.OptionParser(
-            usage="create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com> -c <postgres_connection>")
+            usage="""create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com> -c <postgres_connection>
+            
+  Example:
+    create-madrona-project.py \\
+        --project "My Project" \\
+        --app testapp \\
+        --domain "192.168.1.111:8080" \\
+        --connection "dbname='example' user='postgres' " \\
+        --studyregion "SRID=4326;POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))" \\
+        --aoi "My Areas"  \\
+        --aoi "My Other Areas"  \\
+        --poi "Points of interest"  \\
+        --loi "Pipelines"  \\
+        --folder "Folder for Areas"  \\
+        --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml" """)
     parser.add_option('-p', '--project', help='Name of django project', action='store', 
             dest='project_name', type='string')
     parser.add_option('-a', '--app', help='Name of django application', action='store', 
@@ -117,7 +131,7 @@ def main():
             dest='dest_dir', type='string', default='')
     parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
             dest='dbsrid', type='string', default='3857')
-    parser.add_option('-r', '--studyregion', help='Study region shape (ewkt)', action='store', 
+    parser.add_option('-r', '--studyregion', help='Study region shape (ewkt string or path to shapefile)', action='store', 
             dest='studyregion', type='string', default=None)
     parser.add_option('-w', '--folder', help="Folder", action='append',
             dest='folders', type='string', default=[])
