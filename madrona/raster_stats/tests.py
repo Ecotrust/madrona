@@ -85,10 +85,6 @@ class ZonalTest(TestCase):
         self.assertEqual(zonal.from_cache, False)
         self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
 
-        zonal = zonal_stats(self.polygons[3], self.rast, write_cache=False)
-        self.assertEqual(zonal.from_cache, False)
-        self.assertEqual(len(ZonalStatsCache.objects.all()), 1)
-
         zonal = zonal_stats(self.polygons[3], self.rast)
         self.assertEqual(zonal.from_cache, False)
         self.assertEqual(len(ZonalStatsCache.objects.all()), 2)

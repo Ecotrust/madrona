@@ -87,11 +87,10 @@ def geom_to_file(geom, filepath):
     fh.close()
     assert os.path.exists(filepath)
 
-def _run_starspan_zonal(geom, rasterds, write_cache=True, pixprop=0.5):
+def _run_starspan_zonal(geom, rasterds, pixprop=0.5):
     """
     Consider this a 'private' method .. dont call directly, use zonal_stats() instead
     Runs starspan and returns a ZonalStatsCache object
-    If not write_cache, just return an unsaved object
     """
     # Create tempdir and cd in 
     tmpdir_base = tempfile.gettempdir()
@@ -127,7 +126,7 @@ def _run_starspan_zonal(geom, rasterds, write_cache=True, pixprop=0.5):
     res = open(out_csv,'r').readlines()
 
     # Create zonal model
-    zonal = ZonalStatsCache(raster=rasterds, geom_hash=geom_hash)
+    zonal, created = ZonalStatsCache.objects.get_or_create(raster=rasterds, geom_hash=geom_hash)
 
     # Make sure we have valid results output by starspan
     if len(res) == 2 and "Intersecting features: 0" not in starspan_out:
@@ -157,15 +156,13 @@ def _run_starspan_zonal(geom, rasterds, write_cache=True, pixprop=0.5):
             zc.save()
             zonal.categories.add(zc)
 
-    # return zonal object (caching it if needed)
-    if write_cache:
-        try:
-            if zonal.pixels:
-                zonal.save()
-        except:
-            # Most likely another zonal stats cache for this geom/raster
-            # was saved to the cache before this one completed.
-            pass
+    try:
+        if zonal.pixels:
+            zonal.save()
+    except:
+        # Most likely another zonal stats cache for this geom/raster
+        # was saved to the cache before this one completed.
+        pass
 
     if settings.STARSPAN_REMOVE_TMP:
         os.chdir(old_dir)
@@ -178,12 +175,12 @@ def clear_cache():
     objs = ZonalStatsCache.objects.all()
     objs.delete()
 
-def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=False, pixprop=0.5):
+def zonal_stats(geom, rasterds, read_cache=True, cache_only=False, pixprop=0.5):
     """
     Given a GEOSGeometry and a RasterDataset,
     compute the zonal stats and return json like
      { 'raster': 'elevation', 'stats': {'sum': 10234.2, 'mean': 12.4}}
-    result can be stored in cache (write_cache)
+    result will be stored in cache
      and cache value is returned if read_cache
     """
     if not geom.valid:
@@ -199,10 +196,6 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
             cached = None
         except DatabaseError:
             cached = None
-    else:
-        #If we're not reading the cache, 
-        #we're not going to write to it either
-        write_cache = False 
 
     if cached:
         result = cached
@@ -212,7 +205,7 @@ def zonal_stats(geom, rasterds, write_cache=True, read_cache=True, cache_only=Fa
             # Return an empty result
             result = ZonalStatsCache(geom_hash=geom_hash, raster=rasterds)
         else:
-            result = _run_starspan_zonal(geom, rasterds, write_cache=write_cache, pixprop=pixprop)
+            result = _run_starspan_zonal(geom, rasterds, pixprop=pixprop)
         result.from_cache = False
 
     return result
