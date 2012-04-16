@@ -2,9 +2,12 @@ from django.db import models
 from django.conf import settings
 from django.core import serializers
 from django.db.utils import DatabaseError
+from madrona.common.utils import get_logger
 import tempfile
 import time
 import os
+
+logger = get_logger()
 
 try:
     RASTDIR = settings.RASTER_DIR
@@ -84,7 +87,7 @@ def geom_to_file(geom, filepath):
     fh.close()
     assert os.path.exists(filepath)
 
-def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
+def _run_starspan_zonal(geom, rasterds, write_cache=True, pixprop=0.5):
     """
     Consider this a 'private' method .. dont call directly, use zonal_stats() instead
     Runs starspan and returns a ZonalStatsCache object
@@ -124,7 +127,7 @@ def _run_starspan_zonal(geom, rasterds, write_cache=False, pixprop=0.5):
     res = open(out_csv,'r').readlines()
 
     # Create zonal model
-    zonal, created = ZonalStatsCache.objects.get_or_create(raster=rasterds, geom_hash=geom_hash)
+    zonal = ZonalStatsCache(raster=rasterds, geom_hash=geom_hash)
 
     # Make sure we have valid results output by starspan
     if len(res) == 2 and "Intersecting features: 0" not in starspan_out:
