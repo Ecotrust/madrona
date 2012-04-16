@@ -27,6 +27,12 @@ class RasterDataset(models.Model):
     def __unicode__(self):
         return unicode(self.name + " raster at " + self.filepath)
 
+    def save(self, *args, **kwargs):
+        super(RasterDataset, self).save(*args, **kwargs)
+        # invalidate the zonal stats cache
+        caches = ZonalStatsCache.objects.filter(raster=self)
+        caches.delete()
+
     @property
     def is_valid(self):
         # TODO is there a CHEAP way to check for GDAL open?
