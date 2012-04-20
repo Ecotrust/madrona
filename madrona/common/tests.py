@@ -67,6 +67,7 @@ class SessionsTest(TestCase):
         load_session(request, md5('blah').hexdigest())
         self.assertEquals(request.session.__class__.__name__, 'SessionStore')
 
+
 class BrowserUserAgentTest(TestCase):
     def setUp(self):
         exdir = os.path.dirname(os.path.abspath(__file__))
@@ -86,6 +87,29 @@ class BrowserUserAgentTest(TestCase):
             if valid_browser(ua):
                 print "UAPARSER SAYS SUPPORTED .....", ua
             self.assertEquals(valid_browser(ua),False)
+
+    def test_rootmap_goodua(self):
+        url = '/'
+        agent = {'HTTP_USER_AGENT': self.supported_uastring_examples[0]}
+        response = self.client.get(url, **agent)
+        self.assertEquals(response.status_code, 200, url)
+        # request again and see if cookies are recognized
+        response = self.client.get(url, **agent)
+        self.assertEquals(response.status_code, 200, url)
+        # and request again and see if news cookies are handled
+        response = self.client.get(url, **agent)
+        self.assertEquals(response.status_code, 200, url)
+
+    def test_rootmap_badua(self):
+        # should bring up "unsupported browser" page
+        url = '/'
+        agent = {'HTTP_USER_AGENT': self.unsupported_uastring_examples[0]}
+        response = self.client.get(url, **agent)
+        self.assertEquals(response.status_code, 200, url)
+        # request again but go to map despite the user agent
+        url = '/?supported=false'
+        response = self.client.get(url, **agent)
+        self.assertEquals(response.status_code, 200, url)
 
 class AccessTest(TestCase):
 
