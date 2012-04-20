@@ -155,7 +155,9 @@ class BaseManipulator(object):
         except Exception, e:
             raise self.InvalidGeometryException(e.message)
         if not target.valid:
-            raise self.InvalidGeometryException()
+            target = target.buffer(0)
+            if not target.valid:
+                raise self.InvalidGeometryException()
         # if target.srid != settings.GEOMETRY_DB_SRID:
         target.set_srid(settings.GEOMETRY_CLIENT_SRID)
         return target
