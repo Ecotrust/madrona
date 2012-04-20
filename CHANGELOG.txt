@@ -8,6 +8,12 @@ Reorganization of setup code
 Numerous bug fixes and lots of code cleanup
 Overhaul of setup.py and associated installation procedures
 Added flatblocks to manage content
+Added create-madrona-project.py script as a madrona replacement for startproject
+Fixed several bugs in raster_stats - improved tempfile and cache handling 
+Improved study region loading via management command
+Improved geometry validity handling in manipulators
+Improved logging system
+
 
 # MarineMap 3.0
 ---------------
