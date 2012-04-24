@@ -181,8 +181,8 @@ def main():
     if not kmls:
         kmls = ["Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml",]
 
-    project_slug = slugify(opts.project_name).replace('-', '_')
-    app_slug = slugify(opts.app_name).replace('-','_')
+    project_slug = slugify(opts.project_name).replace('-', '')
+    app_slug = slugify(opts.app_name).replace('-','')
     check_db_connection(opts.conn_string)
     source_dir = os.path.join(os.path.dirname(madrona.__file__),'installer','files')
     if opts.dest_dir == '':
