@@ -390,7 +390,7 @@ STATIC_URL = 'http://%s/media/'
         from madrona.news.models import Entry, Tag
         t = Tag.objects.create(name="Welcome")
         t.save()
-        title = "Welcome to " + opt.project_name[:38] # stay under 50 char
+        title = "Welcome to " + opts.project_name[:38] # stay under 50 char
         e = Entry.objects.create(title=title, 
             body="""This application was automatically created by the 
         Madrona App Generator (see <code>create-madrona-app.py</code>). 
