@@ -19,6 +19,8 @@ Examples
 * `Bioregional Discovery Tool <http://bioregions.apps.ecotrust.org/>`_         
 * `USFWS Aquatic Prioritization Tool <http://aquatic-priorities.apps.ecotrust.org/>`_
 * `Forest Management Scenario Planner <https://github.com/Ecotrust/land_owner_tools>`_
+* `Mid-Atlantic Regional Council on the Ocean Marine Planner <https://github.com/Ecotrust/marco-portal>`_
+* `North Pacific Landscape Conservation Cooperative Prioritization Tool<https://github.com/Ecotrust/nplcc>`_
 
 Quick Start
 ===========
@@ -64,8 +66,8 @@ For more detail, visit the `installation docs <http://ecotrust.github.com/madron
 (Option 2) Download a preconfigured system
 ********************************************
 
-* Virtual Box
-* Amazon AMI
+A pre-installed `Virtual Machine <https://github.com/Ecotrust/madrona/wiki/Madrona-Virtual-Machine>`_ is available to 
+help you get up and running quickly. 
 
 Create your Project 
 =========================
