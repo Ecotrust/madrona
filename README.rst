@@ -20,7 +20,7 @@ Examples
 * `USFWS Aquatic Prioritization Tool <http://aquatic-priorities.apps.ecotrust.org/>`_
 * `Forest Management Scenario Planner <https://github.com/Ecotrust/land_owner_tools>`_
 * `Mid-Atlantic Regional Council on the Ocean Marine Planner <https://github.com/Ecotrust/marco-portal>`_
-* `North Pacific Landscape Conservation Cooperative Prioritization Tool<https://github.com/Ecotrust/nplcc>`_
+* `North Pacific Landscape Conservation Cooperative Prioritization Tool <https://github.com/Ecotrust/nplcc>`_
 
 Quick Start
 ===========
