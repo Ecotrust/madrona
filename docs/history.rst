@@ -1,6 +1,7 @@
-
 History 
 =======
+
+The `Madrona` framwork is evolved from a `MarineMap`, a marine planning tool supporting the Marine Life Protection act in CA. The MarineMap consortium was comprised of scientists and technologists at the University of California Santa Barbara, Ecotrust, and The Nature Conservancy. 
 
 Marine Protected Area Planning
 ******************************
@@ -12,7 +13,7 @@ The Marine Life Protection Act of 1999 mandates the state of California to imple
 
 Designing MPAs requires the consideration of a wide variety of geospatial information, such as the location of critical habitats (e.g., rocky substrate and kelp forests), coastal access points (e.g., harbors and kayak launch sites), extractive activities (e.g., commercial and recreational fishing sites), and the distribution of marine life (e.g., sea lion haulouts and bird breeding sites). Furthermore, MPA design is increasingly stakeholder driven. That is, legislative bodies have discovered that the successful design and implementation of MPAs must involve the individuals that are directly impacted by the state of our oceans, such as fishermen, divers, kayakers, surfers, teachers, scientists, and conservationists. And, because stakeholders have disparate opinions about how and where MPAs are placed, the design process includes a great deal of place-based discussion that currently cannot be referred to in a map-based environment.  
 
-The MarineMap decision support tool has been developed in response to the specific needs of average, non-technical stakeholders as they collaboratively design MPAs. Madrona is a web-mapping application that allows users to:
+The MarineMap decision support tool has been developed in response to the specific needs of average, non-technical stakeholders as they collaboratively design MPAs. MarineMap was a web-mapping application that allowed users to:
 
 #. visualize over 60 vetted geospatial data layers
 #. draw prospective MPA boundaries with attributed information
@@ -21,12 +22,12 @@ The MarineMap decision support tool has been developed in response to the specif
 #. generate graphs and statistics to evaluate MPAs based on science-based guidelines
 #. share results with users in a place-based discussion forum. 
 
-Based entirely on Open Source technologies, we have developed Madrona to be freely distributable and easily adopted by MPA planning processes world-wide. Furthermore, we have designed Madrona to be extensible and modular so that it may be easily modified for MPA monitoring once MPAs have been established. 
+MarineMap is the most comprehensive, most user-friendly, web-based MPA design application that we know of. As of December, 2008, MLPAI Stakeholders have started using MarineMap to explore alternative MPA designs in California and the feedback we have received is overwhelmingly positive. In fact, experts in geographic information systems have invariably described MarineMap as dramatically superior to standard desktop GIS applications (e.g., ArcGIS) for drawing prospective MPAs, evaluating data layers, and receiving graphic reports. Based on these preliminary observations, we are confident that MarineMap will prove very useful to MPA design processes around the world.
 
-Madrona is the most comprehensive, most user-friendly, web-based MPA design application that we know of. As of December, 2008, MLPAI Stakeholders have started using Madrona to explore alternative MPA designs in California and the feedback we have received is overwhelmingly positive. In fact, experts in geographic information systems have invariably described Madrona as dramatically superior to standard desktop GIS applications (e.g., ArcGIS) for drawing prospective MPAs, evaluating data layers, and receiving graphic reports. Based on these preliminary observations, we are confident that Madrona will prove very useful to MPA design processes around the world.
+Based on open source technologies, we developed MarineMap to be freely distributable and easily adopted by MPA planning processes world-wide. Furthermore, we designed MarineMap to be extensible and modular so that it may be easily modified for MPA monitoring once MPAs have been established.  
 
+Because of the careful attention to extensibility and modular code,
+Ecotrust began extending the MarineMap code base as a framework for forestry tools, a bioregional atlas, aquatic prioritization tools, etc. 
+It soon became clear that MarineMap (the software) was distinct from MarineMap (the marine planning tool) and that the software was applicable to many other planning processes outside of the marine domain.
+Thus the idea for Madrona was born; to provide a robust framework for descision support and planning tools that could be used in any domain, at any geography or scale. 
 
-Collaborators
-*************
-
-The Madrona consortium is comprised of scientists and technologists at the University of California Santa Barbara, Ecotrust, and The Nature Conservancy. 

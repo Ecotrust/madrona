@@ -10,16 +10,27 @@ basic customization. By the end you'll have an application that will perform
 all the `basic functions <http://code.google.com/p/madrona/wiki/FeaturesAndRequirements>`_ 
 needed to start drawing MPAs on a map.
 
-Project Structure
------------------
-It is important to understand how a Madrona application is structured. There are essentially two codebases:
+Overview: example Madrona project 
+##################################
+In this example, we'll set up a new Madrona instance for the state of Oregon. 
 
-    * madrona - a python module providing a set of django apps that contain the core functionality common to all Madrona instances.
-    * the project code - a django project which implements and extends the functionality provided by madrona (specific to the particular project's needs).
+Our study region will be defined (roughly) by the following polygon in WKT format::
 
-By seperating the two codebases, we can more easily maintain multiple Madrona projects while continuing to improve the underlying core functionality.
-If you are creating your own project from scratch, you will likely only need to work on the project-specific code; the madrona library can be installed 
-just like any other python module and you should't need to mess with any madrona code.
+    SRID=4326;POLYGON ((-125.0 41.8, -125.0 46.4, -116.4 46.4, -116.4 41.8, -125.0 41.8))
+
+We will set up four example feature types:
+
+    # Areas of Interest (polygons)
+    # Lines of Interst
+    # Points of Interest
+    # Collections of features (folders) 
+
+as well as show you how to tweak certain aspects of the application such as:
+
+    * Generating custom reports
+    * Customizing styling
+    * Handling geometries through manipulators
+    * Managing basemaps and KML datasets
 
 
 Install Dependencies
@@ -27,16 +38,32 @@ Install Dependencies
 
 You will need to install madrona's dependencies and madrona itself. For detailed instructions, please follow the :ref:`Installation <installation>` guide.
 
-Create new django project
+.. note:: If you are using the Madrona Virtual Machine, all of the necessary software is pre-installed. 
+
+
+Create new madrona project
 --------------------------
+In order to jumpstart the coding process, Madrona provides a script, ``create-madrona-project.py``, which auto-generates the boring parts of the codebase for you. First you must create a database:: 
 
-In this example, we'll set up a new Madrona instance for the state of Oregon. We use django-admin.py to create a standard django project:: 
+    createdb example -U postgres  
 
-    cd /usr/local/src
-    mkdir oregon_project
-    cd oregon_project
-    django-admin.py startproject oregon
-    cd oregon
+then choose a directory to store your project and run the ``create-madrona-project.py`` script::
+
+    cd /usr/local/userapps 
+    create-madrona-project.py \
+        --project "Example Project" \
+        --app example \
+        --domain "localhost:8000" \
+        --connection "dbname='example' user='postgres'" \
+        --studyregion "SRID=4326;POLYGON ((-125.0 41.8, -125.0 46.4, -116.4 46.4, -116.4 41.8, -125.0 41.8))" \
+        --aoi "My Areas of Interest"  \
+        --poi "My Points of Iterest"  \
+        --loi "My Lines of Interest"  \
+        --folder "Collection of Features"  \
+        --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml"
+    
+    cd exampleproject 
+    ls
 
 You should see the following directory structure::
 
@@ -48,13 +75,9 @@ You should see the following directory structure::
 
 .. note::
 
-   Though madrona includes several example projects, you are encouraged to 
-   create your Madrona instance as a seperate python package outside of the 
-   madrona source tree. This will allow for clear seperation between the underlying
-   libraries (madrona) and your implementation (the "project")
+    Madrona Virtual Machine users who used the "Madrona App Generator" will have already completed this step via the graphical setup tool. Open a terminal and navigate to `/usr/local/userapps` to find your generated code and begin customization.
 
 
-We now need to configure the settings and urls for our oregon project.
 
 Settings
 --------
