@@ -154,6 +154,15 @@ not a string path." % (name,))
                 method='GET',
             ))
 
+        # Add a geojson generic link
+        export_geojson = getattr(self._options, 'export_geojson', True)
+        if export_geojson:
+            self.links.insert(0, alternate('GeoJSON', 
+                'madrona.features.views.geojson_link', 
+                select='multiple single',
+                method='GET',
+            ))
+
         self.valid_children = getattr(self._options, 'valid_children', None)
         """
         valid child classes for the feature container

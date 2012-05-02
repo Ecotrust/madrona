@@ -796,3 +796,89 @@ def has_features(user):
         except:
             pass
     return False
+
+def geojson_link(request, instances):
+    """
+    Generic view for GeoJSON representation of feature classes. 
+    Can be overridden but this is provided a default.
+
+    To override, feature class needs a geojson object that returns 
+       a geojson feature string (no trailing comma)::
+ 
+      { "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
+        "properties": {"prop0": "value0"}
+      }
+   
+    Feature collections *cannot* be nested within other feature collections
+    http://lists.geojson.org/pipermail/geojson-geojson.org/2008-October/000464.html
+    Thus, by default, collections are treated as null geometries
+     with the understanding that the properties contain 'feature_set' 
+     attribute with uids that the client can use to track down features
+    """
+    from madrona.common import default_mimetypes as mimetypes
+    from madrona.features.models import FeatureCollection, SpatialFeature
+    from django.core import serializers
+    import json
+
+    feature_jsons = []
+
+    def get_properties_json(i):
+        json_orig = serializers.serialize('json', [i,], use_natural_keys=True)
+        obj = json.loads(json_orig)
+        props = obj[0]['fields']
+        unwanted_properties = [
+            'geometry_final', 
+            'geometry_orig', 
+            'content_type', 
+            'object_id', 
+        ]
+        for uwp in unwanted_properties:
+            try:
+                props.pop(uwp)
+            except:
+                pass
+        # Add uid
+        props['uid'] = i.uid
+        return props
+
+    def get_feature_json(geom_json, prop_json):
+        return """{
+            "type": "Feature",
+            "geometry": %s, 
+            "properties": %s
+        }""" % (geom_json, prop_json)
+
+    for i in instances:
+        gj = None
+        try:
+            gj = i.geojson
+        except AttributeError:
+            pass
+         
+        if gj is None:
+            props = get_properties_json(i)
+            if issubclass(i.__class__, FeatureCollection):
+                # collections are treated as null geoms with 'feature_set' property
+                props['feature_set'] = [x.uid for x in i.feature_set()]
+                gj = get_feature_json('null', json.dumps(props))
+            elif issubclass(i.__class__, SpatialFeature):
+                gj = get_feature_json(i.geometry_final.json, json.dumps(props))
+            else:
+                # How did I get here? pass silently for backwards compatibility
+                gj = get_feature_json('null', '{"uid": "%s"}' % i.uid)
+             
+        if gj is not None:
+            feature_jsons.append(gj)
+
+    geojson = """{ 
+      "type": "FeatureCollection",
+      "features": [ %s ]
+    }""" % (', \n'.join(feature_jsons),)
+
+    filename = '_'.join([slugify(i.name) for i in instances])[:40]
+    response = HttpResponse()
+    response['Content-Type'] = mimetypes.JSON
+    response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
+    response.write(geojson)
+    return response

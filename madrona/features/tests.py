@@ -5,6 +5,7 @@ from madrona.features.forms import FeatureForm
 from madrona.common.utils import kml_errors, enable_sharing
 import os
 import shutil
+import json
 from django.test.client import Client
 from django.contrib.auth.models import *
 from django.core.urlresolvers import reverse
@@ -1571,3 +1572,25 @@ class SharingTestCase(TestCase):
         self.client.login(username=self.user2.username, password=self.password)
         response = self.client.get(self.folder1_resource_url)
         self.assertEqual(response.status_code, 200)
+
+class GeoJsonTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@madrona.org', password='pword')
+        self.client.login(username='featuretest', password='pword')
+        g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+        self.mpa = TestMpa(user=self.user, name="My Mpa", geometry_orig=g1) 
+        self.mpa.save()
+
+    def test_geojson_url(self):
+        link = self.mpa.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['name'], 'My Mpa')
+
