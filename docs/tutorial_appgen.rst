@@ -3,13 +3,16 @@
 Customizing your Madrona VM demo 
 =========================================================
 
-.. note::
+This tutorial is intended for users of the Madrona Virtual Machine who have already used the "Madrona App Generator" to generate a demo app using the graphical setup tool. 
 
-    Madrona Virtual Machine users who used the "Madrona App Generator" will have already completed this step via the graphical setup tool. Open a terminal and navigate to `/usr/local/userapps` to find your generated code and begin customization.
+.. image:: appgen.png
 
+Go to the virtual machine and open a terminal window (Start > Accessories > LXTerminal)
 
-You code is in /usr/local/userapps/____
+.. image:: terminal.png
 
-Start from the 
+Navigate to to your generated code and begin customization (replace `testProject` with the name you specified).
 
-`Editing Features and FeatureCollections` section
+.. image:: term.png
+
+From here, you can begin customizing the code. Start from the :ref:`Customization <tutorial_customizing>` section.

@@ -1,6 +1,6 @@
 .. _management_commands:
 
-Django Management Commands
+Madrona/Django Management Commands
 ==============================================
 
 Type ``manage.py help <subcommand>`` for help on a specific subcommand.

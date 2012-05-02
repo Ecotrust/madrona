@@ -245,6 +245,8 @@ collection, all the features/collections contained within it are implicitly shar
     :members:
     :exclude-members: __init__, url_name, parent_slug, reverse, json
 
+.. _feature_options:
+
 The Options inner-class
 ***********************
 
@@ -264,6 +266,12 @@ The Options inner-class
     in the "Create" menu. If not specified, the CamelCase model name will 
     be used. Even though it is optional, this property is obviously highly 
     recommended.
+
+.. py:attribute:: icon_url 
+
+    Provide the path to an icon image to represent the feature, both in the
+    menu and the tree view. Path can be an absolute http URL or relative 
+    to the MEDIA_ROOT directory.
 
 .. py:attribute:: show_template
 
@@ -312,6 +320,8 @@ The Options inner-class
 
     Specify if the PNG link will be created for this Feature. Default is False.
 
+.. _feature_links:
+
 Specifying Links
 ================
 
@@ -327,6 +337,8 @@ interface. There are 4 types of Links:
     modify a selected feature, create a copy, or some other 
     `non-idempotent <http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html>`_
     action.
+
+.. _default_links:
 
 Default links
 -------------

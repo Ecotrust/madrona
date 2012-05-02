@@ -7,8 +7,7 @@ These instructions will walk you through developing a basic implementation of
 Madrona. This includes installing from the development repository, setting
 up a sample app, testing that everything installed smoothly, then doing some
 basic customization. By the end you'll have an application that will perform
-all the `basic functions <http://code.google.com/p/madrona/wiki/FeaturesAndRequirements>`_ 
-needed to start drawing MPAs on a map.
+all the basic functions needed to start drawing MPAs on a map.
 
 Project Structure
 -----------------
@@ -228,7 +227,7 @@ for any absolute urls created by our Madrona project. Then run the dev server to
 
 Our Oregon Madrona project should now be accessible at http://localhost:8000/ ...
 
-.. image:: http://marinemap.googlecode.com/hg/media/common/images/mpa_demo.png?r=2.0-cms
+.. image:: screen1.png 
 
 
 Next steps
