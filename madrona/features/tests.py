@@ -1695,13 +1695,13 @@ class GeoJsonTest(TestCase):
 
     def test_geojson_nest_url(self):
         """
-        We expect custom 'nest' behavior
+        We expect custom 'nest_feature_set' behavior
             
             FeatureCollection:
                 folder1 (with a `feature_set` property listing uids and null geom)
         """
         link = self.folder1.options.get_link('GeoJSON')
-        url = link.reverse(self.folder1) + "?strategy=nest"
+        url = link.reverse(self.folder1) + "?strategy=nest_feature_set"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('application/json' in response['Content-Type'])
@@ -1711,14 +1711,14 @@ class GeoJsonTest(TestCase):
 
     def test_geojson_nest_multi(self):
         """
-        We expect custom 'nest' behavior
+        We expect custom 'nest_feature_set' behavior
             
             FeatureCollection:
                 mpa1
                 folder2 (with a `feature_set` property listing uids and null geom)
         """
         link = self.folder1.options.get_link('GeoJSON')
-        url = link.reverse([self.mpa1, self.folder2]) + "?strategy=nest"
+        url = link.reverse([self.mpa1, self.folder2]) + "?strategy=nest_feature_set"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('application/json' in response['Content-Type'])
@@ -1732,7 +1732,7 @@ class GeoJsonTest(TestCase):
         self.client.login(username='joerando', password='pword')
         link = self.folder1.options.get_link('GeoJSON')
         # joerando user may own mpa4 but not folder2 so boot him 
-        url = link.reverse([self.mpa4, self.folder2]) + "?strategy=nest"
+        url = link.reverse([self.mpa4, self.folder2]) 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
         self.folder2.share_with(self.group1)

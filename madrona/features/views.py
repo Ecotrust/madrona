@@ -817,11 +817,11 @@ def geojson_link(request, instances):
       ``flat``: (DEFAULT) The collection is "flattened" to contain all the  
           features in a single featurecollection (lossy)
 
-      ``nest``: the collection is represented as an empty geometry with a special
+      ``nest_feature_set``: the collection is represented as an empty geometry with a special
           feature_set property; a list of UIDs to fetch 
           (requires a client with knowledge of this convention)
 
-    Pass by URL GET parameter like ?strategy=nest
+    Pass by URL GET parameter like ?strategy=nest_feature_set
     """
     from madrona.common import default_mimetypes as mimetypes
     from madrona.common.jsonutils import get_properties_json, get_feature_json
@@ -842,7 +842,7 @@ def geojson_link(request, instances):
         if gj is None:
             props = get_properties_json(i)
             if issubclass(i.__class__, FeatureCollection):
-                if strategy == 'nest':
+                if strategy == 'nest_feature_set':
                     # collections are treated as null geoms with 'feature_set' property
                     props['feature_set'] = [x.uid for x in i.feature_set()]
                     gj = get_feature_json('null', json.dumps(props))
@@ -878,7 +878,7 @@ def geojson_link(request, instances):
     filename = '_'.join([slugify(i.name) for i in instances])[:40]
     response = HttpResponse()
     response['Content-Type'] = mimetypes.JSON
-    # TODO only serve as attachment if request type != ajax
-    # response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
+    if not request.is_ajax:
+        response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
     response.write(geojson)
     return response
