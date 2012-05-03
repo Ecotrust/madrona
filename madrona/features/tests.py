@@ -1573,13 +1573,39 @@ class SharingTestCase(TestCase):
         response = self.client.get(self.folder1_resource_url)
         self.assertEqual(response.status_code, 200)
 
+@register
+class TestForGeoJSON(PolygonFeature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    class Options:
+        form = 'madrona.features.tests.GJForm'
+
+    @property
+    def geojson(self):
+        import json
+        from madrona.common.jsonutils import *
+        props = get_properties_json(self)
+        props['absolute_url'] = self.get_absolute_url()
+        return get_feature_json(self.geometry_final.json, json.dumps(props))
+
+
+class GJForm(FeatureForm):
+    class Meta:
+        model = TestForGeoJSON
+
 class GeoJsonTest(TestCase):
 
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
             'featuretest', 'featuretest@madrona.org', password='pword')
+        self.user2 = User.objects.create_user(
+            'joerando', 'featuretest@madrona.org', password='pword')
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.user.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+        enable_sharing(self.group1)
         self.client.login(username='featuretest', password='pword')
+
         g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g1.transform(settings.GEOMETRY_DB_SRID)
 
@@ -1593,13 +1619,16 @@ class GeoJsonTest(TestCase):
         self.mpa1 = TestMpa.objects.create(user=self.user, name="Mpa1", geometry_orig=g1) 
         self.mpa2 = TestMpa.objects.create(user=self.user, name="Mpa2", geometry_orig=g1) 
         self.mpa3 = TestMpa.objects.create(user=self.user, name="Mpa3", geometry_orig=g1) 
+        self.mpa4 = TestMpa.objects.create(user=self.user2, name="Mpa4", geometry_orig=g1) 
+        self.mpa5 = TestForGeoJSON.objects.create(user=self.user, name="Mpa5", geometry_orig=g1)
         self.folder1 = TestFolder.objects.create(user=self.user, name="Folder1")
         self.folder2 = TestFolder.objects.create(user=self.user, name="Folder2")
         self.folder1.add(self.mpa1)
         self.folder2.add(self.mpa2)
         self.folder1.add(self.folder2)
 
-    def test_geojson_url(self):
+
+    def test_geojson_single(self):
         link = self.mpa3.options.get_link('GeoJSON')
         url = link.reverse(self.mpa3)
         response = self.client.get(url)
@@ -1609,7 +1638,21 @@ class GeoJsonTest(TestCase):
         self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa3')
         self.assertEquals(len(fc['features']), 1)
 
-    def test_geojson_flat_url(self):
+    def test_geojson_byproperty(self):
+        """
+        Mpa5 has a custom geojson @property that should
+        return a GeoJSON Feature with an extra `absolute_url` property
+        """
+        link = self.mpa5.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa5)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['absolute_url'], self.mpa5.get_absolute_url())
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_flat(self):
         """
         We expect default 'flat' behavior
             
@@ -1625,7 +1668,7 @@ class GeoJsonTest(TestCase):
         fc = json.loads(response.content)
         self.assertTrue(fc['features'][0]['properties']['name'] in ['Mpa1','Mpa2'])
         self.assertTrue(fc['features'][1]['properties']['name'] in ['Mpa1','Mpa2'])
-        self.assertEquals(len(fc['features']), 2)
+        self.assertEquals(len(fc['features']), 2, fc)
 
     def test_geojson_nest_url(self):
         """
@@ -1659,5 +1702,20 @@ class GeoJsonTest(TestCase):
         fc = json.loads(response.content)
         self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa1')
         self.assertEquals(fc['features'][1]['properties']['feature_set'], [self.mpa2.uid])
+        self.assertEquals(len(fc['features']), 2)
+
+    def test_geojson_forbidden(self):
+        self.client.logout()
+        self.client.login(username='joerando', password='pword')
+        link = self.folder1.options.get_link('GeoJSON')
+        # joerando user may own mpa4 but not folder2 so boot him 
+        url = link.reverse([self.mpa4, self.folder2]) + "?strategy=nest"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+        # TODO now share it and see if he gets a 200
+        self.folder2.share_with(self.group1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        fc = json.loads(response.content)
         self.assertEquals(len(fc['features']), 2)
 

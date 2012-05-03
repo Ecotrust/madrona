@@ -824,51 +824,14 @@ def geojson_link(request, instances):
     Pass by URL GET parameter like ?strategy=nest
     """
     from madrona.common import default_mimetypes as mimetypes
+    from madrona.common.jsonutils import get_properties_json, get_feature_json
     from madrona.features.models import FeatureCollection, SpatialFeature
-    from django.core import serializers
     import json
     
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
 
     feature_jsons = []
-
-    def get_properties_json(i):
-        json_orig = serializers.serialize('json', [i,], use_natural_keys=True)
-        obj = json.loads(json_orig)
-        props = obj[0]['fields']
-        unwanted_properties = [
-            'geometry_final', 
-            'geometry_orig', 
-            'content_type', 
-            'object_id', 
-        ]
-        for uwp in unwanted_properties:
-            try:
-                props.pop(uwp)
-            except:
-                pass
-        # Add uid
-        props['uid'] = i.uid
-        return props
-
-    def get_feature_json(geom_json, prop_json):
-        return """{
-            "type": "Feature",
-            "geometry": %s, 
-            "properties": %s
-        }""" % (geom_json, prop_json)
-
-    def get_features(f):
-        "recursion is fun"
-        feats = []
-        for sf in f.feature_set():
-            if issubclass(sf.__class__, FeatureCollection):
-                feats.extend(get_features(sf))
-            else:
-                feats.append(sf)
-        return feats
-         
     for i in instances:
         gj = None
         try:
@@ -884,7 +847,8 @@ def geojson_link(request, instances):
                     props['feature_set'] = [x.uid for x in i.feature_set()]
                     gj = get_feature_json('null', json.dumps(props))
                 else:  # assume 'flat' strategy and recurse
-                    feats = get_features(i)
+                    feats = [f for f in i.feature_set(recurse=True) 
+                               if not isinstance(f, FeatureCollection)]
                     gjs = []
                     for f in feats:
                         try:
