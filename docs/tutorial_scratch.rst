@@ -230,8 +230,103 @@ Our Oregon Madrona project should now be accessible at http://localhost:8000/ ..
 .. image:: screen1.png 
 
 
+
+
+
+
+
+
+
+
+
+
+Setup and Deployment
+#########################
+
+Using settings.py and settings_local.py
+---------------------------------------
+
+Take a look at ``test_project/settings_local.template`` and 
+``settings.py``. Madrona uses a simple splitsetting scheme as described 
+`here <http://code.djangoproject.com/wiki/SplitSettings#Multiplesettingfilesimportingfromeachother>`_. What this enables is the ability to specify standard settings in settings.py and commit them to a public repository. 
+You then create a settings_local.py file which contains your passwords and settings specific to your local machine.
+
+.. important::
+
+    For security reasons, ``SECRET_KEY``, ``DATABASES``, passwords 
+    and other sensistive local settings are kept private and never published.
+
+Lets do that now. Copy settings_local.template to settings_local.py, then
+replace the SECRET_KEY with your own randomly-generated key::
+
+    SECRET_KEY = 'SOME_RANDOMLY_GENERATED_GOBBLYGOOK_VERY_SECRET'
+
+Add the following lines, altering as needed to allow connection to your local postgres database::
+
+    DATABASES = {
+       'default': {
+           'ENGINE': 'django.contrib.gis.db.backends.postgis',
+           'NAME': 'example',
+           'USER': 'postgres',
+           'HOST': 'localhost',
+       }
+    }
+    
+Handling static media
+----------------------
+Because a Madrona instance is split between madrona (the core functionality) and the project-specific code, static media files such as html, javascript, css, images, etc. may exist in both. 
+Django expects all the static media to be in a single directory. 
+In order to merge the madrona media with the project media, 
+you need to create an empty `mediaroot` directory and set it as your MEDIA_ROOT in the project settings_local.py ::
+
+    mkdir /path/to/test_media
+
+Now add the following to you ``settings_local.py``::
+
+    MEDIA_ROOT = '/path/to/test_media'
+
+Then use the 'install_media' management command to merge all the media files into the MEDIA_ROOT directory.:: 
+
+    python manage.py install_media
+
+
+
+To setup the database schema and populate with some initial data, run the 
+django syncdb command from within the ``test_project`` directory::
+
+    python manage.py syncdb
+
+Use the migrate command to handle creating the schemas and populating the database
+for those applications which are under `migration control <http://south.aeracode.org/docs/about.html>`_::
+
+    python manage.py migrate
+    
+Enable sharing globally for the site::
+
+    python manage.py enable_sharing
+
+Set up the site to run under a particular domain, in this case just on localhost port 8000::
+
+    python manage.py site localhost:8000
+
+Test and run the development server
+------------------------------------
+
+Confirm that everything is working as expected by running the tests::
+    
+    python utils/run_tests.py
+    
+If everything looks good, turn on the dev server::
+    
+    python manage.py runserver
+    
+Go to ``http://localhost:8000/admin/`` in a browser and use the authentication
+credentials specified when syncdb was run.  
+At ``http://localhost:8000/`` the interface should render with sample data.
+
+
 Next steps
-----------
+###########
 Madrona has fixtures containing test data that is installed on database 
 setup like an example :ref:`Study Region <studyregion>` and :ref:`layers`. This makes
 it easy to verify the installation and learn how the tool works. For use in an 

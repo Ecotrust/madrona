@@ -39,11 +39,15 @@ Database
 Next we'll create a new postgis-enabled database for this project and use django's syncdb command to create the necessary tables. 
 Assuming you installed postgis according to the installation instructions, this is as simple as::
 
-    createdb example -U postgres  
+    sudo su postgres
+    createdb example -U postgres   # you may want to use a different database user depending on your postgres configuration
+    exit
 
 Networking
 -----------
-Before you begin, you'll need to know the hostname or IP Address at which your server will be accessible. This will be refered to throughout this document as ``<HOST_OR_IP_ADDRESS>`` and your should replace with values appropriate for your networking setup.
+Before you begin, you'll need to know the hostname or IP Address and port at which your server will be accessible.
+
+.. important:: In the examples below, you must replace ``<HOST_OR_IP_ADDRESS>`` and ``<PORT>`` with values appropriate for your networking setup.
 
 Create new madrona project
 --------------------------
@@ -59,15 +63,12 @@ Choose a directory to store your project and run the ``create-madrona-project.py
     create-madrona-project.py \
         --project "Example" \
         --app example \
-        --domain "<HOST_OR_IP_ADDRESS>:8000" \
+        --domain "<HOST_OR_IP_ADDRESS>:<PORT>" \
         --connection "dbname='example' user='postgres'" \
         --studyregion "SRID=4326;POLYGON ((-125.0 41.8, -125.0 46.4, -116.4 46.4, -116.4 41.8, -125.0 41.8))" \
         --aoi "My Areas of Interest"  \
         --folder "Collection of Features"  \
         --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml"
-    
-    cd exampleproject 
-    ls
 
 Finally, create a `superuser` account to manage the site::
 
@@ -90,8 +91,7 @@ First, we want to examine the ``Features`` models. Open ``example/models.py`` an
 
 This defines the `MyAreasOfInterest` polygon feature, adds a `description` attribute and defines the `form` used to edit it. 
 
-.. note:: The python convention is to name your model classes using CapsCase. Whatever you do, don't use underscores _ in the feature class name.
-
+.. warning:: The python convention is to name your model classes using CapsCase. Whatever you do, don't use underscores _ in the feature class name.
 
 Next, open the file containing the forms called ``examples/forms.py`` ::
 
@@ -127,9 +127,9 @@ Trying it out
 --------------
 Now that we've examined the models and forms, we can run the development server to confirm everything is running::
 
-    manage.py runserver 0.0.0.0:8000
+    manage.py runserver 0.0.0.0:<PORT>
 
-And visit your web server at ``http://<HOST_OR_IP_ADDRESS>:8000`` and explore. 
+And visit your web server at ``http://<HOST_OR_IP_ADDRESS>:<PORT>`` and explore. 
 
 .. image:: screen1.png
 
@@ -249,11 +249,11 @@ Madrona provides a robust mechanism for sharing features between users. By defau
 
 The first step is to use Django's admin site to create users and groups.
 
-1. Navigate to  ``http://<HOST_OR_IP_ADDRESS>:8000/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``:
+1. Navigate to  ``http://<HOST_OR_IP_ADDRESS>:<PORT>/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``:
 
 .. image:: add_group.png
 
-2. Of course you, the "madrona" user, are the only member of this group at the moment! Go back to  ``http://<HOST_OR_IP_ADDRESS>:8000/admin/auth/`` and click ``+ Add`` next to `Users` and follow the instructions on-screen to create another user and add them to the ``My Group`` group.
+2. Of course you, the "madrona" user, are the only member of this group at the moment! Go back to  ``http://<HOST_OR_IP_ADDRESS>:<PORT>/admin/auth/`` and click ``+ Add`` next to `Users` and follow the instructions on-screen to create another user and add them to the ``My Group`` group.
 
 3. Finally, at the command line prompt, enable sharing for "My Group" by this command::
 
@@ -283,7 +283,7 @@ Managing basemaps and KML datasets
 ------------------------------------
 Base data layers are managed using a single KML file called the `public layers list`. If you defined KML layers 
 when setting up your initial app, the layers list will be available at 
-``http://<HOST_OR_IP_ADDRESS>:8000/layers/public/``. Download that file, save as ``public.kml``, 
+``http://<HOST_OR_IP_ADDRESS>:<PORT>/layers/public/``. Download that file, save as ``public.kml``, 
 and open for editing. You'll see that it is a standard KML file with `NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink ::
 
     <NetworkLink id="global-marine">
@@ -294,7 +294,7 @@ and open for editing. You'll see that it is a standard KML file with `NetworkLin
         </Link>
     </NetworkLink>
 
-Once we've modified the public kml, browse to admin interface at ``http://<HOST_OR_IP_ADDRESS>:8000/admin/layers/publiclayerlist/add/`` and use it to upload the new KML file. After refreshing your browser cache, you should see the new KML avaible in the layers panel.
+Once we've modified the public kml, browse to admin interface at ``http://<HOST_OR_IP_ADDRESS>:<PORT>/admin/layers/publiclayerlist/add/`` and use it to upload the new KML file. After refreshing your browser cache, you should see the new KML avaible in the layers panel.
 
 For more information, see the :ref:`layers documentation <layers>`.
 
@@ -324,14 +324,14 @@ For example, let's say we want to provide a simple text file download for your a
 2. Create a view to handle the creation of text files for one or more features. Open ``example/views.py`` and add the following function::
    
     def aoi_text(request, instances):
-        header = "Name, Description, Acres"
-        lines = ["%s, %s, %f" % (f.name, f.description, f.acres) for f in instances]
-        text = "%s\n%s" % (header, '\n'.join(lines)
+        text = "Name, Description, Acres\n"
+        for f in instances:
+            text += "%s, %s, %f\n" % (f.name, f.description, f.acres)
         return HttpResponse(text)
 
 Now restart the application, clear the cache and you should see ``Text File`` as an option in the download menu.
 
-.. note:: There are many :ref:`default links<default_links>` provided by madrona - just think of all the work you'd have to do to a) manually create the views and urls to handle them and b) tweak the javascript and html to handle all of those views. Madrona just does it for you... nice, huh!  
+.. note:: There are many :ref:`default links <default_links>` provided by madrona - just think of all the work you'd have to do to a) manually create the views and urls to handle them and b) tweak the javascript and html to handle all of those views. Madrona just does it for you... nice, huh!  
 
 For more information about extending the API through links and views, consult the :ref:`Features documentation <feature_links>` 
 
