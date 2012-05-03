@@ -1602,6 +1602,17 @@ class GJFormNoGeom(FeatureForm):
     class Meta:
         model = TestNoGeomFinal
 
+@register
+class TestNoGeoJSON(PolygonFeature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    class Options:
+        form = 'madrona.features.tests.TestNoGeoJSONForm'
+        export_geojson = False
+
+class TestNoGeoJSONForm(FeatureForm):
+    class Meta:
+        model = TestNoGeoJSON
+
 class GeoJsonTest(TestCase):
 
     def setUp(self):
@@ -1632,6 +1643,7 @@ class GeoJsonTest(TestCase):
         self.mpa4 = TestMpa.objects.create(user=self.user2, name="Mpa4", geometry_orig=g1) 
         self.mpa5 = TestForGeoJSON.objects.create(user=self.user, name="Mpa5", geometry_orig=g1)
         self.mpa6 = TestNoGeomFinal.objects.create(user=self.user, name="Mpa6")
+        self.mpa7 = TestNoGeoJSON.objects.create(user=self.user, name="Mpa7", geometry_orig=g1)
         self.folder1 = TestFolder.objects.create(user=self.user, name="Folder1")
         self.folder2 = TestFolder.objects.create(user=self.user, name="Folder2")
         self.folder1.add(self.mpa1)
@@ -1674,6 +1686,14 @@ class GeoJsonTest(TestCase):
         self.assertEqual(response.status_code, 200)
         fc = json.loads(response.content)
         self.assertEquals(fc['features'][0]['geometry'], None)
+
+    def test_no_geojson(self):
+        """
+        This one has export_geojson = False
+        so no link should be available
+        """
+        with self.assertRaisesRegexp(Exception, 'has no link named GeoJSON'):
+            link = self.mpa7.options.get_link('GeoJSON')
 
     def test_geojson_flat(self):
         """
