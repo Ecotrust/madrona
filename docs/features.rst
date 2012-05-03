@@ -355,11 +355,14 @@ And several generic links that are, by default, applied to all feature types:
   * ``Share`` links get forms for group-based sharing of features
   * ``KML`` links return KML representation of the feature
   * ``KMZ`` links return zipped KML (ie KMZ) representation of the feature
-  * ``GeoJSON`` links returns a GeoJSON FeatureCollection of the specified feature(s)
-  * ``PNG`` links return a PNG image of the feature (see ``staticmap``). Note that this feature can be turned off by specifying::
+  * ``GeoJSON`` links returns a GeoJSON FeatureCollection of the specified feature(s).
+  * ``PNG`` links return a PNG image of the feature (see ``staticmap``). 
+    
+Note that GeoJSON and PNG links can be turned off by specifying::
 
     class Options:
         export_png = False
+        export_geojson = False
 
 FeatureCollections also get
   * ``collection-add`` link to add feature(s) to this collection
