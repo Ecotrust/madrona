@@ -825,7 +825,7 @@ def geojson_link(request, instances):
     """
     from madrona.common import default_mimetypes as mimetypes
     from madrona.common.jsonutils import get_properties_json, get_feature_json
-    from madrona.features.models import FeatureCollection, SpatialFeature
+    from madrona.features.models import FeatureCollection, SpatialFeature, Feature
     import json
     
     strategy = request.GET.get('strategy', default='flat')
@@ -859,11 +859,13 @@ def geojson_link(request, instances):
                         gjs.append(get_feature_json(geom, json.dumps(props)))
                     gj = ', \n'.join(gjs)
 
-            elif issubclass(i.__class__, SpatialFeature):
-                gj = get_feature_json(i.geometry_final.json, json.dumps(props))
             else:
-                # How did I get here? pass silently for backwards compatibility
-                gj = get_feature_json('null', '{"uid": "%s"}' % i.uid)
+                try:
+                    # Eventually support an Option to configure the geometry field? 
+                    geom = i.geometry_final.json
+                except:
+                    geom = 'null'
+                gj = get_feature_json(geom, json.dumps(props))
              
         if gj is not None:
             feature_jsons.append(gj)

@@ -1582,15 +1582,25 @@ class TestForGeoJSON(PolygonFeature):
     @property
     def geojson(self):
         import json
-        from madrona.common.jsonutils import *
+        from madrona.common.jsonutils import get_properties_json, get_feature_json 
         props = get_properties_json(self)
         props['absolute_url'] = self.get_absolute_url()
         return get_feature_json(self.geometry_final.json, json.dumps(props))
 
-
 class GJForm(FeatureForm):
     class Meta:
         model = TestForGeoJSON
+
+@register
+class TestNoGeomFinal(Feature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    # just a base feature so no geometry_final attribute
+    class Options:
+        form = 'madrona.features.tests.GJFormNoGeom'
+
+class GJFormNoGeom(FeatureForm):
+    class Meta:
+        model = TestNoGeomFinal
 
 class GeoJsonTest(TestCase):
 
@@ -1621,6 +1631,7 @@ class GeoJsonTest(TestCase):
         self.mpa3 = TestMpa.objects.create(user=self.user, name="Mpa3", geometry_orig=g1) 
         self.mpa4 = TestMpa.objects.create(user=self.user2, name="Mpa4", geometry_orig=g1) 
         self.mpa5 = TestForGeoJSON.objects.create(user=self.user, name="Mpa5", geometry_orig=g1)
+        self.mpa6 = TestNoGeomFinal.objects.create(user=self.user, name="Mpa6")
         self.folder1 = TestFolder.objects.create(user=self.user, name="Folder1")
         self.folder2 = TestFolder.objects.create(user=self.user, name="Folder2")
         self.folder1.add(self.mpa1)
@@ -1651,6 +1662,18 @@ class GeoJsonTest(TestCase):
         fc = json.loads(response.content)
         self.assertEquals(fc['features'][0]['properties']['absolute_url'], self.mpa5.get_absolute_url())
         self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_nogeomfinal(self):
+        """
+        Mpa6 has no geometry_final attr
+        should fail gracefully with null geometry
+        """
+        link = self.mpa6.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa6)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['geometry'], None)
 
     def test_geojson_flat(self):
         """
@@ -1712,7 +1735,6 @@ class GeoJsonTest(TestCase):
         url = link.reverse([self.mpa4, self.folder2]) + "?strategy=nest"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
-        # TODO now share it and see if he gets a 200
         self.folder2.share_with(self.group1)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
