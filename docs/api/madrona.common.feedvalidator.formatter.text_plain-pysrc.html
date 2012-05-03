@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.formatter.text_plain</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        <a href="madrona.common.feedvalidator.formatter-module.html">Package&nbsp;formatter</a> ::
+        Module&nbsp;text_plain
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.feedvalidator.formatter.text_plain-module.html">Module madrona.common.feedvalidator.formatter.text_plain</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""$Id: text_plain.py 988 2008-03-12 18:22:48Z sa3ruby $"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">"Sam Ruby &lt;http://intertwingly.net/&gt; and Mark Pilgrim &lt;http://diveintomark.org/&gt;"</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-name">__version__</tt> <tt class="py-op">=</tt> <tt class="py-string">"$Revision: 988 $"</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable madrona.common.feedvalidator.formatter.base.__copyright__=madrona.common.feedvalidator.formatter.base-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_html.__copyright__=madrona.common.feedvalidator.formatter.text_html-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_plain.__copyright__=madrona.common.feedvalidator.formatter.text_plain-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_xml.__copyright__=madrona.common.feedvalidator.formatter.text_xml-module.html#__copyright__"><a title="madrona.common.feedvalidator.formatter.base.__copyright__
+madrona.common.feedvalidator.formatter.text_html.__copyright__
+madrona.common.feedvalidator.formatter.text_plain.__copyright__
+madrona.common.feedvalidator.formatter.text_xml.__copyright__" class="py-name" href="#" onclick="return doclink('link-0', '__copyright__', 'link-0');">__copyright__</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Copyright (c) 2002 Sam Ruby and Mark Pilgrim"</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-string">"""Output class for plain text output"""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Module madrona.common.feedvalidator.base=madrona.common.feedvalidator.base-module.html,Module madrona.common.feedvalidator.formatter.base=madrona.common.feedvalidator.formatter.base-module.html"><a title="madrona.common.feedvalidator.base
+madrona.common.feedvalidator.formatter.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class madrona.common.feedvalidator.formatter.base.BaseFormatter=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter" class="py-name" href="#" onclick="return doclink('link-2', 'BaseFormatter', 'link-2');">BaseFormatter</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-3', 'madrona', 'link-3');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package madrona.common=madrona.common-module.html"><a title="madrona.common" class="py-name" href="#" onclick="return doclink('link-4', 'common', 'link-4');">common</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Package madrona.common.feedvalidator=madrona.common.feedvalidator-module.html"><a title="madrona.common.feedvalidator" class="py-name" href="#" onclick="return doclink('link-5', 'feedvalidator', 'link-5');">feedvalidator</a></tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="Formatter"></a><div id="Formatter-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="Formatter-toggle" onclick="return toggle('Formatter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.feedvalidator.formatter.text_plain.Formatter-class.html">Formatter</a><tt class="py-op">(</tt><tt class="py-base-class">BaseFormatter</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Formatter-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Formatter-expanded"><a name="Formatter.format"></a><div id="Formatter.format-def"><a name="L13"></a><tt class="py-lineno">13</tt> <a class="py-toggle" href="#" id="Formatter.format-toggle" onclick="return toggle('Formatter.format');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.formatter.text_plain.Formatter-class.html#format">format</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">event</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Formatter.format-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="Formatter.format-expanded"><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">'%s %s%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method madrona.common.feedvalidator.formatter.base.BaseFormatter.getLineAndColumn()=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html#getLineAndColumn"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter.getLineAndColumn" class="py-name" href="#" onclick="return doclink('link-6', 'getLineAndColumn', 'link-6');">getLineAndColumn</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method madrona.common.feedvalidator.formatter.base.BaseFormatter.getMessage()=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html#getMessage"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter.getMessage" class="py-name" href="#" onclick="return doclink('link-7', 'getMessage', 'link-7');">getMessage</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method madrona.common.feedvalidator.formatter.base.BaseFormatter.getCount()=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html#getCount"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter.getCount" class="py-name" href="#" onclick="return doclink('link-8', 'getCount', 'link-8');">getCount</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:20 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

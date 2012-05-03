@@ -172,8 +172,6 @@ This page loads all the same files that django-compress packages, but loads
 each file individually and dynamically, so you don't need a server running. In
 fact, one can simple browse to the mercurial repository and run tests from there!
 
-`<http://madrona.googlecode.com/hg/media/tests.html>`_
-
 This method *will not test whether the code runs after packaging*. For that
 reason it is suitable for quick use during development but cannot adequately
 test code for use in a production environment.

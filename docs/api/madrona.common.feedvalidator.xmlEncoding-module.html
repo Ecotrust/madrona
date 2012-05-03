@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.xmlEncoding</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        Module&nbsp;xmlEncoding
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module xmlEncoding</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html">source&nbsp;code</a></span></p>
+<p>$Id: xmlEncoding.py 988 2008-03-12 18:22:48Z sa3ruby $ This module 
+  deals with detecting XML encodings, using both BOMs and explicit 
+  declarations.</p>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        $Revision: 988 $
+      </p>
+      <p><strong>Author:</strong>
+        Joseph Walton &lt;http://www.kafsemo.org/&gt;
+      </p>
+      <p><strong>Copyright:</strong>
+        Copyright (c) 2004 Joseph Walton
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.xmlEncoding.FailingCodec-class.html" class="summary-name">FailingCodec</a>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getdecoder"></a><span class="summary-sig-name">getdecoder</span>(<span class="summary-sig-arg">codec</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#getdecoder">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_position"></a><span class="summary-sig-name">_position</span>(<span class="summary-sig-arg">txt</span>,
+        <span class="summary-sig-arg">idx</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_position">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_normaliseNewlines"></a><span class="summary-sig-name">_normaliseNewlines</span>(<span class="summary-sig-arg">txt</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_normaliseNewlines">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_logEvent"></a><span class="summary-sig-name">_logEvent</span>(<span class="summary-sig-arg">loggedEvents</span>,
+        <span class="summary-sig-arg">e</span>,
+        <span class="summary-sig-arg">pos</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_logEvent">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_decodeDeclaration"></a><span class="summary-sig-name">_decodeDeclaration</span>(<span class="summary-sig-arg">sig</span>,
+        <span class="summary-sig-arg">dec</span>,
+        <span class="summary-sig-arg">permitted</span>,
+        <span class="summary-sig-arg">loggedEvents</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_decodeDeclaration">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_decodePostBOMDeclaration"></a><span class="summary-sig-name">_decodePostBOMDeclaration</span>(<span class="summary-sig-arg">sig</span>,
+        <span class="summary-sig-arg">dec</span>,
+        <span class="summary-sig-arg">permitted</span>,
+        <span class="summary-sig-arg">loggedEvents</span>,
+        <span class="summary-sig-arg">fallback</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_decodePostBOMDeclaration">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isStandard"></a><span class="summary-sig-name">isStandard</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Is this encoding required by the XML 1.0 Specification, 4.3.3?</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#isStandard">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="isCommon"></a><span class="summary-sig-name">isCommon</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Is this encoding commonly used, according to 
+      &lt;http://www.syndic8.com/stats.php?Section=feeds#XMLEncodings&gt; 
+      (as of 2004-03-27)?</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#isCommon">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.common.feedvalidator.xmlEncoding-module.html#_detect" class="summary-sig-name" onclick="show_private();">_detect</a>(<span class="summary-sig-arg">doc_start</span>,
+        <span class="summary-sig-arg">loggedEvents</span>=<span class="summary-sig-default">[]</span>,
+        <span class="summary-sig-arg">fallback</span>=<span class="summary-sig-default">'UTF-8'</span>)</span><br />
+      This is the logic from appendix F.1 of the XML 1.0 specification.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_detect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="detect"></a><span class="summary-sig-name">detect</span>(<span class="summary-sig-arg">doc_start</span>,
+        <span class="summary-sig-arg">loggedEvents</span>=<span class="summary-sig-default">[]</span>,
+        <span class="summary-sig-arg">fallback</span>=<span class="summary-sig-default">'UTF-8'</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#detect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_encodingFromDecl"></a><span class="summary-sig-name">_encodingFromDecl</span>(<span class="summary-sig-arg">x</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_encodingFromDecl">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="madrona.common.feedvalidator.xmlEncoding-module.html#removeDeclaration" class="summary-sig-name">removeDeclaration</a>(<span class="summary-sig-arg">x</span>)</span><br />
+      Replace an XML document string's encoding declaration with the same 
+      number of spaces.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#removeDeclaration">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hasCodec"></a><span class="summary-sig-name">_hasCodec</span>(<span class="summary-sig-arg">enc</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_hasCodec">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="decode"></a><span class="summary-sig-name">decode</span>(<span class="summary-sig-arg">mediaType</span>,
+        <span class="summary-sig-arg">charset</span>,
+        <span class="summary-sig-arg">bs</span>,
+        <span class="summary-sig-arg">loggedEvents</span>,
+        <span class="summary-sig-arg">fallback</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#decode">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="asUTF8"></a><span class="summary-sig-name">asUTF8</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      Accept a Unicode string and return a UTF-8 encoded string, with its 
+      encoding declaration removed, suitable for parsing.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#asUTF8">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decUTF32BE"></a><span class="summary-name">_decUTF32BE</span> = <code title="getdecoder('UTF-32BE')">getdecoder('UTF-32BE')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decUTF32LE"></a><span class="summary-name">_decUTF32LE</span> = <code title="getdecoder('UTF-32LE')">getdecoder('UTF-32LE')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decUTF16BE"></a><span class="summary-name">_decUTF16BE</span> = <code title="getdecoder('UTF-16BE')">getdecoder('UTF-16BE')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decUTF16LE"></a><span class="summary-name">_decUTF16LE</span> = <code title="getdecoder('UTF-16LE')">getdecoder('UTF-16LE')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decEBCDIC"></a><span class="summary-name">_decEBCDIC</span> = <code title="getdecoder('IBM037')">getdecoder('IBM037')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_decACE"></a><span class="summary-name">_decACE</span> = <code title="getdecoder('ISO-8859-1')">getdecoder('ISO-8859-1')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.xmlEncoding-module.html#_encRe" class="summary-name" onclick="show_private();">_encRe</a> = <code title="re.compile(r'&lt;\?xml\s+version\s*=\s*(?:&quot;[-a-zA-Z0-9_.:]+&quot;|\'[-a-zA-Z0-\
+9_.:]+\')\s+(encoding\s*=\s*(?:&quot;([-A-Za-z0-9._]+)&quot;|\'([-A-Za-z0-9._]+)\
+\'))')">re.compile(r'&lt;\?xml\s+version\s*=\s*(?:&quot;[-a-zA-Z0-9_.<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_encUTF8"></a><span class="summary-name">_encUTF8</span> = <code title="codecs.getencoder('UTF-8')">codecs.getencoder('UTF-8')</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_detect"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_detect</span>(<span class="sig-arg">doc_start</span>,
+        <span class="sig-arg">loggedEvents</span>=<span class="sig-default">[]</span>,
+        <span class="sig-arg">fallback</span>=<span class="sig-default">'UTF-8'</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#_detect">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This is the logic from appendix F.1 of the XML 1.0 specification. Pass
+  in the start of a document (&gt;= 256 octets), and receive the encoding 
+  to use, or None if there is a problem with the document.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="removeDeclaration"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">removeDeclaration</span>(<span class="sig-arg">x</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="madrona.common.feedvalidator.xmlEncoding-pysrc.html#removeDeclaration">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Replace an XML document string's encoding declaration with the same 
+  number of spaces. Some XML parsers don't allow the encoding to be 
+  overridden, and this is a workaround.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_encRe"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_encRe</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'&lt;\?xml\s+version\s*=\s*(?:&quot;[-a-zA-Z0-9_.:]+&quot;|\'[-a-zA-Z0-<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+9_.:]+\')\s+(encoding\s*=\s*(?:&quot;([-A-Za-z0-9._]+)&quot;|\'([-A-Za-z0-9._]+)<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+\'))')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:14 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

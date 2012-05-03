@@ -1,0 +1,133 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Managing content with flatblocks &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0b1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="prev" title="Madrona/Django Management Commands" href="management_commands.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="management_commands.html" title="Madrona/Django Management Commands"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="managing-content-with-flatblocks">
+<span id="flatblocks"></span><h1>Managing content with flatblocks<a class="headerlink" href="#managing-content-with-flatblocks" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">django-flatblocks</span></tt> app is installed by default. This allows you to put snippets of text into your templates which can be managed and edited
+through the admin interface.</p>
+<div class="section" id="adding-a-flatblock-to-your-template">
+<h2>Adding a flatblock to your template<a class="headerlink" href="#adding-a-flatblock-to-your-template" title="Permalink to this headline">¶</a></h2>
+<p>When creating a project, keep an eye out for textual content in the templates that may need revisions. These sections can be replaced with flatblock template tags:</p>
+<div class="highlight-python"><pre>{% load flatblock_tags %}
+&lt;p&gt;{% flatblock "intro paragraph" %}&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="section" id="creating-flatblock-content">
+<h2>Creating flatblock content<a class="headerlink" href="#creating-flatblock-content" title="Permalink to this headline">¶</a></h2>
+<p>Through the admin interface, <tt class="docutils literal"><span class="pre">/admin/flatblocks/flatblock/</span></tt>, you can add and edit the flatblocks. The only two fields we use are the slug or short description used in the template tag (e.g. &#8220;intro paragraph&#8221;) and the content itself.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Content text is delivered directly to the html template without modification. This means that you <em>can</em> insert html tags. But keep in mind you are editing a live site and any html tags have the potential to alter the layout!</p>
+</div>
+</div>
+<div class="section" id="permissions">
+<h2>Permissions<a class="headerlink" href="#permissions" title="Permalink to this headline">¶</a></h2>
+<p>You can select certain groups and/or users who are able to add, change or delete flatblocks. Since the developers will be controlling the templates (thus inserting the templatetags and formatting them, etc.) it doesn&#8217;t make sense for content managers to add or delete.
+To allow change-only permissions, go to <tt class="docutils literal"><span class="pre">/admin/auth/user/</span></tt> or <tt class="docutils literal"><span class="pre">/admin/auth/group/</span></tt>, select the user or group, and add the permission <tt class="docutils literal"><span class="pre">flatblocks</span> <span class="pre">|</span> <span class="pre">Flat</span> <span class="pre">block</span> <span class="pre">|</span> <span class="pre">Can</span> <span class="pre">change</span> <span class="pre">Flat</span> <span class="pre">block</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Managing content with flatblocks</a><ul>
+<li><a class="reference internal" href="#adding-a-flatblock-to-your-template">Adding a flatblock to your template</a></li>
+<li><a class="reference internal" href="#creating-flatblock-content">Creating flatblock content</a></li>
+<li><a class="reference internal" href="#permissions">Permissions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="management_commands.html"
+                        title="previous chapter">Madrona/Django Management Commands</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/flatblocks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="management_commands.html" title="Madrona/Django Management Commands"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

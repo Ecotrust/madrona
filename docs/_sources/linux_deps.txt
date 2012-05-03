@@ -10,7 +10,7 @@ On Ubuntu 11.10, most of the dependencies can be handled by the package manageme
     # Ubuntu packages
     sudo apt-get install python-dev gcc-4.4 \
          postgresql-9.1-postgis postgresql-server-dev-9.1 \
-         python-gdal python-imaging python-pip \
+         python-gdal python-imaging python-pip csstidy \
          apache2 libapache2-mod-wsgi
      
     # Mapnik

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.formatter.text_xml</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        <a href="madrona.common.feedvalidator.formatter-module.html">Package&nbsp;formatter</a> ::
+        Module&nbsp;text_xml
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.feedvalidator.formatter.text_xml-module.html">Module madrona.common.feedvalidator.formatter.text_xml</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""$Id: text_xml.py 988 2008-03-12 18:22:48Z sa3ruby $"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">"Sam Ruby &lt;http://intertwingly.net/&gt; and Mark Pilgrim &lt;http://diveintomark.org/&gt;"</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-name">__version__</tt> <tt class="py-op">=</tt> <tt class="py-string">"$Revision: 988 $"</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable madrona.common.feedvalidator.formatter.base.__copyright__=madrona.common.feedvalidator.formatter.base-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_html.__copyright__=madrona.common.feedvalidator.formatter.text_html-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_plain.__copyright__=madrona.common.feedvalidator.formatter.text_plain-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_xml.__copyright__=madrona.common.feedvalidator.formatter.text_xml-module.html#__copyright__"><a title="madrona.common.feedvalidator.formatter.base.__copyright__
+madrona.common.feedvalidator.formatter.text_html.__copyright__
+madrona.common.feedvalidator.formatter.text_plain.__copyright__
+madrona.common.feedvalidator.formatter.text_xml.__copyright__" class="py-name" href="#" onclick="return doclink('link-0', '__copyright__', 'link-0');">__copyright__</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Copyright (c) 2002 Sam Ruby and Mark Pilgrim"</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-string">"""Output class for xml output"""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Module madrona.common.feedvalidator.base=madrona.common.feedvalidator.base-module.html,Module madrona.common.feedvalidator.formatter.base=madrona.common.feedvalidator.formatter.base-module.html"><a title="madrona.common.feedvalidator.base
+madrona.common.feedvalidator.formatter.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class madrona.common.feedvalidator.formatter.base.BaseFormatter=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter" class="py-name" href="#" onclick="return doclink('link-2', 'BaseFormatter', 'link-2');">BaseFormatter</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-3', 'madrona', 'link-3');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package madrona.common=madrona.common-module.html"><a title="madrona.common" class="py-name" href="#" onclick="return doclink('link-4', 'common', 'link-4');">common</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Package madrona.common.feedvalidator=madrona.common.feedvalidator-module.html"><a title="madrona.common.feedvalidator" class="py-name" href="#" onclick="return doclink('link-5', 'feedvalidator', 'link-5');">feedvalidator</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Module madrona.common.feedvalidator.logging=madrona.common.feedvalidator.logging-module.html"><a title="madrona.common.feedvalidator.logging" class="py-name" href="#" onclick="return doclink('link-6', 'logging', 'link-6');">logging</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-7', 'madrona', 'link-3');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="madrona.common" class="py-name" href="#" onclick="return doclink('link-8', 'common', 'link-4');">common</a></tt> <tt class="py-keyword">import</tt> <tt id="link-9" class="py-name"><a title="madrona.common.feedvalidator" class="py-name" href="#" onclick="return doclink('link-9', 'feedvalidator', 'link-5');">feedvalidator</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"> </tt>
+<a name="xmlEncode"></a><div id="xmlEncode-def"><a name="L13"></a><tt class="py-lineno">13</tt> <a class="py-toggle" href="#" id="xmlEncode-toggle" onclick="return toggle('xmlEncode');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.formatter.text_xml-module.html#xmlEncode">xmlEncode</a><tt class="py-op">(</tt><tt class="py-param">value</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="xmlEncode-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="xmlEncode-expanded"><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">  <tt id="link-10" class="py-name" targets="Variable madrona.xyquery.models.Attribute.value=madrona.xyquery.models.Attribute-class.html#value"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-10', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-11', 'value', 'link-10');">value</a></tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'&amp;'</tt><tt class="py-op">,</tt> <tt class="py-string">'&amp;amp;'</tt><tt class="py-op">)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">  <tt id="link-12" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-12', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-13', 'value', 'link-10');">value</a></tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'&lt;'</tt><tt class="py-op">,</tt> <tt class="py-string">'&amp;lt;'</tt><tt class="py-op">)</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">  <tt id="link-14" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-14', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-15', 'value', 'link-10');">value</a></tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'&gt;'</tt><tt class="py-op">,</tt> <tt class="py-string">'&amp;gt;'</tt><tt class="py-op">)</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">  <tt id="link-16" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-16', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-17', 'value', 'link-10');">value</a></tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'"'</tt><tt class="py-op">,</tt> <tt class="py-string">'&amp;quot;'</tt><tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">  <tt id="link-18" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-18', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-19', 'value', 'link-10');">value</a></tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">"'"</tt><tt class="py-op">,</tt> <tt class="py-string">'&amp;apos;'</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">  <tt class="py-keyword">return</tt> <tt id="link-20" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-20', 'value', 'link-10');">value</a></tt> </tt>
+</div><a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"> </tt>
+<a name="Formatter"></a><div id="Formatter-def"><a name="L21"></a><tt class="py-lineno">21</tt> <a class="py-toggle" href="#" id="Formatter-toggle" onclick="return toggle('Formatter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.feedvalidator.formatter.text_xml.Formatter-class.html">Formatter</a><tt class="py-op">(</tt><tt class="py-base-class">BaseFormatter</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Formatter-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Formatter-expanded"><a name="Formatter.format"></a><div id="Formatter.format-def"><a name="L22"></a><tt class="py-lineno">22</tt> <a class="py-toggle" href="#" id="Formatter.format-toggle" onclick="return toggle('Formatter.format');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.formatter.text_xml.Formatter-class.html#format">format</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">event</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Formatter.format-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="Formatter.format-expanded"><a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt class="py-name">params</tt> <tt class="py-op">=</tt> <tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">params</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">    <tt class="py-name">params</tt><tt class="py-op">[</tt><tt class="py-string">'type'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">    <tt class="py-name">params</tt><tt class="py-op">[</tt><tt class="py-string">'text'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method madrona.common.feedvalidator.formatter.base.BaseFormatter.getMessage()=madrona.common.feedvalidator.formatter.base.BaseFormatter-class.html#getMessage"><a title="madrona.common.feedvalidator.formatter.base.BaseFormatter.getMessage" class="py-name" href="#" onclick="return doclink('link-21', 'getMessage', 'link-21');">getMessage</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">    <tt class="py-comment"># determine the level of severity</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">    <tt class="py-name">level</tt> <tt class="py-op">=</tt> <tt class="py-string">'unknown'</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">,</tt><tt id="link-22" class="py-name" targets="Class madrona.common.feedvalidator.logging.Info=madrona.common.feedvalidator.logging.Info-class.html"><a title="madrona.common.feedvalidator.logging.Info" class="py-name" href="#" onclick="return doclink('link-22', 'Info', 'link-22');">Info</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">level</tt> <tt class="py-op">=</tt> <tt class="py-string">'info'</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">,</tt><tt id="link-23" class="py-name" targets="Class madrona.common.feedvalidator.logging.Warning=madrona.common.feedvalidator.logging.Warning-class.html"><a title="madrona.common.feedvalidator.logging.Warning" class="py-name" href="#" onclick="return doclink('link-23', 'Warning', 'link-23');">Warning</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">level</tt> <tt class="py-op">=</tt> <tt class="py-string">'warning'</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">,</tt><tt id="link-24" class="py-name" targets="Class madrona.common.feedvalidator.logging.Error=madrona.common.feedvalidator.logging.Error-class.html,Variable madrona.common.feedvalidator.timeoutsocket.Error=madrona.common.feedvalidator.timeoutsocket-module.html#Error"><a title="madrona.common.feedvalidator.logging.Error
+madrona.common.feedvalidator.timeoutsocket.Error" class="py-name" href="#" onclick="return doclink('link-24', 'Error', 'link-24');">Error</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-name">level</tt> <tt class="py-op">=</tt> <tt class="py-string">'error'</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt class="py-name">params</tt><tt class="py-op">[</tt><tt class="py-string">'level'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">level</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-comment"># organize fixed elements into a known order</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">    <tt class="py-name">order</tt> <tt class="py-op">=</tt> <tt class="py-name">params</tt><tt class="py-op">.</tt><tt class="py-name">keys</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">    <tt class="py-name">order</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Class madrona.common.feedvalidator.cf.sort=madrona.common.feedvalidator.cf.sort-class.html"><a title="madrona.common.feedvalidator.cf.sort" class="py-name" href="#" onclick="return doclink('link-25', 'sort', 'link-25');">sort</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-26" class="py-name" targets="Variable madrona.common.models.KmlCache.key=madrona.common.models.KmlCache-class.html#key,Variable madrona.xyquery.models.Attribute.key=madrona.xyquery.models.Attribute-class.html#key"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-26', 'key', 'link-26');">key</a></tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-string">'msgcount'</tt><tt class="py-op">,</tt> <tt class="py-string">'text'</tt><tt class="py-op">,</tt> <tt class="py-string">'column'</tt><tt class="py-op">,</tt> <tt class="py-string">'line'</tt><tt class="py-op">,</tt> <tt class="py-string">'type'</tt><tt class="py-op">,</tt> <tt class="py-string">'level'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">      <tt class="py-keyword">if</tt> <tt id="link-27" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-27', 'key', 'link-26');">key</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">order</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-name">order</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method madrona.features.models.FeatureCollection.remove()=madrona.features.models.FeatureCollection-class.html#remove"><a title="madrona.features.models.FeatureCollection.remove" class="py-name" href="#" onclick="return doclink('link-28', 'remove', 'link-28');">remove</a></tt><tt class="py-op">(</tt><tt id="link-29" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-29', 'key', 'link-26');">key</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-name">order</tt><tt class="py-op">.</tt><tt class="py-name">insert</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt><tt id="link-30" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-30', 'key', 'link-26');">key</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">           </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt class="py-comment"># output the elements</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt id="link-31" class="py-name" targets="Method madrona.manipulators.manipulators.BaseManipulator.result()=madrona.manipulators.manipulators.BaseManipulator-class.html#result"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-31', 'result', 'link-31');">result</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"&lt;%s&gt;\n"</tt> <tt class="py-op">%</tt> <tt class="py-name">level</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-32" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-32', 'key', 'link-26');">key</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">order</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">      <tt id="link-33" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-33', 'value', 'link-10');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name" targets="Function madrona.common.feedvalidator.formatter.text_xml.xmlEncode()=madrona.common.feedvalidator.formatter.text_xml-module.html#xmlEncode"><a title="madrona.common.feedvalidator.formatter.text_xml.xmlEncode" class="py-name" href="#" onclick="return doclink('link-34', 'xmlEncode', 'link-34');">xmlEncode</a></tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">params</tt><tt class="py-op">[</tt><tt id="link-35" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-35', 'key', 'link-26');">key</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">      <tt class="py-name">pub_key</tt> <tt class="py-op">=</tt> <tt id="link-36" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-36', 'key', 'link-26');">key</a></tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">      <tt class="py-keyword">if</tt> <tt id="link-37" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-37', 'key', 'link-26');">key</a></tt> <tt class="py-op">==</tt> <tt class="py-string">"backupcolumn"</tt><tt class="py-op">:</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-name">pubkey</tt> <tt class="py-op">=</tt> <tt class="py-string">"column"</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">      <tt class="py-keyword">elif</tt> <tt id="link-38" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-38', 'key', 'link-26');">key</a></tt> <tt class="py-op">==</tt> <tt class="py-string">"backupline"</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">        <tt class="py-name">pubkey</tt> <tt class="py-op">=</tt> <tt class="py-string">"line"</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">      <tt id="link-39" class="py-name"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-39', 'result', 'link-31');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-40', 'result', 'link-31');">result</a></tt> <tt class="py-op">+</tt> <tt class="py-op">(</tt><tt class="py-string">"  &lt;%s&gt;%s&lt;/%s&gt;\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-41" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-41', 'key', 'link-26');">key</a></tt><tt class="py-op">,</tt> <tt id="link-42" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-42', 'value', 'link-10');">value</a></tt><tt class="py-op">,</tt> <tt id="link-43" class="py-name"><a title="madrona.common.models.KmlCache.key
+madrona.xyquery.models.Attribute.key" class="py-name" href="#" onclick="return doclink('link-43', 'key', 'link-26');">key</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt id="link-44" class="py-name"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-44', 'result', 'link-31');">result</a></tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-45', 'result', 'link-31');">result</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"&lt;/%s&gt;\n"</tt> <tt class="py-op">%</tt> <tt class="py-name">level</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-46" class="py-name"><a title="madrona.manipulators.manipulators.BaseManipulator.result" class="py-name" href="#" onclick="return doclink('link-46', 'result', 'link-31');">result</a></tt> </tt>
+</div></div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:28 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

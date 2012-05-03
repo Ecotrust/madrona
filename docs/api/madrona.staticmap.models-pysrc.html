@@ -79,31 +79,31 @@ madrona.user_profile.models
 madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-0', 'models', 'link-0');">models</a></tt> </tt>
 <a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
 <a name="MapConfig"></a><div id="MapConfig-def"><a name="L3"></a><tt class="py-lineno"> 3</tt> <a class="py-toggle" href="#" id="MapConfig-toggle" onclick="return toggle('MapConfig');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.staticmap.models.MapConfig-class.html">MapConfig</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="MapConfig-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="MapConfig-expanded"><a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line">    <tt class="py-docstring">"""Model used for representing a map (ie a collection of styled map layers)</tt> </tt>
+</div><div id="MapConfig-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="MapConfig-expanded"><a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line">    <tt class="py-docstring">"""Model used for representing a map (ie a collection of styled map layers)</tt> </tt>
 <a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
-<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        Attribute               Description</tt> </tt>
-<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        Attribute               Description</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
 <a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">        ``mapname``             Name of the map. Will be refered to by URL so </tt> </tt>
-<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">                                use http friendly names (no spaces, slashes, etc)</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">        ``mapname``             Name of the map. Will be refered to by URL so </tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">                                use http friendly names (no spaces, slashes, etc)</tt> </tt>
 <a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">        ``mapfile``             Mapnik xml configuration file that defines data </tt> </tt>
-<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">                                sources and styles. All paths within xml must be </tt> </tt>
-<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">                                relative to media/staticmap/</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">        ``mapfile``             Mapnik xml configuration file that defines data </tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">                                sources and styles. All paths within xml must be </tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">                                relative to media/staticmap/</tt> </tt>
 <a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_x1``          LL X coordinate</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_x1``          LL X coordinate</tt> </tt>
 <a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_y1``          LL Y coordinate</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_y1``          LL Y coordinate</tt> </tt>
 <a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_x2``          UR X coordinate</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_x2``          UR X coordinate</tt> </tt>
 <a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_y2``          UR Y coordinate</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_y2``          UR Y coordinate</tt> </tt>
 <a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_width``       Default image width (pixels)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_width``       Default image width (pixels)</tt> </tt>
 <a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_height``      Default image height (pixels)</tt> </tt>
-<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-docstring">        ``default_height``      Default image height (pixels)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-docstring">        ======================  ==============================================</tt> </tt>
 <a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt>    </tt>
 <a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
 <a name="MapConfig.__unicode__"></a><div id="MapConfig.__unicode__-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="MapConfig.__unicode__-toggle" onclick="return toggle('MapConfig.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.staticmap.models.MapConfig-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
@@ -156,9 +156,9 @@ madrona.staticmap.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
-madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-6', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FileField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-string">'staticmap/'</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"""</tt> </tt>
-<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-string">        Mapnik xml configuration file that defines data sources and styles. </tt> </tt>
-<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-string">        All paths within xml must be relative to media/staticmap/</tt> </tt>
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-6', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FileField</tt><tt class="py-op">(</tt><tt class="py-name">upload_to</tt><tt class="py-op">=</tt><tt class="py-string">'staticmap/'</tt><tt class="py-op">,</tt> <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"""</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-string">        Mapnik xml configuration file that defines data sources and styles. </tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-string">        All paths within xml must be relative to media/staticmap/</tt> </tt>
 <a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-string">    """</tt><tt class="py-op">,</tt> <tt class="py-name">blank</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">max_length</tt><tt class="py-op">=</tt><tt class="py-number">510</tt><tt class="py-op">)</tt> </tt>
 <a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable madrona.staticmap.models.MapConfig.default_x1=madrona.staticmap.models.MapConfig-class.html#default_x1"><a title="madrona.staticmap.models.MapConfig.default_x1" class="py-name" href="#" onclick="return doclink('link-7', 'default_x1', 'link-7');">default_x1</a></tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
@@ -183,7 +183,7 @@ madrona.staticmap.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
-madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-8', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-8', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
 <a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Lower-left X coordinate of default map extent. Units and spatial reference system are defined in the mapnik xml."</tt><tt class="py-op">)</tt> </tt>
 <a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">    <tt id="link-9" class="py-name" targets="Variable madrona.staticmap.models.MapConfig.default_y1=madrona.staticmap.models.MapConfig-class.html#default_y1"><a title="madrona.staticmap.models.MapConfig.default_y1" class="py-name" href="#" onclick="return doclink('link-9', 'default_y1', 'link-9');">default_y1</a></tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
@@ -208,7 +208,7 @@ madrona.staticmap.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
-madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-10', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-10', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
 <a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Lower-left Y coordinate of default map extent. Units and spatial reference system are defined in the mapnik xml."</tt><tt class="py-op">)</tt> </tt>
 <a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt id="link-11" class="py-name" targets="Variable madrona.staticmap.models.MapConfig.default_x2=madrona.staticmap.models.MapConfig-class.html#default_x2"><a title="madrona.staticmap.models.MapConfig.default_x2" class="py-name" href="#" onclick="return doclink('link-11', 'default_x2', 'link-11');">default_x2</a></tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
@@ -233,7 +233,7 @@ madrona.staticmap.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
-madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-12', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-12', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
 <a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Upper-right X coordinate of default map extent. Units and spatial reference system are defined in the mapnik xml."</tt><tt class="py-op">)</tt> </tt>
 <a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Variable madrona.staticmap.models.MapConfig.default_y2=madrona.staticmap.models.MapConfig-class.html#default_y2"><a title="madrona.staticmap.models.MapConfig.default_y2" class="py-name" href="#" onclick="return doclink('link-13', 'default_y2', 'link-13');">default_y2</a></tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
@@ -258,7 +258,7 @@ madrona.staticmap.models
 madrona.studyregion.models
 madrona.unit_converter.models
 madrona.user_profile.models
-madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-14', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-14', 'models', 'link-0');">models</a></tt><tt class="py-op">.</tt><tt class="py-name">FloatField</tt><tt class="py-op">(</tt> </tt>
 <a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">            <tt class="py-name">help_text</tt><tt class="py-op">=</tt><tt class="py-string">"Upper-right Y coordinate of default map extent. Units and spatial reference system are defined in the mapnik xml."</tt><tt class="py-op">)</tt> </tt>
 <a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">    <tt id="link-15" class="py-name" targets="Variable madrona.staticmap.models.MapConfig.default_width=madrona.staticmap.models.MapConfig-class.html#default_width"><a title="madrona.staticmap.models.MapConfig.default_width" class="py-name" href="#" onclick="return doclink('link-15', 'default_width', 'link-15');">default_width</a></tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
@@ -365,7 +365,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Apr  2 13:16:03 2012
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:24 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

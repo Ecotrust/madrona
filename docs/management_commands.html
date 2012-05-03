@@ -1,0 +1,147 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Madrona/Django Management Commands &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0b1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="next" title="Managing content with flatblocks" href="flatblocks.html" />
+    <link rel="prev" title="Export Options" href="export.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="Export Options"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-django-management-commands">
+<span id="management-commands"></span><h1>Madrona/Django Management Commands<a class="headerlink" href="#madrona-django-management-commands" title="Permalink to this headline">¶</a></h1>
+<p>Type <tt class="docutils literal"><span class="pre">manage.py</span> <span class="pre">help</span> <span class="pre">&lt;subcommand&gt;</span></tt> for help on a specific subcommand.</p>
+<p>Commonly used subcommands:</p>
+<div class="highlight-python"><pre>[auth]
+    createsuperuser  # create a super user from the command line
+
+[common]
+    clear_cache  # clears the django cache
+    install_cleangeometry  # installs the cleangeometry.sql PLPGSQL function
+    install_media  # compiles madrona and project media to a single mediaroot directory
+    runprofileserver  # runs a development server but with profiling output
+    site  # sets the domain the site is running on
+
+[django]
+    dbshell  # the postgres shell
+    dumpdata  # dump model as json fixture
+    loaddata  # load data from json fixuture
+    runserver # run the dev server
+    shell  # django ipython shell
+
+[djcelery]
+    celeryd  # start the async process server
+
+[features]
+    enable_sharing  # enable sharing controls for groups
+
+[gis]
+    ogrinspect  # bootstraps creating models from shapefiles
+
+[south]
+    migrate  # apply any outstanding migrations
+    schemamigration  # create a new migration to reflect model changes
+    syncdb  # create tables for apps not under migration
+
+[studyregion]
+    create_study_region  # create a study region from a polygon shapefile</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="export.html"
+                        title="previous chapter">Export Options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="flatblocks.html"
+                        title="next chapter">Managing content with flatblocks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/management_commands.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="Export Options"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

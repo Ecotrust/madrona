@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.skipDays</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        Module&nbsp;skipDays
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.feedvalidator.skipDays-module.html">Module madrona.common.feedvalidator.skipDays</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""$Id: skipDays.py 988 2008-03-12 18:22:48Z sa3ruby $"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">"Sam Ruby &lt;http://intertwingly.net/&gt; and Mark Pilgrim &lt;http://diveintomark.org/&gt;"</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-name">__version__</tt> <tt class="py-op">=</tt> <tt class="py-string">"$Revision: 988 $"</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable madrona.common.feedvalidator.formatter.base.__copyright__=madrona.common.feedvalidator.formatter.base-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_html.__copyright__=madrona.common.feedvalidator.formatter.text_html-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_plain.__copyright__=madrona.common.feedvalidator.formatter.text_plain-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_xml.__copyright__=madrona.common.feedvalidator.formatter.text_xml-module.html#__copyright__"><a title="madrona.common.feedvalidator.formatter.base.__copyright__
+madrona.common.feedvalidator.formatter.text_html.__copyright__
+madrona.common.feedvalidator.formatter.text_plain.__copyright__
+madrona.common.feedvalidator.formatter.text_xml.__copyright__" class="py-name" href="#" onclick="return doclink('link-0', '__copyright__', 'link-0');">__copyright__</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Copyright (c) 2002 Sam Ruby and Mark Pilgrim"</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Module madrona.common.feedvalidator.base=madrona.common.feedvalidator.base-module.html,Module madrona.common.feedvalidator.formatter.base=madrona.common.feedvalidator.formatter.base-module.html"><a title="madrona.common.feedvalidator.base
+madrona.common.feedvalidator.formatter.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class madrona.common.feedvalidator.base.validatorBase=madrona.common.feedvalidator.base.validatorBase-class.html"><a title="madrona.common.feedvalidator.base.validatorBase" class="py-name" href="#" onclick="return doclink('link-2', 'validatorBase', 'link-2');">validatorBase</a></tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Module madrona.common.feedvalidator.validators=madrona.common.feedvalidator.validators-module.html"><a title="madrona.common.feedvalidator.validators" class="py-name" href="#" onclick="return doclink('link-3', 'validators', 'link-3');">validators</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Class madrona.common.feedvalidator.validators.text=madrona.common.feedvalidator.validators.text-class.html"><a title="madrona.common.feedvalidator.validators.text" class="py-name" href="#" onclick="return doclink('link-4', 'text', 'link-4');">text</a></tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-5" class="py-name" targets="Module madrona.common.feedvalidator.logging=madrona.common.feedvalidator.logging-module.html"><a title="madrona.common.feedvalidator.logging" class="py-name" href="#" onclick="return doclink('link-5', 'logging', 'link-5');">logging</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"># skipDays element</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="skipDays"></a><div id="skipDays-def"><a name="L14"></a><tt class="py-lineno">14</tt> <a class="py-toggle" href="#" id="skipDays-toggle" onclick="return toggle('skipDays');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.skipDays-class.html">skipDays</a><tt class="py-op">(</tt><tt class="py-base-class">validatorBase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="skipDays-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="skipDays-expanded"><a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">     </tt>
+<a name="skipDays.__init__"></a><div id="skipDays.__init__-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="skipDays.__init__-toggle" onclick="return toggle('skipDays.__init__');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.skipDays-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="skipDays.__init__-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="skipDays.__init__-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">days</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt id="link-6" class="py-name"><a title="madrona.common.feedvalidator.base.validatorBase" class="py-name" href="#" onclick="return doclink('link-6', 'validatorBase', 'link-2');">validatorBase</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method madrona.analysistools.grass.Grass.__init__()=madrona.analysistools.grass.Grass-class.html#__init__,Method madrona.analysistools.widgets.DualSliderWidget.__init__()=madrona.analysistools.widgets.DualSliderWidget-class.html#__init__,Method madrona.analysistools.widgets.SimplePoint.__init__()=madrona.analysistools.widgets.SimplePoint-class.html#__init__,Method madrona.analysistools.widgets.SliderWidget.__init__()=madrona.analysistools.widgets.SliderWidget-class.html#__init__,Method madrona.bookmarks.widgets.BookmarkWidget.__init__()=madrona.bookmarks.widgets.BookmarkWidget-class.html#__init__,Method madrona.common.feedvalidator.base.SAXDispatcher.__init__()=madrona.common.feedvalidator.base.SAXDispatcher-class.html#__init__,Method madrona.common.feedvalidator.base.validatorBase.__init__()=madrona.common.feedvalidator.base.validatorBase-class.html#__init__,Method madrona.common.feedvalidator.channel.channel.__init__()=madrona.common.feedvalidator.channel.channel-class.html#__init__,Method madrona.common.feedvalidator.channel.rss20Channel.__init__()=madrona.common.feedvalidator.channel.rss20Channel-class.html#__init__,Method madrona.common.feedvalidator.content.diveater.__init__()=madrona.common.feedvalidator.content.diveater-class.html#__init__,Method madrona.common.feedvalidator.formatter.text_html.Formatter.__init__()=madrona.common.feedvalidator.formatter.text_html.Formatter-class.html#__init__,Method madrona.common.feedvalidator.itunes.category.__init__()=madrona.common.feedvalidator.itunes.category-class.html#__init__,Method madrona.common.feedvalidator.itunes.subcategory.__init__()=madrona.common.feedvalidator.itunes.subcategory-class.html#__init__,Method madrona.common.feedvalidator.logging.LoggedEvent.__init__()=madrona.common.feedvalidator.logging.LoggedEvent-class.html#__init__,Method madrona.common.feedvalidator.logging.ValidationFailure.__init__()=madrona.common.feedvalidator.logging.ValidationFailure-class.html#__init__,Method madrona.common.feedvalidator.opensearch.OpenSearchDescription.__init__()=madrona.common.feedvalidator.opensearch.OpenSearchDescription-class.html#__init__,Method madrona.common.feedvalidator.rdf.rdfExtension.__init__()=madrona.common.feedvalidator.rdf.rdfExtension-class.html#__init__,Method madrona.common.feedvalidator.root.root.__init__()=madrona.common.feedvalidator.root.root-class.html#__init__,Method madrona.common.feedvalidator.skipDays.skipDays.__init__()=madrona.common.feedvalidator.skipDays.skipDays-class.html#__init__,Method madrona.common.feedvalidator.skipHours.skipHours.__init__()=madrona.common.feedvalidator.skipHours.skipHours-class.html#__init__,Method madrona.common.feedvalidator.timeoutsocket.TimeoutFile.__init__()=madrona.common.feedvalidator.timeoutsocket.TimeoutFile-class.html#__init__,Method madrona.common.feedvalidator.timeoutsocket.TimeoutSocket.__init__()=madrona.common.feedvalidator.timeoutsocket.TimeoutSocket-class.html#__init__,Method madrona.common.feedvalidator.uri.Uri.__init__()=madrona.common.feedvalidator.uri.Uri-class.html#__init__,Method madrona.common.feedvalidator.validators.HTMLValidator.__init__()=madrona.common.feedvalidator.validators.HTMLValidator-class.html#__init__,Method madrona.common.feedvalidator.validators.lengthLimitedText.__init__()=madrona.common.feedvalidator.validators.lengthLimitedText-class.html#__init__,Method madrona.common.feedvalidator.validators.noduplicates.__init__()=madrona.common.feedvalidator.validators.noduplicates-class.html#__init__,Method madrona.common.feedvalidator.validators.nows.__init__()=madrona.common.feedvalidator.validators.nows-class.html#__init__,Method madrona.common.feedvalidator.validators.unique.__init__()=madrona.common.feedvalidator.validators.unique-class.html#__init__,Method madrona.common.feedvalidator.xmlEncoding.FailingCodec.__init__()=madrona.common.feedvalidator.xmlEncoding.FailingCodec-class.html#__init__,Method madrona.common.forms.ShortTextarea.__init__()=madrona.common.forms.ShortTextarea-class.html#__init__,Method madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.__init__()=madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode-class.html#__init__,Method madrona.common.templatetags.absurl.AbsoluteURLNode.__init__()=madrona.common.templatetags.absurl.AbsoluteURLNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.BackLinkNode.__init__()=madrona.common.templatetags.layout_tags.BackLinkNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.FooterNode.__init__()=madrona.common.templatetags.layout_tags.FooterNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.HomeLinkNode.__init__()=madrona.common.templatetags.layout_tags.HomeLinkNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.PanelNode.__init__()=madrona.common.templatetags.layout_tags.PanelNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.TabNode.__init__()=madrona.common.templatetags.layout_tags.TabNode-class.html#__init__,Method madrona.common.templatetags.layout_tags.TabPanelNode.__init__()=madrona.common.templatetags.layout_tags.TabPanelNode-class.html#__init__,Method madrona.common.templatetags.set_var.SetVarNode.__init__()=madrona.common.templatetags.set_var.SetVarNode-class.html#__init__,Method madrona.common.test_settings_manager.SettingsTestCase.__init__()=madrona.common.test_settings_manager.SettingsTestCase-class.html#__init__,Method madrona.common.test_settings_manager.TestSettingsManager.__init__()=madrona.common.test_settings_manager.TestSettingsManager-class.html#__init__,Method madrona.common.uaparser.browser_platform.__init__()=madrona.common.uaparser.browser_platform-class.html#__init__,Method madrona.common.uaparser.parser.UserAgent.__init__()=madrona.common.uaparser.parser.UserAgent-class.html#__init__,Method madrona.common.uaparser.parser.UserAgentParser.__init__()=madrona.common.uaparser.parser.UserAgentParser-class.html#__init__,Method madrona.features.FeatureOptions.__init__()=madrona.features.FeatureOptions-class.html#__init__,Method madrona.features.Link.__init__()=madrona.features.Link-class.html#__init__,Method madrona.features.forms.SpatialFeatureForm.__init__()=madrona.features.forms.SpatialFeatureForm-class.html#__init__,Method madrona.google-analytics.templatetags.analytics.AnalyticsNode.__init__()=madrona.google-analytics.templatetags.analytics.AnalyticsNode-class.html#__init__,Method madrona.manipulators.manipulators.BaseManipulator.HaltManipulations.__init__()=madrona.manipulators.manipulators.BaseManipulator.HaltManipulations-class.html#__init__,Method madrona.manipulators.manipulators.BaseManipulator.InternalException.__init__()=madrona.manipulators.manipulators.BaseManipulator.InternalException-class.html#__init__,Method madrona.manipulators.manipulators.BaseManipulator.InvalidGeometryException.__init__()=madrona.manipulators.manipulators.BaseManipulator.InvalidGeometryException-class.html#__init__,Method madrona.manipulators.manipulators.BaseManipulator.__init__()=madrona.manipulators.manipulators.BaseManipulator-class.html#__init__,Method madrona.manipulators.manipulators.ClipToGraticuleManipulator.GraticuleBoxBuilder.__init__()=madrona.manipulators.manipulators.ClipToGraticuleManipulator.GraticuleBoxBuilder-class.html#__init__,Method madrona.manipulators.manipulators.ClipToGraticuleManipulator.__init__()=madrona.manipulators.manipulators.ClipToGraticuleManipulator-class.html#__init__,Method madrona.manipulators.manipulators.ClipToShapeManipulator.__init__()=madrona.manipulators.manipulators.ClipToShapeManipulator-class.html#__init__,Method madrona.manipulators.manipulators.ClipToStudyRegionManipulator.__init__()=madrona.manipulators.manipulators.ClipToStudyRegionManipulator-class.html#__init__,Method madrona.manipulators.manipulators.DifferenceFromShapeManipulator.__init__()=madrona.manipulators.manipulators.DifferenceFromShapeManipulator-class.html#__init__,Method madrona.manipulators.manipulators.NullManipulator.__init__()=madrona.manipulators.manipulators.NullManipulator-class.html#__init__,Method madrona.manipulators.tests.TestManipulator.__init__()=madrona.manipulators.tests.TestManipulator-class.html#__init__,Method madrona.openid.forms.AssociateOpenID.__init__()=madrona.openid.forms.AssociateOpenID-class.html#__init__,Method madrona.openid.forms.OpenidRegisterForm.__init__()=madrona.openid.forms.OpenidRegisterForm-class.html#__init__,Method madrona.openid.openid_store.DjangoOpenIDStore.__init__()=madrona.openid.openid_store.DjangoOpenIDStore-class.html#__init__,Method madrona.openid.utils.OpenID.__init__()=madrona.openid.utils.OpenID-class.html#__init__,Method madrona.shapes.views.export.ShpResponder.__init__()=madrona.shapes.views.export.ShpResponder-class.html#__init__"><a title="madrona.analysistools.grass.Grass.__init__
+madrona.analysistools.widgets.DualSliderWidget.__init__
+madrona.analysistools.widgets.SimplePoint.__init__
+madrona.analysistools.widgets.SliderWidget.__init__
+madrona.bookmarks.widgets.BookmarkWidget.__init__
+madrona.common.feedvalidator.base.SAXDispatcher.__init__
+madrona.common.feedvalidator.base.validatorBase.__init__
+madrona.common.feedvalidator.channel.channel.__init__
+madrona.common.feedvalidator.channel.rss20Channel.__init__
+madrona.common.feedvalidator.content.diveater.__init__
+madrona.common.feedvalidator.formatter.text_html.Formatter.__init__
+madrona.common.feedvalidator.itunes.category.__init__
+madrona.common.feedvalidator.itunes.subcategory.__init__
+madrona.common.feedvalidator.logging.LoggedEvent.__init__
+madrona.common.feedvalidator.logging.ValidationFailure.__init__
+madrona.common.feedvalidator.opensearch.OpenSearchDescription.__init__
+madrona.common.feedvalidator.rdf.rdfExtension.__init__
+madrona.common.feedvalidator.root.root.__init__
+madrona.common.feedvalidator.skipDays.skipDays.__init__
+madrona.common.feedvalidator.skipHours.skipHours.__init__
+madrona.common.feedvalidator.timeoutsocket.TimeoutFile.__init__
+madrona.common.feedvalidator.timeoutsocket.TimeoutSocket.__init__
+madrona.common.feedvalidator.uri.Uri.__init__
+madrona.common.feedvalidator.validators.HTMLValidator.__init__
+madrona.common.feedvalidator.validators.lengthLimitedText.__init__
+madrona.common.feedvalidator.validators.noduplicates.__init__
+madrona.common.feedvalidator.validators.nows.__init__
+madrona.common.feedvalidator.validators.unique.__init__
+madrona.common.feedvalidator.xmlEncoding.FailingCodec.__init__
+madrona.common.forms.ShortTextarea.__init__
+madrona.common.templatetags.absolute_media_url.AbsoluteMediaUrlNode.__init__
+madrona.common.templatetags.absurl.AbsoluteURLNode.__init__
+madrona.common.templatetags.layout_tags.BackLinkNode.__init__
+madrona.common.templatetags.layout_tags.FooterNode.__init__
+madrona.common.templatetags.layout_tags.HomeLinkNode.__init__
+madrona.common.templatetags.layout_tags.PanelNode.__init__
+madrona.common.templatetags.layout_tags.TabNode.__init__
+madrona.common.templatetags.layout_tags.TabPanelNode.__init__
+madrona.common.templatetags.set_var.SetVarNode.__init__
+madrona.common.test_settings_manager.SettingsTestCase.__init__
+madrona.common.test_settings_manager.TestSettingsManager.__init__
+madrona.common.uaparser.browser_platform.__init__
+madrona.common.uaparser.parser.UserAgent.__init__
+madrona.common.uaparser.parser.UserAgentParser.__init__
+madrona.features.FeatureOptions.__init__
+madrona.features.Link.__init__
+madrona.features.forms.SpatialFeatureForm.__init__
+madrona.google-analytics.templatetags.analytics.AnalyticsNode.__init__
+madrona.manipulators.manipulators.BaseManipulator.HaltManipulations.__init__
+madrona.manipulators.manipulators.BaseManipulator.InternalException.__init__
+madrona.manipulators.manipulators.BaseManipulator.InvalidGeometryException.__init__
+madrona.manipulators.manipulators.BaseManipulator.__init__
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.GraticuleBoxBuilder.__init__
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.__init__
+madrona.manipulators.manipulators.ClipToShapeManipulator.__init__
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.__init__
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.__init__
+madrona.manipulators.manipulators.NullManipulator.__init__
+madrona.manipulators.tests.TestManipulator.__init__
+madrona.openid.forms.AssociateOpenID.__init__
+madrona.openid.forms.OpenidRegisterForm.__init__
+madrona.openid.openid_store.DjangoOpenIDStore.__init__
+madrona.openid.utils.OpenID.__init__
+madrona.shapes.views.export.ShpResponder.__init__" class="py-name" href="#" onclick="return doclink('link-7', '__init__', 'link-7');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="skipDays.validate"></a><div id="skipDays.validate-def"><a name="L20"></a><tt class="py-lineno">20</tt> <a class="py-toggle" href="#" id="skipDays.validate-toggle" onclick="return toggle('skipDays.validate');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.skipDays-class.html#validate">validate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="skipDays.validate-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="skipDays.validate-expanded"><a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-string">"day"</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Variable madrona.common.feedvalidator.extension.Questionable.children=madrona.common.feedvalidator.extension.Questionable-class.html#children"><a title="madrona.common.feedvalidator.extension.Questionable.children" class="py-name" href="#" onclick="return doclink('link-8', 'children', 'link-8');">children</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Variable madrona.analysistools.grass.log=madrona.analysistools.grass-module.html#log,Variable madrona.bookmarks.views.log=madrona.bookmarks.views-module.html#log,Method madrona.common.feedvalidator.base.SAXDispatcher.log()=madrona.common.feedvalidator.base.SAXDispatcher-class.html#log,Method madrona.common.feedvalidator.base.validatorBase.log()=madrona.common.feedvalidator.base.validatorBase-class.html#log,Method madrona.common.feedvalidator.validators.HTMLValidator.log()=madrona.common.feedvalidator.validators.HTMLValidator-class.html#log,Variable madrona.common.utils.log=madrona.common.utils-module.html#log,Variable madrona.kmlapp.views.log=madrona.kmlapp.views-module.html#log,Variable madrona.openid.middleware.log=madrona.openid.middleware-module.html#log,Variable madrona.staticmap.views.log=madrona.staticmap.views-module.html#log"><a title="madrona.analysistools.grass.log
+madrona.bookmarks.views.log
+madrona.common.feedvalidator.base.SAXDispatcher.log
+madrona.common.feedvalidator.base.validatorBase.log
+madrona.common.feedvalidator.validators.HTMLValidator.log
+madrona.common.utils.log
+madrona.kmlapp.views.log
+madrona.openid.middleware.log
+madrona.staticmap.views.log" class="py-name" href="#" onclick="return doclink('link-9', 'log', 'link-9');">log</a></tt><tt class="py-op">(</tt><tt id="link-10" class="py-name" targets="Class madrona.common.feedvalidator.logging.MissingElement=madrona.common.feedvalidator.logging.MissingElement-class.html"><a title="madrona.common.feedvalidator.logging.MissingElement" class="py-name" href="#" onclick="return doclink('link-10', 'MissingElement', 'link-10');">MissingElement</a></tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">"parent"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-11', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"element"</tt><tt class="py-op">:</tt><tt class="py-string">"day"</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="madrona.common.feedvalidator.extension.Questionable.children" class="py-name" href="#" onclick="return doclink('link-12', 'children', 'link-8');">children</a></tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">7</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="madrona.analysistools.grass.log
+madrona.bookmarks.views.log
+madrona.common.feedvalidator.base.SAXDispatcher.log
+madrona.common.feedvalidator.base.validatorBase.log
+madrona.common.feedvalidator.validators.HTMLValidator.log
+madrona.common.utils.log
+madrona.kmlapp.views.log
+madrona.openid.middleware.log
+madrona.staticmap.views.log" class="py-name" href="#" onclick="return doclink('link-13', 'log', 'link-9');">log</a></tt><tt class="py-op">(</tt><tt id="link-14" class="py-name" targets="Class madrona.common.feedvalidator.logging.EightDaysAWeek=madrona.common.feedvalidator.logging.EightDaysAWeek-class.html"><a title="madrona.common.feedvalidator.logging.EightDaysAWeek" class="py-name" href="#" onclick="return doclink('link-14', 'EightDaysAWeek', 'link-14');">EightDaysAWeek</a></tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
+<a name="skipDays.do_day"></a><div id="skipDays.do_day-def"><a name="L26"></a><tt class="py-lineno">26</tt> <a class="py-toggle" href="#" id="skipDays.do_day-toggle" onclick="return toggle('skipDays.do_day');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.skipDays-class.html#do_day">do_day</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="skipDays.do_day-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="skipDays.do_day-expanded"><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-15" class="py-name" targets="Class madrona.common.feedvalidator.skipDays.day=madrona.common.feedvalidator.skipDays.day-class.html"><a title="madrona.common.feedvalidator.skipDays.day" class="py-name" href="#" onclick="return doclink('link-15', 'day', 'link-15');">day</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="day"></a><div id="day-def"><a name="L29"></a><tt class="py-lineno">29</tt> <a class="py-toggle" href="#" id="day-toggle" onclick="return toggle('day');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.day-class.html">day</a><tt class="py-op">(</tt><tt class="py-base-class">text</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="day-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="day-expanded"><a name="day.validate"></a><div id="day.validate-def"><a name="L30"></a><tt class="py-lineno">30</tt> <a class="py-toggle" href="#" id="day.validate-toggle" onclick="return toggle('day.validate');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.skipDays.day-class.html#validate">validate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="day.validate-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="day.validate-expanded"><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Variable madrona.xyquery.models.Attribute.value=madrona.xyquery.models.Attribute-class.html#value"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-16', 'value', 'link-16');">value</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">'Monday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Tuesday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Wednesday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Thursday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Friday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Saturday'</tt><tt class="py-op">,</tt> <tt class="py-string">'Sunday'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="madrona.analysistools.grass.log
+madrona.bookmarks.views.log
+madrona.common.feedvalidator.base.SAXDispatcher.log
+madrona.common.feedvalidator.base.validatorBase.log
+madrona.common.feedvalidator.validators.HTMLValidator.log
+madrona.common.utils.log
+madrona.kmlapp.views.log
+madrona.openid.middleware.log
+madrona.staticmap.views.log" class="py-name" href="#" onclick="return doclink('link-17', 'log', 'link-9');">log</a></tt><tt class="py-op">(</tt><tt id="link-18" class="py-name" targets="Class madrona.common.feedvalidator.logging.InvalidDay=madrona.common.feedvalidator.logging.InvalidDay-class.html"><a title="madrona.common.feedvalidator.logging.InvalidDay" class="py-name" href="#" onclick="return doclink('link-18', 'InvalidDay', 'link-18');">InvalidDay</a></tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">"parent"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-19', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"element"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-20', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"value"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-21', 'value', 'link-16');">value</a></tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-22', 'value', 'link-16');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt class="py-name">days</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="madrona.analysistools.grass.log
+madrona.bookmarks.views.log
+madrona.common.feedvalidator.base.SAXDispatcher.log
+madrona.common.feedvalidator.base.validatorBase.log
+madrona.common.feedvalidator.validators.HTMLValidator.log
+madrona.common.utils.log
+madrona.kmlapp.views.log
+madrona.openid.middleware.log
+madrona.staticmap.views.log" class="py-name" href="#" onclick="return doclink('link-23', 'log', 'link-9');">log</a></tt><tt class="py-op">(</tt><tt id="link-24" class="py-name" targets="Class madrona.common.feedvalidator.logging.DuplicateValue=madrona.common.feedvalidator.logging.DuplicateValue-class.html"><a title="madrona.common.feedvalidator.logging.DuplicateValue" class="py-name" href="#" onclick="return doclink('link-24', 'DuplicateValue', 'link-24');">DuplicateValue</a></tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">"parent"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-25', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"element"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-26', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"value"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-27', 'value', 'link-16');">value</a></tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt class="py-name">days</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-28', 'value', 'link-16');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="madrona.analysistools.grass.log
+madrona.bookmarks.views.log
+madrona.common.feedvalidator.base.SAXDispatcher.log
+madrona.common.feedvalidator.base.validatorBase.log
+madrona.common.feedvalidator.validators.HTMLValidator.log
+madrona.common.utils.log
+madrona.kmlapp.views.log
+madrona.openid.middleware.log
+madrona.staticmap.views.log" class="py-name" href="#" onclick="return doclink('link-29', 'log', 'link-9');">log</a></tt><tt class="py-op">(</tt><tt id="link-30" class="py-name" targets="Class madrona.common.feedvalidator.logging.ValidDay=madrona.common.feedvalidator.logging.ValidDay-class.html"><a title="madrona.common.feedvalidator.logging.ValidDay" class="py-name" href="#" onclick="return doclink('link-30', 'ValidDay', 'link-30');">ValidDay</a></tt><tt class="py-op">(</tt><tt class="py-op">{</tt><tt class="py-string">"parent"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-31', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"element"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-32', 'name', 'link-11');">name</a></tt><tt class="py-op">,</tt> <tt class="py-string">"value"</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-33', 'value', 'link-16');">value</a></tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:25 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

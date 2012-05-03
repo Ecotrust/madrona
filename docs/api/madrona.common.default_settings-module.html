@@ -192,12 +192,12 @@ id.middleware.OpenIDMiddleware',">'django.middleware.gzip.GZipMiddleware', <code
     </td><td class="summary">
         <a href="madrona.common.default_settings-module.html#INSTALLED_APPS" class="summary-name">INSTALLED_APPS</a> = <code title="'madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'djan\
 go.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.s\
-ites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.go\
-ogle-analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.sim\
-plefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', '\
-madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.feat\
-ures', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.open\
-id', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registr\
+ites', 'django.contrib.gis', 'flatblocks', 'compress', 'madrona.shapes\
+', 'madrona.google-analytics', 'madrona.layers', 'madrona.studyregion'\
+, 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.s\
+creencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp',\
+ 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter',\
+ 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookma\
 ...">'madrona.common', 'django.contrib.auth', 'dja<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -205,9 +205,9 @@ id', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registr\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="madrona.common.default_settings-module.html#EXCLUDE_FROM_TESTS" class="summary-name">EXCLUDE_FROM_TESTS</a> = <code title="['south', 'registration', 'django.contrib.auth', 'django.contrib.admin\
-', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.c\
-ontrib.sites', 'django.contrib.gis']">['south', 'registration', 'django.contrib<code class="variable-ellipsis">...</code></code>
+        <a href="madrona.common.default_settings-module.html#EXCLUDE_FROM_TESTS" class="summary-name">EXCLUDE_FROM_TESTS</a> = <code title="['south', 'registration', 'flatblocks', 'django.contrib.auth', 'django\
+.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessio\
+ns', 'django.contrib.sites', 'django.contrib.gis']">['south', 'registration', 'flatblocks', '<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -264,14 +264,7 @@ edia/')">os.path.realpath(os.path.dirname(os.path.abspath(<code class="variable-
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="LOGIN_REDIRECT_URL"></a><span class="summary-name">LOGIN_REDIRECT_URL</span> = <code title="'/'">'/'</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="STATIC_URL"></a><span class="summary-name">STATIC_URL</span> = <code title="'/media/admin/'">'/media/admin/'</code>
+        <a name="STATIC_URL"></a><span class="summary-name">STATIC_URL</span> = <code title="'/media/'">'/media/'</code>
     </td>
   </tr>
 <tr>
@@ -540,6 +533,41 @@ app_directories.Loader',">'django.template.loaders.filesystem.Loader'<code class
         <a name="ENFORCE_SUPPORTED_BROWSER"></a><span class="summary-name">ENFORCE_SUPPORTED_BROWSER</span> = <code title="True">True</code>
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="STARSPAN_BIN"></a><span class="summary-name">STARSPAN_BIN</span> = <code title="'starspan'">'starspan'</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="STARSPAN_REMOVE_TMP"></a><span class="summary-name">STARSPAN_REMOVE_TMP</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="POSTGIS_TEMPLATE"></a><span class="summary-name">POSTGIS_TEMPLATE</span> = <code title="'template1'">'template1'</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="LAUNCH_PAGE"></a><span class="summary-name">LAUNCH_PAGE</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="LOGIN_REDIRECT_URL"></a><span class="summary-name">LOGIN_REDIRECT_URL</span> = <code title="reverse_lazy('map')">reverse_lazy('map')</code>
+    </td>
+  </tr>
 </table>
 <!-- ==================== VARIABLES DETAILS ==================== -->
 <a name="section-VariablesDetails"></a>
@@ -656,12 +684,12 @@ id.middleware.OpenIDMiddleware',
       <dd><table><tr><td><pre class="variable">
 'madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'djan<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 go.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.s<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.go<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ogle-analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.sim<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-plefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', '<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.feat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ures', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.open<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-id', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ites', 'django.contrib.gis', 'flatblocks', 'compress', 'madrona.shapes<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+', 'madrona.google-analytics', 'madrona.layers', 'madrona.studyregion'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+, 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.s<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+creencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp',<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter',<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookma<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -680,9 +708,9 @@ id', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registr<span clas
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-['south', 'registration', 'django.contrib.auth', 'django.contrib.admin<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ontrib.sites', 'django.contrib.gis']
+['south', 'registration', 'flatblocks', 'django.contrib.auth', 'django<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessio<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ns', 'django.contrib.sites', 'django.contrib.gis']
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -831,7 +859,7 @@ MEDIA_URL+ 'screencasts/video_player/player-viral.swf'
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Apr  2 13:15:49 2012
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:13 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

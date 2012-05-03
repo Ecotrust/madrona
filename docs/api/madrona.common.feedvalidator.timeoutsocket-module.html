@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.timeoutsocket</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        Module&nbsp;timeoutsocket
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module timeoutsocket</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.common.feedvalidator.timeoutsocket-pysrc.html">source&nbsp;code</a></span></p>
+<pre class="literalblock">
+Timeout Socket
+
+This module enables a timeout mechanism on all TCP connections.  It
+does this by inserting a shim into the socket module.  After this module
+has been imported, all socket creation goes through this shim.  As a
+result, every TCP connection will support a timeout.
+
+The beauty of this method is that it immediately and transparently
+enables the entire python library to support timeouts on TCP sockets.
+As an example, if you wanted to SMTP connections to have a 20 second
+timeout:
+
+    import timeoutsocket
+    import smtplib
+    timeoutsocket.setDefaultSocketTimeout(20)
+
+
+The timeout applies to the socket functions that normally block on
+execution:  read, write, connect, and accept.  If any of these 
+operations exceeds the specified timeout, the exception Timeout
+will be raised.
+
+The default timeout value is set to None.  As a result, importing
+this module does not change the default behavior of a socket.  The
+timeout mechanism only activates when the timeout has been set to
+a numeric value.  (This behavior mimics the behavior of the
+select.select() function.)
+
+This module implements two classes: TimeoutSocket and TimeoutFile.
+
+The TimeoutSocket class defines a socket-like object that attempts to
+avoid the condition where a socket may block indefinitely.  The
+TimeoutSocket class raises a Timeout exception whenever the
+current operation delays too long. 
+
+The TimeoutFile class defines a file-like object that uses the TimeoutSocket
+class.  When the makefile() method of TimeoutSocket is called, it returns
+an instance of a TimeoutFile.
+
+Each of these objects adds two methods to manage the timeout value:
+
+    get_timeout()   --&gt;  returns the timeout of the socket or file
+    set_timeout()   --&gt;  sets the timeout of the socket or file
+
+
+As an example, one might use the timeout feature to create httplib
+connections that will timeout after 30 seconds:
+
+    import timeoutsocket
+    import httplib
+    H = httplib.HTTP(&quot;www.python.org&quot;)
+    H.sock.set_timeout(30)
+
+Note:  When used in this manner, the connect() routine may still
+block because it happens before the timeout is set.  To avoid
+this, use the 'timeoutsocket.setDefaultSocketTimeout()' function.
+
+Good Luck!
+
+</pre>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        $Revision: 511 $
+      </p>
+      <p><strong>Author:</strong>
+        Timothy O'Malley &lt;timo@alum.mit.edu&gt;
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.timeoutsocket.Timeout-class.html" class="summary-name">Timeout</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.timeoutsocket.TimeoutSocket-class.html" class="summary-name">TimeoutSocket</a><br />
+      TimeoutSocket object Implements a socket-like object that raises 
+        Timeout whenever an operation takes too long.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.timeoutsocket.TimeoutFile-class.html" class="summary-name">TimeoutFile</a><br />
+      TimeoutFile object Implements a file-like object on top of 
+        TimeoutSocket.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="setDefaultSocketTimeout"></a><span class="summary-sig-name">setDefaultSocketTimeout</span>(<span class="summary-sig-arg">timeout</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.timeoutsocket-pysrc.html#setDefaultSocketTimeout">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getDefaultSocketTimeout"></a><span class="summary-sig-name">getDefaultSocketTimeout</span>()</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.timeoutsocket-pysrc.html#getDefaultSocketTimeout">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="timeoutsocket"></a><span class="summary-sig-name">timeoutsocket</span>(<span class="summary-sig-arg">family</span>=<span class="summary-sig-default">AF_INET</span>,
+        <span class="summary-sig-arg">type</span>=<span class="summary-sig-default">SOCK_STREAM</span>,
+        <span class="summary-sig-arg">proto</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.timeoutsocket-pysrc.html#timeoutsocket">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="socket"></a><span class="summary-sig-name">socket</span>(<span class="summary-sig-arg">family</span>=<span class="summary-sig-default">AF_INET</span>,
+        <span class="summary-sig-arg">type</span>=<span class="summary-sig-default">SOCK_STREAM</span>,
+        <span class="summary-sig-arg">proto</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="madrona.common.feedvalidator.timeoutsocket-pysrc.html#timeoutsocket">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_socket"></a><span class="summary-name">_socket</span> = <code title="socket._no_timeoutsocket">socket._no_timeoutsocket</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_IsConnected"></a><span class="summary-name">_IsConnected</span> = <code title="errno.EISCONN,">errno.EISCONN,</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.timeoutsocket-module.html#_ConnectBusy" class="summary-name" onclick="show_private();">_ConnectBusy</a> = <code title="errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK">errno.EINPROGRESS, errno.EALREADY, errno.EWOULD<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_AcceptBusy"></a><span class="summary-name">_AcceptBusy</span> = <code title="errno.EAGAIN, errno.EWOULDBLOCK">errno.EAGAIN, errno.EWOULDBLOCK</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_DefaultTimeout"></a><span class="summary-name">_DefaultTimeout</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Error"></a><span class="summary-name">Error</span> = <code title="socket.error">socket.error</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_ConnectBusy"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_ConnectBusy</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:14 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

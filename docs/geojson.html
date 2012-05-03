@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GeoJSON output &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0b1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="prev" title="Managing content with flatblocks" href="flatblocks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="geojson-output">
+<span id="geojson"></span><h1>GeoJSON output<a class="headerlink" href="#geojson-output" title="Permalink to this headline">¶</a></h1>
+<p>Madrona provides <a class="reference external" href="http://www.geojson.org/">GeoJSON</a> output for by default. As expected, these are exposed through the REST API using an <tt class="docutils literal"><span class="pre">alternate</span></tt> generic link relation:</p>
+<div class="highlight-python"><pre>/features/generic-links/links/geojson/{{instance.uid}}/</pre>
+</div>
+<div class="section" id="turning-off-geojson">
+<h2>Turning off GeoJSON<a class="headerlink" href="#turning-off-geojson" title="Permalink to this headline">¶</a></h2>
+<p>You can specify an Option on your feature class to turn off geojson export:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">AOI</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">export_geojson</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nested-vs-flat">
+<h2>Nested vs Flat<a class="headerlink" href="#nested-vs-flat" title="Permalink to this headline">¶</a></h2>
+<p>Unfortunately the GeoJSON spec <a class="reference external" href="http://www.geojson.org/geojson-spec.html#feature-collection-objects">does not allow FeatureCollection to be nested</a> within other FeatureCollections as Madrona does. Given this nested feature structure:</p>
+<div class="highlight-python"><pre>folder1
+ |- mpa1
+ |- folder2
+     | - mpa2</pre>
+</div>
+<p>You have two strategies for GeoJSON representation:</p>
+<ol class="arabic">
+<li><p class="first"><tt class="docutils literal"><span class="pre">flat</span></tt>: (Default) Flatten the geojson output and loose information about the heirarchical structure:</p>
+<div class="highlight-python"><pre>FeatureCollection
+ |- mpa1
+ |- mpa2</pre>
+</div>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">nest_feature_set</span></tt>: The collection is represented as an empty geometry with a special <tt class="docutils literal"><span class="pre">feature_set</span></tt> property - a list of UIDs of the contained features. This is within the GeoJSON spec but fetching those contained features requires a client with knowledge of this convention:</p>
+<div class="highlight-python"><pre>FeatureCollection
+ |- mpa1
+ |- folder1 (with a `feature_set` list of uids and null geom)</pre>
+</div>
+</li>
+</ol>
+<p>You can specify the geojson strategy with a URL parameter like so:</p>
+<div class="highlight-python"><pre>/features/generic-links/links/geojson/{{instance.uid}}/?strategy=nest_feature_set</pre>
+</div>
+</div>
+<div class="section" id="custom-geojson-output">
+<h2>Custom GeoJSON output<a class="headerlink" href="#custom-geojson-output" title="Permalink to this headline">¶</a></h2>
+<p>To override the default geojson representation of a feature, you can specify a geojson property
+which returns string containing a geojson feature (without a trailing comma):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;Feature&quot;</span><span class="p">,</span>
+  <span class="s">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;Point&quot;</span><span class="p">,</span> <span class="s">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">102.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]},</span>
+  <span class="s">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;prop0&quot;</span><span class="p">:</span> <span class="s">&quot;value0&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In order to construct the geojson, there are several utility functions available. The example below show
+how you could add an additional property to the geojseon feature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">madrona.common.jsonutils</span> <span class="kn">import</span> <span class="n">get_properties_json</span><span class="p">,</span> <span class="n">get_feature_json</span>
+
+<span class="k">class</span> <span class="nc">AOI</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">geojson</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="n">get_properties_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">props</span><span class="p">[</span><span class="s">&#39;absolute_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">get_feature_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_final</span><span class="o">.</span><span class="n">json</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="geometry-field">
+<h2>Geometry field<a class="headerlink" href="#geometry-field" title="Permalink to this headline">¶</a></h2>
+<p>Unless you provide a custom geojson property on your feature class, the GeoJSON view will look for a geometry_final attribute.
+If it doesn&#8217;t exist for whatever reason, the GeoJSON geometry will be null. You can fake a geometry_final field
+by mirroring with a property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@property</span>
+<span class="k">def</span> <span class="nf">geometry_final</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_custom_geometry_field</span>
+</pre></div>
+</div>
+<p>But most likely you&#8217;ll want to create a custom GeoJSON property.</p>
+</div>
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<p>The GeoJSON feature properties are serialized directly from the feature instance. Not all fields are included though; we strip out the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unwanted_properties</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">&#39;geometry_final&#39;</span><span class="p">,</span>
+    <span class="s">&#39;geometry_orig&#39;</span><span class="p">,</span>
+    <span class="s">&#39;content_type&#39;</span><span class="p">,</span>
+    <span class="s">&#39;object_id&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>And add a &#8216;uid&#8217; property. This behavior can of course be overridden with a custom geojson &#64;property.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GeoJSON output</a><ul>
+<li><a class="reference internal" href="#turning-off-geojson">Turning off GeoJSON</a></li>
+<li><a class="reference internal" href="#nested-vs-flat">Nested vs Flat</a></li>
+<li><a class="reference internal" href="#custom-geojson-output">Custom GeoJSON output</a></li>
+<li><a class="reference internal" href="#geometry-field">Geometry field</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="flatblocks.html"
+                        title="previous chapter">Managing content with flatblocks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/geojson.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

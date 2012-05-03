@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Default Settings &mdash; Madrona Decision Support Framework v4.0.dev documentation</title>
+    <title>Default Settings &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0.dev',
+        VERSION:     '4.0b1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0.dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
     <link rel="up" title="Topics" href="topics.html" />
     <link rel="next" title="Template Customization" href="template_customization.html" />
     <link rel="prev" title="PostGIS and the Django test database" href="postgis_django_tests.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
       </ul>
     </div>  
@@ -233,12 +233,90 @@ django apps critical to madrona functionality.</p>
 </dl>
 <dl class="docutils" id="login-redirect-url">
 <dt><tt class="docutils literal"><span class="pre">LOGIN_REDIRECT_URL</span></tt></dt>
-<dd>Set to the map view at the root ( <tt class="docutils literal"><span class="pre">/</span></tt> )</dd>
+<dd>Set to the map view. (Either <tt class="docutils literal"><span class="pre">/</span></tt> or <tt class="docutils literal"><span class="pre">/map/</span></tt> depending on the <tt class="docutils literal"><span class="pre">LAUNCH_PAGE</span></tt> setting.</dd>
+</dl>
+<dl class="docutils" id="launch-page">
+<dt><tt class="docutils literal"><span class="pre">LAUNCH_PAGE</span></tt></dt>
+<dd>Boolean to determine if the root url is a launch page. Default is False meaning <tt class="docutils literal"><span class="pre">/</span></tt> points directly to the map view.</dd>
 </dl>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">CACHES</span></tt></dt>
-<dd>see the <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/settings/#caches">django docs</a> for details on cache setup. defaults to local memory caching.</dd>
+<dd><blockquote class="first last">
+<div>see the <a class="reference external" href="http://docs.djangoproject.com/en/dev/ref/settings/#caches">django docs</a> for details on cache setup. defaults to local memory caching.</div></blockquote>
+</dd>
 </dl>
+</div>
+<div class="section" id="full-settings-list">
+<h2>Full settings list<a class="headerlink" href="#full-settings-list" title="Permalink to this headline">¶</a></h2>
+<p>Below is a complete list of settings for the test project:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ACCOUNT_ACTIVATION_DAYS</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c">###</span>
+<span class="n">APP_NAME</span> <span class="o">=</span> <span class="s">&#39;Madrona&#39;</span>  <span class="c">###</span>
+<span class="n">ASYNC_IS_DISABLED</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c">###</span>
+<span class="n">AWS_USE_S3_MEDIA</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c">###</span>
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="s">&#39;/usr/local/src/madrona/examples/test_project&#39;</span>  <span class="c">###</span>
+<span class="n">BOOKMARK_ANON_LIMIT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1800</span><span class="p">))</span>  <span class="c">###</span>
+<span class="n">BOOKMARK_ANON_USERNAME</span> <span class="o">=</span> <span class="s">&#39;anonymous_bookmark_user&#39;</span>  <span class="c">###</span>
+<span class="n">BOOKMARK_FEATURE</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c">###</span>
+<span class="n">BROKER_BACKEND</span> <span class="o">=</span> <span class="s">&#39;djkombu.transport.DatabaseTransport&#39;</span>  <span class="c">###</span>
+<span class="n">CACHES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s">&#39;django.core.cache.backends.locmem.LocMemCache&#39;</span><span class="p">}}</span>
+<span class="n">CARROT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;django&#39;</span>  <span class="c">###</span>
+<span class="n">CELERY_RESULT_BACKEND</span> <span class="o">=</span> <span class="s">&#39;database&#39;</span>  <span class="c">###</span>
+<span class="n">CELERY_TRACK_STARTED</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">COMPRESS_AUTO</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">COMPRESS_CSS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;application&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;source_filenames&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;closure/assets/common.css&#39;</span><span class="p">,</span> <span class="s">&#39;closure/assets/menus.css&#39;</span><span class="p">,</span> <span class="s">&#39;closure/assets/menubutton.css&#39;</span><span class="p">,</span> <span class="s">&#39;closure/assets/toolbar.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/typography.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/application.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/tabs.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/layout.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/menu_items.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/buttons.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/forms.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/closure-fixes.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/table.css&#39;</span><span class="p">,</span> <span class="s">&#39;geographic_report/css/geographic_report.css&#39;</span><span class="p">,</span> <span class="s">&#39;common/css/jquery-widgets.css&#39;</span><span class="p">,</span> <span class="s">&#39;bookmarks/css/bookmarks.css&#39;</span><span class="p">],</span> <span class="s">&#39;extra_context&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;media&#39;</span><span class="p">:</span> <span class="s">&#39;all&#39;</span><span class="p">},</span> <span class="s">&#39;output_filename&#39;</span><span class="p">:</span> <span class="s">&#39;common/css/madrona.r?.css&#39;</span><span class="p">}}</span>  <span class="c">###</span>
+<span class="n">COMPRESS_JS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;application&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;source_filenames&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;common/js/lib/extensions.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/jquery.form.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/jquery/jquery.selText.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/madrona.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/tmpl.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/smartresize.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/ge_utility_lib_patches.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/raphael-js/raphael.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/raphael_ext.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/tools/measure_tool.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/layout/layout.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/layout/panel.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/layout/shortTextArea.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/layout/menu_items.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/map/map.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/map/googleLayers.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/map/geocoder.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/lib/json2.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/jquery/jquery.ui.slider.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/jquery/jquery-callback-1.2.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/jquery/jquery.localscroll-1.2.7-min.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/jquery/jquery.scrollTo-1.4.2-min.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/tools/formats.js&#39;</span><span class="p">,</span> <span class="s">&#39;manipulators/js/manipulators.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/graphics.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/ui/table.js&#39;</span><span class="p">,</span> <span class="s">&#39;geographic_report/js/geographicReport.js&#39;</span><span class="p">,</span> <span class="s">&#39;features/features.js&#39;</span><span class="p">,</span> <span class="s">&#39;features/js/workspace.js&#39;</span><span class="p">,</span> <span class="s">&#39;features/js/kmlEditor.js&#39;</span><span class="p">,</span> <span class="s">&#39;bookmarks/js/bookmarks.js&#39;</span><span class="p">],</span> <span class="s">&#39;output_filename&#39;</span><span class="p">:</span> <span class="s">&#39;madrona.r?.js&#39;</span><span class="p">},</span> <span class="s">&#39;tests&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;source_filenames&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;common/js/test/lib/tmpl.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/test/lib/ge_utility_lib_patches.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/test/tools/measure_tool.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/test/layout/panel.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/test/map/googleLayers.js&#39;</span><span class="p">,</span> <span class="s">&#39;common/js/test/map/geocoder.js&#39;</span><span class="p">,</span> <span class="s">&#39;manipulators/js/test/manipulators.js&#39;</span><span class="p">],</span> <span class="s">&#39;output_filename&#39;</span><span class="p">:</span> <span class="s">&#39;madrona_tests.r?.js&#39;</span><span class="p">}}</span>  <span class="c">###</span>
+<span class="n">COMPRESS_VERSION</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s">&#39;django.contrib.gis.db.backends.postgis&#39;</span><span class="p">,</span> <span class="s">&#39;TEST_MIRROR&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;NAME&#39;</span><span class="p">:</span> <span class="s">&#39;test_project&#39;</span><span class="p">,</span> <span class="s">&#39;TEST_CHARSET&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;TIME_ZONE&#39;</span><span class="p">:</span> <span class="s">&#39;America/Vancouver&#39;</span><span class="p">,</span> <span class="s">&#39;TEST_COLLATION&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;PORT&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;HOST&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;USER&#39;</span><span class="p">:</span> <span class="s">&#39;postgres&#39;</span><span class="p">,</span> <span class="s">&#39;TEST_NAME&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{}}}</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">DISPLAY_AREA_UNITS</span> <span class="o">=</span> <span class="s">&#39;sq_mi&#39;</span>  <span class="c">###</span>
+<span class="n">DISPLAY_LENGTH_UNITS</span> <span class="o">=</span> <span class="s">&#39;mi&#39;</span>  <span class="c">###</span>
+<span class="n">ENFORCE_SUPPORTED_BROWSER</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">EXCLUDE_FROM_TESTS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;south&#39;</span><span class="p">,</span> <span class="s">&#39;registration&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.sites&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.gis&#39;</span><span class="p">]</span>  <span class="c">###</span>
+<span class="n">GEOMETRY_CLIENT_SRID</span> <span class="o">=</span> <span class="mi">4326</span>  <span class="c">###</span>
+<span class="n">GEOMETRY_DB_SRID</span> <span class="o">=</span> <span class="mi">3310</span>  <span class="c">###</span>
+<span class="n">GOOGLE_ANALYTICS_MODEL</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">GOOGLE_API_KEY</span> <span class="o">=</span> <span class="s">&#39;ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg&#39;</span>  <span class="c">###</span>
+<span class="n">GROUP_REGISTERED_BY_WEB</span> <span class="o">=</span> <span class="s">&#39;registered_by_web&#39;</span>  <span class="c">###</span>
+<span class="n">GROUP_REQUEST_EMAIL</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c">###</span>
+<span class="n">HELP_EMAIL</span> <span class="o">=</span> <span class="s">&#39;help@madrona.org&#39;</span>  <span class="c">###</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;madrona.common&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.sites&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.gis&#39;</span><span class="p">,</span> <span class="s">&#39;compress&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.shapes&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.google-analytics&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.layers&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.studyregion&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.simplefaq&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.help&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.staticmap&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.screencasts&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.news&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.manipulators&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.kmlapp&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.features&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.user_profile&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.unit_converter&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.openid&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.async&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.loadshp&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.bookmarks&#39;</span><span class="p">,</span> <span class="s">&#39;registration&#39;</span><span class="p">,</span> <span class="s">&#39;south&#39;</span><span class="p">,</span> <span class="s">&#39;djcelery&#39;</span><span class="p">,</span> <span class="s">&#39;djkombu&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.raster_stats&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.heatmap&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.analysistools&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.xyquery&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.group_management&#39;</span><span class="p">,</span> <span class="s">&#39;mlpa&#39;</span><span class="p">)</span>
+<span class="n">KML_ALTITUDEMODE_DEFAULT</span> <span class="o">=</span> <span class="s">&#39;absolute&#39;</span>  <span class="c">###</span>
+<span class="n">KML_EXTRUDE_HEIGHT</span> <span class="o">=</span> <span class="mi">700</span>  <span class="c">###</span>
+<span class="n">KML_SIMPLIFY_TOLERANCE</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c">###</span>
+<span class="n">KML_SIMPLIFY_TOLERANCE_DEGREES</span> <span class="o">=</span> <span class="mf">0.0002</span>  <span class="c">###</span>
+<span class="n">LOGIN_REDIRECT_URL</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span>
+<span class="n">LOGIN_URL</span> <span class="o">=</span> <span class="s">&#39;/accounts/signin/&#39;</span>
+<span class="n">LOG_FILE</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c">###</span>
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="s">&#39;/usr/local/src/madrona/examples/test_project/mediaroot&#39;</span>
+<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">&#39;/media/&#39;</span>
+<span class="n">MIDDLEWARE_CLASSES</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;django.middleware.gzip.GZipMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.middleware.common.CommonMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.common.middleware.IgnoreCsrfMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.messages.middleware.MessageMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;django.middleware.transaction.TransactionMiddleware&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.openid.middleware.OpenIDMiddleware&#39;</span><span class="p">)</span>
+<span class="n">OPENID_ENABLED</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c">###</span>
+<span class="n">POSTGIS_TEMPLATE</span> <span class="o">=</span> <span class="s">&#39;template1&#39;</span>  <span class="c">###</span>
+<span class="n">PRIVATE_KML_ROOT</span> <span class="o">=</span> <span class="s">&#39;/mnt/EBS_superoverlays/display&#39;</span>  <span class="c">###</span>
+<span class="n">REGISTRATION_OPEN</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="s">&#39;test_project.urls&#39;</span>  <span class="c">###</span>
+<span class="n">SCREENCASTS</span> <span class="o">=</span> <span class="s">&#39;screencasts/&#39;</span>  <span class="c">###</span>
+<span class="n">SCREENCAST_IMAGES</span> <span class="o">=</span> <span class="s">&#39;screencasts/images&#39;</span>  <span class="c">###</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">&#39;=knpq2es_kedoi-j1es=$o02nc*v$^=^8zs*&amp;s@@nij@zev%m2&#39;</span>
+<span class="n">SETTINGS_MODULE</span> <span class="o">=</span> <span class="s">&#39;test_project.settings&#39;</span>  <span class="c">###</span>
+<span class="n">SHARING_TO_PUBLIC_GROUPS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Share with Public&#39;</span><span class="p">]</span>  <span class="c">###</span>
+<span class="n">SHARING_TO_STAFF_GROUPS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Share with Staff&#39;</span><span class="p">]</span>  <span class="c">###</span>
+<span class="n">SITE_ID</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c">###</span>
+<span class="n">SKIP_SOUTH_TESTS</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">SOUTH_TESTS_MIGRATE</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c">###</span>
+<span class="n">STARSPAN_BIN</span> <span class="o">=</span> <span class="s">&#39;starspan&#39;</span>  <span class="c">###</span>
+<span class="n">STATICMAP_AUTOZOOM</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c">###</span>
+<span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">&#39;/media/admin/&#39;</span>
+<span class="n">TEMPLATE_CONTEXT_PROCESSORS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;django.contrib.auth.context_processors.auth&#39;</span><span class="p">,</span> <span class="s">&#39;django.core.context_processors.debug&#39;</span><span class="p">,</span> <span class="s">&#39;django.core.context_processors.i18n&#39;</span><span class="p">,</span> <span class="s">&#39;django.core.context_processors.media&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.messages.context_processors.messages&#39;</span><span class="p">,</span> <span class="s">&#39;django.core.context_processors.request&#39;</span><span class="p">,</span> <span class="s">&#39;madrona.openid.context_processors.authopenid&#39;</span><span class="p">)</span>
+<span class="n">TEMPLATE_DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;/usr/local/src/madrona/examples/test_project/templates&#39;</span><span class="p">,)</span>
+<span class="n">TIME_ZONE</span> <span class="o">=</span> <span class="s">&#39;America/Vancouver&#39;</span>
+<span class="n">TITLES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;self&#39;</span><span class="p">:</span> <span class="s">&#39;View&#39;</span><span class="p">}</span>  <span class="c">###</span>
+<span class="n">USER_DATA_ROOT</span> <span class="o">=</span> <span class="s">&#39;/mnt/EBS_userdatalayers/display&#39;</span>  <span class="c">###</span>
+<span class="n">VIDEO_PLAYER</span> <span class="o">=</span> <span class="s">&#39;/media/screencasts/video_player/player-viral.swf&#39;</span>  <span class="c">###</span>
+<span class="n">WAVE_ID</span> <span class="o">=</span> <span class="s">&#39;wavesandbox.com!q43w5q3w45taesrfgs&#39;</span>  <span class="c">###</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -254,6 +332,7 @@ django apps critical to madrona functionality.</p>
 <li><a class="reference internal" href="#madrona-settings">Madrona Settings</a></li>
 <li><a class="reference internal" href="#rd-party-app-settings">3rd Party App Settings</a></li>
 <li><a class="reference internal" href="#django-settings">Django Settings</a></li>
+<li><a class="reference internal" href="#full-settings-list">Full settings list</a></li>
 </ul>
 </li>
 </ul>
@@ -298,7 +377,7 @@ django apps critical to madrona functionality.</p>
         <li class="right" >
           <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="topics.html" >Topics</a> &raquo;</li> 
       </ul>
     </div>

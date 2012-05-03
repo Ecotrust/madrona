@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.generator</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        Module&nbsp;generator
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.feedvalidator.generator-module.html">Module madrona.common.feedvalidator.generator</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""$Id: generator.py 988 2008-03-12 18:22:48Z sa3ruby $"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">"Sam Ruby &lt;http://intertwingly.net/&gt; and Mark Pilgrim &lt;http://diveintomark.org/&gt;"</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-name">__version__</tt> <tt class="py-op">=</tt> <tt class="py-string">"$Revision: 988 $"</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable madrona.common.feedvalidator.formatter.base.__copyright__=madrona.common.feedvalidator.formatter.base-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_html.__copyright__=madrona.common.feedvalidator.formatter.text_html-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_plain.__copyright__=madrona.common.feedvalidator.formatter.text_plain-module.html#__copyright__,Variable madrona.common.feedvalidator.formatter.text_xml.__copyright__=madrona.common.feedvalidator.formatter.text_xml-module.html#__copyright__"><a title="madrona.common.feedvalidator.formatter.base.__copyright__
+madrona.common.feedvalidator.formatter.text_html.__copyright__
+madrona.common.feedvalidator.formatter.text_plain.__copyright__
+madrona.common.feedvalidator.formatter.text_xml.__copyright__" class="py-name" href="#" onclick="return doclink('link-0', '__copyright__', 'link-0');">__copyright__</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Copyright (c) 2002 Sam Ruby and Mark Pilgrim"</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Module madrona.common.feedvalidator.base=madrona.common.feedvalidator.base-module.html,Module madrona.common.feedvalidator.formatter.base=madrona.common.feedvalidator.formatter.base-module.html"><a title="madrona.common.feedvalidator.base
+madrona.common.feedvalidator.formatter.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class madrona.common.feedvalidator.base.validatorBase=madrona.common.feedvalidator.base.validatorBase-class.html"><a title="madrona.common.feedvalidator.base.validatorBase" class="py-name" href="#" onclick="return doclink('link-2', 'validatorBase', 'link-2');">validatorBase</a></tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Module madrona.common.feedvalidator.validators=madrona.common.feedvalidator.validators-module.html"><a title="madrona.common.feedvalidator.validators" class="py-name" href="#" onclick="return doclink('link-3', 'validators', 'link-3');">validators</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"># Atom generator element</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="generator"></a><div id="generator-def"><a name="L13"></a><tt class="py-lineno">13</tt> <a class="py-toggle" href="#" id="generator-toggle" onclick="return toggle('generator');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.common.feedvalidator.generator.generator-class.html">generator</a><tt class="py-op">(</tt><tt class="py-base-class">nonhtml</tt><tt class="py-op">,</tt><tt class="py-base-class">rfc2396</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="generator-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="generator-expanded"><a name="generator.getExpectedAttrNames"></a><div id="generator.getExpectedAttrNames-def"><a name="L14"></a><tt class="py-lineno">14</tt> <a class="py-toggle" href="#" id="generator.getExpectedAttrNames-toggle" onclick="return toggle('generator.getExpectedAttrNames');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.generator.generator-class.html#getExpectedAttrNames">getExpectedAttrNames</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="generator.getExpectedAttrNames-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="generator.getExpectedAttrNames-expanded"><a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">u'uri'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">u'version'</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="generator.prevalidate"></a><div id="generator.prevalidate-def"><a name="L17"></a><tt class="py-lineno">17</tt> <a class="py-toggle" href="#" id="generator.prevalidate-toggle" onclick="return toggle('generator.prevalidate');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.feedvalidator.generator.generator-class.html#prevalidate">prevalidate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="generator.prevalidate-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="generator.prevalidate-expanded"><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attrs</tt><tt class="py-op">.</tt><tt class="py-name">has_key</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">"url"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Variable madrona.xyquery.models.Attribute.value=madrona.xyquery.models.Attribute-class.html#value"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-4', 'value', 'link-4');">value</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attrs</tt><tt class="py-op">.</tt><tt class="py-name">getValue</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">"url"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">      <tt id="link-5" class="py-name" targets="Class madrona.common.feedvalidator.validators.rfc2396=madrona.common.feedvalidator.validators.rfc2396-class.html"><a title="madrona.common.feedvalidator.validators.rfc2396" class="py-name" href="#" onclick="return doclink('link-5', 'rfc2396', 'link-5');">rfc2396</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method madrona.common.feedvalidator.author.author.validate()=madrona.common.feedvalidator.author.author-class.html#validate,Method madrona.common.feedvalidator.base.validatorBase.validate()=madrona.common.feedvalidator.base.validatorBase-class.html#validate,Method madrona.common.feedvalidator.categories.categories.validate()=madrona.common.feedvalidator.categories.categories-class.html#validate,Method madrona.common.feedvalidator.channel.blink.validate()=madrona.common.feedvalidator.channel.blink-class.html#validate,Method madrona.common.feedvalidator.channel.channel.validate()=madrona.common.feedvalidator.channel.channel-class.html#validate,Method madrona.common.feedvalidator.channel.docs.validate()=madrona.common.feedvalidator.channel.docs-class.html#validate,Method madrona.common.feedvalidator.channel.link.validate()=madrona.common.feedvalidator.channel.link-class.html#validate,Method madrona.common.feedvalidator.channel.title.validate()=madrona.common.feedvalidator.channel.title-class.html#validate,Method madrona.common.feedvalidator.content.diveater.validate()=madrona.common.feedvalidator.content.diveater-class.html#validate,Method madrona.common.feedvalidator.content.textConstruct.validate()=madrona.common.feedvalidator.content.textConstruct-class.html#validate,Method madrona.common.feedvalidator.entry.entry.validate()=madrona.common.feedvalidator.entry.entry-class.html#validate,Method madrona.common.feedvalidator.entry.source.validate()=madrona.common.feedvalidator.entry.source-class.html#validate,Method madrona.common.feedvalidator.extension.decimal.validate()=madrona.common.feedvalidator.extension.decimal-class.html#validate,Method madrona.common.feedvalidator.extension.floatUnit.validate()=madrona.common.feedvalidator.extension.floatUnit-class.html#validate,Method madrona.common.feedvalidator.extension.g_float.validate()=madrona.common.feedvalidator.extension.g_float-class.html#validate,Method madrona.common.feedvalidator.extension.g_full_locationType.validate()=madrona.common.feedvalidator.extension.g_full_locationType-class.html#validate,Method madrona.common.feedvalidator.extension.g_intUnit.validate()=madrona.common.feedvalidator.extension.g_intUnit-class.html#validate,Method madrona.common.feedvalidator.extension.g_labelType.validate()=madrona.common.feedvalidator.extension.g_labelType-class.html#validate,Method madrona.common.feedvalidator.extension.g_locationType.validate()=madrona.common.feedvalidator.extension.g_locationType-class.html#validate,Method madrona.common.feedvalidator.extension.g_year.validate()=madrona.common.feedvalidator.extension.g_year-class.html#validate,Method madrona.common.feedvalidator.extension.geo_point.validate()=madrona.common.feedvalidator.extension.geo_point-class.html#validate,Method madrona.common.feedvalidator.extension.gml_pos.validate()=madrona.common.feedvalidator.extension.gml_pos-class.html#validate,Method madrona.common.feedvalidator.extension.gml_posList.validate()=madrona.common.feedvalidator.extension.gml_posList-class.html#validate,Method madrona.common.feedvalidator.extension.heisen_uri.validate()=madrona.common.feedvalidator.extension.heisen_uri-class.html#validate,Method madrona.common.feedvalidator.extension.in_reply_to.validate()=madrona.common.feedvalidator.extension.in_reply_to-class.html#validate,Method madrona.common.feedvalidator.extension.l_permalink.validate()=madrona.common.feedvalidator.extension.l_permalink-class.html#validate,Method madrona.common.feedvalidator.extension.sy_updatePeriod.validate()=madrona.common.feedvalidator.extension.sy_updatePeriod-class.html#validate,Method madrona.common.feedvalidator.feed.feed.validate()=madrona.common.feedvalidator.feed.feed-class.html#validate,Method madrona.common.feedvalidator.image.height.validate()=madrona.common.feedvalidator.image.height-class.html#validate,Method madrona.common.feedvalidator.image.image.validate()=madrona.common.feedvalidator.image.image-class.html#validate,Method madrona.common.feedvalidator.image.link.validate()=madrona.common.feedvalidator.image.link-class.html#validate,Method madrona.common.feedvalidator.image.title.validate()=madrona.common.feedvalidator.image.title-class.html#validate,Method madrona.common.feedvalidator.image.url.validate()=madrona.common.feedvalidator.image.url-class.html#validate,Method madrona.common.feedvalidator.image.width.validate()=madrona.common.feedvalidator.image.width-class.html#validate,Method madrona.common.feedvalidator.item.guid.validate()=madrona.common.feedvalidator.item.guid-class.html#validate,Method madrona.common.feedvalidator.item.item.validate()=madrona.common.feedvalidator.item.item-class.html#validate,Method madrona.common.feedvalidator.item.rss10Item.validate()=madrona.common.feedvalidator.item.rss10Item-class.html#validate,Method madrona.common.feedvalidator.itunes.itunes_channel.validate()=madrona.common.feedvalidator.itunes.itunes_channel-class.html#validate,Method madrona.common.feedvalidator.itunes.itunes_item.validate()=madrona.common.feedvalidator.itunes.itunes_item-class.html#validate,Method madrona.common.feedvalidator.itunes.owner.validate()=madrona.common.feedvalidator.itunes.owner-class.html#validate,Method madrona.common.feedvalidator.itunes.yesnoclean.validate()=madrona.common.feedvalidator.itunes.yesnoclean-class.html#validate,Method madrona.common.feedvalidator.kml.FloatWithNegative.validate()=madrona.common.feedvalidator.kml.FloatWithNegative-class.html#validate,Method madrona.common.feedvalidator.kml.GroundOverlay.validate()=madrona.common.feedvalidator.kml.GroundOverlay-class.html#validate,Method madrona.common.feedvalidator.kml.Icon.validate()=madrona.common.feedvalidator.kml.Icon-class.html#validate,Method madrona.common.feedvalidator.kml.ItemIcon.validate()=madrona.common.feedvalidator.kml.ItemIcon-class.html#validate,Method madrona.common.feedvalidator.kml.LatLonBox.validate()=madrona.common.feedvalidator.kml.LatLonBox-class.html#validate,Method madrona.common.feedvalidator.kml.LineString.validate()=madrona.common.feedvalidator.kml.LineString-class.html#validate,Method madrona.common.feedvalidator.kml.LinearRing.validate()=madrona.common.feedvalidator.kml.LinearRing-class.html#validate,Method madrona.common.feedvalidator.kml.Location.validate()=madrona.common.feedvalidator.kml.Location-class.html#validate,Method madrona.common.feedvalidator.kml.Metadata.validate()=madrona.common.feedvalidator.kml.Metadata-class.html#validate,Method madrona.common.feedvalidator.kml.Model.validate()=madrona.common.feedvalidator.kml.Model-class.html#validate,Method madrona.common.feedvalidator.kml.NetworkLink.validate()=madrona.common.feedvalidator.kml.NetworkLink-class.html#validate,Method madrona.common.feedvalidator.kml.Pair.validate()=madrona.common.feedvalidator.kml.Pair-class.html#validate,Method madrona.common.feedvalidator.kml.Point.validate()=madrona.common.feedvalidator.kml.Point-class.html#validate,Method madrona.common.feedvalidator.kml.Polygon.validate()=madrona.common.feedvalidator.kml.Polygon-class.html#validate,Method madrona.common.feedvalidator.kml.Region.validate()=madrona.common.feedvalidator.kml.Region-class.html#validate,Method madrona.common.feedvalidator.kml.SchemaField.validate()=madrona.common.feedvalidator.kml.SchemaField-class.html#validate,Method madrona.common.feedvalidator.kml.Snippet.validate()=madrona.common.feedvalidator.kml.Snippet-class.html#validate,Method madrona.common.feedvalidator.kml.StyleMap.validate()=madrona.common.feedvalidator.kml.StyleMap-class.html#validate,Method madrona.common.feedvalidator.kml.TimeStamp.validate()=madrona.common.feedvalidator.kml.TimeStamp-class.html#validate,Method madrona.common.feedvalidator.kml.Update.validate()=madrona.common.feedvalidator.kml.Update-class.html#validate,Method madrona.common.feedvalidator.kml.angle360.validate()=madrona.common.feedvalidator.kml.angle360-class.html#validate,Method madrona.common.feedvalidator.kml.antialias.validate()=madrona.common.feedvalidator.kml.antialias-class.html#validate,Method madrona.common.feedvalidator.kml.boundary.validate()=madrona.common.feedvalidator.kml.boundary-class.html#validate,Method madrona.common.feedvalidator.kml.color.validate()=madrona.common.feedvalidator.kml.color-class.html#validate,Method madrona.common.feedvalidator.kml.coordinates.validate()=madrona.common.feedvalidator.kml.coordinates-class.html#validate,Method madrona.common.feedvalidator.kml.geomColor.validate()=madrona.common.feedvalidator.kml.geomColor-class.html#validate,Method madrona.common.feedvalidator.kml.geomScale.validate()=madrona.common.feedvalidator.kml.geomScale-class.html#validate,Method madrona.common.feedvalidator.kml.labelColor.validate()=madrona.common.feedvalidator.kml.labelColor-class.html#validate,Method madrona.common.feedvalidator.kml.noiconoffset.validate()=madrona.common.feedvalidator.kml.noiconoffset-class.html#validate,Method madrona.common.feedvalidator.kml.overlayxy.validate()=madrona.common.feedvalidator.kml.overlayxy-class.html#validate,Method madrona.common.feedvalidator.kml.refreshVisibility.validate()=madrona.common.feedvalidator.kml.refreshVisibility-class.html#validate,Method madrona.common.feedvalidator.kml.zeroone.validate()=madrona.common.feedvalidator.kml.zeroone-class.html#validate,Method madrona.common.feedvalidator.link.link.validate()=madrona.common.feedvalidator.link.link-class.html#validate,Method madrona.common.feedvalidator.media.media_content.validate()=madrona.common.feedvalidator.media.media_content-class.html#validate,Method madrona.common.feedvalidator.media.media_group.validate()=madrona.common.feedvalidator.media.media_group-class.html#validate,Method madrona.common.feedvalidator.media.media_hash.validate()=madrona.common.feedvalidator.media.media_hash-class.html#validate,Method madrona.common.feedvalidator.media.media_player.validate()=madrona.common.feedvalidator.media.media_player-class.html#validate,Method madrona.common.feedvalidator.media.media_rating.validate()=madrona.common.feedvalidator.media.media_rating-class.html#validate,Method madrona.common.feedvalidator.media.media_restriction.validate()=madrona.common.feedvalidator.media.media_restriction-class.html#validate,Method madrona.common.feedvalidator.media.media_text.validate()=madrona.common.feedvalidator.media.media_text-class.html#validate,Method madrona.common.feedvalidator.media.media_thumbnail.validate()=madrona.common.feedvalidator.media.media_thumbnail-class.html#validate,Method madrona.common.feedvalidator.media.media_title.validate()=madrona.common.feedvalidator.media.media_title-class.html#validate,Method madrona.common.feedvalidator.opensearch.Language.validate()=madrona.common.feedvalidator.opensearch.Language-class.html#validate,Method madrona.common.feedvalidator.opensearch.OpenSearchDescription.validate()=madrona.common.feedvalidator.opensearch.OpenSearchDescription-class.html#validate,Method madrona.common.feedvalidator.opensearch.QueryRole.validate()=madrona.common.feedvalidator.opensearch.QueryRole-class.html#validate,Method madrona.common.feedvalidator.opensearch.SyndicationRight.validate()=madrona.common.feedvalidator.opensearch.SyndicationRight-class.html#validate,Method madrona.common.feedvalidator.opensearch.Template.validate()=madrona.common.feedvalidator.opensearch.Template-class.html#validate,Method madrona.common.feedvalidator.opensearch.UrlEncoded.validate()=madrona.common.feedvalidator.opensearch.UrlEncoded-class.html#validate,Method madrona.common.feedvalidator.opml.commaSeparatedLines.validate()=madrona.common.feedvalidator.opml.commaSeparatedLines-class.html#validate,Method madrona.common.feedvalidator.opml.opml.validate()=madrona.common.feedvalidator.opml.opml-class.html#validate,Method madrona.common.feedvalidator.opml.opmlBody.validate()=madrona.common.feedvalidator.opml.opmlBody-class.html#validate,Method madrona.common.feedvalidator.opml.opmlOutline.validate()=madrona.common.feedvalidator.opml.opmlOutline-class.html#validate,Method madrona.common.feedvalidator.rdf.rdf.validate()=madrona.common.feedvalidator.rdf.rdf-class.html#validate,Method madrona.common.feedvalidator.rdf.rdfExtension.validate()=madrona.common.feedvalidator.rdf.rdfExtension-class.html#validate,Method madrona.common.feedvalidator.rdf.rss10Image.validate()=madrona.common.feedvalidator.rdf.rss10Image-class.html#validate,Method madrona.common.feedvalidator.rss.rss.validate()=madrona.common.feedvalidator.rss.rss-class.html#validate,Method madrona.common.feedvalidator.service.collection.validate()=madrona.common.feedvalidator.service.collection-class.html#validate,Method madrona.common.feedvalidator.service.service.validate()=madrona.common.feedvalidator.service.service-class.html#validate,Method madrona.common.feedvalidator.service.workspace.validate()=madrona.common.feedvalidator.service.workspace-class.html#validate,Method madrona.common.feedvalidator.skipDays.day.validate()=madrona.common.feedvalidator.skipDays.day-class.html#validate,Method madrona.common.feedvalidator.skipDays.skipDays.validate()=madrona.common.feedvalidator.skipDays.skipDays-class.html#validate,Method madrona.common.feedvalidator.skipHours.hour.validate()=madrona.common.feedvalidator.skipHours.hour-class.html#validate,Method madrona.common.feedvalidator.skipHours.skipHours.validate()=madrona.common.feedvalidator.skipHours.skipHours-class.html#validate,Method madrona.common.feedvalidator.sse.Sync.validate()=madrona.common.feedvalidator.sse.Sync-class.html#validate,Method madrona.common.feedvalidator.sse.rfc2141_nss.validate()=madrona.common.feedvalidator.sse.rfc2141_nss-class.html#validate,Method madrona.common.feedvalidator.textInput.textInput.validate()=madrona.common.feedvalidator.textInput.textInput-class.html#validate,Method madrona.common.feedvalidator.validators.Charset.validate()=madrona.common.feedvalidator.validators.Charset-class.html#validate,Method madrona.common.feedvalidator.validators.Float.validate()=madrona.common.feedvalidator.validators.Float-class.html#validate,Method madrona.common.feedvalidator.validators.Integer.validate()=madrona.common.feedvalidator.validators.Integer-class.html#validate,Method madrona.common.feedvalidator.validators.MediaRange.validate()=madrona.common.feedvalidator.validators.MediaRange-class.html#validate,Method madrona.common.feedvalidator.validators.MimeType.validate()=madrona.common.feedvalidator.validators.MimeType-class.html#validate,Method madrona.common.feedvalidator.validators.addr_spec.validate()=madrona.common.feedvalidator.validators.addr_spec-class.html#validate,Method madrona.common.feedvalidator.validators.alphanumeric.validate()=madrona.common.feedvalidator.validators.alphanumeric-class.html#validate,Method madrona.common.feedvalidator.validators.canonicaluri.validate()=madrona.common.feedvalidator.validators.canonicaluri-class.html#validate,Method madrona.common.feedvalidator.validators.caseinsensitive_enumeration.validate()=madrona.common.feedvalidator.validators.caseinsensitive_enumeration-class.html#validate,Method madrona.common.feedvalidator.validators.commaSeparatedIntegers.validate()=madrona.common.feedvalidator.validators.commaSeparatedIntegers-class.html#validate,Method madrona.common.feedvalidator.validators.duration.validate()=madrona.common.feedvalidator.validators.duration-class.html#validate,Method madrona.common.feedvalidator.validators.email.validate()=madrona.common.feedvalidator.validators.email-class.html#validate,Method madrona.common.feedvalidator.validators.email_with_name.validate()=madrona.common.feedvalidator.validators.email_with_name-class.html#validate,Method madrona.common.feedvalidator.validators.enumeration.validate()=madrona.common.feedvalidator.validators.enumeration-class.html#validate,Method madrona.common.feedvalidator.validators.formname.validate()=madrona.common.feedvalidator.validators.formname-class.html#validate,Method madrona.common.feedvalidator.validators.httpURL.validate()=madrona.common.feedvalidator.validators.httpURL-class.html#validate,Method madrona.common.feedvalidator.validators.iso639.validate()=madrona.common.feedvalidator.validators.iso639-class.html#validate,Method madrona.common.feedvalidator.validators.iso8601.validate()=madrona.common.feedvalidator.validators.iso8601-class.html#validate,Method madrona.common.feedvalidator.validators.iso8601_date.validate()=madrona.common.feedvalidator.validators.iso8601_date-class.html#validate,Method madrona.common.feedvalidator.validators.keywords.validate()=madrona.common.feedvalidator.validators.keywords-class.html#validate,Method madrona.common.feedvalidator.validators.latitude.validate()=madrona.common.feedvalidator.validators.latitude-class.html#validate,Method madrona.common.feedvalidator.validators.lengthLimitedText.validate()=madrona.common.feedvalidator.validators.lengthLimitedText-class.html#validate,Method madrona.common.feedvalidator.validators.longitude.validate()=madrona.common.feedvalidator.validators.longitude-class.html#validate,Method madrona.common.feedvalidator.validators.nonNegativeInteger.validate()=madrona.common.feedvalidator.validators.nonNegativeInteger-class.html#validate,Method madrona.common.feedvalidator.validators.nonblank.validate()=madrona.common.feedvalidator.validators.nonblank-class.html#validate,Method madrona.common.feedvalidator.validators.nonemail.validate()=madrona.common.feedvalidator.validators.nonemail-class.html#validate,Method madrona.common.feedvalidator.validators.nonhtml.validate()=madrona.common.feedvalidator.validators.nonhtml-class.html#validate,Method madrona.common.feedvalidator.validators.percentType.validate()=madrona.common.feedvalidator.validators.percentType-class.html#validate,Method madrona.common.feedvalidator.validators.positiveInteger.validate()=madrona.common.feedvalidator.validators.positiveInteger-class.html#validate,Method madrona.common.feedvalidator.validators.rdfAbout.validate()=madrona.common.feedvalidator.validators.rdfAbout-class.html#validate,Method madrona.common.feedvalidator.validators.rdfResourceURI.validate()=madrona.common.feedvalidator.validators.rdfResourceURI-class.html#validate,Method madrona.common.feedvalidator.validators.rfc2396.validate()=madrona.common.feedvalidator.validators.rfc2396-class.html#validate,Method madrona.common.feedvalidator.validators.rfc2396_full.validate()=madrona.common.feedvalidator.validators.rfc2396_full-class.html#validate,Method madrona.common.feedvalidator.validators.rfc3987.validate()=madrona.common.feedvalidator.validators.rfc3987-class.html#validate,Method madrona.common.feedvalidator.validators.rfc3987_full.validate()=madrona.common.feedvalidator.validators.rfc3987_full-class.html#validate,Method madrona.common.feedvalidator.validators.rfc822.validate()=madrona.common.feedvalidator.validators.rfc822-class.html#validate,Method madrona.common.feedvalidator.validators.safeHtml.validate()=madrona.common.feedvalidator.validators.safeHtml-class.html#validate,Method madrona.common.feedvalidator.validators.truefalse.validate()=madrona.common.feedvalidator.validators.truefalse-class.html#validate,Method madrona.common.feedvalidator.validators.truefalsestrict.validate()=madrona.common.feedvalidator.validators.truefalsestrict-class.html#validate,Method madrona.common.feedvalidator.validators.unbounded_iso8601.validate()=madrona.common.feedvalidator.validators.unbounded_iso8601-class.html#validate,Method madrona.common.feedvalidator.validators.unique.validate()=madrona.common.feedvalidator.validators.unique-class.html#validate,Method madrona.common.feedvalidator.validators.xmlbase.validate()=madrona.common.feedvalidator.validators.xmlbase-class.html#validate,Method madrona.common.feedvalidator.validators.yesno.validate()=madrona.common.feedvalidator.validators.yesno-class.html#validate,Method madrona.loadshp.forms.UploadForm.validate()=madrona.loadshp.forms.UploadForm-class.html#validate,Method madrona.shapes.forms.UploadForm.validate()=madrona.shapes.forms.UploadForm-class.html#validate"><a title="madrona.common.feedvalidator.author.author.validate
+madrona.common.feedvalidator.base.validatorBase.validate
+madrona.common.feedvalidator.categories.categories.validate
+madrona.common.feedvalidator.channel.blink.validate
+madrona.common.feedvalidator.channel.channel.validate
+madrona.common.feedvalidator.channel.docs.validate
+madrona.common.feedvalidator.channel.link.validate
+madrona.common.feedvalidator.channel.title.validate
+madrona.common.feedvalidator.content.diveater.validate
+madrona.common.feedvalidator.content.textConstruct.validate
+madrona.common.feedvalidator.entry.entry.validate
+madrona.common.feedvalidator.entry.source.validate
+madrona.common.feedvalidator.extension.decimal.validate
+madrona.common.feedvalidator.extension.floatUnit.validate
+madrona.common.feedvalidator.extension.g_float.validate
+madrona.common.feedvalidator.extension.g_full_locationType.validate
+madrona.common.feedvalidator.extension.g_intUnit.validate
+madrona.common.feedvalidator.extension.g_labelType.validate
+madrona.common.feedvalidator.extension.g_locationType.validate
+madrona.common.feedvalidator.extension.g_year.validate
+madrona.common.feedvalidator.extension.geo_point.validate
+madrona.common.feedvalidator.extension.gml_pos.validate
+madrona.common.feedvalidator.extension.gml_posList.validate
+madrona.common.feedvalidator.extension.heisen_uri.validate
+madrona.common.feedvalidator.extension.in_reply_to.validate
+madrona.common.feedvalidator.extension.l_permalink.validate
+madrona.common.feedvalidator.extension.sy_updatePeriod.validate
+madrona.common.feedvalidator.feed.feed.validate
+madrona.common.feedvalidator.image.height.validate
+madrona.common.feedvalidator.image.image.validate
+madrona.common.feedvalidator.image.link.validate
+madrona.common.feedvalidator.image.title.validate
+madrona.common.feedvalidator.image.url.validate
+madrona.common.feedvalidator.image.width.validate
+madrona.common.feedvalidator.item.guid.validate
+madrona.common.feedvalidator.item.item.validate
+madrona.common.feedvalidator.item.rss10Item.validate
+madrona.common.feedvalidator.itunes.itunes_channel.validate
+madrona.common.feedvalidator.itunes.itunes_item.validate
+madrona.common.feedvalidator.itunes.owner.validate
+madrona.common.feedvalidator.itunes.yesnoclean.validate
+madrona.common.feedvalidator.kml.FloatWithNegative.validate
+madrona.common.feedvalidator.kml.GroundOverlay.validate
+madrona.common.feedvalidator.kml.Icon.validate
+madrona.common.feedvalidator.kml.ItemIcon.validate
+madrona.common.feedvalidator.kml.LatLonBox.validate
+madrona.common.feedvalidator.kml.LineString.validate
+madrona.common.feedvalidator.kml.LinearRing.validate
+madrona.common.feedvalidator.kml.Location.validate
+madrona.common.feedvalidator.kml.Metadata.validate
+madrona.common.feedvalidator.kml.Model.validate
+madrona.common.feedvalidator.kml.NetworkLink.validate
+madrona.common.feedvalidator.kml.Pair.validate
+madrona.common.feedvalidator.kml.Point.validate
+madrona.common.feedvalidator.kml.Polygon.validate
+madrona.common.feedvalidator.kml.Region.validate
+madrona.common.feedvalidator.kml.SchemaField.validate
+madrona.common.feedvalidator.kml.Snippet.validate
+madrona.common.feedvalidator.kml.StyleMap.validate
+madrona.common.feedvalidator.kml.TimeStamp.validate
+madrona.common.feedvalidator.kml.Update.validate
+madrona.common.feedvalidator.kml.angle360.validate
+madrona.common.feedvalidator.kml.antialias.validate
+madrona.common.feedvalidator.kml.boundary.validate
+madrona.common.feedvalidator.kml.color.validate
+madrona.common.feedvalidator.kml.coordinates.validate
+madrona.common.feedvalidator.kml.geomColor.validate
+madrona.common.feedvalidator.kml.geomScale.validate
+madrona.common.feedvalidator.kml.labelColor.validate
+madrona.common.feedvalidator.kml.noiconoffset.validate
+madrona.common.feedvalidator.kml.overlayxy.validate
+madrona.common.feedvalidator.kml.refreshVisibility.validate
+madrona.common.feedvalidator.kml.zeroone.validate
+madrona.common.feedvalidator.link.link.validate
+madrona.common.feedvalidator.media.media_content.validate
+madrona.common.feedvalidator.media.media_group.validate
+madrona.common.feedvalidator.media.media_hash.validate
+madrona.common.feedvalidator.media.media_player.validate
+madrona.common.feedvalidator.media.media_rating.validate
+madrona.common.feedvalidator.media.media_restriction.validate
+madrona.common.feedvalidator.media.media_text.validate
+madrona.common.feedvalidator.media.media_thumbnail.validate
+madrona.common.feedvalidator.media.media_title.validate
+madrona.common.feedvalidator.opensearch.Language.validate
+madrona.common.feedvalidator.opensearch.OpenSearchDescription.validate
+madrona.common.feedvalidator.opensearch.QueryRole.validate
+madrona.common.feedvalidator.opensearch.SyndicationRight.validate
+madrona.common.feedvalidator.opensearch.Template.validate
+madrona.common.feedvalidator.opensearch.UrlEncoded.validate
+madrona.common.feedvalidator.opml.commaSeparatedLines.validate
+madrona.common.feedvalidator.opml.opml.validate
+madrona.common.feedvalidator.opml.opmlBody.validate
+madrona.common.feedvalidator.opml.opmlOutline.validate
+madrona.common.feedvalidator.rdf.rdf.validate
+madrona.common.feedvalidator.rdf.rdfExtension.validate
+madrona.common.feedvalidator.rdf.rss10Image.validate
+madrona.common.feedvalidator.rss.rss.validate
+madrona.common.feedvalidator.service.collection.validate
+madrona.common.feedvalidator.service.service.validate
+madrona.common.feedvalidator.service.workspace.validate
+madrona.common.feedvalidator.skipDays.day.validate
+madrona.common.feedvalidator.skipDays.skipDays.validate
+madrona.common.feedvalidator.skipHours.hour.validate
+madrona.common.feedvalidator.skipHours.skipHours.validate
+madrona.common.feedvalidator.sse.Sync.validate
+madrona.common.feedvalidator.sse.rfc2141_nss.validate
+madrona.common.feedvalidator.textInput.textInput.validate
+madrona.common.feedvalidator.validators.Charset.validate
+madrona.common.feedvalidator.validators.Float.validate
+madrona.common.feedvalidator.validators.Integer.validate
+madrona.common.feedvalidator.validators.MediaRange.validate
+madrona.common.feedvalidator.validators.MimeType.validate
+madrona.common.feedvalidator.validators.addr_spec.validate
+madrona.common.feedvalidator.validators.alphanumeric.validate
+madrona.common.feedvalidator.validators.canonicaluri.validate
+madrona.common.feedvalidator.validators.caseinsensitive_enumeration.validate
+madrona.common.feedvalidator.validators.commaSeparatedIntegers.validate
+madrona.common.feedvalidator.validators.duration.validate
+madrona.common.feedvalidator.validators.email.validate
+madrona.common.feedvalidator.validators.email_with_name.validate
+madrona.common.feedvalidator.validators.enumeration.validate
+madrona.common.feedvalidator.validators.formname.validate
+madrona.common.feedvalidator.validators.httpURL.validate
+madrona.common.feedvalidator.validators.iso639.validate
+madrona.common.feedvalidator.validators.iso8601.validate
+madrona.common.feedvalidator.validators.iso8601_date.validate
+madrona.common.feedvalidator.validators.keywords.validate
+madrona.common.feedvalidator.validators.latitude.validate
+madrona.common.feedvalidator.validators.lengthLimitedText.validate
+madrona.common.feedvalidator.validators.longitude.validate
+madrona.common.feedvalidator.validators.nonNegativeInteger.validate
+madrona.common.feedvalidator.validators.nonblank.validate
+madrona.common.feedvalidator.validators.nonemail.validate
+madrona.common.feedvalidator.validators.nonhtml.validate
+madrona.common.feedvalidator.validators.percentType.validate
+madrona.common.feedvalidator.validators.positiveInteger.validate
+madrona.common.feedvalidator.validators.rdfAbout.validate
+madrona.common.feedvalidator.validators.rdfResourceURI.validate
+madrona.common.feedvalidator.validators.rfc2396.validate
+madrona.common.feedvalidator.validators.rfc2396_full.validate
+madrona.common.feedvalidator.validators.rfc3987.validate
+madrona.common.feedvalidator.validators.rfc3987_full.validate
+madrona.common.feedvalidator.validators.rfc822.validate
+madrona.common.feedvalidator.validators.safeHtml.validate
+madrona.common.feedvalidator.validators.truefalse.validate
+madrona.common.feedvalidator.validators.truefalsestrict.validate
+madrona.common.feedvalidator.validators.unbounded_iso8601.validate
+madrona.common.feedvalidator.validators.unique.validate
+madrona.common.feedvalidator.validators.xmlbase.validate
+madrona.common.feedvalidator.validators.yesno.validate
+madrona.loadshp.forms.UploadForm.validate
+madrona.shapes.forms.UploadForm.validate" class="py-name" href="#" onclick="return doclink('link-6', 'validate', 'link-6');">validate</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">extraParams</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-string">"attr"</tt><tt class="py-op">:</tt> <tt class="py-string">"url"</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attrs</tt><tt class="py-op">.</tt><tt class="py-name">has_key</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">"uri"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">      <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-7', 'value', 'link-4');">value</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">attrs</tt><tt class="py-op">.</tt><tt class="py-name">getValue</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-string">"uri"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">      <tt id="link-8" class="py-name"><a title="madrona.common.feedvalidator.validators.rfc2396" class="py-name" href="#" onclick="return doclink('link-8', 'rfc2396', 'link-5');">rfc2396</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="madrona.common.feedvalidator.author.author.validate
+madrona.common.feedvalidator.base.validatorBase.validate
+madrona.common.feedvalidator.categories.categories.validate
+madrona.common.feedvalidator.channel.blink.validate
+madrona.common.feedvalidator.channel.channel.validate
+madrona.common.feedvalidator.channel.docs.validate
+madrona.common.feedvalidator.channel.link.validate
+madrona.common.feedvalidator.channel.title.validate
+madrona.common.feedvalidator.content.diveater.validate
+madrona.common.feedvalidator.content.textConstruct.validate
+madrona.common.feedvalidator.entry.entry.validate
+madrona.common.feedvalidator.entry.source.validate
+madrona.common.feedvalidator.extension.decimal.validate
+madrona.common.feedvalidator.extension.floatUnit.validate
+madrona.common.feedvalidator.extension.g_float.validate
+madrona.common.feedvalidator.extension.g_full_locationType.validate
+madrona.common.feedvalidator.extension.g_intUnit.validate
+madrona.common.feedvalidator.extension.g_labelType.validate
+madrona.common.feedvalidator.extension.g_locationType.validate
+madrona.common.feedvalidator.extension.g_year.validate
+madrona.common.feedvalidator.extension.geo_point.validate
+madrona.common.feedvalidator.extension.gml_pos.validate
+madrona.common.feedvalidator.extension.gml_posList.validate
+madrona.common.feedvalidator.extension.heisen_uri.validate
+madrona.common.feedvalidator.extension.in_reply_to.validate
+madrona.common.feedvalidator.extension.l_permalink.validate
+madrona.common.feedvalidator.extension.sy_updatePeriod.validate
+madrona.common.feedvalidator.feed.feed.validate
+madrona.common.feedvalidator.image.height.validate
+madrona.common.feedvalidator.image.image.validate
+madrona.common.feedvalidator.image.link.validate
+madrona.common.feedvalidator.image.title.validate
+madrona.common.feedvalidator.image.url.validate
+madrona.common.feedvalidator.image.width.validate
+madrona.common.feedvalidator.item.guid.validate
+madrona.common.feedvalidator.item.item.validate
+madrona.common.feedvalidator.item.rss10Item.validate
+madrona.common.feedvalidator.itunes.itunes_channel.validate
+madrona.common.feedvalidator.itunes.itunes_item.validate
+madrona.common.feedvalidator.itunes.owner.validate
+madrona.common.feedvalidator.itunes.yesnoclean.validate
+madrona.common.feedvalidator.kml.FloatWithNegative.validate
+madrona.common.feedvalidator.kml.GroundOverlay.validate
+madrona.common.feedvalidator.kml.Icon.validate
+madrona.common.feedvalidator.kml.ItemIcon.validate
+madrona.common.feedvalidator.kml.LatLonBox.validate
+madrona.common.feedvalidator.kml.LineString.validate
+madrona.common.feedvalidator.kml.LinearRing.validate
+madrona.common.feedvalidator.kml.Location.validate
+madrona.common.feedvalidator.kml.Metadata.validate
+madrona.common.feedvalidator.kml.Model.validate
+madrona.common.feedvalidator.kml.NetworkLink.validate
+madrona.common.feedvalidator.kml.Pair.validate
+madrona.common.feedvalidator.kml.Point.validate
+madrona.common.feedvalidator.kml.Polygon.validate
+madrona.common.feedvalidator.kml.Region.validate
+madrona.common.feedvalidator.kml.SchemaField.validate
+madrona.common.feedvalidator.kml.Snippet.validate
+madrona.common.feedvalidator.kml.StyleMap.validate
+madrona.common.feedvalidator.kml.TimeStamp.validate
+madrona.common.feedvalidator.kml.Update.validate
+madrona.common.feedvalidator.kml.angle360.validate
+madrona.common.feedvalidator.kml.antialias.validate
+madrona.common.feedvalidator.kml.boundary.validate
+madrona.common.feedvalidator.kml.color.validate
+madrona.common.feedvalidator.kml.coordinates.validate
+madrona.common.feedvalidator.kml.geomColor.validate
+madrona.common.feedvalidator.kml.geomScale.validate
+madrona.common.feedvalidator.kml.labelColor.validate
+madrona.common.feedvalidator.kml.noiconoffset.validate
+madrona.common.feedvalidator.kml.overlayxy.validate
+madrona.common.feedvalidator.kml.refreshVisibility.validate
+madrona.common.feedvalidator.kml.zeroone.validate
+madrona.common.feedvalidator.link.link.validate
+madrona.common.feedvalidator.media.media_content.validate
+madrona.common.feedvalidator.media.media_group.validate
+madrona.common.feedvalidator.media.media_hash.validate
+madrona.common.feedvalidator.media.media_player.validate
+madrona.common.feedvalidator.media.media_rating.validate
+madrona.common.feedvalidator.media.media_restriction.validate
+madrona.common.feedvalidator.media.media_text.validate
+madrona.common.feedvalidator.media.media_thumbnail.validate
+madrona.common.feedvalidator.media.media_title.validate
+madrona.common.feedvalidator.opensearch.Language.validate
+madrona.common.feedvalidator.opensearch.OpenSearchDescription.validate
+madrona.common.feedvalidator.opensearch.QueryRole.validate
+madrona.common.feedvalidator.opensearch.SyndicationRight.validate
+madrona.common.feedvalidator.opensearch.Template.validate
+madrona.common.feedvalidator.opensearch.UrlEncoded.validate
+madrona.common.feedvalidator.opml.commaSeparatedLines.validate
+madrona.common.feedvalidator.opml.opml.validate
+madrona.common.feedvalidator.opml.opmlBody.validate
+madrona.common.feedvalidator.opml.opmlOutline.validate
+madrona.common.feedvalidator.rdf.rdf.validate
+madrona.common.feedvalidator.rdf.rdfExtension.validate
+madrona.common.feedvalidator.rdf.rss10Image.validate
+madrona.common.feedvalidator.rss.rss.validate
+madrona.common.feedvalidator.service.collection.validate
+madrona.common.feedvalidator.service.service.validate
+madrona.common.feedvalidator.service.workspace.validate
+madrona.common.feedvalidator.skipDays.day.validate
+madrona.common.feedvalidator.skipDays.skipDays.validate
+madrona.common.feedvalidator.skipHours.hour.validate
+madrona.common.feedvalidator.skipHours.skipHours.validate
+madrona.common.feedvalidator.sse.Sync.validate
+madrona.common.feedvalidator.sse.rfc2141_nss.validate
+madrona.common.feedvalidator.textInput.textInput.validate
+madrona.common.feedvalidator.validators.Charset.validate
+madrona.common.feedvalidator.validators.Float.validate
+madrona.common.feedvalidator.validators.Integer.validate
+madrona.common.feedvalidator.validators.MediaRange.validate
+madrona.common.feedvalidator.validators.MimeType.validate
+madrona.common.feedvalidator.validators.addr_spec.validate
+madrona.common.feedvalidator.validators.alphanumeric.validate
+madrona.common.feedvalidator.validators.canonicaluri.validate
+madrona.common.feedvalidator.validators.caseinsensitive_enumeration.validate
+madrona.common.feedvalidator.validators.commaSeparatedIntegers.validate
+madrona.common.feedvalidator.validators.duration.validate
+madrona.common.feedvalidator.validators.email.validate
+madrona.common.feedvalidator.validators.email_with_name.validate
+madrona.common.feedvalidator.validators.enumeration.validate
+madrona.common.feedvalidator.validators.formname.validate
+madrona.common.feedvalidator.validators.httpURL.validate
+madrona.common.feedvalidator.validators.iso639.validate
+madrona.common.feedvalidator.validators.iso8601.validate
+madrona.common.feedvalidator.validators.iso8601_date.validate
+madrona.common.feedvalidator.validators.keywords.validate
+madrona.common.feedvalidator.validators.latitude.validate
+madrona.common.feedvalidator.validators.lengthLimitedText.validate
+madrona.common.feedvalidator.validators.longitude.validate
+madrona.common.feedvalidator.validators.nonNegativeInteger.validate
+madrona.common.feedvalidator.validators.nonblank.validate
+madrona.common.feedvalidator.validators.nonemail.validate
+madrona.common.feedvalidator.validators.nonhtml.validate
+madrona.common.feedvalidator.validators.percentType.validate
+madrona.common.feedvalidator.validators.positiveInteger.validate
+madrona.common.feedvalidator.validators.rdfAbout.validate
+madrona.common.feedvalidator.validators.rdfResourceURI.validate
+madrona.common.feedvalidator.validators.rfc2396.validate
+madrona.common.feedvalidator.validators.rfc2396_full.validate
+madrona.common.feedvalidator.validators.rfc3987.validate
+madrona.common.feedvalidator.validators.rfc3987_full.validate
+madrona.common.feedvalidator.validators.rfc822.validate
+madrona.common.feedvalidator.validators.safeHtml.validate
+madrona.common.feedvalidator.validators.truefalse.validate
+madrona.common.feedvalidator.validators.truefalsestrict.validate
+madrona.common.feedvalidator.validators.unbounded_iso8601.validate
+madrona.common.feedvalidator.validators.unique.validate
+madrona.common.feedvalidator.validators.xmlbase.validate
+madrona.common.feedvalidator.validators.yesno.validate
+madrona.loadshp.forms.UploadForm.validate
+madrona.shapes.forms.UploadForm.validate" class="py-name" href="#" onclick="return doclink('link-9', 'validate', 'link-6');">validate</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">errorClass</tt><tt class="py-op">=</tt><tt id="link-10" class="py-name" targets="Class madrona.common.feedvalidator.logging.InvalidURIAttribute=madrona.common.feedvalidator.logging.InvalidURIAttribute-class.html"><a title="madrona.common.feedvalidator.logging.InvalidURIAttribute" class="py-name" href="#" onclick="return doclink('link-10', 'InvalidURIAttribute', 'link-10');">InvalidURIAttribute</a></tt><tt class="py-op">,</tt> <tt class="py-name">extraParams</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-string">"attr"</tt><tt class="py-op">:</tt> <tt class="py-string">"uri"</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="madrona.xyquery.models.Attribute.value" class="py-name" href="#" onclick="return doclink('link-11', 'value', 'link-4');">value</a></tt><tt class="py-op">=</tt><tt class="py-string">''</tt> </tt>
+</div></div><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:26 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

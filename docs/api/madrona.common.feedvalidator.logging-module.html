@@ -1,0 +1,2451 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.feedvalidator.logging</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        <a href="madrona.common.feedvalidator-module.html">Package&nbsp;feedvalidator</a> ::
+        Module&nbsp;logging
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module logging</h1><p class="nomargin-top"><span class="codelink"><a href="madrona.common.feedvalidator.logging-pysrc.html">source&nbsp;code</a></span></p>
+<p>$Id: logging.py 1059 2009-11-12 22:08:04Z sa3ruby $</p>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        $Revision: 1059 $
+      </p>
+      <p><strong>Author:</strong>
+        Sam Ruby &lt;http://intertwingly.net/&gt; and Mark Pilgrim 
+        &lt;http://diveintomark.org/&gt;
+      </p>
+      <p><strong>Copyright:</strong>
+        Copyright (c) 2002 Sam Ruby and Mark Pilgrim
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.LoggedEvent-class.html" class="summary-name">LoggedEvent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Info-class.html" class="summary-name">Info</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Message-class.html" class="summary-name">Message</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Warning-class.html" class="summary-name">Warning</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Error-class.html" class="summary-name">Error</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidationFailure-class.html" class="summary-name">ValidationFailure</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SAXError-class.html" class="summary-name">SAXError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.WPBlankLine-class.html" class="summary-name">WPBlankLine</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnicodeError-class.html" class="summary-name">UnicodeError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingNamespace-class.html" class="summary-name">MissingNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotInANamespace-class.html" class="summary-name">NotInANamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UseOfExtensionAttr-class.html" class="summary-name">UseOfExtensionAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UndefinedNamedEntity-class.html" class="summary-name">UndefinedNamedEntity</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRSSVersion-class.html" class="summary-name">InvalidRSSVersion</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UndefinedElement-class.html" class="summary-name">UndefinedElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NoBlink-class.html" class="summary-name">NoBlink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NoThrWhen-class.html" class="summary-name">NoThrWhen</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingAttribute-class.html" class="summary-name">MissingAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnexpectedAttribute-class.html" class="summary-name">UnexpectedAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateElement-class.html" class="summary-name">DuplicateElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotEnoughHoursInTheDay-class.html" class="summary-name">NotEnoughHoursInTheDay</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.EightDaysAWeek-class.html" class="summary-name">EightDaysAWeek</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidValue-class.html" class="summary-name">InvalidValue</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidContact-class.html" class="summary-name">InvalidContact</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnknownHost-class.html" class="summary-name">UnknownHost</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAddrSpec-class.html" class="summary-name">InvalidAddrSpec</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLink-class.html" class="summary-name">InvalidLink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UriNotIri-class.html" class="summary-name">UriNotIri</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidIRI-class.html" class="summary-name">InvalidIRI</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidFullLink-class.html" class="summary-name">InvalidFullLink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidUriChar-class.html" class="summary-name">InvalidUriChar</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidISO8601Date-class.html" class="summary-name">InvalidISO8601Date</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidISO8601DateTime-class.html" class="summary-name">InvalidISO8601DateTime</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidW3CDTFDate-class.html" class="summary-name">InvalidW3CDTFDate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRFC2822Date-class.html" class="summary-name">InvalidRFC2822Date</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.IncorrectDOW-class.html" class="summary-name">IncorrectDOW</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRFC3339Date-class.html" class="summary-name">InvalidRFC3339Date</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidURIAttribute-class.html" class="summary-name">InvalidURIAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidURLAttribute-class.html" class="summary-name">InvalidURLAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidIntegerAttribute-class.html" class="summary-name">InvalidIntegerAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidBooleanAttribute-class.html" class="summary-name">InvalidBooleanAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMIMEAttribute-class.html" class="summary-name">InvalidMIMEAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidInteger-class.html" class="summary-name">InvalidInteger</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidPercentage-class.html" class="summary-name">InvalidPercentage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidNonNegativeInteger-class.html" class="summary-name">InvalidNonNegativeInteger</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidPositiveInteger-class.html" class="summary-name">InvalidPositiveInteger</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAlphanum-class.html" class="summary-name">InvalidAlphanum</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidWidth-class.html" class="summary-name">InvalidWidth</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidHeight-class.html" class="summary-name">InvalidHeight</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidHour-class.html" class="summary-name">InvalidHour</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidDay-class.html" class="summary-name">InvalidDay</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidHttpGUID-class.html" class="summary-name">InvalidHttpGUID</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLanguage-class.html" class="summary-name">InvalidLanguage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidUpdatePeriod-class.html" class="summary-name">InvalidUpdatePeriod</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidItunesCategory-class.html" class="summary-name">InvalidItunesCategory</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ObsoleteItunesCategory-class.html" class="summary-name">ObsoleteItunesCategory</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidYesNo-class.html" class="summary-name">InvalidYesNo</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidYesNoClean-class.html" class="summary-name">InvalidYesNoClean</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidDuration-class.html" class="summary-name">InvalidDuration</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.TooLong-class.html" class="summary-name">TooLong</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKeywords-class.html" class="summary-name">InvalidKeywords</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidTextType-class.html" class="summary-name">InvalidTextType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCommaSeparatedIntegers-class.html" class="summary-name">InvalidCommaSeparatedIntegers</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UndeterminableVocabulary-class.html" class="summary-name">UndeterminableVocabulary</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidFormComponentName-class.html" class="summary-name">InvalidFormComponentName</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAccessRestrictionRel-class.html" class="summary-name">InvalidAccessRestrictionRel</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotURLEncoded-class.html" class="summary-name">NotURLEncoded</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLocalRole-class.html" class="summary-name">InvalidLocalRole</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidEncoding-class.html" class="summary-name">InvalidEncoding</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLocalParameter-class.html" class="summary-name">InvalidLocalParameter</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingElement-class.html" class="summary-name">MissingElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingDescription-class.html" class="summary-name">MissingDescription</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingLink-class.html" class="summary-name">MissingLink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingTitle-class.html" class="summary-name">MissingTitle</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ItemMustContainTitleOrDescription-class.html" class="summary-name">ItemMustContainTitleOrDescription</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingXhtmlDiv-class.html" class="summary-name">MissingXhtmlDiv</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingContentOrAlternate-class.html" class="summary-name">MissingContentOrAlternate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.FatalSecurityRisk-class.html" class="summary-name">FatalSecurityRisk</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ContainsSystemEntity-class.html" class="summary-name">ContainsSystemEntity</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateValue-class.html" class="summary-name">DuplicateValue</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidDoctype-class.html" class="summary-name">InvalidDoctype</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.BadXmlVersion-class.html" class="summary-name">BadXmlVersion</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateAtomLink-class.html" class="summary-name">DuplicateAtomLink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingHref-class.html" class="summary-name">MissingHref</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.AtomLinkNotEmpty-class.html" class="summary-name">AtomLinkNotEmpty</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnregisteredAtomLinkRel-class.html" class="summary-name">UnregisteredAtomLinkRel</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.HttpError-class.html" class="summary-name">HttpError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.IOError-class.html" class="summary-name">IOError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnknownEncoding-class.html" class="summary-name">UnknownEncoding</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnexpectedText-class.html" class="summary-name">UnexpectedText</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnexpectedWhitespace-class.html" class="summary-name">UnexpectedWhitespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidatorLimit-class.html" class="summary-name">ValidatorLimit</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.HttpProtocolError-class.html" class="summary-name">HttpProtocolError</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRDF-class.html" class="summary-name">InvalidRDF</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLatitude-class.html" class="summary-name">InvalidLatitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLongitude-class.html" class="summary-name">InvalidLongitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MisplacedMetadata-class.html" class="summary-name">MisplacedMetadata</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidPermalink-class.html" class="summary-name">InvalidPermalink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCreditRole-class.html" class="summary-name">InvalidCreditRole</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaTextType-class.html" class="summary-name">InvalidMediaTextType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaHash-class.html" class="summary-name">InvalidMediaHash</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaRating-class.html" class="summary-name">InvalidMediaRating</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidNPTTime-class.html" class="summary-name">InvalidNPTTime</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaRestriction-class.html" class="summary-name">InvalidMediaRestriction</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaRestrictionRel-class.html" class="summary-name">InvalidMediaRestrictionRel</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaRestrictionType-class.html" class="summary-name">InvalidMediaRestrictionType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaMedium-class.html" class="summary-name">InvalidMediaMedium</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaExpression-class.html" class="summary-name">InvalidMediaExpression</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DeprecatedMediaAdult-class.html" class="summary-name">DeprecatedMediaAdult</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MediaGroupWithoutAlternatives-class.html" class="summary-name">MediaGroupWithoutAlternatives</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidSseType-class.html" class="summary-name">InvalidSseType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidNSS-class.html" class="summary-name">InvalidNSS</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.IntegerOverflow-class.html" class="summary-name">IntegerOverflow</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SinceAfterUntil-class.html" class="summary-name">SinceAfterUntil</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingByAndWhenAttrs-class.html" class="summary-name">MissingByAndWhenAttrs</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateSemantics-class.html" class="summary-name">DuplicateSemantics</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateItemSemantics-class.html" class="summary-name">DuplicateItemSemantics</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateDescriptionSemantics-class.html" class="summary-name">DuplicateDescriptionSemantics</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ImageLinkDoesntMatch-class.html" class="summary-name">ImageLinkDoesntMatch</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ImageUrlFormat-class.html" class="summary-name">ImageUrlFormat</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ContainsRelRef-class.html" class="summary-name">ContainsRelRef</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ReservedPrefix-class.html" class="summary-name">ReservedPrefix</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MediaRssNamespace-class.html" class="summary-name">MediaRssNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotSufficientlyUnique-class.html" class="summary-name">NotSufficientlyUnique</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ImplausibleDate-class.html" class="summary-name">ImplausibleDate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ProblematicalRFC822Date-class.html" class="summary-name">ProblematicalRFC822Date</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SecurityRisk-class.html" class="summary-name">SecurityRisk</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SecurityRiskAttr-class.html" class="summary-name">SecurityRiskAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DangerousStyleAttr-class.html" class="summary-name">DangerousStyleAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.BadCharacters-class.html" class="summary-name">BadCharacters</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ObscureEncoding-class.html" class="summary-name">ObscureEncoding</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnexpectedContentType-class.html" class="summary-name">UnexpectedContentType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.EncodingMismatch-class.html" class="summary-name">EncodingMismatch</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NonSpecificMediaType-class.html" class="summary-name">NonSpecificMediaType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NonCanonicalURI-class.html" class="summary-name">NonCanonicalURI</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SameDocumentReference-class.html" class="summary-name">SameDocumentReference</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ContainsEmail-class.html" class="summary-name">ContainsEmail</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ContainsHTML-class.html" class="summary-name">ContainsHTML</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ContainsUndeclaredHTML-class.html" class="summary-name">ContainsUndeclaredHTML</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingSelf-class.html" class="summary-name">MissingSelf</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SelfDoesntMatchLocation-class.html" class="summary-name">SelfDoesntMatchLocation</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.RelativeSelf-class.html" class="summary-name">RelativeSelf</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingSourceElement-class.html" class="summary-name">MissingSourceElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingTypeAttr-class.html" class="summary-name">MissingTypeAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateIds-class.html" class="summary-name">DuplicateIds</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateEntries-class.html" class="summary-name">DuplicateEntries</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateUpdated-class.html" class="summary-name">DuplicateUpdated</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotBlank-class.html" class="summary-name">NotBlank</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.AttrNotBlank-class.html" class="summary-name">AttrNotBlank</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingSummary-class.html" class="summary-name">MissingSummary</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingTextualContent-class.html" class="summary-name">MissingTextualContent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotUTF8-class.html" class="summary-name">NotUTF8</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingItunesElement-class.html" class="summary-name">MissingItunesElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingItunesEmail-class.html" class="summary-name">MissingItunesEmail</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnsupportedItunesFormat-class.html" class="summary-name">UnsupportedItunesFormat</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SelfNotAtom-class.html" class="summary-name">SelfNotAtom</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DuplicateEnclosure-class.html" class="summary-name">DuplicateEnclosure</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingGuid-class.html" class="summary-name">MissingGuid</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ObsoleteWikiNamespace-class.html" class="summary-name">ObsoleteWikiNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.CommentRSS-class.html" class="summary-name">CommentRSS</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ShouldIncludeExample-class.html" class="summary-name">ShouldIncludeExample</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAdultContent-class.html" class="summary-name">InvalidAdultContent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidSyndicationRight-class.html" class="summary-name">InvalidSyndicationRight</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UndeclaredPrefix-class.html" class="summary-name">UndeclaredPrefix</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MisplacedXHTMLContent-class.html" class="summary-name">MisplacedXHTMLContent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SchemeNotIANARegistered-class.html" class="summary-name">SchemeNotIANARegistered</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.AvoidNamespacePrefix-class.html" class="summary-name">AvoidNamespacePrefix</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UnknownNamespace-class.html" class="summary-name">UnknownNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingRecommendedAttribute-class.html" class="summary-name">MissingRecommendedAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.QuestionableUsage-class.html" class="summary-name">QuestionableUsage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.BestPractices-class.html" class="summary-name">BestPractices</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingRecommendedElement-class.html" class="summary-name">MissingRecommendedElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingDCLanguage-class.html" class="summary-name">MissingDCLanguage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NonstdPrefix-class.html" class="summary-name">NonstdPrefix</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NonstdEncoding-class.html" class="summary-name">NonstdEncoding</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingEncoding-class.html" class="summary-name">MissingEncoding</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.TempRedirect-class.html" class="summary-name">TempRedirect</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.TextXml-class.html" class="summary-name">TextXml</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Uncompressed-class.html" class="summary-name">Uncompressed</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ObsoleteVersion-class.html" class="summary-name">ObsoleteVersion</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ObsoleteNamespace-class.html" class="summary-name">ObsoleteNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ConflictingCatAttr-class.html" class="summary-name">ConflictingCatAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ConflictingCatChildren-class.html" class="summary-name">ConflictingCatChildren</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMediaRange-class.html" class="summary-name">InvalidMediaRange</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UndefinedParam-class.html" class="summary-name">UndefinedParam</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidURI-class.html" class="summary-name">InvalidURI</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidURN-class.html" class="summary-name">InvalidURN</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidUUID-class.html" class="summary-name">InvalidUUID</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidTAG-class.html" class="summary-name">InvalidTAG</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidContentMode-class.html" class="summary-name">InvalidContentMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMIMEType-class.html" class="summary-name">InvalidMIMEType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidNamespace-class.html" class="summary-name">InvalidNamespace</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotEscaped-class.html" class="summary-name">NotEscaped</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotBase64-class.html" class="summary-name">NotBase64</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotInline-class.html" class="summary-name">NotInline</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NotHtml-class.html" class="summary-name">NotHtml</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.HtmlFragment-class.html" class="summary-name">HtmlFragment</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.FeedHistoryRelInEntry-class.html" class="summary-name">FeedHistoryRelInEntry</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.FeedRelInCompleteFeed-class.html" class="summary-name">FeedRelInCompleteFeed</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.CurrentNotSelfInCompleteFeed-class.html" class="summary-name">CurrentNotSelfInCompleteFeed</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.LinkPastEnd-class.html" class="summary-name">LinkPastEnd</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingCurrentInArchive-class.html" class="summary-name">MissingCurrentInArchive</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ArchiveIncomplete-class.html" class="summary-name">ArchiveIncomplete</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Success-class.html" class="summary-name">Success</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidValue-class.html" class="summary-name">ValidValue</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidCloud-class.html" class="summary-name">ValidCloud</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidURI-class.html" class="summary-name">ValidURI</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidHttpGUID-class.html" class="summary-name">ValidHttpGUID</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidURLAttribute-class.html" class="summary-name">ValidURLAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidURN-class.html" class="summary-name">ValidURN</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidTAG-class.html" class="summary-name">ValidTAG</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidDate-class.html" class="summary-name">ValidDate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidW3CDTFDate-class.html" class="summary-name">ValidW3CDTFDate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidRFC2822Date-class.html" class="summary-name">ValidRFC2822Date</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidAttributeValue-class.html" class="summary-name">ValidAttributeValue</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidBooleanAttribute-class.html" class="summary-name">ValidBooleanAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidLanguage-class.html" class="summary-name">ValidLanguage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidHeight-class.html" class="summary-name">ValidHeight</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidWidth-class.html" class="summary-name">ValidWidth</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidTitle-class.html" class="summary-name">ValidTitle</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidContact-class.html" class="summary-name">ValidContact</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidIntegerAttribute-class.html" class="summary-name">ValidIntegerAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidMIMEAttribute-class.html" class="summary-name">ValidMIMEAttribute</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidDay-class.html" class="summary-name">ValidDay</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidHour-class.html" class="summary-name">ValidHour</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidInteger-class.html" class="summary-name">ValidInteger</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidPercentage-class.html" class="summary-name">ValidPercentage</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidUpdatePeriod-class.html" class="summary-name">ValidUpdatePeriod</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidContentMode-class.html" class="summary-name">ValidContentMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidElement-class.html" class="summary-name">ValidElement</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidCopyright-class.html" class="summary-name">ValidCopyright</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidGeneratorName-class.html" class="summary-name">ValidGeneratorName</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.OptionalValueMissing-class.html" class="summary-name">OptionalValueMissing</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidDoctype-class.html" class="summary-name">ValidDoctype</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DeprecatedDTD-class.html" class="summary-name">DeprecatedDTD</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidHtml-class.html" class="summary-name">ValidHtml</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidAtomLinkRel-class.html" class="summary-name">ValidAtomLinkRel</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidLatitude-class.html" class="summary-name">ValidLatitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidLongitude-class.html" class="summary-name">ValidLongitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidNPTTime-class.html" class="summary-name">ValidNPTTime</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidOPMLVersion-class.html" class="summary-name">InvalidOPMLVersion</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingXmlURL-class.html" class="summary-name">MissingXmlURL</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidOutlineVersion-class.html" class="summary-name">InvalidOutlineVersion</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidOutlineType-class.html" class="summary-name">InvalidOutlineType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidExpansionState-class.html" class="summary-name">InvalidExpansionState</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidTrueFalse-class.html" class="summary-name">InvalidTrueFalse</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingOutlineType-class.html" class="summary-name">MissingOutlineType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingTitleAttr-class.html" class="summary-name">MissingTitleAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingUrlAttr-class.html" class="summary-name">MissingUrlAttr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCountryCode-class.html" class="summary-name">InvalidCountryCode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCurrencyUnit-class.html" class="summary-name">InvalidCurrencyUnit</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidFloat-class.html" class="summary-name">InvalidFloat</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidFloatUnit-class.html" class="summary-name">InvalidFloatUnit</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidFullLocation-class.html" class="summary-name">InvalidFullLocation</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidGender-class.html" class="summary-name">InvalidGender</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidIntUnit-class.html" class="summary-name">InvalidIntUnit</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLabel-class.html" class="summary-name">InvalidLabel</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidLocation-class.html" class="summary-name">InvalidLocation</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMaritalStatus-class.html" class="summary-name">InvalidMaritalStatus</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidPaymentMethod-class.html" class="summary-name">InvalidPaymentMethod</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidPriceType-class.html" class="summary-name">InvalidPriceType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRatingType-class.html" class="summary-name">InvalidRatingType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidReviewerType-class.html" class="summary-name">InvalidReviewerType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidSalaryType-class.html" class="summary-name">InvalidSalaryType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidServiceType-class.html" class="summary-name">InvalidServiceType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidYear-class.html" class="summary-name">InvalidYear</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.TooMany-class.html" class="summary-name">TooMany</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCoord-class.html" class="summary-name">InvalidCoord</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidCoordList-class.html" class="summary-name">InvalidCoordList</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.CoordComma-class.html" class="summary-name">CoordComma</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMetaName-class.html" class="summary-name">InvalidMetaName</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidMetaContent-class.html" class="summary-name">InvalidMetaContent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.Deprecated-class.html" class="summary-name">Deprecated</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.DeprecatedRootHref-class.html" class="summary-name">DeprecatedRootHref</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAltitudeMode-class.html" class="summary-name">InvalidAltitudeMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidAngle-class.html" class="summary-name">InvalidAngle</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidColor-class.html" class="summary-name">InvalidColor</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidColorMode-class.html" class="summary-name">InvalidColorMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidItemIconState-class.html" class="summary-name">InvalidItemIconState</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidListItemType-class.html" class="summary-name">InvalidListItemType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKmlCoordList-class.html" class="summary-name">InvalidKmlCoordList</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKmlLatitude-class.html" class="summary-name">InvalidKmlLatitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKmlLongitude-class.html" class="summary-name">InvalidKmlLongitude</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKmlMediaType-class.html" class="summary-name">InvalidKmlMediaType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidKmlUnits-class.html" class="summary-name">InvalidKmlUnits</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidRefreshMode-class.html" class="summary-name">InvalidRefreshMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidSchemaFieldType-class.html" class="summary-name">InvalidSchemaFieldType</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidStyleState-class.html" class="summary-name">InvalidStyleState</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidViewRefreshMode-class.html" class="summary-name">InvalidViewRefreshMode</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.InvalidZeroOne-class.html" class="summary-name">InvalidZeroOne</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingId-class.html" class="summary-name">MissingId</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ValidAngle-class.html" class="summary-name">ValidAngle</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.RSS20Profile-class.html" class="summary-name">RSS20Profile</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.CharacterData-class.html" class="summary-name">CharacterData</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.EmailFormat-class.html" class="summary-name">EmailFormat</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingRealName-class.html" class="summary-name">MissingRealName</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MisplacedItem-class.html" class="summary-name">MisplacedItem</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.ImageTitleDoesntMatch-class.html" class="summary-name">ImageTitleDoesntMatch</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.AvoidTextInput-class.html" class="summary-name">AvoidTextInput</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.NeedDescriptionBeforeContent-class.html" class="summary-name">NeedDescriptionBeforeContent</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.SlashDate-class.html" class="summary-name">SlashDate</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UseZeroForMidnight-class.html" class="summary-name">UseZeroForMidnight</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.MissingAtomSelfLink-class.html" class="summary-name">MissingAtomSelfLink</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging.UseZeroForUnknown-class.html" class="summary-name">UseZeroForUnknown</a>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_UNKNOWN"></a><span class="summary-name">TYPE_UNKNOWN</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_RSS1"></a><span class="summary-name">TYPE_RSS1</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_RSS2"></a><span class="summary-name">TYPE_RSS2</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_ATOM"></a><span class="summary-name">TYPE_ATOM</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_ATOM_ENTRY"></a><span class="summary-name">TYPE_ATOM_ENTRY</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_APP_CATEGORIES"></a><span class="summary-name">TYPE_APP_CATEGORIES</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_APP_SERVICE"></a><span class="summary-name">TYPE_APP_SERVICE</span> = <code title="6">6</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_XRD"></a><span class="summary-name">TYPE_XRD</span> = <code title="7">7</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_OPENSEARCH"></a><span class="summary-name">TYPE_OPENSEARCH</span> = <code title="8">8</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_OPML"></a><span class="summary-name">TYPE_OPML</span> = <code title="9">9</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_KML20"></a><span class="summary-name">TYPE_KML20</span> = <code title="10">10</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_KML21"></a><span class="summary-name">TYPE_KML21</span> = <code title="11">11</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="TYPE_KML22"></a><span class="summary-name">TYPE_KML22</span> = <code title="12">12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging-module.html#FEEDTYPEDISPLAY" class="summary-name">FEEDTYPEDISPLAY</a> = <code title="{0: &quot;(unknown type)&quot;, 1: &quot;RSS&quot;, 2: &quot;RSS&quot;, 3: &quot;Atom 1.0&quot;, 4: &quot;Atom 1.0&quot;\
+, 5: &quot;Atom Publishing Protocol Category&quot;, 6: &quot;Atom Publishing Protocol\
+ Service&quot;, 7: &quot;XRD&quot;, 8: &quot;OpenSearch&quot;, 9: &quot;OPML&quot;, 10: &quot;KML 2.0&quot;, 11: &quot;K\
+ML 2.1&quot;, 12: &quot;KML 2.2&quot;}">{0: &quot;(unknown type)&quot;, 1: &quot;RSS&quot;, 2: &quot;RSS&quot;, 3:<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="madrona.common.feedvalidator.logging-module.html#VALIDFEEDGRAPHIC" class="summary-name">VALIDFEEDGRAPHIC</a> = <code title="{0: &quot;&quot;, 1: &quot;valid-rss.png&quot;, 2: &quot;valid-rss-rogers.png&quot;, 3: &quot;valid-atom.\
+png&quot;, 4: &quot;valid-atom.png&quot;, 5: &quot;valid-atom.png&quot;, 6: &quot;valid-atom.png&quot;, 7\
+: &quot;valid-xrd.png&quot;, 8: &quot;valid-opensearch.png&quot;, 9: &quot;valid-opml.gif&quot;, 10:\
+ &quot;valid-kml.png&quot;, 11: &quot;valid-kml.png&quot;, 12: &quot;valid-kml.png&quot;}">{0: &quot;&quot;, 1: &quot;valid-rss.png&quot;, 2: &quot;valid-rss-r<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="FEEDTYPEDISPLAY"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">FEEDTYPEDISPLAY</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{0: &quot;(unknown type)&quot;, 1: &quot;RSS&quot;, 2: &quot;RSS&quot;, 3: &quot;Atom 1.0&quot;, 4: &quot;Atom 1.0&quot;<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+, 5: &quot;Atom Publishing Protocol Category&quot;, 6: &quot;Atom Publishing Protocol<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ Service&quot;, 7: &quot;XRD&quot;, 8: &quot;OpenSearch&quot;, 9: &quot;OPML&quot;, 10: &quot;KML 2.0&quot;, 11: &quot;K<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ML 2.1&quot;, 12: &quot;KML 2.2&quot;}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="VALIDFEEDGRAPHIC"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">VALIDFEEDGRAPHIC</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{0: &quot;&quot;, 1: &quot;valid-rss.png&quot;, 2: &quot;valid-rss-rogers.png&quot;, 3: &quot;valid-atom.<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+png&quot;, 4: &quot;valid-atom.png&quot;, 5: &quot;valid-atom.png&quot;, 6: &quot;valid-atom.png&quot;, 7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+: &quot;valid-xrd.png&quot;, 8: &quot;valid-opensearch.png&quot;, 9: &quot;valid-opml.gif&quot;, 10:<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ &quot;valid-kml.png&quot;, 11: &quot;valid-kml.png&quot;, 12: &quot;valid-kml.png&quot;}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu May  3 16:28:14 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

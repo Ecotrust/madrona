@@ -1,0 +1,477 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating your first Madrona project &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0b1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="up" title="Tutorials" href="tutorial.html" />
+    <link rel="next" title="madrona.features - Spatial Content Management of Features" href="features.html" />
+    <link rel="prev" title="Tutorials" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="features.html" title="madrona.features - Spatial Content Management of Features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorials"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-your-first-madrona-project">
+<span id="create-new-project"></span><h1>Creating your first Madrona project<a class="headerlink" href="#creating-your-first-madrona-project" title="Permalink to this headline">¶</a></h1>
+<p>These instructions will walk you through developing a basic implementation of
+Madrona. This includes installing the dependencies, setting
+up a sample app, testing that everything installed smoothly, then doing some
+simple customization. By the end you&#8217;ll have a basic Madrona application and a
+sense how to customize it for your needs.</p>
+<div class="section" id="overview-example-madrona-project">
+<h2>Overview: example Madrona project<a class="headerlink" href="#overview-example-madrona-project" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we&#8217;ll set up a new Madrona instance for the state of Oregon.</p>
+<p>We will set up an example feature types:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Areas of Interest (polygons)</li>
+<li>Collections of features (folders)</li>
+</ul>
+</div></blockquote>
+<p>as well as show you how to tweak certain aspects of the application such as:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Generating custom reports</li>
+<li>Customizing styling</li>
+<li>Handling geometries through manipulators</li>
+<li>Managing basemaps and KML datasets</li>
+</ul>
+</div></blockquote>
+<div class="section" id="install-dependencies">
+<h3>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>You will need to install madrona&#8217;s dependencies and madrona itself. For detailed instructions, please follow the <a class="reference internal" href="installation.html#installation"><em>Installation</em></a> guide.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using the Madrona Virtual Machine, all of the necessary software is pre-installed.</p>
+</div>
+</div>
+<div class="section" id="database">
+<h3>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
+<p>Next we&#8217;ll create a new postgis-enabled database for this project and use django&#8217;s syncdb command to create the necessary tables.
+Assuming you installed postgis according to the installation instructions, this is as simple as:</p>
+<div class="highlight-python"><pre>sudo su postgres
+createdb example -U postgres   # you may want to use a different database user depending on your postgres configuration
+exit</pre>
+</div>
+</div>
+<div class="section" id="networking">
+<h3>Networking<a class="headerlink" href="#networking" title="Permalink to this headline">¶</a></h3>
+<p>Before you begin, you&#8217;ll need to know the hostname or IP Address and port at which your server will be accessible.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">In the examples below, you must replace <tt class="docutils literal"><span class="pre">&lt;HOST_OR_IP_ADDRESS&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;PORT&gt;</span></tt> with values appropriate for your networking setup.</p>
+</div>
+</div>
+<div class="section" id="create-new-madrona-project">
+<h3>Create new madrona project<a class="headerlink" href="#create-new-madrona-project" title="Permalink to this headline">¶</a></h3>
+<p>In order to jumpstart the coding process, Madrona provides a script, <tt class="docutils literal"><span class="pre">create-madrona-project.py</span></tt>, which auto-generates the boring parts of the codebase for you. First we&#8217;ll need to decide on some basic parameters of our project.</p>
+<p>Our study region will be defined (roughly) by the following polygon in WKT format:</p>
+<div class="highlight-python"><pre>SRID=4326;POLYGON ((-125.0 41.8, -125.0 46.4, -116.4 46.4, -116.4 41.8, -125.0 41.8))</pre>
+</div>
+<p>Choose a directory to store your project and run the <tt class="docutils literal"><span class="pre">create-madrona-project.py</span></tt> script:</p>
+<div class="highlight-python"><pre>cd /usr/local/userapps
+create-madrona-project.py \
+    --project "Example" \
+    --app example \
+    --domain "&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;" \
+    --connection "dbname='example' user='postgres'" \
+    --studyregion "SRID=4326;POLYGON ((-125.0 41.8, -125.0 46.4, -116.4 46.4, -116.4 41.8, -125.0 41.8))" \
+    --aoi "My Areas of Interest"  \
+    --folder "Collection of Features"  \
+    --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml"</pre>
+</div>
+<p>Finally, create a <cite>superuser</cite> account to manage the site:</p>
+<div class="highlight-python"><pre>cd exampleproject/exampleproject/
+python manage.py createsuperuser --username=madrona --email=madrona@ecotrust.org
+# You'll be prompted to enter a password twice</pre>
+</div>
+</div>
+<div class="section" id="examining-features">
+<h3>Examining Features<a class="headerlink" href="#examining-features" title="Permalink to this headline">¶</a></h3>
+<p>First, we want to examine the <tt class="docutils literal"><span class="pre">Features</span></tt> models. Open <tt class="docutils literal"><span class="pre">example/models.py</span></tt> and find the definition for the AOI Feature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterest</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.MyAreasOfInterestForm&#39;</span>
+</pre></div>
+</div>
+<p>This defines the <cite>MyAreasOfInterest</cite> polygon feature, adds a <cite>description</cite> attribute and defines the <cite>form</cite> used to edit it.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The python convention is to name your model classes using CapsCase. Whatever you do, don&#8217;t use underscores _ in the feature class name.</p>
+</div>
+<p>Next, open the file containing the forms called <tt class="docutils literal"><span class="pre">examples/forms.py</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">MyAreasOfInterest</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterestForm</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">MyAreasOfInterest</span>
+</pre></div>
+</div>
+<p>Here we define the form or editing interface for our feature. Notice that the classes are inherited from the <tt class="docutils literal"><span class="pre">SpatialFeatureForm</span> <span class="pre">class</span></tt>. Right now, we are just accepting the defaults and linking it to our <cite>MyAreasOfInterest</cite> model.</p>
+</div>
+<div class="section" id="featurecollections">
+<h3>FeatureCollections<a class="headerlink" href="#featurecollections" title="Permalink to this headline">¶</a></h3>
+<p>Similarly, we could group features into collections. We can inherit from the base <tt class="docutils literal"><span class="pre">FeatureCollection</span></tt> and specify the mandatory <tt class="docutils literal"><span class="pre">valid_children</span></tt> Option to configure which feature types can be placed in a folder.</p>
+<p>Again, from <tt class="docutils literal"><span class="pre">examples/models.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">CollectionOfFeatures</span><span class="p">(</span><span class="n">FeatureCollection</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.CollectionOfFeaturesForm&#39;</span>
+        <span class="n">valid_children</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s">&#39;example.models.MyAreasOfInterest&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">&#39;example.models.CollectionOfFeatures&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, we&#8217;ve specified that <tt class="docutils literal"><span class="pre">CollectionOfFeatures</span></tt> can contain our AOI feature type as well as other collections (nested).
+This is all that is necessary to begin managing features and organizing them into Collections. With a few lines of code, we&#8217;ve defined the features and aspects of our application&#8217;s behavior. One of our goals is to make the customization and configuration of madrona as easy as possible - and its almost entirely driven by the model configurations you see above. There are few other things you need to do in order to get a fully functional application.</p>
+</div>
+<div class="section" id="trying-it-out">
+<h3>Trying it out<a class="headerlink" href="#trying-it-out" title="Permalink to this headline">¶</a></h3>
+<p>Now that we&#8217;ve examined the models and forms, we can run the development server to confirm everything is running:</p>
+<div class="highlight-python"><pre>manage.py runserver 0.0.0.0:&lt;PORT&gt;</pre>
+</div>
+<p>And visit your web server at <tt class="docutils literal"><span class="pre">http://&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;</span></tt> and explore.</p>
+<img alt="_images/screen1.png" src="_images/screen1.png" />
+</div>
+</div>
+<div class="section" id="customizing-the-madrona-project">
+<span id="tutorial-customizing"></span><h2>Customizing the Madrona project<a class="headerlink" href="#customizing-the-madrona-project" title="Permalink to this headline">¶</a></h2>
+<p>While the above shows the basic layout of a simple madrona app, we&#8217;ll now dive in and begin customizing it.</p>
+<div class="section" id="verbose-name">
+<h3>Verbose name<a class="headerlink" href="#verbose-name" title="Permalink to this headline">¶</a></h3>
+<p>The first obvious step is to change how our feature name appears on screen. We can supply custom text using the <tt class="docutils literal"><span class="pre">verbose_name</span></tt> option:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterest</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.MyAreasOfInterestForm&#39;</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Areas that interest me&#39;</span>
+</pre></div>
+</div>
+<p>For other options, see the <a class="reference internal" href="features.html#feature-options"><em>Feature options docs</em></a>.</p>
+</div>
+<div class="section" id="generating-custom-reports">
+<h3>Generating custom reports<a class="headerlink" href="#generating-custom-reports" title="Permalink to this headline">¶</a></h3>
+<p>The default template for the AOI feature just prints out some basic details. In order to customize it, open <tt class="docutils literal"><span class="pre">templates/myareasofinterest/show.html</span></tt>. There you will see a django html template responsible for creating the attributes page.</p>
+<p>Each feature get&#8217;s passed to the template as the variable <tt class="docutils literal"><span class="pre">instance</span></tt>. Any attributes, properties and methods that exist on the feature model instances can be accessed via template variables. For example, to get the polygon area, you could use the following template substitution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{{</span><span class="n">instance</span><span class="o">.</span><span class="n">geometry_final</span><span class="o">.</span><span class="n">area</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>You could also define a custom property on your AOI model...:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterest</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.MyAreasOfInterestForm&#39;</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Areas that interest me&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">acres</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">area_meters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_final</span><span class="o">.</span><span class="n">area</span>
+        <span class="n">conversion</span> <span class="o">=</span> <span class="mf">0.000247105381</span>
+        <span class="n">area_acres</span> <span class="o">=</span> <span class="n">area_meters</span> <span class="o">*</span> <span class="n">conversion</span>
+        <span class="k">return</span> <span class="n">area_acres</span>
+</pre></div>
+</div>
+<p>... and use the following in your template:</p>
+<div class="highlight-python"><pre>&lt;p&gt;Acreage is {{instance.acres}}&lt;/p&gt;</pre>
+</div>
+<p>The reporting can get as detailed and complex as your needs require and can leverage GeoDjango geometry operations as well as any spatial analysis supported by Python.</p>
+</div>
+<div class="section" id="about-page">
+<h3>About page<a class="headerlink" href="#about-page" title="Permalink to this headline">¶</a></h3>
+<p>Open the <tt class="docutils literal"><span class="pre">templates/news/about.html</span></tt> page. The default landing page is just a placeholder; here you can put any
+html description of your project or high-level documentation that you want the user to see when they first view the site:</p>
+<div class="highlight-python"><pre>{% load appname %}
+&lt;h1&gt; About {% appname %}&lt;/h1&gt;
+&lt;p&gt; This app exists as an example to highlight some of the functionality
+of the Madrona framework. &lt;/p&gt;</pre>
+</div>
+</div>
+<div class="section" id="customizing-kml-styling">
+<h3>Customizing KML styling<a class="headerlink" href="#customizing-kml-styling" title="Permalink to this headline">¶</a></h3>
+<p>Every feature class has a default <tt class="docutils literal"><span class="pre">kml</span></tt> and <tt class="docutils literal"><span class="pre">kml_style</span></tt> properties which defines the KML representation of that feature. If you want to customize the look and behavior of your map features, you can override the kml property in your feature model. In <tt class="docutils literal"><span class="pre">example/models.py</span></tt>:</p>
+<div class="highlight-python"><pre>@register
+class MyAreasOfInterest(PolygonFeature):
+    description = models.TextField(null=True, blank=True)
+    class Options:
+        form = 'example.forms.MyAreasOfInterestForm'
+        verbose_name = 'Areas that interest me'
+
+    @property
+    def kml(self):
+        return """
+        &lt;Placemark id="%s"&gt;
+            &lt;name&gt;%s&lt;/name&gt;
+            &lt;styleUrl&gt;#%s-default&lt;/styleUrl&gt;
+            &lt;ExtendedData&gt;
+                &lt;Data name="name"&gt;&lt;value&gt;%s&lt;/value&gt;&lt;/Data&gt;
+                &lt;Data name="dsc"&gt;&lt;value&gt;%s&lt;/value&gt;&lt;/Data&gt;
+                &lt;Data name="acres"&gt;&lt;value&gt;%s&lt;/value&gt;&lt;/Data&gt;
+            &lt;/ExtendedData&gt;
+            %s
+        &lt;/Placemark&gt;
+        """ % (self.uid,
+            self.name,
+            self.model_uid(),
+            self.name, self.date_modified, self.acres
+            self.geom_kml)
+
+    @property
+    def kml_style(self):
+        return """
+        &lt;Style id="%s-default"&gt;
+            &lt;PolyStyle&gt;
+                &lt;color&gt;ffc00000&lt;/color&gt;
+            &lt;/PolyStyle&gt;
+        &lt;/Style&gt;
+        """ % self.model_uid()</pre>
+</div>
+<p>The above will give us KML placemarks with a different popup balloon (showing Name, Description and Acres)
+and change polygon styling to green fill.</p>
+<p>Ultimately, whatever you can do with KML, you can do with your feature&#8217;s KML representation.
+However, there are some important guidelines to follow;  For more information, see the <a class="reference internal" href="kmlapp.html#kmlapp"><em>kmlapp documentation</em></a>.</p>
+</div>
+<div class="section" id="group-collaboration">
+<h3>Group Collaboration<a class="headerlink" href="#group-collaboration" title="Permalink to this headline">¶</a></h3>
+<p>Madrona provides a robust mechanism for sharing features between users. By default, all features you create under a single account are accessible by that user alone. But <cite>users</cite> can be made members of <cite>groups</cite> and can choose to share features with group members who can then view them, copy them, share them back with revisions, etc. This allows for truely collaborative multi-user workflows while maintaining privacy of data.</p>
+<p>The first step is to use Django&#8217;s admin site to create users and groups.</p>
+<ol class="arabic simple">
+<li>Navigate to  <tt class="docutils literal"><span class="pre">http://&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;/admin/auth/</span></tt> and click <tt class="docutils literal"><span class="pre">+</span> <span class="pre">Add</span></tt> next to Groups. Give the group a name, &#8220;My Group&#8221;, and add the &#8220;madrona&#8221; user to it, and click <tt class="docutils literal"><span class="pre">Save</span></tt>:</li>
+</ol>
+<img alt="_images/add_group.png" src="_images/add_group.png" />
+<ol class="arabic" start="2">
+<li><p class="first">Of course you, the &#8220;madrona&#8221; user, are the only member of this group at the moment! Go back to  <tt class="docutils literal"><span class="pre">http://&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;/admin/auth/</span></tt> and click <tt class="docutils literal"><span class="pre">+</span> <span class="pre">Add</span></tt> next to <cite>Users</cite> and follow the instructions on-screen to create another user and add them to the <tt class="docutils literal"><span class="pre">My</span> <span class="pre">Group</span></tt> group.</p>
+</li>
+<li><p class="first">Finally, at the command line prompt, enable sharing for &#8220;My Group&#8221; by this command:</p>
+<div class="highlight-python"><pre>python manage.py enable_sharing --all</pre>
+</div>
+</li>
+</ol>
+<p>Back in the application, you should now be able to share features with other users through the <tt class="docutils literal"><span class="pre">Edit</span></tt> &gt; <tt class="docutils literal"><span class="pre">Share</span></tt> menu item and view shapes that others have shared in the <tt class="docutils literal"><span class="pre">Shared</span> <span class="pre">with</span> <span class="pre">Me</span></tt> tab.</p>
+</div>
+<div class="section" id="handling-geometries-through-manipulators">
+<h3>Handling geometries through manipulators<a class="headerlink" href="#handling-geometries-through-manipulators" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="manipulators.html#manipulators"><em>manipulators</em></a> app provides ways to validate user-drawn geometries and make sure they conform to rules that you define.
+For example, you may want to limit user-drawn shapes to be within the study region. For this case, there is a built in manipulator called <tt class="docutils literal"><span class="pre">ClipToStudyRegion</span></tt> which will, as the name suggests, clip a user-drawn shape to the coundary of the study region:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterest</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.MyAreasOfInterestForm&#39;</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Areas that interest me&#39;</span>
+    <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;madrona.manipulators.manipulators.ClipToStudyRegion&#39;</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>You can also choose from several other built-in manipulators, define custom manipulators or make them optional. For more information, see the <a class="reference internal" href="manipulators.html#manipulators"><em>manipulators documentation</em></a>.</p>
+</div>
+<div class="section" id="managing-basemaps-and-kml-datasets">
+<h3>Managing basemaps and KML datasets<a class="headerlink" href="#managing-basemaps-and-kml-datasets" title="Permalink to this headline">¶</a></h3>
+<p>Base data layers are managed using a single KML file called the <cite>public layers list</cite>. If you defined KML layers
+when setting up your initial app, the layers list will be available at
+<tt class="docutils literal"><span class="pre">http://&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;/layers/public/</span></tt>. Download that file, save as <tt class="docutils literal"><span class="pre">public.kml</span></tt>,
+and open for editing. You&#8217;ll see that it is a standard KML file with <a href="#id1"><span class="problematic" id="id2">`</span></a>NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink</p>
+<div class="highlight-python"><pre>&lt;NetworkLink id="global-marine"&gt;
+    &lt;name&gt;Global Marine&lt;/name&gt;
+    &lt;visibility&gt;0&lt;/visibility&gt;
+    &lt;Link&gt;
+    &lt;href&gt;http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml&lt;/href&gt;
+    &lt;/Link&gt;
+&lt;/NetworkLink&gt;</pre>
+</div>
+<p>Once we&#8217;ve modified the public kml, browse to admin interface at <tt class="docutils literal"><span class="pre">http://&lt;HOST_OR_IP_ADDRESS&gt;:&lt;PORT&gt;/admin/layers/publiclayerlist/add/</span></tt> and use it to upload the new KML file. After refreshing your browser cache, you should see the new KML avaible in the layers panel.</p>
+<p>For more information, see the <a class="reference internal" href="layers.html#layers"><em>layers documentation</em></a>.</p>
+</div>
+<div class="section" id="custom-links-extending-the-api">
+<h3>Custom Links: Extending the API<a class="headerlink" href="#custom-links-extending-the-api" title="Permalink to this headline">¶</a></h3>
+<p>Many default API actions are defined out-of-box for Madrona Features (Create, Edit, Delete, KML download, etc.). If you want to provide other methods of accessing your features, Madrona provides a link option to extend the API.</p>
+<p>For example, let&#8217;s say we want to provide a simple text file download for your area of interest. This would involve two steps:</p>
+<ol class="arabic">
+<li><p class="first">Add a link to your feature Options in <tt class="docutils literal"><span class="pre">example/models.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@register</span>
+<span class="k">class</span> <span class="nc">MyAreasOfInterest</span><span class="p">(</span><span class="n">PolygonFeature</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="s">&#39;example.forms.MyAreasOfInterestForm&#39;</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s">&#39;Areas that interest me&#39;</span>
+        <span class="n">manipulators</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;madrona.manipulators.manipulators.ClipToStudyRegion&#39;</span> <span class="p">]</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">related</span><span class="p">(</span><span class="s">&#39;Text file&#39;</span><span class="p">,</span>
+                <span class="s">&#39;examples.views.aoi_text&#39;</span><span class="p">,</span>
+                <span class="n">select</span><span class="o">=</span><span class="s">&#39;single multiple&#39;</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s">&#39;text/csv&#39;</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a view to handle the creation of text files for one or more features. Open <tt class="docutils literal"><span class="pre">example/views.py</span></tt> and add the following function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">aoi_text</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instances</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Name, Description, Acres</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">, </span><span class="si">%f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">acres</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Now restart the application, clear the cache and you should see <tt class="docutils literal"><span class="pre">Text</span> <span class="pre">File</span></tt> as an option in the download menu.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are many <a class="reference internal" href="features.html#default-links"><em>default links</em></a> provided by madrona - just think of all the work you&#8217;d have to do to a) manually create the views and urls to handle them and b) tweak the javascript and html to handle all of those views. Madrona just does it for you... nice, huh!</p>
+</div>
+<p>For more information about extending the API through links and views, consult the <a class="reference internal" href="features.html#feature-links"><em>Features documentation</em></a></p>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>See the documentation in the following sections to customize Madrona as
+needed:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features.html"><tt class="docutils literal"><span class="pre">madrona.features</span></tt> -  Spatial Content Management of <em>Features</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="studyregion.html"><tt class="docutils literal"><span class="pre">madrona.studyregion</span></tt> -  The Study Region</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="layers.html"><tt class="docutils literal"><span class="pre">madrona.layers</span></tt> -   KML Data Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_users.html">Managing Users in Madrona</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migrations for Database Schema Changes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manipulators.html"><tt class="docutils literal"><span class="pre">madrona.manipulators</span></tt> -  Manipulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="staticmap.html"><tt class="docutils literal"><span class="pre">madrona.staticmap</span></tt> -  Static Map Data Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sharing_configuration.html">Sharing Features and Collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template_customization.html">Template Customization</a></li>
+</ul>
+</div>
+<p>The setup this guide has walked through only specifies how to run the django
+development server. To setup a public facing website using Apache, consult the
+<a class="reference internal" href="deployment.html#deployment"><em>Deployment</em></a> notes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating your first Madrona project</a><ul>
+<li><a class="reference internal" href="#overview-example-madrona-project">Overview: example Madrona project</a><ul>
+<li><a class="reference internal" href="#install-dependencies">Install Dependencies</a></li>
+<li><a class="reference internal" href="#database">Database</a></li>
+<li><a class="reference internal" href="#networking">Networking</a></li>
+<li><a class="reference internal" href="#create-new-madrona-project">Create new madrona project</a></li>
+<li><a class="reference internal" href="#examining-features">Examining Features</a></li>
+<li><a class="reference internal" href="#featurecollections">FeatureCollections</a></li>
+<li><a class="reference internal" href="#trying-it-out">Trying it out</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customizing-the-madrona-project">Customizing the Madrona project</a><ul>
+<li><a class="reference internal" href="#verbose-name">Verbose name</a></li>
+<li><a class="reference internal" href="#generating-custom-reports">Generating custom reports</a></li>
+<li><a class="reference internal" href="#about-page">About page</a></li>
+<li><a class="reference internal" href="#customizing-kml-styling">Customizing KML styling</a></li>
+<li><a class="reference internal" href="#group-collaboration">Group Collaboration</a></li>
+<li><a class="reference internal" href="#handling-geometries-through-manipulators">Handling geometries through manipulators</a></li>
+<li><a class="reference internal" href="#managing-basemaps-and-kml-datasets">Managing basemaps and KML datasets</a></li>
+<li><a class="reference internal" href="#custom-links-extending-the-api">Custom Links: Extending the API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Tutorials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="features.html"
+                        title="next chapter"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">madrona.features</span></tt> -  Spatial Content Management of <em>Features</em></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial_create.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="features.html" title="madrona.features - Spatial Content Management of Features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorials"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

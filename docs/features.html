@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.features - Spatial Content Management of Features &mdash; Madrona Decision Support Framework v4.0.dev documentation</title>
+    <title>madrona.features - Spatial Content Management of Features &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0.dev',
+        VERSION:     '4.0b1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0.dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.kmlapp - KML Representation of Features and Collections" href="kmlapp.html" />
     <link rel="prev" title="Core Apps" href="apps.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="apps.html" title="Core Apps"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -181,8 +181,6 @@ The default path to the show template can be changed using an optional
 <blockquote>
 <div><ul class="simple">
 <li><tt class="docutils literal"><span class="pre">instance</span></tt> - the feature class instance being being displayed</li>
-<li>...</li>
-<li>...</li>
 </ul>
 </div></blockquote>
 <p>You can add to this list using the <a class="reference internal" href="#show_context">show_context</a> Option property.</p>
@@ -695,7 +693,7 @@ or limit/filter for a list of feature classes</p>
 </div>
 </div>
 <div class="section" id="the-options-inner-class">
-<h2>The Options inner-class<a class="headerlink" href="#the-options-inner-class" title="Permalink to this headline">¶</a></h2>
+<span id="feature-options"></span><h2>The Options inner-class<a class="headerlink" href="#the-options-inner-class" title="Permalink to this headline">¶</a></h2>
 <dl class="attribute">
 <dt id="form">
 <tt class="descname">form</tt><big>(</big><em>required</em><big>)</big><a class="headerlink" href="#form" title="Permalink to this definition">¶</a></dt>
@@ -714,6 +712,14 @@ within the interface. For example, this name determines the name used
 in the &#8220;Create&#8221; menu. If not specified, the CamelCase model name will
 be used. Even though it is optional, this property is obviously highly
 recommended.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="icon_url">
+<tt class="descname">icon_url</tt><a class="headerlink" href="#icon_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the path to an icon image to represent the feature, both in the
+menu and the tree view. Path can be an absolute http URL or relative
+to the MEDIA_ROOT directory.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -782,7 +788,7 @@ export tools, and editing actions that can be performed.</p>
 </dd></dl>
 
 <div class="section" id="specifying-links">
-<h3>Specifying Links<a class="headerlink" href="#specifying-links" title="Permalink to this headline">¶</a></h3>
+<span id="feature-links"></span><h3>Specifying Links<a class="headerlink" href="#specifying-links" title="Permalink to this headline">¶</a></h3>
 <p>Links allow developers to extend the functionality of features by specifying
 downloads, actions, or related pages that should be made available through the
 interface. There are 4 types of Links:</p>
@@ -799,7 +805,7 @@ action.</li>
 </ul>
 </div></blockquote>
 <div class="section" id="default-links">
-<h4>Default links<a class="headerlink" href="#default-links" title="Permalink to this headline">¶</a></h4>
+<span id="id1"></span><h4>Default links<a class="headerlink" href="#default-links" title="Permalink to this headline">¶</a></h4>
 <p>There are several links that are provided by default specific for every feature:</p>
 <blockquote>
 <div><ul class="simple">
@@ -1075,7 +1081,7 @@ be used to automatically assign an icon in the dropdown Export menu.</p>
         <li class="right" >
           <a href="apps.html" title="Core Apps"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>

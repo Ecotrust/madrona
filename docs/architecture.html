@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Project Architecture &mdash; Madrona Decision Support Framework v4.0.dev documentation</title>
+    <title>Project Architecture &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0.dev',
+        VERSION:     '4.0b1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0.dev documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
     <link rel="up" title="Overview" href="overview.html" />
     <link rel="next" title="History" href="history.html" />
     <link rel="prev" title="Overview" href="overview.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="overview.html" accesskey="U">Overview</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,19 +51,99 @@
             
   <div class="section" id="project-architecture">
 <h1>Project Architecture<a class="headerlink" href="#project-architecture" title="Permalink to this headline">¶</a></h1>
-<p>Madrona is based on the idea of a <cite>Spatial Content Management System</cite>. In a spatial CMS, the goal is to allow the developer to focus
-entirely on building <cite>models</cite> of the <cite>Features</cite> they want to include in their tool.</p>
-<p>The Feature models should drive the entire process; Features are registered and most of the apps functionality is determined on the fly, eliminating the need to write boilerplate code. Specifically, Feature models drive:</p>
+<p>Madrona allows you to focus on the actual problem your project is trying to solve (rather than technical minutia) and keeps your application modular and flexible. Here&#8217;s how:</p>
+<img alt="_images/madrona_outline.png" src="_images/madrona_outline.png" />
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>The majority of a madrona-based tool revolves around building models of the <tt class="docutils literal"><span class="pre">Features</span></tt> you want to include in the tool.
+Features are the driver of your application behavior; they are the entities important to your decision/planning process.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Created and managed by users</li>
+<li>Have a spatial representation</li>
+<li>Can have non-spatial attributes and properties</li>
+<li>Relate to other Features</li>
+<li>Can contain other features (i.e. a collection of features)</li>
+<li>Have defined behaviors (views and methods)</li>
+<li>Can have complex reporting and analysis</li>
+<li>Typically represented as a KML object</li>
+<li>Are defined with Django models</li>
+</ul>
+</div></blockquote>
+<p>Features are registered with Madrona and most of the functionality is determined on the fly, eliminating the need to write boilerplate code. Specifically, the feature models automatically drive:</p>
 <blockquote>
 <div><ul class="simple">
 <li>Django urls, views and forms</li>
 <li>A fully-featured REST API</li>
-<li>KML representations of Features</li>
-<li>Client-side javascript libraries (client automatically adapts to models)</li>
+<li>Client-side javascript libraries</li>
 </ul>
 </div></blockquote>
-<img alt="_images/rest_arch.png" src="_images/rest_arch.png" />
-<p>This allows you to focus on the actual problem your project is trying to solve (rather than technical minutia) and keeps your application modular and flexible.</p>
+</div>
+<div class="section" id="the-rest-api">
+<h2>The REST API<a class="headerlink" href="#the-rest-api" title="Permalink to this headline">¶</a></h2>
+<p>The method by which users will interact with <tt class="docutils literal"><span class="pre">Features</span></tt> via HTTP.</p>
+<dl class="docutils">
+<dt>Besides the standard <cite>CRUD</cite> operations:</dt>
+<dd><ul class="first last simple">
+<li>Create</li>
+<li>Read</li>
+<li>Update</li>
+<li>Delete</li>
+</ul>
+</dd>
+<dt>The Default REST API provides for advanced views:</dt>
+<dd><ul class="first last simple">
+<li>KML and other spatial data formats</li>
+<li>Reports</li>
+<li>Static maps</li>
+<li>Sharing / Collaboration</li>
+<li>Copying</li>
+<li>Importing</li>
+<li>Exporting</li>
+<li>Moving</li>
+</ul>
+</dd>
+</dl>
+<p>Most importantly, Madrona provides the ability to quickly extend API to expose additional fuctionality pertaining to your features.</p>
+<p>Finally, the entire REST API is described by a <tt class="docutils literal"><span class="pre">workspace</span></tt> document (JSON format) which defines the available feature classes and the URLS to interact with them.</p>
+</div>
+<div class="section" id="the-javascript-html-client">
+<h2>The javascript/HTML client<a class="headerlink" href="#the-javascript-html-client" title="Permalink to this headline">¶</a></h2>
+<p>Madrona ships with a full-fledged js/html client. Based on jQuery and the Google Earth plugin, this interface reads the <tt class="docutils literal"><span class="pre">workspace</span></tt> document from the REST API and configures itself accordingly.</p>
+<img alt="_images/3dclient.png" src="_images/3dclient.png" />
+<p>The 3D map client interface provides</p>
+<blockquote>
+<div><ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">KMLEditor</span></tt> provides a menu for interacting with the REST API. This includes creating new features and accessing contextualy-appropriate actions that the user can apply to selected features.</li>
+<li>The <tt class="docutils literal"><span class="pre">KMLTree</span></tt> component provides a tree view of the KML representation of your features.</li>
+<li>The map component, provided by the <tt class="docutils literal"><span class="pre">Google</span> <span class="pre">Earth</span> <span class="pre">plugin</span></tt>, provides a 3D interative map to interact with the features spatially.</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">2D mapping clients are supported but there is currently no out-of-the-box client interface for 2D.</p>
+</div>
+</div>
+<div class="section" id="software-stack">
+<h2>Software stack<a class="headerlink" href="#software-stack" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>On the Server</dt>
+<dd><ul class="first last simple">
+<li>Python WSGI</li>
+<li>GeoDjango</li>
+<li>PostGIS</li>
+<li>GDAL/OGR</li>
+<li>External analytics (e.g. GRASS, Marxan, ArcGIS)</li>
+</ul>
+</dd>
+<dt>On the Client</dt>
+<dd><ul class="first last simple">
+<li>JQuery</li>
+<li>Google Earth API</li>
+</ul>
+</dd>
+</dl>
+</div>
 </div>
 
 
@@ -72,6 +152,17 @@ entirely on building <cite>models</cite> of the <cite>Features</cite> they want 
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Project Architecture</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#the-rest-api">The REST API</a></li>
+<li><a class="reference internal" href="#the-javascript-html-client">The javascript/HTML client</a></li>
+<li><a class="reference internal" href="#software-stack">Software stack</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="overview.html"
                         title="previous chapter">Overview</a></p>
@@ -112,7 +203,7 @@ entirely on building <cite>models</cite> of the <cite>Features</cite> they want 
         <li class="right" >
           <a href="overview.html" title="Overview"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0.dev documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
           <li><a href="overview.html" >Overview</a> &raquo;</li> 
       </ul>
     </div>
