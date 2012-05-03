@@ -1582,15 +1582,82 @@ class GeoJsonTest(TestCase):
         self.client.login(username='featuretest', password='pword')
         g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
         g1.transform(settings.GEOMETRY_DB_SRID)
-        self.mpa = TestMpa(user=self.user, name="My Mpa", geometry_orig=g1) 
-        self.mpa.save()
+
+        '''
+         mpa3
+         folder1
+          |- mpa1
+          |- folder2
+              | - mpa2
+        '''
+        self.mpa1 = TestMpa.objects.create(user=self.user, name="Mpa1", geometry_orig=g1) 
+        self.mpa2 = TestMpa.objects.create(user=self.user, name="Mpa2", geometry_orig=g1) 
+        self.mpa3 = TestMpa.objects.create(user=self.user, name="Mpa3", geometry_orig=g1) 
+        self.folder1 = TestFolder.objects.create(user=self.user, name="Folder1")
+        self.folder2 = TestFolder.objects.create(user=self.user, name="Folder2")
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
 
     def test_geojson_url(self):
-        link = self.mpa.options.get_link('GeoJSON')
-        url = link.reverse(self.mpa)
+        link = self.mpa3.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa3)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('application/json' in response['Content-Type'])
         fc = json.loads(response.content)
-        self.assertEquals(fc['features'][0]['properties']['name'], 'My Mpa')
+        self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa3')
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_flat_url(self):
+        """
+        We expect default 'flat' behavior
+            
+            FeatureCollection:
+                mpa1
+                mpa2
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse(self.folder1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertTrue(fc['features'][0]['properties']['name'] in ['Mpa1','Mpa2'])
+        self.assertTrue(fc['features'][1]['properties']['name'] in ['Mpa1','Mpa2'])
+        self.assertEquals(len(fc['features']), 2)
+
+    def test_geojson_nest_url(self):
+        """
+        We expect custom 'nest' behavior
+            
+            FeatureCollection:
+                folder1 (with a `feature_set` property listing uids and null geom)
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse(self.folder1) + "?strategy=nest"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['feature_set'], [x.uid for x in [self.mpa1, self.folder2]])
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_nest_multi(self):
+        """
+        We expect custom 'nest' behavior
+            
+            FeatureCollection:
+                mpa1
+                folder2 (with a `feature_set` property listing uids and null geom)
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse([self.mpa1, self.folder2]) + "?strategy=nest"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa1')
+        self.assertEquals(fc['features'][1]['properties']['feature_set'], [self.mpa2.uid])
+        self.assertEquals(len(fc['features']), 2)
 

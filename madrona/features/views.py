@@ -812,14 +812,24 @@ def geojson_link(request, instances):
    
     Feature collections *cannot* be nested within other feature collections
     http://lists.geojson.org/pipermail/geojson-geojson.org/2008-October/000464.html
-    Thus, by default, collections are treated as null geometries
-     with the understanding that the properties contain 'feature_set' 
-     attribute with uids that the client can use to track down features
+    Thus collections can be treated using one of the following strategies: 
+
+      ``flat``: (DEFAULT) The collection is "flattened" to contain all the  
+          features in a single featurecollection (lossy)
+
+      ``nest``: the collection is represented as an empty geometry with a special
+          feature_set property; a list of UIDs to fetch 
+          (requires a client with knowledge of this convention)
+
+    Pass by URL GET parameter like ?strategy=nest
     """
     from madrona.common import default_mimetypes as mimetypes
     from madrona.features.models import FeatureCollection, SpatialFeature
     from django.core import serializers
     import json
+    
+    strategy = request.GET.get('strategy', default='flat')
+    strategy = strategy.lower()
 
     feature_jsons = []
 
@@ -849,6 +859,16 @@ def geojson_link(request, instances):
             "properties": %s
         }""" % (geom_json, prop_json)
 
+    def get_features(f):
+        "recursion is fun"
+        feats = []
+        for sf in f.feature_set():
+            if issubclass(sf.__class__, FeatureCollection):
+                feats.extend(get_features(sf))
+            else:
+                feats.append(sf)
+        return feats
+         
     for i in instances:
         gj = None
         try:
@@ -859,9 +879,22 @@ def geojson_link(request, instances):
         if gj is None:
             props = get_properties_json(i)
             if issubclass(i.__class__, FeatureCollection):
-                # collections are treated as null geoms with 'feature_set' property
-                props['feature_set'] = [x.uid for x in i.feature_set()]
-                gj = get_feature_json('null', json.dumps(props))
+                if strategy == 'nest':
+                    # collections are treated as null geoms with 'feature_set' property
+                    props['feature_set'] = [x.uid for x in i.feature_set()]
+                    gj = get_feature_json('null', json.dumps(props))
+                else:  # assume 'flat' strategy and recurse
+                    feats = get_features(i)
+                    gjs = []
+                    for f in feats:
+                        try:
+                            geom = x.geometry_final.json
+                        except:
+                            geom = 'null'
+                        props = get_properties_json(f)
+                        gjs.append(get_feature_json(geom, json.dumps(props)))
+                    gj = ', \n'.join(gjs)
+
             elif issubclass(i.__class__, SpatialFeature):
                 gj = get_feature_json(i.geometry_final.json, json.dumps(props))
             else:
@@ -879,6 +912,7 @@ def geojson_link(request, instances):
     filename = '_'.join([slugify(i.name) for i in instances])[:40]
     response = HttpResponse()
     response['Content-Type'] = mimetypes.JSON
-    response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
+    # TODO only serve as attachment if request type != ajax
+    # response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
     response.write(geojson)
     return response
