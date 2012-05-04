@@ -1777,3 +1777,10 @@ class GeoJsonTest(TestCase):
         self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
         self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
 
+    def test_geojson_download(self):
+        link = self.mpa3.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa3) + '?download'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Content-Disposition' in response)
+        self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
