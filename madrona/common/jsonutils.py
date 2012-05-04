@@ -5,7 +5,9 @@ from django.core import serializers
 import json
 
 def get_properties_json(i):
-    json_orig = serializers.serialize('json', [i,], use_natural_keys=True)
+    json_orig = serializers.serialize('json', [i,])
+    # use_natural_keys=True is not reliable; can fail w/ content_type error:
+    #     'NoneType' object has no attribute 'natural_key'
     obj = json.loads(json_orig)
     props = obj[0]['fields']
     unwanted_properties = [
