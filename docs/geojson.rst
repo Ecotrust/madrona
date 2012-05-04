@@ -29,7 +29,7 @@ You have two strategies for GeoJSON representation:
 
      FeatureCollection 
       |- mpa1
-      |- folder1 (with a `feature_set` list of uids and null geom)
+      |- folder2 (with a `feature_set` list of uids and null geom)
 
 You can specify the geojson strategy with a URL parameter like so::
 
