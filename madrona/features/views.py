@@ -824,18 +824,19 @@ def geojson_link(request, instances):
     Pass by URL GET parameter like ?strategy=nest_feature_set
     """
     from madrona.common import default_mimetypes as mimetypes
-    from madrona.common.jsonutils import get_properties_json, get_feature_json
+    from madrona.common.jsonutils import get_properties_json, get_feature_json, srid_to_urn
     from madrona.features.models import FeatureCollection, SpatialFeature, Feature
     import json
     
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
+    srid = int(request.GET.get('srid', default=settings.GEOMETRY_DB_SRID))
 
     feature_jsons = []
     for i in instances:
         gj = None
         try:
-            gj = i.geojson
+            gj = i.geojson(srid)
         except AttributeError:
             pass
          
@@ -852,7 +853,7 @@ def geojson_link(request, instances):
                     gjs = []
                     for f in feats:
                         try:
-                            geom = x.geometry_final.json
+                            geom = x.geometry_final.transform(srid, clone=True).json
                         except:
                             geom = 'null'
                         props = get_properties_json(f)
@@ -862,7 +863,7 @@ def geojson_link(request, instances):
             else:
                 try:
                     # Eventually support an Option to configure the geometry field? 
-                    geom = i.geometry_final.json
+                    geom = i.geometry_final.transform(srid, clone=True).json
                 except:
                     geom = 'null'
                 gj = get_feature_json(geom, json.dumps(props))
@@ -872,8 +873,9 @@ def geojson_link(request, instances):
 
     geojson = """{ 
       "type": "FeatureCollection",
+      "crs": { "type": "name", "properties": {"name": "%s"}},
       "features": [ %s ]
-    }""" % (', \n'.join(feature_jsons),)
+    }""" % (srid_to_urn(srid), ', \n'.join(feature_jsons),)
 
     filename = '_'.join([slugify(i.name) for i in instances])[:40]
     response = HttpResponse()

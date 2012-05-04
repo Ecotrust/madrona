@@ -7,15 +7,6 @@ Madrona provides `GeoJSON <http://www.geojson.org/>`_ output for by default. As 
 
     /features/generic-links/links/geojson/{{instance.uid}}/
 
-Turning off GeoJSON 
--------------------
-You can specify an Option on your feature class to turn off geojson export::
-
-    class AOI(PolygonFeature):
-        ...
-        class Options:
-            export_geojson = False
-
 Nested vs Flat
 --------------
 
@@ -44,9 +35,17 @@ You can specify the geojson strategy with a URL parameter like so::
 
     /features/generic-links/links/geojson/{{instance.uid}}/?strategy=nest_feature_set
 
+Specifying the spatial reference system
+----------------------------------------
+By default, the GeoJSON geometries will be in the coordinate system of your database (defined by your ``GEOMETRY_DB_SRID`` setting).
+If you need a different coordinate system, you can specify an ``srid`` parameter on the URL::
+
+    /features/generic-links/links/geojson/{{instance.uid}}/?srid=4326
+
+
 Custom GeoJSON output
 ----------------------
-To override the default geojson representation of a feature, you can specify a geojson property 
+To override the default geojson representation of a feature, you can specify a geojson method on your feature class 
 which returns string containing a geojson feature (without a trailing comma)::
  
       { 
@@ -55,8 +54,10 @@ which returns string containing a geojson feature (without a trailing comma)::
         "properties": {"prop0": "value0"}
       }
 
+.. important:: Your geojson method *must* take an ``srid`` argument and transform the geometry accordingly. 
+
 In order to construct the geojson, there are several utility functions available. The example below show 
-how you could add an additional property to the geojseon feature::
+how you could add an additional property to the geojson feature::
 
     import json
     from madrona.common.jsonutils import get_properties_json, get_feature_json 
@@ -64,16 +65,16 @@ how you could add an additional property to the geojseon feature::
     class AOI(PolygonFeature):
         ...
 
-        @property
-        def geojson(self):
+        def geojson(self, srid):
             props = get_properties_json(self)
             props['absolute_url'] = self.get_absolute_url()
-            return get_feature_json(self.geometry_final.json, json.dumps(props))
+            json_geom = self.geometry_final.transform(srid, clone=True).json
+            return get_feature_json(json_geom, json.dumps(props))
 
 
 Geometry field
 --------------
-Unless you provide a custom geojson property on your feature class, the GeoJSON view will look for a geometry_final attribute.
+Unless you provide a custom geojson method on your feature class, the GeoJSON view will look for a geometry_final attribute.
 If it doesn't exist for whatever reason, the GeoJSON geometry will be null. You can fake a geometry_final field 
 by mirroring with a property::
 
@@ -86,7 +87,8 @@ But most likely you'll want to create a custom GeoJSON property.
 
 Properties
 ----------
-The GeoJSON feature properties are serialized directly from the feature instance. Not all fields are included though; we strip out the following::
+The GeoJSON feature properties are serialized directly from the feature instance. Not all fields are included though; 
+Madrona strips out the following::
 
     unwanted_properties = [
         'geometry_final', 
@@ -95,4 +97,14 @@ The GeoJSON feature properties are serialized directly from the feature instance
         'object_id', 
     ]
 
-And add a 'uid' property. This behavior can of course be overridden with a custom geojson @property.  
+... and adds a ``uid`` property. This behavior can be overridden with a custom geojson method.  
+
+Turning off GeoJSON 
+-------------------
+You can specify an Option on your feature class to turn off geojson export::
+
+    class AOI(PolygonFeature):
+        ...
+        class Options:
+            export_geojson = False
+

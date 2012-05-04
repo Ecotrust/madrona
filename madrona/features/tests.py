@@ -1579,13 +1579,13 @@ class TestForGeoJSON(PolygonFeature):
     class Options:
         form = 'madrona.features.tests.GJForm'
 
-    @property
-    def geojson(self):
+    def geojson(self, srid):
         import json
         from madrona.common.jsonutils import get_properties_json, get_feature_json 
         props = get_properties_json(self)
         props['absolute_url'] = self.get_absolute_url()
-        return get_feature_json(self.geometry_final.json, json.dumps(props))
+        jsongeom = self.geometry_final.transform(srid, clone=True).json
+        return get_feature_json(jsongeom, json.dumps(props))
 
 class GJForm(FeatureForm):
     class Meta:
@@ -1760,4 +1760,20 @@ class GeoJsonTest(TestCase):
         self.assertEqual(response.status_code, 200)
         fc = json.loads(response.content)
         self.assertEquals(len(fc['features']), 2)
+
+    def test_geojson_transform(self):
+        from madrona.common.jsonutils import srid_to_urn
+        link = self.mpa3.options.get_link('GeoJSON')
+        # this one should be in db srs
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(settings.GEOMETRY_DB_SRID))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -38619)
+        # and this one should be in latlon
+        url = url + "?srid=4326"
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
 
