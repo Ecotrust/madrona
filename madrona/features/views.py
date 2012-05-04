@@ -826,6 +826,9 @@ def geojson_link(request, instances):
     from madrona.common import default_mimetypes as mimetypes
     from madrona.common.jsonutils import get_properties_json, get_feature_json, srid_to_urn
     from madrona.features.models import FeatureCollection, SpatialFeature, Feature
+    from django.contrib.gis.gdal import DataSource
+    import tempfile
+    import os
     import json
     
     strategy = request.GET.get('strategy', default='flat')
@@ -874,9 +877,20 @@ def geojson_link(request, instances):
 
     geojson = """{ 
       "type": "FeatureCollection",
+      "bbox": null, 
       "crs": { "type": "name", "properties": {"name": "%s"}},
       "features": [ %s ]
     }""" % (srid_to_urn(srid), ', \n'.join(feature_jsons),)
+
+    tmpfile = tempfile.mktemp() + ".json"
+    with open(tmpfile, 'w') as fh:
+        fh.write(geojson)
+    ds = DataSource(tmpfile)
+    bbox = list(ds[0].extent.tuple)
+    if bbox and len(bbox) == 4:
+        geojson.replace('"bbox": null,', '"bbox": %s,' % str(bbox))
+    del ds
+    os.remove(tmpfile)
 
     response = HttpResponse()
     response['Content-Type'] = mimetypes.JSON
