@@ -99,6 +99,14 @@ Madrona strips out the following::
 
 ... and adds a ``uid`` property. This behavior can be overridden with a custom geojson method.  
 
+
+Downloading
+------------
+The default behavior is to open the json file in the browser. If you want to force the browser to handle as a download (i.e. prompt the user to save the json file and give it a reasonable filename), you can add a ``download`` parameter to the URL::
+
+    /features/generic-links/links/geojson/{{instance.uid}}/?download
+
+
 Turning off GeoJSON 
 -------------------
 You can specify an Option on your feature class to turn off geojson export::

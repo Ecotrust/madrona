@@ -831,6 +831,7 @@ def geojson_link(request, instances):
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
     srid = int(request.GET.get('srid', default=settings.GEOMETRY_DB_SRID))
+    download = 'download' in request.GET
 
     feature_jsons = []
     for i in instances:
@@ -877,10 +878,10 @@ def geojson_link(request, instances):
       "features": [ %s ]
     }""" % (srid_to_urn(srid), ', \n'.join(feature_jsons),)
 
-    filename = '_'.join([slugify(i.name) for i in instances])[:40]
     response = HttpResponse()
     response['Content-Type'] = mimetypes.JSON
-    if not request.is_ajax:
-        response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
+    if download:
+        filename = '_'.join([slugify(i.name) for i in instances])[:40]
+        response['Content-Disposition'] = 'attachment; filename=%s.geojson' % filename
     response.write(geojson)
     return response
