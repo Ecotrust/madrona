@@ -834,7 +834,10 @@ def geojson_link(request, instances):
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
     srid = int(request.GET.get('srid', default=settings.GEOMETRY_DB_SRID))
-    download = 'download' in request.GET
+    if settings.GEOJSON_DOWNLOAD:
+        download = 'noattach' not in request.GET
+    else:
+        download = 'attach' in request.GET
 
     feature_jsons = []
     for i in instances:

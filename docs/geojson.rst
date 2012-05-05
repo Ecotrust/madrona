@@ -102,9 +102,18 @@ Madrona strips out the following::
 
 Downloading
 ------------
-The default behavior is to open the json file in the browser. If you want to force the browser to handle as a download (i.e. prompt the user to save the json file and give it a reasonable filename), you can add a ``download`` parameter to the URL::
+The default behavior is to handle as a download (i.e. prompt the user to save the json file and give it a reasonable filename). This is done
+through an HTTP ``Content-Disposition: attachment; filename={{instance_uid}}.geojson`` header. 
+The default behavior can be controlled through a setting::
 
-    /features/generic-links/links/geojson/{{instance.uid}}/?download
+    GEOJSON_DOWNLOAD = True  # Default
+    GEOJSON_DOWNLOAD = False  # don't treat like a downloadable attachment
+
+Additionally, you can override the setting at runtime by adding an ``attach`` or ``noattach`` parameter to the URL::
+
+    /features/generic-links/links/geojson/{{instance.uid}}/?attach
+    /features/generic-links/links/geojson/{{instance.uid}}/?noattach
+
 
 
 Turning off GeoJSON 

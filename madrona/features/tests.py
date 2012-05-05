@@ -1779,8 +1779,30 @@ class GeoJsonTest(TestCase):
 
     def test_geojson_download(self):
         link = self.mpa3.options.get_link('GeoJSON')
-        url = link.reverse(self.mpa3) + '?download'
+        # default download
+        url = link.reverse(self.mpa3)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Content-Disposition' in response)
         self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
+        # no attach
+        url = link.reverse(self.mpa3) + "?noattach"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse('Content-Disposition' in response)
+        # setting default to no download
+        settings.GEOJSON_DOWNLOAD = False
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse('Content-Disposition' in response)
+        # attach
+        url = link.reverse(self.mpa3) + "?attach"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Content-Disposition' in response)
+        self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
+        # cleanup
+        settings.GEOJSON_DOWNLOAD = True
+
+         

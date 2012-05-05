@@ -236,3 +236,5 @@ POSTGIS_TEMPLATE = 'template1'
 LAUNCH_PAGE = False 
 from django.core.urlresolvers import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('map')
+
+GEOJSON_DOWNLOAD = True  # force headers to treat like an attachment
