@@ -1613,7 +1613,7 @@ class TestNoGeoJSONForm(FeatureForm):
     class Meta:
         model = TestNoGeoJSON
 
-class GeoJsonTest(TestCase):
+class GeoJSONTest(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -1776,6 +1776,13 @@ class GeoJsonTest(TestCase):
         fc = json.loads(response.content)
         self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
         self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
+        # and this one should be in latlon as well
+        settings.GEOJSON_SRID = 4326 
+        url = link.reverse(self.mpa3)  # no need to specify parameter, setting should work
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
 
     def test_geojson_download(self):
         link = self.mpa3.options.get_link('GeoJSON')
@@ -1804,5 +1811,3 @@ class GeoJsonTest(TestCase):
         self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
         # cleanup
         settings.GEOJSON_DOWNLOAD = True
-
-         

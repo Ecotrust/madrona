@@ -810,7 +810,7 @@ def geojson_link(request, instances):
         "properties": {"prop0": "value0"}
       }
    
-    Feature collections *cannot* be nested within other feature collections
+    GeoJSON Feature collections *cannot* be nested within other feature collections
     http://lists.geojson.org/pipermail/geojson-geojson.org/2008-October/000464.html
     Thus collections can be treated using one of the following strategies: 
 
@@ -833,7 +833,11 @@ def geojson_link(request, instances):
     
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
-    srid = int(request.GET.get('srid', default=settings.GEOMETRY_DB_SRID))
+    if settings.GEOJSON_SRID:
+        srid_setting = settings.GEOJSON_SRID
+    else:
+        srid_setting = settings.GEOMETRY_DB_SRID
+    srid = int(request.GET.get('srid', default=srid_setting))
     if settings.GEOJSON_DOWNLOAD:
         download = 'noattach' not in request.GET
     else:

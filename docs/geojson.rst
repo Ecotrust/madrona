@@ -38,7 +38,11 @@ You can specify the geojson strategy with a URL parameter like so::
 Specifying the spatial reference system
 ----------------------------------------
 By default, the GeoJSON geometries will be in the coordinate system of your database (defined by your ``GEOMETRY_DB_SRID`` setting).
-If you need a different coordinate system, you can specify an ``srid`` parameter on the URL::
+You can set a different default by using the ``GEOJSON_SRID`` setting::
+
+    GEOJSON_SRID = 3357  # default to web mercator
+
+If you need a different coordinate system at runtime, you can specify an ``srid`` parameter on the URL::
 
     /features/generic-links/links/geojson/{{instance.uid}}/?srid=4326
 
