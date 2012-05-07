@@ -37,9 +37,20 @@ def srid_to_urn(srid):
     Take a postgis srid and make it into a OGC CRS URN
     As suggested by http://www.geojson.org/geojson-spec.html#named-crs
     This is pretty dumb right now and just assumes EPSG as the authority
-    currently: 
-      4326 -> urn:ogc:def:crs:EPSG::4326
-    eventually a smart tranlation? like:
+    except for 4326 which uses:
       4326 -> urn:ogc:def:crs:OGC:1.3:CRS84
     """
+    if int(srid) == 4326:
+        return "urn:ogc:def:crs:OGC:1.3:CRS84"
+    
     return "urn:ogc:def:crs:EPSG::%d" % srid
+
+def srid_to_proj(srid):
+    """
+    Take a postgis srid and return the proj4 string
+    Useful for custom projections with no authority
+    """
+    from django.contrib.gis.gdal import SpatialReference
+    srs = SpatialReference(srid) 
+    return srs.proj.strip()
+

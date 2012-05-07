@@ -824,7 +824,7 @@ def geojson_link(request, instances):
     Pass by URL GET parameter like ?strategy=nest_feature_set
     """
     from madrona.common import default_mimetypes as mimetypes
-    from madrona.common.jsonutils import get_properties_json, get_feature_json, srid_to_urn
+    from madrona.common.jsonutils import get_properties_json, get_feature_json, srid_to_urn, srid_to_proj
     from madrona.features.models import FeatureCollection, SpatialFeature, Feature
     from django.contrib.gis.gdal import DataSource
     import tempfile
@@ -833,11 +833,17 @@ def geojson_link(request, instances):
     
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
+
     if settings.GEOJSON_SRID:
         srid_setting = settings.GEOJSON_SRID
     else:
         srid_setting = settings.GEOMETRY_DB_SRID
     srid = int(request.GET.get('srid', default=srid_setting))
+    if srid <= 32766:  # assumed max EPSG code
+        crs = srid_to_urn(srid)
+    else:
+        crs = srid_to_proj(srid)
+
     if settings.GEOJSON_DOWNLOAD:
         download = 'noattach' not in request.GET
     else:
@@ -885,8 +891,10 @@ def geojson_link(request, instances):
     geojson = """{ 
       "type": "FeatureCollection",
       "crs": { "type": "name", "properties": {"name": "%s"}},
-      "features": [ %s ]
-    }""" % (srid_to_urn(srid), ', \n'.join(feature_jsons),)
+      "features": [ 
+      %s 
+      ]
+    }""" % (crs, ', \n'.join(feature_jsons),)
 
     ##### Not reliable, extent call throws unknown OGR error, even with valid datasource
     #tmpfile = tempfile.mktemp() + ".json"

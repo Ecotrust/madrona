@@ -1811,3 +1811,10 @@ class GeoJSONTest(TestCase):
         self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
         # cleanup
         settings.GEOJSON_DOWNLOAD = True
+
+    def test_srid_util(self):
+        from madrona.common.jsonutils import srid_to_urn, srid_to_proj
+        ogc_wgs84 = "urn:ogc:def:crs:OGC:1.3:CRS84"
+        proj4_wgs84 = "+proj=longlat +datum=WGS84 +no_defs"
+        self.assertEqual(ogc_wgs84, srid_to_urn(4326))
+        self.assertEqual(proj4_wgs84, srid_to_proj(4326))
