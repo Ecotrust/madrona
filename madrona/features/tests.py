@@ -5,6 +5,7 @@ from madrona.features.forms import FeatureForm
 from madrona.common.utils import kml_errors, enable_sharing
 import os
 import shutil
+import json
 from django.test.client import Client
 from django.contrib.auth.models import *
 from django.core.urlresolvers import reverse
@@ -1571,3 +1572,249 @@ class SharingTestCase(TestCase):
         self.client.login(username=self.user2.username, password=self.password)
         response = self.client.get(self.folder1_resource_url)
         self.assertEqual(response.status_code, 200)
+
+@register
+class TestForGeoJSON(PolygonFeature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    class Options:
+        form = 'madrona.features.tests.GJForm'
+
+    def geojson(self, srid):
+        import json
+        from madrona.common.jsonutils import get_properties_json, get_feature_json 
+        props = get_properties_json(self)
+        props['absolute_url'] = self.get_absolute_url()
+        jsongeom = self.geometry_final.transform(srid, clone=True).json
+        return get_feature_json(jsongeom, json.dumps(props))
+
+class GJForm(FeatureForm):
+    class Meta:
+        model = TestForGeoJSON
+
+@register
+class TestNoGeomFinal(Feature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    # just a base feature so no geometry_final attribute
+    class Options:
+        form = 'madrona.features.tests.GJFormNoGeom'
+
+class GJFormNoGeom(FeatureForm):
+    class Meta:
+        model = TestNoGeomFinal
+
+@register
+class TestNoGeoJSON(PolygonFeature):
+    designation = models.CharField(max_length=1, choices=DESIGNATION_CHOICES)
+    class Options:
+        form = 'madrona.features.tests.TestNoGeoJSONForm'
+        export_geojson = False
+
+class TestNoGeoJSONForm(FeatureForm):
+    class Meta:
+        model = TestNoGeoJSON
+
+class GeoJSONTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@madrona.org', password='pword')
+        self.user2 = User.objects.create_user(
+            'joerando', 'featuretest@madrona.org', password='pword')
+        self.group1 = Group.objects.create(name="Test Group 1")
+        self.user.groups.add(self.group1)
+        self.user2.groups.add(self.group1)
+        enable_sharing(self.group1)
+        self.client.login(username='featuretest', password='pword')
+
+        g1 = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        g1.transform(settings.GEOMETRY_DB_SRID)
+
+        '''
+         mpa3
+         folder1
+          |- mpa1
+          |- folder2
+              | - mpa2
+        '''
+        self.mpa1 = TestMpa.objects.create(user=self.user, name="Mpa1", geometry_orig=g1) 
+        self.mpa2 = TestMpa.objects.create(user=self.user, name="Mpa2", geometry_orig=g1) 
+        self.mpa3 = TestMpa.objects.create(user=self.user, name="Mpa3", geometry_orig=g1) 
+        self.mpa4 = TestMpa.objects.create(user=self.user2, name="Mpa4", geometry_orig=g1) 
+        self.mpa5 = TestForGeoJSON.objects.create(user=self.user, name="Mpa5", geometry_orig=g1)
+        self.mpa6 = TestNoGeomFinal.objects.create(user=self.user, name="Mpa6")
+        self.mpa7 = TestNoGeoJSON.objects.create(user=self.user, name="Mpa7", geometry_orig=g1)
+        self.folder1 = TestFolder.objects.create(user=self.user, name="Folder1")
+        self.folder2 = TestFolder.objects.create(user=self.user, name="Folder2")
+        self.folder1.add(self.mpa1)
+        self.folder2.add(self.mpa2)
+        self.folder1.add(self.folder2)
+
+
+    def test_geojson_single(self):
+        link = self.mpa3.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa3')
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_byproperty(self):
+        """
+        Mpa5 has a custom geojson @property that should
+        return a GeoJSON Feature with an extra `absolute_url` property
+        """
+        link = self.mpa5.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa5)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['absolute_url'], self.mpa5.get_absolute_url())
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_nogeomfinal(self):
+        """
+        Mpa6 has no geometry_final attr
+        should fail gracefully with null geometry
+        """
+        link = self.mpa6.options.get_link('GeoJSON')
+        url = link.reverse(self.mpa6)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['geometry'], None)
+
+    def test_no_geojson(self):
+        """
+        This one has export_geojson = False
+        so no link should be available
+        """
+        with self.assertRaisesRegexp(Exception, 'has no link named GeoJSON'):
+            link = self.mpa7.options.get_link('GeoJSON')
+
+    def test_geojson_flat(self):
+        """
+        We expect default 'flat' behavior
+            
+            FeatureCollection:
+                mpa1
+                mpa2
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse(self.folder1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertTrue(fc['features'][0]['properties']['name'] in ['Mpa1','Mpa2'])
+        self.assertTrue(fc['features'][1]['properties']['name'] in ['Mpa1','Mpa2'])
+        self.assertEquals(len(fc['features']), 2, fc)
+
+    def test_geojson_nest_url(self):
+        """
+        We expect custom 'nest_feature_set' behavior
+            
+            FeatureCollection:
+                folder1 (with a `feature_set` property listing uids and null geom)
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse(self.folder1) + "?strategy=nest_feature_set"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['feature_set'], [x.uid for x in [self.mpa1, self.folder2]])
+        self.assertEquals(len(fc['features']), 1)
+
+    def test_geojson_nest_multi(self):
+        """
+        We expect custom 'nest_feature_set' behavior
+            
+            FeatureCollection:
+                mpa1
+                folder2 (with a `feature_set` property listing uids and null geom)
+        """
+        link = self.folder1.options.get_link('GeoJSON')
+        url = link.reverse([self.mpa1, self.folder2]) + "?strategy=nest_feature_set"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('application/json' in response['Content-Type'])
+        fc = json.loads(response.content)
+        self.assertEquals(fc['features'][0]['properties']['name'], 'Mpa1')
+        self.assertEquals(fc['features'][1]['properties']['feature_set'], [self.mpa2.uid])
+        self.assertEquals(len(fc['features']), 2)
+
+    def test_geojson_forbidden(self):
+        self.client.logout()
+        self.client.login(username='joerando', password='pword')
+        link = self.folder1.options.get_link('GeoJSON')
+        # joerando user may own mpa4 but not folder2 so boot him 
+        url = link.reverse([self.mpa4, self.folder2]) 
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+        self.folder2.share_with(self.group1)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        fc = json.loads(response.content)
+        self.assertEquals(len(fc['features']), 2)
+
+    def test_geojson_transform(self):
+        from madrona.common.jsonutils import srid_to_urn
+        link = self.mpa3.options.get_link('GeoJSON')
+        # this one should be in db srs
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(settings.GEOMETRY_DB_SRID))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -38619)
+        # and this one should be in latlon
+        url = url + "?srid=4326"
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
+        # and this one should be in latlon as well
+        settings.GEOJSON_SRID = 4326 
+        url = link.reverse(self.mpa3)  # no need to specify parameter, setting should work
+        response = self.client.get(url)
+        fc = json.loads(response.content)
+        self.assertEquals(fc['crs']['properties']['name'], srid_to_urn(4326))
+        self.assertEquals(int(fc['features'][0]['geometry']['coordinates'][0][0][0]), -120)
+
+    def test_geojson_download(self):
+        link = self.mpa3.options.get_link('GeoJSON')
+        # default download
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Content-Disposition' in response)
+        self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
+        # no attach
+        url = link.reverse(self.mpa3) + "?noattach"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse('Content-Disposition' in response)
+        # setting default to no download
+        settings.GEOJSON_DOWNLOAD = False
+        url = link.reverse(self.mpa3)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse('Content-Disposition' in response)
+        # attach
+        url = link.reverse(self.mpa3) + "?attach"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Content-Disposition' in response)
+        self.assertTrue('attachment; filename=mpa3.geojson' in response['Content-Disposition'])
+        # cleanup
+        settings.GEOJSON_DOWNLOAD = True
+
+    def test_srid_util(self):
+        from madrona.common.jsonutils import srid_to_urn, srid_to_proj
+        ogc_wgs84 = "urn:ogc:def:crs:OGC:1.3:CRS84"
+        proj4_wgs84 = "+proj=longlat +datum=WGS84 +no_defs"
+        self.assertEqual(ogc_wgs84, srid_to_urn(4326))
+        self.assertEqual(proj4_wgs84, srid_to_proj(4326))

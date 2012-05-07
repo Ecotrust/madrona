@@ -796,3 +796,122 @@ def has_features(user):
         except:
             pass
     return False
+
+def geojson_link(request, instances):
+    """
+    Generic view for GeoJSON representation of feature classes. 
+    Can be overridden but this is provided a default.
+
+    To override, feature class needs a geojson object that returns 
+       a geojson feature string (no trailing comma)::
+ 
+      { "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
+        "properties": {"prop0": "value0"}
+      }
+   
+    GeoJSON Feature collections *cannot* be nested within other feature collections
+    http://lists.geojson.org/pipermail/geojson-geojson.org/2008-October/000464.html
+    Thus collections can be treated using one of the following strategies: 
+
+      ``flat``: (DEFAULT) The collection is "flattened" to contain all the  
+          features in a single featurecollection (lossy)
+
+      ``nest_feature_set``: the collection is represented as an empty geometry with a special
+          feature_set property; a list of UIDs to fetch 
+          (requires a client with knowledge of this convention)
+
+    Pass by URL GET parameter like ?strategy=nest_feature_set
+    """
+    from madrona.common import default_mimetypes as mimetypes
+    from madrona.common.jsonutils import get_properties_json, get_feature_json, srid_to_urn, srid_to_proj
+    from madrona.features.models import FeatureCollection, SpatialFeature, Feature
+    from django.contrib.gis.gdal import DataSource
+    import tempfile
+    import os
+    import json
+    
+    strategy = request.GET.get('strategy', default='flat')
+    strategy = strategy.lower()
+
+    if settings.GEOJSON_SRID:
+        srid_setting = settings.GEOJSON_SRID
+    else:
+        srid_setting = settings.GEOMETRY_DB_SRID
+    srid = int(request.GET.get('srid', default=srid_setting))
+    if srid <= 32766:  # assumed max EPSG code
+        crs = srid_to_urn(srid)
+    else:
+        crs = srid_to_proj(srid)
+
+    if settings.GEOJSON_DOWNLOAD:
+        download = 'noattach' not in request.GET
+    else:
+        download = 'attach' in request.GET
+
+    feature_jsons = []
+    for i in instances:
+        gj = None
+        try:
+            gj = i.geojson(srid)
+        except AttributeError:
+            pass
+         
+        if gj is None:
+            props = get_properties_json(i)
+            if issubclass(i.__class__, FeatureCollection):
+                if strategy == 'nest_feature_set':
+                    # collections are treated as null geoms with 'feature_set' property
+                    props['feature_set'] = [x.uid for x in i.feature_set()]
+                    gj = get_feature_json('null', json.dumps(props))
+                else:  # assume 'flat' strategy and recurse
+                    feats = [f for f in i.feature_set(recurse=True) 
+                               if not isinstance(f, FeatureCollection)]
+                    gjs = []
+                    for f in feats:
+                        try:
+                            geom = x.geometry_final.transform(srid, clone=True).json
+                        except:
+                            geom = 'null'
+                        props = get_properties_json(f)
+                        gjs.append(get_feature_json(geom, json.dumps(props)))
+                    gj = ', \n'.join(gjs)
+
+            else:
+                try:
+                    # Eventually support an Option to configure the geometry field? 
+                    geom = i.geometry_final.transform(srid, clone=True).json
+                except:
+                    geom = 'null'
+                gj = get_feature_json(geom, json.dumps(props))
+             
+        if gj is not None:
+            feature_jsons.append(gj)
+
+    geojson = """{ 
+      "type": "FeatureCollection",
+      "crs": { "type": "name", "properties": {"name": "%s"}},
+      "features": [ 
+      %s 
+      ]
+    }""" % (crs, ', \n'.join(feature_jsons),)
+
+    ##### Not reliable, extent call throws unknown OGR error, even with valid datasource
+    #tmpfile = tempfile.mktemp() + ".json"
+    #with open(tmpfile, 'w') as fh:
+    #    fh.write(geojson)
+    #ds = DataSource(tmpfile)
+    #bbox = list(ds[0].extent.tuple)
+    #if bbox and len(bbox) == 4:
+    #    # requires "bbox": null, in the geojson
+    #    geojson.replace('"bbox": null,', '"bbox": %s,' % str(bbox))
+    #del ds
+    #os.remove(tmpfile)
+
+    response = HttpResponse()
+    response['Content-Type'] = mimetypes.JSON
+    if download:
+        filename = '_'.join([slugify(i.name) for i in instances])[:40]
+        response['Content-Disposition'] = 'attachment; filename=%s.geojson' % filename
+    response.write(geojson)
+    return response
