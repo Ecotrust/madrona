@@ -5,9 +5,9 @@ The ``madrona.features`` app works along with other Madrona apps to create a
 system that is best described as a content management system for user-designed
 spatial features. This system can be configured quickly to support a range of 
 management options such as marine protected areas, hydrokinetic generators, 
-wind turbines, or undersea cables. With one model definition it's possible to
+wind turbines, or undersea cables. With one model definition it is possible to
 define the data schema for storing these features, as well as what behaviors 
-and actions they support within the Madrona interface. I high degree of 
+and actions they support within the Madrona interface. A high degree of 
 customization can be achieved with a Madrona project with this declarative 
 format, without having to customize the view or client-side javascript 
 components.
@@ -39,7 +39,7 @@ process involves:
     stored with it.
   * Creating an Options inner-class, and using it to specify a form to use 
     when creating or editing this Feature Class.
-  * Creating kml and kml_style properties that define it's KML representation
+  * Creating kml and kml_style properties that define its KML representation
   * Specifying links to downloads or services related to the Feature Class.
   * Specifying any optional parameters on the Options inner-class
   * Creating a template to use when displaying this Feature Class' attributes
@@ -138,7 +138,7 @@ Customizing the Output Styling and KML Representation
 =====================================================
 
 There are three primary visual representations of Features: KML, the KMLTree and static maps. 
-While the base Feature classes define reasonable default styling, it's likely that you'll need to customize the look and feel for your implementation.
+While the base Feature classes define reasonable default styling, it is likely that you'll need to customize the look and feel for your implementation.
 
   * :ref:`Customizing the styling of the KML <kmlapp>`
   * :ref:`Customizing the Mapnik static map rendering <staticmap>`
