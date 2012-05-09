@@ -123,8 +123,7 @@ Test Out Your New App
 
 14. Click and drag your feature you created into your new folder.  You can organize your features any way you like.
 
-.. note:: There are many more things you can do with these features.  Content to be added
-
+.. note:: There are many more things you can do with these features and folders out of the box including edit, delete, copy, share and download.  Try selecting one or more features or folders and performing these actions, for example download an entire folder of features as KML.
 
 Viewing and editing the generated code
 ---------------------------------------
