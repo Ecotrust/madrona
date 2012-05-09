@@ -13,7 +13,7 @@ The application is currently running on a production web server which is ideal f
 
 2. Then, run the development server with the following command::
 
-    runserver 0.0.0.0:8000
+    python manage.py runserver 0.0.0.0:8000
 
 From this point on, you will access your application at ``http://madrona:8000``
 
