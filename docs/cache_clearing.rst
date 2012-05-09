@@ -24,14 +24,18 @@ Clearing your Google Earth cache
 --------------------------------
 
 Sometimes code changes that result in updated KML will require some trial and error.  
+
 At times, such changes will be reflected in your application through a simple browser refresh.  
+
 At other times, these changes may require the clearing of your browser's cache.  
+
 At still other times, it may help to `clear the cache on your Google Earth client <http://support.google.com/earth/bin/answer.py?hl=en&answer=20712>`_ application.  
 
 Additional Strategies
 ---------------------
 
 Additional cache clearing strategies include:
+
  * restarting your web server and refreshing your browser
  * running the management command ``clear_cache`` (clears the django cache)
  * closing the application tab in your browser, clearing the browser cache, and opening the application in a new tab
