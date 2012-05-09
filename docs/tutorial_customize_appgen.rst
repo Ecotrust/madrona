@@ -20,7 +20,7 @@ From this point on, you will access your application at ``http://madrona:8000``
 Group Collaboration
 ---------------------------------
 
-Madrona provides a robust mechanism for sharing features between users. By default, all features you create under a single account are accessible by that user alone. But `users` can be made members of `groups` and can choose to share features with group members who can then view them, copy them, share them back with revisions, etc. This allows for truely collaborative multi-user workflows while maintaining privacy of data. 
+Madrona provides a robust mechanism for sharing features between users. By default, all features you create under a single account are accessible by that user alone. But `users` can be made members of `groups` and can choose to share features with group members who can then view them, copy them, share them back with revisions, etc. This allows for truly collaborative multi-user workflows while maintaining privacy of data. 
 
 The first step is to use Django's admin site to create users and groups.
 
@@ -42,8 +42,8 @@ Go back to your host web browser and reload your application. You should now be 
 
 About page
 -----------
-Open the ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/news/about.html`` page. The default landing page is just a placeholder; here you can put any 
-html description of your project or high-level documentation that you want the user to see when they first view the site::
+In your text editor, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/news/about.html``. This is a Django HTML template.  It generates the default landing page which by default is just a placeholder; you can put any 
+html description or documentation that you wish and it will be the first thing they see when they first view the site.  Change the text to the following::
 
     {% load appname %}
     <h1> About {% appname %}</h1>
@@ -53,7 +53,7 @@ html description of your project or high-level documentation that you want the u
 
 Verbose name 
 ---------------------
-The first obvious step is to change how our feature name appears on screen. We can supply custom text using ``verbose_name`` in the feature's Options class::
+The first obvious step is to change how our feature name appears on screen. We can supply custom text using ``verbose_name`` in the feature's Options class.  Give yours a verbose_name of 'Areas of Interest'::
 
     @register
     class AOI(PolygonFeature):
@@ -62,13 +62,11 @@ The first obvious step is to change how our feature name appears on screen. We c
             form = 'testapp.forms.AOI'
             verbose_name = 'Areas of Interest'
 
-
-For other options, see the :ref:`Feature options docs<feature_options>`.
-
+Other Options are available, see the :ref:`Feature options docs<feature_options>`.
 
 Generating custom reports
 -------------------------
-The default template for the AOI feature just prints out some basic details. In order to customize it, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
+The default template for the AOI feature (what you see when you double-click a feature under My Shapes) just prints out some basic details. In order to customize it, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
 
 Each feature gets passed to the template as the variable ``instance``. Any attributes, properties and methods that exist on the feature model instance can be accessed through this template variable. 
 For example, the polygon area is currently being reported through the following template variable::
