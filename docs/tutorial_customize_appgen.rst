@@ -152,7 +152,7 @@ For example, you may want to limit user-drawn shapes to be within the study regi
         class Options:
             form = 'testapp.forms.AOI'
         verbose_name = 'Areas of Interest'
-        manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegion' ]
+        manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegionManipulator' ]
 
 You can also choose from several other built-in manipulators, define custom manipulators or make them optional. For more information, see the :ref:`manipulators documentation <manipulators>`.
 
