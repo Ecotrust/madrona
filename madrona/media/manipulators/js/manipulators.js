@@ -348,6 +348,7 @@ madrona.Manipulator.prototype.enterManipulatedState_ = function(html, success){
     this.render_target_.find('div.manipulated a.edit_shape').removeClass('disabled');
     this.render_target_.find('div.manipulated').show().find('>p')
         .html(html);
+    $('#button_next').removeClass('disabled');
 }
 
 madrona.Manipulator.prototype.isInvalidGeometry = function(){
