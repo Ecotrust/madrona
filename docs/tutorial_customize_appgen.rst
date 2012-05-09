@@ -184,15 +184,17 @@ For example, let's say we want to provide a simple text file download for your a
 
 1. Add a link to your feature Options in ``testapp/models.py``::
 
+    from madrona.features import alternate
+
     @register
     class AOI(PolygonFeature):
         description = models.TextField(null=True, blank=True)
         class Options:
             form = 'testapp.forms.AOI'
             verbose_name = 'Areas that interest me'
-            manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegion' ]
+            manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegionManipulator' ]
             links = (
-                related('Text file',
+                alternate('Text file',
                     'testapp.views.aoi_text',
                     select='single multiple',
                     type='text/csv'
@@ -201,6 +203,8 @@ For example, let's say we want to provide a simple text file download for your a
 
 2. Create a view to handle the creation of text files for one or more features. Open ``testapp/views.py`` and add the following function::
    
+    from django.http import HttpResponse
+
     def aoi_text(request, instances):
         text = "Name, Description, Acres\n"
         for f in instances:
