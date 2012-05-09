@@ -66,14 +66,11 @@ Other Options are available, see the :ref:`Feature options docs<feature_options>
 
 Generating custom reports
 -------------------------
-The default template for the AOI feature (what you see when you double-click a feature under My Shapes) just prints out some basic details. In order to customize it, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
+The default template for the AOI feature (what you see when you double-click a feature under My Shapes) just prints out some basic details by default including: the feature name, who created it, when they created it, the description, the area of the AOI, etc.  Let's customize it and report the acreage for the polygon.
 
-Each feature gets passed to the template as the variable ``instance``. Any attributes, properties and methods that exist on the feature model instance can be accessed through this template variable. 
-For example, the polygon area is currently being reported through the following template variable::
+1.  In your text editor, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
 
-    {{instance.geometry_final.area}}
-
-You could also define a custom property on your ``AOI`` model (``/usr/local/userapps/testappDemoProject/testappdemoproject/testapp/models.py``) that returns the acreage...::
+2.  In your AOI model, below your verbose_name, add a new property called `acres` that returns acreage as seen below:
 
     @register
     class AOI(PolygonFeature):
@@ -89,11 +86,13 @@ You could also define a custom property on your ``AOI`` model (``/usr/local/user
             area_acres = area_meters * conversion
             return area_acres
 
-... and add the following to your feature's show template (``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``)::
+3.  Save that file.  Now add the new information to your feature's show template.  In your text editor, open (``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``)::
+
+4. Insert the following at line 15, just below the reporting of Polygon Area and above the line break `<br/>`
 
     <p>Acreage is {{instance.acres}}</p>
 
-Now when you view the attributes panel for your AOI, you will see that the acreage is reported.  
+5. Save that file.  Now refresh your browser.  Double-click one of your AOI features you created under 'My Shapes'.  You will now see that acreage is reported.  
     
 The reporting can get as detailed and complex as your needs require and can leverage GeoDjango geometry operations as well as any spatial analysis supported by Python. 
 
