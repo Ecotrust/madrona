@@ -7,11 +7,15 @@ Running the development server
 ------------------------------
 The application is currently running on a production web server which is ideal for publishing a site to the public. However, it is not convient for development; for that we have a special development server which is more suitable for tweaking. 
 
-In your LXTerminal window, run the development server with the following command::
+1. In your LXTerminal window, change to the django app directory
+
+    cd /usr/local/userapps/testappDemoProject
+
+2. Then, run the development server with the following command::
 
     runserver 0.0.0.0:8000
 
-From this point on, we will access our application at ``http://madrona:8000``
+From this point on, you will access your application at ``http://madrona:8000``
 
 Group Collaboration
 ---------------------------------
