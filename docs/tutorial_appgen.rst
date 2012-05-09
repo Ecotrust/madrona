@@ -36,46 +36,52 @@ Downloading and installing the virtual machine
 
 .. image:: hostsvm.png
 
+.. note:: TODO: Add tutorial link (direct link to the 'Creating the initial demo app' section below) to the Welcome page.
+
 Creating the initial demo app 
 ###############################
 
-In your *host* web browser, open the URL ``http://madrona/`` and sign in. The username and password is `madrona`/`madrona`.
+In your *host* web browser, open the URL ``http://madrona/`` and sign in. The username and password is `madrona` / `madrona`.
 
-Click ``Generate New Madrona App`` to begin:
+Click ``Generate New Madrona App`` to begin.
+
+Provide the App with a name (we'll be using Test App throughout this tutorial), an optional description, and a studyregion (the studyregion is used to define the geographical extent of your project). 
+Select a Feature and a KML, and then click ``Save``.  
+
+.. image:: appgen_new_or.png
+
+.. note:: TODO: Explain how a user might add a new Feature or KML through the AppGen interface. 
 
 
-.. image:: appgen_new.png
+Once you've clicked ``Save``, and you'll see a summary of your app.
+Next, Click ``Initialize`` ... this step can take a minute so be patient. When ready, click the ``Activate`` button to begin.
 
-Click ``Save`` and you'll see a summary of your app.
-Next, Click ``Initialize`` ... this step can take a minute so be patient. When ready, click the `Activate` button to begin.
+.. image:: appgen_or.png
 
-.. image:: appgen.png
-
+.. note:: What's going on under the hood? This graphic interface is just running some simple commands that can be viewed by using the `toggle code` link.
 
 Click ``Go To App`` (will take you to ``http://madrona:81/``) and you should see the application you just created. 
 
-.. note:: What's going on under the hood? This graphic interface is just running some simple commands that can be viewed by using the `toggle code` link.
+.. note:: TODO: Provide additional information (or a link) covering the tool itself.  I.E. Instructions for signing in, creating an AOI, a Folder, and dragging the AOI into the Folder.  Could also cover Data Layer and Tools panels as well as Export and Edit...
+
 
 Viewing and editing the generated code
 ---------------------------------------
 
 Now we'll go back to the Virtual Machine window to see the code that was generated through this process. 
 
-The wierd little icon in the lower-left is your "Start" button. From there you can access ``Start > Accessories`` and open:
-
-.. image:: terminal.png
+The weird little icon in the lower-left is your "Start" button. From there you can access ``Start > Accessories`` and open:
 
 1. ``LXTerminal`` (a command line terminal)
 2. ``File Manager`` (for browsing and editing files)
 
+.. image:: terminal.png
+
 In the LXTerminal window, type::
 
-    cd /usr/local/userapps/testDemoProject/testdemoproject
-    sudo chmod 777 *
+    cd /usr/local/userapps/testappDemoProject/testappdemoproject
 
-.. note:: This last command will set the file permission so you can edit them; this may require you to enter a password. Type `madrona` if prompted.
-
-And navigate to that same directory in the File Manager and go into the ``test`` folder. Now you're ready to begin customizing the app.
+Using the File Manager, navigate to that same directory and go into the ``testapp`` folder. Now you're ready to begin customizing the app.
 
 .. include:: tutorial_customize_appgen.rst
     
