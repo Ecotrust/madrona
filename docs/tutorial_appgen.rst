@@ -9,10 +9,13 @@ This tutorial will walk through:
 2. Creating an initial app using the graphical "Madrona App Generator"
 3. Customizing the app
 
+.. note:: You'll need a Windows or OSX system that can run the Google Earth Web Plugin
+
 Downloading and installing the virtual machine
 ###############################################
 
 First we need to get the Madrona VM up and running on your machine:
+
 1. Download and install `VirtualBox <http://www.virtualbox.org/>`_ for your operating system
 
 2. Download the `Madrona Virtual Machine <https://s3.amazonaws.com/madrona_vm/madrona_virtual_v1.ova>`_ (.ova format; ~ 1GB) 
@@ -27,7 +30,7 @@ First we need to get the Madrona VM up and running on your machine:
     * check that your network card is listed in the "Name" field
     * click "OK"
 
-5. Start the virtual machine and click `Start Using the Madrona VM`
+5. Start the virtual machine and click "Start Using the Madrona VM"
 
 .. image:: initvm.png
 
@@ -40,17 +43,29 @@ First we need to get the Madrona VM up and running on your machine:
 Creating the initial demo app 
 ###############################
 
-In your *host* web browser, open the URL ``http://madrona/`` and sign in. The username and password is `madrona` / `madrona`.
+Now that your virtual machine is up and running and your networking is setup, access the app generator from a web browser in your *host* operatings system (not the VM).
 
-Click ``Generate New Madrona App`` to begin.
+.. note:: TODO: Why access it from your host system?  The demo uses the Google Earth Web Plugin which isn't supported for Linux.  Explain how a user might add a new Feature or KML through the AppGen interface. 
 
-Provide the App with a name (we'll be using Test App throughout this tutorial), an optional description, and a studyregion (the studyregion is used to define the geographical extent of your project). 
-Select a Feature and a KML, and then click ``Save``.  
+1. Open the URL ``http://madrona/``
+
+2. Sign in. The username and password is `madrona` / `madrona`.
+
+3. Click ``Generate New Madrona App`` to begin.
+
+4. Provide the App with a name, we'll be using "Test App" throughout this tutorial.
+
+5. Enter an optional description.
+
+6. Draw a study region on the map.  The studyregion is used to define the geographical extent of your project.  For best results, draw a smaller region.
+
+7. Select the 'AOI' feature or create your own by clicking the '+' button.  Features are spatial entities that the user will be able to draw, edit and share with other people.  Select as many features as you want. 
+
+8.  Select one or more KML data layers to make available to your users.  Click the "+" button to add your own KML file if you know the URL.
+
+9. Click ``Save``.
 
 .. image:: appgen_new_or.png
-
-.. note:: TODO: Explain how a user might add a new Feature or KML through the AppGen interface. 
-
 
 Once you've clicked ``Save``, and you'll see a summary of your app.
 Next, Click ``Initialize`` ... this step can take a minute so be patient. When ready, click the ``Activate`` button to begin.
