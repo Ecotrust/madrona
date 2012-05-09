@@ -67,16 +67,20 @@ Now that your virtual machine is up and running and your networking is setup, ac
 
 .. image:: appgen_new_or.png
 
-You should now see a summary of your app.
+You should now see a summary of your app.  You're ready to initialize and activate it.
 
-- Click ``Initialize`` This will generate the code for your app and can take up to a minute.  Be patient... this step can take a minute so be patient. 
-- Once initialization is complete you will see an ``Activate`` button.  Click the ``Activate`` button.
+1. Click ``Initialize`` This will generate the code for your app and can take up to a minute.  Be patient...
 
-.. image:: appgen_or.png
+2. Once initialization is complete you will see an ``Activate`` button.  Click the ``Activate`` button.
 
 .. note:: What's going on under the hood? This graphic interface is just running some simple commands that can be viewed by using the `toggle code` link.
 
-Click ``Go To App`` (will take you to ``http://madrona:81/``) and you should see the application you just created. 
+.. image:: appgen_or.png
+
+Trying Our Your New App
+---------------------------------------
+
+- Click ``Go To App`` (will take you to ``http://madrona:81/``) and you should see the application you just created. 
 
 .. note:: TODO: Provide additional information (or a link) covering the tool itself.  I.E. Instructions for signing in, creating an AOI, a Folder, and dragging the AOI into the Folder.  Could also cover Data Layer and Tools panels as well as Export and Edit...
 
