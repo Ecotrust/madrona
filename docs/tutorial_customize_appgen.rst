@@ -3,6 +3,16 @@ Customizing the Madrona project
 
 The following sections will expose you to the django admin, django templates and models, and basic KML.
 
+Running the development server
+------------------------------
+The application is currently running on a production web server which is ideal for publishing a site to the public. However, it is not convient for development; for that we have a special development server which is more suitable for tweaking. 
+
+In your LXTerminal window, run the development server with the following command::
+
+    runserver 0.0.0.0:8000
+
+From this point on, we will access our application at ``http://madrona:8000``
+
 Group Collaboration
 ---------------------------------
 
@@ -10,11 +20,11 @@ Madrona provides a robust mechanism for sharing features between users. By defau
 
 The first step is to use Django's admin site to create users and groups.
 
-1. Navigate to  ``http://madrona:81/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``:
+1. Navigate to  ``http://madrona:8000/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``:
 
 .. image:: add_group.png
 
-2. Of course you, the "madrona" user, are the only member of this group at the moment! Go back to  ``http://madrona:81/admin/auth/`` and click ``+ Add`` next to `Users` and follow the instructions on-screen to create another user and add them to the ``My Group`` group.
+2. Of course you, the "madrona" user, are the only member of this group at the moment! Go back to  ``http://madrona:8000/admin/auth/`` and click ``+ Add`` next to `Users` and follow the instructions on-screen to create another user and add them to the ``My Group`` group.
 
 3. Finally, at the command line prompt (in the LXTerminal), enable sharing for "My Group" by this command::
 
@@ -49,7 +59,6 @@ The first obvious step is to change how our feature name appears on screen. We c
 
 For other options, see the :ref:`Feature options docs<feature_options>`.
 
-.. note::  TODO:  At some point we should talk about using ``runserver 0.0.0.0:8000`` (and viewing from ``madrona:8000``) to prevent the need to touch the ``wsgi`` file or similar strategies.
 
 Generating custom reports
 -------------------------
