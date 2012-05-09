@@ -3,18 +3,17 @@
 Using the Madrona Virtual Machine 
 =========================================================
 
-This tutorial is intended for users of the Madrona Virtual Machine who want to use the graphical "Madrona App Generator" setup tool to get started. 
-We'll walk through:
+This tutorial will walk through:
 
-1. Downloading and installing the virtual machine
-2. Creating the initial demo app 
-3. Customization
+1. Downloading and installing the Madrona virtual machine
+2. Creating an initial app using the graphical "Madrona App Generator"
+3. Customizing the app
 
 Downloading and installing the virtual machine
 ###############################################
 
-
-1. Download and install `VirtualBox <http://www.virtualbox.org/>`_
+First we need to get the Madrona VM up and running on your machine:
+1. Download and install `VirtualBox <http://www.virtualbox.org/>`_ for your operating system
 
 2. Download the `Madrona Virtual Machine <https://s3.amazonaws.com/madrona_vm/madrona_virtual_v1.ova>`_ (.ova format; ~ 1GB) 
 
