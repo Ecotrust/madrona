@@ -55,33 +55,57 @@ Now that your virtual machine is up and running and your networking is setup, ac
 
 4. Provide the App with a name, we'll be using "Test App" throughout this tutorial.
 
-5. Enter an optional description.
+5. Enter the description ``Test Application`` or whatever you want.
 
 6. Draw a study region on the map.  The studyregion is used to define the geographical extent of your project.  For best results, draw a smaller region.
 
-7. Select the 'AOI' feature or create your own by clicking the '+' button.  Features are spatial entities that the user will be able to draw, edit and share with other people.  Select as many features as you want. 
+7. Under `Features`, select the `AOI` feature.  
 
-8.  Select one or more KML data layers to make available to your users.  Click the "+" button to add your own KML file if you know the URL.
+.. note:: Features are spatial entities that the user will be able to draw, edit and share with other people.
 
-9. Click ``Save``.
+8. (Optionally) create one or more additional features by clicking the '+' button.  Give them a name and a type (point, line, polygon or folder).or create your own by clicking the '+' button.  Once you create more you need to select them all in the `Features` list by holding down the Ctrl key and selecting them all. 
+
+9.  Select one or more of the available KML data layers to make available to your user.
+
+10. (Optionally)  Click the "+" button to add your own KML file if you know the URL.
+
+11. Click ``Save``.  You should now see a summary of your app.
 
 .. image:: appgen_new_or.png
 
-You should now see a summary of your app.  You're ready to initialize and activate it.
+Initialize and Activate Your App
+---------------------------------------
 
-1. Click ``Initialize`` This will generate the code for your app and can take up to a minute.  Be patient...
+1. Click ``Initialize`` This can take up to a minute.  Be patient...
+
+.. note:: Under the hood this is generating the code for your app using some simple commands.  To see what the actual commands look like click the `toggle code` link.
 
 2. Once initialization is complete you will see an ``Activate`` button.  Click the ``Activate`` button.
 
-.. note:: What's going on under the hood? This graphic interface is just running some simple commands that can be viewed by using the `toggle code` link.
+.. note:: Under the hood this is configuring the Apache web server to make your app available on port 81.  You can only have one app active at one time.
 
 .. image:: appgen_or.png
 
-Trying Our Your New App
+Test Out Your New App
 ---------------------------------------
 
-- Click ``Go To App`` (will take you to ``http://madrona:81/``) and you should see the application you just created. 
+1. In the admin, click ``Go To App``.  This will take you to ``http://madrona:81/``.  When the app loads it will automatically zoom the map to the study region that you drew.  
 
+.. note:: Loading may take a little while the first time as it caches your requests in order to speed up subsequent loads.  If you don't already have the Google Earth Web Plugin installed you will be asked to at this time.  Once you do, refresh the page
+
+2. Click ``Login`` in the top right.  The username and password is `madrona` / `madrona`
+
+3. Click the `Data Layers` icon in the top left.  
+
+.. note:: This is next to the `Tools` icon which looks like a gear. 
+
+4. You should see a `Test App` folder which has a data layer for your study region.  Try turning this on and off.  Double-click to zoom into it.
+
+5. You should also see a `Base KML Data` folder which has all of the data layers that you added.  Try turning them on and off.
+
+6. Now let's create some features.  Click the `Public Proposals` tab in the top left
+
+7. Click `Create New` and 
 .. note:: TODO: Provide additional information (or a link) covering the tool itself.  I.E. Instructions for signing in, creating an AOI, a Folder, and dragging the AOI into the Folder.  Could also cover Data Layer and Tools panels as well as Export and Edit...
 
 
