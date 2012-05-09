@@ -151,8 +151,8 @@ For example, you may want to limit user-drawn shapes to be within the study regi
         description = models.TextField(null=True, blank=True)
         class Options:
             form = 'testapp.forms.AOI'
-        verbose_name = 'Areas of Interest'
-        manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegion' ]
+            verbose_name = 'Areas of Interest'
+            manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegionManipulator' ]
 
 You can also choose from several other built-in manipulators, define custom manipulators or make them optional. For more information, see the :ref:`manipulators documentation <manipulators>`.
 
@@ -161,8 +161,8 @@ Managing basemaps and KML datasets
 ------------------------------------
 Base data layers are managed using a single KML file called the `public layers list`. If you defined KML layers 
 when setting up your initial app, the layers list will be available at 
-``http://madrona:81/layers/public/``. Download that file, save as ``public.kml``, 
-and open for editing. You'll see that it is a standard KML file with `NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink ::
+``http://madrona:8000/admin/layers/publiclayerlist/1/``
+. Download the ``public.kml`` file  and open it in a text editor. You'll see that it is a standard KML file with `NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink ::
 
     <NetworkLink id="global-marine">
         <name>Global Marine</name>
@@ -172,7 +172,7 @@ and open for editing. You'll see that it is a standard KML file with `NetworkLin
         </Link>
     </NetworkLink>
 
-Once we've modified the public kml, browse to admin interface at ``http://madrona:81/admin/layers/publiclayerlist/add/`` and use it to upload the new KML file. After refreshing your browser cache, you should see the new KML avaible in the layers panel.
+Once we've modified the public kml, browse to admin interface at ``http://madrona:8000/admin/layers/publiclayerlist/add/`` and use it to upload the new KML file. After refreshing your browser cache, you should see the new KML avaible in the layers panel.
 
 For more information, see the :ref:`layers documentation <layers>`.
 
@@ -184,15 +184,17 @@ For example, let's say we want to provide a simple text file download for your a
 
 1. Add a link to your feature Options in ``testapp/models.py``::
 
+    from madrona.features import alternate
+
     @register
     class AOI(PolygonFeature):
         description = models.TextField(null=True, blank=True)
         class Options:
             form = 'testapp.forms.AOI'
             verbose_name = 'Areas that interest me'
-            manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegion' ]
+            manipulators = [ 'madrona.manipulators.manipulators.ClipToStudyRegionManipulator' ]
             links = (
-                related('Text file',
+                alternate('Text file',
                     'testapp.views.aoi_text',
                     select='single multiple',
                     type='text/csv'
@@ -201,6 +203,8 @@ For example, let's say we want to provide a simple text file download for your a
 
 2. Create a view to handle the creation of text files for one or more features. Open ``testapp/views.py`` and add the following function::
    
+    from django.http import HttpResponse
+
     def aoi_text(request, instances):
         text = "Name, Description, Acres\n"
         for f in instances:
