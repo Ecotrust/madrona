@@ -49,6 +49,8 @@ The first obvious step is to change how our feature name appears on screen. We c
 
 For other options, see the :ref:`Feature options docs<feature_options>`.
 
+.. note::  TODO:  At some point we should talk about using ``runserver 0.0.0.0:8000`` (and viewing from ``madrona:8000``) to prevent the need to touch the ``wsgi`` file or similar strategies.
+
 Generating custom reports
 -------------------------
 The default template for the AOI feature just prints out some basic details. In order to customize it, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
