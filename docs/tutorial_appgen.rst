@@ -45,7 +45,7 @@ Creating the initial demo app
 
 Now that your virtual machine is up and running and your networking is setup, access the app generator from a web browser in your *host* operatings system (not the VM).
 
-.. note:: TODO: Why access it from your host system?  The demo uses the Google Earth Web Plugin which isn't supported for Linux.  Explain how a user might add a new Feature or KML through the AppGen interface. 
+.. note:: Why access it from your host system?  The demo uses the Google Earth Web Plugin which isn't available currently for Linux.
 
 1. Open the URL ``http://madrona/``
 
@@ -67,8 +67,10 @@ Now that your virtual machine is up and running and your networking is setup, ac
 
 .. image:: appgen_new_or.png
 
-Once you've clicked ``Save``, and you'll see a summary of your app.
-Next, Click ``Initialize`` ... this step can take a minute so be patient. When ready, click the ``Activate`` button to begin.
+You should now see a summary of your app.
+
+- Click ``Initialize`` This will generate the code for your app and can take up to a minute.  Be patient... this step can take a minute so be patient. 
+- Once initialization is complete you will see an ``Activate`` button.  Click the ``Activate`` button.
 
 .. image:: appgen_or.png
 
