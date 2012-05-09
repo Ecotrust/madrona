@@ -103,29 +103,42 @@ Test Out Your New App
 
 5. You should also see a `Base KML Data` folder which has all of the data layers that you added.  Try turning them on and off.
 
-6. Now let's create some features.  Click the `Public Proposals` tab in the top left
+6. Now let's create some features.  Click the `My Shapes` tab in the top left.  If you don't see this tab you probably aren't logged in.
 
-7. Click `Create New` and 
-.. note:: TODO: Provide additional information (or a link) covering the tool itself.  I.E. Instructions for signing in, creating an AOI, a Folder, and dragging the AOI into the Folder.  Could also cover Data Layer and Tools panels as well as Export and Edit...
+7. Click `Create` and then click `AOI` which generically stands for `Area of Interest`.  
 
+8. Click `Draw Shape` and then draw a polygon on the map.  Double-click the last point to finish.
+
+.. note:: Madrona will now validate your shape, make sure you didn't draw any bowties or any other type of self-intersecting polygon.  If it's valid you now have the option of editing your shape or if you are happy click `Next`.
+
+9. Give your new feature a name, any name.  Optionally, give it a description.
+
+10. Click `Submit`
+
+11. You'll now be presented with detailed information for your shape.  Close this window by clicking the 'X'.
+
+12. You should now see your feature in the `Features and Collections`
+
+13. Now let's create a new folder.  Do it the same way you created an AOI, through the `Create` menu.
+
+14. Click and drag your feature you created into your new folder.  You can organize your features any way you like.
+
+.. note:: There are many more things you can do with these features and folders out of the box including edit, delete, copy, share and download.  Try selecting one or more features or folders and performing these actions, for example download an entire folder of features as KML.
 
 Viewing and editing the generated code
 ---------------------------------------
 
 Now we'll go back to the Virtual Machine window to see the code that was generated through this process. 
 
-The weird little icon in the lower-left is your "Start" button. From there you can access ``Start > Accessories`` and open:
+1. The icon in the lower-left is your "Start" button.  Yes it looks a little strange. Click ``Start > Accessories > LXTerminal`` to open a command line terminal window
 
-1. ``LXTerminal`` (a command line terminal)
-2. ``File Manager`` (for browsing and editing files)
+2. Click ``Start > Accessories > Sublime Editor 2``.  This will be your text editor
+
+3. In Sublime Text click ``File > Open Folder`` and then open ``/usr/local/userapps/testDemoProject/testdemoproject``
 
 .. image:: terminal.png
 
-In the LXTerminal window, type::
-
-    cd /usr/local/userapps/testappDemoProject/testappdemoproject
-
-Using the File Manager, navigate to that same directory and go into the ``testapp`` folder. Now you're ready to begin customizing the app.
+Now you're ready to begin customizing the app.
 
 .. include:: tutorial_customize_appgen.rst
     
