@@ -26,13 +26,15 @@ The first step is to use Django's admin site to create users and groups.
 
 2. Of course you, the "madrona" user, are the only member of this group at the moment! Go back to  ``http://madrona:8000/admin/auth/`` and click ``+ Add`` next to `Users` and follow the instructions on-screen to create another user and add them to the ``My Group`` group.
 
-3. Finally, at the command line prompt (in the LXTerminal), enable sharing for "My Group" by this command::
+3. At the command line prompt (LXTerminal), stop the development server by hitting ``Ctrl-C`` and type this command to enable sharing for all available groups::
 
     python manage.py enable_sharing --all
 
-Back in the application, you should now be able to share features with other users through the ``Edit`` > ``Share`` menu item and view shapes that others have shared in the ``Shared with Me`` tab.
+4. Finally, restart the developement server by typing::
+   
+    python manage.py runserver 0.0.0.0:8000
 
-.. note::  TODO: Improve this section (more details, re-order?, etc)
+Go back to your host web browser and reload your application. You should now be able to share features with other users through the ``Edit`` > ``Share`` menu item and view shapes that others have shared in the ``Shared with Me`` tab.
 
 About page
 -----------
