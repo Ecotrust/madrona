@@ -134,7 +134,7 @@ Now we'll go back to the Virtual Machine window to see the code that was generat
 
 2. Click ``Start > Accessories > Sublime Editor 2``.  This will be your text editor
 
-3. In Sublime Text click `File > Open Folder` and then open `/usr/local/userapps/testDemoProject/testdemoproject`
+3. In Sublime Text click ``File > Open Folder`` and then open ``/usr/local/userapps/testDemoProject/testdemoproject``
 
 .. image:: terminal.png
 
