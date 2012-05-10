@@ -7,7 +7,7 @@ Running the development server
 ------------------------------
 The application is currently running on a production web server which is ideal for publishing a site to the public. However, it is not convient for development; for that we have a special development server which is more suitable for tweaking. 
 
-1. In your LXTerminal window, change to the django app directory
+1. In your LXTerminal window, change to the django app directory::
 
     cd /usr/local/userapps/testappDemoProject
 
@@ -24,7 +24,7 @@ Madrona provides a robust mechanism for sharing features between users. By defau
 
 The first step is to use Django's admin site to create users and groups.
 
-1. Navigate to  ``http://madrona:8000/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``:
+1. Navigate to  ``http://madrona:8000/admin/auth/`` and click ``+ Add`` next to Groups. Give the group a name, "My Group", and add the "madrona" user to it, and click ``Save``.
 
 .. image:: add_group.png
 
@@ -70,25 +70,25 @@ The default template for the AOI feature (what you see when you double-click a f
 
 1.  In your text editor, open ``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``. There you will see a django html template responsible for creating the attributes page. 
 
-2.  In your AOI model, below your verbose_name, add a new property called `acres` that returns acreage as seen below:
+2.  In your AOI model, below your verbose_name, add a new property called `acres` that returns acreage as seen below::
 
-    @register
-    class AOI(PolygonFeature):
-        description = models.TextField(null=True, blank=True)
-        class Options:
-            form = 'testapp.forms.AOI'
-            verbose_name = 'Areas of Interest'
+        @register
+        class AOI(PolygonFeature):
+            description = models.TextField(null=True, blank=True)
+            class Options:
+                form = 'testapp.forms.AOI'
+                verbose_name = 'Areas of Interest'
 
-        @property
-        def acres(self):
-            area_meters = self.geometry_final.area 
-            conversion = 0.000247105381 
-            area_acres = area_meters * conversion
-            return area_acres
+            @property
+            def acres(self):
+                area_meters = self.geometry_final.area 
+                conversion = 0.000247105381 
+                area_acres = area_meters * conversion
+                return area_acres
 
-3.  Save that file.  Now add the new information to your feature's show template.  In your text editor, open (``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``)::
+3.  Save that file.  Now add the new information to your feature's show template.  In your text editor, open (``/usr/local/userapps/testappDemoProject/testappdemoproject/templates/aoi/show.html``)
 
-4. Insert the following at line 15, just below the reporting of Polygon Area and above the line break `<br/>`
+4. Insert the following at line 15, just below the reporting of Polygon Area and above the line break `<br/>`. ``instance`` refers to the current AOI feature being reported on::
 
     <p>Acreage is {{instance.acres}}</p>
 
@@ -174,7 +174,7 @@ Managing basemaps and KML datasets
 Base data layers are managed using a single KML file called the `public layers list`. If you defined KML layers 
 when setting up your initial app, the layers list will be available at 
 ``http://madrona:8000/admin/layers/publiclayerlist/1/``
-. Download the ``public.kml`` file  and open it in a text editor. You'll see that it is a standard KML file with `NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink ::
+. Download the ``public.kml`` file  and open it in a text editor. You'll see that it is a standard KML file with `NetworkLink`s to the base data layers.  We can modify it by adding another KML NetworkLink::
 
     <NetworkLink id="global-marine">
         <name>Global Marine</name>

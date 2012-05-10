@@ -21,27 +21,41 @@ parser.add_option('-p', '--pylint', dest='pylint', default=False,
 cwd = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, cwd)
 
-print options.docs_output
+
+############ Sphinx docs and epydoc
 print "Generating documentation..."
 os.system('cd %s; make clean; make html' % os.path.join(cwd,'..','docs'))
 if options.pylint:
+    ############ Pylint
     print "Pylint..."
     os.system('pylint -f html madrona > %s' % os.path.join(cwd,'..','docs','.build','html','pylint.html'))
+
+############  Coverage
 print "Coverage..."
 os.system('cd %s; coverage html --omit=madrona/common/feedvalidator* --include=madrona* -d %s' % (os.path.join(cwd,'..'), 
                 os.path.join(cwd,'..','docs','.build','html','coverage')))
+
+############  JSDocs
+if options.jar:
+    jsdoc = options.jar
+else:
+    jsdoc = os.path.join('..','jsdoc_toolkit-2.4.0','jsdoc-toolkit')
+if options.docs_output:
+    docout = options.docs_output
+else:
+    docout = os.path.join(cwd,'..','docs','.build','html', 'jsdoc')
+
+print "Generating javascript documentation"
+c = 'java -jar %s/jsrun.jar %s/app/run.js -a -t=%s/templates/jsdoc madrona/media/common/js -r=10 -d=%s/jsdocs' % (jsdoc, jsdoc, jsdoc, docout, )
+print c
+os.system(c)
+############  Copy to final output dir 
 outdir = options.docs_output
 trydir = os.path.join(cwd,'..','..','madrona_docs','docs')
 if not outdir and os.path.exists(trydir):
     outdir = trydir 
-
 if outdir:
     src = os.path.join(cwd,'..','docs','.build','html','*')
     os.system('cp -r %s %s' % (src, outdir, ))
     print "Docs copied to %s" % outdir
 
-    if options.jar:
-        print "Generating javascript documentation"
-        c = 'java -jar %s/jsrun.jar %s/app/run.js -a -t=%s/templates/jsdoc media/common/js -r=10 -d=%s/jsdocs' % (options.jar, options.jar, options.jar, options.docs_output, )
-        print c
-        os.system(c)
