@@ -57,10 +57,21 @@
         };
         
         $('#button_prev').click( function() { wizard('prev'); });
-        $('#button_next').click( function() { wizard('next'); });
-        $('.draw_shape').click( function() { $('#button_next').addClass('disabled'); });
-        $('.edit_shape').click( function() { $('#button_next').addClass('disabled'); });
+        $('#button_next').click( function() { 
+            if(!$('#button_next').hasClass('disabled')) {
+                wizard('next'); 
+            }
+        });
+        $('.draw_shape').click( function() { disable_next(); });
+        $('.edit_shape').click( function() { disable_next(); });
         $('.done_editing').click( function() { $('#button_next').removeClass('disabled'); });
+        
+        function disable_next() {
+            if(!$('#button_next').hasClass('disabled')){
+                $('#button_next').addClass('disabled'); 
+            }
+            $('#button_next').attr('disabled', 'disabled'); 
+        }
         
         if (is_spatial == "True") {
             {% if form.errors %}
