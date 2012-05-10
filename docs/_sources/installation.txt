@@ -8,7 +8,7 @@ implement a Madrona-based project of their own. You should be familiar with
 
     * programming in Python
     * the command line interface 
-    * how web application are structured in `Django <http://djangoproject.com>`_
+    * how web applications are structured in `Django <http://djangoproject.com>`_
 
 There are four primary steps to creating a Madrona-based project:
     #. Install :ref:`system requirements<system_requirements>`

@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="NAME">module</span><span class="PUNC">(</span><span class="STRN">'DrawTool'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="COMM">/**
+<span class='line'>  4</span>  * Simply verify that the widget loads without throwing any errors (unless of course the proper options were not defined).
+<span class='line'>  5</span>  */</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="NAME">earthTest</span><span class="PUNC">(</span><span class="STRN">'initialize'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">ge</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gex</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">    </span><span class="NAME">tool</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">madrona.DrawTool</span><span class="PUNC">(</span><span class="NAME">ge</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">    </span><span class="NAME">equals</span><span class="PUNC">(</span><span class="NAME">tool.gex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">    </span><span class="NAME">equals</span><span class="PUNC">(</span><span class="NAME">tool.targetShape</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">equals</span><span class="PUNC">(</span><span class="NAME">tool.clippedShapeWKT</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">    </span><span class="NAME">equals</span><span class="PUNC">(</span><span class="NAME">tool.clippedShapeKML</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

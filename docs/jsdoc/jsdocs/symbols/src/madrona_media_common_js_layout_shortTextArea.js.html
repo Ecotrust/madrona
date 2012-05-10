@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="WHIT">
+<span class='line'>  2</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">limit_to</span><span class="PUNC">(</span><span class="NAME">textarea</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">max_chars</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">chars_used_el</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">alert_truncate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">textarea.value.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">max_chars</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">alert_truncate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="WHIT">            </span><span class="NAME">alert</span><span class="PUNC">(</span><span class="STRN">"The current text value exceeds the character limit; Any text after "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">max_chars</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" characters will be truncated"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">        </span><span class="NAME">textarea.value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">textarea.value.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">max_chars</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">        </span><span class="NAME">textarea.focus</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="NAME">chars_used_el</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">textarea.value.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 12</span> </span></pre></body></html>

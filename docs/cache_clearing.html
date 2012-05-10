@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Clearing Cache &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.0b1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="up" title="Topics" href="topics.html" />
+    <link rel="prev" title="Managing content with flatblocks" href="flatblocks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="clearing-cache">
+<span id="cache-clearing"></span><h1>Clearing Cache<a class="headerlink" href="#clearing-cache" title="Permalink to this headline">¶</a></h1>
+<p>Oftentimes changes made to your project code are not immediately reflected in your application.
+When this happens, there are various cache clearing strategies you may want to employ.</p>
+<div class="section" id="clearing-your-browser-cache">
+<h2>Clearing your browser cache<a class="headerlink" href="#clearing-your-browser-cache" title="Permalink to this headline">¶</a></h2>
+<p>Predictably, when changes are made to javascript or css files, you will need to run <tt class="docutils literal"><span class="pre">install_media</span></tt> (to update the shared media folder) and refresh your browser (so that it loads the most recent js and css).
+If these actions do not cause your code changes to appear in your application, you will want to try clearing your browser cache.</p>
+<p>For <em>Firefox</em> browsers, the shortcut key ctrl-shift-del will bring up the Clear History dialog box permitting you to clear your cache.</p>
+<p>For <em>Chrome</em> users, this same shortcut key ctrl-shift-del will bring up the Clear Browsing Data dialog allowing you to empty your cache.</p>
+<p>For other browsers (<em>IE</em>, <em>Safari</em>, etc), there is a fairly comprehensive and up to date <a class="reference external" href="http://www.wikihow.com/Clear-Your-Browser%27s-Cache">wikihow site</a> that explains appropriate steps based on the browser (and version) you may be using.</p>
+</div>
+<div class="section" id="clearing-your-google-earth-cache">
+<h2>Clearing your Google Earth cache<a class="headerlink" href="#clearing-your-google-earth-cache" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes code changes that result in updated KML will require some trial and error.
+At times, such changes will be reflected in your application through a simple browser refresh.
+At other times, these changes may require the clearing of your browser&#8217;s cache.
+At still other times, it may help to <a class="reference external" href="http://support.google.com/earth/bin/answer.py?hl=en&amp;answer=20712">clear the cache on your Google Earth client</a> application.</p>
+</div>
+<div class="section" id="additional-strategies">
+<h2>Additional Strategies<a class="headerlink" href="#additional-strategies" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Additional cache clearing strategies include:</dt>
+<dd><ul class="first last simple">
+<li>restarting your web server and refreshing your browser</li>
+<li>running the management command <tt class="docutils literal"><span class="pre">clear_cache</span></tt> (clears the django cache)</li>
+<li>closing the application tab in your browser, clearing the browser cache, and opening the application in a new tab</li>
+<li>viewing the application in a different browser</li>
+<li>finally, causing a KML change to occur at run-time (such as dragging/dropping features among folders in My Shapes) may do the trick</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Clearing Cache</a><ul>
+<li><a class="reference internal" href="#clearing-your-browser-cache">Clearing your browser cache</a></li>
+<li><a class="reference internal" href="#clearing-your-google-earth-cache">Clearing your Google Earth cache</a></li>
+<li><a class="reference internal" href="#additional-strategies">Additional Strategies</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="flatblocks.html"
+                        title="previous chapter">Managing content with flatblocks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cache_clearing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="flatblocks.html" title="Managing content with flatblocks"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+          <li><a href="topics.html" >Topics</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

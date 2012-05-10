@@ -544,49 +544,40 @@ madrona.features.models.Feature.user
 madrona.group_management.models.GroupRequest.user
 madrona.openid.models.UserAssociation.user
 madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-41', 'user', 'link-33');">user</a></tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
-<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">            <tt id="link-42" class="py-name" targets="Variable madrona.common.feedvalidator.validators.addr_spec.message=madrona.common.feedvalidator.validators.addr_spec-class.html#message,Variable madrona.common.feedvalidator.validators.email.message=madrona.common.feedvalidator.validators.email-class.html#message,Variable madrona.common.feedvalidator.validators.rfc3339.message=madrona.common.feedvalidator.validators.rfc3339-class.html#message,Variable madrona.common.feedvalidator.validators.unbounded_iso8601.message=madrona.common.feedvalidator.validators.unbounded_iso8601-class.html#message,Variable madrona.common.feedvalidator.validators.w3cdtf.message=madrona.common.feedvalidator.validators.w3cdtf-class.html#message"><a title="madrona.common.feedvalidator.validators.addr_spec.message
-madrona.common.feedvalidator.validators.email.message
-madrona.common.feedvalidator.validators.rfc3339.message
-madrona.common.feedvalidator.validators.unbounded_iso8601.message
-madrona.common.feedvalidator.validators.w3cdtf.message" class="py-name" href="#" onclick="return doclink('link-42', 'message', 'link-42');">message</a></tt> <tt class="py-op">=</tt> <tt class="py-name">render_to_string</tt><tt class="py-op">(</tt><tt class="py-string">'authopenid/associate_email.txt'</tt><tt class="py-op">,</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">            <tt class="py-name">message</tt> <tt class="py-op">=</tt> <tt class="py-name">render_to_string</tt><tt class="py-op">(</tt><tt class="py-string">'authopenid/associate_email.txt'</tt><tt class="py-op">,</tt> </tt>
 <a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">                                       <tt class="py-op">{</tt><tt class="py-string">'site'</tt><tt class="py-op">:</tt> <tt class="py-name">current_site</tt><tt class="py-op">,</tt> </tt>
-<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">                                         <tt class="py-string">'user'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">                                         <tt class="py-string">'user'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="madrona.features.forms.FeatureForm.user
 madrona.features.models.Feature.user
 madrona.group_management.models.GroupRequest.user
 madrona.openid.models.UserAssociation.user
-madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-43', 'user', 'link-33');">user</a></tt><tt class="py-op">,</tt> </tt>
-<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">                                         <tt class="py-string">'openid'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="madrona.openid.forms.AssociateOpenID.openid_url
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-42', 'user', 'link-33');">user</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">                                         <tt class="py-string">'openid'</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="madrona.openid.forms.AssociateOpenID.openid_url
 madrona.openid.forms.OpenidDissociateForm.openid_url
 madrona.openid.forms.OpenidSigninForm.openid_url
-madrona.openid.models.UserAssociation.openid_url" class="py-name" href="#" onclick="return doclink('link-44', 'openid_url', 'link-30');">openid_url</a></tt> </tt>
+madrona.openid.models.UserAssociation.openid_url" class="py-name" href="#" onclick="return doclink('link-43', 'openid_url', 'link-30');">openid_url</a></tt> </tt>
 <a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">                                        <tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
 <a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line"> </tt>
-<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">            <tt class="py-name">send_mail</tt><tt class="py-op">(</tt><tt class="py-name">subject</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="madrona.common.feedvalidator.validators.addr_spec.message
-madrona.common.feedvalidator.validators.email.message
-madrona.common.feedvalidator.validators.rfc3339.message
-madrona.common.feedvalidator.validators.unbounded_iso8601.message
-madrona.common.feedvalidator.validators.w3cdtf.message" class="py-name" href="#" onclick="return doclink('link-45', 'message', 'link-42');">message</a></tt><tt class="py-op">,</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">DEFAULT_FROM_EMAIL</tt><tt class="py-op">,</tt>  </tt>
-<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">                    <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">            <tt class="py-name">send_mail</tt><tt class="py-op">(</tt><tt class="py-name">subject</tt><tt class="py-op">,</tt> <tt class="py-name">message</tt><tt class="py-op">,</tt> <tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">DEFAULT_FROM_EMAIL</tt><tt class="py-op">,</tt>  </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">                    <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="madrona.features.forms.FeatureForm.user
 madrona.features.models.Feature.user
 madrona.group_management.models.GroupRequest.user
 madrona.openid.models.UserAssociation.user
-madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-46', 'user', 'link-33');">user</a></tt><tt class="py-op">.</tt><tt id="link-47" class="py-name" targets="Class madrona.common.feedvalidator.validators.email=madrona.common.feedvalidator.validators.email-class.html,Variable madrona.openid.forms.OpenidRegisterForm.email=madrona.openid.forms.OpenidRegisterForm-class.html#email"><a title="madrona.common.feedvalidator.validators.email
-madrona.openid.forms.OpenidRegisterForm.email" class="py-name" href="#" onclick="return doclink('link-47', 'email', 'link-47');">email</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">fail_silently</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
-<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">        <tt id="link-48" class="py-name"><a title="madrona.openid.signals.oid_associate" class="py-name" href="#" onclick="return doclink('link-48', 'oid_associate', 'link-9');">oid_associate</a></tt><tt class="py-op">.</tt><tt id="link-49" class="py-name" targets="Method madrona.common.feedvalidator.timeoutsocket.TimeoutSocket.send()=madrona.common.feedvalidator.timeoutsocket.TimeoutSocket-class.html#send"><a title="madrona.common.feedvalidator.timeoutsocket.TimeoutSocket.send" class="py-name" href="#" onclick="return doclink('link-49', 'send', 'link-49');">send</a></tt><tt class="py-op">(</tt><tt class="py-name">sender</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-50" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-44', 'user', 'link-33');">user</a></tt><tt class="py-op">.</tt><tt id="link-45" class="py-name" targets="Variable madrona.openid.forms.OpenidRegisterForm.email=madrona.openid.forms.OpenidRegisterForm-class.html#email"><a title="madrona.openid.forms.OpenidRegisterForm.email" class="py-name" href="#" onclick="return doclink('link-45', 'email', 'link-45');">email</a></tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">fail_silently</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">        <tt id="link-46" class="py-name"><a title="madrona.openid.signals.oid_associate" class="py-name" href="#" onclick="return doclink('link-46', 'oid_associate', 'link-9');">oid_associate</a></tt><tt class="py-op">.</tt><tt class="py-name">send</tt><tt class="py-op">(</tt><tt class="py-name">sender</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-47" class="py-name"><a title="madrona.features.forms.FeatureForm.user
 madrona.features.models.Feature.user
 madrona.group_management.models.GroupRequest.user
 madrona.openid.models.UserAssociation.user
-madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-50', 'user', 'link-33');">user</a></tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="madrona.features.forms.FeatureForm.user
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-47', 'user', 'link-33');">user</a></tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="madrona.features.forms.FeatureForm.user
 madrona.features.models.Feature.user
 madrona.group_management.models.GroupRequest.user
 madrona.openid.models.UserAssociation.user
-madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-51', 'user', 'link-33');">user</a></tt><tt class="py-op">,</tt> <tt id="link-52" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-52', 'openid', 'link-7');">openid</a></tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="madrona.openid.forms.AssociateOpenID.openid_url
+madrona.user_profile.models.UserProfile.user" class="py-name" href="#" onclick="return doclink('link-48', 'user', 'link-33');">user</a></tt><tt class="py-op">,</tt> <tt id="link-49" class="py-name"><a title="madrona.openid" class="py-name" href="#" onclick="return doclink('link-49', 'openid', 'link-7');">openid</a></tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="madrona.openid.forms.AssociateOpenID.openid_url
 madrona.openid.forms.OpenidDissociateForm.openid_url
 madrona.openid.forms.OpenidSigninForm.openid_url
-madrona.openid.models.UserAssociation.openid_url" class="py-name" href="#" onclick="return doclink('link-53', 'openid_url', 'link-30');">openid_url</a></tt><tt class="py-op">)</tt> </tt>
+madrona.openid.models.UserAssociation.openid_url" class="py-name" href="#" onclick="return doclink('link-50', 'openid_url', 'link-30');">openid_url</a></tt><tt class="py-op">)</tt> </tt>
 </div><a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"> </tt>
 <a name="UserAssociation.Meta"></a><div id="UserAssociation.Meta-def"><a name="L88"></a><tt class="py-lineno">88</tt> <a class="py-toggle" href="#" id="UserAssociation.Meta-toggle" onclick="return toggle('UserAssociation.Meta');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.openid.models.UserAssociation.Meta-class.html">Meta</a><tt class="py-op">:</tt> </tt>
-</div><div id="UserAssociation.Meta-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserAssociation.Meta-expanded"><a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line">        <tt id="link-54" class="py-name"><a title="madrona.common.admin.GroupMembersInline.verbose_name
+</div><div id="UserAssociation.Meta-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserAssociation.Meta-expanded"><a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line">        <tt id="link-51" class="py-name"><a title="madrona.common.admin.GroupMembersInline.verbose_name
 madrona.features.tests.Pipeline.Options.verbose_name
 madrona.features.tests.RenewableEnergySite.Options.verbose_name
 madrona.features.tests.Shipwreck.Options.verbose_name
@@ -596,10 +587,10 @@ madrona.manipulators.tests.TestLine.Options.verbose_name
 madrona.manipulators.tests.TestOptmanip.Options.verbose_name
 madrona.manipulators.tests.TestPoint.Options.verbose_name
 madrona.manipulators.tests.TestPoly.Options.verbose_name
-madrona.openid.models.UserAssociation.Meta.verbose_name" class="py-name" href="#" onclick="return doclink('link-54', 'verbose_name', 'link-32');">verbose_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'user association'</tt><tt class="py-op">)</tt> </tt>
-<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line">        <tt id="link-55" class="py-name" targets="Variable madrona.common.admin.GroupMembersInline.verbose_name_plural=madrona.common.admin.GroupMembersInline-class.html#verbose_name_plural,Variable madrona.news.models.Entry.Meta.verbose_name_plural=madrona.news.models.Entry.Meta-class.html#verbose_name_plural,Variable madrona.openid.models.UserAssociation.Meta.verbose_name_plural=madrona.openid.models.UserAssociation.Meta-class.html#verbose_name_plural"><a title="madrona.common.admin.GroupMembersInline.verbose_name_plural
+madrona.openid.models.UserAssociation.Meta.verbose_name" class="py-name" href="#" onclick="return doclink('link-51', 'verbose_name', 'link-32');">verbose_name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'user association'</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line">        <tt id="link-52" class="py-name" targets="Variable madrona.common.admin.GroupMembersInline.verbose_name_plural=madrona.common.admin.GroupMembersInline-class.html#verbose_name_plural,Variable madrona.news.models.Entry.Meta.verbose_name_plural=madrona.news.models.Entry.Meta-class.html#verbose_name_plural,Variable madrona.openid.models.UserAssociation.Meta.verbose_name_plural=madrona.openid.models.UserAssociation.Meta-class.html#verbose_name_plural"><a title="madrona.common.admin.GroupMembersInline.verbose_name_plural
 madrona.news.models.Entry.Meta.verbose_name_plural
-madrona.openid.models.UserAssociation.Meta.verbose_name_plural" class="py-name" href="#" onclick="return doclink('link-55', 'verbose_name_plural', 'link-55');">verbose_name_plural</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'user associations'</tt><tt class="py-op">)</tt> </tt>
+madrona.openid.models.UserAssociation.Meta.verbose_name_plural" class="py-name" href="#" onclick="return doclink('link-52', 'verbose_name_plural', 'link-52');">verbose_name_plural</a></tt> <tt class="py-op">=</tt> <tt class="py-name">_</tt><tt class="py-op">(</tt><tt class="py-string">'user associations'</tt><tt class="py-op">)</tt> </tt>
 </div></div><a name="L91"></a><tt class="py-lineno">91</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
@@ -633,7 +624,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May  3 16:28:25 2012
+    Generated by Epydoc 3.0.1 on Wed May  9 17:15:18 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

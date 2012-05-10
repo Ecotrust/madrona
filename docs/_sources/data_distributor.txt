@@ -1,4 +1,0 @@
-``madrona.data_distributor`` - Data Distributor
-===============================================
-
-Distributes data .. I think? 

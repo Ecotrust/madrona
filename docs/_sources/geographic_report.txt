@@ -1,2 +1,0 @@
-`madrona.geographic_report`
-=================================

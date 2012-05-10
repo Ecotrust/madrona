@@ -59,7 +59,7 @@ sense how to customize it for your needs.</p>
 <div class="section" id="overview-example-madrona-project">
 <h2>Overview: example Madrona project<a class="headerlink" href="#overview-example-madrona-project" title="Permalink to this headline">¶</a></h2>
 <p>In this example, we&#8217;ll set up a new Madrona instance for the state of Oregon.</p>
-<p>We will set up an example feature types:</p>
+<p>We will set up the following example feature types:</p>
 <blockquote>
 <div><ul class="simple">
 <li>Areas of Interest (polygons)</li>
@@ -69,10 +69,10 @@ sense how to customize it for your needs.</p>
 <p>as well as show you how to tweak certain aspects of the application such as:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Generating custom reports</li>
-<li>Customizing styling</li>
-<li>Handling geometries through manipulators</li>
-<li>Managing basemaps and KML datasets</li>
+<li>Custom reports</li>
+<li>Visual styling</li>
+<li>Validation and manipulation of user-drawn geometries</li>
+<li>Basemaps and KML datasets</li>
 </ul>
 </div></blockquote>
 <div class="section" id="install-dependencies">
@@ -118,9 +118,11 @@ create-madrona-project.py \
     --folder "Collection of Features"  \
     --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml"</pre>
 </div>
+<p>Now enter the project directory where the new code lives:</p>
+<div class="highlight-python"><pre>cd exampleproject/exampleproject/</pre>
+</div>
 <p>Finally, create a <cite>superuser</cite> account to manage the site:</p>
-<div class="highlight-python"><pre>cd exampleproject/exampleproject/
-python manage.py createsuperuser --username=madrona --email=madrona@ecotrust.org
+<div class="highlight-python"><pre>python manage.py createsuperuser --username=madrona --email=madrona@ecotrust.org
 # You'll be prompted to enter a password twice</pre>
 </div>
 </div>
@@ -139,7 +141,7 @@ python manage.py createsuperuser --username=madrona --email=madrona@ecotrust.org
 <p class="first admonition-title">Warning</p>
 <p class="last">The python convention is to name your model classes using CapsCase. Whatever you do, don&#8217;t use underscores _ in the feature class name.</p>
 </div>
-<p>Next, open the file containing the forms called <tt class="docutils literal"><span class="pre">examples/forms.py</span></tt></p>
+<p>Next, open the file containing the forms called <tt class="docutils literal"><span class="pre">example/forms.py</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">MyAreasOfInterest</span>
 <span class="k">class</span> <span class="nc">MyAreasOfInterestForm</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">SpatialFeatureForm</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
@@ -176,7 +178,7 @@ This is all that is necessary to begin managing features and organizing them int
 </div>
 </div>
 <div class="section" id="customizing-the-madrona-project">
-<span id="tutorial-customizing"></span><h2>Customizing the Madrona project<a class="headerlink" href="#customizing-the-madrona-project" title="Permalink to this headline">¶</a></h2>
+<h2>Customizing the Madrona project<a class="headerlink" href="#customizing-the-madrona-project" title="Permalink to this headline">¶</a></h2>
 <p>While the above shows the basic layout of a simple madrona app, we&#8217;ll now dive in and begin customizing it.</p>
 <div class="section" id="verbose-name">
 <h3>Verbose name<a class="headerlink" href="#verbose-name" title="Permalink to this headline">¶</a></h3>
@@ -270,7 +272,7 @@ class MyAreasOfInterest(PolygonFeature):
 </div>
 <p>The above will give us KML placemarks with a different popup balloon (showing Name, Description and Acres)
 and change polygon styling to green fill.</p>
-<p>Ultimately, whatever you can do with KML, you can do with your feature&#8217;s KML representation.
+<p>Ultimately, whatever you can do with <a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference">KML</a> , you can do with your feature&#8217;s KML representation.
 However, there are some important guidelines to follow;  For more information, see the <a class="reference internal" href="kmlapp.html#kmlapp"><em>kmlapp documentation</em></a>.</p>
 </div>
 <div class="section" id="group-collaboration">
@@ -430,7 +432,7 @@ development server. To setup a public facing website using Apache, consult the
                         title="previous chapter">Tutorials</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="features.html"
-                        title="next chapter"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">madrona.features</span></tt> -  Spatial Content Management of <em>Features</em></a></p>
+                        title="next chapter"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">madrona.features</span></tt> -  Spatial Content Management of <em>Features</em></a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial_create.txt"

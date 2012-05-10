@@ -1,4 +1,0 @@
-``madrona.data_manager`` - Data Manager
-========================================
-
-Allows users to upload shapefiles, keep a revision history and sync them with django models.

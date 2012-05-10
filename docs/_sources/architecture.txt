@@ -57,7 +57,7 @@ Madrona ships with a full-fledged js/html client. Based on jQuery and the Google
 
 .. image:: 3dclient.png
 
-The 3D map client interface provides
+The 3D map client interface consists of three components:
 
     * The ``KMLEditor`` provides a menu for interacting with the REST API. This includes creating new features and accessing contextualy-appropriate actions that the user can apply to selected features. 
     * The ``KMLTree`` component provides a tree view of the KML representation of your features.

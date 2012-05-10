@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="NAME">module</span><span class="PUNC">(</span><span class="STRN">'micro-templating'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="NAME">test</span><span class="PUNC">(</span><span class="STRN">"list template"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="WHIT">    </span><span class="NAME">template</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="WHIT">        </span><span class="STRN">"&lt;ul>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="WHIT">            </span><span class="STRN">"&lt;% for (var i=0; i &lt; users.length; i++) { %>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="WHIT">                </span><span class="STRN">"&lt;li>&lt;%= users[i].name %>&lt;/li>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  8</span> </span><span class="WHIT">            </span><span class="STRN">"&lt;% } %>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">        </span><span class="STRN">"&lt;/ul>"</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">    </span><span class="NAME">template</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">template.join</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">    </span><span class="NAME">list_users</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmpl</span><span class="PUNC">(</span><span class="NAME">template</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">    </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">users</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">{</span><span class="NAME">name</span><span class="PUNC">:</span><span class="STRN">'me'</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'myself'</span><span class="PUNC">}</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">    </span><span class="NAME">equals</span><span class="PUNC">(</span><span class="NAME">list_users</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"&lt;ul>&lt;li>me&lt;/li>&lt;li>myself&lt;/li>&lt;/ul>"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
