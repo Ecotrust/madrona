@@ -1,5 +1,6 @@
 # Madrona 4.0
 -------------
+GeoJSON links to features
 Added `analysistools` app
 Switched to new-style url and absurl template tags 
   (Use `{% url 'url-name' %}` versus `{% url url-name %}` ) 
