@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for madrona/features/models: 83%</title>
+    <title>Coverage for madrona/features/models: 85%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
     <script type='text/javascript' src='jquery.hotkeys.js'></script>
@@ -20,13 +20,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>madrona/features/models</b> :
-            <span class='pc_cov'>83%</span>
+            <span class='pc_cov'>85%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
             294 statements
-            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>245 run</span>
-            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>49 missing</span>
+            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>251 run</span>
+            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>43 missing</span>
             <span class='exc shortkey_x' onclick='coverage.toggle_lines(this, "exc")'>0 excluded</span>
             
         </h2>
@@ -496,17 +496,17 @@
 <p id='n434' class='pln'><a href='#n434'>434</a></p>
 <p id='n435' class='stm run hide_run'><a href='#n435'>435</a></p>
 <p id='n436' class='stm run hide_run'><a href='#n436'>436</a></p>
-<p id='n437' class='stm mis'><a href='#n437'>437</a></p>
+<p id='n437' class='stm run hide_run'><a href='#n437'>437</a></p>
 <p id='n438' class='pln'><a href='#n438'>438</a></p>
 <p id='n439' class='stm run hide_run'><a href='#n439'>439</a></p>
 <p id='n440' class='pln'><a href='#n440'>440</a></p>
 <p id='n441' class='pln'><a href='#n441'>441</a></p>
-<p id='n442' class='stm mis'><a href='#n442'>442</a></p>
-<p id='n443' class='stm mis'><a href='#n443'>443</a></p>
-<p id='n444' class='stm mis'><a href='#n444'>444</a></p>
-<p id='n445' class='stm mis'><a href='#n445'>445</a></p>
+<p id='n442' class='stm run hide_run'><a href='#n442'>442</a></p>
+<p id='n443' class='stm run hide_run'><a href='#n443'>443</a></p>
+<p id='n444' class='stm run hide_run'><a href='#n444'>444</a></p>
+<p id='n445' class='stm run hide_run'><a href='#n445'>445</a></p>
 <p id='n446' class='pln'><a href='#n446'>446</a></p>
-<p id='n447' class='stm mis'><a href='#n447'>447</a></p>
+<p id='n447' class='stm run hide_run'><a href='#n447'>447</a></p>
 <p id='n448' class='pln'><a href='#n448'>448</a></p>
 <p id='n449' class='stm run hide_run'><a href='#n449'>449</a></p>
 <p id='n450' class='stm run hide_run'><a href='#n450'>450</a></p>
@@ -1232,17 +1232,17 @@
 <p id='t434' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t435' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>len</span><span class='op'>(</span><span class='nam'>manipulator_list</span><span class='op'>)</span> <span class='op'>&lt;</span> <span class='num'>1</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t436' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='key'>not</span> <span class='nam'>required</span> <span class='key'>or</span> <span class='nam'>len</span><span class='op'>(</span><span class='nam'>required</span><span class='op'>)</span> <span class='op'>&lt;</span> <span class='num'>1</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t437' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>manipulator_list</span> <span class='op'>=</span> <span class='op'>[</span><span class='str'>&#39;NullManipulator&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
+<p id='t437' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>manipulator_list</span> <span class='op'>=</span> <span class='op'>[</span><span class='str'>&#39;NullManipulator&#39;</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
 <p id='t438' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>else</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t439' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>active</span><span class='strut'>&nbsp;</span></p>
 <p id='t440' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t441' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='com'># include all valid manipulators from the self.manipulators list</span><span class='strut'>&nbsp;</span></p>
-<p id='t442' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>manipulator</span> <span class='key'>in</span> <span class='nam'>manipulator_list</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t443' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>manipClass</span> <span class='op'>=</span> <span class='nam'>manipulatorsDict</span><span class='op'>.</span><span class='nam'>get</span><span class='op'>(</span><span class='nam'>manipulator</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t444' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>manipClass</span> <span class='key'>and</span> <span class='op'>(</span><span class='nam'>manipClass</span> <span class='key'>in</span> <span class='nam'>optional</span> <span class='key'>or</span> <span class='nam'>manipClass</span> <span class='op'>==</span> <span class='nam'>NullManipulator</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t445' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>active</span><span class='op'>.</span><span class='nam'>append</span><span class='op'>(</span><span class='nam'>manipClass</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t442' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>manipulator</span> <span class='key'>in</span> <span class='nam'>manipulator_list</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t443' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>manipClass</span> <span class='op'>=</span> <span class='nam'>manipulatorsDict</span><span class='op'>.</span><span class='nam'>get</span><span class='op'>(</span><span class='nam'>manipulator</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t444' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>manipClass</span> <span class='key'>and</span> <span class='op'>(</span><span class='nam'>manipClass</span> <span class='key'>in</span> <span class='nam'>optional</span> <span class='key'>or</span> <span class='nam'>manipClass</span> <span class='op'>==</span> <span class='nam'>NullManipulator</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t445' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>active</span><span class='op'>.</span><span class='nam'>append</span><span class='op'>(</span><span class='nam'>manipClass</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t446' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t447' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>active</span><span class='strut'>&nbsp;</span></p>
+<p id='t447' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>active</span><span class='strut'>&nbsp;</span></p>
 <p id='t448' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t449' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>def</span> <span class='nam'>apply_manipulators</span><span class='op'>(</span><span class='nam'>self</span><span class='op'>,</span> <span class='nam'>force</span><span class='op'>=</span><span class='nam'>False</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t450' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>force</span> <span class='key'>or</span> <span class='op'>(</span><span class='nam'>self</span><span class='op'>.</span><span class='nam'>geometry_orig</span> <span class='key'>and</span> <span class='key'>not</span> <span class='nam'>self</span><span class='op'>.</span><span class='nam'>geometry_final</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>

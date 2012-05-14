@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.common.jsonutils</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.common-module.html">Package&nbsp;common</a> ::
+        Module&nbsp;jsonutils
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.common.jsonutils-module.html">Module madrona.common.jsonutils</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">GeoJSON helper functions</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">core</tt> <tt class="py-keyword">import</tt> <tt class="py-name">serializers</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Method madrona.features.FeatureOptions.json()=madrona.features.FeatureOptions-class.html#json,Method madrona.features.Link.json()=madrona.features.Link-class.html#json,Method madrona.raster_stats.models.ZonalStatsCache.json()=madrona.raster_stats.models.ZonalStatsCache-class.html#json"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-0', 'json', 'link-0');">json</a></tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="get_properties_json"></a><div id="get_properties_json-def"><a name="L7"></a><tt class="py-lineno"> 7</tt> <a class="py-toggle" href="#" id="get_properties_json-toggle" onclick="return toggle('get_properties_json');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.jsonutils-module.html#get_properties_json">get_properties_json</a><tt class="py-op">(</tt><tt class="py-param">i</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_properties_json-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_properties_json-expanded"><a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">    <tt class="py-name">json_orig</tt> <tt class="py-op">=</tt> <tt class="py-name">serializers</tt><tt class="py-op">.</tt><tt class="py-name">serialize</tt><tt class="py-op">(</tt><tt class="py-string">'json'</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">,</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt class="py-comment"># use_natural_keys=True is not reliable; can fail w/ content_type error:</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">    <tt class="py-comment">#     'NoneType' object has no attribute 'natural_key'</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt class="py-name">obj</tt> <tt class="py-op">=</tt> <tt id="link-1" class="py-name"><a title="madrona.features.FeatureOptions.json
+madrona.features.Link.json
+madrona.raster_stats.models.ZonalStatsCache.json" class="py-name" href="#" onclick="return doclink('link-1', 'json', 'link-0');">json</a></tt><tt class="py-op">.</tt><tt class="py-name">loads</tt><tt class="py-op">(</tt><tt class="py-name">json_orig</tt><tt class="py-op">)</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">    <tt class="py-name">props</tt> <tt class="py-op">=</tt> <tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'fields'</tt><tt class="py-op">]</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-name">unwanted_properties</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">        <tt class="py-string">'geometry_final'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-string">'geometry_orig'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt class="py-string">'content_type'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-string">'object_id'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-op">]</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">uwp</tt> <tt class="py-keyword">in</tt> <tt class="py-name">unwanted_properties</tt><tt class="py-op">:</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">            <tt class="py-name">props</tt><tt class="py-op">.</tt><tt class="py-name">pop</tt><tt class="py-op">(</tt><tt class="py-name">uwp</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">    <tt class="py-comment"># Add uid</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">    <tt class="py-name">props</tt><tt class="py-op">[</tt><tt class="py-string">'uid'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">i</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method madrona.features.models.Feature.uid()=madrona.features.models.Feature-class.html#uid"><a title="madrona.features.models.Feature.uid" class="py-name" href="#" onclick="return doclink('link-2', 'uid', 'link-2');">uid</a></tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">props</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="get_feature_json"></a><div id="get_feature_json-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="get_feature_json-toggle" onclick="return toggle('get_feature_json');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.jsonutils-module.html#get_feature_json">get_feature_json</a><tt class="py-op">(</tt><tt class="py-param">geom_json</tt><tt class="py-op">,</tt> <tt class="py-param">prop_json</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_feature_json-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="get_feature_json-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">"""{</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-string">        "type": "Feature",</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-string">        "geometry": %s, </tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-string">        "properties": %s</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-string">    }"""</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">geom_json</tt><tt class="py-op">,</tt> <tt class="py-name">prop_json</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="srid_to_urn"></a><div id="srid_to_urn-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="srid_to_urn-toggle" onclick="return toggle('srid_to_urn');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.jsonutils-module.html#srid_to_urn">srid_to_urn</a><tt class="py-op">(</tt><tt class="py-param">srid</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="srid_to_urn-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="srid_to_urn-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">    Take a postgis srid and make it into a OGC CRS URN</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">    As suggested by http://www.geojson.org/geojson-spec.html#named-crs</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-docstring">    This is pretty dumb right now and just assumes EPSG as the authority</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-docstring">    except for 4326 which uses:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-docstring">      4326 -&gt; urn:ogc:def:crs:OGC:1.3:CRS84</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">srid</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">4326</tt><tt class="py-op">:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"urn:ogc:def:crs:OGC:1.3:CRS84"</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">     </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">"urn:ogc:def:crs:EPSG::%d"</tt> <tt class="py-op">%</tt> <tt class="py-name">srid</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
+<a name="srid_to_proj"></a><div id="srid_to_proj-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="srid_to_proj-toggle" onclick="return toggle('srid_to_proj');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.common.jsonutils-module.html#srid_to_proj">srid_to_proj</a><tt class="py-op">(</tt><tt class="py-param">srid</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="srid_to_proj-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="srid_to_proj-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-docstring">    Take a postgis srid and return the proj4 string</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-docstring">    Useful for custom projections with no authority</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt class="py-name">gis</tt><tt class="py-op">.</tt><tt class="py-name">gdal</tt> <tt class="py-keyword">import</tt> <tt class="py-name">SpatialReference</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt class="py-name">srs</tt> <tt class="py-op">=</tt> <tt class="py-name">SpatialReference</tt><tt class="py-op">(</tt><tt class="py-name">srid</tt><tt class="py-op">)</tt>  </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">srs</tt><tt class="py-op">.</tt><tt class="py-name">proj</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon May 14 10:40:50 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

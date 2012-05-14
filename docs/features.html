@@ -816,26 +816,22 @@ action.</li>
 </div></blockquote>
 <p>And several generic links that are, by default, applied to all feature types:</p>
 <blockquote>
-<div><ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">Copy</span></tt> link creates a copy of the feature (see &#8220;Implementing A Custom Copy Method&#8221; for more)</p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">Delete</span></tt> links removes the feature permanantly</p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">Share</span></tt> links get forms for group-based sharing of features</p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">KML</span></tt> links return KML representation of the feature</p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">KMZ</span></tt> links return zipped KML (ie KMZ) representation of the feature (see <tt class="docutils literal"><span class="pre">kmlapp</span></tt>)</p>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">PNG</span></tt> links return a PNG image of the feature (see <tt class="docutils literal"><span class="pre">staticmap</span></tt>). Note that this feature can be turned off by specifying:</p>
-<dl class="docutils">
-<dt>class Options:</dt>
-<dd><p class="first last">export_png = False</p>
-</dd>
-</dl>
-</li>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">Copy</span></tt> link creates a copy of the feature (see &#8220;Implementing A Custom Copy Method&#8221; for more)</li>
+<li><tt class="docutils literal"><span class="pre">Delete</span></tt> links removes the feature permanantly</li>
+<li><tt class="docutils literal"><span class="pre">Share</span></tt> links get forms for group-based sharing of features</li>
+<li><tt class="docutils literal"><span class="pre">KML</span></tt> links return KML representation of the feature</li>
+<li><tt class="docutils literal"><span class="pre">KMZ</span></tt> links return zipped KML (ie KMZ) representation of the feature</li>
+<li><tt class="docutils literal"><span class="pre">GeoJSON</span></tt> links returns a GeoJSON FeatureCollection of the specified feature(s).</li>
+<li><tt class="docutils literal"><span class="pre">PNG</span></tt> links return a PNG image of the feature (see <tt class="docutils literal"><span class="pre">staticmap</span></tt>).</li>
 </ul>
 </div></blockquote>
+<p>Note that GeoJSON and PNG links can be turned off by specifying:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+    <span class="n">export_png</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">export_geojson</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
 <dl class="docutils">
 <dt>FeatureCollections also get</dt>
 <dd><ul class="first last simple">
