@@ -31,6 +31,7 @@ python-cjson>=1.0.5
 python-openid>=2.2.5
 South>=0.7
 wsgiref>=0.1.2
+httpagentparser>=1.0.5
 
 # Optional - for testing and extra apps
 django-unittest-depth>=0.6

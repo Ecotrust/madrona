@@ -321,28 +321,42 @@ def valid_browser(ua):
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
     Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0b7) Gecko/20100101 Firefox/4.0b7
     """
+    import httpagentparser
+    from distutils.version import LooseVersion
+
     supported_browsers = [
-            ('Firefox', 3, 5, 'Mac'),
-            ('Firefox', 4, 0, 'Mac'),
-            ('Safari', 3, 1, 'Mac'),
-            ('Chrome', 6, 0, 'Mac'),
-            ('Firefox', 3, 5, 'Windows'),
-            ('Firefox', 4, 0, 'Windows'),
-            ('Chrome', 1, 0, 'Windows'),
-            ('IE', 8, 0, 'Windows'),
+            ('Firefox', '3.5', 'Mac'),
+            ('Firefox', '4.0', 'Mac'),
+            ('Safari', '3.1', 'Mac'),
+            ('Chrome', '6.0', 'Mac'),
+            ('Firefox', '3.5', 'Win'),
+            ('Firefox', '4.0', 'Win'),
+            ('Chrome', '1.0', 'Win'),
+            ('Microsoft Internet Explorer', '8.0', 'Win'),
     ]
 
-    from madrona.common import uaparser
+    ba = httpagentparser.detect(ua)
 
-    bp = uaparser.browser_platform(ua)
-    if not bp.platform:
-        log.warn("Platform is None: UA String is '%s'" % ua)
+    try:
+        os = ba['os']['name'][:3]
+    except:
+        os = "Unknown"
+
+    try:
+        version = LooseVersion(ba['browser']['version'])
+    except TypeError:
+        version = 0.0
+
+    try:
+        browser = ba['browser']['name']
+    except TypeError:
+        browser = "Unknown"
 
     for sb in supported_browsers:
-        if bp.family == sb[0] and \
-            ((bp.v1 == sb[1] and bp.v2 >= sb[2]) or bp.v1 > sb[1]) and \
-            bp.platform == sb[3]:
-                return True
+        supported_version = LooseVersion(sb[1])
+        if sb[0] == browser and sb[2] == os and version >= supported_version:
+               return True
+
 
     return False
 

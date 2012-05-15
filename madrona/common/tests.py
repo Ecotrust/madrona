@@ -4,6 +4,8 @@ from django.contrib.gis import geos
 from madrona.common.utils import *
 import os
 
+logger = get_logger()
+
 class AssetsTest(TestCase):
     def test_get_js_files(self):
         """
@@ -84,6 +86,7 @@ class BrowserUserAgentTest(TestCase):
     def test_unsupported_browsers(self):
         from madrona.common.utils import valid_browser 
         for ua in self.unsupported_uastring_examples:
+            logger.error(ua)
             if valid_browser(ua):
                 print "UAPARSER SAYS SUPPORTED .....", ua
             self.assertEquals(valid_browser(ua),False)
