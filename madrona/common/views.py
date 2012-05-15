@@ -30,10 +30,11 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     if 'supported' in request.REQUEST and request.REQUEST['supported'] == 'false':
             enforce_supported = False
     if not valid_browser(useragent) and enforce_supported:
-        from madrona.common import uaparser
-        bp = uaparser.browser_platform(useragent)
+        from madrona.common.utils import os_browser_version
+        os, browser, version = os_browser_version(useragent)
+        bap = "%s version %s on %s" % (browser, version, os)
         context = {'useragent':useragent, 
-                'browser_platform': bp.__repr__(), 
+                'browser_platform': bap,
                 'redirect_url': settings.LOGIN_REDIRECT_URL}
         context.update(extra_context)
         return render_to_response('common/supported_browsers.html', context)

@@ -312,6 +312,31 @@ def load_session(request, session_key):
         engine = import_module(settings.SESSION_ENGINE)
         request.session = engine.SessionStore(session_key)
 
+def os_browser_version(ua):
+    """
+    returns 3 values
+    the operating system, the browser type and the browser version
+    """
+    import httpagentparser
+    ba = httpagentparser.detect(ua)
+
+    try:
+        os = ba['os']['name']
+    except:
+        os = "Unknown"
+
+    try:
+        version = ba['browser']['version']
+    except TypeError:
+        version = 0.0
+
+    try:
+        browser = ba['browser']['name']
+    except TypeError:
+        browser = "Unknown"
+
+    return os, browser, version
+
 def valid_browser(ua):
     """
     Returns boolean depending on whether we support their browser
@@ -321,42 +346,26 @@ def valid_browser(ua):
     Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10
     Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0b7) Gecko/20100101 Firefox/4.0b7
     """
-    import httpagentparser
     from distutils.version import LooseVersion
 
     supported_browsers = [
-            ('Firefox', '3.5', 'Mac'),
-            ('Firefox', '4.0', 'Mac'),
-            ('Safari', '3.1', 'Mac'),
-            ('Chrome', '6.0', 'Mac'),
-            ('Firefox', '3.5', 'Win'),
-            ('Firefox', '4.0', 'Win'),
-            ('Chrome', '1.0', 'Win'),
-            ('Microsoft Internet Explorer', '8.0', 'Win'),
+            ('Firefox', '3.5', 'Macintosh'),
+            ('Firefox', '4.0', 'Macintosh'),
+            ('Safari', '3.1', 'Macintosh'),
+            ('Chrome', '6.0', 'Macintosh'),
+            ('Firefox', '3.5', 'Windows'),
+            ('Firefox', '4.0', 'Windows'),
+            ('Chrome', '1.0', 'Windows'),
+            ('Microsoft Internet Explorer', '8.0', 'Windows'),
     ]
 
-    ba = httpagentparser.detect(ua)
-
-    try:
-        os = ba['os']['name'][:3]
-    except:
-        os = "Unknown"
-
-    try:
-        version = LooseVersion(ba['browser']['version'])
-    except TypeError:
-        version = 0.0
-
-    try:
-        browser = ba['browser']['name']
-    except TypeError:
-        browser = "Unknown"
+    os, browser, version = os_browser_version(ua)
+    version = LooseVersion(version)
 
     for sb in supported_browsers:
         supported_version = LooseVersion(sb[1])
         if sb[0] == browser and sb[2] == os and version >= supported_version:
                return True
-
 
     return False
 

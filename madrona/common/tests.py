@@ -86,7 +86,6 @@ class BrowserUserAgentTest(TestCase):
     def test_unsupported_browsers(self):
         from madrona.common.utils import valid_browser 
         for ua in self.unsupported_uastring_examples:
-            logger.error(ua)
             if valid_browser(ua):
                 print "UAPARSER SAYS SUPPORTED .....", ua
             self.assertEquals(valid_browser(ua),False)
