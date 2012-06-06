@@ -19,6 +19,8 @@ class Command(BaseCommand):
             help="Specifies the root directory in which to collect media files."),
         make_option('-n', '--dry-run', action='store_true', dest='dry_run',
             help="Do everything except modify the filesystem."),
+        make_option('-a', '--admin', action='store_true', dest='admin',
+            help="Include django.contrib.admin static media files."),
         make_option('-d', '--dir', action='append', default=media_dirs, dest='media_dirs', metavar='NAME',
             help="Specifies the name of the media directory to look for in each app."),
         make_option('-e', '--exclude', action='append', default=exclude, dest='exclude', metavar='PATTERNS',
@@ -32,11 +34,13 @@ class Command(BaseCommand):
 
     def handle(self, *app_labels, **options):
         self.dry_run = options.get('dry_run', False)
+        self.include_admin = options.get('admin', False)
         self.media_root = options.get('media_root', settings.MEDIA_ROOT)
         self.force_compress = options.get('force_compress', False)
 
         madrona_media_dir = self.get_madrona_dir()
         project_media_dir = self.get_project_dir()
+        admin_media_dir = self.get_admin_dir()
 
         if self.dry_run:
             print "    DRY RUN! NO FILES WILL BE MODIFIED."
@@ -45,6 +49,8 @@ class Command(BaseCommand):
            os.path.abspath(os.path.realpath(project_media_dir)) == os.path.abspath(os.path.realpath(self.media_root)):
             raise Exception("Your MEDIA_ROOT setting has to be a directory other than your madrona or project media folder!")
 
+        if self.include_admin:
+            self.copy_media_to_root(admin_media_dir)
         self.copy_media_to_root(madrona_media_dir)
         self.copy_media_to_root(project_media_dir)
 
@@ -70,6 +76,11 @@ class Command(BaseCommand):
             trydir = os.path.realpath(os.path.join(settings.BASE_DIR, 'media'))
         projdir = trydir
         return projdir
+    
+    def get_admin_dir(self):
+        # django admin is relative to django source
+        import django
+        return os.path.join(django.__path__[0], 'contrib', 'admin', 'static')
 
     def copy_media_to_root(self, source_dir):
         if self.dry_run:

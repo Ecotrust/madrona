@@ -13,6 +13,7 @@ Fixed several bugs in raster_stats - improved tempfile and cache handling
 Improved study region loading via management command
 Improved geometry validity handling in manipulators
 Improved logging system
+Install_media command flag to handle admin static files
 
 
 # MarineMap 3.0
