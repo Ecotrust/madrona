@@ -6,6 +6,9 @@ from madrona.common import default_mimetypes as mimetypes
 from django.utils import simplejson
 from django.shortcuts import render_to_response
 
+from django.views.decorators.cache import never_cache
+# set headers to disable all client-side caching
+@never_cache
 def progress(request, uid):
     instance = get_object_for_viewing(request, uid)
     if isinstance(instance, HttpResponse):
@@ -14,6 +17,7 @@ def progress(request, uid):
     if issubclass(instance.__class__, Analysis):
         p = instance.progress
         progress = {
+            'uid': instance.uid,
             'complete': p[0],
             'total': p[1],
             'html': instance.status_html,
