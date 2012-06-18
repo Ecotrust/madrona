@@ -72,8 +72,7 @@ There are two options to get madrona and it's supporting python libraries:
 2. Use the development master branch. Choose this option if you're thinking about working on the core madrona source code::
 
     cd src
-    git clone http://github.com/Ecotrust/madrona.git
-    pip install -r madrona/requirements.txt
+    git clone https://github.com/Ecotrust/madrona.git
     cd madrona
     python setup.py develop
 
@@ -96,7 +95,7 @@ is to set up postgis in the default postgres database called template1::
    createlang -d template1 plpgsql # Adding PLPGSQL language support.
    psql -d template1 -f $POSTGIS_SQL_PATH/postgis.sql # Loading the PostGIS SQL routines
    psql -d template1 -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
-   psql -d template1 -f /usr/local/src/madrona/madrona/common/cleangeometry.sql
+   psql -d template1 -f /usr/local/src/madrona/madrona/common/sql/cleangeometry.sql
    psql -d template1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
    psql -d template1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
    exit # back to regular user
