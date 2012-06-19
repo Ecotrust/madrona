@@ -14,7 +14,7 @@ There are four primary steps to creating a Madrona-based project:
     #. Install :ref:`system requirements<system_requirements>`
     #. Install :ref:`python dependencies<python_dependencies>`
     #. Setup Postgres :ref:`database<database>`
-
+    #. Create and deploy your project
 
 .. _system_requirements:
 
