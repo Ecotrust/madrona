@@ -12,5 +12,4 @@ Madrona leverages open source technology including Django, PostGIS, Mapnik, GDAL
 
 Getting Started
 -------
-
-Installation instructions, documentation and tutorials are available at http://madrona.ecotrust.org/developer
+Visit http://madrona.ecotrust.org for case studies, a technology overview, and much more.  Documentation, Installation instructions, tutorials, and other developer essentials can be found at http://madrona.ecotrust.org/developer
