@@ -22,5 +22,4 @@ If the release number is 0 and the release type is NOT final, we get:
 If the revision number is > 0, it sneaks in as well:
     (4,0,1,'alpha',0) => 4.0.1dev
 """
-VERSION = (4, 0, 0, 'beta', 1)
-
+VERSION = (4, 0, 0, 'final', 0)
