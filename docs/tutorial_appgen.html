@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the Madrona Virtual Machine &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <title>Madrona Appliance Tutorial &mdash; Madrona Decision Support Framework v4.0 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0b1',
+        VERSION:     '4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0 documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorial.html" />
     <link rel="next" title="madrona.features - Spatial Content Management of Features" href="features.html" />
     <link rel="prev" title="Template Customization" href="template_customization.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="template_customization.html" title="Template Customization"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
           <li><a href="tutorial.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -49,55 +49,32 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="using-the-madrona-virtual-machine">
-<span id="appgen-project"></span><h1>Using the Madrona Virtual Machine<a class="headerlink" href="#using-the-madrona-virtual-machine" title="Permalink to this headline">¶</a></h1>
-<p>This tutorial will walk through:</p>
-<ol class="arabic simple">
-<li>Downloading and installing the Madrona virtual machine</li>
-<li>Creating an initial app using the graphical &#8220;Madrona App Generator&#8221;</li>
-<li>Customizing the app</li>
-</ol>
+  <div class="section" id="madrona-appliance-tutorial">
+<span id="appgen-project"></span><h1>Madrona Appliance Tutorial<a class="headerlink" href="#madrona-appliance-tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You&#8217;ll need a Windows or OSX system that can run the Google Earth Web Plugin</p>
+<p class="last">We assume you&#8217;ve already <a class="reference external" href="http://madrona.ecotrust.org/developer/appliance/">downloaded and installed the Madrona Appliance</a> and have a virtual machine (VM) up and running.</p>
 </div>
-<div class="section" id="downloading-and-installing-the-virtual-machine">
-<h2>Downloading and installing the virtual machine<a class="headerlink" href="#downloading-and-installing-the-virtual-machine" title="Permalink to this headline">¶</a></h2>
-<p>First we need to get the Madrona VM up and running on your machine:</p>
-<ol class="arabic">
-<li><p class="first">Download and install <a class="reference external" href="http://www.virtualbox.org/">VirtualBox</a> for your operating system</p>
-</li>
-<li><p class="first">Download the <a class="reference external" href="https://s3.amazonaws.com/madrona_vm/madrona_virtual_v1.ova">Madrona Virtual Machine</a> (.ova format; ~ 1GB)</p>
-</li>
-<li><p class="first">Navigate to File &gt; Import Applicance &gt; and select the madrona_virtual_v1.ova file.</p>
-</li>
-<li><p class="first">Set up networking. In the VM Manager,</p>
-<blockquote>
-<div><ul class="simple">
-<li>select the Madrona VM</li>
-<li>click the &#8220;Settings&#8221; icon</li>
-<li>click on &#8220;Network&#8221;</li>
-<li>check that your network card is listed in the &#8220;Name&#8221; field</li>
-<li>click &#8220;OK&#8221;</li>
+<p>This tutorial will walk through:</p>
+<ul class="simple">
+<li>Creating an app using the Madrona App Generator</li>
+<li>Getting started customizing the app</li>
 </ul>
-</div></blockquote>
-</li>
-<li><p class="first">Start the virtual machine and click &#8220;Start Using the Madrona VM&#8221;</p>
-</li>
+<ol class="arabic simple">
+<li>In your running VM, click &#8220;Start Using the Madrona VM&#8221;</li>
 </ol>
 <img alt="_images/initvm.png" src="_images/initvm.png" />
-<ol class="arabic simple" start="6">
-<li>Follow the instructions on screen to set up networking</li>
+<ol class="arabic simple" start="2">
+<li>The App Generator is now running.  Follow the instructions onscreen to configure your host system to send web requests for &#8216;madrona&#8217; to the VM&#8217;s IP address.</li>
 </ol>
-<img alt="_images/hostsvm.png" src="_images/hostsvm.png" />
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">TODO: Add tutorial link (direct link to the &#8216;Creating the initial demo app&#8217; section below) to the Welcome page.</p>
+<p class="last">this IP address could be different every time you start the VM and you will need to change it.</p>
 </div>
-</div>
+<img alt="_images/hostsvm.png" src="_images/hostsvm.png" />
 <div class="section" id="creating-the-initial-demo-app">
 <h2>Creating the initial demo app<a class="headerlink" href="#creating-the-initial-demo-app" title="Permalink to this headline">¶</a></h2>
-<p>Now that your virtual machine is up and running and your networking is setup, access the app generator from a web browser in your <em>host</em> operatings system (not the VM).</p>
+<p>Now that your networking is setup, access the app generator from a web browser in your <em>host</em> operatings system (not the VM).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Why access it from your host system?  The demo uses the Google Earth Web Plugin which isn&#8217;t available currently for Linux.</p>
@@ -453,8 +430,7 @@ development server. To setup a public facing website using Apache, consult the
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Using the Madrona Virtual Machine</a><ul>
-<li><a class="reference internal" href="#downloading-and-installing-the-virtual-machine">Downloading and installing the virtual machine</a></li>
+<li><a class="reference internal" href="#">Madrona Appliance Tutorial</a><ul>
 <li><a class="reference internal" href="#creating-the-initial-demo-app">Creating the initial demo app</a><ul>
 <li><a class="reference internal" href="#initialize-and-activate-your-app">Initialize and Activate Your App</a></li>
 <li><a class="reference internal" href="#test-out-your-new-app">Test Out Your New App</a></li>
@@ -520,7 +496,7 @@ development server. To setup a public facing website using Apache, consult the
         <li class="right" >
           <a href="template_customization.html" title="Template Customization"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
           <li><a href="tutorial.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>

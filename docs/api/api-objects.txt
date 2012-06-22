@@ -597,6 +597,8 @@ madrona.studyregion.views.kml	madrona.studyregion.views-module.html#kml
 madrona.studyregion.views.regionKml	madrona.studyregion.views-module.html#regionKml
 madrona.studyregion.views.show	madrona.studyregion.views-module.html#show
 madrona.studyregion.views.regionKmlChunk	madrona.studyregion.views-module.html#regionKmlChunk
+madrona.this	madrona.this-module.html
+madrona.this.s	madrona.this-module.html#s
 madrona.unit_converter	madrona.unit_converter-module.html
 madrona.unit_converter.models	madrona.unit_converter.models-module.html
 madrona.unit_converter.models.area_object	madrona.unit_converter.models-module.html#area_object
@@ -848,6 +850,7 @@ madrona.common.management.commands.install_media.Command.help	madrona.common.man
 madrona.common.management.commands.install_media.Command.media_dirs	madrona.common.management.commands.install_media.Command-class.html#media_dirs
 madrona.common.management.commands.install_media.Command.copy_mediaroot_to_s3	madrona.common.management.commands.install_media.Command-class.html#copy_mediaroot_to_s3
 madrona.common.management.commands.install_media.Command.exclude	madrona.common.management.commands.install_media.Command-class.html#exclude
+madrona.common.management.commands.install_media.Command.get_admin_dir	madrona.common.management.commands.install_media.Command-class.html#get_admin_dir
 madrona.common.management.commands.install_media.Command.remove_uncompressed_media	madrona.common.management.commands.install_media.Command-class.html#remove_uncompressed_media
 madrona.common.management.commands.install_media.Command.change_mediaroot_owner	madrona.common.management.commands.install_media.Command-class.html#change_mediaroot_owner
 madrona.common.management.commands.install_media.Command.copy_media_to_root	madrona.common.management.commands.install_media.Command-class.html#copy_media_to_root

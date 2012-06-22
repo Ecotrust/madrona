@@ -1,49 +1,29 @@
 .. _appgen_project:
 
-Using the Madrona Virtual Machine 
+Madrona Appliance Tutorial 
 =========================================================
+
+.. note:: We assume you've already `downloaded and installed the Madrona Appliance <http://madrona.ecotrust.org/developer/appliance/>`_ and have a virtual machine (VM) up and running.
 
 This tutorial will walk through:
 
-1. Downloading and installing the Madrona virtual machine
-2. Creating an initial app using the graphical "Madrona App Generator"
-3. Customizing the app
+* Creating an app using the Madrona App Generator
+* Getting started customizing the app
 
-.. note:: You'll need a Windows or OSX system that can run the Google Earth Web Plugin
-
-Downloading and installing the virtual machine
-###############################################
-
-First we need to get the Madrona VM up and running on your machine:
-
-1. Download and install `VirtualBox <http://www.virtualbox.org/>`_ for your operating system
-
-2. Download the `Madrona Virtual Machine <https://s3.amazonaws.com/madrona_vm/madrona_virtual_v1.ova>`_ (.ova format; ~ 1GB) 
-
-3. Navigate to File > Import Applicance > and select the madrona_virtual_v1.ova file.
-
-4. Set up networking. In the VM Manager, 
-
-    * select the Madrona VM 
-    * click the "Settings" icon
-    * click on "Network"
-    * check that your network card is listed in the "Name" field
-    * click "OK"
-
-5. Start the virtual machine and click "Start Using the Madrona VM"
+1. In your running VM, click "Start Using the Madrona VM"
 
 .. image:: initvm.png
 
-6. Follow the instructions on screen to set up networking 
+2. The App Generator is now running.  Follow the instructions onscreen to configure your host system to send web requests for 'madrona' to the VM's IP address.
+
+.. note:: this IP address could be different every time you start the VM and you will need to change it.
 
 .. image:: hostsvm.png
-
-.. note:: TODO: Add tutorial link (direct link to the 'Creating the initial demo app' section below) to the Welcome page.
 
 Creating the initial demo app 
 ###############################
 
-Now that your virtual machine is up and running and your networking is setup, access the app generator from a web browser in your *host* operatings system (not the VM).
+Now that your networking is setup, access the app generator from a web browser in your *host* operatings system (not the VM).
 
 .. note:: Why access it from your host system?  The demo uses the Google Earth Web Plugin which isn't available currently for Linux.
 

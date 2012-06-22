@@ -139,4 +139,5 @@ GRASS (6.4.2 RC3) -- Optional::
     cd grass-6.4.2RC3.tar.gz/
     sudo ./configure --enable-64bit --with-cxx --with-python=/usr/bin/python2.7-config --without-tcltk --without-opengl --with-freetype-includes='/usr/include/freetype2' --with-postgres --with-postgres-includes='/usr/include/postgresql' --with-x --with-cairo --with-geos
     sudo make
+    sudo make install
 

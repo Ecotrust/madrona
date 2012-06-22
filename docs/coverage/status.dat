@@ -418,15 +418,15 @@ I1
 sg20
 I0
 sg21
-I113
+I120
 sg22
 I0
 sg23
-I79
+I85
 sg24
 I0
 sbssg25
-S'}\xf7\x87\x9c\xbb\tx\x82\xd1^T\xa1C\xe3]\xfe'
+S'b\xe1g\xa4w\x02iC\xb4;\xee\xd3\n\xaf\xc5\x16'
 p114
 ssS'madrona_common_uaparser_parser'
 p115
@@ -3954,15 +3954,15 @@ I1
 sg20
 I0
 sg21
-I20
+I21
 sg22
 I0
 sg23
-I10
+I11
 sg24
 I0
 sbssg25
-S'\x0c\xfa\xd1W\x1b \x1fG}Y\xc1\xf9\xa6\xc4\xba_'
+S'\xda\x9e\xa4\x16\x1bW\xcaw\xb8u\x08y\x0e\x8e\xcd\xdd'
 p946
 ssS'madrona_analysistools___init__'
 p947
@@ -4030,7 +4030,7 @@ I0
 sg24
 I0
 sbssg25
-S"z\xd2'X\x87~,(N\xe8\xd2&r\xba\xb3\xee"
+S'\x8b\xf1\x81\xa9;\xac\x9c\x13\xf4\xeb\x07\r\xa30U%'
 p962
 ssS'madrona_raster_stats_models'
 p963
@@ -4702,15 +4702,15 @@ I1
 sg20
 I0
 sg21
-I15
+I16
 sg22
 I0
 sg23
-I13
+I2
 sg24
 I0
 sbssg25
-S'v\xd6#\n\xde &\x86\x03\xf8\x054\x13_9p'
+S'`(\x17\xce\xbc\x83\xa0\xed\xdf8\xa5\x0e\xe4\x8d2t'
 p1122
 ssS'madrona_help_tests'
 p1123

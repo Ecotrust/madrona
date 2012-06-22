@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Default Settings &mdash; Madrona Decision Support Framework v4.0b1 documentation</title>
+    <title>Default Settings &mdash; Madrona Decision Support Framework v4.0 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0b1',
+        VERSION:     '4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0b1 documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework v4.0 documentation" href="index.html" />
     <link rel="up" title="Topics" href="topics.html" />
     <link rel="next" title="Template Customization" href="template_customization.html" />
     <link rel="prev" title="PostGIS and the Django test database" href="postgis_django_tests.html" /> 
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
           <li><a href="topics.html" accesskey="U">Topics</a> &raquo;</li> 
       </ul>
     </div>  
@@ -85,27 +85,6 @@ default is 4326, compatible with the Google Earth Plugin.</dd>
 <dd>Default key works for localhost:8080.
 Obtain new keys from <a class="reference external" href="http://code.google.com/apis/maps/signup.html">Google</a></dd>
 </dl>
-<dl class="docutils" id="mpa-class">
-<dt><tt class="docutils literal"><span class="pre">MPA_CLASS</span></tt></dt>
-<dd>Set to the class representing Marine Protected Areas in your project. The
-default for this setting is <tt class="xref docutils literal"><span class="pre">None</span></tt>, and will cause an exception if it is
-not set.</dd>
-</dl>
-<dl class="docutils" id="array-class">
-<dt><tt class="docutils literal"><span class="pre">ARRAY_CLASS</span></tt></dt>
-<dd>Set to the class representing Arrays in your project. The default for this
-setting is <tt class="xref docutils literal"><span class="pre">None</span></tt>, and will cause an exception if it is not set.</dd>
-</dl>
-<dl class="docutils" id="mpa-form">
-<dt><tt class="docutils literal"><span class="pre">MPA_FORM</span></tt></dt>
-<dd>Set to a ModelForm class for editing MPAs. Defaults to
-<tt class="docutils literal"><span class="pre">'madrona.mpa.forms.MpaForm'</span></tt></dd>
-</dl>
-<dl class="docutils" id="array-form">
-<dt><tt class="docutils literal"><span class="pre">ARRAY_FORM</span></tt></dt>
-<dd>Set to a ModelForm class for editing Arrays. Defaults to
-<tt class="docutils literal"><span class="pre">'madrona.mpa.forms.ArrayForm'</span></tt></dd>
-</dl>
 <dl class="docutils" id="group-request-email">
 <dt><tt class="docutils literal"><span class="pre">GROUP_REQUEST_EMAIL</span></tt></dt>
 <dd>When user requests group membership, send email to this address (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no email sent)</dd>
@@ -113,6 +92,10 @@ setting is <tt class="xref docutils literal"><span class="pre">None</span></tt>,
 <dl class="docutils" id="group-registered-by-web">
 <dt><tt class="docutils literal"><span class="pre">GROUP_REGISTERED_BY_WEB</span></tt></dt>
 <dd>Group name assigned to users who register using the web interface. Defaults to &#8216;registered_by_web&#8217;</dd>
+</dl>
+<dl class="docutils" id="enforce-supported-browser">
+<dt><tt class="docutils literal"><span class="pre">ENFORCE_SUPPORTED_BROWSER</span></tt></dt>
+<dd>Boolean. Should the view check the user agent string to ensure a valid browser? Default is <tt class="xref docutils literal"><span class="pre">True</span></tt>.</dd>
 </dl>
 <dl class="docutils" id="kml-simplify-tolerance">
 <dt><tt class="docutils literal"><span class="pre">KML_SIMPLIFY_TOLERANCE</span></tt></dt>
@@ -377,7 +360,7 @@ django apps critical to madrona functionality.</p>
         <li class="right" >
           <a href="postgis_django_tests.html" title="PostGIS and the Django test database"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0b1 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
           <li><a href="topics.html" >Topics</a> &raquo;</li> 
       </ul>
     </div>

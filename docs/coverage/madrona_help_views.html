@@ -5,7 +5,7 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for madrona/help/views: 50%</title>
+    <title>Coverage for madrona/help/views: 48%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
     <script type='text/javascript' src='jquery.hotkeys.js'></script>
@@ -20,13 +20,13 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>madrona/help/views</b> :
-            <span class='pc_cov'>50%</span>
+            <span class='pc_cov'>48%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            20 statements
+            21 statements
             <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>10 run</span>
-            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>10 missing</span>
+            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>11 missing</span>
             <span class='exc shortkey_x' onclick='coverage.toggle_lines(this, "exc")'>0 excluded</span>
             
         </h2>
@@ -86,6 +86,9 @@
 <p id='n24' class='stm mis'><a href='#n24'>24</a></p>
 <p id='n25' class='stm mis'><a href='#n25'>25</a></p>
 <p id='n26' class='stm mis'><a href='#n26'>26</a></p>
+<p id='n27' class='pln'><a href='#n27'>27</a></p>
+<p id='n28' class='pln'><a href='#n28'>28</a></p>
+<p id='n29' class='stm mis'><a href='#n29'>29</a></p>
                 
             </td>
             <td class='text' valign='top'>
@@ -114,7 +117,10 @@
 <p id='t23' class='stm run hide_run'><span class='key'>def</span> <span class='nam'>help</span><span class='op'>(</span><span class='nam'>request</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
 <p id='t24' class='stm mis'>&nbsp; &nbsp; <span class='nam'>vids</span> <span class='op'>=</span> <span class='nam'>get_vids</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t25' class='stm mis'>&nbsp; &nbsp; <span class='nam'>faqs</span> <span class='op'>=</span> <span class='nam'>get_faqs</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t26' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>render_to_response</span><span class='op'>(</span><span class='str'>&#39;help.html&#39;</span><span class='op'>,</span> <span class='op'>{</span><span class='str'>&#39;faqs_by_group&#39;</span><span class='op'>:</span><span class='nam'>faqs</span><span class='op'>,</span> <span class='str'>&#39;screencast_list&#39;</span><span class='op'>:</span><span class='nam'>vids</span><span class='op'>,</span> <span class='str'>&#39;MEDIA_URL&#39;</span><span class='op'>:</span><span class='nam'>settings</span><span class='op'>.</span><span class='nam'>MEDIA_URL</span><span class='op'>}</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t26' class='stm mis'>&nbsp; &nbsp; <span class='nam'>c</span> <span class='op'>=</span> <span class='nam'>RequestContext</span><span class='op'>(</span><span class='nam'>request</span><span class='op'>,</span><span class='strut'>&nbsp;</span></p>
+<p id='t27' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class='op'>{</span><span class='str'>&#39;faqs_by_group&#39;</span><span class='op'>:</span><span class='nam'>faqs</span><span class='op'>,</span> <span class='str'>&#39;screencast_list&#39;</span><span class='op'>:</span><span class='nam'>vids</span><span class='op'>,</span> <span class='str'>&#39;MEDIA_URL&#39;</span><span class='op'>:</span><span class='nam'>settings</span><span class='op'>.</span><span class='nam'>MEDIA_URL</span><span class='op'>}</span><span class='strut'>&nbsp;</span></p>
+<p id='t28' class='pln'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t29' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>render_to_response</span><span class='op'>(</span><span class='str'>&#39;help.html&#39;</span><span class='op'>,</span> <span class='nam'>c</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>

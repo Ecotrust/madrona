@@ -16,6 +16,7 @@ Madrona Settings
 .. _SUPEROVERLAY_ROOT:
 ``SUPEROVERLAY_ROOT``
     Directory path containing access-restricted/private superoverlay kmls.  
+
 .. _LOG_FILE:
 ``LOG_FILE``
     Location of the madrona log file output. Used for debugging. Defaults to `/tmp/madrona.log` 
@@ -39,32 +40,6 @@ Madrona Settings
     Default key works for localhost:8080.
     Obtain new keys from `Google <http://code.google.com/apis/maps/signup.html>`_
 
-
-.. _MPA_CLASS:
-
-``MPA_CLASS``
-    Set to the class representing Marine Protected Areas in your project. The 
-    default for this setting is ``None``, and will cause an exception if it is
-    not set.
-
-.. _ARRAY_CLASS:
-
-``ARRAY_CLASS``
-    Set to the class representing Arrays in your project. The default for this 
-    setting is ``None``, and will cause an exception if it is not set.
-
-.. _MPA_FORM:
-
-``MPA_FORM``
-    Set to a ModelForm class for editing MPAs. Defaults to 
-    ``'madrona.mpa.forms.MpaForm'``
-
-.. _ARRAY_FORM:
-
-``ARRAY_FORM``
-    Set to a ModelForm class for editing Arrays. Defaults to 
-    ``'madrona.mpa.forms.ArrayForm'``
-
 .. _GROUP_REQUEST_EMAIL:
 
 ``GROUP_REQUEST_EMAIL``
@@ -75,6 +50,10 @@ Madrona Settings
 ``GROUP_REGISTERED_BY_WEB`` 
     Group name assigned to users who register using the web interface. Defaults to 'registered_by_web'
 
+.. _ENFORCE_SUPPORTED_BROWSER:
+
+``ENFORCE_SUPPORTED_BROWSER``
+    Boolean. Should the view check the user agent string to ensure a valid browser? Default is ``True``.
 
 .. _KML_SIMPLIFY_TOLERANCE:
 
