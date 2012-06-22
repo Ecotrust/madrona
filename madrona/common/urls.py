@@ -27,6 +27,7 @@ urlpatterns += patterns('madrona',
     (r'^staticmap/', include('madrona.staticmap.urls')),
     (r'^studyregion/', include('madrona.studyregion.urls')),
     (r'^bookmark/', include('madrona.bookmarks.urls')),
+    (r'^layer_manager/', include('madrona.layer_manager.urls')),
     # Optional
     #(r'^heatmap/', include('madrona.heatmap.urls')),
 )

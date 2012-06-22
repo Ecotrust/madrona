@@ -30,6 +30,7 @@ INSTALLED_APPS += (
     'madrona.xyquery',
     'madrona.group_management',
     'mlpa',
+    'madrona.layer_manager',
 )
 
 KML_EXTRUDE_HEIGHT = 700
