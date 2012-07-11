@@ -11,7 +11,7 @@ class Theme(models.Model):
 
     @property
     def toDict(self):
-        layers = [layer.id for layer in self.layer.all()]
+        layers = [layer.id for layer in self.layer.filter(is_sublayer=False)]
         themes_dict = {
             'name': self.name,
             'layers': layers,
@@ -23,6 +23,7 @@ class Layer(models.Model):
         ('XYZ', 'XYZ'),
         ('WMS', 'WMS'),
         ('radio', 'radio'),
+	('Vector', 'Vector'),
     )
     name = models.CharField(max_length=100)
     layer_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
