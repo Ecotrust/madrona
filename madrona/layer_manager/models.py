@@ -15,6 +15,7 @@ class Theme(models.Model):
         themes_dict = {
             'name': self.name,
             'layers': layers,
+	    'id': self.id,
         }
         return themes_dict
 
