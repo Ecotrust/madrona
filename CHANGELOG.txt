@@ -1,3 +1,7 @@
+# Madrona 4.1
+-------------
+New `layer_manager` app for managing 2D tiled map sources
+
 # Madrona 4.0
 -------------
 GeoJSON links to features
