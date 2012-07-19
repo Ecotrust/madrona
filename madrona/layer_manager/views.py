@@ -1,9 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core import serializers
+from django.http import HttpResponse
 from django.utils import simplejson
 from models import *
 
-def getJson(request):
+def get_json(request):
     json = {
         "state": {
             "activeLayers": []
