@@ -49,7 +49,7 @@ app.viewModel.layers.loadLayers = function(data) {
         
         self.themes.push(theme);
     });
-    app.typeAheadSource = (function () {
+    app.utils.typeAheadSource = (function () {
             var keys = [];
             for (var searchTerm in app.viewModel.layers.layerSearchIndex) {
                 if (app.viewModel.layers.layerSearchIndex.hasOwnProperty(searchTerm)) {
@@ -59,7 +59,6 @@ app.viewModel.layers.loadLayers = function(data) {
             return keys;
         })();
 
-
 };
 app.viewModel.layers.loadLayersFromFixture = function() {
     app.viewModel.loadLayers(app.fixture);
@@ -67,10 +66,12 @@ app.viewModel.layers.loadLayersFromFixture = function() {
 
 
 app.viewModel.layers.loadLayersFromServer = function() {
-    console.log("loading layers");
     return $.getJSON('/layer_manager/get_json', function(data) {
-        console.log(data); 
         app.viewModel.layers.loadLayers(data);
+        $('#layer-search-box').typeahead({
+            source: app.utils.typeAheadSource  
+        });
     })
     .error( function() { console.log("error"); } );
+
 };
