@@ -1,0 +1,69 @@
+<!-- ko if: layers.themes -->
+<!-- ko with: layers -->
+<div id="data-accordion">
+    <div class="accordion" data-bind="foreach: themes">
+        <div class="accordion-group">
+            <div class="accordion-heading" data-bind="css: { 'active': isOpenTheme() }">
+                <div>
+                    <a class="accordion-toggle"  data-bind="click: setOpenTheme"> <!--event: {'hover': showdescription}-->
+                        <span data-bind="text: name">themes</span></a>
+                </div>
+            </div>
+            <div class="accordion-body collapse" data-bind="css: { 'in': isOpenTheme() }">
+                <div class="accordion-inner">
+                    <ul  class="unstyled" data-bind="foreach: layers ">
+                        <li class="layer" data-bind="css: { nosublayers: subLayers.length === 0 } ">
+                            <div class="btn-group btn-group-layer" data-bind="css: {'open': showSublayers() }">
+                                <!--
+                                <a class="btn btn-info-sign" data-bind="click: toggleDescription, css: { 'active': infoActive() }">
+                                    <i class="icon-info-sign icon-large"></i>
+                                </a>
+                                -->
+
+                                <a class="btn-layer" 
+                                    data-bind="css: { 'active': active(), 'not-active': ! active() }, click: toggleActive">
+                                    <div style="font-weight: normal">
+                                        <i class="icon-info-sign icon-large"></i>
+                                        <span data-bind="text: name"></span>
+                                        <span class="caret" style="display:none" data-bind="visible: subLayers.length > 0"></span>
+                                        <i class="check icon-large icon-check" data-bind="visible: active() && visible()"></i>
+                                        <i class="check icon-large icon-check-empty" data-bind="visible: active() && ! visible()"></i>
+                                    </div>
+                                </a>
+
+                                <!-- ko if: subLayers.length > 0 -->
+                                    <!-- ko if: !isCheckBoxLayer() -->
+                                    <ul class="dropdown-menu layer-menu" data-bind="event: { mouseleave: closeMenu }">
+                                        <li data-bind="foreach: subLayers">
+                                            <a data-bind="click: toggleActive">
+                                                <span data-bind="style: {visibility: active() ? 'visible': 'hidden' }">• </span>
+                                                <span data-bind="text: name"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- /ko -->
+                                    <!-- ko if: isCheckBoxLayer() -->
+                                    <ul class="dropdown-menu layer-menu" data-bind="event: { mouseleave: closeMenu }">
+                                        <li data-bind="foreach: subLayers">
+                                            <a data-bind="click: toggleActive">
+                                                <span style="margin-left: -10px">
+                                                    <i class="icon-check" data-bind="style: {display: active() ? 'inline': 'none' }"></i>
+                                                    <i style="opacity: .4" class="icon-check-empty" 
+                                                        data-bind="style: {display: ! active() ? 'inline': 'none' }"></i>
+                                                </span>
+                                                <span data-bind="text: name"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- /ko -->
+                                <!-- /ko -->
+                            </div>
+                        </li>  
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /data-accordion -->
+<!-- /ko -->
+<!-- /ko -->
