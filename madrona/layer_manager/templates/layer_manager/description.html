@@ -1,0 +1,16 @@
+<!-- ko with:layers -->
+<div id="description-overlay" style="display: none" data-bind="visible: showDescription()" >
+    <div class="span11">
+        <span class="title" data-bind="text: activeInfoLayer().name"></span> -- 
+        <span class="text" data-bind="text: activeInfoLayer().description"></span>
+        <span class="text" data-bind="visible: activeInfoLayer().learn_link">
+            <a class="btn-mini btn" data-bind="attr: { href: activeInfoLayer().learn_link }" 
+                target="_blank">Learn More...</a>
+        </span>  
+    </div>
+    <div class="span1">
+        <a href="#" style="margin-left: 10px; opacity: .6;" class="btn btn-mini pull-right close" 
+            data-bind="click: closeDescription">X</a> 
+    </div>
+</div>
+<!-- /ko -->

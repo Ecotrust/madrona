@@ -170,11 +170,16 @@ class Layer(models.Model):
         if self.learn_more:
             return self.learn_more
         else:
+            return None
+        """
+        # TODO 
+        else:
             try:
                 theme = self.themes.all()[0]  
             except IndexError:
                 return ""
             return "%s#%s" %(theme.learn_link, self.slug)
+        """
         
     @property
     def description_link(self):
