@@ -6,29 +6,44 @@
             <div class="accordion-heading" data-bind="css: { 'active': isOpenTheme() }">
                 <div>
                     <a class="accordion-toggle"  data-bind="click: setOpenTheme"> <!--event: {'hover': showdescription}-->
-                        <span data-bind="text: name">themes</span></a>
+                        <span data-bind="text: name">Loading...</span></a>
                 </div>
             </div>
             <div class="accordion-body collapse" data-bind="css: { 'in': isOpenTheme() }">
                 <div class="accordion-inner">
                     <ul  class="unstyled" data-bind="foreach: layers ">
-                        <li class="layer" data-bind="css: { nosublayers: subLayers.length === 0 } ">
+                        <li class="layer" data-bind="css: { noSubLayers: subLayers.length === 0 } ">
                             <div class="btn-group btn-group-layer" data-bind="css: {'open': showSublayers() }">
+
                                 <!--
                                 <a class="btn btn-info-sign" data-bind="click: toggleDescription, css: { 'active': infoActive() }">
                                     <i class="icon-info-sign icon-large"></i>
                                 </a>
-                                -->
 
-                                <a class="btn-layer" 
-                                    data-bind="css: { 'active': active(), 'not-active': ! active() }, click: toggleActive">
+                                <a class="btn btn-layer" 
+                                    data-bind="css: { 'btn-info': active(), 'not-active': ! active() }, click: toggleActive">
                                     <div style="font-weight: normal">
-                                        <i class="icon-info-sign icon-large"></i>
                                         <span data-bind="text: name"></span>
                                         <span class="caret" style="display:none" data-bind="visible: subLayers.length > 0"></span>
-                                        <i class="check icon-large icon-check" data-bind="visible: active() && visible()"></i>
-                                        <i class="check icon-large icon-check-empty" data-bind="visible: active() && ! visible()"></i>
+                                        <i class="check icon-large icon-ok" data-bind="visible: active() && visible()"></i>
+                                        <i class="check icon-large icon-ban-circle" data-bind="visible: active() && ! visible()"></i>
                                     </div>
+                                </a>
+                                -->
+
+                                <a class="btn btn-layer btn-primary btn-small" 
+                                    data-bind="css: { 'active': active(), 'not-active': ! active() }, click: toggleActive">
+                                    <div style="font-weight: normal; width: 306px; text-align:left;">
+                                        <i class="icon-ok icon-white" data-bind="visible: active() && visible()"></i>
+                                        <i class="icon-white icon-eye-close" data-bind="visible: active() && ! visible()"></i>
+                                        <i class="icon-" data-bind="visible: !active()"></i>
+                                        <span data-bind="text: name"></span>
+                                        <span class="caret" style="display:none" data-bind="visible: subLayers.length > 0"></span>
+                                    </div>
+                                </a>
+                                <a class="btn btn-info-sign btn-primary btn-small" 
+                                    data-bind="click: toggleDescription, css: { 'active': infoActive() }">
+                                    <i class="icon-info-sign icon-large"></i>
                                 </a>
 
                                 <!-- ko if: subLayers.length > 0 -->

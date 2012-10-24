@@ -127,7 +127,7 @@ function layerModel(options, parent) {
         layer.active(false);
         layer.visible(false);
 
-        app.setLayerVisibility(layer, false);
+        app.utils.setLayerVisibility(layer, false);
         layer.opacity(layer.defaultOpacity);
 
         if (layer.parent && layer.parent.isCheckBoxLayer()) { // if layer has a parent and that layer is a checkbox layer
@@ -230,7 +230,7 @@ function layerModel(options, parent) {
                     }
                 }
             }
-            app.setLayerVisibility(layer, false);
+            app.utils.setLayerVisibility(layer, false);
 
             //remove related utfgrid layer
             if (layer.utfgrid) {
@@ -246,7 +246,7 @@ function layerModel(options, parent) {
             if (layer.parent) {
                 layer.parent.visible(true);
             }
-            app.setLayerVisibility(layer, true);
+            app.utils.setLayerVisibility(layer, true);
 
             //add utfgrid if applicable
             if (layer.utfgrid) {
@@ -822,7 +822,7 @@ function viewModel() {
             // layers at the beginning of activeLayers
             // are above those that are at the end
             // also save the layer state
-            app.setLayerZIndex(layer, index);
+            app.utils.setLayerZIndex(layer, index);
             index--;
             /*
             if (layer.utfurl) { //remove utfcontrol for all layers (utfcontrol for top layer will be re-established below)
