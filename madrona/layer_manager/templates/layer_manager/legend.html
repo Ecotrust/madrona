@@ -1,0 +1,14 @@
+<div data-bind="with: layers">
+    <div data-bind="foreach: activeLegendLayers">
+        <div style="padding-bottom: 10px;">
+            <span class="pagination-centered" data-bind="html: legendTitle ? legendTitle : name"></span>
+            <p style="margin: 0px -5px 3px; text-align: left;font-size: 12px;" 
+                data-bind="visible: legendSubTitle, html: legendSubTitle"></p>
+            <span data-bind="if: legend">
+                <div data-bind="css: { 'in': legendVisibility }" style="padding-top: 5px;">
+                    <img data-bind="attr: { src: legend }" />
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
