@@ -17,17 +17,17 @@
                 <ul class="unstyled" data-bind="sortable: { data: activeLayers, options: {  } }">
                     <li>
                         <div class="btn-group">
+                            <a class="btn btn-layer" data-bind="css: { 'active': visible() }, click: toggleVisible">
+                                <span>
+                                    <i class="icon-large check" 
+                                        data-bind="css: { 'icon-ok': visible(), 'icon-': ! visible() }"></i>
+                                </span>
+                                <span data-bind="text: name"></span>
+                            </a>
                             <button class="btn btn-info-sign" 
                                 data-bind="click: toggleDescription, css: { 'active': infoActive()}">
                                 <i class="icon-info-sign icon-large"></i>
                             </button>
-                            <a class="btn btn-layer" data-bind="css: { 'active': visible() }, click: toggleVisible">
-                                <span data-bind="text: name"></span>
-                                <span>
-                                    <i class="icon-large check" 
-                                        data-bind="css: { 'icon-check': visible(), 'icon-': ! visible() }"></i>
-                                </span>
-                            </a>
                             <a class="btn opacity-button" data-bind="click: $parent.showOpacity"><i class="icon-adjust icon-large"></i></a>
                             <button class="btn" data-bind="click: toggleActive">
                                 <i class="icon-remove"></i>

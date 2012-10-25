@@ -1,12 +1,15 @@
 <!-- ko if: layers.themes -->
 <!-- ko with: layers -->
 <div id="data-accordion">
+    <div id="layers-loading">
+        Loading...
+    </div>
     <div class="accordion" data-bind="foreach: themes">
         <div class="accordion-group">
             <div class="accordion-heading" data-bind="css: { 'active': isOpenTheme() }">
                 <div>
                     <a class="accordion-toggle"  data-bind="click: setOpenTheme">
-                        <span data-bind="text: name">Loading...</span></a>
+                        <span data-bind="text: name"></span></a>
                 </div>
             </div>
             <div class="accordion-body collapse" data-bind="css: { 'in': isOpenTheme() }">

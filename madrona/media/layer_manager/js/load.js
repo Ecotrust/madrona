@@ -68,9 +68,12 @@ app.viewModel.layers.loadLayersFromFixture = function() {
 app.viewModel.layers.loadLayersFromServer = function() {
     return $.getJSON('/layer_manager/get_json', function(data) {
         app.viewModel.layers.loadLayers(data);
+    })
+    .success( function() { 
         $('#layer-search-box').typeahead({
             source: app.utils.typeAheadSource  
         });
+        $('#layers-loading').fadeOut();
     })
     .error( function() { console.log("error"); } );
 
