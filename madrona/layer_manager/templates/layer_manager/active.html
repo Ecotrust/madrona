@@ -13,28 +13,38 @@
                     </p>
                 </div>
             </div>
-            <!-- ko with: layers -->
-            <ul class="unstyled" data-bind="sortable: { data: activeLayers, options: {  } }">
-                <li>
-                    <div class="btn-group">
-                        <button class="btn btn-info-sign" 
-                            data-bind="click: toggleDescription, css: { 'active': infoActive()}">
-                            <i class="icon-info-sign icon-large"></i>
-                        </button>
-                        <a class="btn btn-layer" data-bind="css: { 'active': visible() }, click: toggleVisible">
-                            <span data-bind="text: name"></span>
-                            <span>
-                                <i class="icon-large check" 
-                                    data-bind="css: { 'icon-check': visible(), 'icon-': ! visible() }"></i>
-                            </span>
-                        </a>
-                        <a class="btn opacity-button" data-bind="click: $parent.showOpacity"><i class="icon-adjust icon-large"></i></a>
-                        <button class="btn" data-bind="click: toggleActive">
-                            <i class="icon-remove"></i>
-                        </button>
-                    </div>
-                </li>
-            </ul>
-            <!-- /ko -->
+            <div data-bind="with: layers">
+                <ul class="unstyled" data-bind="sortable: { data: activeLayers, options: {  } }">
+                    <li>
+                        <div class="btn-group">
+                            <button class="btn btn-info-sign" 
+                                data-bind="click: toggleDescription, css: { 'active': infoActive()}">
+                                <i class="icon-info-sign icon-large"></i>
+                            </button>
+                            <a class="btn btn-layer" data-bind="css: { 'active': visible() }, click: toggleVisible">
+                                <span data-bind="text: name"></span>
+                                <span>
+                                    <i class="icon-large check" 
+                                        data-bind="css: { 'icon-check': visible(), 'icon-': ! visible() }"></i>
+                                </span>
+                            </a>
+                            <a class="btn opacity-button" data-bind="click: $parent.showOpacity"><i class="icon-adjust icon-large"></i></a>
+                            <button class="btn" data-bind="click: toggleActive">
+                                <i class="icon-remove"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="display:none" id="opacity-popover" class="popover fade bottom in">
+        <div class="arrow">
+        </div>
+        <div class="popover-inner" data-bind="with: layers">
+            <div class="popover-content" data-bind="if: selectedLayer">
+                <div class="slider" 
+                    data-bind="jqSlider: selectedLayer().opacity, jqOptions: { min: 0, max: 1, step: .01, range: 'min' }"></div>                    
+            </div>
         </div>
     </div>
