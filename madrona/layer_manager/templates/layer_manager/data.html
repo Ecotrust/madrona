@@ -31,17 +31,21 @@
                                 </a>
                                 -->
 
-                                <a class="btn btn-layer btn-primary btn-small" 
+                                <style>
+                                    .btn-layer { font-weight: normal; width: 306px; text-align:left; }
+                                </style>
+
+                                <a class="btn btn-layer btn-small" 
                                     data-bind="css: { 'active': active(), 'not-active': ! active() }, click: toggleActive">
-                                    <div style="font-weight: normal; width: 306px; text-align:left;">
-                                        <i class="icon-ok icon-white" data-bind="visible: active() && visible()"></i>
-                                        <i class="icon-white icon-eye-close" data-bind="visible: active() && ! visible()"></i>
+                                    <div>
+                                        <i class="icon-ok" data-bind="visible: active() && visible()"></i>
+                                        <i class="icon-eye-close" data-bind="visible: active() && ! visible()"></i>
                                         <i class="icon-" data-bind="visible: !active()"></i>
                                         <span data-bind="text: name"></span>
                                         <span class="caret" style="display:none" data-bind="visible: subLayers.length > 0"></span>
                                     </div>
                                 </a>
-                                <a class="btn btn-info-sign btn-primary btn-small" 
+                                <a class="btn btn-info-sign btn-small" 
                                     data-bind="click: toggleDescription, css: { 'active': infoActive() }">
                                     <i class="icon-info-sign icon-large"></i>
                                 </a>

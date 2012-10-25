@@ -1,0 +1,40 @@
+    <div class="row-fluid">
+        <div class="span12">
+            <div data-bind="visible: layers.activeLayers().length === 0">
+                <div style="padding: 10px;">
+                    <p>
+                        You currently have no activated data layers. 
+                    </p>
+                    <p>
+                        Any layers that are activated in the Data panel will appear in this Active panel.
+                    </p>
+                    <p>
+                        Layers in the Active panel can be adjusted in terms of their transparency and their ordering on the map.
+                    </p>
+                </div>
+            </div>
+            <!-- ko with: layers -->
+            <ul class="unstyled" data-bind="sortable: { data: activeLayers, options: {  } }">
+                <li>
+                    <div class="btn-group">
+                        <button class="btn btn-info-sign" 
+                            data-bind="click: toggleDescription, css: { 'active': infoActive()}">
+                            <i class="icon-info-sign icon-large"></i>
+                        </button>
+                        <a class="btn btn-layer" data-bind="css: { 'active': visible() }, click: toggleVisible">
+                            <span data-bind="text: name"></span>
+                            <span>
+                                <i class="icon-large check" 
+                                    data-bind="css: { 'icon-check': visible(), 'icon-': ! visible() }"></i>
+                            </span>
+                        </a>
+                        <a class="btn opacity-button" data-bind="click: $parent.showOpacity"><i class="icon-adjust icon-large"></i></a>
+                        <button class="btn" data-bind="click: toggleActive">
+                            <i class="icon-remove"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+            <!-- /ko -->
+        </div>
+    </div>
