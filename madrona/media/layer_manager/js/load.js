@@ -60,10 +60,18 @@ app.viewModel.layers.loadLayers = function(data) {
         })();
 
 };
+
 app.viewModel.layers.loadLayersFromFixture = function() {
-    app.viewModel.loadLayers(app.fixture);
+    app.viewModel.layers.loadLayers(app.fixture);
 };
 
+app.viewModel.layers.turnOnDefault = function() {
+    $.each(app.viewModel.layers.layerIndex, function(i, layer) {
+        if (layer.defaultOn) {
+            layer.activateLayer();
+        }
+    });
+};
 
 app.viewModel.layers.loadLayersFromServer = function() {
     return $.getJSON('/layer_manager/get_json', function(data) {
@@ -74,6 +82,7 @@ app.viewModel.layers.loadLayersFromServer = function() {
             source: app.utils.typeAheadSource  
         });
         $('#layers-loading').fadeOut();
+        app.viewModel.layers.turnOnDefault();
     })
     .error( function() { console.log("error"); } );
 

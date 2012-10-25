@@ -56,6 +56,7 @@ class Layer(models.Model):
     legend_title = models.CharField(max_length=255, blank=True, null=True)
     legend_subtitle = models.CharField(max_length=255, blank=True, null=True)
     utfurl = models.CharField(max_length=255, blank=True, null=True)
+    default_on = models.BooleanField(default=False)
     
     #tooltip
     description = models.TextField(blank=True, null=True)
@@ -247,6 +248,7 @@ class Layer(models.Model):
             'learn_link': self.learn_link,
             'attributes': self.serialize_attributes,
             'lookups': self.serialize_lookups,
+            'default_on': self.default_on,
             'color': self.vector_color,
             'fill_opacity': self.vector_fill,
             'graphic': self.vector_graphic,

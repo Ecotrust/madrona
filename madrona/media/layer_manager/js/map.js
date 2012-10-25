@@ -5,16 +5,6 @@ app.utils.initMap = function (map) {
     map.displayProjection = new OpenLayers.Projection("EPSG:4326");
     map.projection = "EPSG:3857";
 
-    esriOcean = new OpenLayers.Layer.XYZ("ESRI Ocean", "http://services.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}", {
-        sphericalMercator: true,
-        isBaseLayer: true,
-        numZoomLevels: 13,
-        attribution: "Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri"
-    });
-    
-    map.addLayers([esriOcean]);
-    esriOcean.setZIndex(100);
-
     // TODO what is this? 
     // map.addControl(new SimpleLayerSwitcher());
 
@@ -300,3 +290,4 @@ app.utils.setLayerVisibility = function(layer, visibility) {
 app.utils.setLayerZIndex = function(layer, index) {
     layer.layer.setZIndex(index);
 };
+
