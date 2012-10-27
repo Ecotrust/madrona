@@ -43,13 +43,8 @@ function layerModel(options, parent) {
 
     // opacity
     self.opacity.subscribe(function(newOpacity) {
-        if (self.layer.CLASS_NAME === "OpenLayers.Layer.Vector") {
-            self.layer.styleMap.styles['default'].defaultStyle.strokeOpacity = newOpacity;
-            self.layer.styleMap.styles['default'].defaultStyle.graphicOpacity = newOpacity;
-            self.layer.redraw();
-        } else {
-            self.layer.setOpacity(newOpacity);
-        }
+        self.layer.setOpacity(newOpacity);
+        self.layer.redraw();
     });
 
     // is description active

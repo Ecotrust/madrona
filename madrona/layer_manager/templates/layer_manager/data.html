@@ -1,6 +1,4 @@
-<!-- ko if: layers.themes -->
-<!-- ko with: layers -->
-<div id="data-accordion">
+<div id="data-accordion" data-bind="with: layers">
     <div id="layers-loading">
         Loading...
     </div>
@@ -70,6 +68,4 @@
             </div>
         </div>
     </div>
-</div> <!-- /data-accordion -->
-<!-- /ko -->
-<!-- /ko -->
+</div>
