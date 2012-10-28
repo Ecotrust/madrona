@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Madrona Layer Manager Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script type="text/javascript">
+      var madrona = { features: {} }
+    </script>
+
+    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.custom.css" rel="stylesheet">
+    {% load compressed %}{% compressed_css 'application' %}
+    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
+
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout-2.0.0.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout.mapping-latest.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jPaq.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/amplify.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/json2.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}features/js/workspace.js" charset="utf-8"></script>
+    <script>
+        var map;
+
+        function init_map() {
+            var latlon = new OpenLayers.Projection("EPSG:4326");
+            var merc = new OpenLayers.Projection("EPSG:900913");
+            var extent = new OpenLayers.Bounds( -124.848974, 24.396308, -66.885444, 49.384358);
+            extent.transform(latlon, merc);
+
+            map = new OpenLayers.Map({
+                div: "map",
+                //div: null,
+                projection: "EPSG:900913",
+                displayProjection: "EPSG:4326",
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Zoom(),
+                    new OpenLayers.Control.Attribution()
+                ],
+                minZoomLevel: 3,
+                //restrictedExtent: extent,
+                //numZoomLevels: 7
+            });
+
+            var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
+                "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
+                {
+                    sphericalMercator: true, 
+                    opacity: 0.2,
+                }
+            );
+
+            map.isValidZoomLevel = function(zoomLevel) {
+                // Why is this even necessary OpenLayers?.. grrr
+                // http://stackoverflow.com/questions/4240610/min-max-zoom-level-in-openlayers
+                return ( (zoomLevel !== null) &&
+                    (zoomLevel >= this.minZoomLevel) &&
+                    (zoomLevel < this.minZoomLevel + this.numZoomLevels));
+            };
+            map.addLayers([terrain]);  // must have at least one base layer
+            var pnt = new OpenLayers.LonLat(-95.0, 37.0);
+            pnt.transform(latlon, merc);
+            map.setCenter(pnt, 3);
+        }
+    </script>
+    <!--
+    <script type="text/javascript" src="seak/js/seak.js" charset="utf-8"></script>
+    <script type="text/javascript" src="seak/js/scenario.js" charset="utf-8"></script>
+    -->
+    <script src="{{MEDIA_URL}}OpenLayers.js"></script>
+    <!-- IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="{{MEDIA_URL}}html5shiv.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/media/common/img/favicon.ico">
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/">Madrona Layer Manager Demo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+          <div class="span6">
+            <div id="scenario-html">
+              <div class="row-fluid">
+                  <div class="row-fluid" id="row-scenarios-list">
+                    <div class="span12">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
+                                <li class="active">
+                                    <a href="#data-tab-content" id="data-tab" data-toggle="tab">Data</a>
+                                </li>
+                                <li>
+                                    <a href="#active-tab-content" id="active-tab" data-toggle="tab">Active</a>
+                                </li>
+                                <li>
+                                    <a href="#legend-tab-content" id="legend-tab" data-toggle="tab">Legend</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="active-tab-content" class="tab-pane">
+                                    <div>{% include "layer_manager/active.html" %}</div>
+                                </div>
+                                <div id="legend-tab-content" class="tab-pane">
+                                    <div>{% include "layer_manager/legend.html" %}</div>
+                                </div>
+                                <div id="data-tab-content" class="tab-pane active"> 
+                                    <div class="">
+                                        <div>{% include "layer_manager/search.html" %}</div>
+                                        <div>{% include "layer_manager/data.html" %}</div>
+                                    </div>
+                                </div>
+                            </div> <!-- end tab content -->
+                        </div>  <!-- end tabable -->
+                  </div>
+                </div>
+              </div> <!-- no properties -->
+            </div>
+            <!-- end of scenario pages -->
+
+          </div>
+
+          <div class="span6">
+            <div class="outermap well">
+                <style>
+                    #description-overlay {
+                        margin: 6px;
+                        background: rgba(162, 205, 181, 0.9);
+                        bottom: 14px;
+                        font-size: 93%;
+                        font-weight: bold;
+                        position: absolute;
+                        z-index: 1043;
+                        text-align: left;
+                        vertical-align: center;
+                        margin-right: 12px;
+                    }
+                </style>
+                {% include "layer_manager/description.html" %}
+
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+  
+    <script type="text/javascript">
+    var app = {
+        // TODO document global namespace app.viewModel.blah
+        viewModel: {
+            progress: null,
+        },
+        utils: {},
+        updateUrl: function() { /* change url hash */ },
+    };
+    </script>
+
+    <!-- TODO document or put in include -->
+    <script src="/media/layer_manager/js/map.js"></script>
+    <script src="/media/layer_manager/js/models.js"></script>
+    <script src="/media/layer_manager/js/load.js"></script>
+    <script src="/media/layer_manager/js/knockout-bindings.js"></script>
+
+    <script>
+        handleWorkspace = function (data) {
+            app.workspace = data;
+            app.workspaceUtil = new madrona.features.workspace(data); 
+        };
+
+        app.onResize = function () {
+            $("#map").height($(window).height() - 78);
+            map.render('map');
+        };
+        
+        app.timer = null; 
+
+        $(document).ready(function () {
+            ko.applyBindings(app.viewModel);
+            init_map();
+            app.utils.initMap(map);
+            app.viewModel.layers.loadLayersFromServer().done( function() {
+                // pass
+            });
+            app.onResize();
+            $(window).resize(app.onResize);
+        });
+    </script>
+
+    </div>
+
+  </body>
+</html>

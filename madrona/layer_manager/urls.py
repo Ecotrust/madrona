@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
-from views import get_json
+from views import get_json, demo
 
 urlpatterns = patterns('madrona.layer_manager.views',
-    (r'^get_json', get_json)
+    (r'^get_json', get_json),
+    (r'^demo', demo)
 )
