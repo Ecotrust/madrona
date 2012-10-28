@@ -44,7 +44,8 @@
         <div class="popover-inner" data-bind="with: layers">
             <div class="popover-content" data-bind="if: selectedLayer">
                 <div class="slider" 
-                    data-bind="jqSlider: selectedLayer().opacity, jqOptions: { min: 0, max: 1, step: .01, range: 'min' }"></div>                    
+                    data-bind="jqSlider: selectedLayer().opacity, jqOptions: { min: 0, max: 1.01, step: .01, range: 'min' }">
+                </div>
             </div>
         </div>
     </div>
