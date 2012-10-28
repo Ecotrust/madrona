@@ -49,6 +49,7 @@ class Layer(models.Model):
     layer_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     url = models.CharField(max_length=255, blank=True, null=True)
     arcgis_layers = models.CharField(max_length=255, blank=True, null=True)
+    subdomains = models.CharField(max_length=255, blank=True, null=True)
     sublayers = models.ManyToManyField('self', blank=True, null=True)
     themes = models.ManyToManyField("Theme", blank=True, null=True)
     is_sublayer = models.BooleanField(default=False)
@@ -75,7 +76,7 @@ class Layer(models.Model):
     learn_more = models.CharField(max_length=255, blank=True, null=True)
     metadata = models.CharField(max_length=255, blank=True, null=True)
     fact_sheet = models.CharField(max_length=255, blank=True, null=True)
-    source = models.CharField(max_length=255, blank=True, null=True)
+    source = models.CharField(max_length=512, blank=True, null=True)
     thumbnail = models.URLField(max_length=255, blank=True, null=True)
     
     #geojson javascript attribution
@@ -96,6 +97,16 @@ class Layer(models.Model):
     
     def __unicode__(self):
         return unicode('%s' % (self.name))
+
+    @property
+    def calculate_url(self):
+        if self.subdomains:
+            urls = []
+            for sd in self.subdomains.split(","):
+                urls.append(self.url.replace("${s}",sd))
+            return urls
+        else:
+            return self.url
 
     @property
     def is_parent(self):
@@ -215,7 +226,7 @@ class Layer(models.Model):
                 'id': layer.id,
                 'name': layer.name,
                 'type': layer.layer_type,
-                'url': layer.url,
+                'url': layer.calculate_url,
                 'arcgis_layers': layer.arcgis_layers,
                 'utfurl': layer.utfurl,
                 'parent': self.id,
@@ -237,7 +248,7 @@ class Layer(models.Model):
             'id': self.id,
             'name': self.name,
             'type': self.layer_type,
-            'url': self.url,
+            'url': self.calculate_url,
             'arcgis_layers': self.arcgis_layers,
             'utfurl': self.utfurl,
             'subLayers': sublayers,
