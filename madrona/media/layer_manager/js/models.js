@@ -484,7 +484,7 @@ function bookmarkModel($popover) {
 
     self.prepareEmail = function(bookmark) {
         app.viewModel.layers.bookmarkEmail(self.getUrl(bookmark));
-    }
+    };
 
     self.getEmailHref = function(bookmark) {
         return "mailto:?subject=MARCO Bookmark&body=<a href='" + self.getUrl(bookmark).replace(/&/g, '%26') + "'>bookmark</a>";
@@ -626,11 +626,11 @@ function viewModel() {
     // zoom with box
     self.zoomBoxIn = function (self, event) {
         var $button = $(event.target).closest('.btn');
-        self.zoomBox($button)
+        self.zoomBox($button);
     };
     self.zoomBoxOut = function (self, event) {
         var $button = $(event.target).closest('.btn');
-        self.zoomBox($button, true)
+        self.zoomBox($button, true);
     };
     self.zoomBox = function  ($button, out) {
         // out is a boolean to specify whether we are zooming in or out
