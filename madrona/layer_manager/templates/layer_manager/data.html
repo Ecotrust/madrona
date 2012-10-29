@@ -10,15 +10,14 @@
                         <span data-bind="text: name"></span></a>
                 </div>
             </div>
+            <style>
+                .btn-layer { font-weight: normal; width: 56%; text-align:left; }
+            </style>
             <div class="accordion-body collapse" data-bind="css: { 'in': isOpenTheme() }">
                 <div class="accordion-inner">
                     <ul  class="unstyled" data-bind="foreach: layers ">
                         <li class="layer" data-bind="css: { noSubLayers: subLayers.length === 0 } ">
                             <div class="btn-group btn-group-layer" data-bind="css: {'open': showSublayers() }">
-
-                                <style>
-                                    .btn-layer { font-weight: normal; width: 306px; text-align:left; }
-                                </style>
 
                                 <a class="btn btn-layer btn-small" 
                                     data-bind="css: { 'active': active(), 'not-active': ! active() }, click: toggleActive">
