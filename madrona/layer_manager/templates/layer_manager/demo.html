@@ -11,8 +11,52 @@
       var madrona = { features: {} }
     </script>
 
-    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.custom.css" rel="stylesheet">
-    {% load compressed %}{% compressed_css 'application' %}
+    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="{{MEDIA_URL}}common/css/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{MEDIA_URL}}common/css/ui.theme.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{MEDIA_URL}}theme/default/style.css" rel="stylesheet" type="text/css" media="all" />
+    <style>
+        .outermap {
+            padding: 3px !important;
+        }
+        .tab-content {
+            padding: 14px; 
+            padding-top: 21px;
+            -webkit-border-radius: 0 0 4px 4px;
+            -moz-border-radius: 0 0 4px 4px;
+            border-radius: 0 0 4px 4px;
+            background-color: white;
+            border: solid 1px #dddddd; 
+            cursor: default;
+            border-top: 0;
+        }
+        /* Removes Firefox imposed outline */
+        .nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+            outline:none;
+        }
+        .hidden {
+            display: none;
+        }
+        .olControlAttribution {
+            bottom: 5px;
+            font-size: 9px;
+        }
+        body {
+            padding-top: 60px; /* align container with bottom of the topbar */
+        }
+        .olControlAttribution {
+            bottom: 2px !important;
+            font-size: 7pt !important;
+        }
+        img.olTileImage {
+            max-width: 256px !important;
+        }
+        label.olButton {
+            display: inline;
+            padding: 9px 10px 11px;
+            line-height: 24px; 
+        }
+    </style>
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
 
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>
@@ -23,7 +67,6 @@
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jPaq.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/amplify.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/json2.js" charset="utf-8"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}features/js/workspace.js" charset="utf-8"></script>
     <script>
         var map;
 
@@ -35,7 +78,6 @@
 
             map = new OpenLayers.Map({
                 div: "map",
-                //div: null,
                 projection: "EPSG:900913",
                 displayProjection: "EPSG:4326",
                 controls: [
@@ -44,41 +86,30 @@
                     new OpenLayers.Control.Attribution()
                 ],
                 minZoomLevel: 3,
-                //restrictedExtent: extent,
-                //numZoomLevels: 7
             });
 
-            var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
-                "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
+            var terrain = new OpenLayers.Layer.XYZ( "Base Map",
+                ["http://a1.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png",
+                "http://a2.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png",
+                "http://a3.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png"],
                 {
                     sphericalMercator: true, 
                     opacity: 0.2,
                 }
             );
 
-            map.isValidZoomLevel = function(zoomLevel) {
-                // Why is this even necessary OpenLayers?.. grrr
-                // http://stackoverflow.com/questions/4240610/min-max-zoom-level-in-openlayers
-                return ( (zoomLevel !== null) &&
-                    (zoomLevel >= this.minZoomLevel) &&
-                    (zoomLevel < this.minZoomLevel + this.numZoomLevels));
-            };
             map.addLayers([terrain]);  // must have at least one base layer
             var pnt = new OpenLayers.LonLat(-95.0, 37.0);
             pnt.transform(latlon, merc);
             map.setCenter(pnt, 3);
         }
     </script>
-    <!--
-    <script type="text/javascript" src="seak/js/seak.js" charset="utf-8"></script>
-    <script type="text/javascript" src="seak/js/scenario.js" charset="utf-8"></script>
-    -->
     <script src="{{MEDIA_URL}}OpenLayers.js"></script>
     <!-- IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="{{MEDIA_URL}}html5shiv.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="/media/common/img/favicon.ico">
+    <link rel="shortcut icon" href="{{MEDIA_URL}}common/img/favicon.ico">
   </head>
 
   <body>
@@ -154,50 +185,38 @@
             </div>
           </div>
         </div>
-  
+    </div>
     <script type="text/javascript">
-    var app = {
-        // TODO document global namespace app.viewModel.blah
-        viewModel: {
-            progress: null,
-        },
-        utils: {},
-        updateUrl: function() { /* change url hash */ },
-    };
+        var app = {
+            viewModel: {
+                progress: null,
+            },
+            utils: {},
+            updateUrl: function() { /* change url hash */ },
+        };
     </script>
 
-    <!-- TODO document or put in include -->
-    <script src="/media/layer_manager/js/map.js"></script>
-    <script src="/media/layer_manager/js/models.js"></script>
-    <script src="/media/layer_manager/js/load.js"></script>
-    <script src="/media/layer_manager/js/knockout-bindings.js"></script>
+    <script src="{{MEDIA_URL}}layer_manager/js/map.js"></script>
+    <script src="{{MEDIA_URL}}layer_manager/js/models.js"></script>
+    <script src="{{MEDIA_URL}}layer_manager/js/load.js"></script>
+    <script src="{{MEDIA_URL}}layer_manager/js/knockout-bindings.js"></script>
+    <script src="{{MEDIA_URL}}layer_manager/js/demo_fixture.js"></script>
 
     <script>
-        handleWorkspace = function (data) {
-            app.workspace = data;
-            app.workspaceUtil = new madrona.features.workspace(data); 
-        };
-
         app.onResize = function () {
             $("#map").height($(window).height() - 78);
             map.render('map');
         };
         
-        app.timer = null; 
-
         $(document).ready(function () {
             ko.applyBindings(app.viewModel);
             init_map();
             app.utils.initMap(map);
-            app.viewModel.layers.loadLayersFromServer().done( function() {
-                // pass
-            });
+            app.viewModel.layers.loadLayersFromFixture(); 
             app.onResize();
             $(window).resize(app.onResize);
         });
     </script>
-
-    </div>
 
   </body>
 </html>
