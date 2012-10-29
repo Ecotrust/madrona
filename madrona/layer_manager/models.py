@@ -65,7 +65,7 @@ class Layer(models.Model):
     #data description (updated fact sheet) (now the Learn pages)
     data_overview = models.TextField(blank=True, null=True)
     data_status = models.CharField(max_length=255, blank=True, null=True)
-    data_source = models.CharField(max_length=255, blank=True, null=True)
+    data_source = models.CharField(max_length=512, blank=True, null=True)
     data_notes = models.TextField(blank=True, null=True)
     
     #data catalog links    
@@ -240,6 +240,7 @@ class Layer(models.Model):
                 'color': layer.vector_color,
                 'fill_opacity': layer.vector_fill,
                 'graphic': layer.vector_graphic,
+                'data_source': layer.data_source,
                 'opacity': layer.opacity
             } 
             for layer in self.sublayers.all()
@@ -263,6 +264,7 @@ class Layer(models.Model):
             'color': self.vector_color,
             'fill_opacity': self.vector_fill,
             'graphic': self.vector_graphic,
+            'data_source': self.data_source,
             'opacity': self.opacity
         }
         return layers_dict

@@ -151,47 +151,38 @@ app.utils.initMap = function (map) {
 app.utils.addLayerToMap = function(layer) {
     if (!layer.layer) {
         var opts = {
-            displayInLayerSwitcher: false
+            displayInLayerSwitcher: false,
+            attribution: layer.dataSource
         };
-        
+
         if (layer.utfurl || (layer.parent && layer.parent.utfurl)) {
             layer.utfgrid = new OpenLayers.Layer.UTFGrid({
                 layerModel: layer,
                 url: layer.utfurl ? layer.utfurl : layer.parent.utfurl,
                 sphericalMercator: true,
                                  
-                utfgridResolution: 4, // default is 2
+                utfgridResolution: 4,
                 displayInLayerSwitcher: false,
                 useJSONP: false
             });
-            //layer.utfgrid.projection = new OpenLayers.Projection("EPSG:4326");  
             app.map.addLayer(layer.utfgrid);           
-            //app.map.UTFControl.layers = [layer.utfgrid];
-            //layer.utfcontrol = app.addUTFControl(layer);
-            //app.map.addControl(layer.utfcontrol); 
             layer.layer = new OpenLayers.Layer.XYZ(
                 layer.name, 
                 layer.url,
                 $.extend({}, opts, 
                     {
                         sphericalMercator: true,
-                        isBaseLayer: false //previously set automatically when allOverlays was set to true, must now be set manually
+                        isBaseLayer: false
                     }
                 )
             );  
             app.map.addLayer(layer.layer);  
-            //app.addUTFAttribution(layer);
         } else if (layer.type === 'Vector') {
             var styleMap = new OpenLayers.StyleMap( {
                 fillColor: layer.color,
                 fillOpacity: layer.fillOpacity,
-                //strokeDashStyle: "dash",
-                //strokeOpacity: 1,
                 strokeColor: layer.color,
                 strokeOpacity: layer.defaultOpacity,
-                //strokeLinecap: "square",
-                //http://dev.openlayers.org/apidocs/files/OpenLayers/Feature/Vector-js.html
-                //title: 'testing'
                 pointRadius: 2,
                 externalGraphic: layer.graphic,
                 graphicWidth: 8,
@@ -209,7 +200,6 @@ app.utils.addLayerToMap = function(layer) {
                                                 externalGraphic: details.graphic }; 
                 });
                 styleMap.addUniqueValueRules("default", layer.lookupField, mylookup);
-                //styleMap.addUniqueValueRules("select", layer.lookupField, mylookup);
             }
             layer.layer = new OpenLayers.Layer.Vector(
                 layer.name,
@@ -225,9 +215,7 @@ app.utils.addLayerToMap = function(layer) {
                     layerModel: layer
                 }
             );
-            //app.addVectorAttribution(layer);
             app.map.addLayer(layer.layer);  
-            //selectFeatureControl = app.map.getControlsByClass("OpenLayers.Control.SelectFeature")[0];
             if (layer.attributes.length) {
                 app.map.vectorList.unshift(layer.layer);
                 app.map.selectFeatureControl.setLayer(app.map.vectorList);
@@ -256,14 +244,12 @@ app.utils.addLayerToMap = function(layer) {
             );
             app.map.addLayer(layer.layer);  
         } else { //if XYZ with no utfgrid
-            // adding layer to the map for the first time		
             layer.layer = new OpenLayers.Layer.XYZ(layer.name, 
-                //layer.type === 'XYZ' ? layer.url : layer.url + '.png', 
                 layer.url,
                 $.extend({}, opts, 
                     {
                         sphericalMercator: true,
-                        isBaseLayer: false //previously set automatically when allOverlays was set to true, must now be set manually
+                        isBaseLayer: false
                     }
                 )
             );

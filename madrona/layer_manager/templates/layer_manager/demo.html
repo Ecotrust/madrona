@@ -153,8 +153,7 @@
                                     <div class="">
                                         <div>{% include "layer_manager/search.html" %}</div>
                                         <div>{% include "layer_manager/data.html" %}</div>
-                                    </div>
-                                </div>
+                                    </div> </div>
                             </div> <!-- end tab content -->
                         </div>  <!-- end tabable -->
                   </div>
@@ -215,6 +214,7 @@
             init_map();
             app.utils.initMap(map);
             app.viewModel.layers.loadLayersFromFixture(); 
+            //app.viewModel.layers.loadLayersFromServer(); 
             app.onResize();
             $(window).resize(app.onResize);
         });

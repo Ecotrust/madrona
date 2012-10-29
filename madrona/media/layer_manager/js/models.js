@@ -27,6 +27,7 @@ function layerModel(options, parent) {
     self.opacity = ko.observable(self.defaultOpacity);
     self.graphic = options.graphic || null;
     self.defaultOn = options.default_on || false;
+    self.dataSource = options.data_source || null;
 
     // set target blank for all links
     if (options.description) {
