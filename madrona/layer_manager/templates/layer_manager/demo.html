@@ -93,7 +93,7 @@
                     new OpenLayers.Control.Zoom(),
                     new OpenLayers.Control.Attribution()
                 ],
-                minZoomLevel: 3,
+                minZoomLevel: 3
             });
 
             var terrain = new OpenLayers.Layer.XYZ( "Base Map",
@@ -102,7 +102,7 @@
                 "http://a3.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png"],
                 {
                     sphericalMercator: true, 
-                    opacity: 0.2,
+                    opacity: 0.2
                 }
             );
 
@@ -181,11 +181,9 @@
     </div>
     <script type="text/javascript">
         var app = {
-            viewModel: {
-                progress: null,
-            },
+            viewModel: {},
             utils: {},
-            updateUrl: function() { /* change url hash */ },
+            updateUrl: function() { /* change url hash */ }
         };
     </script>
 
