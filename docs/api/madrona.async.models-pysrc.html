@@ -53,7 +53,7 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="madrona.async.models-module.html">Module madrona.async.models</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layer_manager.models=madrona.layer_manager.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
 madrona.async.models
 madrona.bookmarks.models
 madrona.common.models
@@ -63,6 +63,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -87,6 +88,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -107,7 +109,8 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-1
 <a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-string">    url entries should be unique -- a single url maps to a single task_id in a one-to-one fashion</tt> </tt>
 <a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-string">'''</tt> </tt>
 <a name="URLtoTaskID"></a><div id="URLtoTaskID-def"><a name="L8"></a><tt class="py-lineno"> 8</tt> <a class="py-toggle" href="#" id="URLtoTaskID-toggle" onclick="return toggle('URLtoTaskID');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.async.models.URLtoTaskID-class.html">URLtoTaskID</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="URLtoTaskID-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="URLtoTaskID-expanded"><a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable madrona.async.models.URLtoTaskID.url=madrona.async.models.URLtoTaskID-class.html#url"><a title="madrona.async.models.URLtoTaskID.url" class="py-name" href="#" onclick="return doclink('link-2', 'url', 'link-2');">url</a></tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name"><a title="madrona.analysistools.models
+</div><div id="URLtoTaskID-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="URLtoTaskID-expanded"><a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable madrona.async.models.URLtoTaskID.url=madrona.async.models.URLtoTaskID-class.html#url,Variable madrona.layer_manager.models.Layer.url=madrona.layer_manager.models.Layer-class.html#url"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-2', 'url', 'link-2');">url</a></tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name"><a title="madrona.analysistools.models
 madrona.async.models
 madrona.bookmarks.models
 madrona.common.models
@@ -117,6 +120,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -151,6 +155,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -208,7 +213,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 21 17:27:07 2012
+    Generated by Epydoc 3.0.1 on Tue Oct 30 11:06:59 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

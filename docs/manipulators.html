@@ -2,17 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.manipulators - Manipulators &mdash; Madrona Decision Support Framework v4.0 documentation</title>
+    <title>madrona.manipulators - Manipulators &mdash; Madrona Decision Support Framework 4.1.dev documentation</title>
+    
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0',
+        VERSION:     '4.1.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0 documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework 4.1.dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.news - Display news items, announcements, etc" href="news.html" />
     <link rel="prev" title="madrona.loadshp - Shapefile loader" href="loadshp.html" /> 
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="loadshp.html" title="madrona.loadshp - Shapefile loader"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -119,7 +122,8 @@ as enabling your manipulator to work seemlessly within the Lingcod application</
 </li>
 </ul>
 </div></blockquote>
-<div class="highlight-python"><pre>class YourManipulator(BaseManipulator):</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">YourManipulator</span><span class="p">(</span><span class="n">BaseManipulator</span><span class="p">):</span>
+</pre></div>
 </div>
 <blockquote>
 <div><ul class="simple">
@@ -278,8 +282,9 @@ Lastly, the map.html template must include the manipulators div as specified in 
 </div>
 <p>Second, use <tt class="docutils literal"><span class="pre">syncdb</span></tt> or <tt class="docutils literal"><span class="pre">migrate</span></tt> to generate the associated database table.</p>
 <p>Finally, load your own geometry layer with the following management commands:</p>
-<div class="highlight-python"><pre>manage.py create_manipulator_geom &lt;path to shapefile&gt;/my_clipping_region.shp &lt;module name&gt;.models.MyClippingLayer
-manage.py change_manipulator_geom 1 MyClippingLayer</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">create_manipulator_geom</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">shapefile</span><span class="o">&gt;/</span><span class="n">my_clipping_region</span><span class="o">.</span><span class="n">shp</span> <span class="o">&lt;</span><span class="n">module</span> <span class="n">name</span><span class="o">&gt;.</span><span class="n">models</span><span class="o">.</span><span class="n">MyClippingLayer</span>
+<span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">change_manipulator_geom</span> <span class="mi">1</span> <span class="n">MyClippingLayer</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -316,7 +321,7 @@ manage.py change_manipulator_geom 1 MyClippingLayer</pre>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -342,13 +347,13 @@ manage.py change_manipulator_geom 1 MyClippingLayer</pre>
         <li class="right" >
           <a href="loadshp.html" title="madrona.loadshp - Shapefile loader"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

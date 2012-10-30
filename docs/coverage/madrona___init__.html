@@ -5,8 +5,9 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for madrona/__init__: 88%</title>
+    <title>Coverage for madrona/__init__: 75%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
+    
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
     <script type='text/javascript' src='jquery.hotkeys.js'></script>
     <script type='text/javascript' src='jquery.isonscreen.js'></script>
@@ -20,14 +21,14 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>madrona/__init__</b> :
-            <span class='pc_cov'>88%</span>
+            <span class='pc_cov'>75%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            16 statements
-            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>14 run</span>
-            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>2 missing</span>
-            <span class='exc shortkey_x' onclick='coverage.toggle_lines(this, "exc")'>0 excluded</span>
+            16 statements &nbsp;
+            <span class='run hide_run shortkey_r button_toggle_run'>12 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>4 missing</span>
+            <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
         </h2>
     </div>
@@ -79,11 +80,11 @@
 <p id='n17' class='stm run hide_run'><a href='#n17'>17</a></p>
 <p id='n18' class='pln'><a href='#n18'>18</a></p>
 <p id='n19' class='stm run hide_run'><a href='#n19'>19</a></p>
-<p id='n20' class='stm mis'><a href='#n20'>20</a></p>
+<p id='n20' class='stm run hide_run'><a href='#n20'>20</a></p>
 <p id='n21' class='pln'><a href='#n21'>21</a></p>
-<p id='n22' class='stm run hide_run'><a href='#n22'>22</a></p>
-<p id='n23' class='stm run hide_run'><a href='#n23'>23</a></p>
-<p id='n24' class='stm run hide_run'><a href='#n24'>24</a></p>
+<p id='n22' class='stm mis'><a href='#n22'>22</a></p>
+<p id='n23' class='stm mis'><a href='#n23'>23</a></p>
+<p id='n24' class='stm mis'><a href='#n24'>24</a></p>
 <p id='n25' class='pln'><a href='#n25'>25</a></p>
 <p id='n26' class='stm run hide_run'><a href='#n26'>26</a></p>
 <p id='n27' class='pln'><a href='#n27'>27</a></p>
@@ -110,11 +111,11 @@
 <p id='t17' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>sub</span> <span class='op'>=</span> <span class='str'>&#39;&#39;</span><span class='strut'>&nbsp;</span></p>
 <p id='t18' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t19' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>if</span> <span class='nam'>version</span><span class='op'>[</span><span class='num'>3</span><span class='op'>]</span> <span class='op'>==</span> <span class='str'>&#39;alpha&#39;</span> <span class='key'>and</span> <span class='nam'>version</span><span class='op'>[</span><span class='num'>4</span><span class='op'>]</span> <span class='op'>==</span> <span class='num'>0</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t20' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>sub</span> <span class='op'>=</span> <span class='str'>&#39;.dev&#39;</span><span class='strut'>&nbsp;</span></p>
+<p id='t20' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>sub</span> <span class='op'>=</span> <span class='str'>&#39;.dev&#39;</span><span class='strut'>&nbsp;</span></p>
 <p id='t21' class='pln'><span class='strut'>&nbsp;</span></p>
-<p id='t22' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>elif</span> <span class='nam'>version</span><span class='op'>[</span><span class='num'>3</span><span class='op'>]</span> <span class='op'>!=</span> <span class='str'>&#39;final&#39;</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t23' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>mapping</span> <span class='op'>=</span> <span class='op'>{</span><span class='str'>&#39;alpha&#39;</span><span class='op'>:</span> <span class='str'>&#39;a&#39;</span><span class='op'>,</span> <span class='str'>&#39;beta&#39;</span><span class='op'>:</span> <span class='str'>&#39;b&#39;</span><span class='op'>,</span> <span class='str'>&#39;rc&#39;</span><span class='op'>:</span> <span class='str'>&#39;c&#39;</span><span class='op'>}</span><span class='strut'>&nbsp;</span></p>
-<p id='t24' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>sub</span> <span class='op'>=</span> <span class='nam'>mapping</span><span class='op'>[</span><span class='nam'>version</span><span class='op'>[</span><span class='num'>3</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='nam'>str</span><span class='op'>(</span><span class='nam'>version</span><span class='op'>[</span><span class='num'>4</span><span class='op'>]</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t22' class='stm mis'>&nbsp; &nbsp; <span class='key'>elif</span> <span class='nam'>version</span><span class='op'>[</span><span class='num'>3</span><span class='op'>]</span> <span class='op'>!=</span> <span class='str'>&#39;final&#39;</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t23' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>mapping</span> <span class='op'>=</span> <span class='op'>{</span><span class='str'>&#39;alpha&#39;</span><span class='op'>:</span> <span class='str'>&#39;a&#39;</span><span class='op'>,</span> <span class='str'>&#39;beta&#39;</span><span class='op'>:</span> <span class='str'>&#39;b&#39;</span><span class='op'>,</span> <span class='str'>&#39;rc&#39;</span><span class='op'>:</span> <span class='str'>&#39;c&#39;</span><span class='op'>}</span><span class='strut'>&nbsp;</span></p>
+<p id='t24' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>sub</span> <span class='op'>=</span> <span class='nam'>mapping</span><span class='op'>[</span><span class='nam'>version</span><span class='op'>[</span><span class='num'>3</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>+</span> <span class='nam'>str</span><span class='op'>(</span><span class='nam'>version</span><span class='op'>[</span><span class='num'>4</span><span class='op'>]</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
 <p id='t25' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t26' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>main</span> <span class='op'>+</span> <span class='nam'>sub</span><span class='strut'>&nbsp;</span></p>
 <p id='t27' class='pln'><span class='strut'>&nbsp;</span></p>
@@ -128,7 +129,7 @@
 <div id='footer'>
     <div class='content'>
         <p>
-            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.5.1</a>
+            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.5.2</a>
         </p>
     </div>
 </div>

@@ -5,8 +5,9 @@
     
     
     <meta http-equiv='X-UA-Compatible' content='IE=emulateIE7' />
-    <title>Coverage for madrona/simplefaq/views: 100%</title>
+    <title>Coverage for madrona/simplefaq/views: 45%</title>
     <link rel='stylesheet' href='style.css' type='text/css'>
+    
     <script type='text/javascript' src='jquery-1.4.3.min.js'></script>
     <script type='text/javascript' src='jquery.hotkeys.js'></script>
     <script type='text/javascript' src='jquery.isonscreen.js'></script>
@@ -20,14 +21,14 @@
 <div id='header'>
     <div class='content'>
         <h1>Coverage for <b>madrona/simplefaq/views</b> :
-            <span class='pc_cov'>100%</span>
+            <span class='pc_cov'>45%</span>
         </h1>
         <img id='keyboard_icon' src='keybd_closed.png'>
         <h2 class='stats'>
-            11 statements
-            <span class='run hide_run shortkey_r' onclick='coverage.toggle_lines(this, "run")'>11 run</span>
-            <span class='mis shortkey_m' onclick='coverage.toggle_lines(this, "mis")'>0 missing</span>
-            <span class='exc shortkey_x' onclick='coverage.toggle_lines(this, "exc")'>0 excluded</span>
+            11 statements &nbsp;
+            <span class='run hide_run shortkey_r button_toggle_run'>5 run</span>
+            <span class='mis shortkey_m button_toggle_mis'>6 missing</span>
+            <span class='exc shortkey_x button_toggle_exc'>0 excluded</span>
             
         </h2>
     </div>
@@ -68,13 +69,13 @@
 <p id='n6' class='pln'><a href='#n6'>6</a></p>
 <p id='n7' class='pln'><a href='#n7'>7</a></p>
 <p id='n8' class='stm run hide_run'><a href='#n8'>8</a></p>
-<p id='n9' class='stm run hide_run'><a href='#n9'>9</a></p>
-<p id='n10' class='stm run hide_run'><a href='#n10'>10</a></p>
+<p id='n9' class='stm mis'><a href='#n9'>9</a></p>
+<p id='n10' class='stm mis'><a href='#n10'>10</a></p>
 <p id='n11' class='pln'><a href='#n11'>11</a></p>
-<p id='n12' class='stm run hide_run'><a href='#n12'>12</a></p>
-<p id='n13' class='stm run hide_run'><a href='#n13'>13</a></p>
-<p id='n14' class='stm run hide_run'><a href='#n14'>14</a></p>
-<p id='n15' class='stm run hide_run'><a href='#n15'>15</a></p>
+<p id='n12' class='stm mis'><a href='#n12'>12</a></p>
+<p id='n13' class='stm mis'><a href='#n13'>13</a></p>
+<p id='n14' class='stm mis'><a href='#n14'>14</a></p>
+<p id='n15' class='stm mis'><a href='#n15'>15</a></p>
                 
             </td>
             <td class='text' valign='top'>
@@ -86,13 +87,13 @@
 <p id='t6' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t7' class='pln'><span class='strut'>&nbsp;</span></p>
 <p id='t8' class='stm run hide_run'><span class='key'>def</span> <span class='nam'>faq</span><span class='op'>(</span><span class='nam'>request</span><span class='op'>)</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t9' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>faq_groups</span> <span class='op'>=</span> <span class='nam'>FaqGroup</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>all</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t10' class='stm run hide_run'>&nbsp; &nbsp; <span class='nam'>faqs_by_group</span> <span class='op'>=</span> <span class='op'>[</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
+<p id='t9' class='stm mis'>&nbsp; &nbsp; <span class='nam'>faq_groups</span> <span class='op'>=</span> <span class='nam'>FaqGroup</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>all</span><span class='op'>(</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t10' class='stm mis'>&nbsp; &nbsp; <span class='nam'>faqs_by_group</span> <span class='op'>=</span> <span class='op'>[</span><span class='op'>]</span><span class='strut'>&nbsp;</span></p>
 <p id='t11' class='pln'>&nbsp; &nbsp; <span class='com'>#Build an faq list by group, then by faq.&nbsp; order them by importance</span><span class='strut'>&nbsp;</span></p>
-<p id='t12' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>group</span> <span class='key'>in</span> <span class='nam'>faq_groups</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
-<p id='t13' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>faq_query</span> <span class='op'>=</span> <span class='nam'>Faq</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>filter</span><span class='op'>(</span><span class='nam'>faq_group__faq_group_name</span><span class='op'>=</span><span class='nam'>group</span><span class='op'>.</span><span class='nam'>faq_group_name</span><span class='op'>)</span><span class='op'>.</span><span class='nam'>order_by</span><span class='op'>(</span><span class='str'>&#39;importance&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t14' class='stm run hide_run'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>faqs_by_group</span><span class='op'>.</span><span class='nam'>append</span><span class='op'>(</span><span class='op'>{</span><span class='str'>&#39;group_obj&#39;</span><span class='op'>:</span><span class='nam'>group</span><span class='op'>,</span><span class='str'>&#39;group_faqs&#39;</span><span class='op'>:</span><span class='nam'>faq_query</span><span class='op'>}</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
-<p id='t15' class='stm run hide_run'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>render_to_response</span><span class='op'>(</span><span class='str'>&#39;faq.html&#39;</span><span class='op'>,</span> <span class='op'>{</span><span class='str'>&#39;faqs_by_group&#39;</span><span class='op'>:</span><span class='nam'>faqs_by_group</span><span class='op'>}</span><span class='op'>,</span> <span class='nam'>context_instance</span><span class='op'>=</span><span class='nam'>RequestContext</span><span class='op'>(</span><span class='nam'>request</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t12' class='stm mis'>&nbsp; &nbsp; <span class='key'>for</span> <span class='nam'>group</span> <span class='key'>in</span> <span class='nam'>faq_groups</span><span class='op'>:</span><span class='strut'>&nbsp;</span></p>
+<p id='t13' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>faq_query</span> <span class='op'>=</span> <span class='nam'>Faq</span><span class='op'>.</span><span class='nam'>objects</span><span class='op'>.</span><span class='nam'>filter</span><span class='op'>(</span><span class='nam'>faq_group__faq_group_name</span><span class='op'>=</span><span class='nam'>group</span><span class='op'>.</span><span class='nam'>faq_group_name</span><span class='op'>)</span><span class='op'>.</span><span class='nam'>order_by</span><span class='op'>(</span><span class='str'>&#39;importance&#39;</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t14' class='stm mis'>&nbsp; &nbsp; &nbsp; &nbsp; <span class='nam'>faqs_by_group</span><span class='op'>.</span><span class='nam'>append</span><span class='op'>(</span><span class='op'>{</span><span class='str'>&#39;group_obj&#39;</span><span class='op'>:</span><span class='nam'>group</span><span class='op'>,</span><span class='str'>&#39;group_faqs&#39;</span><span class='op'>:</span><span class='nam'>faq_query</span><span class='op'>}</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
+<p id='t15' class='stm mis'>&nbsp; &nbsp; <span class='key'>return</span> <span class='nam'>render_to_response</span><span class='op'>(</span><span class='str'>&#39;faq.html&#39;</span><span class='op'>,</span> <span class='op'>{</span><span class='str'>&#39;faqs_by_group&#39;</span><span class='op'>:</span><span class='nam'>faqs_by_group</span><span class='op'>}</span><span class='op'>,</span> <span class='nam'>context_instance</span><span class='op'>=</span><span class='nam'>RequestContext</span><span class='op'>(</span><span class='nam'>request</span><span class='op'>)</span><span class='op'>)</span><span class='strut'>&nbsp;</span></p>
                 
             </td>
         </tr>
@@ -102,7 +103,7 @@
 <div id='footer'>
     <div class='content'>
         <p>
-            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.5.1</a>
+            <a class='nav' href='index.html'>&#xab; index</a> &nbsp; &nbsp; <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.5.2</a>
         </p>
     </div>
 </div>

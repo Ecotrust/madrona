@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>madrona.layer_manager.tests</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="madrona-module.html">Package&nbsp;madrona</a> ::
+        <a href="madrona.layer_manager-module.html">Package&nbsp;layer_manager</a> ::
+        Module&nbsp;tests
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="madrona.layer_manager.tests-module.html">Module madrona.layer_manager.tests</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">test</tt> <tt class="py-keyword">import</tt> <tt class="py-name">TestCase</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">test</tt><tt class="py-op">.</tt><tt class="py-name">client</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Client</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package madrona=madrona-module.html"><a title="madrona" class="py-name" href="#" onclick="return doclink('link-0', 'madrona', 'link-0');">madrona</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package madrona.layer_manager=madrona.layer_manager-module.html"><a title="madrona.layer_manager" class="py-name" href="#" onclick="return doclink('link-1', 'layer_manager', 'link-1');">layer_manager</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layer_manager.models=madrona.layer_manager.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+madrona.async.models
+madrona.bookmarks.models
+madrona.common.models
+madrona.features.models
+madrona.google-analytics.models
+madrona.group_management.models
+madrona.heatmap.models
+madrona.help.models
+madrona.kmlapp.models
+madrona.layer_manager.models
+madrona.layers.models
+madrona.loadshp.models
+madrona.manipulators.models
+madrona.news.models
+madrona.openid.models
+madrona.raster_stats.models
+madrona.screencasts.models
+madrona.shapes.models
+madrona.simplefaq.models
+madrona.staticmap.models
+madrona.studyregion.models
+madrona.unit_converter.models
+madrona.user_profile.models
+madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2', 'models', 'link-2');">models</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Class madrona.layer_manager.models.Theme=madrona.layer_manager.models.Theme-class.html"><a title="madrona.layer_manager.models.Theme" class="py-name" href="#" onclick="return doclink('link-3', 'Theme', 'link-3');">Theme</a></tt><tt class="py-op">,</tt> <tt id="link-4" class="py-name" targets="Class madrona.layer_manager.models.Layer=madrona.layer_manager.models.Layer-class.html,Class madrona.xyquery.models.Layer=madrona.xyquery.models.Layer-class.html"><a title="madrona.layer_manager.models.Layer
+madrona.xyquery.models.Layer" class="py-name" href="#" onclick="return doclink('link-4', 'Layer', 'link-4');">Layer</a></tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">simplejson</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="LayerManagerTest"></a><div id="LayerManagerTest-def"><a name="L6"></a><tt class="py-lineno"> 6</tt> <a class="py-toggle" href="#" id="LayerManagerTest-toggle" onclick="return toggle('LayerManagerTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.layer_manager.tests.LayerManagerTest-class.html">LayerManagerTest</a><tt class="py-op">(</tt><tt class="py-base-class">TestCase</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="LayerManagerTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="LayerManagerTest-expanded"><a name="LayerManagerTest.setUp"></a><div id="LayerManagerTest.setUp-def"><a name="L7"></a><tt class="py-lineno"> 7</tt> <a class="py-toggle" href="#" id="LayerManagerTest.setUp-toggle" onclick="return toggle('LayerManagerTest.setUp');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layer_manager.tests.LayerManagerTest-class.html#setUp">setUp</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="LayerManagerTest.setUp-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="LayerManagerTest.setUp-expanded"><a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">client</tt> <tt class="py-op">=</tt> <tt class="py-name">Client</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Variable madrona.async.models.URLtoTaskID.url=madrona.async.models.URLtoTaskID-class.html#url,Variable madrona.layer_manager.models.Layer.url=madrona.layer_manager.models.Layer-class.html#url"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-5', 'url', 'link-5');">url</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'/layer_manager/get_json'</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">theme1</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="madrona.layer_manager.models.Theme" class="py-name" href="#" onclick="return doclink('link-6', 'Theme', 'link-3');">Theme</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Variable madrona.features.models.Feature.objects=madrona.features.models.Feature-class.html#objects,Variable madrona.manipulators.models.BaseManipulatorGeometry.objects=madrona.manipulators.models.BaseManipulatorGeometry-class.html#objects,Variable madrona.studyregion.models.StudyRegion.objects=madrona.studyregion.models.StudyRegion-class.html#objects,Variable madrona.xyquery.models.Feature.objects=madrona.xyquery.models.Feature-class.html#objects"><a title="madrona.features.models.Feature.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-7', 'objects', 'link-7');">objects</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Function madrona.features.views.create()=madrona.features.views-module.html#create"><a title="madrona.features.views.create" class="py-name" href="#" onclick="return doclink('link-8', 'create', 'link-8');">create</a></tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.layer_manager.models.Layer.name=madrona.layer_manager.models.Layer-class.html#name,Variable madrona.layer_manager.models.Theme.name=madrona.layer_manager.models.Theme-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-9', 'name', 'link-9');">name</a></tt><tt class="py-op">=</tt><tt class="py-string">"Theme1"</tt><tt class="py-op">)</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer1</tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="madrona.layer_manager.models.Layer
+madrona.xyquery.models.Layer" class="py-name" href="#" onclick="return doclink('link-10', 'Layer', 'link-4');">Layer</a></tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="madrona.features.models.Feature.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-11', 'objects', 'link-7');">objects</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="madrona.features.views.create" class="py-name" href="#" onclick="return doclink('link-12', 'create', 'link-8');">create</a></tt><tt class="py-op">(</tt><tt id="link-13" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-13', 'name', 'link-9');">name</a></tt><tt class="py-op">=</tt><tt class="py-string">"Layer1"</tt><tt class="py-op">,</tt> <tt id="link-14" class="py-name" targets="Variable madrona.layer_manager.models.Layer.layer_type=madrona.layer_manager.models.Layer-class.html#layer_type"><a title="madrona.layer_manager.models.Layer.layer_type" class="py-name" href="#" onclick="return doclink('link-14', 'layer_type', 'link-14');">layer_type</a></tt><tt class="py-op">=</tt><tt class="py-string">'XYZ'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">                <tt id="link-15" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-15', 'url', 'link-5');">url</a></tt><tt class="py-op">=</tt><tt class="py-string">'https://example.com/ocsb1/ocsb/${z}/${x}/${y}.png'</tt><tt class="py-op">)</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer1</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Variable madrona.layer_manager.models.Layer.themes=madrona.layer_manager.models.Layer-class.html#themes"><a title="madrona.layer_manager.models.Layer.themes" class="py-name" href="#" onclick="return doclink('link-16', 'themes', 'link-16');">themes</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method madrona.features.models.FeatureCollection.add()=madrona.features.models.FeatureCollection-class.html#add"><a title="madrona.features.models.FeatureCollection.add" class="py-name" href="#" onclick="return doclink('link-17', 'add', 'link-17');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">theme1</tt><tt class="py-op">)</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer2</tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name"><a title="madrona.layer_manager.models.Layer
+madrona.xyquery.models.Layer" class="py-name" href="#" onclick="return doclink('link-18', 'Layer', 'link-4');">Layer</a></tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="madrona.features.models.Feature.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-19', 'objects', 'link-7');">objects</a></tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="madrona.features.views.create" class="py-name" href="#" onclick="return doclink('link-20', 'create', 'link-8');">create</a></tt><tt class="py-op">(</tt><tt id="link-21" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
+madrona.layers.models.PrivateKml.name
+madrona.manipulators.manipulators.BaseManipulator.Options.name
+madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
+madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name
+madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name
+madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name
+madrona.manipulators.manipulators.NullManipulator.Options.name
+madrona.manipulators.tests.TestManipulator.Options.name
+madrona.news.models.Tag.name
+madrona.raster_stats.models.RasterDataset.name
+madrona.studyregion.models.StudyRegion.name
+madrona.xyquery.models.Layer.name" class="py-name" href="#" onclick="return doclink('link-21', 'name', 'link-9');">name</a></tt><tt class="py-op">=</tt><tt class="py-string">"Layer2"</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name"><a title="madrona.layer_manager.models.Layer.layer_type" class="py-name" href="#" onclick="return doclink('link-22', 'layer_type', 'link-14');">layer_type</a></tt><tt class="py-op">=</tt><tt class="py-string">'XYZ'</tt><tt class="py-op">,</tt>  </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">                <tt id="link-23" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-23', 'url', 'link-5');">url</a></tt><tt class="py-op">=</tt><tt class="py-string">'https://example.com/ocsb2/ocsb/${z}/${x}/${y}.png'</tt><tt class="py-op">)</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer2</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="madrona.layer_manager.models.Layer.themes" class="py-name" href="#" onclick="return doclink('link-24', 'themes', 'link-16');">themes</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="madrona.features.models.FeatureCollection.add" class="py-name" href="#" onclick="return doclink('link-25', 'add', 'link-17');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">theme1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">         </tt>
+<a name="LayerManagerTest.test_themes"></a><div id="LayerManagerTest.test_themes-def"><a name="L18"></a><tt class="py-lineno">18</tt> <a class="py-toggle" href="#" id="LayerManagerTest.test_themes-toggle" onclick="return toggle('LayerManagerTest.test_themes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layer_manager.tests.LayerManagerTest-class.html#test_themes">test_themes</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>       </tt>
+</div><a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">response</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">client</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-26', 'url', 'link-5');">url</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">,</tt> <tt class="py-number">200</tt><tt class="py-op">,</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">res_str</tt> <tt class="py-op">=</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">obj</tt> <tt class="py-op">=</tt> <tt class="py-name">simplejson</tt><tt class="py-op">.</tt><tt class="py-name">loads</tt><tt class="py-op">(</tt><tt class="py-name">res_str</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"state"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"activeLayers"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"themes"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">"Theme1"</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"themes"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"layers"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer1</tt><tt class="py-op">.</tt><tt class="py-name">id</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">layer2</tt><tt class="py-op">.</tt><tt class="py-name">id</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="LayerManagerTest.test_state"></a><div id="LayerManagerTest.test_state-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="LayerManagerTest.test_state-toggle" onclick="return toggle('LayerManagerTest.test_state');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layer_manager.tests.LayerManagerTest-class.html#test_state">test_state</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>        </tt>
+</div><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-name">response</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">client</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-27', 'url', 'link-5');">url</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">,</tt> <tt class="py-number">200</tt><tt class="py-op">,</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-name">res_str</tt> <tt class="py-op">=</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-name">obj</tt> <tt class="py-op">=</tt> <tt class="py-name">simplejson</tt><tt class="py-op">.</tt><tt class="py-name">loads</tt><tt class="py-op">(</tt><tt class="py-name">res_str</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"state"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"activeLayers"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"> </tt>
+<a name="LayerManagerTest.test_layers"></a><div id="LayerManagerTest.test_layers-def"><a name="L34"></a><tt class="py-lineno">34</tt> <a class="py-toggle" href="#" id="LayerManagerTest.test_layers-toggle" onclick="return toggle('LayerManagerTest.test_layers');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.layer_manager.tests.LayerManagerTest-class.html#test_layers">test_layers</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>       </tt>
+</div><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-name">response</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">client</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="madrona.async.models.URLtoTaskID.url
+madrona.layer_manager.models.Layer.url" class="py-name" href="#" onclick="return doclink('link-28', 'url', 'link-5');">url</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">,</tt> <tt class="py-number">200</tt><tt class="py-op">,</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">status_code</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-name">res_str</tt> <tt class="py-op">=</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">obj</tt> <tt class="py-op">=</tt> <tt class="py-name">simplejson</tt><tt class="py-op">.</tt><tt class="py-name">loads</tt><tt class="py-op">(</tt><tt class="py-name">res_str</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">assertEqual</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"layers"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">"Layer1"</tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">layerid</tt> <tt class="py-keyword">in</tt> <tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-string">"themes"</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">"layers"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">            <tt class="py-comment"># make sure we can get the specified layer through the ORM</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">lyr</tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="madrona.layer_manager.models.Layer
+madrona.xyquery.models.Layer" class="py-name" href="#" onclick="return doclink('link-29', 'Layer', 'link-4');">Layer</a></tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="madrona.features.models.Feature.objects
+madrona.manipulators.models.BaseManipulatorGeometry.objects
+madrona.studyregion.models.StudyRegion.objects
+madrona.xyquery.models.Feature.objects" class="py-name" href="#" onclick="return doclink('link-30', 'objects', 'link-7');">objects</a></tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">id</tt><tt class="py-op">=</tt><tt class="py-name">layerid</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="madrona-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Oct 30 11:06:58 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

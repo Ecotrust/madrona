@@ -2,17 +2,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>madrona.features - Spatial Content Management of Features &mdash; Madrona Decision Support Framework v4.0 documentation</title>
+    <title>madrona.features - Spatial Content Management of Features &mdash; Madrona Decision Support Framework 4.1.dev documentation</title>
+    
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '4.0',
+        VERSION:     '4.1.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Madrona Decision Support Framework v4.0 documentation" href="index.html" />
+    <link rel="top" title="Madrona Decision Support Framework 4.1.dev documentation" href="index.html" />
     <link rel="up" title="Core Apps" href="apps.html" />
     <link rel="next" title="madrona.kmlapp - KML Representation of Features and Collections" href="kmlapp.html" />
     <link rel="prev" title="Core Apps" href="apps.html" /> 
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="apps.html" title="Core Apps"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
       </ul>
     </div>  
@@ -258,21 +261,21 @@ While the base Feature classes define reasonable default styling, it is likely t
 <col width="68%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
 <td>Creator</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
 <td>Name of the object</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
 <td>When it was created</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
 <td>When it was last updated.</td>
 </tr>
 </tbody>
@@ -281,13 +284,6 @@ While the base Feature classes define reasonable default styling, it is likely t
 <dt id="madrona.features.models.Feature.add_to_collection">
 <tt class="descname">add_to_collection</tt><big>(</big><em>collection</em><big>)</big><a class="headerlink" href="#madrona.features.models.Feature.add_to_collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add feature to specified FeatureCollection</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="madrona.features.models.Feature.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.Feature.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
 </dd></dl>
 
 <dl class="method">
@@ -381,24 +377,24 @@ common to all geometry types.</p>
 <col width="68%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
 <td>Creator</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
 <td>Name of the object</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
 <td>When it was created</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
 <td>When it was last updated.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
 <td>List of manipulators to be applied when geom
 is saved.</td>
 </tr>
@@ -415,13 +411,6 @@ is saved.</td>
 <dt>If there is a self.manipulators string and there are optional manipulators contained in it,</dt>
 <dd>apply the required manipulators PLUS the specified optional manipulators</dd>
 </dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="madrona.features.models.SpatialFeature.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.SpatialFeature.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -478,43 +467,36 @@ to it. BEST TO TREAT THIS LIKE A CLASS METHOD - no instance specific vars.</p>
 <col width="68%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
 <td>Creator</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
 <td>Name of the object</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
 <td>When it was created</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
 <td>When it was last updated.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
 <td>List of manipulators to be applied when geom
 is saved.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
 <td>Original geometry as input by the user.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
 <td>Geometry after manipulators are applied.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
-<dl class="attribute">
-<dt id="madrona.features.models.PointFeature.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.PointFeature.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -531,43 +513,36 @@ fields.</p>
 <col width="68%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
 <td>Creator</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
 <td>Name of the object</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
 <td>When it was created</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
 <td>When it was last updated.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
 <td>List of manipulators to be applied when geom
 is saved.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
 <td>Original geometry as input by the user.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
 <td>Geometry after manipulators are applied.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
-<dl class="attribute">
-<dt id="madrona.features.models.LineFeature.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.LineFeature.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -584,31 +559,31 @@ fields.</p>
 <col width="68%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">user</span></tt></td>
 <td>Creator</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">name</span></tt></td>
 <td>Name of the object</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">date_created</span></tt></td>
 <td>When it was created</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">date_modified</span></tt></td>
 <td>When it was last updated.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">manipulators</span></tt></td>
 <td>List of manipulators to be applied when geom
 is saved.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">geometry_original</span></tt></td>
 <td>Original geometry as input by the user.</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">geometry_final</span></tt></td>
 <td>Geometry after manipulators are applied.</td>
 </tr>
 </tbody>
@@ -618,13 +593,6 @@ is saved.</td>
 <dt id="madrona.features.models.PolygonFeature.centroid_kml">
 <tt class="descname">centroid_kml</tt><a class="headerlink" href="#madrona.features.models.PolygonFeature.centroid_kml" title="Permalink to this definition">¶</a></dt>
 <dd><p>KML geometry representation of the centroid of the polygon</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="madrona.features.models.PolygonFeature.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.PolygonFeature.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
 </dd></dl>
 
 </dd></dl>
@@ -652,13 +620,6 @@ collection, all the features/collections contained within it are implicitly shar
 <dt id="madrona.features.models.FeatureCollection.add">
 <tt class="descname">add</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#madrona.features.models.FeatureCollection.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a specified Feature to the Collection</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="madrona.features.models.FeatureCollection.collection">
-<tt class="descname">collection</tt><a class="headerlink" href="#madrona.features.models.FeatureCollection.collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides a generic relation to any object through content-type/object-id
-fields.</p>
 </dd></dl>
 
 <dl class="method">
@@ -896,13 +857,13 @@ configured views.</p>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.confirm">
-<tt class="descname">confirm</tt><a class="headerlink" href="#madrona.features.Link.confirm" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">confirm</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.confirm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Confirmation message to show the user before POSTing to rel=edit link</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.edits_original">
-<tt class="descname">edits_original</tt><a class="headerlink" href="#madrona.features.Link.edits_original" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">edits_original</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.edits_original" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set to false for editing links that create a copy of the original.
 This will allow users who do not own the instance(s) but can view them
 perform the action.</p>
@@ -910,19 +871,19 @@ perform the action.</p>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.extra_kwargs">
-<tt class="descname">extra_kwargs</tt><a class="headerlink" href="#madrona.features.Link.extra_kwargs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extra_kwargs</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.extra_kwargs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extra keyword arguments to pass to the view.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.generic">
-<tt class="descname">generic</tt><a class="headerlink" href="#madrona.features.Link.generic" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">generic</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.generic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether this view can be applied to multiple feature classes.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.limit_to_groups">
-<tt class="descname">limit_to_groups</tt><a class="headerlink" href="#madrona.features.Link.limit_to_groups" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">limit_to_groups</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.limit_to_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows you to specify groups (a list of group names)
 that should have access to the link.
 Default is None; i.e. All users have link access regardless of group membership</p>
@@ -930,27 +891,27 @@ Default is None; i.e. All users have link access regardless of group membership<
 
 <dl class="attribute">
 <dt id="madrona.features.Link.method">
-<tt class="descname">method</tt><a class="headerlink" href="#madrona.features.Link.method" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">method</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.method" title="Permalink to this definition">¶</a></dt>
 <dd><p>For rel=edit links, identifies whether a form should be requested or
 that url should just be POST&#8217;ed to.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.models">
-<tt class="descname">models</tt><a class="headerlink" href="#madrona.features.Link.models" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">models</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.models" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of feature classes that a this view can be applied to, if it is
 generic.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.rel">
-<tt class="descname">rel</tt><a class="headerlink" href="#madrona.features.Link.rel" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">rel</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.rel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type of link - alternate, related, edit, or edit_form.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.select">
-<tt class="descname">select</tt><a class="headerlink" href="#madrona.features.Link.select" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">select</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.select" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines whether this link accepts requests with single or multiple
 instances of a feature class. Valid values are &#8220;single&#8221;, &#8220;multiple&#8221;,
 &#8220;single multiple&#8221;, and &#8220;multiple single&#8221;.</p>
@@ -958,26 +919,26 @@ instances of a feature class. Valid values are &#8220;single&#8221;, &#8220;mult
 
 <dl class="attribute">
 <dt id="madrona.features.Link.slug">
-<tt class="descname">slug</tt><a class="headerlink" href="#madrona.features.Link.slug" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">slug</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.slug" title="Permalink to this definition">¶</a></dt>
 <dd><p>Part of this link&#8217;s path.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.title">
-<tt class="descname">title</tt><a class="headerlink" href="#madrona.features.Link.title" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">title</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Human-readable title for the link to be shown in the user interface.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.type">
-<tt class="descname">type</tt><a class="headerlink" href="#madrona.features.Link.type" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">type</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>MIME type of this link, useful for alternate links. May in the future
 be used to automatically assign an icon in the dropdown Export menu.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="madrona.features.Link.view">
-<tt class="descname">view</tt><a class="headerlink" href="#madrona.features.Link.view" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">view</tt><em class="property"> = None</em><a class="headerlink" href="#madrona.features.Link.view" title="Permalink to this definition">¶</a></dt>
 <dd><p>View function handling requests to this link.</p>
 </dd></dl>
 
@@ -1051,7 +1012,7 @@ be used to automatically assign an icon in the dropdown Export menu.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1077,13 +1038,13 @@ be used to automatically assign an icon in the dropdown Export menu.</p>
         <li class="right" >
           <a href="apps.html" title="Core Apps"
              >previous</a> |</li>
-        <li><a href="index.html">Madrona Decision Support Framework v4.0 documentation</a> &raquo;</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
           <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

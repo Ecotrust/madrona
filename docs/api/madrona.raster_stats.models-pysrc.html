@@ -53,7 +53,7 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="madrona.raster_stats.models-module.html">Module madrona.raster_stats.models</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">db</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module madrona.analysistools.models=madrona.analysistools.models-module.html,Module madrona.async.models=madrona.async.models-module.html,Module madrona.bookmarks.models=madrona.bookmarks.models-module.html,Module madrona.common.models=madrona.common.models-module.html,Module madrona.features.models=madrona.features.models-module.html,Module madrona.google-analytics.models=madrona.google-analytics.models-module.html,Module madrona.group_management.models=madrona.group_management.models-module.html,Module madrona.heatmap.models=madrona.heatmap.models-module.html,Module madrona.help.models=madrona.help.models-module.html,Module madrona.kmlapp.models=madrona.kmlapp.models-module.html,Module madrona.layer_manager.models=madrona.layer_manager.models-module.html,Module madrona.layers.models=madrona.layers.models-module.html,Module madrona.loadshp.models=madrona.loadshp.models-module.html,Module madrona.manipulators.models=madrona.manipulators.models-module.html,Module madrona.news.models=madrona.news.models-module.html,Module madrona.openid.models=madrona.openid.models-module.html,Module madrona.raster_stats.models=madrona.raster_stats.models-module.html,Module madrona.screencasts.models=madrona.screencasts.models-module.html,Module madrona.shapes.models=madrona.shapes.models-module.html,Module madrona.simplefaq.models=madrona.simplefaq.models-module.html,Module madrona.staticmap.models=madrona.staticmap.models-module.html,Module madrona.studyregion.models=madrona.studyregion.models-module.html,Module madrona.unit_converter.models=madrona.unit_converter.models-module.html,Module madrona.user_profile.models=madrona.user_profile.models-module.html,Module madrona.xyquery.models=madrona.xyquery.models-module.html"><a title="madrona.analysistools.models
 madrona.async.models
 madrona.bookmarks.models
 madrona.common.models
@@ -63,6 +63,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -110,8 +111,10 @@ madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="retu
 madrona.raster_stats.models.STARSPAN_BIN" class="py-name" href="#" onclick="return doclink('link-12', 'STARSPAN_BIN', 'link-11');">STARSPAN_BIN</a></tt> </tt>
 <a name="RasterDataset"></a><div id="RasterDataset-def"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
 <a name="L24"></a><tt class="py-lineno"> 24</tt> <a class="py-toggle" href="#" id="RasterDataset-toggle" onclick="return toggle('RasterDataset');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="madrona.raster_stats.models.RasterDataset-class.html">RasterDataset</a><tt class="py-op">(</tt><tt class="py-base-class">models</tt><tt class="py-op">.</tt><tt class="py-base-class">Model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="RasterDataset-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="RasterDataset-expanded"><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bookmarks.forms.BookmarkForm.name
+</div><div id="RasterDataset-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="RasterDataset-expanded"><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Variable madrona.bookmarks.forms.BookmarkForm.name=madrona.bookmarks.forms.BookmarkForm-class.html#name,Variable madrona.features.models.Feature.name=madrona.features.models.Feature-class.html#name,Variable madrona.layer_manager.models.Layer.name=madrona.layer_manager.models.Layer-class.html#name,Variable madrona.layer_manager.models.Theme.name=madrona.layer_manager.models.Theme-class.html#name,Variable madrona.layers.models.PrivateKml.name=madrona.layers.models.PrivateKml-class.html#name,Variable madrona.manipulators.manipulators.BaseManipulator.Options.name=madrona.manipulators.manipulators.BaseManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name=madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToShapeManipulator.Options.name=madrona.manipulators.manipulators.ClipToShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options.name=madrona.manipulators.manipulators.ClipToStudyRegionManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options.name=madrona.manipulators.manipulators.DifferenceFromShapeManipulator.Options-class.html#name,Variable madrona.manipulators.manipulators.NullManipulator.Options.name=madrona.manipulators.manipulators.NullManipulator.Options-class.html#name,Variable madrona.manipulators.tests.TestManipulator.Options.name=madrona.manipulators.tests.TestManipulator.Options-class.html#name,Variable madrona.news.models.Tag.name=madrona.news.models.Tag-class.html#name,Variable madrona.raster_stats.models.RasterDataset.name=madrona.raster_stats.models.RasterDataset-class.html#name,Variable madrona.studyregion.models.StudyRegion.name=madrona.studyregion.models.StudyRegion-class.html#name,Variable madrona.xyquery.models.Layer.name=madrona.xyquery.models.Layer-class.html#name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -133,6 +136,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -157,6 +161,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -182,6 +187,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -211,6 +217,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -229,6 +236,8 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-2
 <a name="RasterDataset.__unicode__"></a><div id="RasterDataset.__unicode__-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="RasterDataset.__unicode__-toggle" onclick="return toggle('RasterDataset.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.RasterDataset-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="RasterDataset.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="RasterDataset.__unicode__-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -293,6 +302,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -317,6 +327,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -346,6 +357,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -370,6 +382,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -394,6 +407,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -418,6 +432,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -442,6 +457,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -466,6 +482,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -490,6 +507,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -514,6 +532,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -538,6 +557,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -562,6 +582,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -586,6 +607,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -610,6 +632,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -636,6 +659,7 @@ madrona.group_management.models
 madrona.heatmap.models
 madrona.help.models
 madrona.kmlapp.models
+madrona.layer_manager.models
 madrona.layers.models
 madrona.loadshp.models
 madrona.manipulators.models
@@ -658,6 +682,8 @@ madrona.xyquery.models" class="py-name" href="#" onclick="return doclink('link-6
 <a name="ZonalStatsCache.__unicode__"></a><div id="ZonalStatsCache.__unicode__-def"><a name="L72"></a><tt class="py-lineno"> 72</tt> <a class="py-toggle" href="#" id="ZonalStatsCache.__unicode__-toggle" onclick="return toggle('ZonalStatsCache.__unicode__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="madrona.raster_stats.models.ZonalStatsCache-class.html#__unicode__">__unicode__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 </div><div id="ZonalStatsCache.__unicode__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ZonalStatsCache.__unicode__-expanded"><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">unicode</tt><tt class="py-op">(</tt><tt class="py-string">"Zonal Stats for %s - avg:%s , pixels:%s, nulls:%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.raster" class="py-name" href="#" onclick="return doclink('link-66', 'raster', 'link-30');">raster</a></tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -705,6 +731,8 @@ madrona.xyquery.models.Raster.filepath" class="py-name" href="#" onclick="return
 <a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt id="link-83" class="py-name" targets="Variable madrona.openid.models.Nonce.timestamp=madrona.openid.models.Nonce-class.html#timestamp"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-83', 'timestamp', 'link-83');">timestamp</a></tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">    <tt class="py-name">tmpdir</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tmpdir_base</tt><tt class="py-op">,</tt> <tt class="py-string">'madrona.raster_stats'</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="madrona.raster_stats.models.ZonalStatsCache.geom_hash" class="py-name" href="#" onclick="return doclink('link-84', 'geom_hash', 'link-39');">geom_hash</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-85" class="py-name"><a title="madrona.openid.models.Nonce.timestamp" class="py-name" href="#" onclick="return doclink('link-85', 'timestamp', 'link-83');">timestamp</a></tt><tt class="py-op">,</tt> <tt class="py-name">rasterds</tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="madrona.bookmarks.forms.BookmarkForm.name
 madrona.features.models.Feature.name
+madrona.layer_manager.models.Layer.name
+madrona.layer_manager.models.Theme.name
 madrona.layers.models.PrivateKml.name
 madrona.manipulators.manipulators.BaseManipulator.Options.name
 madrona.manipulators.manipulators.ClipToGraticuleManipulator.Options.name
@@ -922,7 +950,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 21 17:27:05 2012
+    Generated by Epydoc 3.0.1 on Tue Oct 30 11:06:58 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
