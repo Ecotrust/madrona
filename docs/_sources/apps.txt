@@ -17,6 +17,7 @@ Required Apps
     google-analytics
     help
     layers
+    layer_manager
     loadshp
     manipulators
     news

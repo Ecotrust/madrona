@@ -1,0 +1,226 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>madrona.layer_manager 2D Data Layer Management &mdash; Madrona Decision Support Framework 4.1.dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '4.1.dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Madrona Decision Support Framework 4.1.dev documentation" href="index.html" />
+    <link rel="up" title="Core Apps" href="apps.html" />
+    <link rel="next" title="madrona.loadshp - Shapefile loader" href="loadshp.html" />
+    <link rel="prev" title="madrona.layers - KML Data Layers" href="layers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp - Shapefile loader"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="layers.html" title="madrona.layers - KML Data Layers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" accesskey="U">Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="madrona-layer-manager-2d-data-layer-management">
+<span id="layer-manager"></span><h1><tt class="docutils literal"><span class="pre">madrona.layer_manager</span></tt> 2D Data Layer Management<a class="headerlink" href="#madrona-layer-manager-2d-data-layer-management" title="Permalink to this headline">¶</a></h1>
+<p>This document outlines data layers are handled in 2D/OpenLayers versions of Madrona.</p>
+<div class="section" id="server-side-data-model">
+<h2>Server side data model<a class="headerlink" href="#server-side-data-model" title="Permalink to this headline">¶</a></h2>
+<p>The data layers are configured through django models: <cite>layer_manager.model.Layer</cite> and <cite>layer_manager.model.Theme</cite>.</p>
+<p>Layers describe a 2D data source from one of the following sources:</p>
+<ul class="simple">
+<li>XYZ tiles</li>
+<li>WMS</li>
+<li>Geojson</li>
+<li>UTFGrid json</li>
+</ul>
+<p>These can be organized into one or more Themes.</p>
+<p>All configuration can be done through the django admin interface at <cite>/admin/layer_manager/</cite>. If you want to load up the full catalog of data layers found in the demo, there is a fixture which can be loaded:</p>
+<div class="highlight-python"><pre>python manage.py loaddata base_layers</pre>
+</div>
+</div>
+<div class="section" id="client-side-elements">
+<h2>Client side elements<a class="headerlink" href="#client-side-elements" title="Permalink to this headline">¶</a></h2>
+<p>The client side of the layer_manager app includes five UI elements that can be added to the page:</p>
+<ul class="simple">
+<li><cite>data</cite> list; Accordion-style list of themes and layers</li>
+<li><cite>search</cite> box; Allows type-ahead search of all data layers</li>
+<li><cite>active</cite> list; opacity, z-layer and visibility controls for active layers</li>
+<li><cite>legend</cite>: legend images for active layers</li>
+<li><cite>description</cite>: brief abstract of selected info layer</li>
+</ul>
+</div>
+<div class="section" id="client-side-configuration">
+<h2>Client side configuration<a class="headerlink" href="#client-side-configuration" title="Permalink to this headline">¶</a></h2>
+<p>In order to incorportate the nice 2D layer management interface, you&#8217;ll need to follow some simple setup guidelines on the client side.</p>
+<p>The functionality depends on OpenLayers, Bootstrap, jQuery and knockout.</p>
+<p>Include the css:</p>
+<div class="highlight-python"><pre>&lt;link href="{{MEDIA_URL}}common/bootstrap/css/bootstrap.css" rel="stylesheet"&gt;
+&lt;link href="{{MEDIA_URL}}common/css/jquery-ui.css" rel="stylesheet" type="text/css" media="all" /&gt;
+&lt;link href="{{MEDIA_URL}}common/css/ui.theme.css" rel="stylesheet" type="text/css" media="all" /&gt;
+&lt;link href="{{MEDIA_URL}}common/js/theme/default/style.css" rel="stylesheet" type="text/css" media="all" /&gt;</pre>
+</div>
+<p>Include the required javascript sources:</p>
+<div class="highlight-python"><pre>&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery-ui.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/bootstrap/js/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout-2.0.0.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout.mapping-latest.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/jPaq.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/amplify.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/json2.js" charset="utf-8"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="{{MEDIA_URL}}common/js/OpenLayers.js"&gt;&lt;/script&gt;</pre>
+</div>
+<p>Create an OpenLayer.Map object:</p>
+<div class="highlight-python"><pre>&lt;script&gt;
+    var map = new OpenLayers.Map({
+        div: "map",
+        projection: "EPSG:900913",
+        displayProjection: "EPSG:4326",
+        controls: [
+            new OpenLayers.Control.Navigation(),
+            new OpenLayers.Control.Zoom(),
+            new OpenLayers.Control.Attribution()
+        ],
+        minZoomLevel: 3,
+    });
+
+    var terrain = new OpenLayers.Layer.XYZ( "Base Map", { /* must have one base layer here */});
+    map.addLayers([terrain]);  // must have at least one base layer
+&lt;/script&gt;</pre>
+</div>
+<p>And add the elements of the user interface to your page using <cite>include</cite> tags:</p>
+<div class="highlight-python"><pre>&lt;div&gt;{% include "layer_manager/active.html" %}&lt;/div&gt;
+&lt;div&gt;{% include "layer_manager/legend.html" %}&lt;/div&gt;
+&lt;div&gt;{% include "layer_manager/search.html" %}&lt;/div&gt;
+&lt;div&gt;{% include "layer_manager/data.html" %}&lt;/div&gt;
+&lt;div&gt;{% include "layer_manager/description.html" %}&lt;/div&gt;</pre>
+</div>
+<p>Finally, and most importantly, you must set up a global javascript namespace, load the layer_manager javascript files and bind the viewModel to the entire DOM:</p>
+<div class="highlight-python"><pre>&lt;script type="text/javascript"&gt;
+    var app = {
+        viewModel: {
+            progress: null,
+        },
+        utils: {},
+        updateUrl: function() { /* change url hash */ },
+    };
+&lt;/script&gt;
+&lt;script src="{{MEDIA_URL}}layer_manager/js/map.js"&gt;&lt;/script&gt;
+&lt;script src="{{MEDIA_URL}}layer_manager/js/models.js"&gt;&lt;/script&gt;
+&lt;script src="{{MEDIA_URL}}layer_manager/js/load.js"&gt;&lt;/script&gt;
+&lt;script src="{{MEDIA_URL}}layer_manager/js/knockout-bindings.js"&gt;&lt;/script&gt;
+&lt;script src="{{MEDIA_URL}}layer_manager/js/demo_fixture.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(document).ready(function () {
+        ko.applyBindings(app.viewModel);
+        app.utils.initMap(map);
+        app.viewModel.layers.loadLayersFromServer();
+    });
+&lt;/script&gt;</pre>
+</div>
+</div>
+<div class="section" id="example-interface">
+<h2>Example interface<a class="headerlink" href="#example-interface" title="Permalink to this headline">¶</a></h2>
+<p>See <cite>layer_manager/templates/layer_manager/demo.html</cite> for a minimal example of the javascript, css and html markup required to set up the client side.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">madrona.layer_manager</span></tt> 2D Data Layer Management</a><ul>
+<li><a class="reference internal" href="#server-side-data-model">Server side data model</a></li>
+<li><a class="reference internal" href="#client-side-elements">Client side elements</a></li>
+<li><a class="reference internal" href="#client-side-configuration">Client side configuration</a></li>
+<li><a class="reference internal" href="#example-interface">Example interface</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="layers.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">madrona.layers</span></tt> -   KML Data Layers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="loadshp.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">madrona.loadshp</span></tt> - Shapefile loader</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/layer_manager.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="loadshp.html" title="madrona.loadshp - Shapefile loader"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="layers.html" title="madrona.layers - KML Data Layers"
+             >previous</a> |</li>
+        <li><a href="index.html">Madrona Decision Support Framework 4.1.dev documentation</a> &raquo;</li>
+          <li><a href="apps.html" >Core Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, MarineMap Consortium, Ecotrust.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
