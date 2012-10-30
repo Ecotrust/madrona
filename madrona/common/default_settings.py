@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'madrona.shapes',
     'madrona.google-analytics', 
     'madrona.layers',
+    'madrona.layer_manager',
     'madrona.studyregion',
     'madrona.simplefaq',
     'madrona.help',
