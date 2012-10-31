@@ -88,9 +88,7 @@ Finally, and most importantly, you must set up a global javascript namespace, lo
 
     <script type="text/javascript">
         var app = {
-            viewModel: {
-                progress: null,
-            },
+            viewModel: {},
             utils: {},
             updateUrl: function() { /* change url hash */ },
         };

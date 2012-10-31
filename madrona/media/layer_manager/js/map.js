@@ -1,5 +1,3 @@
-app.viewModel.layers = {};
-
 app.utils.initMap = function (map) {
 
     map.displayProjection = new OpenLayers.Projection("EPSG:4326");
