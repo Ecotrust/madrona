@@ -165,8 +165,12 @@ def clean_geometry(geom):
     cursor.execute(query)
     row = cursor.fetchone()
     newgeom = fromstr(row[0])
-    # sometimes, clean returns a multipolygon
-    geometry = LargestPolyFromMulti(newgeom)
+
+    if geom.geom_type == "Polygon":
+        # sometimes, clean returns a multipolygon
+        geometry = LargestPolyFromMulti(newgeom)
+    else:
+        geometry = newgeom
 
     if not geometry.valid or (geometry.geom_type != 'Point' and geometry.num_coords < 2):
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")

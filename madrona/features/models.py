@@ -518,6 +518,36 @@ class PolygonFeature(SpatialFeature):
     class Meta(Feature.Meta):
         abstract = True
 
+class MultiPolygonFeature(SpatialFeature):
+    geometry_orig = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID,
+            null=True, blank=True, verbose_name="Original Polygon Geometry")
+    geometry_final = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Final Polygon Geometry")
+
+    @property
+    def centroid_kml(self):
+        """
+        KML geometry representation of the centroid of the polygon
+        """
+        geom = self.geometry_final.point_on_surface.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+        return geom.kml
+
+    @classmethod
+    def mapnik_style(self):
+        polygon_style = mapnik.Style()
+        ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
+        ps.fill_opacity = 0.5
+        ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
+        ls.stroke_opacity = 0.5
+        r = mapnik.Rule()
+        r.symbols.append(ps)
+        r.symbols.append(ls)
+        polygon_style.rules.append(r)
+        return polygon_style
+
+    class Meta(Feature.Meta):
+        abstract = True
+
 class LineFeature(SpatialFeature):
     """
     Model used for representing user-generated linestring features. Inherits from SpatialFeature.
