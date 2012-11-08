@@ -44,6 +44,12 @@ try:
 except:
     pass
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 # If no starspan, don't bother testing raster_stats
 import subprocess
 try:
