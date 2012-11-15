@@ -624,21 +624,31 @@ def is_text(s):
         return False
     return True
 
-from django.core.cache import cache
-def cachemethod(cache_key, timeout=3600):
+def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     http://djangosnippets.org/snippets/1130/    
     Cacheable class method decorator
     from madrona.common.utils import cachemethod
+
+    @property
     @cachemethod("SomeClass_get_some_result_%(id)s")
     '''
     def paramed_decorator(func):
         def decorated(self):
+            if not settings.USE_CACHE:
+                res = func(self)
+                return res
+
             key = cache_key % self.__dict__
+            #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
             if res == None:
+                #logger.debug("   Cache MISS")
                 res = func(self)
                 cache.set(key, res, timeout)
+                #logger.debug("   Cache SET")
+                if cache.get(key) != res:
+                    logger.error("*** Cache GET was NOT successful, %s" % key)
             return res
         decorated.__doc__ = func.__doc__
         decorated.__dict__ = func.__dict__
