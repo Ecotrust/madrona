@@ -321,17 +321,18 @@ class DataNeed(models.Model):
         return unicode('%s' % (self.name))
 
 # When Layer or Theme changes, invalidate any caches
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from django.core.cache import cache
 
-@receiver(pre_save, sender=Layer)
+@receiver(post_save, sender=Layer)
 def _clear_layer_cache(sender, instance, **kwargs):
-     key = "Layer_toDict_%(id)s" % instance.__dict__
-     cache.delete(key)
+    key = "Layer_toDict_%(id)s" % instance.__dict__
+    cache.delete(key)
+    for theme in Theme.objects.all():
+        cache.delete("Theme_toDict_%s" % theme.id)
 
-@receiver(pre_save, sender=Layer)
+@receiver(post_save, sender=Theme)
 def _clear_theme_cache(sender, instance, **kwargs):
-     key = "Theme_toDict_%(id)s" % instance.__dict__
-     cache.delete(key)
-
+    key = "Theme_toDict_%(id)s" % instance.__dict__
+    cache.delete(key)
