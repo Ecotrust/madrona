@@ -654,3 +654,17 @@ def cachemethod(cache_key, timeout=60*60*24*365):
         decorated.__dict__ = func.__dict__
         return decorated 
     return paramed_decorator
+
+# Use a single json object, optimized for the best available
+#     from madrona.common.utils import json
+try:
+    import cjson as json
+except ImportError:
+    try:
+        import json
+    except ImportError:
+        try:
+            import simplejson as json
+        except ImportError:
+            raise ImportError('You must have the cjson, json, or simplejson ' +
+                            'module(s) available.')
