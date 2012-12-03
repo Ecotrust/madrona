@@ -275,3 +275,12 @@ app.utils.setLayerZIndex = function(layer, index) {
     layer.layer.setZIndex(index);
 };
 
+$(document).mousedown(function(e) {
+  //removing opacity popover from view
+  var op_pvr_event = $(e.target).closest("#opacity-popover").length;
+  var op_btn_event = $(e.target).closest(".opacity-button").length;
+  if (!op_pvr_event && !op_btn_event) {
+    $('#opacity-popover').hide();
+    $('.opacity-button').removeClass('active');
+  }
+});
