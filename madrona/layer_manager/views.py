@@ -2,11 +2,8 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.views.decorators.cache import cache_page, cache_control
 from models import *
 
-@cache_page(60 * 60 * 8)
-@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
 def get_json(request):
     json = {
         "state": {

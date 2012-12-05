@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from madrona.common.utils import cachemethod
 
 class Theme(models.Model):
     display_name = models.CharField(max_length=100)
@@ -24,6 +25,7 @@ class Theme(models.Model):
         return '/learn/%s' % (self.name)
         
     @property
+    @cachemethod("Theme_toDict_%(id)s")
     def toDict(self):
         layers = [layer.id for layer in self.layer_set.filter(is_sublayer=False).exclude(layer_type='placeholder')]
         themes_dict = {
@@ -220,7 +222,9 @@ class Layer(models.Model):
         return {'field': self.lookup_field, 
                 'details': [{'value': lookup.value, 'color': lookup.color, 'dashstyle': lookup.dashstyle, 'fill': lookup.fill, 'graphic': lookup.graphic} for lookup in self.lookup_table.all()]}
     
+
     @property
+    @cachemethod("Layer_toDict_%(id)s")
     def toDict(self):
         sublayers = [
             {
@@ -316,3 +320,24 @@ class DataNeed(models.Model):
     
     def __unicode__(self):
         return unicode('%s' % (self.name))
+
+# When Layer or Theme changes, invalidate any caches
+from django.db.models.signals import post_save, post_delete
+from django.dispatch.dispatcher import receiver
+from django.core.cache import cache
+
+@receiver(post_save, sender=Layer)
+@receiver(post_delete, sender=Layer)
+def _clear_layer_cache(sender, instance, **kwargs):
+    key = "Layer_toDict_%(id)s" % instance.__dict__
+    cache.delete(key)
+    for theme in Theme.objects.all():
+        cache.delete("Theme_toDict_%s" % theme.id)
+
+@receiver(post_save, sender=Theme)
+@receiver(post_delete, sender=Theme)
+def _clear_theme_cache(sender, instance, **kwargs):
+    key = "Theme_toDict_%(id)s" % instance.__dict__
+    cache.delete(key)
+
+
