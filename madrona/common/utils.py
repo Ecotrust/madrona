@@ -639,10 +639,6 @@ def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     def paramed_decorator(func):
         def decorated(self):
-            if not settings.USE_CACHE:
-                res = func(self)
-                return res
-
             key = cache_key % self.__dict__
             #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
