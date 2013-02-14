@@ -17,7 +17,20 @@ import time
 import urllib
 
 from django.conf import settings
-from django.http import str_to_unicode, get_host
+
+# Django 1.5 compatibility
+try:
+    from django.http import str_to_unicode, get_host
+except:
+    def str_to_unicode(s, encoding):
+        if isinstance(s, str):
+            return unicode(s, encoding, 'replace')
+        else:
+            return s
+
+    def get_host(request):
+        request.get_host()
+
 from django.utils.html import escape
 
 from openid.consumer.discover import discover
