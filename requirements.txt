@@ -16,7 +16,7 @@
 # starspan, grass required for some optional apps
 
 boto>=2.3.0
-Django==1.4
+Django>=1.4
 django-compress>=1.0.1
 django-celery>=2.5.1
 django-flatblocks>=0.6.0

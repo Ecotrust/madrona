@@ -165,8 +165,12 @@ def clean_geometry(geom):
     cursor.execute(query)
     row = cursor.fetchone()
     newgeom = fromstr(row[0])
-    # sometimes, clean returns a multipolygon
-    geometry = LargestPolyFromMulti(newgeom)
+
+    if geom.geom_type == "Polygon":
+        # sometimes, clean returns a multipolygon
+        geometry = LargestPolyFromMulti(newgeom)
+    else:
+        geometry = newgeom
 
     if not geometry.valid or (geometry.geom_type != 'Point' and geometry.num_coords < 2):
         raise Exception("I can't clean this geometry. Dirty, filthy geometry. This geometry should be ashamed.")
@@ -635,10 +639,6 @@ def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     def paramed_decorator(func):
         def decorated(self):
-            if not settings.USE_CACHE:
-                res = func(self)
-                return res
-
             key = cache_key % self.__dict__
             #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
@@ -654,3 +654,17 @@ def cachemethod(cache_key, timeout=60*60*24*365):
         decorated.__dict__ = func.__dict__
         return decorated 
     return paramed_decorator
+
+# Use a single json object, optimized for the best available
+#     from madrona.common.utils import json
+try:
+    import cjson as json
+except ImportError:
+    try:
+        import json
+    except ImportError:
+        try:
+            import simplejson as json
+        except ImportError:
+            raise ImportError('You must have the cjson, json, or simplejson ' +
+                            'module(s) available.')

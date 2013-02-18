@@ -1,6 +1,6 @@
 from django.test import TestCase
 from madrona.features import *
-from madrona.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from madrona.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection, MultiPolygonFeature
 from madrona.features.forms import FeatureForm
 from madrona.common.utils import kml_errors, enable_sharing
 import os
@@ -1818,3 +1818,41 @@ class GeoJSONTest(TestCase):
         proj4_wgs84 = "+proj=longlat +datum=WGS84 +no_defs"
         self.assertEqual(ogc_wgs84, srid_to_urn(4326))
         self.assertEqual(proj4_wgs84, srid_to_proj(4326))
+
+@register
+class MockMultiPoly(MultiPolygonFeature):
+    class Options:
+        verbose_name = 'Marine Protected Area multipolygon'
+        form = 'madrona.features.tests.TestMultiPolyForm'
+        manipulators = []
+
+class MockMultiPolyForm(FeatureForm):
+    class Meta:
+        model = MockMultiPoly
+
+class TestMultiPolygonFeature(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            'featuretest', 'featuretest@madrona.org', password='pword')
+        self.client.login(username='featuretest', password='pword')
+
+        # multi polygon made up of two polygons, one with a hole in it
+        self.g = GEOSGeometry('SRID=4326;MULTIPOLYGON(((40 40, 20 45, 45 30, 40 40)),((20 35, 45 20, 30 5, 10 10, 10 30, 20 35),(30 20, 20 25, 20 15, 30 20)))')
+        self.g.transform(settings.GEOMETRY_DB_SRID)
+
+        self.single_g = GEOSGeometry('SRID=4326;POLYGON((-120.42 34.37, -119.64 34.32, -119.63 34.12, -120.44 34.15, -120.42 34.37))')
+        self.single_g.transform(settings.GEOMETRY_DB_SRID)
+
+    def test_feature_type(self):
+        mpa = MockMultiPoly(user=self.user, name="My Multi", geometry_orig=self.g) 
+        mpa.save()
+
+        self.assertTrue(isinstance(mpa, MultiPolygonFeature))
+        self.assertEqual(mpa.geometry_final.geom_type,'MultiPolygon')
+
+    def test_single_polygon(self):
+        with self.assertRaises(TypeError): 
+            mpa = MockMultiPoly(user=self.user, name="My Multi with single input", geometry_orig=self.single_g) 
+            mpa.save()

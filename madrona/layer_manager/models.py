@@ -31,6 +31,7 @@ class Theme(models.Model):
         themes_dict = {
             'id': self.id,
             'display_name': self.display_name,
+            'name': self.name,
             'learn_link': self.learn_link,
             'layers': layers,
             'description': self.description
