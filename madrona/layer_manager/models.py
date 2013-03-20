@@ -53,7 +53,7 @@ class Layer(models.Model):
     url = models.CharField(max_length=255, null=True)
     arcgis_layers = models.CharField(max_length=255, blank=True, null=True)
     subdomains = models.CharField(max_length=255, blank=True, null=True)
-    sublayers = models.ManyToManyField('self', blank=True, null=True)
+    sublayers = models.ManyToManyField('self', blank=True, null=True, help_text="Select the PARENT layer (which should be checkbox or radio type). Be sure to also check is_sublayer.")
     themes = models.ManyToManyField("Theme", null=True)
     is_sublayer = models.BooleanField(default=False)
     legend = models.CharField(max_length=255, blank=True, null=True, help_text="URL to legend image")
@@ -277,6 +277,9 @@ class Layer(models.Model):
             'opacity': self.opacity
         }
         return layers_dict
+
+    class Meta:
+        ordering = ['name']
 
 class AttributeInfo(models.Model):
     display_name = models.CharField(max_length=255, blank=True, null=True)
