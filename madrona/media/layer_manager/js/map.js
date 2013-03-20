@@ -47,7 +47,7 @@ app.utils.initMap = function (map) {
     
     map.vectorList = [];
     map.selectFeatureControl = new OpenLayers.Control.SelectFeature(map.vectorList, {
-        //hover: true,
+        hover: true,
         highlightOnly: false,
         renderIntent: "temporary",
         cancelBubble: false,
@@ -181,7 +181,7 @@ app.utils.addLayerToMap = function(layer) {
                 fillOpacity: layer.fillOpacity,
                 strokeColor: layer.color,
                 strokeOpacity: layer.defaultOpacity,
-                pointRadius: 2,
+                pointRadius: 4,
                 externalGraphic: layer.graphic,
                 graphicWidth: 8,
                 graphicHeight: 8,

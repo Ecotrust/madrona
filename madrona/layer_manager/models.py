@@ -48,19 +48,19 @@ class Layer(models.Model):
         ('Vector', 'Vector'),
         ('placeholder', 'placeholder'),
     )
-    name = models.CharField(max_length=100)
-    layer_type = models.CharField(max_length=50, choices=TYPE_CHOICES)
-    url = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=100, help_text="Layer name (as it appears in the interface)")
+    layer_type = models.CharField(max_length=50, choices=TYPE_CHOICES, help_text="Layer type")
+    url = models.CharField(max_length=255, null=True)
     arcgis_layers = models.CharField(max_length=255, blank=True, null=True)
     subdomains = models.CharField(max_length=255, blank=True, null=True)
     sublayers = models.ManyToManyField('self', blank=True, null=True)
-    themes = models.ManyToManyField("Theme", blank=True, null=True)
+    themes = models.ManyToManyField("Theme", null=True)
     is_sublayer = models.BooleanField(default=False)
-    legend = models.CharField(max_length=255, blank=True, null=True)
+    legend = models.CharField(max_length=255, blank=True, null=True, help_text="URL to legend image")
     legend_title = models.CharField(max_length=255, blank=True, null=True)
     legend_subtitle = models.CharField(max_length=255, blank=True, null=True)
     utfurl = models.CharField(max_length=255, blank=True, null=True)
-    default_on = models.BooleanField(default=False)
+    default_on = models.BooleanField(default=False, help_text="Should layer appear initially on load?")
     
     #tooltip
     description = models.TextField(blank=True, null=True)
@@ -100,6 +100,10 @@ class Layer(models.Model):
     
     def __unicode__(self):
         return unicode('%s' % (self.name))
+
+    @property
+    def themes_string(self):
+        return ', '.join([x.display_name for x in self.themes.all()])
 
     @property
     def calculate_url(self):
@@ -322,7 +326,7 @@ class DataNeed(models.Model):
         return unicode('%s' % (self.name))
 
 # When Layer or Theme changes, invalidate any caches
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch.dispatcher import receiver
 from django.core.cache import cache
 
@@ -331,6 +335,15 @@ from django.core.cache import cache
 def _clear_layer_cache(sender, instance, **kwargs):
     key = "Layer_toDict_%(id)s" % instance.__dict__
     cache.delete(key)
+    for theme in Theme.objects.all():
+        cache.delete("Theme_toDict_%s" % theme.id) 
+
+@receiver(m2m_changed, sender=Layer.sublayers.through)
+def _clear_layer_m2m_cache(sender, instance, **kwargs):
+    # make sure we follow any m2m relationships
+    for x in instance.sublayers.all():
+        key = "Layer_toDict_%(id)s" % x.__dict__
+        cache.delete(key)
     for theme in Theme.objects.all():
         cache.delete("Theme_toDict_%s" % theme.id) 
 
