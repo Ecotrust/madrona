@@ -1,6 +1,10 @@
 # Madrona 4.1
 -------------
 New `layer_manager` app for managing 2D tiled map sources
+By default, enforce_supported_browser set to False (breaks backwards compatibility with some 3D apps)
+Clean up json import situation
+Preliminary Multipolygon support (server-side)
+
 
 # Madrona 4.0
 -------------
