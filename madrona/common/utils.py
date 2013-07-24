@@ -640,15 +640,10 @@ def cachemethod(cache_key, timeout=60*60*24*365):
     def paramed_decorator(func):
         def decorated(self):
             key = cache_key % self.__dict__
-            #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
             if res == None:
-                #logger.debug("   Cache MISS")
                 res = func(self)
                 cache.set(key, res, timeout)
-                #logger.debug("   Cache SET")
-                if cache.get(key) != res:
-                    logger.error("*** Cache GET was NOT successful, %s" % key)
             return res
         decorated.__doc__ = func.__doc__
         decorated.__dict__ = func.__dict__
