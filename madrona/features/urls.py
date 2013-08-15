@@ -46,8 +46,8 @@ for link in registered_links:
     )
 
 urlpatterns += patterns('madrona.features.views',
-    url(r'^(?P<username>\w+)/workspace-owner.json', 'workspace', kwargs={"is_owner": True}, name='workspace-owner-json'),
-    url(r'^(?P<username>\w+)/workspace-shared.json', 'workspace', kwargs={"is_owner": False}, name='workspace-shared-json'),
+    url(r'^(?P<username>.+)/workspace-owner.json', 'workspace', kwargs={"is_owner": True}, name='workspace-owner-json'),
+    url(r'^(?P<username>.+)/workspace-shared.json', 'workspace', kwargs={"is_owner": False}, name='workspace-shared-json'),
     url(r'^workspace-public.json', 'workspace', kwargs={"is_owner": False, "username": ''}, name='workspace-public-json'),
     url(r'^feature_tree.css', 'feature_tree_css', name='feature-tree-css'),
 )
