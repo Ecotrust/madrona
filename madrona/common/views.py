@@ -29,7 +29,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     enforce_supported = settings.ENFORCE_SUPPORTED_BROWSER
     if 'supported' in request.REQUEST and request.REQUEST['supported'] == 'false':
             enforce_supported = False
-    if not valid_browser(useragent) and enforce_supported:
+    if enforce_supported and not valid_browser(useragent):
         from madrona.common import uaparser
         bp = uaparser.browser_platform(useragent)
         context = {'useragent':useragent, 
