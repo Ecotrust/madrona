@@ -86,7 +86,7 @@ class Command(BaseCommand):
                             prof.dump_stats(profname)
                             stats = pstats.Stats(profname)
                             stats.sort_stats('cumulative', 'time', 'calls')
-                            stats.print_stats('madrona',20)
+                            stats.print_stats('/usr/local',20)
                             print " * Complete cProfile output at %s" % profname
                             print "============= Done ================================="
 

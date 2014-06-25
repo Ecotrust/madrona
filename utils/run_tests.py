@@ -36,7 +36,7 @@ broken test runner; we'd rather test our code in an ugly but reliable way.
 """
 import sys
 import os
-from django.core.management import call_command, execute_manager, execute_from_command_line
+from django.core.management import call_command, execute_from_command_line
 from django.conf import settings
 
 def use_exec(pdir):
@@ -93,12 +93,14 @@ def create_test_cmd():
 
 hdir = os.path.dirname(os.path.abspath(__file__))
 pdir = os.path.join(hdir,'..','examples/test_project')
-spdir = os.path.join(hdir,'..','examples')
+#spdir = os.path.join(hdir,'..','examples')
 sys.path.insert(0, pdir)
-sys.path.insert(0, spdir)
+#sys.path.insert(0, spdir)
 sys.path.insert(0, hdir)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'test_project.settings'
+os.chdir(pdir)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'test_site.settings'
 
 settings.TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 settings.TEST_OUTPUT_VERBOSE = True

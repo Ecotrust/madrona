@@ -2,6 +2,7 @@
 marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js
+examples/test_project/test_site/mediaroot/*
 examples/test_project/mediaroot/*
 env1/*
 docs/.build/*
