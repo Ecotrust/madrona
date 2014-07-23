@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 urlpatterns = patterns('madrona.kmlapp.views',
     url(r'^user_features/(?P<session_key>\w+)/(?P<input_username>\w+).kml$', 

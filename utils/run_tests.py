@@ -71,7 +71,7 @@ def use_exec(pdir):
         print
         print "   manage.py test %s --noinput --failfast -v 2" % sys.argv[1]
         print
-        execute_from_command_line(['manage.py','test',sys.argv[1],'--noinput','--failfast','-v','2'])
+        execute_from_command_line(['manage.py','test', sys.argv[1], '--noinput','--failfast','-v','2'])
     else:
         cmd_dict = create_test_cmd()
         print
@@ -80,7 +80,7 @@ def use_exec(pdir):
         execute_from_command_line(cmd_dict)
 
 def create_test_cmd():
-    base = ['manage.py','test','--noinput','-v','2']
+    base = ['manage.py','test', '--noinput','-v','2']
     cmd_dict = base
     for app in settings.INSTALLED_APPS:
         try:
@@ -92,15 +92,15 @@ def create_test_cmd():
     return cmd_dict
 
 hdir = os.path.dirname(os.path.abspath(__file__))
-pdir = os.path.join(hdir,'..','examples/test_project')
-#spdir = os.path.join(hdir,'..','examples')
+#pdir = os.path.join(hdir,'..','examples/test_project')
+pdir = os.path.join(hdir,'..','examples')
 sys.path.insert(0, pdir)
 #sys.path.insert(0, spdir)
 sys.path.insert(0, hdir)
 
 os.chdir(pdir)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'test_site.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'test_project.settings'
 
 settings.TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
 settings.TEST_OUTPUT_VERBOSE = True
@@ -108,6 +108,6 @@ settings.DEBUG = True
 import logging
 settings.LOG_LEVEL = logging.WARNING
 settings.MEDIA_URL = '/media/'
-settings.POSTGIS_TEMPLATE = 'template1'
+#settings.POSTGIS_TEMPLATE = 'template1'
 
 use_exec(pdir)

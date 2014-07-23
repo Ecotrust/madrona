@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from madrona.common.utils import get_class
 from madrona.features import registered_models, registered_links
 from madrona.features import get_collection_models

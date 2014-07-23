@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.views.generic.base import TemplateView
 from django.views.generic.dates import ArchiveIndexView, DateDetailView
 from models import Entry, Tag

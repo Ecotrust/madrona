@@ -7,7 +7,7 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase, Client
 from madrona.studyregion.models import StudyRegion
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry 
 

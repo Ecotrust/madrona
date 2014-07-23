@@ -7,7 +7,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'test_project',
-        'USER': 'postgres',
+        'USER': 'django',
+        'PASSWORD': 'django',
+        'HOST': 'localhost'
      }
 }
 
@@ -38,6 +40,7 @@ import os
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__),'mediaroot'))
 
 POSTGIS_TEMPLATE = 'template1'
+POSTGIS_VERSION = (2, 1, 0)
 
 try:
     from settings_local import *

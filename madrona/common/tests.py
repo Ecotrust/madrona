@@ -56,7 +56,8 @@ class UtilsTest(TestCase):
         result = remove_spikes(result, 0.01)
         self.assertEquals(result,expected_wkt)
 
-from django.utils.hashcompat import md5_constructor as md5
+# from django.utils.hashcompat import md5_constructor as md5
+from hashlib import md5
 
 class SessionsTest(TestCase):
     def test_load_session(self):

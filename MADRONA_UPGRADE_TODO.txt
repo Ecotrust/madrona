@@ -1,12 +1,11 @@
 sudo apt-get install gdal-bin libgdal-dev python-dev build-essential libjpeg-dev libjpeg8-dev libpng3 libfreetype6-dev
 
-# These are the tricky ones
-pip install numpy
-pip install PIL --allow-external PIL --allow-unverified PIL
 export CPLUS_INCLUDE_PATH=/usr/include/gdal
 export C_INCLUDE_PATH=/usr/include/gdal
-pip install "gdal=1.10" 
-
+pip install --allow-external --allow-insecure \
+    --find-links http://wheels2.astropy.org/ --use-wheel \
+    "Cython>=0.16" Numpy "matplotlib>=1.2.1" "GDAL==1.10.0" \
+    PIL --allow-external PIL --allow-unverified PIL
 
 sudo apt-get install python-mapnik mapnik-input-plugin-* mapnik-utils libmapnik2.2 libmapnik2-dev
 #requires virtualenv wrapper
@@ -22,6 +21,7 @@ sudo apt-get install postgresql-9.3-postgis-2.1
 sudo su postgres
 cd /tmp
 psql -d template1 -c "CREATE EXTENSION postgis;"
+psql -d template1 -f madrona/common/sql/cleangeometry.sql
 exit
 
 # new style manage.py in /home/mperry/src/madrona/utils/../examples/test_project/manage.py
@@ -36,3 +36,19 @@ if __name__ == "__main__":
 
     execute_from_command_line(sys.argv)
 --------------------------------------------
+
+mv manage.py up one level
+mv app to same level as project 
+
+sudo -u postgres createuser -sdP django
+sudo -u postgres createdb -O django test_project
+
+
+urls -> django.conf.urls.default to django.conf.urls
+
+clearn
+django-registration issues .. fork?
+
+requirements: django 1.6+, postgis 2.1+
+
+

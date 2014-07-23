@@ -1,11 +1,11 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.contrib.gis.geos import *
 from madrona.studyregion.models import StudyRegion
 from django.core import serializers 
-from manipulators import *      
+from .manipulators import *      
 from madrona.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from madrona.features.forms import FeatureForm
 from madrona.features import register

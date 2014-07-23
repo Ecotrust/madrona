@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from madrona.layer_manager.models import Theme, Layer
-import simplejson
+import json
 
 class LayerManagerTest(TestCase):
     def setUp(self):
@@ -21,7 +21,7 @@ class LayerManagerTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200, response.status_code)
         res_str = response.content
-        obj = simplejson.loads(res_str)
+        obj = json.loads(res_str)
         self.assertEqual(obj["state"]["activeLayers"], [], obj)
         self.assertEqual(obj["themes"][0]["name"], "Theme1", obj)
         self.assertEqual(obj["themes"][0]["layers"], [self.layer1_id, self.layer2_id])
@@ -30,14 +30,14 @@ class LayerManagerTest(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         res_str = response.content
-        obj = simplejson.loads(res_str)
+        obj = json.loads(res_str)
         self.assertEqual(obj["state"]["activeLayers"], [], obj)
 
     def test_layers(self):	
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200, response.status_code)
         res_str = response.content
-        obj = simplejson.loads(res_str)
+        obj = json.loads(res_str)
         self.assertEqual(obj["layers"][0]["name"], "Layer1")
         for layerid in obj["themes"][0]["layers"]:
             # make sure we can get the specified layer through the ORM

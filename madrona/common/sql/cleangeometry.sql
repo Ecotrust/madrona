@@ -31,7 +31,7 @@ BEGIN
 
 -- Only process if geometry is not valid, 
 -- otherwise put out without change
-    if not isValid(inGeom) THEN
+    if not ST_isValid(inGeom) THEN
     
 -- create nodes at all self-intersecting lines by union the polygon boundaries
 -- with the startingpoint of the boundary.  

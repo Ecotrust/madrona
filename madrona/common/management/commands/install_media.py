@@ -88,6 +88,7 @@ class Command(BaseCommand):
             return
 
         print "    Copying %s to %s" % (source_dir, self.media_root)
+
         from distutils.dir_util import copy_tree
         copy_tree(source_dir, self.media_root)
 

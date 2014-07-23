@@ -8,7 +8,7 @@ __copyright__ = "Copyright (c) 2002 Sam Ruby and Mark Pilgrim"
 
 from UserList import UserList
 import os
-LANGUAGE = os.environ.get('LANGUAGE', 'en')
+LANGUAGE = 'en'  # FIXME i18n
 lang = __import__('madrona.common.feedvalidator.i18n.%s' % LANGUAGE, globals(), locals(), LANGUAGE)
 
 from madrona.common.feedvalidator.logging import Info, Warning, Error

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from madrona.common.utils import get_logger, get_class, enable_sharing
 from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist

@@ -14,7 +14,7 @@ from django.template.defaultfilters import slugify
 from madrona.features.models import SpatialFeature, Feature, FeatureCollection
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
-from django.utils import simplejson
+import json
 logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -472,7 +472,7 @@ from madrona.manipulators.manipulators import get_manipulators_for_model
 # TODO: Refactor this so that it is part of Feature.Options.edit_context
 def decorate_with_manipulators(extra_context, form_class):
     try:
-        extra_context['json'] = simplejson.dumps(get_manipulators_for_model(form_class.Meta.model))
+        extra_context['json'] = json.dumps(get_manipulators_for_model(form_class.Meta.model))
     except:
         extra_context['json'] = False
     return extra_context
@@ -768,7 +768,7 @@ def to_response(status=200, select=None, show=None, parent=None,
         "X-Madrona-UnToggle": to_csv(untoggle),
     }
     headers = dict((k,v) for k,v in headers.items() if v != '' and v != None)
-    response = HttpResponse(simplejson.dumps(headers), status=status)
+    response = HttpResponse(json.dumps(headers), status=status)
     for k,v in headers.items():
         if k != 'status' and k != 'Location':
             response[k] = v

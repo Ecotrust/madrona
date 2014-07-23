@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 urlpatterns = patterns('madrona.manipulators.views',
     (r'^test/$', 'testView'),

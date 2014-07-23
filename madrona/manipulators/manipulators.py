@@ -16,7 +16,7 @@ def simplify(geom):
         geom.transform(settings.GEOMETRY_DB_SRID)
     from django.db import connection
     cursor = connection.cursor()
-    query = "select simplify(st_geomfromewkt(\'%s\'), %s) as geometry" % (geom.ewkt,settings.KML_SIMPLIFY_TOLERANCE)
+    query = "select st_simplify(st_geomfromewkt(\'%s\'), %s) as geometry" % (geom.ewkt,settings.KML_SIMPLIFY_TOLERANCE)
     cursor.execute(query)
     row = cursor.fetchone()
     try:
