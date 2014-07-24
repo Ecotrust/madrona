@@ -12,7 +12,7 @@ from madrona.studyregion.models import StudyRegion
 from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
-from django.utils import simplejson
+import json
 from madrona.common.utils import clean_geometry
 
 
@@ -28,7 +28,7 @@ def mpaManipulatorList(request, app_name, model_name):
 
     manip_text = [(manipulator.Options.name) for manipulator in manipulators]   
 
-    return HttpResponse(simplejson.dumps(manip_text)) 
+    return HttpResponse(json.dumps(manip_text)) 
 
 def multi_generic_manipulator_view(request, manipulators):
     '''
@@ -73,7 +73,7 @@ def multi_generic_manipulator_view(request, manipulators):
                     if form.is_valid():
                         initial_result = form.manipulation
                     else: # invalid parameters - bounce form back to user
-                        return HttpResponse(simplejson.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string('common/base_form.html', {'form': form}, RequestContext(request))}))
+                        return HttpResponse(json.dumps({"message": "form is not valid (missing arguments?)", "html": render_to_string('common/base_form.html', {'form': form}, RequestContext(request))}))
                 else: # no form exists - run this manipulator directly, passing the POST params directly as kwargs
                     manip_inst = manipClass(**kwargs)
                     initial_result = manip_inst.manipulate()
@@ -115,11 +115,11 @@ def respond_with_template(status_html, submitted, final_shape, success="1"):
     user_shape.srid = settings.GEOMETRY_CLIENT_SRID
     user_shape.transform(settings.GEOMETRY_DB_SRID)
 
-    return HttpResponse(simplejson.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))   
+    return HttpResponse(json.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))   
 
 def respond_with_error(key='unexpected', message=''):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
-    return HttpResponse(simplejson.dumps({"html": status_html, "geojson_clipped": None, "success": "0"}), status=500)
+    return HttpResponse(json.dumps({"html": status_html, "geojson_clipped": None, "success": "0"}), status=500)
 
 def ensure_keys(values):
     values.setdefault("html", "")

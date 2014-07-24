@@ -1,11 +1,11 @@
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from models import *
+import json
 
 def get_json(request):
-    json = {
+    data = {
         "state": {
             "activeLayers": []
         },
@@ -13,7 +13,7 @@ def get_json(request):
         "themes": [theme.toDict for theme in Theme.objects.all()],
         "success": True
     }
-    return HttpResponse(simplejson.dumps(json))
+    return HttpResponse(json.dumps(data))
 
 def demo(request):
     context = RequestContext(request)

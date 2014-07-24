@@ -72,21 +72,17 @@ def overlap_kmz_response(request, collection_uids):
 
     # Convert to RGB 
     cmd = "pct2rgb.py -of PNG %s %s" % (temp_geotiff, outrgb)  
-    print cmd
-    print os.popen(cmd).read()
+    os.popen(cmd).read()
 
     # Assign a nodata value
     cmd = "gdal_translate -of vrt -a_nodata 0 %s %s" % (outrgb, outvrt)
-    print cmd
-    print os.popen(cmd).read()
+    os.popen(cmd).read()
 
     # Split into wgs84 tiles
     cmd = "gdal2tiles.py -k -z 6-10 -p geodetic %s %s" % (outvrt, outkmldir)
-    print cmd
-    print os.popen(cmd).read()
+    os.popen(cmd).read()
 
     # Zip up directory into a kmz
-    print "Creating", outkmz
     from madrona.common.utils import KMZUtil
     zu = KMZUtil()
     filename = outkmz

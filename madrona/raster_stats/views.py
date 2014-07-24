@@ -27,9 +27,9 @@ def stats_for_geom(request, raster_name):
     zonal.save()
     zqs = ZonalStatsCache.objects.filter(pk=zonal.pk)
     data = serializers.serialize("json", zqs, fields=('avg','min','max','median','mode','stdev','nulls','pixels','date_modified','raster'))
-    return HttpResponse(data, mimetype='application/json')
+    return HttpResponse(data, content_type='application/json')
 
 def raster_list(request):
     rasts = RasterDataset.objects.all()
     data = serializers.serialize("json", rasts, fields=('name','type'))
-    return HttpResponse(data, mimetype='application/json')
+    return HttpResponse(data, content_type='application/json')

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from madrona.features.views import get_object_for_viewing
 from madrona.analysistools.models import Analysis
 from madrona.common import default_mimetypes as mimetypes
-from django.utils import simplejson
+import json
 from django.shortcuts import render_to_response
 
 from django.views.decorators.cache import never_cache
@@ -25,7 +25,7 @@ def progress(request, uid):
         }
         if 'error' in instance.status_html.lower():
             progress['error'] = 1
-        res = HttpResponse(simplejson.dumps(progress))
+        res = HttpResponse(json.dumps(progress))
         res['Content-Type'] = mimetypes.JSON 
         return res
 

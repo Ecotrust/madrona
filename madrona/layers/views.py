@@ -64,7 +64,7 @@ def get_privatekml_list(request, session_key='0'):
     t = get_template('layers/private.kml')
     kml = t.render(RequestContext(request, {'session_key': session_key, 
                                              'kmls': accessible_kmls}))
-    response = HttpResponse(kml, mimetype=mimetypes.KML)
+    response = HttpResponse(kml, content_type=mimetypes.KML)
     response['Content-Disposition'] = 'filename=privatekml_%s.kml' % user.username
     return response
 
@@ -95,7 +95,7 @@ def get_privatekml(request, pk, session_key='0'):
     else:
         mimetype, encoding = _mimetypes.guess_type(layer.base_kml)
         mimetype = mimetype or 'application/octet-stream'
-        response = HttpResponse(open(layer.base_kml,'rb').read(), status=200, mimetype=mimetype)
+        response = HttpResponse(open(layer.base_kml,'rb').read(), status=200, content_type=mimetype)
         response['Content-Disposition'] = 'filename=privatekml_%s.kml' % pk
         return response
 
@@ -132,7 +132,7 @@ def get_relative_to_privatekml(request, pk, path, session_key='0'):
             raise Http404
         mimetype, encoding = _mimetypes.guess_type(requested_file)
         mimetype = mimetype or 'application/octet-stream'
-        return HttpResponse(open(requested_file,'rb').read(), status=200, mimetype=mimetype)
+        return HttpResponse(open(requested_file,'rb').read(), status=200, content_type=mimetype)
     else:
         return HttpResponse("Nice try", status=403)
 
@@ -144,6 +144,6 @@ def get_public_layers(request):
         layer = PublicLayerList.objects.filter(active=True)[0]
     except:
         raise Http404
-    response = HttpResponse(layer.kml_file.read(), mimetype=mimetypes.KML)
+    response = HttpResponse(layer.kml_file.read(), content_type=mimetypes.KML)
     response['Content-Disposition'] = 'attachment; filename=public.kml'
     return response

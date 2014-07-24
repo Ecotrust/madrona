@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from django.utils import simplejson
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from madrona.common import default_mimetypes as mimetypes
 from madrona.common.utils import kml_errors
 from forms import UploadForm
+import json
 
 
 def load_single_shp(request):
@@ -35,13 +35,13 @@ def load_single_shp(request):
             geoms = [g]
             t = get_template('loadshp/loadshp.kml')
             kml = t.render(Context({'username': user.username, 'geoms': geoms}))
-            json = simplejson.dumps({'input_kml': kml, 'status':'success'})
+            json = son.dumps({'input_kml': kml, 'status':'success'})
             # Jquery Form plugin requires that we wrap this in a textarea 
             # otherwise it mangles the kml  
-            return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
+            return HttpResponse('<textarea>' + json + '</textarea>', content_type="text/html")
         else:
-            json = simplejson.dumps({'error_html': form.errors['file_obj'][0], 'status':'errors'})
-            return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
+            json = json.dumps({'error_html': form.errors['file_obj'][0], 'status':'errors'})
+            return HttpResponse('<textarea>' + json + '</textarea>', content_type="text/html")
 
     elif request.method == 'GET':
         return render_to_response('loadshp/upload.html', RequestContext(request,{'form': form,'action':request.path}))

@@ -51,4 +51,60 @@ django-registration issues .. fork?
 
 requirements: django 1.6+, postgis 2.1+
 
+TODO: from madrona.common.utils import json
+
+Support for 
+- django 1.7 and py 3
+- postgis
+- improved registration
+- security issues (csrf, outdated dependencies)
+- remove cruft
+	- kmlapp
+	- layers
+	- help
+	- google-analytics
+	- kml bookmarks
+	- async
+	- xy_query
+	- openid
+	- browser checking
+	- simplefaq, news, etc
+- build in support for:
+	- flatblocks
+	- socialauth
+	- new raster_stats
+	- geopandas
+	- extended user model
+	- caching / redis
+	- bookmarks / map state
+	- geojson or tile viewing
+	- group management
+	- py.test
+	- spatialitedb or non-postgres
+- break into separate modules or use thrid party
+    - unit_converter
+    - heatmap
+- travis
+- more robust test suite
+- modern dir structure
+- use django media management and modern asset mgmt
+- optional mapnik dependency
+- dramatically simplify installation
+- js front end components to use workspace
+- new workspace data model
+- improved API 
+- improved docs / tutorials
+- improved front page (developer focused)
+
+
+
+Madrona
+Web Framework for Spatial Content Managment 
+
+- REST API
+- User and Admin interfaces
+- Import/Export of common data formats
+- Decision support - primitives for building advanced analysis and reporting
+- Collaboration
+- Data visualization
 
