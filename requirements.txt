@@ -22,7 +22,7 @@ django-celery>=2.5.1
 django-flatblocks>=0.6.0
 django-kombu>=0.9.2
 django-picklefield>=0.1.9
-django-registration>=1.0
+django-registration==0.8
 elementtree>=1.2.6
 numpy>=1.5.1
 psycopg2>=2.4.1
