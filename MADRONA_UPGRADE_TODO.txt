@@ -1,57 +1,32 @@
-sudo apt-get install gdal-bin libgdal-dev python-dev build-essential libjpeg-dev libjpeg8-dev libpng3 libfreetype6-dev
+sudo apt-get install gdal-bin libgdal-dev python-dev build-essential libjpeg-dev \
+                     libjpeg8-dev libpng3 libfreetype6-dev python-mapnik \
+                     mapnik-input-plugin-* mapnik-utils libmapnik2.2 libmapnik2-dev \
+                     postgresql-9.3-postgis-2.1
+
 
 export CPLUS_INCLUDE_PATH=/usr/include/gdal
 export C_INCLUDE_PATH=/usr/include/gdal
 pip install --allow-external --allow-insecure \
     --find-links http://wheels2.astropy.org/ --use-wheel \
-    "Cython>=0.16" Numpy "matplotlib>=1.2.1" "GDAL==1.10.0" \
-    PIL --allow-external PIL --allow-unverified PIL
-
-sudo apt-get install python-mapnik mapnik-input-plugin-* mapnik-utils libmapnik2.2 libmapnik2-dev
-#requires virtualenv wrapper
-add2virtualenv /usr/lib/pymodules/python2.7  # GRRRRR
+    "Cython>=0.16" Numpy "matplotlib>=1.2.1" "GDAL>=1.10.0" \
+    PIL --allow-external PIL --allow-unverified PIL \
+    --allow-all-external --allow-unverified elementtree elementtree
 
 
-pip install --allow-all-external --allow-unverified elementtree elementtree 
+# IF inside venv, requires virtualenv wrapper
+pip install virtualenvwrapper virtualenv
+add2virtualenv /usr/lib/pymodules/python2.7
+
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 python setup.py develop
 
-sudo apt-get install postgresql-9.3-postgis-2.1
-sudo su postgres
-cd /tmp
-psql -d template1 -c "CREATE EXTENSION postgis;"
-psql -d template1 -f madrona/common/sql/cleangeometry.sql
-exit
-
-# new style manage.py in /home/mperry/src/madrona/utils/../examples/test_project/manage.py
---------------------------------------------
-#!/usr/bin/env python
-import os, sys
-
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_project.settings")
-
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line(sys.argv)
---------------------------------------------
-
-mv manage.py up one level
-mv app to same level as project 
-
+sudo -u postgres psql -d template1 -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql -d template1 -f madrona/common/sql/cleangeometry.sql
 sudo -u postgres createuser -sdP django
 sudo -u postgres createdb -O django test_project
 
 
-urls -> django.conf.urls.default to django.conf.urls
-
-clearn
-django-registration issues .. fork?
-
-requirements: django 1.6+, postgis 2.1+
-
-TODO: from madrona.common.utils import json
 
 Support for 
 - django 1.7 and py 3

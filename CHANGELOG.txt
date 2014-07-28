@@ -1,3 +1,22 @@
+# Madrona 4.2
+-------------
+requirements: django 1.6, postgis 2+
+drop use of simplejson in favor of json
+django 1.6 support changes:
+	django.conf.urls.default to django.conf.urls
+	new style manage.py (see examples/manage.py)
+New directory structure
+	mv manage.py up one level
+    mv app to same level as project 
+
+----- TODO ----
+Continuous integration
+Test on real life app
+Vagrant file
+?? Move media to apps and use collect static ??   
+BUG: have to specify postgis_version in settings 
+
+
 # Madrona 4.1
 -------------
 New `layer_manager` app for managing 2D tiled map sources
