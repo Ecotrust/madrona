@@ -14,7 +14,7 @@ pip install --allow-external --allow-insecure \
 
 
 # IF inside venv, requires virtualenv wrapper
-pip install virtualenvwrapper virtualenv
+pip install virtualenvwrapper 
 add2virtualenv /usr/lib/pymodules/python2.7
 
 pip install -r requirements.txt

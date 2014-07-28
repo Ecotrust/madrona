@@ -12,7 +12,8 @@ New directory structure
 ----- TODO ----
 Continuous integration
 Test on real life app
-Vagrant file
+Vagrant file (vagrant up; vagrant provision; vagrant ssh; cd /usr/local/src/madrona; python utils/run_tests.py)
+Document new installation
 ?? Move media to apps and use collect static ??   
 BUG: have to specify postgis_version in settings 
 

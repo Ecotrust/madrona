@@ -8,7 +8,7 @@ env:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install gdal-bin libgdal-dev python-dev build-essential libjpeg-dev libjpeg8-dev libpng3 libfreetype6-dev python-mapnik mapnik-input-plugin-* mapnik-utils libmapnik2.2 libmapnik2-dev postgresql-9.3-postgis-2.1
+  - sudo apt-get install gdal-bin libgdal-dev python-dev build-essential libjpeg-dev libjpeg8-dev libpng3 libfreetype6-dev python-mapnik mapnik-input-plugin-gdal mapnik-input-plugin-ogr mapnik-input-plugin-osm mapnik-input-plugin-postgis mapnik-input-plugin-sqlite mapnik-utils libmapnik2.2 libmapnik2-dev postgresql-9.3-postgis-2.1
   - pip install --allow-external --allow-insecure --find-links http://wheels2.astropy.org/ --use-wheel "Cython>=0.16" Numpy "matplotlib>=1.2.1" "GDAL>=1.10.0" PIL --allow-external PIL --allow-unverified PIL --allow-all-external --allow-unverified elementtree elementtree virtualenvwrapper virtualenv
   - sudo -u postgres psql -d template1 -c "CREATE EXTENSION postgis;"
   - sudo -u postgres psql -d template1 -f madrona/common/sql/cleangeometry.sql
