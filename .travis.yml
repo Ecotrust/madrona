@@ -4,9 +4,7 @@ python:
   - 2.7
 
 env:
-  - CPLUS_INCLUDE_PATH=/usr/include/gdal
-  - C_INCLUDE_PATH=/usr/include/gdal
-  #- GDAL_DATA=/usr/share/gdal/1.10/
+  - CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal
 
 before_install:
   - sudo apt-get update
