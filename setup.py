@@ -128,7 +128,6 @@ setup_args = dict(
 try:
     from osgeo import ogr
     from osgeo import gdal
-    import PIL 
     import mapnik
     try:
         assert mapnik.mapnik_version >= 200000
