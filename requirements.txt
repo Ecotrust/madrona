@@ -7,14 +7,12 @@
 #
 # Mapnik >= 2.0 (including python bindings installed globally)
 #
-# Python Imaging Library (PIL is broken w/ setup.py; 
-#       use http://effbot.org/downloads/Imaging-1.1.6.tar.gz)
-#
 # Postgis (set up according to the geodjango and madrona docs; 
 #       or sudo apt-get install postgresql-9.1-postgis)
 #
 # starspan, grass required for some optional apps
 
+pillow>=2.5
 boto>=2.3.0
 Django>=1.4
 django-compress>=1.0.1
