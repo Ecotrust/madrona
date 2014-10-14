@@ -159,7 +159,6 @@ class DependenciesTest(TestCase):
             'django.contrib.gis',
             'elementtree',
             'sphinx',
-            'mapnik',
             'BeautifulSoup',
             'xlwt',
             'registration',

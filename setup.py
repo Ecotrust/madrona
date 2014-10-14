@@ -73,9 +73,6 @@ setup_args = dict(
     scripts = [
         'madrona/installer/bin/create-madrona-project.py',
         ],
-    dependency_links = [
-        'https://github.com/springmeyer/djmapnik/tarball/8d736a73470b/#egg=djmapnik-0.1.3',
-        ],
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
