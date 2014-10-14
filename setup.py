@@ -18,28 +18,6 @@ from distutils.command.install import INSTALL_SCHEMES
 
 readme_text = file('README.rst', 'rb').read()
 
-def parse_requirements(file_name):
-    '''
-    Scan the pip requirements file until you hit a line saying
-    # Optional
-    Packages before that are added to setup.py install_requires
-    '''
-    requirements = []
-    for line in open(file_name, 'r').read().split('\n'):
-        if line.startswith('# Optional') or line.startswith('#Optional'):
-            break
-
-        if re.match(r'(\s*#)|(\s*$)', line):
-            continue
-
-        if re.match(r'\s*-e\s+', line):
-            requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
-        elif re.match(r'\s*-f\s+', line):
-            pass
-        else:
-            requirements.append(line)
-    return requirements
-
 def fullsplit(path, result=None):
     """
     Split a pathname into components (the opposite of os.path.join) in a
@@ -95,7 +73,6 @@ setup_args = dict(
     scripts = [
         'madrona/installer/bin/create-madrona-project.py',
         ],
-    install_requires = parse_requirements('requirements.txt'),
     dependency_links = [
         'https://github.com/springmeyer/djmapnik/tarball/8d736a73470b/#egg=djmapnik-0.1.3',
         ],
@@ -126,13 +103,13 @@ setup_args = dict(
 
 # Make sure we've got the other dependencies handled
 try:
-    from osgeo import ogr
-    from osgeo import gdal
-    import mapnik
-    try:
-        assert mapnik.mapnik_version >= 200000
-    except:
-        raise ImportError
+    # from osgeo import ogr
+    # from osgeo import gdal
+    # import mapnik
+    # try:
+    #     assert mapnik.mapnik_version >= 200000
+    # except:
+    #     raise ImportError
 except ImportError, e:
     print e
     sys.exit(1)
