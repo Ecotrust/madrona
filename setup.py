@@ -98,19 +98,6 @@ setup_args = dict(
 #        ),
     )
 
-# Make sure we've got the other dependencies handled
-try:
-    # from osgeo import ogr
-    # from osgeo import gdal
-    # import mapnik
-    # try:
-    #     assert mapnik.mapnik_version >= 200000
-    # except:
-    #     raise ImportError
-except ImportError, e:
-    print e
-    sys.exit(1)
-
 #Make sure postgres is ready
 try:
     sd = subprocess.check_output(["pg_config", "--sharedir"]).strip()
