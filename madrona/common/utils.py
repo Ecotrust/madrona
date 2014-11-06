@@ -161,7 +161,7 @@ def remove_spikes(poly,threshold=0.01):
 def clean_geometry(geom):
     """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
     cursor = connection.cursor()
-    query = "select cleangeometry(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
+    query = "select st_makevalid(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
     cursor.execute(query)
     row = cursor.fetchone()
     newgeom = fromstr(row[0])
