@@ -211,16 +211,27 @@ def create(request, model, action):
     """
     config = model.get_options()
     form_class = config.get_form_class()
-    if not request.user.is_authenticated():
-        return HttpResponse('You must be logged in.', status=401)
+    if request.user.is_authenticated():
+        user = request.user
+    else:
+        if settings.ALLOW_PUBLIC_DRAWING:
+            from django.contrib.auth.models import User
+            user = User.objects.get(username="public")
+        else:
+            return HttpResponse('You must be logged in.', status=401)
+
     title = 'New %s' % (config.slug, )
     if request.method == 'POST':
         values = request.POST.copy()
         values.__setitem__('user', request.user.pk)
+        if not values.__getitem__('user') and settings.ALLOW_PUBLIC_DRAWING:
+            values.__setitem__('user', user.pk)
+
         if request.FILES:
             form = form_class(values, request.FILES, label_suffix='')
         else:
             form = form_class(values, label_suffix='')
+
         if form.is_valid():
             m = form.save(commit=False)
             '''
@@ -239,7 +250,6 @@ def create(request, model, action):
             )
         else:
             context = config.form_context
-            user = request.user
             context.update({
                 'form': form,
                 'title': title,
@@ -263,6 +273,7 @@ def create_form(request, model, action=None):
 
     GET only
     """
+    from django.contrib.auth.models import User
     config = model.get_options()
     form_class = config.get_form_class()
     if action is None:
@@ -270,8 +281,10 @@ def create_form(request, model, action=None):
     if request.user.is_authenticated():
         user = request.user
     else:
-        user = User.objects.filter(username="public")
-        # return HttpResponse('You must be logged in.', status=401)
+        if settings.ALLOW_PUBLIC_DRAWING:
+            user = User.objects.get(username="public")
+        else:
+            return HttpResponse('You must be logged in.', status=401)
 
 
     title = 'New %s' % (config.verbose_name)
