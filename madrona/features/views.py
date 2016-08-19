@@ -211,12 +211,14 @@ def create(request, model, action):
     """
     config = model.get_options()
     form_class = config.get_form_class()
+    public_request = False
     if request.user.is_authenticated():
         user = request.user
     else:
         if settings.ALLOW_PUBLIC_DRAWING:
             from django.contrib.auth.models import User
             user = User.objects.get(username="public")
+            public_request = True
         else:
             return HttpResponse('You must be logged in.', status=401)
 
@@ -242,12 +244,29 @@ def create(request, model, action):
             kwargs['form'] = form
             m.save(**kwargs)
 
-            return to_response(
+            traditional_madrona_response = to_response(
                 status=201,
                 location=m.get_absolute_url(),
                 select=m.uid,
                 show=m.uid
             )
+
+            if public_request:
+                import ast
+                headers = ast.literal_eval(traditional_madrona_response.content)
+                #get original drawing WKT
+                headers['orig'] = m.geometry_orig.wkt
+                #get clipped wkt
+                headers['final'] = m.geometry_final.wkt
+                #get feature attributes
+                headers['name'] = m.name
+                headers['description'] = m.description
+                public_response = HttpResponse(simplejson.dumps(headers), status=201)
+                #Give a hoot: don't pollute!
+                m.delete()
+                return public_response
+            else:
+                return traditional_madrona_response
         else:
             context = config.form_context
             context.update({
