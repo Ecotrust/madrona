@@ -257,10 +257,11 @@ def create(request, model, action):
                 #get original drawing WKT
                 headers['orig'] = m.geometry_orig.wkt
                 #get clipped wkt
-                headers['final'] = m.geometry_final.wkt
+                headers['final'] = ast.literal_eval(m.geometry_final.json)
                 #get feature attributes
                 headers['name'] = m.name
                 headers['description'] = m.description
+                headers['attributes'] = m.serialize_attributes
                 public_response = HttpResponse(simplejson.dumps(headers), status=201)
                 #Give a hoot: don't pollute!
                 m.delete()
