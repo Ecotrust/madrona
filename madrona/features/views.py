@@ -262,6 +262,13 @@ def create(request, model, action):
                 headers['name'] = m.name
                 headers['description'] = m.description
                 headers['attributes'] = m.serialize_attributes
+
+                try:
+                    from drawing.views import get_csv
+                    headers['csv']=get_csv(request, m.uid, False)
+                except:
+                    pass
+
                 public_response = HttpResponse(simplejson.dumps(headers), status=201)
                 #Give a hoot: don't pollute!
                 m.delete()
