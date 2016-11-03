@@ -870,7 +870,7 @@ def geojson_link(request, instances):
                     gjs = []
                     for f in feats:
                         try:
-                            geom = x.geometry_final.transform(srid, clone=True).json
+                            geom = f.geometry_final.transform(srid, clone=True).json
                         except:
                             geom = 'null'
                         props = get_properties_json(f)
