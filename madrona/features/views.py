@@ -21,8 +21,8 @@ def get_object_for_editing(request, uid, target_klass=None):
     """
     Return the specified instance by uid for editing.
     If a target_klass is provided, uid will be checked for consistency.
-    If the request has no logged-in user, a 401 Response will be returned. If 
-    the item is not found, a 404 Response will be returned. If the user is 
+    If the request has no logged-in user, a 401 Response will be returned. If
+    the item is not found, a 404 Response will be returned. If the user is
     not authorized to edit the item (not the owner or a staff user), a 403 Not
     Authorized Response will be returned.
 
@@ -34,7 +34,7 @@ def get_object_for_editing(request, uid, target_klass=None):
 
     """
     if target_klass and not target_klass.model_uid() in uid:
-        return HttpResponse("Target class %s doesn't match the provided uid %s" % 
+        return HttpResponse("Target class %s doesn't match the provided uid %s" %
                             (target_klass, uid),
                             status=401)
     try:
@@ -57,7 +57,7 @@ def get_object_for_viewing(request, uid, target_klass=None):
     Return the specified instance by uid for viewing.
     If a target_klass is provided, uid will be checked for consistency.
     If the request has no authenticated user, a 401 Response will be returned.
-    If the item is not found, a 404 Response will be returned. If the user is 
+    If the item is not found, a 404 Response will be returned. If the user is
     not authorized to view the item (not the owner or part of a group the item
     is shared with), a 403 Not Authorized Response will be returned.
 
@@ -69,7 +69,7 @@ def get_object_for_viewing(request, uid, target_klass=None):
 
     """
     if target_klass and not target_klass.model_uid() in uid:
-        return HttpResponse("Target class %s doesn't match the provided uid %s" % 
+        return HttpResponse("Target class %s doesn't match the provided uid %s" %
                             (target_klass, uid),
                             status=401)
     try:
@@ -79,7 +79,7 @@ def get_object_for_viewing(request, uid, target_klass=None):
     except:
         return HttpResponse("Feature not found - %s" % uid, status=404)
 
-    viewable, response = instance.is_viewable(request.user) 
+    viewable, response = instance.is_viewable(request.user)
     if viewable:
         return instance
     else:
@@ -89,18 +89,18 @@ def get_object_for_viewing(request, uid, target_klass=None):
 
 def handle_link(request, uids, link=None):
     """
-    Handles all requests to views setup via features.register using Link 
+    Handles all requests to views setup via features.register using Link
     objects.
 
-    Assuming a valid request, this generic view will call the view specified 
-    by the link including an instance or instances argument containing the 
+    Assuming a valid request, this generic view will call the view specified
+    by the link including an instance or instances argument containing the
     relavent Feature(s).
 
     If the incoming request is invalid, any one of the following errors may be
     returned:
 
     401: login required
-    403: user does not have permission (not admin user or doesn't own object 
+    403: user does not have permission (not admin user or doesn't own object
          to be edited)
     404: feature(s) could not be found
     400: requested for feature classes not supported by this view
@@ -145,7 +145,7 @@ def handle_link(request, uids, link=None):
             return HttpResponse(
                 'Not Supported Error: Requested for "%s" feature class. This \
 generic link only supports requests for feature classes %s' % (
-                instance.__class__.__name__, 
+                instance.__class__.__name__,
                 ', '.join([m.__name__ for m in link.models])), status=400)
 
     if link.select is 'single':
@@ -171,19 +171,19 @@ def delete(request, model=None, uid=None):
     if request.method == 'DELETE':
         if model is None or uid is None:
             raise Exception('delete view not configured properly.')
-        instance = get_object_for_editing(request, uid, target_klass=model) 
+        instance = get_object_for_editing(request, uid, target_klass=model)
         if isinstance(instance, HttpResponse):
             # get_object_for_editing is trying to return a 404, 401, or 403
             return instance
         instance.delete()
         return HttpResponse('{"status": 200}')
     else:
-        return HttpResponse('DELETE http method must be used to delete', 
+        return HttpResponse('DELETE http method must be used to delete',
             status=405)
 
 def multi_delete(request, instances):
-    """ 
-    Generic view to delete multiple instances 
+    """
+    Generic view to delete multiple instances
     """
     deleted = []
     if request.method == 'DELETE':
@@ -193,7 +193,7 @@ def multi_delete(request, instances):
             deleted.append(uid)
         return HttpResponse('{"status": 200}')
     else:
-        return HttpResponse('DELETE http method must be used to delete', 
+        return HttpResponse('DELETE http method must be used to delete',
                 status=405)
 
 
@@ -212,7 +212,7 @@ def create(request, model, action):
     config = model.get_options()
     form_class = config.get_form_class()
     if not request.user.is_authenticated():
-        return HttpResponse('You must be logged in.', status=401)    
+        return HttpResponse('You must be logged in.', status=401)
     title = 'New %s' % (config.slug, )
     if request.method == 'POST':
         values = request.POST.copy()
@@ -224,7 +224,7 @@ def create(request, model, action):
         if form.is_valid():
             m = form.save(commit=False)
             '''
-            Note on the following 3 lines:  
+            Note on the following 3 lines:
             We need to call form.save_m2m after save but before run, this is accomplished in the Feature model save method
             '''
             kwargs = {}
@@ -232,7 +232,7 @@ def create(request, model, action):
             m.save(**kwargs)
 
             return to_response(
-                status=201, 
+                status=201,
                 location=m.get_absolute_url(),
                 select=m.uid,
                 show=m.uid
@@ -325,7 +325,7 @@ def update_form(request, model, uid):
         context = decorate_with_manipulators(context, form_class)
         return render_to_response(config.form_template, context)
     else:
-        return HttpResponse('Invalid http method', status=405)        
+        return HttpResponse('Invalid http method', status=405)
 
 def update(request, model, uid):
     """
@@ -360,8 +360,8 @@ def update(request, model, uid):
     if request.method == 'POST':
         values = request.POST.copy()
         # Even if request.user is different (ie request.user is staff)
-        # user is still set to the original owner to prevent staff from 
-        # 'stealing' 
+        # user is still set to the original owner to prevent staff from
+        # 'stealing'
         values.__setitem__('user', instance.user.pk)
         form_class = config.get_form_class()
         if request.FILES:
@@ -397,23 +397,23 @@ def update(request, model, uid):
             t = loader.get_template(config.form_template)
             return HttpResponse(t.render(c), status=400)
     else:
-        return HttpResponse("""Invalid http method. 
-        Yes we know, PUT is supposed to be used rather than POST, 
+        return HttpResponse("""Invalid http method.
+        Yes we know, PUT is supposed to be used rather than POST,
         but it was much easier to implement as POST :)""", status=405)
 
 
 def resource(request, model=None, uid=None):
     """
-    Provides a resource for a django model that can be utilized by the 
+    Provides a resource for a django model that can be utilized by the
     madrona.features client module.
 
     Implements actions for the following http actions:
 
         POST:   Update an object
         DELETE: Delete it
-        GET:    Provide a page representing the model. For MPAs, this is the 
+        GET:    Provide a page representing the model. For MPAs, this is the
                 MPA attributes screen. The madrona client will display this
-                page in the sidebar whenever the object is brought into focus. 
+                page in the sidebar whenever the object is brought into focus.
 
                 To implement GET, this view needs to be passed a view function
                 that returns an HttpResponse or a template can be specified
@@ -453,19 +453,19 @@ def form_resources(request, model=None, uid=None):
         if uid is None:
             return create(request, model, request.build_absolute_uri())
         else:
-            return HttpResponse('Invalid http method', status=405)        
+            return HttpResponse('Invalid http method', status=405)
     elif request.method == 'GET':
         if uid is None:
             # Get the create form
             return create_form(
-                request, 
+                request,
                 model,
                 action=request.build_absolute_uri())
         else:
             # get the update form
             return update_form(request, model, uid)
     else:
-        return HttpResponse('Invalid http method', status=405)        
+        return HttpResponse('Invalid http method', status=405)
 
 from madrona.manipulators.manipulators import get_manipulators_for_model
 
@@ -479,7 +479,7 @@ def decorate_with_manipulators(extra_context, form_class):
 
 def copy(request, instances):
     """
-    Generic view that can be used to copy any feature classes. Supports 
+    Generic view that can be used to copy any feature classes. Supports
     requests referencing multiple instances.
 
     To copy, this view will call the copy() method with the request's user as
@@ -487,12 +487,12 @@ def copy(request, instances):
     developers can override it. A poorly implemented copy method that does not
     return the copied instance will raise an exception here.
 
-    This view returns a space-delimited list of the Feature uid's for 
-    selection in the user-interface after this operation via the 
+    This view returns a space-delimited list of the Feature uid's for
+    selection in the user-interface after this operation via the
     X-Madrona-Select response header.
     """
     copies = []
-    # setting this here because somehow the copies and instances vars get 
+    # setting this here because somehow the copies and instances vars get
     # confused
     untoggle = ' '.join([i.uid for i in instances])
     for instance in instances:
@@ -516,10 +516,10 @@ def kmz(request, instances):
 
 def kml_core(request, instances, kmz):
     """
-    Generic view for KML representation of feature classes. 
+    Generic view for KML representation of feature classes.
     Can be overridden in options but this provided a default.
     """
-    from madrona.kmlapp.views import get_styles, create_kmz 
+    from madrona.kmlapp.views import get_styles, create_kmz
     from django.template.loader import get_template
     from madrona.common import default_mimetypes as mimetypes
     from madrona.features.models import FeatureCollection
@@ -579,11 +579,11 @@ def kml_core(request, instances, kmz):
 
     t = get_template('kmlapp/myshapes.kml')
     context = Context({
-                'user': user, 
-                'features': features, 
+                'user': user,
+                'features': features,
                 'collections': collections,
-                'use_network_links': False, 
-                'request_path': request.path, 
+                'use_network_links': False,
+                'request_path': request.path,
                 'styles': styles,
                 'session_key': session_key,
                 'shareuser': None,
@@ -633,14 +633,14 @@ def share_form(request,model=None, uid=None):
         # Which groups is this object already shared to?
         already_shared_groups = obj.sharing_groups.all()
 
-        # Get a list of user's groups that have sharing permissions 
+        # Get a list of user's groups that have sharing permissions
         groups = user_sharing_groups(request.user)
 
         return render_to_response('sharing/share_form.html', {'groups': groups,
             'already_shared_groups': already_shared_groups, 'obj': obj,
-            'obj_type_verbose': obj_type_verbose,  'user':request.user, 
+            'obj_type_verbose': obj_type_verbose,  'user':request.user,
             'MEDIA_URL': settings.MEDIA_URL,
-            'action': request.build_absolute_uri()}) 
+            'action': request.build_absolute_uri()})
 
     elif request.method == 'POST':
         group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]
@@ -655,11 +655,11 @@ def share_form(request,model=None, uid=None):
             )
         except Exception as e:
             return HttpResponse(
-                    'Unable to share objects with those specified groups: %r.' % e, 
+                    'Unable to share objects with those specified groups: %r.' % e,
                     status=500)
 
     else:
-        return HttpResponse("Received unexpected " + request.method + 
+        return HttpResponse("Received unexpected " + request.method +
                 " request.", status=400)
 
 def manage_collection(request, action, uids, collection_model, collection_uid):
@@ -704,7 +704,7 @@ def workspace(request, username, is_owner):
         if user.is_anonymous() and is_owner:
             return HttpResponse("Anonymous user can't access workspace as owner", status=403)
         res = HttpResponse(workspace_json(user, is_owner), status=200)
-        res['Content-Type'] = mimetypes.JSON 
+        res['Content-Type'] = mimetypes.JSON
         return res
     else:
         return HttpResponse("Invalid http method.", status=405)
@@ -724,22 +724,22 @@ def feature_tree_css(request):
                 pass
 
         res = HttpResponse('\n'.join(styles), status=200)
-        res['Content-Type'] = 'text/css' 
+        res['Content-Type'] = 'text/css'
         return res
     else:
         return HttpResponse("Invalid http method.", status=405)
 
-def to_response(status=200, select=None, show=None, parent=None, 
+def to_response(status=200, select=None, show=None, parent=None,
     untoggle=None, location=None):
-    """Will return an appropriately structured response that the client can 
+    """Will return an appropriately structured response that the client can
     interpret to carry out the following actions:
 
         select
-            Accepts a list of features. Tells the client to select these 
+            Accepts a list of features. Tells the client to select these
             features in the user interface after an editing operation
 
         show
-            Accepts a single feature. Client will show that feature's 
+            Accepts a single feature. Client will show that feature's
             attribute window in the sidebar
 
         untoggle
@@ -752,11 +752,11 @@ def to_response(status=200, select=None, show=None, parent=None,
             particular FeatureCollection. Without this hint the client may not
             in all cases be able to perform select and show behaviors.
 
-    These behaviors are intended to be specified to the client using 
+    These behaviors are intended to be specified to the client using
     X-Madrona- style headers in the response. Unfortunately, we have to post
-    some forms via an iframe in order to upload files. This makes it 
+    some forms via an iframe in order to upload files. This makes it
     impossible to get the response headers on the client end. This function
-    therefor currently also returns all headers in a json structure in the 
+    therefor currently also returns all headers in a json structure in the
     response body.
     """
     headers = {
@@ -799,26 +799,26 @@ def has_features(user):
 
 def geojson_link(request, instances):
     """
-    Generic view for GeoJSON representation of feature classes. 
+    Generic view for GeoJSON representation of feature classes.
     Can be overridden but this is provided a default.
 
-    To override, feature class needs a geojson object that returns 
+    To override, feature class needs a geojson object that returns
        a geojson feature string (no trailing comma)::
- 
+
       { "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
         "properties": {"prop0": "value0"}
       }
-   
+
     GeoJSON Feature collections *cannot* be nested within other feature collections
     http://lists.geojson.org/pipermail/geojson-geojson.org/2008-October/000464.html
-    Thus collections can be treated using one of the following strategies: 
+    Thus collections can be treated using one of the following strategies:
 
-      ``flat``: (DEFAULT) The collection is "flattened" to contain all the  
+      ``flat``: (DEFAULT) The collection is "flattened" to contain all the
           features in a single featurecollection (lossy)
 
       ``nest_feature_set``: the collection is represented as an empty geometry with a special
-          feature_set property; a list of UIDs to fetch 
+          feature_set property; a list of UIDs to fetch
           (requires a client with knowledge of this convention)
 
     Pass by URL GET parameter like ?strategy=nest_feature_set
@@ -830,7 +830,7 @@ def geojson_link(request, instances):
     import tempfile
     import os
     import json
-    
+
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()
 
@@ -856,7 +856,7 @@ def geojson_link(request, instances):
             gj = i.geojson(srid)
         except AttributeError:
             pass
-         
+
         if gj is None:
             props = get_properties_json(i)
             if issubclass(i.__class__, FeatureCollection):
@@ -865,7 +865,7 @@ def geojson_link(request, instances):
                     props['feature_set'] = [x.uid for x in i.feature_set()]
                     gj = get_feature_json('null', json.dumps(props))
                 else:  # assume 'flat' strategy and recurse
-                    feats = [f for f in i.feature_set(recurse=True) 
+                    feats = [f for f in i.feature_set(recurse=True)
                                if not isinstance(f, FeatureCollection)]
                     gjs = []
                     for f in feats:
@@ -879,20 +879,20 @@ def geojson_link(request, instances):
 
             else:
                 try:
-                    # Eventually support an Option to configure the geometry field? 
+                    # Eventually support an Option to configure the geometry field?
                     geom = i.geometry_final.transform(srid, clone=True).json
                 except:
                     geom = 'null'
                 gj = get_feature_json(geom, json.dumps(props))
-             
+
         if gj is not None:
             feature_jsons.append(gj)
 
-    geojson = """{ 
+    geojson = """{
       "type": "FeatureCollection",
       "crs": { "type": "name", "properties": {"name": "%s"}},
-      "features": [ 
-      %s 
+      "features": [
+      %s
       ]
     }""" % (crs, ', \n'.join(feature_jsons),)
 
