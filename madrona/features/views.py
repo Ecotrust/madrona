@@ -865,8 +865,7 @@ def geojson_link(request, instances):
                     props['feature_set'] = [x.uid for x in i.feature_set()]
                     gj = get_feature_json('null', json.dumps(props))
                 else:  # assume 'flat' strategy and recurse
-                    feats = [f for f in i.feature_set(recurse=True)
-                               if not isinstance(f, FeatureCollection)]
+                    feats = [f for f in i.feature_set(recurse=True) if not isinstance(f, FeatureCollection)]
                     gjs = []
                     for f in feats:
                         try:
@@ -883,6 +882,8 @@ def geojson_link(request, instances):
                     geom = i.geometry_final.transform(srid, clone=True).json
                 except:
                     geom = 'null'
+                if hasattr(i, 'collection'):
+                    props['collection'] = get_properties_json(i.collection)
                 gj = get_feature_json(geom, json.dumps(props))
 
         if gj is not None:
