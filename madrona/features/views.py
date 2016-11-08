@@ -882,7 +882,7 @@ def geojson_link(request, instances):
                     geom = i.geometry_final.transform(srid, clone=True).json
                 except:
                     geom = 'null'
-                if hasattr(i, 'collection'):
+                if hasattr(i, 'collection') and not i.collection == None:
                     props['collection'] = get_properties_json(i.collection)
                 gj = get_feature_json(geom, json.dumps(props))
 
