@@ -1,7 +1,7 @@
 
-.. image:: https://pypip.in/v/madrona/badge.png
+.. image:: https://img.shields.io/pypi/v/madrona.svg
  
-.. image:: https://pypip.in/d/madrona/badge.png
+.. image:: https://img.shields.io/pypi/dm/madrona.svg
 
 Madrona
 ========
