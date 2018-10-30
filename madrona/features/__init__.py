@@ -23,15 +23,15 @@ class FeatureConfigurationError(Exception):
 class FeatureOptions:
     """
     Represents properties of Feature Classes derived from both defaults and
-    developer-specified options within the Options inner-class. These 
-    properties drive the features of the spatial content managment system, 
+    developer-specified options within the Options inner-class. These
+    properties drive the features of the spatial content managment system,
     such as CRUD operations, copy, sharing, etc.
 
     """
     def __init__(self, model):
 
         # Import down here to avoid circular reference
-        from madrona.features.models import Feature, FeatureCollection    
+        from madrona.features.models import Feature, FeatureCollection
 
         # call this here to ensure that permsissions get created
         #enable_sharing()
@@ -67,17 +67,17 @@ not a string path." % (name,))
 
         self.slug = slugify(name)
         """
-        Name used in the url path to this feature as well as part of 
+        Name used in the url path to this feature as well as part of
         the Feature's uid
         """
 
         self.verbose_name = getattr(self._options, 'verbose_name', name)
         """
-        Name specified or derived from the feature class name used 
+        Name specified or derived from the feature class name used
         in the user interface for representing this feature class.
         """
 
-        self.form_template = getattr(self._options, 'form_template', 
+        self.form_template = getattr(self._options, 'form_template',
             'features/form.html')
         """
         Location of the template that should be used to render forms
@@ -113,14 +113,14 @@ not a string path." % (name,))
 
         self.enable_copy = getattr(self._options, 'disable_copy', True)
         """
-        Enable copying features. Uses the feature class' copy() method. 
+        Enable copying features. Uses the feature class' copy() method.
         Defaults to True.
         """
 
         # Add a copy method unless disabled
         if self.enable_copy:
-            self.links.insert(0, edit('Copy', 
-                'madrona.features.views.copy', 
+            self.links.insert(0, edit('Copy',
+                'madrona.features.views.copy',
                 select='multiple single',
                 edits_original=False))
 
@@ -128,17 +128,17 @@ not a string path." % (name,))
 
         # Add a multi-share generic link
         # TODO when the share_form view takes multiple instances
-        #  we can make sharing a generic link 
-        #self.links.insert(0, edit('Share', 
-        #    'madrona.features.views.share_form', 
+        #  we can make sharing a generic link
+        #self.links.insert(0, edit('Share',
+        #    'madrona.features.views.share_form',
         #    select='multiple single',
         #    method='POST',
         #    edits_original=True,
         #))
 
         # Add a multi-delete generic link
-        self.links.insert(0, edit('Delete', 
-            'madrona.features.views.multi_delete', 
+        self.links.insert(0, edit('Delete',
+            'madrona.features.views.multi_delete',
             select='multiple single',
             method='DELETE',
             edits_original=True,
@@ -148,8 +148,8 @@ not a string path." % (name,))
         # Add a staticmap generic link
         export_png = getattr(self._options, 'export_png', True)
         if export_png:
-            self.links.insert(0, alternate('PNG Image', 
-                'madrona.staticmap.views.staticmap_link', 
+            self.links.insert(0, alternate('PNG Image',
+                'madrona.staticmap.views.staticmap_link',
                 select='multiple single',
                 method='GET',
             ))
@@ -157,8 +157,8 @@ not a string path." % (name,))
         # Add a geojson generic link
         export_geojson = getattr(self._options, 'export_geojson', True)
         if export_geojson:
-            self.links.insert(0, alternate('GeoJSON', 
-                'madrona.features.views.geojson_link', 
+            self.links.insert(0, alternate('GeoJSON',
+                'madrona.features.views.geojson_link',
                 select='multiple single',
                 method='GET',
             ))
@@ -171,11 +171,11 @@ not a string path." % (name,))
             raise FeatureConfigurationError("valid_children Option only \
                     for FeatureCollection classes" % m)
 
-        self.manipulators = [] 
+        self.manipulators = []
         """
         Required manipulators applied to user input geometries
         """
-        manipulators = getattr(self._options, 'manipulators', []) 
+        manipulators = getattr(self._options, 'manipulators', [])
         for m in manipulators:
             try:
                 manip = get_class(m)
@@ -183,7 +183,7 @@ not a string path." % (name,))
                 raise FeatureConfigurationError("Error trying to import module %s" % m)
 
             # Test that manipulator is compatible with this Feature Class
-            geom_field = self._model.geometry_final._field.__class__.__name__ 
+            geom_field = self._model.geometry_final._field.__class__.__name__
             if geom_field not in manip.Options.supported_geom_fields:
                 raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
                         (m, geom_field, manip.Options.supported_geom_fields))
@@ -203,7 +203,7 @@ not a string path." % (name,))
                 raise FeatureConfigurationError("Error trying to import module %s" % m)
 
             # Test that manipulator is compatible with this Feature Class
-            geom_field = self._model.geometry_final._field.__class__.__name__ 
+            geom_field = self._model.geometry_final._field.__class__.__name__
             try:
                 if geom_field not in manip.Options.supported_geom_fields:
                     raise FeatureConfigurationError("%s does not support %s geometry types (only %r)" %
@@ -237,7 +237,7 @@ not a string path." % (name,))
         Returns the template used to render this Feature Class' attributes
         """
         # Grab a template specified in the Options object, or use the default
-        template = getattr(self._options, 'show_template', 
+        template = getattr(self._options, 'show_template',
             '%s/show.html' % (self.slug, ))
         try:
             t = loader.get_template(template)
@@ -268,12 +268,12 @@ not a string path." % (name,))
                 vc_class = get_class(vc)
             except:
                 raise FeatureConfigurationError(
-                        "Error trying to import module %s" % vc) 
+                        "Error trying to import module %s" % vc)
 
             from madrona.features.models import Feature
             if not issubclass(vc_class, Feature):
                 raise FeatureConfigurationError(
-                        "%r is not a Feature; can't be a child" % vc) 
+                        "%r is not a Feature; can't be a child" % vc)
 
             valid_child_classes.append(vc_class)
 
@@ -282,8 +282,8 @@ not a string path." % (name,))
     def get_potential_parents(self):
         """
         It's not sufficient to look if this model is a valid_child of another
-        FeatureCollection; that collection could contain other collections 
-        that contain this model. 
+        FeatureCollection; that collection could contain other collections
+        that contain this model.
 
         Ex: Folder (only valid child is Array)
             Array (only valid child is MPA)
@@ -292,7 +292,7 @@ not a string path." % (name,))
         potential_parents = []
         direct_parents = []
         collection_models = get_collection_models()
-        for model in collection_models: 
+        for model in collection_models:
             opts = model.get_options()
             valid_children = opts.get_valid_children()
 
@@ -301,10 +301,10 @@ not a string path." % (name,))
                 potential_parents.append(model)
 
         for direct_parent in direct_parents:
-            if direct_parent != self._model: 
+            if direct_parent != self._model:
                 potential_parents.extend(direct_parent.get_options().get_potential_parents())
 
-        return potential_parents 
+        return potential_parents
 
     def get_form_class(self):
         """
@@ -335,7 +335,7 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
             'title': self.verbose_name,
             'link-relations': {
                 'self': {
-                    'uri-template': reverse("%s_resource" % (self.slug, ), 
+                    'uri-template': reverse("%s_resource" % (self.slug, ),
                         args=[placeholder]).replace(placeholder, '{uid}'),
                     'title': settings.TITLES['self'],
                 },
@@ -350,11 +350,11 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
 
             lr['edit'] = [
                     {'title': 'Edit',
-                      'uri-template': reverse("%s_update_form" % (self.slug, ), 
+                      'uri-template': reverse("%s_update_form" % (self.slug, ),
                         args=[placeholder]).replace(placeholder, '{uid}')
                     },
                     {'title': 'Share',
-                      'uri-template': reverse("%s_share_form" % (self.slug, ), 
+                      'uri-template': reverse("%s_share_form" % (self.slug, ),
                         args=[placeholder]).replace(placeholder, '{uid}')
                     }]
 
@@ -369,11 +369,11 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
             link_rels['collection'] = {
                 'classes': [x.model_uid() for x in self.get_valid_children()],
                 'remove': {
-                    'uri-template': reverse("%s_remove_features" % (self.slug, ), 
+                    'uri-template': reverse("%s_remove_features" % (self.slug, ),
                         kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uid+}')
                 },
                 'add': {
-                    'uri-template': reverse("%s_add_features" % (self.slug, ), 
+                    'uri-template': reverse("%s_add_features" % (self.slug, ),
                         kwargs={'collection_uid':14,'uids':'xx'}).replace('14', '{collection_uid}').replace('xx','{uid+}')
                 }
 
@@ -404,15 +404,15 @@ madrona.features.forms.FeatureForm." % (self._model.__name__, ))
 
     def get_resource(self, pk):
         """
-        Returns the primary url for a feature. This url supports GET, POST, 
+        Returns the primary url for a feature. This url supports GET, POST,
         and DELETE operations.
         """
         return reverse('%s_resource' % (self.slug, ), args=['%s_%d' % (self._model.model_uid(), pk)])
 
 class Link:
-    def __init__(self, rel, title, view, method='GET', select='single', 
-        type=None, slug=None, generic=False, models=None, extra_kwargs={}, 
-        confirm=False, edits_original=None, must_own=False, 
+    def __init__(self, rel, title, view, method='GET', select='single',
+        type=None, slug=None, generic=False, models=None, extra_kwargs={},
+        confirm=False, edits_original=None, must_own=False,
         limit_to_groups=None):
 
         self.rel = rel
@@ -440,7 +440,7 @@ class Link:
 
         self.method = method
         """
-        For rel=edit links, identifies whether a form should be requested or 
+        For rel=edit links, identifies whether a form should be requested or
         that url should just be POST'ed to.
         """
 
@@ -459,7 +459,7 @@ class Link:
         """
         Determines whether this link accepts requests with single or multiple
         instances of a feature class. Valid values are "single", "multiple",
-        "single multiple", and "multiple single". 
+        "single multiple", and "multiple single".
         """
 
         self.extra_kwargs = extra_kwargs
@@ -474,7 +474,7 @@ class Link:
 
         self.models = models
         """
-        List of feature classes that a this view can be applied to, if it is 
+        List of feature classes that a this view can be applied to, if it is
         generic.
         """
 
@@ -485,7 +485,7 @@ class Link:
 
         self.edits_original = edits_original
         """
-        Set to false for editing links that create a copy of the original. 
+        Set to false for editing links that create a copy of the original.
         This will allow users who do not own the instance(s) but can view them
         perform the action.
         """
@@ -496,13 +496,13 @@ class Link:
         """
         Whether this link should be accessible to non-owners.
         Default link behavior is False; i.e. Link can be used for shared features
-        as well as for user-owned features. 
+        as well as for user-owned features.
         If edits_original is true, this implies must_own = True as well.
         """
 
         self.limit_to_groups = limit_to_groups
         """
-        Allows you to specify groups (a list of group names) 
+        Allows you to specify groups (a list of group names)
         that should have access to the link.
         Default is None; i.e. All users have link access regardless of group membership
         """
@@ -513,7 +513,7 @@ class Link:
         # Make sure title isn't empty
         if self.title is '':
             raise FeatureConfigurationError('Link title is empty')
-        valid_options = ('single', 'multiple', 'single multiple', 
+        valid_options = ('single', 'multiple', 'single multiple',
             'multiple single')
         # Check for valid 'select' kwarg
         if self.select not in valid_options:
@@ -528,7 +528,7 @@ class Link:
 
     def _validate_view(self, view):
         """
-        Ensures view has a compatible signature to be able to hook into the 
+        Ensures view has a compatible signature to be able to hook into the
         features app url registration facilities
 
         For single-select views
@@ -536,7 +536,7 @@ class Link:
         For multiple-select views
             must accept a second argument named instances
 
-        Must also ensure that if the extra_kwargs option is specified, the 
+        Must also ensure that if the extra_kwargs option is specified, the
         view can handle them
         """
         # Check for instance or instances arguments
@@ -556,7 +556,7 @@ self.title, ))
 
     def can_user_view(self, user, is_owner):
         """
-        Returns True/False depending on whether user can view the link. 
+        Returns True/False depending on whether user can view the link.
         """
         if self.limit_to_groups:
             # We rely on the auth Group model ensuring unique group names
@@ -577,7 +577,7 @@ self.title, ))
     @property
     def url_name(self):
         """
-        Links are registered with named-urls. This function will return 
+        Links are registered with named-urls. This function will return
         that name so that it can be used in calls to reverse().
         """
         return "%s-%s" % (self.parent_slug, self.slug)
@@ -585,7 +585,7 @@ self.title, ))
     @property
     def parent_slug(self):
         """
-        Returns either the slug of the only model this view applies to, or 
+        Returns either the slug of the only model this view applies to, or
         'generic'
         """
         if len(self.models) == 1:
@@ -594,7 +594,7 @@ self.title, ))
             return 'generic-links'
 
     def reverse(self, instances):
-        """Can be used to get the url for this link. 
+        """Can be used to get the url for this link.
 
         In the case of select=single links, just pass in a single instance. In
         the case of select=multiple links, pass in an array.
@@ -615,7 +615,7 @@ self.title, ))
             'rel': self.rel,
             'title': self.title,
             'select': self.select,
-            'uri-template': reverse(self.url_name, 
+            'uri-template': reverse(self.url_name,
                 kwargs={'uids': 'idplaceholder'}).replace(
                     'idplaceholder', '{uid+}')
         }
@@ -634,7 +634,7 @@ def create_link(rel, *args, **kwargs):
     nargs = [rel]
     nargs.extend(args)
     link = Link(*nargs, **kwargs)
-    must_match = ('rel', 'title', 'view', 'extra_kwargs', 'method', 'slug', 
+    must_match = ('rel', 'title', 'view', 'extra_kwargs', 'method', 'slug',
         'select', 'must_own')
     for registered_link in registered_links:
         matches = True
@@ -706,10 +706,10 @@ def workspace_json(user, is_owner, models=None):
 
 def get_collection_models():
     """
-    Utility function returning models for 
+    Utility function returning models for
     registered and valid FeatureCollections
     """
-    from madrona.features.models import FeatureCollection    
+    from madrona.features.models import FeatureCollection
     registered_collections = []
     for model in registered_models:
         if issubclass(model,FeatureCollection):
@@ -723,7 +723,7 @@ def get_collection_models():
 
 def get_feature_models():
     """
-    Utility function returning models for 
+    Utility function returning models for
     registered and valid Features excluding Collections
     """
     from madrona.features.models import Feature, FeatureCollection
@@ -735,7 +735,7 @@ def get_feature_models():
 
 def user_sharing_groups(user):
     """
-    Returns a list of groups that user is member of and 
+    Returns a list of groups that user is member of and
     and group must have sharing permissions
     """
     try:
@@ -788,8 +788,19 @@ def get_model_by_uid(muid):
     raise Exception("No model with model_uid == `%s`" % muid)
 
 def get_feature_by_uid(uid):
-    applabel, modelname, id = uid.split('_')
-    id = int(id)
-    model = get_model_by_uid("%s_%s" % (applabel,modelname))
+    try:
+        applabel, modelname, id = uid.split('_')
+        id = int(id)
+        model = get_model_by_uid("%s_%s" % (applabel,modelname))
+    except ValueError:
+        # both applabel and modelname can contain underscores, meaning the above logic doesn't always work.
+        model = None
+        num_id = uid.split('_')[-1]
+        id = int(num_id)
+        from madrona.features import registered_models
+        for reg_model in registered_models:
+            if "%s_%s" % (reg_model.model_uid(), str(num_id)) == uid:
+                model = reg_model
+        pass
     instance = model.objects.get(pk=int(id))
     return instance
