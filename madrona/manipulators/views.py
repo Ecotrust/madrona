@@ -12,7 +12,7 @@ from madrona.studyregion.models import StudyRegion
 from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
-from django.utils import simplejson
+import json as simplejson
 from madrona.common.utils import clean_geometry
 
 
@@ -22,13 +22,13 @@ def mpaManipulatorList(request, app_name, model_name):
     '''
     try:
         model = ContentType.objects.get(app_label=app_name, model=model_name)
-        manipulators = model.model_class().Options.manipulators        
+        manipulators = model.model_class().Options.manipulators
     except Exception, e:
         return HttpResponse("The following error was reported: '" + e.message + "', while generating manipulator list from application: " + app_name + " and model: " + model_name, status=404)
 
-    manip_text = [(manipulator.Options.name) for manipulator in manipulators]   
+    manip_text = [(manipulator.Options.name) for manipulator in manipulators]
 
-    return HttpResponse(simplejson.dumps(manip_text)) 
+    return HttpResponse(simplejson.dumps(manip_text))
 
 def multi_generic_manipulator_view(request, manipulators):
     '''
@@ -40,7 +40,7 @@ def multi_generic_manipulator_view(request, manipulators):
     for key,val in request.POST.items():
         kwargs[str(key)] = str(val)
     try:
-        submitted = kwargs['target_shape']            
+        submitted = kwargs['target_shape']
     except:
         return HttpResponse("Target shape not provided", status=500)
     # parse out which manipulators are requested
@@ -79,11 +79,11 @@ def multi_generic_manipulator_view(request, manipulators):
                     initial_result = manip_inst.manipulate()
 
                 result = ensure_keys(initial_result)
-                new_shape = result['clipped_shape'] 
+                new_shape = result['clipped_shape']
 
                 # put the resulting shape back into the kwargs as the target_shape
                 kwargs['target_shape'] = new_shape.wkt
-                html_response = html_response + result["html"] 
+                html_response = html_response + result["html"]
 
         except manipClass.InvalidGeometryException, e:
             return respond_with_template(e.html, submitted, None, e.success)
@@ -92,11 +92,11 @@ def multi_generic_manipulator_view(request, manipulators):
         except manipClass.HaltManipulations, e:
             return respond_with_template(e.html, submitted, None, e.success)
         except Exception as e:
-            return respond_with_error(message=str(e))      
-    #end manipulator for loop      
+            return respond_with_error(message=str(e))
+    #end manipulator for loop
 
     #manipulators ran fine and the resulting shape is ready for outbound processing
-    new_shape.transform(settings.GEOMETRY_DB_SRID) 
+    new_shape.transform(settings.GEOMETRY_DB_SRID)
     new_shape.transform(settings.GEOMETRY_CLIENT_SRID)
     new_shape = clean_geometry(new_shape)
     # #we should probably move this static value 20 to a settings variable
@@ -115,7 +115,7 @@ def respond_with_template(status_html, submitted, final_shape, success="1"):
     user_shape.srid = settings.GEOMETRY_CLIENT_SRID
     user_shape.transform(settings.GEOMETRY_DB_SRID)
 
-    return HttpResponse(simplejson.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))   
+    return HttpResponse(simplejson.dumps({"html": status_html, "submitted": submitted, "user_shape": user_shape.wkt, "final_shape_kml": final_shape_kml, "success": success}))
 
 def respond_with_error(key='unexpected', message=''):
     status_html = render_to_string(BaseManipulator.Options.html_templates[key], {'MEDIA_URL':settings.MEDIA_URL, 'INTERNAL_MESSAGE': message})
@@ -128,20 +128,20 @@ def ensure_keys(values):
     return values
 
 def testView(request):
-    trans_geom = StudyRegion.objects.current().geometry 
+    trans_geom = StudyRegion.objects.current().geometry
 
     w = trans_geom.extent[0]
     s = trans_geom.extent[1]
     e = trans_geom.extent[2]
     n = trans_geom.extent[3]
 
-    center_lat = trans_geom.centroid.y 
+    center_lat = trans_geom.centroid.y
     center_lon = trans_geom.centroid.x
 
-    target_shape = Polygon(LinearRing([Point(center_lon, center_lat), 
-                                       Point(e, center_lat), 
-                                       Point(e, s), 
-                                       Point(center_lon, s), 
+    target_shape = Polygon(LinearRing([Point(center_lon, center_lat),
+                                       Point(e, center_lat),
+                                       Point(e, s),
+                                       Point(center_lon, s),
                                        Point(center_lon, center_lat)]))
 
     target_shape.set_srid(settings.GEOMETRY_DB_SRID)

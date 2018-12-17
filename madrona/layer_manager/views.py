@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.utils import simplejson
+import json as simplejson
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from models import *

@@ -14,7 +14,7 @@ from django.template.defaultfilters import slugify
 from madrona.features.models import SpatialFeature, Feature, FeatureCollection
 from django.core.urlresolvers import reverse
 from django.views.decorators.cache import cache_page
-from django.utils import simplejson
+import json as simplejson
 logger = get_logger()
 
 def get_object_for_editing(request, uid, target_klass=None):

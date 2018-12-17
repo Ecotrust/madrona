@@ -50,12 +50,12 @@ MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'madrona.common.middleware.IgnoreCsrfMiddleware', 
+    'madrona.common.middleware.IgnoreCsrfMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # compatibility problems with django trunk? 
+    # compatibility problems with django trunk?
     # 'maintenancemode.middleware.MaintenanceModeMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'madrona.openid.middleware.OpenIDMiddleware',
@@ -72,7 +72,7 @@ INSTALLED_APPS = (
     'flatblocks',
     'compress',
     'madrona.shapes',
-    'madrona.google-analytics', 
+    'madrona.google-analytics',
     'madrona.layers',
     'madrona.layer_manager',
     'madrona.studyregion',
@@ -91,11 +91,10 @@ INSTALLED_APPS = (
     'madrona.loadshp',
     'madrona.bookmarks',
     'registration',
-    'south',
-    'djcelery', 
+    'djcelery',
     'djkombu',
     ##### Optional Apps ####
-    #'madrona.heatmap', 
+    #'madrona.heatmap',
     #'madrona.analysistools',
     #'madrona.raster_stats',
     #'madrona.xyquery',
@@ -103,7 +102,6 @@ INSTALLED_APPS = (
 )
 
 EXCLUDE_FROM_TESTS = [
-    'south', 
     'registration',
     'flatblocks',
     'django.contrib.auth',
@@ -116,7 +114,7 @@ EXCLUDE_FROM_TESTS = [
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?
-GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent) 
+GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent)
 GROUP_REGISTERED_BY_WEB = 'registered_by_web'  # Group name assigned to users who register using the web interface
 
 MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
@@ -164,7 +162,7 @@ SCREENCASTS = 'screencasts/'
 SCREENCAST_IMAGES = 'screencasts/images'
 VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
 
-# This path is used by madrona.layers.views to handle requests initiated by a UserLayerList 
+# This path is used by madrona.layers.views to handle requests initiated by a UserLayerList
 USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 
 SKIP_SOUTH_TESTS = True
@@ -180,10 +178,10 @@ BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 import djcelery
 djcelery.setup_loader()
 
-#The following is used to determine whether the async app (and celery) should be used 
+#The following is used to determine whether the async app (and celery) should be used
 ASYNC_IS_DISABLED = False
 
-AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media. 
+AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media.
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
 
 OPENID_ENABLED = False
@@ -201,7 +199,7 @@ DATABASES = {
 }
 
 # UNIX username which owns the wsgi process.
-# Used to set ownership of MEDIA_ROOT 
+# Used to set ownership of MEDIA_ROOT
 # None implies MEDIA_ROOT is owned by whoever runs the install_media command
 WSGI_USER = None
 
@@ -234,7 +232,7 @@ STARSPAN_REMOVE_TMP = True
 
 POSTGIS_TEMPLATE = 'template1'
 
-LAUNCH_PAGE = False 
+LAUNCH_PAGE = False
 from django.core.urlresolvers import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('map')
 
