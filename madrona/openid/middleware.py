@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -35,21 +35,21 @@ class OpenIDMiddleware(object):
         request.openids = request.session.get('openids', [])
 
         # The code below seems benign and perfectly understandable (just grabs the openids and attaches a list to the request object)
-        # But for some unknown reason, this filter interacts with sessions in such a way that 
+        # But for some unknown reason, this filter interacts with sessions in such a way that
         # load_sessions fails to work on requests from the GE plugin
         #
         # Not sure what the implications are for excluding it but we shall see
-        # 
+        #
         #rels = UserAssociation.objects.filter(user__id=request.user.id)
         rels = []
         request.associated_openids = [rel.openid_url for rel in rels]
 
     def process_response(self, request, response):
-        if response.status_code != 200 or len(response.content) < 200:
+        if response.status_code != 200 or (hasattr(response, 'content') and len(response.content) < 200):
             return response
         path = request.get_full_path()
         if path == "/" and 'HTTP_ACCEPT' in request.META and \
-                best_match(['text/html', 'application/xrds+xml'], 
+                best_match(['text/html', 'application/xrds+xml'],
                     request.META['HTTP_ACCEPT']) == 'application/xrds+xml':
             response = xrdf(request)
         return response
