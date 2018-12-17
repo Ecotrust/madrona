@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from django.views.generic.base import TemplateView
 
 # views
@@ -49,7 +49,7 @@ urlpatterns = patterns('',
     url(
         r'^signup/$',
         reg_views.register,
-        {'backend': 'registration.backends.default.DefaultBackend', 
+        {'backend': 'registration.backends.default.DefaultBackend',
          'form_class': MadronaRegistrationForm},
         name='registration_register'
     ),
@@ -78,7 +78,7 @@ urlpatterns = patterns('',
 )
 
 
-## The openid login behavior can be 'hidden' by use of a 
+## The openid login behavior can be 'hidden' by use of a
 # template which only allows local user/pass authentication
 # Note that this does not disable openid completely; user could still
 # POST openid credentials if they wanted to

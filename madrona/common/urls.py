@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.conf import settings
 
@@ -41,4 +41,3 @@ urlpatterns += patterns('',
     (r'^media(.*)/upload/', 'madrona.common.views.forbidden'),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 )
-

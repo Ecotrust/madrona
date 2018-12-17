@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('madrona.analysistools.views',
     url(r'^(?P<uid>[\w_]+)/progress.json$', 'progress', name='analysis-progress'),

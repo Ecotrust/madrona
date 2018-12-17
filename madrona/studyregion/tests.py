@@ -7,9 +7,9 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase, Client
 from madrona.studyregion.models import StudyRegion
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.conf import settings
-from django.contrib.gis.geos import GEOSGeometry 
+from django.contrib.gis.geos import GEOSGeometry
 
 urlpatterns = patterns('',
     # Example:
@@ -67,7 +67,7 @@ class StudyRegionTest(TestCase):
     # this is a non-critical test, which is failing on the server, but not local dev boxes, with:
     # TemplateSyntaxError: Caught an exception while rendering: compress/css.html
 
-    # disabling test 
+    # disabling test
 
     #def testStudyRegionSandboxView(self):
         #"""
@@ -83,7 +83,7 @@ class StudyRegionTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def testOnlyOneActive(self):
-        # Only need to create one to test since there is an active study 
+        # Only need to create one to test since there is an active study
         # region fixture
         count = StudyRegion.objects.count()
         self.assertTrue(count > 0)

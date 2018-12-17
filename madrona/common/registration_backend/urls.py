@@ -2,7 +2,7 @@
 URLconf for registration and activation, using django-registration's
 default backend.
 """
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.views.generic.base import TemplateView
 from registration.views import activate
 from registration.views import register

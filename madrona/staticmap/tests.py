@@ -2,9 +2,9 @@
 Unit tests for staticmap rendering via mapnik
 """
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.contrib.auth.models import User, Group
-from django.contrib.gis.geos import GEOSGeometry 
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.contenttypes.models import ContentType
 from django.test import Client
 from madrona.common.test_settings_manager import SettingsTestCase as TestCase
