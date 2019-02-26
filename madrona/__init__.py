@@ -1,5 +1,5 @@
 # from django.__init__
-from version import VERSION
+from .version import VERSION
 
 def get_version(version=None):
     """Derives a PEP386-compliant version number from VERSION."""
