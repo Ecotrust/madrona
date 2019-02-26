@@ -1,4 +1,6 @@
 import os
+from madrona.common import assets
+from django.urls import reverse
 os.environ["CELERY_LOADER"] = "django"
 
 # !!!!!!!!!!!!!!!!!!!!!!!
@@ -17,8 +19,6 @@ DISPLAY_LENGTH_UNITS = 'mi' # Choices can be found in django.contrib.gis.measure
 DISPLAY_AREA_UNITS = 'sq_mi' # Choices can be found in django.contrib.gis.measure.Area.UNITS  Most common will be sq_mi, sq_m, sq_km, sq_nm, sq_ft
 
 GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
-
-from madrona.common import assets
 
 COMPRESS_CSS = {
     'application': {
@@ -233,8 +233,7 @@ STARSPAN_REMOVE_TMP = True
 POSTGIS_TEMPLATE = 'template1'
 
 LAUNCH_PAGE = False
-from django.core.urlresolvers import reverse_lazy
-LOGIN_REDIRECT_URL = reverse_lazy('map')
+LOGIN_REDIRECT_URL = reverse('map')
 
 GEOJSON_DOWNLOAD = True  # force headers to treat like an attachment
 GEOJSON_SRID = None  # None -> use GEOMETRY_DB_SRID
