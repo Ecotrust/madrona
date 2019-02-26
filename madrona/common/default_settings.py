@@ -1,6 +1,9 @@
 import os
 from madrona.common import assets
-from django.urls import reverse
+from django.urls import reverse_lazy
+import djcelery
+from datetime import timedelta
+
 os.environ["CELERY_LOADER"] = "django"
 
 # !!!!!!!!!!!!!!!!!!!!!!!
@@ -175,7 +178,6 @@ CELERY_TRACK_STARTED = True
 BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 # Make sure to add any modules containing tasks
 #CELERY_IMPORT = ('myapp.tasks',)
-import djcelery
 djcelery.setup_loader()
 
 #The following is used to determine whether the async app (and celery) should be used
@@ -222,7 +224,7 @@ TITLES = {
 # Do you want bookmarks to show up in the kmleditor (True) or just the tool panel (False)?
 BOOKMARK_FEATURE = False
 BOOKMARK_ANON_USERNAME = "anonymous_bookmark_user"
-from datetime import timedelta
+
 BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks per IP every 30 minutes
 
 ENFORCE_SUPPORTED_BROWSER = False
@@ -233,7 +235,9 @@ STARSPAN_REMOVE_TMP = True
 POSTGIS_TEMPLATE = 'template1'
 
 LAUNCH_PAGE = False
-LOGIN_REDIRECT_URL = reverse('map')
+LOGIN_REDIRECT_URL = reverse_lazy('map')
 
 GEOJSON_DOWNLOAD = True  # force headers to treat like an attachment
 GEOJSON_SRID = None  # None -> use GEOMETRY_DB_SRID
+
+SECRET_KEY = 'Override this nonsense'
