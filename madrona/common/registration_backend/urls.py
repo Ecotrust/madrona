@@ -2,13 +2,13 @@
 URLconf for registration and activation, using django-registration's
 default backend.
 """
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from django.views.generic.base import TemplateView
 from registration.views import activate
 from registration.views import register
 from django.conf import settings
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^activate/complete/$',
         TemplateView.as_view(template_name='registration/activation_complete.html'),
         {'extra_context': {'group_request_email': settings.GROUP_REQUEST_EMAIL}},
@@ -18,11 +18,11 @@ urlpatterns = patterns('',
     # that way it can return a sensible "invalid key" message instead of a
     # confusing 404.
     url(r'^activate/(?P<activation_key>\w+)/$',
-        activate,
+        .activate,
         {'backend': 'madrona.common.registration_backend.LingcodBackend'},
         name='registration_activate'),
     url(r'^register/$',
-        register,
+        .register,
         {'backend': 'madrona.common.registration_backend.LingcodBackend'},
         name='registration_register'),
     url(r'^register/complete/$',
@@ -32,4 +32,4 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name='registration/registration_closed.html'),
         name='registration_disallowed'),
     (r'', include('registration.auth_urls')),
-)
+]

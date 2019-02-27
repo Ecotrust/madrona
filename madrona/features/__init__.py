@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from madrona.common.utils import get_logger, get_class, enable_sharing
 from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist
 from madrona.features.forms import FeatureForm
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
@@ -312,7 +312,7 @@ not a string path." % (name,))
         """
         try:
             klass = get_class(self.form)
-        except Exception, e:
+        except Exception as e:
             raise FeatureConfigurationError(
                 "Feature class %s is not configured with a valid form class. \
 Could not import %s.\n%s" % (self._model.__name__, self.form, e))

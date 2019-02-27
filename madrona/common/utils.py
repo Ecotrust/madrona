@@ -4,6 +4,7 @@ from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
 from django.core.cache import cache
+from importlib import import_module
 from madrona.common.models import KmlCache
 import zipfile
 import re
@@ -245,9 +246,8 @@ def ComputeLookAt(geometry):
     return lookAtParams
 
 def get_class(path):
-    from django.utils import importlib
     module,dot,klass = path.rpartition('.')
-    m = importlib.import_module(module)
+    m = import_module(module)
     return m.__getattribute__(klass)
 
 def kml_errors(kmlstring):
@@ -308,8 +308,6 @@ def hex8_to_rgba(hex8):
     rgba_values = [int(x,16) for x in hex_values]
     rgba_values.reverse()
     return rgba_values
-
-from django.utils.importlib import import_module
 
 def load_session(request, session_key):
     if session_key and session_key != '0':

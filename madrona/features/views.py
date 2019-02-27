@@ -12,7 +12,7 @@ from madrona.common import default_mimetypes as mimetypes
 from madrona.features import workspace_json, get_feature_by_uid
 from django.template.defaultfilters import slugify
 from madrona.features.models import SpatialFeature, Feature, FeatureCollection
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.decorators.cache import cache_page
 import json as simplejson
 logger = get_logger()

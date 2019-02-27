@@ -5,10 +5,12 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib import admin
+from django.urls import reverse
+
 
 def roles(self):
     #short_name = unicode # function to get group name
-    p = sorted([u"<a title='%s'>%s</a>" % (x, x) for x in self.groups.all()]) 
+    p = sorted([u"<a title='%s'>%s</a>" % (x, x) for x in self.groups.all()])
     if self.user_permissions.count():
         p += ['+']
     value = ' | '.join(p)
@@ -34,7 +36,6 @@ def staff(self):
 staff.boolean = True
 staff.admin_order_field = 'is_staff'
 
-from django.core.urlresolvers import reverse
 def persons(self):
     return ', '.join(['<a href="%s">%s</a>' % (reverse('admin:auth_user_change', args=(x.id,)), x.username) for x in self.user_set.all().order_by('username')])
 persons.allow_tags = True

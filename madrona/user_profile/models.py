@@ -7,5 +7,5 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return u"UserProfile: %s" % (self.user.username)
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     about = models.TextField(blank=True)

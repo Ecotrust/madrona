@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.gis.db import models
+from django.db.models import Manager as GeoManager
 
 
-class BaseManipulatorGeometryManager(models.GeoManager):
+class BaseManipulatorGeometryManager(GeoManager):
     """Returns the currently active data layer (determined by the active attribute).
     """
     def current(self):
@@ -17,13 +18,13 @@ class BaseManipulatorGeometry(models.Model):
         ``creation_date``       When the layer was created. Is not changed on
                                 updates.
 
-        ``active``              Whether this layer represents the current 
+        ``active``              Whether this layer represents the current
                                 data layer. If set to true and and another
-                                layer is active, that old layer will be 
+                                layer is active, that old layer will be
                                 deactivated.
         ======================  ==============================================
-    """    
-    creation_date = models.DateTimeField(auto_now=True) 
+    """
+    creation_date = models.DateTimeField(auto_now=True)
 
     active = models.BooleanField(default=True, help_text="""
         Checking here indicates that this layer list should be the one used in

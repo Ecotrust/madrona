@@ -16,7 +16,7 @@ class FaqGroup(models.Model):
         (7,'7'),
         (8,'8'),
         (9,'9'),
-        (10,'10')                      
+        (10,'10')
     )
 
     faq_group_name = models.CharField(max_length=50)
@@ -37,10 +37,10 @@ class Faq(models.Model):
         (7,'7'),
         (8,'8'),
         (9,'9'),
-        (10,'10')                      
+        (10,'10')
     )
 
     question = models.TextField(max_length=200)
     answer = models.TextField(max_length=2000)
     importance = models.IntegerField(choices=IMPORTANCE_CHOICES)
-    faq_group = models.ForeignKey(FaqGroup)    
+    faq_group = models.ForeignKey(FaqGroup, on_delete=models.CASCADE,)    

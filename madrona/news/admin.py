@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from models import Entry, Tag
+from .models import Entry, Tag
 
 class TagAdmin(admin.ModelAdmin):
     pass
