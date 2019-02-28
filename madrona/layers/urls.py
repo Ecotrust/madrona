@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^privatekml/(?P<session_key>\w+)/(?P<pk>\d+)/$',
         views.get_privatekml,
         name='layers-privatekml'),
-    url(r'^privatekml/(?P<session_key>\w+)/(?P<pk>\d+)/(?P<path>[^\z]+)$',
+    url(r'^privatekml/(?P<session_key>\w+)/(?P<pk>\d+)/(?P<path>[^\n]+)$',
         views.get_relative_to_privatekml,
         name='layers-privatekml-relative'),
 ]

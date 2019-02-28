@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import json as simplejson
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from models import *
+from .models import *
 
 def get_json(request):
     json = {

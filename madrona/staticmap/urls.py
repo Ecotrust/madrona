@@ -4,5 +4,5 @@ from madrona.staticmap import views
 urlpatterns = [
     url(r'^(?P<map_name>\w+)/$', views.show, name="staticmap-show"),
     url(r'^(?P<map_name>\w+)/$', views.staticmap_link, name="staticmap-link"),
-    (r'^$', views.show)
+    url(r'^$', views.show)
 ]

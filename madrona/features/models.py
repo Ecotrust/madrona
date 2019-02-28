@@ -32,7 +32,7 @@ class Feature(models.Model):
         ======================  ==============================================
     """
     user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related", on_delete=models.CASCADE)
-    name = models.CharField(verbose_name="Name", max_length="255")
+    name = models.CharField(verbose_name="Name", max_length=255)
     date_created = models.DateTimeField(auto_now_add=True,
             verbose_name="Date Created")
     date_modified = models.DateTimeField(auto_now=True,
@@ -40,7 +40,7 @@ class Feature(models.Model):
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,
             null=True,verbose_name="Share with the following groups",
             related_name="%(app_label)s_%(class)s_related")
-    content_type = models.ForeignKey(ContentType, blank=True, null=True,
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, default=None,
             related_name="%(app_label)s_%(class)s_related", on_delete=models.SET_DEFAULT,)
     object_id = models.PositiveIntegerField(blank=True,null=True)
     collection = GenericForeignKey('content_type', 'object_id')
