@@ -16,7 +16,7 @@
 
 from madrona.openid.utils.mimeparse import best_match
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from madrona.openid.models import UserAssociation
 from madrona.openid.views import xrdf
@@ -30,6 +30,12 @@ class OpenIDMiddleware(object):
     Populate request.openid. This comes either from cookie or from
     session, depending on the presence of OPENID_USE_SESSIONS. MP- HUH? I dont see that setting used anywhere
     """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
     def process_request(self, request):
         request.openid = request.session.get('openid', None)
         request.openids = request.session.get('openids', [])

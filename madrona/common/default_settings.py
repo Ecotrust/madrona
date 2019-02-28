@@ -23,29 +23,44 @@ DISPLAY_AREA_UNITS = 'sq_mi' # Choices can be found in django.contrib.gis.measur
 
 GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
 
-COMPRESS_CSS = {
-    'application': {
-        'source_filenames': assets.get_css_files(),
-        'output_filename': 'common/css/madrona.r?.css',
-        'extra_context': {
-            'media': 'all'
-        }
-    }
-}
+try:
+    STATICFILES_FINDERS += (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+    )
+except Exception as e:
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+    )
 
-COMPRESS_JS = {
-    'application': {
-        'source_filenames': assets.get_js_files(),
-        'output_filename': 'madrona.r?.js'
-    },
-    'tests': {
-        'source_filenames': assets.get_js_test_files(),
-        'output_filename': 'madrona_tests.r?.js'
-    }
-}
+# COMPRESS_CSS = {
+#     'application': {
+#         'source_filenames': assets.get_css_files(),
+#         'output_filename': 'common/css/madrona.r?.css',
+#         'extra_context': {
+#             'media': 'all'
+#         }
+#     }
+# }
+#
+# COMPRESS_JS = {
+#     'application': {
+#         'source_filenames': assets.get_js_files(),
+#         'output_filename': 'madrona.r?.js'
+#     },
+#     'tests': {
+#         'source_filenames': assets.get_js_test_files(),
+#         'output_filename': 'madrona_tests.r?.js'
+#     }
+# }
+#
+# COMPRESS_VERSION = True
+# COMPRESS_AUTO = True
 
-COMPRESS_VERSION = True
-COMPRESS_AUTO = True
+
 
 GOOGLE_ANALYTICS_MODEL = True
 
@@ -60,20 +75,21 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # compatibility problems with django trunk?
     # 'maintenancemode.middleware.MaintenanceModeMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
+    # 'django.middleware.transaction.TransactionMiddleware',
     'madrona.openid.middleware.OpenIDMiddleware',
 )
 
 INSTALLED_APPS = (
-    'madrona.common',
-    'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.auth',
+    'madrona.common',
+    'django.contrib.staticfiles',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.gis',
     'flatblocks',
-    'compress',
+    'compressor',
     'madrona.shapes',
     'madrona.google-analytics',
     'madrona.layers',
@@ -121,11 +137,12 @@ GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to 
 GROUP_REGISTERED_BY_WEB = 'registered_by_web'  # Group name assigned to users who register using the web interface
 
 MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
+STATIC_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../static/')
 
 # URLS
 MEDIA_URL = '/media/'
 LOGIN_URL = '/accounts/signin/'
-STATIC_URL = '/media/'
+STATIC_URL = '/static/'
 
 # KML SETTINGS
 KML_SIMPLIFY_TOLERANCE = 20 # meters
