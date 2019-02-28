@@ -1,21 +1,20 @@
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext, Context
-from django.template import loader, TemplateDoesNotExist
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import Group
 from madrona.features.models import Feature
 from madrona.features import user_sharing_groups
-from madrona.common.utils import get_logger
 from madrona.common import default_mimetypes as mimetypes
-from madrona.features import workspace_json, get_feature_by_uid
-from django.template.defaultfilters import slugify
 from madrona.features.models import SpatialFeature, Feature, FeatureCollection
-from django.urls import reverse
 from django.views.decorators.cache import cache_page
-import json as simplejson
-logger = get_logger()
+from madrona.common.utils import get_logger, get_class# , enable_sharing
+from django.template.defaultfilters import slugify
+from django.template import loader, TemplateDoesNotExist
+from madrona.features.forms import FeatureForm
+from django.urls import reverse
+from django.contrib.auth.models import Permission, Group
+from django.conf import settings
+import json
 
 def get_object_for_editing(request, uid, target_klass=None):
     """
@@ -472,7 +471,7 @@ from madrona.manipulators.manipulators import get_manipulators_for_model
 # TODO: Refactor this so that it is part of Feature.Options.edit_context
 def decorate_with_manipulators(extra_context, form_class):
     try:
-        extra_context['json'] = simplejson.dumps(get_manipulators_for_model(form_class.Meta.model))
+        extra_context['json'] = json.dumps(get_manipulators_for_model(form_class.Meta.model))
     except:
         extra_context['json'] = False
     return extra_context
@@ -768,7 +767,7 @@ def to_response(status=200, select=None, show=None, parent=None,
         "X-Madrona-UnToggle": to_csv(untoggle),
     }
     headers = dict((k,v) for k,v in headers.items() if v != '' and v != None)
-    response = HttpResponse(simplejson.dumps(headers), status=status)
+    response = HttpResponse(json.dumps(headers), status=status)
     for k,v in headers.items():
         if k != 'status' and k != 'Location':
             response[k] = v
@@ -829,7 +828,7 @@ def geojson_link(request, instances):
     from django.contrib.gis.gdal import DataSource
     import tempfile
     import os
-    import json
+    # import json
 
     strategy = request.GET.get('strategy', default='flat')
     strategy = strategy.lower()

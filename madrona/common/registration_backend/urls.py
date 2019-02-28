@@ -4,8 +4,8 @@ default backend.
 """
 from django.conf.urls import url, include
 from django.views.generic.base import TemplateView
-from registration.views import activate
-from registration.views import register
+from django_registration.views import activate
+from django_registration.views import register
 from django.conf import settings
 
 urlpatterns = [
@@ -31,5 +31,5 @@ urlpatterns = [
     url(r'^register/closed/$',
         TemplateView.as_view(template_name='registration/registration_closed.html'),
         name='registration_disallowed'),
-    (r'', include('registration.auth_urls')),
+    (r'', include('django_registration.auth_urls')),
 ]

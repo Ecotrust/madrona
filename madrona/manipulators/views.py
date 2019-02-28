@@ -23,7 +23,7 @@ def mpaManipulatorList(request, app_name, model_name):
     try:
         model = ContentType.objects.get(app_label=app_name, model=model_name)
         manipulators = model.model_class().Options.manipulators
-    except Exception, e:
+    except Exception as e:
         return HttpResponse("The following error was reported: '" + e.message + "', while generating manipulator list from application: " + app_name + " and model: " + model_name, status=404)
 
     manip_text = [(manipulator.Options.name) for manipulator in manipulators]
@@ -85,11 +85,11 @@ def multi_generic_manipulator_view(request, manipulators):
                 kwargs['target_shape'] = new_shape.wkt
                 html_response = html_response + result["html"]
 
-        except manipClass.InvalidGeometryException, e:
+        except manipClass.InvalidGeometryException as e:
             return respond_with_template(e.html, submitted, None, e.success)
-        except manipClass.InternalException, e:
+        except manipClass.InternalException as e:
             return respond_with_template(e.html, submitted, None, e.success)
-        except manipClass.HaltManipulations, e:
+        except manipClass.HaltManipulations as e:
             return respond_with_template(e.html, submitted, None, e.success)
         except Exception as e:
             return respond_with_error(message=str(e))

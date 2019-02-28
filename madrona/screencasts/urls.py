@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
+from madrona.screencasts import views
 
-
-urlpatterns = patterns('madrona.screencasts.views',
-    (r'^$', 'listTutorials'),
-    (r'^(\w+)/$', 'showVideo'),
-    url(r'^(?P<pk>\d)/show/$', 'showVideoByPk', name='screencasts-show-video'),
-    url(r'^(?P<pk>\d+)/show_youtube/$', 'showYoutubeVideo', name='screencasts-show-youtube-video'),
-)
+urlpatterns = [
+    (r'^$', views.listTutorials),
+    (r'^(\w+)/$', views.showVideo),
+    url(r'^(?P<pk>\d)/show/$', views.showVideoByPk, name='screencasts-show-video'),
+    url(r'^(?P<pk>\d+)/show_youtube/$', views.showYoutubeVideo, name='screencasts-show-youtube-video'),
+]

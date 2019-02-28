@@ -54,4 +54,6 @@ def load_store(path):
         'openid store' % (module, attr))
     return cls
 
-DjangoOpenIDStore = load_store(settings.OPENID_STORE)
+# RDH: Changed this to a function to use lazy_instantiation to avoid "Apps not ready"
+def DjangoOpenIDStore():
+    return load_store(settings.OPENID_STORE)

@@ -1,19 +1,21 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
+from madrona.common import views
 
 if settings.LAUNCH_PAGE:
     urlpatterns = [
-        url(r'^$', madrona.common.views.launch, name='launch'),
-        url(r'^map/', madrona.common.views.map, name='map'),
+        url(r'^$', views.launch, name='launch'),
+        url(r'^map/', views.map, name='map'),
     ]
 else:
     urlpatterns = [
-        url(r'^$', madrona.common.views.map, name='map'),
+        url(r'^$', views.map, name='map'),
     ]
 
 urlpatterns += [
     (r'^accounts/', include('madrona.openid.urls')),
+    (r'^accounts/', include('django_registration.backends.activation.urls')),
     (r'^accounts/profile/', include('madrona.user_profile.urls')),
     (r'^faq/', include('madrona.simplefaq.urls')),
     (r'^features/', include('madrona.features.urls')),
@@ -38,6 +40,6 @@ urlpatterns += [
 
 # Useful for serving files when using the django dev server
 urlpatterns += [
-    (r'^media(.*)/upload/', 'madrona.common.views.forbidden'),
+    (r'^media(.*)/upload/', views.forbidden),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 ]

@@ -160,7 +160,7 @@ class DependenciesTest(TestCase):
             'sphinx',
             'BeautifulSoup',
             'xlwt',
-            'registration',
+            'django_registration',
             'compress',
             'maintenancemode',
         ]

@@ -6,7 +6,7 @@ from django.template import Context, RequestContext
 from django.template.loader import get_template
 from madrona.common import default_mimetypes as mimetypes
 from madrona.common.utils import kml_errors
-from forms import UploadForm
+from .forms import UploadForm
 
 
 def load_single_shp(request):

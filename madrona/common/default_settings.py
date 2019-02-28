@@ -93,9 +93,9 @@ INSTALLED_APPS = (
     'madrona.async',
     'madrona.loadshp',
     'madrona.bookmarks',
-    'registration',
+    'django_registration',
     'djcelery',
-    'djkombu',
+    'kombu.transport.django',
     ##### Optional Apps ####
     #'madrona.heatmap',
     #'madrona.analysistools',
@@ -105,7 +105,7 @@ INSTALLED_APPS = (
 )
 
 EXCLUDE_FROM_TESTS = [
-    'registration',
+    'django_registration',
     'flatblocks',
     'django.contrib.auth',
     'django.contrib.admin',

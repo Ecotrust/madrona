@@ -3,13 +3,13 @@ import zipfile
 import tempfile
 import datetime
 from django import forms
-from django.forms.util import ValidationError
+from django.forms.utils import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.gis import gdal
 
 #http://docs.djangoproject.com/en/dev/topics/http/file-uploads/
-#http://www.neverfriday.com/sweetfriday/2008/09/-a-long-time-ago.html 
+#http://www.neverfriday.com/sweetfriday/2008/09/-a-long-time-ago.html
 
 class UploadForm(forms.Form):
 
@@ -31,7 +31,7 @@ class UploadForm(forms.Form):
         # ensure the upload directory exists
         upload_dir = os.path.join(settings.MEDIA_ROOT,'upload','loadshp',user.username)
         if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir) 
+            os.makedirs(upload_dir)
 
         # contruct the full filepath and filename
         downloaded_file = os.path.normpath(os.path.join(upload_dir, filefield_data.name))
@@ -40,7 +40,7 @@ class UploadForm(forms.Form):
         if os.path.exists(downloaded_file):
             name, ext = os.path.splitext(downloaded_file)
             append = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-            downloaded_file = '%s_%s%s' % (name,append,ext) 
+            downloaded_file = '%s_%s%s' % (name,append,ext)
 
         # write the zip archive to final location
         self.write_file(downloaded_file,filefield_data)
@@ -64,7 +64,7 @@ class UploadForm(forms.Form):
         destination = open(filename, 'wb+')
         for chunk in filefield_data.chunks():
             destination.write(chunk)
-        destination.close()        
+        destination.close()
 
     def check_zip_contents(self, ext, zip_file):
         if not True in [info.filename.endswith(ext) for info in zip_file.infolist()]:

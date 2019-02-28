@@ -2,12 +2,12 @@ from django.http import HttpResponse
 from madrona.common.views import map
 from madrona.bookmarks.models import Bookmark
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
 from madrona.common.utils import get_logger
 import datetime
-import urlparse
+from urllib import parse as urlparse
 
 log = get_logger()
 

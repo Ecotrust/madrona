@@ -14,7 +14,7 @@ try:
 except:
     RASTDIR = os.path.join(os.path.dirname(__file__), 'test_data')
 
-RASTER_TYPES = ( 
+RASTER_TYPES = (
                 ("continuous", "continuous"),
                 ("categorical", "catgorical"),
                )
@@ -52,7 +52,7 @@ class ZonalCategory(models.Model):
 
 class ZonalStatsCache(models.Model):
     geom_hash = models.CharField(max_length=255)
-    raster = models.ForeignKey('RasterDataset')
+    raster = models.ForeignKey(RasterDataset, on_delete=models.CASCADE)
     sum = models.FloatField(null=True, blank=True)
     avg = models.FloatField(null=True, blank=True)
     min = models.FloatField(null=True, blank=True)
@@ -92,7 +92,7 @@ def _run_starspan_zonal(geom, rasterds, pixprop=0.5):
     Consider this a 'private' method .. dont call directly, use zonal_stats() instead
     Runs starspan and returns a ZonalStatsCache object
     """
-    # Create tempdir and cd in 
+    # Create tempdir and cd in
     tmpdir_base = tempfile.gettempdir()
     geom_hash = geom.wkt.__hash__()
     timestamp = str(time.time())
@@ -108,9 +108,9 @@ def _run_starspan_zonal(geom, rasterds, pixprop=0.5):
     # Run starspan
     out_csv = os.path.join(tmpdir, 'output_%s_stats.csv' % timestamp)
     out_categories = os.path.join(tmpdir, 'output_%s_categories.csv' % timestamp)
-    if os.path.exists(out_csv): 
+    if os.path.exists(out_csv):
         os.remove(out_csv)
-    if os.path.exists(out_categories): 
+    if os.path.exists(out_categories):
         os.remove(out_categories)
     cmd = '%s --vector %s --where "id=1" --out-prefix %s/output_%s --out-type table --summary-suffix _stats.csv --raster %s --stats avg mode median min max sum stdev nulls --pixprop %s ' % (STARSPAN_BIN,out_json,tmpdir, timestamp, rasterds.filepath, pixprop)
     if rasterds.type == 'categorical':

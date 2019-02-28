@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404
 #, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
-from models import *
+from .models import *
 import os
 import itertools
 import posixpath
@@ -12,7 +12,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from madrona.common import default_mimetypes as mimetypes
 from madrona.common.utils import load_session
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from madrona.features.views import get_object_for_viewing
 from django.contrib.auth.models import Group
 from madrona.common.utils import is_text
@@ -62,7 +62,7 @@ def get_privatekml_list(request, session_key='0'):
             accessible_kmls.append(kml)
 
     t = get_template('layers/private.kml')
-    kml = t.render(RequestContext(request, {'session_key': session_key, 
+    kml = t.render(RequestContext(request, {'session_key': session_key,
                                              'kmls': accessible_kmls}))
     response = HttpResponse(kml, mimetype=mimetypes.KML)
     response['Content-Disposition'] = 'filename=privatekml_%s.kml' % user.username
@@ -124,7 +124,7 @@ def get_relative_to_privatekml(request, pk, path, session_key='0'):
             continue
         newpath = os.path.join(newpath, part).replace('\\', '/')
 
-    # newpath is different from path any time path is unsafe. 
+    # newpath is different from path any time path is unsafe.
     if newpath and path == newpath:
         basedir = os.path.dirname(layer.base_kml)
         requested_file = os.path.join(basedir,newpath)
@@ -137,7 +137,7 @@ def get_relative_to_privatekml(request, pk, path, session_key='0'):
         return HttpResponse("Nice try", status=403)
 
 def get_public_layers(request):
-    """Returns uploaded kml from the :class:`PublicLayerList <madrona.layers.models.PublicLayerList>` 
+    """Returns uploaded kml from the :class:`PublicLayerList <madrona.layers.models.PublicLayerList>`
     object marked ``active``.
     """
     try:

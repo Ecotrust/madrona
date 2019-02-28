@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
+from madrona.help import views
 
-urlpatterns = patterns('madrona.help.views',
-    url(r'^$', 'help', name="help-main"),
-)
+urlpatterns = [
+    url(r'^$', views.help, name="help-main"),
+]

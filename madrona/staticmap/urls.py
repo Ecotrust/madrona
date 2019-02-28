@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url, include
-from django.core.urlresolvers import reverse
-
-urlpatterns = patterns('madrona.staticmap.views',
-    url(r'^(?P<map_name>\w+)/$', 'show',name="staticmap-show"),
-    url(r'^(?P<map_name>\w+)/$', 'staticmap_link',name="staticmap-link"),
-    (r'^$', 'show')
-)
+from django.conf.urls import url, include
+from django.urls import reverse
+from madrona.staticmap import views
+urlpatterns = [
+    url(r'^(?P<map_name>\w+)/$', views.show, name="staticmap-show"),
+    url(r'^(?P<map_name>\w+)/$', views.staticmap_link, name="staticmap-link"),
+    (r'^$', views.show)
+]

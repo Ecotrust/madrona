@@ -1,9 +1,9 @@
 #!/usr/bin/python
-from registration.forms import RegistrationForm
+from django_registration.forms import RegistrationForm
 from django import forms
 
 attrs_dict = {
-        'class': 'required', 
+        'class': 'required',
 #        'onchange':'alert("check your self, fool");'
 }
 

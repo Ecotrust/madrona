@@ -1,4 +1,4 @@
-import settings
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
@@ -19,11 +19,11 @@ except:
 
 
 def get_features(uids,user):
-    """ 
+    """
     Returns list of tuples representing mapnik layers
     Tuple => (model_class, [pks])
     Note: currently just a single pk per 'layer' which is
-    incredibly inefficient but the only way to ensure 
+    incredibly inefficient but the only way to ensure
     proper layer ordering (??).
         features = [ (Mpa, [49, 50]),
                     (Pipeline, [32, 31]),
@@ -78,32 +78,32 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         try:
             ugeom = model.objects.filter(pk__in=pks).collect(field_name=geomfield).transform(srid,clone=True)
             bbox = ugeom.extent
-            if bbox[0] < minx: 
+            if bbox[0] < minx:
                 minx = bbox[0]
-            if bbox[1] < miny: 
+            if bbox[1] < miny:
                 miny = bbox[1]
-            if bbox[2] > maxx: 
+            if bbox[2] > maxx:
                 maxx = bbox[2]
-            if bbox[3] > maxy: 
+            if bbox[3] > maxy:
                 maxy = bbox[3]
         except TypeError as e:
-            log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e)) 
+            log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e))
             pass
 
     width = maxx - minx
-    height = maxy - miny  
+    height = maxy - miny
     buffer = .15
     # if width and height are 0 (such as for a point geom)
     # we need to take a stab a reasonable value
     if width == 0:
         if bbox[2] <= 180.1:
             width = 0.1
-        else: 
+        else:
             width = 1000
     if height == 0:
         if bbox[3] <= 90.1:
             height = 0.1
-        else: 
+        else:
             height = 1000
 
     # If the following settings variables are not defined (or set to None), then the original method
@@ -136,7 +136,7 @@ def staticmap_link(request, instances, map_name="default"):
 
     response = HttpResponse()
     response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
+    response['Content-Type'] = 'image/png'
     response['Content-Disposition'] = 'attachment; filename=%s.png' % filename
     response.write(img)
     return response
@@ -151,7 +151,7 @@ def show(request, map_name="default"):
         # fall back on defaults
         width, height = None, None
 
-    if 'uids' in request.REQUEST: 
+    if 'uids' in request.REQUEST:
         uids = str(request.REQUEST['uids']).split(',')
     else:
         uids = []
@@ -180,7 +180,7 @@ def show(request, map_name="default"):
 
     response = HttpResponse()
     response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
+    response['Content-Type'] = 'image/png'
     if attach:
         response['Content-Disposition'] = 'attachment; filename=madrona.png'
     response.write(img)
@@ -198,7 +198,7 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     map = get_object_or_404(MapConfig,mapname=map_name)
     if not width:
         width = map.default_width
-    if not height: 
+    if not height:
         height = map.default_height
     mapfile = str(map.mapfile.path)
 

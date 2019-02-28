@@ -1,13 +1,10 @@
 from django.conf.urls import url, include
-from madrona.common.utils import get_logger, get_class, enable_sharing
+# from madrona.common.utils import get_logger, get_class, enable_sharing
 from django.template.defaultfilters import slugify
 from django.template import loader, TemplateDoesNotExist
-from madrona.features.forms import FeatureForm
 from django.urls import reverse
-from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save, class_prepared
 from django.dispatch import receiver
-from django.contrib.auth.models import Permission, Group
 from django.conf import settings
 from django.db.utils import DatabaseError
 import json
@@ -15,7 +12,13 @@ import json
 registered_models = []
 registered_model_options = {}
 registered_links = []
-logger = get_logger()
+# logger = get_logger()
+
+def get_class(path):
+    from importlib import import_module
+    module,dot,klass = path.rpartition('.')
+    m = import_module(module)
+    return m.__getattribute__(klass)
 
 class FeatureConfigurationError(Exception):
     pass
@@ -307,6 +310,7 @@ not a string path." % (name,))
         return potential_parents
 
     def get_form_class(self):
+        from madrona.features.forms import FeatureForm
         """
         Returns the form class for this Feature Class.
         """
@@ -666,7 +670,7 @@ def edit_form(*args, **kwargs):
 
 def register(model):
     options = FeatureOptions(model)
-    logger.debug('registering Feature %s' % (model.__name__,))
+    # logger.debug('registering Feature %s' % (model.__name__,))
     if model not in registered_models:
         registered_models.append(model)
         registered_model_options[model.__name__] = options
@@ -738,6 +742,7 @@ def user_sharing_groups(user):
     Returns a list of groups that user is member of and
     and group must have sharing permissions
     """
+    from django.contrib.auth.models import Permission
     try:
         p = Permission.objects.get(codename='can_share_features')
     except Permission.DoesNotExist:
