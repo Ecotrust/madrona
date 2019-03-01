@@ -32,8 +32,8 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     if enforce_supported and not valid_browser(useragent):
         from madrona.common import uaparser
         bp = uaparser.browser_platform(useragent)
-        context = {'useragent':useragent, 
-                'browser_platform': bp.__repr__(), 
+        context = {'useragent':useragent,
+                'browser_platform': bp.__repr__(),
                 'redirect_url': settings.LOGIN_REDIRECT_URL}
         context.update(extra_context)
         return render_to_response('common/supported_browsers.html', context)
@@ -72,11 +72,11 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     # Check if the user is a member of any sharing groups (not including public shares)
     member_of_sharing_group = False
     user = request.user
-    if user.is_authenticated() and user_sharing_groups(user):
+    if user.is_authenticated and user_sharing_groups(user):
         member_of_sharing_group = True
 
     context = RequestContext(request,{
-        'api_key':settings.GOOGLE_API_KEY, 
+        'api_key':settings.GOOGLE_API_KEY,
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         'member_of_sharing_group': member_of_sharing_group,
@@ -85,7 +85,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'is_privatekml': has_privatekml(user),
         'has_features': has_features(user),
         'camera': parse_camera(request),
-        'publicstate': get_publicstate(request), 
+        'publicstate': get_publicstate(request),
         'bookmarks_as_feature': settings.BOOKMARK_FEATURE,
     })
 

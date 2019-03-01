@@ -15,7 +15,7 @@ def load_single_shp(request):
     POST takes the zip, validates that it is a single-feature poly shp and returns KML
     """
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse('You must be logged in', status=401)
 
     form = UploadForm()

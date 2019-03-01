@@ -43,7 +43,7 @@ def get_object_for_editing(request, uid, target_klass=None):
     except:
         return HttpResponse("Feature not found - %s" % uid, status=404)
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse('You must be logged in.', status=401)
     # Check that user owns the object or is staff
     if not request.user.is_staff and request.user != instance.user:
@@ -210,7 +210,7 @@ def create(request, model, action):
     """
     config = model.get_options()
     form_class = config.get_form_class()
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse('You must be logged in.', status=401)
     title = 'New %s' % (config.slug, )
     if request.method == 'POST':
@@ -266,7 +266,7 @@ def create_form(request, model, action=None):
     form_class = config.get_form_class()
     if action is None:
         raise Exception('create_form view is not configured properly.')
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponse('You must be logged in.', status=401)
     title = 'New %s' % (config.verbose_name)
     user = request.user

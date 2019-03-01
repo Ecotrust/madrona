@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 
@@ -10,11 +11,11 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="common/js/load_js.js"></script>
     <script type="text/javascript" charset="utf-8">
-        
+
         function addStyleSheet(path){
             $('head').prepend('<link rel="stylesheet" media="all" href="'+path+'"></link>');
         }
-        
+
         // Dynamically load stylesheets from css_includes.xml
         $.get('css_includes.xml', function(data, textStatus){
             var xml = $(data);
@@ -23,7 +24,7 @@
                 addStyleSheet(path);
             });
         });
-        
+
         $(document).ready(function(){
             // Load appropriate javascript in case needed
             mm_load_js('', function(){
@@ -38,7 +39,7 @@
             height:auto;
             background-color:#DDDDDE;
         }
-        
+
         #panelManager {
             position:absolute;
             top:1em;
@@ -99,8 +100,8 @@
             </div>
         </div>
     </div>
-    
-    
+
+
     <div id="meta-navigation">
         <ul>
             <li><a href="profile">cburt</a> | </li>
@@ -124,7 +125,7 @@
                             <li><input type="checkbox" name="setOverviewMapVisibility" />Overview Map</li>
                             <li><input type="checkbox" name="setScaleLegendVisibility" />Scale Legend</li>
                             <li><input type="checkbox" name="setAtmosphereVisibility" checked />Atmosphere</li>
-                            <li><input type="checkbox" name="sun" />Sun</li>      
+                            <li><input type="checkbox" name="sun" />Sun</li>
                         </form>
                     </ul>
                     <h3>Google Layers</h3>
@@ -134,7 +135,7 @@
                             <li><input type="checkbox" name="LAYER_ROADS">Roads</li>
                             <li><input type="checkbox" name="LAYER_TERRAIN" checked>Terrain</li>
                             <li><input type="checkbox" name="LAYER_BUILDINGS" checked>3d Buildings</li>
-                            <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>                                
+                            <li><input type="checkbox" name="LAYER_BUILDINGS_LOW_RESOLUTION" checked>Low Resolution Buildings</li>
                         </form>
                     </ul>
                     <h3>Find a place</h3>
@@ -142,7 +143,7 @@
                         <ul>
                             <li>
                                 <input type="text" name="flyto_location" value="">
-                                <input type="submit" value="Fly here">                                    
+                                <input type="submit" value="Fly here">
                             </li>
                         </ul>
                     </form>
@@ -152,16 +153,16 @@
             {% tab "My Shapes" %}
                 {% block my_shapes_prepend %}{% endblock %}
                 <p>
-                    <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/arrays.png" width="355" height="444" />
+                    <img style="margin:0px;padding:0px;" src="{% static 'common/fixtures/widget_mockups/arrays.png' %}" width="355" height="444" />
                     <a href="javascript:alert('create mpa');">create mpa</a> |
                     <a href="javascript:alert('create array');">create array</a>
-                </p>                    
+                </p>
                 {% block my_shapes_append %}{% endblock %}
             {% endtab %}
             {% tab "Collaborate" %}
                     <p>
-                        <img style="margin:0px;padding:0px;" src="{{MEDIA_URL}}common/fixtures/widget_mockups/wave.png" width="372" height="483" />
-                    </p>   
+                        <img style="margin:0px;padding:0px;" src="{% static 'common/fixtures/widget_mockups/wave.png' %}" width="372" height="483" />
+                    </p>
             {% endtab %}
             {% tab "Tools" %}
                     {% block tools_prepend %}{% endblock %}
@@ -173,21 +174,21 @@
                         <select id="measure_units">
                             <option value="metric">metric</option>
                             <option value="english">english</option>
-                            <option value="nautical">nautical</option>                            
+                            <option value="nautical">nautical</option>
                         </select>
                         <p><strong>Distance: </strong><span id="distance">N/A</span></p>
                         <p><strong>Area: </strong><span id="area">N/A</span></p>
                         <hr>
                     </div>
-                    {% block tools_append %}{% endblock %}   
+                    {% block tools_append %}{% endblock %}
             {% endtab %}
-        {% endtabpanel %}        
+        {% endtabpanel %}
     </div>
     <div id="map_container">
         <div id="map"></div>
     </div>
-    
-    
-    
+
+
+
 </body>
 </html>

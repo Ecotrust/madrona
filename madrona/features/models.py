@@ -223,7 +223,7 @@ class Feature(models.Model):
         returns : Viewable(boolean), HttpResponse
         """
         # First, is the user logged in?
-        if user.is_anonymous() or not user.is_authenticated():
+        if user.is_anonymous() or not user.is_authenticated:
             try:
                 obj = self.__class__.objects.shared_with_user(user).get(pk=self.pk)
                 return True, HttpResponse("Object shared with public, viewable by anonymous user", status=202)

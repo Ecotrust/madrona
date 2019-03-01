@@ -1,25 +1,77 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 {% load analytics %}
-{% load url from future %}
 {% load appname %}
+{% load static %}
+{% load compress %}
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{% block title %}{% appname %}{% endblock %}</title>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="{{MEDIA_URL}}jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="http://www.google.com/jsapi?key={{api_key}}"></script>
-    <script src="{{MEDIA_URL}}closure/closure-compiled.js" type="text/javascript" charset="utf-8"></script>
-    <script src="{{MEDIA_URL}}kmltree/dist/kmltree.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "jquery-ui.min.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi?key={{api_key}}"></script>
+    <script src="{% static "closure/closure-compiled.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "kmltree/dist/kmltree.min.js" %}" type="text/javascript" charset="utf-8"></script>
 
-    <link rel="stylesheet" href="{{MEDIA_URL}}kmltree/dist/kmltree.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static "kmltree/dist/kmltree.css" %}" type="text/css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{% url 'feature-tree-css' %}" type="text/css" media="screen" charset="utf-8">
 
-    {% load compressed %}
-    {% compressed_css 'application' %}
-    {% compressed_js 'application' %}
+    {% compress css %}
+    <link rel="stylesheet" href="{% static "closure/assets/common.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "closure/assets/menus.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "closure/assets/menubutton.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "closure/assets/toolbar.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/typography.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/application.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/tabs.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/layout.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/menu_items.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/buttons.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/forms.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/closure-fixes.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="{% static "common/css/table.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="{% static "common/css/common.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="{% static "geographic_report/css/geographic_report.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="{% static "common/css/jquery-ui.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="{% static "common/css/jquery-widgets.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="{% static "common/css/ui.theme.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="{% static "bookmarks/css/bookmarks.css" %}" type="text/css" charset="utf-8">
+    {% endcompress %}
+    {% compress js %}
+    <script src="/static/common/js/lib/extensions.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/jquery.form.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/jquery/jquery.selText.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/madrona.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/tmpl.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/smartresize.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/ge_utility_lib_patches.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/raphael-js/raphael.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/raphael_ext.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/tools/measure_tool.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/layout/layout.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/layout/panel.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/layout/shortTextArea.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/layout/menu_items.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/map/map.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/map/googleLayers.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/map/geocoder.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/lib/json2.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/jquery/jquery.ui.slider.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/jquery/jquery-callback-1.2.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/jquery/jquery.localscroll-1.2.7-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/jquery/jquery.scrollTo-1.4.2-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/tools/formats.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/manipulators/js/manipulators.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/graphics.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/common/js/ui/table.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/geographic_report/js/geographicReport.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/features/features.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/features/js/workspace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/features/js/kmlEditor.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/bookmarks/js/bookmarks.js" type="text/javascript" charset="utf-8"></script>
+    {% endcompress %}
     {% block head %}{% endblock %}
     {% block headtwo %}{% endblock headtwo %}
 </head>

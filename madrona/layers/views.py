@@ -40,7 +40,7 @@ def is_privatekml_viewable(layer, user):
     """
     Since privatekmls are not Features, they get their own sharing scheme
     """
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous() or not user.is_authenticated:
         return False, HttpResponse('You must be logged in', status=401)
 
     for user_group in user.groups.all():
@@ -52,7 +52,7 @@ def is_privatekml_viewable(layer, user):
 def get_privatekml_list(request, session_key='0'):
     load_session(request, session_key)
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse('You must be logged in', status=401)
     all_kmls = PrivateKml.objects.all()
     accessible_kmls = []
@@ -86,7 +86,7 @@ def has_privatekml(user):
 def get_privatekml(request, pk, session_key='0'):
     load_session(request, session_key)
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse('You must be logged in', status=401)
     layer = PrivateKml.objects.get(pk=pk)
     viewable, response = is_privatekml_viewable(layer, user)
@@ -102,7 +102,7 @@ def get_privatekml(request, pk, session_key='0'):
 def get_relative_to_privatekml(request, pk, path, session_key='0'):
     load_session(request, session_key)
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse('You must be logged in', status=401)
     layer = PrivateKml.objects.get(pk=pk)
     viewable, response = is_privatekml_viewable(layer, user)

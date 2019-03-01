@@ -1,12 +1,33 @@
 {% load appname %}
+{% load static %}
+{% load compress %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{% block title %}{% appname %}{% endblock %}</title>
-    {% load compressed %}
-    {% compressed_css 'application' %}
+    {% compress css %}
+    <link rel="stylesheet" href="%{ static "closure/assets/common.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "closure/assets/menus.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "closure/assets/menubutton.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "closure/assets/toolbar.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/typography.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/application.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/tabs.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/layout.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/menu_items.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/buttons.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/forms.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/closure-fixes.css" %}" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="%{ static "common/css/table.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="%{ static "common/css/common.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="%{ static "geographic_report/css/geographic_report.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="%{ static "common/css/jquery-ui.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="%{ static "common/css/jquery-widgets.css" %}" type="text/css" charset="utf-8">
+    <!-- <link rel="stylesheet" href="%{ static "common/css/ui.theme.css" %}" type="text/css" charset="utf-8"> -->
+    <link rel="stylesheet" href="%{ static "bookmarks/css/bookmarks.css" %}" type="text/css" charset="utf-8">
+    {% endcompress %}
 </head>
 <body style="padding:10px;">
     <h1> Your current browser is not supported by {% appname %}. </h1>
@@ -30,7 +51,7 @@
         </ul>
     </div>
 
-    <p><em>We can not support Microsoft Internet Explorer Browsers earlier than MSIE8 or the Linux Operating System at this time.</em></p> 
+    <p><em>We can not support Microsoft Internet Explorer Browsers earlier than MSIE8 or the Linux Operating System at this time.</em></p>
 
     <div>
         <h4>Additional System Requirements</h4>
@@ -46,6 +67,3 @@
     <p>We see that you are using {{browser_platform}}; you can <a href="{{redirect_url}}?supported=false">try {% appname %}</a> with the understanding that it is not officially supported.</p>
     </body>
 </html>
-
-
-
