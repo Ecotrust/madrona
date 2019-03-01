@@ -1,0 +1,54 @@
+/*
+    Site-wide typographic styling. Due to the cascading nature, styles 
+    specified in application.css will override these.
+*/
+
+html {
+    font-family: Verdana, sans-serif;
+}
+
+h1 {
+    margin:12px 0;
+    padding:0;
+    font-size:18px;
+    color:#1A3752;
+    text-shadow: #FFF 0px 1px 0px;
+    -moz-text-shadow: #FFF 0px 1px 0px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family:sans-serif;    
+}
+
+h2 {
+    font-size:16px;
+    color:#47556C;
+    margin-bottom:5px;
+    margin-top:20px;
+}
+
+h3 {
+    font-size: 14px;
+    color:#47556C;
+    font-weight:normal;
+    margin-bottom:0px;
+}
+
+.madrona-panel p {
+    padding:0;
+    margin:10px;
+    font-size:12px;
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+}
+
+.pagetitle {
+    position:absolute; 
+    left:525px; 
+    top:12px; 
+    font-size: 120%; 
+    color:white;
+}

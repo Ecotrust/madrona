@@ -136,8 +136,25 @@ REGISTRATION_OPEN = True # Can users register themselves or not?
 GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent)
 GROUP_REGISTERED_BY_WEB = 'registered_by_web'  # Group name assigned to users who register using the web interface
 
-MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
-STATIC_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../static/')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATIC_URL = '/static/'
+
+# STATIC_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../static/')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATICFILES_DIRS = [
+    # RDH: It can find properly named static files like the one below on its own.
+    # os.path.join(BASE_DIR, "providers", "static"),
+]
+
+
+
 
 # URLS
 MEDIA_URL = '/media/'

@@ -1,0 +1,258 @@
+/* CSS file modified from http://stilbuero.de/jquery/tabs_3/ */
+/* Caution! Ensure accessibility in print and other media types... */
+.ui-tabs-hide {
+    position:absolute;
+    left:-10000px;
+    top:-10000px;
+    top:0px;
+}
+/*}*/
+
+/* Hide useless elements in print layouts... */
+
+/* Skin */
+.ui-tabs-nav{
+/*    font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif;*/
+    font-size: 0.6em;
+}
+.ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 4px;
+    position:absolute;
+    top:5px;
+    z-index:4;
+
+}
+
+.ui-tabs-nav span {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+.ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+
+.ui-tabs-nav li {
+    float: left;
+    margin: 0 0 0 1px;
+    min-width: 84px; /* be nice to Opera */
+    padding:0;
+    margin-right:-40px;
+}
+
+.ui-tabs-nav a {
+    width:182px;
+    height:36px;
+}
+
+.ui-tabs-nav a, .ui-tabs-nav a span {
+    display: block;
+/*    padding: 0 10px;*/
+/*    background: white;*/
+/*    background-color:#E2E2E2;*/
+    font-size:12px;
+    padding:0em;
+}
+
+.ui-tabs-nav a {
+    margin: 1px 1px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
+    padding-left: 0;
+/*    color: #102233;*/
+    color:white;
+    font-size:12px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* required in IE 6 */    
+    outline: 0; /* prevent dotted border in Firefox */
+/*    border-bottom:solid 1px #A9CEE8;
+    -webkit-box-shadow: 2px -2px 3px #357ABE;
+    -moz-box-shadow: 2px -2px 3px #3373B2;
+*/}
+
+.masked .ui-tabs-nav a {
+    color:#808080;
+}
+
+.sidebar-panel .ui-tabs-nav a {
+    color:#17314A;
+}
+
+.ui-tabs-nav .ui-tabs-selected {
+    background: url(../images/tab_bg.png)  no-repeat 0px 0px;
+}
+
+.masked .ui-tabs-selected {
+    background: url(../images/tab_bg.png)  no-repeat -182px 0px;
+}
+
+.ui-tabs-nav {
+/*    margin-left:-20px;*/
+}
+
+.ui-tabs-nav .ui-tabs-selected a {
+/*    -webkit-box-shadow: 2px -2px 3px #3373B2;
+    -moz-box-shadow: 2px -2px 3px #B6B6B6;
+*/    border-bottom:none;
+    font-size:12px;
+/*    background-color:#FFF;*/
+/*    color:black;*/
+/*    -webkit-border-top-right-radius:15px;
+    -webkit-border-top-left-radius:2px;
+    -moz-border-radius-topright:15px;
+    -moz-border-radius-topleft:2px;
+*/   
+/*    margin-right:-5px;*/
+    position: relative;
+/*    padding-bottom:7px;*/
+/*    top: 0px;*/
+    z-index: 2;
+/*    margin-top: 0;*/
+/*    margin-bottom:-5px;*/
+    color: #1A3752;
+}
+.ui-tabs-nav a span {
+    padding-top:12px;
+}
+
+
+.ui-tabs-nav .ui-tabs-selected a span {
+}
+.ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active,
+.ui-tabs-nav .ui-tabs-deselectable a:hover, .ui-tabs-nav .ui-tabs-deselectable a:focus, .ui-tabs-nav .ui-tabs-deselectable a:active { /* @ Opera, we need to be explicit again here now... */
+    cursor: pointer;
+}
+.ui-tabs-disabled {
+    opacity: .4;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+}
+.ui-tabs-loading em {
+    padding: 0 0 0 20px;
+    background: url(loading.gif) no-repeat 0 50%;
+}
+
+/* Additional IE specific bug fixes... */
+* html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
+    display: inline-block;
+}
+*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+    display: inline-block;
+}
+
+.madrona-panel .ui-tabs-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position:relative;
+/*    top:0em;*/
+/*    z-index:4;*/
+    background: transparent url(../images/below_tabs.png) no-repeat center bottom;
+    padding-bottom:25px;
+}
+
+.madrona-panel .ui-tabs-nav {
+    margin-top:-5px;
+    margin-bottom:20px;
+}
+
+.madrona-panel .tabs .ui-state-disabled {
+    display:none;
+}
+
+.madrona-panel .tabs {
+    font-family:"Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+}
+
+.madrona-panel .ui-tabs-nav a {
+    color:#333;
+    background-color:none;
+    padding:3px 10px;
+    font-weight:normal;
+}
+
+.madrona-panel .ui-tabs-nav .ui-tabs-selected a {
+    background-color:#4982DE;
+    color:white;
+    background-image:none;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+/*    text-decoration:underline;*/
+}
+
+.madrona-panel .ui-tabs-nav a {
+    width:auto;
+    height:auto;
+    margin:0 0 0px 0;
+}
+
+.madrona-panel .ui-tabs-nav li {
+    margin:5px 15px 5px 0;
+    min-width:0;
+}
+
+.madrona-panel .ui-tabs-nav .ui-tabs-selected {
+    background-image:none;
+}
+
+.madrona-panel .ui-tabs-nav a span {
+    padding-top:0px;
+    margin-top:0px;
+}
+
+.madrona-panel .ui-tabs-hide {
+/*    display:none;*/
+    
+    position:absolute;
+    left:-10000px;
+    top:-10000px;
+    
+}
+/*
+li.ui-state-processing a {
+    background-color:#B3C6D4;
+    color:white;
+    background-image:none;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+*/
+li.ui-state-processing span img {
+    margin-bottom:-3px;
+    margin-right:5px;
+}
+
+.madrona-panel .ui-tabs .ui-tabs .ui-tabs-nav a {
+    color: #333;
+    padding:3px 10px;
+}
+
+.madrona-panel .ui-tabs .ui-tabs .ui-tabs-nav a span {
+    font-size:11px;
+}
+
+.madrona-panel .ui-tabs .ui-tabs .ui-tabs-nav .ui-tabs-selected a {
+    background-color:#716F79;
+    color:white;
+}
+
+.madrona-panel .ui-tabs .ui-tabs {
+    margin-top:-25px;
+    margin-left:10px;
+}
+
+.madrona-panel .ui-tabs .ui-tabs .ui-tabs-nav {
+    padding-bottom:5px;
+}
+
+.madrona-panel .ui-tabs .ui-tabs .ui-tabs-nav {
+    background-image:none;
+}

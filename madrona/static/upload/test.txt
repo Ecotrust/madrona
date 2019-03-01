@@ -1,0 +1,1 @@
+This file should NOT be web-accessible by any user via a static media server (Apache). No files in the upload directory should!

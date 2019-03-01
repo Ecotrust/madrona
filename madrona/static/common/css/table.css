@@ -1,0 +1,41 @@
+.madrona-table {
+    font-size:12px;
+    width:100%;
+    border:solid 1px #ccc;
+    margin:5px;
+}
+
+.madrona-table th {
+    color:#344E63;
+    font-weight:bold;
+    text-shadow:0 1px 0 #FCFAFF;
+}
+
+.madrona-table thead tr {
+    background:#FAFAFA url(../images/toolbar-bg.png) repeat-x scroll left bottom;
+    text-align:center;
+}
+
+.madrona-table tbody {
+    background-color:white;
+}
+
+.madrona-table tr.zebra {
+    background-color:#eee;
+}
+
+.madrona-table span.hover {
+    display:none;
+}
+
+.madrona-table-hover tbody tr:hover {
+    background-color:#C9E9FF;
+}
+
+.madrona-table-hover tbody tr:hover span {
+    display:none;
+}
+
+.madrona-table-hover tbody tr:hover span.hover {
+    display:block;
+}

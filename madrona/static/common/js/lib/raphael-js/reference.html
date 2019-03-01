@@ -1,0 +1,992 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Raphaël Reference</title>
+        <meta http-equiv="content-language" content="en">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="author" content="Dmitry Baranovskiy">
+        <meta name="description" content="Vector Graphics JavaScript Library">
+        <meta name="keywords" content="JavaScript Library, Raphael, SVG, VML">
+        <meta name="viewport" content="width=450; user-scalable=no">
+        <link rel="shortcut icon" href="/favicon16.png" type="image/x-icon">
+        <link rel="stylesheet" href="raphael.css" type="text/css" charset="utf-8" media="screen,projection">
+        <link rel="stylesheet" type="text/css" media="print" href="print.css">
+        <link rel="shortcut icon" href="/favicon16.png" type="image/x-icon">
+        <link media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" rel="stylesheet">
+        <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
+        <script src="museo.js" type="text/javascript" charset="utf-8"></script>
+
+
+    </head>
+    <body class="raphael" id="reference">
+        <div id="header">
+            <a href="http://twitter.com/statuses/user_timeline/17180567.atom" id="rss" name="rss">rss</a>
+            <h1>
+                Raphaël—JavaScript Library
+            </h1>
+        </div>
+        <div id="content">
+            <div>
+                <div>
+                    <div id="column-1">
+                        <h2>Main Function</h2>
+                        <h3 id="Raphael">
+                            Raphael
+                        </h3>
+                        <p>
+                            Creates a canvas object on which to draw. You must do this first, as all future calls to drawing methods from this instance will be bound to this canvas.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>container <em>HTMLElement</em> or <em>string</em></li>
+                            <li>width <em>number</em></li>
+                            <li>height <em>number</em></li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>x <em>number</em></li>
+                            <li>y <em>number</em></li>
+                            <li>width <em>number</em></li>
+                            <li>height <em>number</em></li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>all <em>array</em> (first 3 or 4 elements in the array are equal to [containerID, width, height] or [x, y, width, height]. The rest are element descriptions in format {type: type, &lt;attributes>})</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>// Each of the following examples create a canvas that is 320px wide by 200px high
+// Canvas is created at the viewport’s 10,50 coordinate
+var paper = Raphael(10, 50, 320, 200);
+// Canvas is created at the top left corner of the #notepad element
+// (or its top right corner in dir="rtl" elements)
+var paper = Raphael(document.getElementById("notepad"), 320, 200);
+// Same as above
+var paper = Raphael("notepad", 320, 200);
+// Image dump
+var set = Raphael(["notepad", 320, 200, {
+    type: "rect",
+    x: 10,
+    y: 10,
+    width: 25,
+    height: 25,
+    stroke: "#f00"
+}, {
+    type: "text",
+    x: 30,
+    y: 40,
+    text: "Dump"
+}]);</code></pre>
+                        <h3 id="circle">
+                            circle
+                        </h3>
+                        <div class="sample" id="circle-sample"></div>
+                        <p>
+                            Draws a circle.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>x <em>number</em> X coordinate of the centre</li>
+                            <li>y <em>number</em> Y coordinate of the centre</li>
+                            <li>r <em>number</em> radius</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(50, 50, 40);</code></pre>
+                        <h3 id="rect">
+                            rect
+                        </h3>
+                        <div class="sample" id="rect-sample"></div>
+                        <p>
+                            Draws a rectangle.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>x <em>number</em> X coordinate of top left corner</li>
+                            <li>y <em>number</em> Y coordinate of top left corner</li>
+                            <li>width <em>number</em></li>
+                            <li>height <em>number</em></li>
+                            <li>r <em>number</em> [optional] radius for rounded corners, default is 0</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>// regular rectangle</code>
+<code>var c = paper.rect(10, 10, 50, 50);</code>
+<code>// rectangle with rounded corners</code>
+<code>var c = paper.rect(40, 40, 50, 50, 10);</code></pre>
+                        <h3 id="ellipse">
+                            ellipse
+                        </h3>
+                        <div class="sample" id="ellipse-sample"></div>
+                        <p>
+                            Draws an ellipse.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>x <em>number</em> X coordinate of the centre</li>
+                            <li>y <em>number</em> X coordinate of the centre</li>
+                            <li>rx <em>number</em> Horisontal radius</li>
+                            <li>ry <em>number</em> Vertical radius</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.ellipse(50, 50, 40, 20);</code></pre>
+                        <h3 id="image">
+                            image
+                        </h3>
+                        <div class="sample" id="image-sample"></div>
+                        <p>
+                            Embeds an image into the SVG/VML canvas.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>src <em>string</em> URI of the source image</li>
+                            <li>x <em>number</em> X coordinate position</li>
+                            <li>y <em>number</em> Y coordinate position</li>
+                            <li>width <em>number</em> Width of the image</li>
+                            <li>height <em>number</em> Height of the image</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.image("apple.png", 10, 10, 80, 80);</code></pre>
+                        <h3 id="set">
+                            set
+                        </h3>
+                        <div class="sample" id="set-sample"></div>
+                        <p>
+                            Creates array-like object to keep and operate couple of elements at once. Warning: it doesn’t create any elements for itself in the page.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var st = paper.set();</code>
+<code>st.push(
+    paper.circle(10, 10, 5),
+    paper.circle(30, 10, 5)
+);</code>
+<code>st.attr({fill: "red"});</code></pre>
+                        <h3 id="text">
+                            text
+                        </h3>
+                        <div class="sample" id="text-sample"></div>
+                        <p>
+                            Draws a text string. If you need line breaks, put “\n” in the string.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>x <em>number</em> X coordinate position.</li>
+                            <li>y <em>number</em> Y coordinate position.</li>
+                            <li>text <em>string</em> The text string to draw.</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var t = paper.text(50, 50, "Raphaël\nkicks\nbutt!");</code></pre>
+                        <h3 id="path">
+                            path
+                        </h3>
+                        <div class="sample" id="path-sample"></div>
+                        <p>
+                            Creates a path element by given path data string.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>pathString <em>string</em> [optional] Path data in <a href="http://www.w3.org/TR/SVG/paths.html#PathData" title="Details of a path's data attribute's format are described in the SVG specification.">SVG path string format</a>.</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.path("M10 10L90 90");
+// draw a diagonal line:
+// move to 10,10, line to 90,90</code></pre>
+                        <h2 id="Element">
+                            Element’s generic methods
+                        </h2>
+                        <p>
+                            Each object created on the canvas shares these same generic methods:
+                        </p>
+                        <h3 id="node">
+                            node
+                        </h3>
+                        <p>
+                            Gives you a reference to the DOM object, so you can assign event handlers or just mess around.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>// draw a circle at coordinate 10,10 with radius of 10
+var c = paper.circle(10, 10, 10);
+c.node.onclick = function () {
+    c.attr("fill", "red");
+};</code></pre>
+                        <h3 id="paper">
+                            paper
+                        </h3>
+                        <p>
+                            Internal reference to “paper” where object drawn. Mainly for use in plugins and element extensions.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>Raphael.el.cross = function () {
+    this.attr({fill: "red"});
+    this.paper.path("M10,10L50,50M50,10L10,50")
+        .attr({stroke: "red"});
+}</code></pre>
+                        <h3 id="remove">
+                            remove
+                        </h3>
+                        <p>
+                            Removes element from the DOM. You can’t use it after this method call.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+c.remove();</code></pre>
+                        <h3 id="hide">
+                            hide
+                        </h3>
+                        <p>
+                            Makes element invisible.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+c.hide();</code></pre>
+                        <h3 id="show">
+                            show
+                        </h3>
+                        <p>
+                            Makes element visible.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+c.show();</code></pre>
+                        <h3 id="rotate">
+                            rotate
+                        </h3>
+                        <p>
+                            Rotates the element by the given degree from its center point.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>degree <em>number</em> Degree of rotation (0 – 360°)</li>
+                            <li>isAbsolute <em>boolean</em> [optional] Specifies is degree is relative to previous position (<code>false</code>) or is it absolute angle (<code>true</code>)</li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>degree <em>number</em> Degree of rotation (0 – 360°)</li>
+                            <li>cx <em>number</em> [optional] X coordinate of the origin of rotation</li>
+                            <li>cY <em>number</em> [optional] Y coordinate of the origin of rotation</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+c.rotate(45);        // rotation is relative
+c.rotate(45, true);  // rotation is absolute</code></pre>
+                        <h3 id="translate">
+                            translate
+                        </h3>
+                        <p>
+                            Moves the element around the canvas by the given distances.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>dx <em>number</em> Pixels of translation by X axis</li>
+                            <li>dy <em>number</em> Pixels of translation by Y axis</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+// moves the circle 10&nbsp;px to the right and down
+c.translate(10, 10);</code></pre>
+                        <h3 id="scale">
+                            scale
+                        </h3>
+                        <p>
+                            Resizes the element by the given multiplier.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>Xtimes <em>number</em> Amount to scale horizontally</li>
+                            <li>Ytimes <em>number</em> Amount to scale vertically</li>
+                            <li>centerX <em>number</em> [optional] X of the center of scaling, default is the center of the element</li>
+                            <li>centerY <em>number</em> [optional] Y of the center of scaling, default is the center of the element</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+// makes the circle 1.5 times larger
+c.scale(1.5, 1.5);
+// makes the circle half as wide, and 75% as high
+c.scale(.5, .75);</code></pre>
+                        <h3 id="attr">
+                            attr
+                        </h3>
+                        <p>
+                            Sets the attributes of elements directly.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>attributeName <em>string</em></li>
+                            <li>value <em>string</em></li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>params <em>object</em></li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>attributeName <em>string</em> in this case method returns current value for given attribute name</li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>attributeNames <em>array</em> in this case method returns array of current values for given attribute names</li>
+                        </ol>
+                        <p>or</p>
+                        <p>no parameters, in this case object containing all attributes will be returned</p>
+                        <h4>Possible parameters</h4>
+                        <p>Please refer to the <a href="http://www.w3.org/TR/SVG/" title="The W3C Recommendation for the SVG language describes these properties in detail.">SVG specification</a> for an explanation of these parameters.</p>
+                        <ul>
+                            <li id="attr-clip-rect">clip-rect <em>string</em> comma or space separated values: x, y, width and height</li>
+                            <li id="attr-cx">cx <em>number</em></li>
+                            <li id="attr-cy">cy <em>number</em></li>
+                            <li id="attr-fill">
+                                fill <em>colour</em> or <em>gradient</em>
+                                <ul>
+                                    <li>linear gradient: “‹angle›-‹colour›[-‹colour›[:‹offset›]]*-‹colour›”, example: “<samp>90-#fff-#000</samp>” – 90° gradient from white to black or “<samp>0-#fff-#f00:20-#000</samp>” – 0° gradient from white via red (at 20%) to black</li>
+                                    <li>radial gradient: “r[(‹fx›, ‹fy›)]‹colour›[-‹colour›[:‹offset›]]*-‹colour›”, example: “<samp>r#fff-#000</samp>” – gradient from white to black or “<samp>r(0.25, 0.75)#fff-#000</samp>” – gradient from white to black with focus point at 0.25, 0.75</li>
+                                    <li>Focus point coordinates are in 0..1 range</li>
+                                    <li>Radial gradients can only be applied to circles and ellipses</li>
+                                </ul>
+                            </li>
+                            <li id="attr-fill-opacity">fill-opacity <em>number</em></li>
+                            <li id="attr-font">font <em>string</em></li>
+                            <li id="attr-font-family">font-family <em>string</em></li>
+                            <li id="attr-font-size">font-size <em>number</em></li>
+                            <li id="attr-font-weight">font-weight <em>string</em></li>
+                            <li id="attr-height">height <em>number</em></li>
+                            <li id="attr-opacity">opacity <em>number</em></li>
+                            <li id="attr-path">path <em>pathString</em> <a href="http://www.w3.org/TR/SVG/paths.html#PathData" title="Details of a path’s data attribute’s format are described in the SVG specification.">SVG path string format</a></li>
+                            <li id="attr-r">r <em>number</em></li>
+                            <li id="attr-rotation">rotation <em>number</em></li>
+                            <li id="attr-rx">rx <em>number</em></li>
+                            <li id="attr-ry">ry <em>number</em></li>
+                            <li id="attr-scale">scale <em>string</em> comma or space separated values: xtimes, ytimes, cx, cy. See: <a href="#scale">scale</a></li>
+                            <li id="attr-src">src <em>string</em> (URL)</li>
+                            <li id="attr-stroke">stroke <em>colour</em></li>
+                            <li id="attr-stroke-dasharray">stroke-dasharray <em>string</em> [“”, “<samp>-</samp>”, “<samp>.</samp>”, “<samp>-.</samp>”, “<samp>-..</samp>”, “<samp>. </samp>”, “<samp>- </samp>”, “<samp>--</samp>”, “<samp>-&nbsp;.</samp>”, “<samp>--.</samp>”, “<samp>--..</samp>”]</li>
+                            <li id="attr-stroke-linecap">stroke-linecap <em>string</em> [“<samp>butt</samp>”, “<samp>square</samp>”, “<samp>round</samp>”]</li>
+                            <li id="attr-stroke-linejoin">stroke-linejoin <em>string</em> [“<samp>bevel</samp>”, “<samp>round</samp>”, “<samp>miter</samp>”]</li>
+                            <li id="attr-stroke-miterlimit">stroke-miterlimit <em>number</em></li>
+                            <li id="attr-stroke-opacity">stroke-opacity <em>number</em></li>
+                            <li id="attr-stroke-width">stroke-width <em>number</em></li>
+                            <li id="attr-translation">translation <em>string</em> comma or space separated values: x and y</li>
+                            <li id="attr-width">width <em>number</em></li>
+                            <li id="attr-x">x <em>number</em></li>
+                            <li id="attr-y">y <em>number</em></li>
+                        </ul>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);
+// using strings
+c.attr("fill", "black");
+// using params object
+c.attr({fill: "#000", stroke: "#f00", opacity: 0.5});
+c.attr({
+    fill: "90-#fff-#000",
+    "stroke-dasharray": "-..",
+    "clip-rect": "10, 10, 100, 100"
+});</code></pre>
+                        <h3 id="animate">
+                            animate
+                        </h3>
+                        <p>
+                            Changes an attribute from its current value to its specified value in the given amount of milliseconds.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>newAttrs <em>object</em> A parameters object of the animation results. (Not all attributes can be animated.)</li>
+                            <li>ms <em>number</em> The duration of the animation, given in milliseconds.</li>
+                            <li>callback <em>function</em> [optional]</li>
+                        </ol>
+                        <p>or</p>
+                        <ol>
+                            <li>newAttrs <em>object</em> A parameters object of the animation results. (Not all attributes can be animated.)</li>
+                            <li>ms <em>number</em> The duration of the animation, given in milliseconds.</li>
+                            <li>easing <em>string</em> [“<samp>></samp>”, “<samp>&lt;</samp>”, “<samp>&lt;></samp>”, “<samp>backIn</samp>”, “<samp>backOut</samp>”, “<samp>bounce</samp>”, “<samp>elastic</samp>”] or <em>function</em> [optional]</li>
+                            <li>callback <em>function</em> [optional]</li>
+                        </ol>
+                        <h4>Attributes that can be animated</h4>
+                        <p>The <code>newAttrs</code> parameter accepts an object whose properties are the attributes to animate. However, not all attributes listed in the <code>attr</code> method reference can be animated. The following is a list of those properties that can be animated:</p>
+                        <ul>
+                            <li>clip-rect <em>string</em></li>
+                            <li>cx <em>number</em></li>
+                            <li>cy <em>number</em></li>
+                            <li>fill <em>colour</em></li>
+                            <li>fill-opacity <em>number</em></li>
+                            <li>font-size <em>number</em></li>
+                            <li>height <em>number</em></li>
+                            <li>opacity <em>number</em></li>
+                            <li>path <em>pathString</em></li>
+                            <li>r <em>number</em></li>
+                            <li>rotation <em>string</em></li>
+                            <li>rx <em>number</em></li>
+                            <li>ry <em>number</em></li>
+                            <li>scale <em>string</em></li>
+                            <li>stroke <em>colour</em></li>
+                            <li>stroke-opacity <em>number</em></li>
+                            <li>stroke-width <em>number</em></li>
+                            <li>translation <em>string</em></li>
+                            <li>width <em>number</em></li>
+                            <li>x <em>number</em></li>
+                            <li>y <em>number</em></li>
+                        </ul>
+                        <h4>Easing</h4>
+                        <p>
+                            For easing use built in functions or add your own by adding new functions to <code>Raphael.easing_formulas</code> object. Look at the <a href="easing.html">example of easing usage</a>.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);</code>
+<code>c.animate({cx: 20, r: 20}, 2000);</code>
+<code>c.animate({cx: 20, r: 20}, 2000, "bounce");</code></pre>
+                        <h3 id="animateWith">
+                            animateWith
+                        </h3>
+                        <p>
+                            The same as <a href="#animate"><code>animate</code></a> method, but synchronise animation with another element.
+                        </p>
+                        <h4>Parameters</h4>
+                        <p>The same as for <a href="#animate"><code>animate</code></a> method, but first argument is an element.</p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10),
+    r = paper.rect(10, 10, 10, 10);
+c.animate({cx: 20, r: 20}, 2000);
+r.animateWith(c, {x: 20}, 2000);</code></pre>
+                        <h3 id="animateAlong">
+                            animateAlong
+                        </h3>
+                        <div class="sample" id="along-sample"></div>
+                        <p>
+                            Animates element along the given path. As an option it could rotate element along the path.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>path <em>object</em> or <em>string</em> path element or path string along which the element will be animated</li>
+                            <li>ms <em>number</em> The duration of the animation, given in milliseconds.</li>
+                            <li>rotate <em>boolean</em> [optional] if true, element will be rotated along the path</li>
+                            <li>callback <em>function</em> [optional]</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var p = r.path("M100,100c0,50 100-50 100,0c0,50 -100-50 -100,0z").attr({stroke: "#ddd"}),
+    e = r.ellipse(104, 100, 4, 4).attr({stroke: "none", fill: "#f00"}),
+    b = r.rect(0, 0, 620, 400).attr({stroke: "none", fill: "#000", opacity: 0}).click(function () {
+        e.attr({rx: 5, ry: 3}).animateAlong(p, 4000, true, function () {
+            e.attr({rx: 4, ry: 4});
+        });
+    });</code></pre>
+                        <h3 id="animateAlongBack">
+                            animateAlongBack
+                        </h3>
+                        <p>
+                            Similar to <a href="animateAlong"><code>animateAlong</code></a>. Animates element along the given path, starting from the end of it.
+                        </p>
+                        <h3 id="onAnimation">
+                            onAnimation
+                        </h3>
+                        <div class="sample" id="onanim-sample"></div>
+                        <p>
+                            Sets or resets the function that will be called on each stage of the animation.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>f <em>function</em> function that will be called on each stage of animation</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var p = r.path("M10,50c0,50,80-50,80,0c0,50-80-50-80,0z"),
+    p2 = r.path(),
+    e = r.ellipse(10, 50, 4, 4).attr({stroke: "none", fill: "#f00"}).onAnimation(function () {
+        p2.attr({path: "M50,10L" + e.attr("cx") + "," + e.attr("cy")});
+    }),
+    b = r.rect(0, 0, 620, 400).attr({stroke: "none", fill: "#000", opacity: 0}).click(function () {
+        e.attr({rx: 5, ry: 3}).animateAlong(p, 4000, true, function () {
+            e.attr({rx: 4, ry: 4});
+        });
+    });</code></pre>
+                        <h3 id="getBBox">
+                            getBBox
+                        </h3>
+                        <p>
+                            Returns the dimensions of an element.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);</code>
+<code>var width = c.getBBox().width;</code></pre>
+                        <h3 id="toFront">
+                            toFront
+                        </h3>
+                        <p>
+                            Moves the element so it is the closest to the viewer’s eyes, on top of other elements.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);</code>
+<code>c.toFront();</code></pre>
+                        <h3 id="toBack">
+                            toBack
+                        </h3>
+                        <p>
+                            Moves the element so it is the furthest from the viewer’s eyes, behind other elements.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.circle(10, 10, 10);</code>
+<code>c.toBack();</code></pre>
+                        <h3 id="insertBefore">
+                            insertBefore
+                        </h3>
+                        <p>
+                            Inserts current object before the given one.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var r = paper.rect(10, 10, 10, 10);</code>
+<code>var c = paper.circle(10, 10, 10);</code>
+<code>c.insertBefore(r);</code></pre>
+                        <h3 id="insertAfter">
+                            insertAfter
+                        </h3>
+                        <p>
+                            Inserts current object after the given one.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var r = paper.rect(10, 10, 10, 10);
+var c = paper.circle(10, 10, 10);
+r.insertAfter(c);</code></pre>
+                        <h3 id="clone">
+                            clone
+                        </h3>
+                        <p>
+                            Returns a clone of the current element.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var r = paper.rect(10, 10, 10, 10);
+var c = r.clone();</code></pre>
+                        <h2>Graphic Primitives</h2>
+                        <p>
+                            Methods of “paper” object, created with <code>Raphael</code> function call.
+                        </p>
+                        <h3 id="raphael">
+                            raphael
+                        </h3>
+                        <p>
+                            Internal reference to <code>Raphael</code> object. In case it is not available.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>Raphael.el.red = function () {
+    var hsb = this.paper.raphael.rgb2hsb(this.attr("fill"));
+    hsb.h = 1;
+    this.attr({fill: this.paper.raphael.hsb2rgb(hsb).hex});
+}</code></pre>
+                        <h3 id="getTotalLength">
+                            getTotalLength
+                        </h3>
+                        <p>
+                            Path specific method. Returns length of the path in pixels.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var p = r.path("M100,100c0,50 100-50 100,0c0,50 -100-50 -100,0z");
+    alert(p.getTotalLength());</code></pre>
+                        <h3 id="getPointAtLength">
+                            getPointAtLength
+                        </h3>
+                        <div class="sample" id="point-sample"></div>
+                        <p>
+                            Path specific method. Returns point description at given length.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>length <em>number</em> length in pixels from the beginining of the path to the point</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var p = r.path("M10,50c0,50,80-50,80,0c0,50-80-50-80,0z");
+    var point = p.getPointAtLength(30);
+    r.circle(point.x, point.y, 3);</code></pre>
+                        <p>Returned object format:</p>
+                        <ul>
+                            <li>x – x coordinate of the point</li>
+                            <li>y – y coordinate of the point</li>
+                            <li>alpha – angle of the path at the point</li>
+                        </ul>
+                        <h3 id="getSubpath">
+                            getSubpath
+                        </h3>
+                        <div class="sample" id="subpath-sample"></div>
+                        <p>
+                            Path specific method. Returns the subpath string of a given path.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>from <em>number</em> length in pixels from the beginining of the path to the beginining of the subpath</li>
+                            <li>to <em>number</em> length in pixels from the beginining of the path to the end of the subpath</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var p = r.path("M10,50c0,50,80-50,80,0c0,50-80-50-80,0z");
+    var path = p.getSubpath(10, 60);
+    r.path(path).attr({stroke: "#f00"});</code></pre>
+                        <h3 id="setSize">
+                            setSize
+                        </h3>
+                        <p>
+                            If you need to change dimensions of the canvas call this method
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>width <em>number</em> new width of the canvas</li>
+                            <li>height <em>number</em> new height of the canvas</li>
+                        </ol>
+                        <h3 id="setWindow">
+                            setWindow
+                        </h3>
+                        <p>
+                            Should be called before main Raphael method. Sets which window should be used for drawing. Default is the current one. You need to use it if you want to draw inside <code>iframe</code>
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>window <em>object</em></li>
+                        </ol>
+                        <h3 id="getRGB">
+                            getRGB
+                        </h3>
+                        <p>
+                            Parses passes string and returns an color object. Especially usefull for plug-in developers.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>color <em>string</em> Color in form acceptable by library</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var stroke = Raphael.getRGB(circle.attr("stroke")).hex</code></pre>
+                        <h3 id="getColor">
+                            getColor
+                        </h3>
+                        <p>
+                            Returns a colour object for the next colour in spectrum
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>value <em>number</em> brightness [optional]</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var c = paper.path("M10,10L100,100").attr({stroke: Raphael.getColor()});</code></pre>
+                        <h3 id="getColor-reset">
+                            getColor.reset
+                        </h3>
+                        <p>
+                            Resets getColor function, so it will start from the beginning
+                        </p>
+                        <h3 id="registerFont">
+                            registerFont
+                        </h3>
+                        <p>
+                            Adds given font to the registered set of fonts for Raphaël. Should be used as an internal call from within Cufón’s font file. <a href="http://wiki.github.com/sorccu/cufon/about">More about Cufón and how to convert your font form TTF, OTF, etc to JavaScript file</a>. Returns original parameter, so it could be used with chaining.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>font <em>object</em> the font to register</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>Cufon.registerFont(Raphael.registerFont({…}))</code></pre>
+                        <h3 id="getFont">
+                            getFont
+                        </h3>
+                        <p>
+                            Finds font object in the registered fonts by given parameters. You could specify only one word from the font name, like “Myriad” for “Myriad Pro”.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>family <em>string</em> font family name or any word from it</li>
+                            <li>weight <em>string</em> weight of the font [optional]</li>
+                            <li>style <em>string</em> style of the font [optional]</li>
+                            <li>stretch <em>string</em> stretch of the font [optional]</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>paper.print(100, 100, "Test string", paper.getFont("Times", 800), 30);</code></pre>
+                        <h3 id="print">
+                            print
+                        </h3>
+                        <div class="sample" id="print-sample"></div>
+                        <p>
+                            Creates set of shapes to represent given font at given position with given size. Result of the method is set object (see <a href="#set">set</a>) which contains each letter as separate path object.
+                        </p>
+                        <h4>Parameters</h4>
+                        <ol>
+                            <li>x <em>number</em> x position of the text</li>
+                            <li>y <em>number</em> y position of the text</li>
+                            <li>text <em>string</em> text to print</li>
+                            <li>font <em>object</em> font object (see <a href="#getFont">getFont</a>)</li>
+                            <li>font_size <em>number</em> size of the font</li>
+                        </ol>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>var txt = r.print(10, 50, "print", r.getFont("Museo"), 30).attr({fill: "#fff"});
+// following line will paint first letter in red
+txt[0].attr({fill: "#f00"});</code></pre>
+                        <h3 id="plugins-canvas">
+                            Adding your own methods to canvas
+                        </h3>
+                        <p>
+                            You can add your own method to the canvas. For example if you want to draw pie chart, you can create your own pie chart function and ship it as a Raphaël plugin. To do this you need to extend Raphael.fn object. Please note that you can create your own namespaces inside fn object. Methods will be run in context of canvas anyway. You should alter fn object before Raphaël instance was created, otherwise it will take no effect.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>Raphael.fn.arrow = function (x1, y1, x2, y2, size) {
+    return this.path( ... );
+};
+// or create namespace
+Raphael.fn.mystuff = {
+    arrow: function () {…},
+    star: function () {…},
+    // etc…
+};
+var paper = Raphael(10, 10, 630, 480);
+// then use it
+paper.arrow(10, 10, 30, 30, 5).attr({fill: "#f00"});
+paper.mystuff.arrow();
+paper.mystuff.star();
+</code></pre>
+                        <h3 id="plugins-elements">
+                            Adding your own methods to elements
+                        </h3>
+                        <p>
+                            You can add your own method to elements. This is usefull when you want to hack default functionality or want to wrap some common transformation or attributes in one method. In difference to canvas mathods, you can redefine element method at any time.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>Raphael.el.red = function () {
+    this.attr({fill: "#f00"});
+};
+// then use it
+paper.circle(100, 100, 20).red();
+</code></pre>
+                        <h3 id="colour">
+                            Supported colour formats
+                        </h3>
+                        <p>
+                            You could specify colour in this formats:
+                        </p>
+                        <ul>
+                            <li>Colour name (“<samp>red</samp>”, “<samp>green</samp>”, “<samp>cornflowerblue</samp>”, etc)</li>
+                            <li>#••• — shortened HTML colour: (“<samp>#000</samp>”, “<samp>#fc0</samp>”, etc)</li>
+                            <li>#•••••• — full length HTML colour: (“<samp>#000000</samp>”, “<samp>#bd2300</samp>”)</li>
+                            <li>rgb(•••, •••, •••) — red, green and blue channels’ values: (“<samp>rgb(200,&nbsp;100,&nbsp;0)</samp>”)</li>
+                            <li>rgb(•••%, •••%, •••%) — same as above, but in %: (“<samp>rgb(100%,&nbsp;175%,&nbsp;0%)</samp>”)</li>
+                            <li>hsb(•••, •••, •••) — hue, saturation and brightness values: (“<samp>hsb(0.5,&nbsp;0.25,&nbsp;1)</samp>”)</li>
+                            <li>hsb(•••%, •••%, •••%) — same as above, but in %</li>
+                            <li>hsl(•••, •••, •••) — same as hsb</li>
+                            <li>hsl(•••%, •••%, •••%) — same as hsb</li>
+                        </ul>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>paper.circle(100, 100, 20).attr({
+    fill: "hsb(1, 255, 200)",
+    stroke: "red"
+});</code></pre>
+                        <h3 id="safari">
+                            safari
+                        </h3>
+                        <p>
+                            There is an inconvenient rendering bug is Safari (WebKit): sometimes the rendering should be forced. This method should help with dealing with this bug.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>paper.safari();</code></pre>
+                        <h3 id="ninja-mode">
+                            “Ninja Mode”
+                        </h3>
+                        <p>
+                            If you want to leave no trace of Raphaël (Well, Raphaël creates only one global variable <code>Raphael</code>, but anyway.) You can use <code>ninja</code> method. Beware, that in this case plugins could stop working, because they are depending on global variable existance.
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>(function (local_raphael) {
+    var paper = local_raphael(10, 10, 320, 200);
+    …
+})(Raphael.ninja());
+</code></pre>
+                        <h3 id="events">
+                            Events
+                        </h3>
+                        <p>
+                            You can attach events to elements by using element.node and your favourite library (<samp>$(circle.node).click(…)</samp>) or you can use built-in methods:
+                        </p>
+                        <h4>Usage</h4>
+                        <pre class="javascript code"><code>element.click(function (event) {
+    this.attr({fill: "red"});
+});
+element.dblclick(function (event) {
+    this.attr({fill: "red"});
+});
+element.mousedown(function (event) {
+    this.attr({fill: "red"});
+});
+element.mousemove(function (event) {
+    this.attr({fill: "red"});
+});
+element.mouseout(function (event) {
+    this.attr({fill: "red"});
+});
+element.mouseover(function (event) {
+    this.attr({fill: "red"});
+});
+element.mouseup(function (event) {
+    this.attr({fill: "red"});
+});
+element.hover(function (event) {
+    this.attr({fill: "red"});
+}, function (event) {
+    this.attr({fill: "black"});
+});</code></pre>
+                        <p>
+                            To unbind events use the same method names with “un” prefix, i.e. <samp>element.unclick(f);</samp>
+                        </p>
+                    </div>
+                    <div id="column-2">
+                        <h2>
+                            <a href="index.html">Home</a>
+                        </h2>
+                        <h2>
+                            Contents
+                        </h2>
+                        <ul id="contents">
+                            <li>
+                                <a href="#Raphael"><code>Raphael</code></a>
+                            </li>
+                            <li>
+                                <a href="#circle"><code>circle</code></a>
+                            </li>
+                            <li>
+                                <a href="#rect"><code>rect</code></a>
+                            </li>
+                            <li>
+                                <a href="#ellipse"><code>ellipse</code></a>
+                            </li>
+                            <li>
+                                <a href="#image"><code>image</code></a>
+                            </li>
+                            <li>
+                                <a href="#set"><code>set</code></a>
+                            </li>
+                            <li>
+                                <a href="#text"><code>text</code></a>
+                            </li>
+                            <li>
+                                <a href="#path"><code>path</code></a>
+                            </li>
+                            <li>
+                                <a href="#node"><code>node</code></a>
+                            </li>
+                            <li>
+                                <a href="#paper"><code>paper</code></a>
+                            </li>
+                            <li>
+                                <a href="#remove"><code>remove</code></a>
+                            </li>
+                            <li>
+                                <a href="#hide"><code>hide</code></a>
+                            </li>
+                            <li>
+                                <a href="#show"><code>show</code></a>
+                            </li>
+                            <li>
+                                <a href="#rotate"><code>rotate</code></a>
+                            </li>
+                            <li>
+                                <a href="#translate"><code>translate</code></a>
+                            </li>
+                            <li>
+                                <a href="#scale"><code>scale</code></a>
+                            </li>
+                            <li>
+                                <a href="#attr"><code>attr</code></a>
+                            </li>
+                            <li>
+                                <a href="#animate"><code>animate</code></a>
+                            </li>
+                            <li>
+                                <a href="#animateWith"><code>animateWith</code></a>
+                            </li>
+                            <li>
+                                <a href="#animateAlong"><code>animateAlong</code></a>
+                            </li>
+                            <li>
+                                <a href="#animateAlongBack"><code>animateAlongBack</code></a>
+                            </li>
+                            <li>
+                                <a href="#getBBox"><code>getBBox</code></a>
+                            </li>
+                            <li>
+                                <a href="#toFront"><code>toFront</code></a>
+                            </li>
+                            <li>
+                                <a href="#toBack"><code>toBack</code></a>
+                            </li>
+                            <li>
+                                <a href="#insertBefore"><code>insertBefore</code></a>
+                            </li>
+                            <li>
+                                <a href="#insertAfter"><code>insertAfter</code></a>
+                            </li>
+                            <li>
+                                <a href="#clone"><code>clone</code></a>
+                            </li>
+                            <li>
+                                <a href="#raphael"><code>raphael</code></a>
+                            </li>
+                            <li>
+                                <a href="#getTotalLength"><code>getTotalLength</code></a>
+                            </li>
+                            <li>
+                                <a href="#getPointAtLength"><code>getPointAtLength</code></a>
+                            </li>
+                            <li>
+                                <a href="#getSubpath"><code>getSubpath</code></a>
+                            </li>
+                            <li>
+                                <a href="#setSize"><code>setSize</code></a>
+                            </li>
+                            <li>
+                                <a href="#setWindow"><code>setWindow</code></a>
+                            </li>
+                            <li>
+                                <a href="#getRGB"><code>getRGB</code></a>
+                            </li>
+                            <li>
+                                <a href="#getColor"><code>getColor</code></a>
+                            </li>
+                            <li>
+                                <a href="#getColor-reset"><code>getColor.reset</code></a>
+                            </li>
+                            <li>
+                                <a href="#registerFont"><code>registerFont</code></a>
+                            </li>
+                            <li>
+                                <a href="#getFont"><code>getFont</code></a>
+                            </li>
+                            <li>
+                                <a href="#print"><code>print</code></a>
+                            </li>
+                            <li>
+                                <a href="#plugins-canvas">Adding your own methods to canvas</a>
+                            </li>
+                            <li>
+                                <a href="#plugins-elements">Adding your own methods to elements</a>
+                            </li>
+                            <li>
+                                <a href="#colour">Supported colour formats</a>
+                            </li>
+                            <li>
+                                <a href="#safari">safari</a>
+                            </li>
+                            <li>
+                                <a href="#ninja-mode">“Ninja Mode”</a>
+                            </li>
+                            <li>
+                                <a href="#events">Events</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div  id="footer">
+                        <h3 id="copyright">
+                            <a href="http://www.opensource.org/licenses/mit-license.php" title="MIT License" rel="license">Some Rights Reserved</a> by <a href="http://dmitry.baranovskiy.com/">Dmitry Baranovskiy</a>
+                        </h3>
+                        <h3 id="font">
+                            Logo by <a href="http://wasabicube.com/">Wasabicube</a> ·
+                            Work at this project started as 20% time at <a href="http://www.atlassian.com/" title="Atlassian — Software to Track, Test &#38; Collaborate, from Enterprises to Open Source Projects.">Atlassian</a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="syntax.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-616618-3");
+        pageTracker._trackPageview();
+        </script>
+    </body>
+</html>
