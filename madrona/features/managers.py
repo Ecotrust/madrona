@@ -17,7 +17,7 @@ class ShareableGeoManager(GeoManager):
         model_name = self.model.__name__.lower()
         perm = Permission.objects.get(codename='can_share_features')
 
-        if user.is_anonymous() or not user.is_authenticated:
+        if user.is_anonymous or not user.is_authenticated:
             # public users get special treatment -
             # ONLY get to see anything shared with a public group
             groups = Group.objects.filter(name__in=settings.SHARING_TO_PUBLIC_GROUPS)

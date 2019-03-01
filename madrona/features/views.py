@@ -14,6 +14,7 @@ from madrona.features.forms import FeatureForm
 from django.urls import reverse
 from django.contrib.auth.models import Permission, Group
 from django.conf import settings
+from madrona.features import workspace_json
 import json
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -700,7 +701,7 @@ def manage_collection(request, action, uids, collection_model, collection_uid):
 def workspace(request, username, is_owner):
     user = request.user
     if request.method == 'GET':
-        if user.is_anonymous() and is_owner:
+        if user.is_anonymous and is_owner:
             return HttpResponse("Anonymous user can't access workspace as owner", status=403)
         res = HttpResponse(workspace_json(user, is_owner), status=200)
         res['Content-Type'] = mimetypes.JSON
