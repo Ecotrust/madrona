@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext, Context
 from django.conf import settings
 from madrona.features.models import Feature
@@ -284,7 +284,8 @@ def create_form(request, model, action=None):
             'user': user,
         })
         context = decorate_with_manipulators(context, form_class)
-        return render_to_response(config.form_template, context)
+        # return render_to_response(config.form_template, context)
+        return render(request, config.form_template, context)
     else:
         return HttpResponse('Invalid http method', status=405)
 
@@ -775,8 +776,13 @@ def to_response(status=200, select=None, show=None, parent=None,
     return response
 
 def to_csv(features):
-    if not features or isinstance(features, unicode):
-        return features
+    try:
+        # py 2 backward compatibility
+        if not features or isinstance(features, unicode):
+            return features
+    except NameError as e:
+        if not features or isinstance(features, str):
+            return features
     elif isinstance(features, Feature):
         return features.uid
     elif len(features) != 0:

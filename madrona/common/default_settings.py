@@ -68,7 +68,7 @@ MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'madrona.common.middleware.IgnoreCsrfMiddleware',
+    # 'madrona.common.middleware.IgnoreCsrfMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -78,6 +78,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.transaction.TransactionMiddleware',
     'madrona.openid.middleware.OpenIDMiddleware',
 )
+
+MIDDLEWARE = MIDDLEWARE_CLASSES # Django 2 compatibility
 
 INSTALLED_APPS = (
     'django.contrib.admin',
