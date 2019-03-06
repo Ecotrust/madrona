@@ -776,12 +776,7 @@ def to_response(status=200, select=None, show=None, parent=None,
     return response
 
 def to_csv(features):
-    try:
-        # py 2 backward compatibility
-        if not features or isinstance(features, unicode):
-            return features
-    except NameError as e:
-        if not features or isinstance(features, str):
+    if not features or isinstance(features, str):
             return features
     elif isinstance(features, Feature):
         return features.uid
