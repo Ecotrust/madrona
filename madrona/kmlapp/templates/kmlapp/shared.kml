@@ -1,5 +1,5 @@
 {% extends "kmlapp/base.kml" %}
-{% load url from future %}
+
 {% load absurl %}
 {% block workspace-json %}
 	{% if user.is_anonymous %}

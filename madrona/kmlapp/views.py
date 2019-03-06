@@ -1,10 +1,10 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import *
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse, Http404
 from madrona.common import default_mimetypes as mimetypes
-from madrona.common import utils 
+from madrona.common import utils
 from django.http import Http404
 from madrona.common.utils import load_session, get_logger
 from django.contrib.gis.db import models
@@ -136,17 +136,17 @@ def get_shared_data(shareuser, sharegroup, user):
 def create_kmz(kml, zippath):
     """
     Given a KML string and a "/" seperated path like "FOLDERNAME/doc.kml",
-    creates a zipped KMZ archive buffer that can be written directly to a 
+    creates a zipped KMZ archive buffer that can be written directly to a
     django response object
     """
     import tempfile
-    from cStringIO import StringIO
+    from io import StringIO, BytesIO
     import zipfile
 
     # write out the kml to tempfile
     #The Problem:  for Windows, we need to close the file before we can access it again below (via zipout.write)
     #   this caused a Permissions Error when running from the local dev server (on Windows)
-    #   as Windows considered the unclosed file to already be in use (and therefore unaccessible) 
+    #   as Windows considered the unclosed file to already be in use (and therefore unaccessible)
     #The Solution: adding 'delete=False' to tempfile.NamedTemporaryFiles for developing environments using Python 2.6(sf 2-16-10)
     #   this will only happen if the user is using Python 2.6, previous versions of Python will treat the code as it was
     #   (this delete parameter isn't available until python 2.6)
@@ -162,18 +162,24 @@ def create_kmz(kml, zippath):
     kmlfile.write(kml.encode('utf-8'))
     kmlfile.flush()
     if python26:
-        kmlfile.close() 
+        kmlfile.close()
 
     # zip it up into a kmz
-    kmzbuffer = StringIO()
-    zipout = zipfile.ZipFile(kmzbuffer,'w',zipfile.ZIP_DEFLATED)
-    zipout.write(kmlfile.name, zippath.encode('ascii')) 
-    zipout.close()
+    try:
+        strbuffer = StringIO()
+        with zipfile.ZipFile(strbuffer,'w',zipfile.ZIP_DEFLATED) as strzipout:
+            strzipout.write(kmlfile.name, zippath.encode('ascii'))
+        kmzbuffer = strbuffer
+    except TypeError as e:
+        bytbuffer = BytesIO()
+        with zipfile.ZipFile(bytbuffer,'w',zipfile.ZIP_DEFLATED) as bytzipout:
+            bytzipout.write(kmlfile.name, zippath)
+        kmzbuffer = bytbuffer
 
     # close out the tempfile
     if python26:
-        import os 
-        os.unlink(kmlfile.name) 
+        import os
+        os.unlink(kmlfile.name)
     else:
         kmlfile.close()
     # grab the content of the stringIO buffer
@@ -186,7 +192,7 @@ def create_kmz(kml, zippath):
 from django.views.decorators.cache import cache_control
 
 @cache_control(no_cache=True)
-def create_kml(request, input_username=None, input_uid=None, 
+def create_kml(request, input_username=None, input_uid=None,
         input_shareuser=None, input_sharegroup=None, links=False, kmz=False,
         session_key='0'):
     """
@@ -213,25 +219,25 @@ def create_kml(request, input_username=None, input_uid=None,
     styles = get_styles(features,collections,links)
 
     t = get_template('kmlapp/myshapes.kml')
-    context = Context({
-                'user': user, 
-                'features': features, 
+    context = {
+                'user': user,
+                'features': features,
                 'collections': collections,
-                'use_network_links': links, 
-                'request_path': request.path, 
+                'use_network_links': links,
+                'request_path': request.path,
                 'styles': styles,
                 'session_key': session_key,
                 'shareuser': input_shareuser,
                 'sharegroup': input_sharegroup,
                 'feature_id': input_uid,
-                })
+                }
     kml = t.render(context)
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
         kml = create_kmz(kml, 'mm/doc.kml')
-    response = HttpResponse(kml, mimetype=mime)
-    response['Content-Disposition'] = 'attachment'    
+    response = HttpResponse(kml, content_type=mime)
+    response['Content-Disposition'] = 'attachment'
     return response
 
 @cache_control(no_cache=True)
@@ -244,22 +250,28 @@ def create_shared_kml(request, input_username, kmz=False, session_key='0'):
     if input_username and user.username != input_username:
         return HttpResponse('Access denied', status=401)
 
-    from madrona.features import groups_users_sharing_with 
+    from madrona.features import groups_users_sharing_with
     sharing_with = groups_users_sharing_with(user)
 
     t = get_template('kmlapp/shared.kml')
-    kml = t.render(Context({'user': request.user, 'groups_users': sharing_with, 'request_path': request.path, 'session_key': session_key}))
+    context = {
+        'user': request.user,
+        'groups_users': sharing_with,
+        'request_path': request.path,
+        'session_key': session_key
+    }
+    kml = t.render(context)
 
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
         kml = create_kmz(kml, 'mm/doc.kml')
-    response = HttpResponse(kml, mimetype=mime)
-    response['Content-Disposition'] = 'attachment'    
+    response = HttpResponse(kml, content_type=mime)
+    response['Content-Disposition'] = 'attachment'
     return response
 
 def shared_public(request, kmz=False, session_key='0'):
-    """ 
+    """
     Shows all publically shared arrays
     Must be shared with a special set of public groups
     defined in settings.SHARING_TO_PUBLIC_GROUPS
@@ -272,15 +284,15 @@ def shared_public(request, kmz=False, session_key='0'):
 
     # determine content types for sharing
     t = get_template('kmlapp/public.kml')
-    kml = t.render(Context({'loggedin_user': request.user, 'user': request.user, 
-        'features': features, 'collections': collections, 'styles': styles, 
-        'use_network_links': True, 'request_path': request.path, 
-        'session_key': session_key}))
+    kml = t.render({'loggedin_user': request.user, 'user': request.user,
+        'features': features, 'collections': collections, 'styles': styles,
+        'use_network_links': True, 'request_path': request.path,
+        'session_key': session_key})
 
     mime = mimetypes.KML
     if kmz:
         mime = mimetypes.KMZ
         kml = create_kmz(kml, 'mm/doc.kml')
-    response = HttpResponse(kml, mimetype=mime)
+    response = HttpResponse(kml, content_type=mime)
     response['Content-Disposition'] = 'attachment'
     return response

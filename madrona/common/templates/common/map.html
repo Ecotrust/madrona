@@ -13,12 +13,12 @@
 
         var options = {
             media_url: "{{STATIC_URL}}",
-            news_url: '{% url 'news-main' %}',
-            about_url: '{% url 'news-about' %}',
-            {% if user.is_authenticated %}profile_url: '{% url 'user_profile-form' user.username %}',{% endif %}
-            registration_url: '{% url 'registration_register' %}',
-            help_url: '{% url 'help-main' %}',
-            signin_url: '{% url 'user_signin' %}',
+            news_url: '/news/',
+            about_url: '/news/about/',
+            {% if user.is_authenticated %}profile_url: '/user_profile/{{user.username}}/',{% endif %}
+            registration_url: '/accounts/register/',
+            help_url: '/help/',
+            signin_url: '/accounts/signin/',
             textLookup: {},
             refreshButton: false
         };

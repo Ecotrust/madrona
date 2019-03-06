@@ -1,4 +1,4 @@
-{% load absurl absolute_media_url %}{% load url from future %}<?xml version="1.0" encoding="UTF-8"?>
+{% load absurl absolute_media_url %}<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:mm="http://madrona.org" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document{% if feature_id %} id="{{feature_id}}"{% endif %}>
   {% block workspace-json %}

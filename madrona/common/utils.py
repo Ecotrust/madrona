@@ -520,26 +520,26 @@ def enable_sharing(group=None):
     from django.contrib.contenttypes.models import ContentType
 
     try:
-        p = Permission.objects.get(codename='can_share_features')
+        perm_obj = Permission.objects.get(codename='can_share_features')
     except Permission.DoesNotExist:
-        gct = ContentType.objects.get(name="group")
-        p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
-        p.save()
+        gct = ContentType.objects.get(model="group")
+        perm_obj = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
+        perm_obj.save()
 
     # Set up default sharing groups
     for groupname in settings.SHARING_TO_PUBLIC_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
-        g.permissions.add(p)
+        g.permissions.add(perm_obj)
         g.save()
 
     for groupname in settings.SHARING_TO_STAFF_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
-        g.permissions.add(p)
+        g.permissions.add(perm_obj)
         g.save()
 
     if group:
         # Set up specified group
-        group.permissions.add(p)
+        group.permissions.add(perm_obj)
         group.save()
     return True
 
