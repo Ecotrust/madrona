@@ -161,7 +161,7 @@ class BaseManipulator(object):
             if not target.valid:
                 raise self.InvalidGeometryException()
 
-        target.set_srid(settings.GEOMETRY_CLIENT_SRID)
+        setattr(target, 'set_srid', settings.GEOMETRY_CLIENT_SRID)
         return target
 
     def result(self, clipped_shape, html="", success="1"):
