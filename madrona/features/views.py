@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.contrib.auth.models import Permission, Group
 from django.conf import settings
 from madrona.features import workspace_json, get_feature_by_uid
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 def get_object_for_editing(request, uid, target_klass=None):
@@ -663,6 +664,7 @@ def share_form(request,model=None, uid=None):
         return HttpResponse("Received unexpected " + request.method +
                 " request.", status=400)
 
+@csrf_exempt
 def manage_collection(request, action, uids, collection_model, collection_uid):
     config = collection_model.get_options()
     collection_instance = get_object_for_editing(request, collection_uid,
