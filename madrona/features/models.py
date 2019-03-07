@@ -441,7 +441,9 @@ class SpatialFeature(Feature):
     def apply_manipulators(self, force=False):
         if force or (self.geometry_orig and not self.geometry_final):
             logger.debug("applying manipulators to %r" % self)
-            target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True).wkt
+            target_shape = self.geometry_orig.transform(settings.GEOMETRY_CLIENT_SRID, clone=True)
+            if not target_shape.srid:
+                setattr(target_shape, 'srid', settings.GEOMETRY_CLIENT_SRID)
             logger.debug("active manipulators: %r" % self.active_manipulators)
             result = False
             for manipulator in self.active_manipulators:

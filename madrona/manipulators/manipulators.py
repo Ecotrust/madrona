@@ -655,7 +655,15 @@ class NullManipulator(BaseManipulator):
         self.target_shape = target_shape
 
     def manipulate(self):
-        target_shape = self.target_to_valid_geom(self.target_shape)
+        if type(self.target_shape) == Polygon:
+            target_shape = self.target_shape
+        else:
+            target_shape = self.target_to_valid_geom(self.target_shape)
+        if not target_shape.srid:
+            # RDH: I'm not sure that settings.GEOMETRY_CLIENT_SRID is correct, but
+            #       until we have time to sort out what it MUST be, it MUST have
+            #       an srid field and this is a pretty good guess.
+            setattr(target_shape, 'srid', settings.GEOMETRY_CLIENT_SRID)
         status_html = self.do_template("0")
         return self.result(target_shape, status_html)
 
