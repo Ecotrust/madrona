@@ -1,7 +1,6 @@
 import os
 from madrona.common import assets
 from django.urls import reverse_lazy
-import djcelery
 from datetime import timedelta
 
 os.environ["CELERY_LOADER"] = "django"
@@ -112,8 +111,6 @@ INSTALLED_APPS = (
     'madrona.loadshp',
     'madrona.bookmarks',
     'django_registration',
-    'djcelery',
-    'kombu.transport.django',
     ##### Optional Apps ####
     #'madrona.heatmap',
     #'madrona.analysistools',
@@ -207,14 +204,22 @@ USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
 
-#Celery and djkombu settings (for server-side asynchronous process handling)
-CARROT_BACKEND = "django"
-CELERY_RESULT_BACKEND = "database"
-CELERY_TRACK_STARTED = True
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+# ------------------------------------------------------------------------------
+# Celery
+# NEWER CELERY VERSIONS DO NOT USE KOMBU and have different settings. They also
+#       rely on redis or rabbitmq or somthing similar. These settings are to be
+#       moved into your project settings, as it is up to the project to decide
+#       on these dependencies
+# Recommended reading: https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html
+# ------------------------------------------------------------------------------
+CELERY_BROKER_URL = 'amqp://localhost'
+# CARROT_BACKEND = "django"
+# CELERY_RESULT_BACKEND = "database"
+# CELERY_TRACK_STARTED = True
+# BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 # Make sure to add any modules containing tasks
 #CELERY_IMPORT = ('myapp.tasks',)
-djcelery.setup_loader()
+# djcelery.setup_loader()
 
 #The following is used to determine whether the async app (and celery) should be used
 ASYNC_IS_DISABLED = False

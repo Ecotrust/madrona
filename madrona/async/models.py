@@ -1,5 +1,4 @@
 from django.db import models
-from djcelery.models import TaskMeta
 
 '''
 NOTES:
