@@ -14,7 +14,7 @@ from madrona.features.forms import FeatureForm
 from django.urls import reverse
 from django.contrib.auth.models import Permission, Group
 from django.conf import settings
-from madrona.features import workspace_json
+from madrona.features import workspace_json, get_feature_by_uid
 import json
 
 def get_object_for_editing(request, uid, target_klass=None):
