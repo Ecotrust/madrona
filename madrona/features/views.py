@@ -88,6 +88,7 @@ def get_object_for_viewing(request, uid, target_klass=None):
 
 # RESTful Generic Views
 
+@csrf_exempt
 def handle_link(request, uids, link=None):
     """
     Handles all requests to views setup via features.register using Link
@@ -154,6 +155,7 @@ generic link only supports requests for feature classes %s' % (
     else:
         return link.view(request, instances, **link.extra_kwargs)
 
+@csrf_exempt
 def delete(request, model=None, uid=None):
     """
     When calling, provide the request object, reference to the resource
@@ -325,7 +327,7 @@ def update_form(request, model, uid):
             'user': user,
         })
         context = decorate_with_manipulators(context, form_class)
-        return render_to_response(config.form_template, context)
+        return render(request, config.form_template, context)
     else:
         return HttpResponse('Invalid http method', status=405)
 
@@ -403,7 +405,7 @@ def update(request, model, uid):
         Yes we know, PUT is supposed to be used rather than POST,
         but it was much easier to implement as POST :)""", status=405)
 
-
+@csrf_exempt
 def resource(request, model=None, uid=None):
     """
     Provides a resource for a django model that can be utilized by the
