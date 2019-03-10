@@ -38,7 +38,7 @@ def create_test_geometries():
 
 def meter_measurements(geoms):
     rdict = {}
-    for k,v in geoms.iteritems():
+    for k,v in geoms.items():
         if k.find('line') > -1:
             rdict[k] = v.length
         else:
@@ -47,7 +47,7 @@ def meter_measurements(geoms):
 
 def meter_dict_convert(mdict,unit):
     con_dict = {}
-    for k,v in mdict.iteritems():
+    for k,v in mdict.items():
         if k.find('line') > -1:
             con_dict[k] = D(m=v).__getattr__(unit)
         else:
@@ -84,8 +84,8 @@ class AppendedMethodsTest(TestCase):
         }
         add_conversion_methods_to_GEOSGeometry()
 
-        for unit, result_dict in units_dict.iteritems():
-            for key, geom in geoms.iteritems():
+        for unit, result_dict in units_dict.items():
+            for key, geom in geoms.items():
                 fail_str = "unit = %s, key = %s, dict value = %f" % (unit,key,result_dict[key])
                 if key.find('line') > -1:
                     att_name = 'length_' + unit
@@ -101,7 +101,7 @@ class OtherMethodsTest(TestCase):
         m_dict = meter_measurements(geoms)
         result_dict = meter_dict_convert(m_dict,unit)
 
-        for key, geom in geoms.iteritems():
+        for key, geom in geoms.items():
             fail_str = "unit = %s, key = %s, dict value = %f" % (unit,key,result_dict[key])
             if key.find('line') > -1:
                 att_name = 'length_' + unit
