@@ -15,11 +15,11 @@
         <span class="error">{{ form2.non_field_errors }}</span>
         <br/>
     {% endif %}
-	{% if form2.username.errors %} 
+	{% if form2.username.errors %}
 		<span class="error">USERNAME errors {{ form2.username.errors|join:", " }}</span>
         <br/>
 	{% endif %}
-	{% if form2.password.errors %} 
+	{% if form2.password.errors %}
 		<span class="error">PASSWORD errors {{ form2.password.errors|join:", " }}</span>
         <br/>
 	{% endif %}
@@ -37,18 +37,16 @@
 <div class="login" style="margin-top:25px">
 
 <form id="auth_form" name="auth_form" action="{% url 'user_signin' %}" method="post">
+    {% csrf_token %}
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
-        <legend><strong>Sign In To {% appname %}</strong></legend> 
+        <legend><strong>Sign In To {% appname %}</strong></legend>
 		<div class="form-row"><label for="id_username">Username</label><br />{{ form2.username }}</div>
 		<div class="form-row"><label for="id_password">Password</label><br />{{ form2.password }}</div>
         <div class="submit-row"><input type="submit" name="blogin" value="Sign in"> </div>
-	</fieldset>	
+	</fieldset>
 </form>
 
 <p><a class="panel_link" href="{% url 'auth_password_reset' %}">Forgot your password?</a></p>
-</div>	
+</div>
 {% endblock panel %}
-
-
-
