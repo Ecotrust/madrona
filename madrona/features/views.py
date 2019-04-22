@@ -450,7 +450,8 @@ def resource(request, model=None, uid=None):
             'template': template_name,
         })
 
-        return HttpResponse(t.render(RequestContext(request, context)))
+        return render(request, config.form_template, context, status=400)
+        # return HttpResponse(t.render(RequestContext(request, context)))
     elif request.method == 'POST':
         return update(request, model, uid)
 
