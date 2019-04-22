@@ -439,11 +439,15 @@ def resource(request, model=None, uid=None):
 
         t = config.get_show_template()
         context = config.show_context
+        try:
+            template_name = t.name
+        except AttributeError:
+            template_name = t.template.name
         context.update({
             'instance': instance,
             'MEDIA_URL': settings.MEDIA_URL,
             'is_ajax': request.is_ajax(),
-            'template': t.name,
+            'template': template_name,
         })
 
         return HttpResponse(t.render(RequestContext(request, context)))
