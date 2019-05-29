@@ -286,7 +286,6 @@ def create_form(request, model, action=None):
             'user': user,
         })
         context = decorate_with_manipulators(context, form_class)
-        # return render_to_response(config.form_template, context)
         return render(request, config.form_template, context)
     else:
         return HttpResponse('Invalid http method', status=405)
