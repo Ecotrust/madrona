@@ -38,7 +38,7 @@ class Feature(models.Model):
     date_modified = models.DateTimeField(auto_now=True,
             verbose_name="Date Modified")
     sharing_groups = models.ManyToManyField(Group,editable=False,blank=True,
-            null=True,verbose_name="Share with the following groups",
+            verbose_name="Share with the following groups",
             related_name="%(app_label)s_%(class)s_related")
     content_type = models.ForeignKey(ContentType, blank=True, null=True, default=None,
             related_name="%(app_label)s_%(class)s_related", on_delete=models.SET_DEFAULT,)

@@ -13,7 +13,7 @@ tag_dict = {
 }
 
 urlpatterns = [
-    url(r'^/?$',
+    url(r'^',
         ArchiveIndexView.as_view(**entry_dict),
         name="news-main"),
     url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>[0-9A-Za-z-]+)/$',

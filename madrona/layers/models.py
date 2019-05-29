@@ -100,7 +100,7 @@ class PrivateKml(models.Model):
     priority = models.FloatField(help_text="Floating point. Higher number = appears higher up on the KML tree.",
             default=0.0)
     name = models.CharField(verbose_name="Name", max_length=255,unique=True)
-    sharing_groups = models.ManyToManyField(Group,blank=True,null=True,
+    sharing_groups = models.ManyToManyField(Group,blank=True,
             verbose_name="Share layer with the following groups")
     base_kml = models.FilePathField(path=settings.PRIVATE_KML_ROOT, match="\.km.$",
         recursive=True, max_length=255,
