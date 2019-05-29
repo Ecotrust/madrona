@@ -67,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'madrona.common.middleware.IgnoreCsrfMiddleware',
+    'madrona.common.middleware.IgnoreCsrfMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -282,3 +282,4 @@ GEOJSON_DOWNLOAD = True  # force headers to treat like an attachment
 GEOJSON_SRID = None  # None -> use GEOMETRY_DB_SRID
 
 SECRET_KEY = 'Override this nonsense'
+ALLOW_PUBLIC_DRAWING = False
