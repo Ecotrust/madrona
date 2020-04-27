@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from madrona.common import default_mimetypes as mimetypes
 from madrona.news.models import Entry
 from madrona.common.utils import valid_browser
@@ -27,16 +27,16 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
 
     useragent = request.META['HTTP_USER_AGENT']
     enforce_supported = settings.ENFORCE_SUPPORTED_BROWSER
-    if 'supported' in request.REQUEST and request.REQUEST['supported'] == 'false':
+    if hasattr(request, 'REQUEST') and 'supported' in request.REQUEST.keys() and request.REQUEST['supported'] == 'false':
             enforce_supported = False
     if enforce_supported and not valid_browser(useragent):
         from madrona.common import uaparser
         bp = uaparser.browser_platform(useragent)
-        context = {'useragent':useragent, 
-                'browser_platform': bp.__repr__(), 
+        context = {'useragent':useragent,
+                'browser_platform': bp.__repr__(),
                 'redirect_url': settings.LOGIN_REDIRECT_URL}
         context.update(extra_context)
-        return render_to_response('common/supported_browsers.html', context)
+        return render(request, 'common/supported_browsers.html', context)
 
     if "mm_already_viewed" in request.COOKIES:
         if "mm_last_checked_news" in request.COOKIES:
@@ -72,11 +72,11 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     # Check if the user is a member of any sharing groups (not including public shares)
     member_of_sharing_group = False
     user = request.user
-    if user.is_authenticated() and user_sharing_groups(user):
+    if user.is_authenticated and user_sharing_groups(user):
         member_of_sharing_group = True
 
-    context = RequestContext(request,{
-        'api_key':settings.GOOGLE_API_KEY, 
+    context = {
+        'api_key':settings.GOOGLE_API_KEY,
         'session_key': request.session.session_key,
         'show_panel': show_panel,
         'member_of_sharing_group': member_of_sharing_group,
@@ -85,12 +85,12 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
         'is_privatekml': has_privatekml(user),
         'has_features': has_features(user),
         'camera': parse_camera(request),
-        'publicstate': get_publicstate(request), 
+        'publicstate': get_publicstate(request),
         'bookmarks_as_feature': settings.BOOKMARK_FEATURE,
-    })
+    }
 
     context.update(extra_context)
-    response = render_to_response(template_name, context)
+    response = render(request, template_name, context)
 
     if set_news_cookie:
         now = datetime.datetime.strftime(datetime.datetime.now(), timeformat)
@@ -114,6 +114,8 @@ def parse_camera(request):
             camera[p] = float(request.REQUEST[p])
         except KeyError:
             pass
+        except AttributeError as e:
+            camera[p] = None
 
     if len(camera.keys()) == 0:
         return None
@@ -124,6 +126,8 @@ def get_publicstate(request):
         s = request.REQUEST['publicstate']
     except KeyError:
         s = None
+    except AttributeError as e:
+        s = None
     return s
 
 def launch(request, template_name='common/launch.html', extra_context={}):
@@ -132,4 +136,4 @@ def launch(request, template_name='common/launch.html', extra_context={}):
     """
     context = {}
     context.update(extra_context)
-    return render_to_response(template_name, context)
+    return render(request, template_name, context)

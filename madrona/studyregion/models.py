@@ -1,12 +1,14 @@
 from django.contrib.gis.db import models
+from django.db.models import Manager as GeoManager
 from django.conf import settings
 from django.contrib.gis.measure import A, D
 from madrona.unit_converter.models import length_in_display_units, area_in_display_units
 from madrona.common.utils import KmlWrap, ComputeLookAt
 from django.contrib.gis.geos import Point, Polygon, LinearRing
+from django.urls import reverse
 
-class StudyRegionManager(models.GeoManager):
-    """Returns the currently active study region. The active study region is 
+class StudyRegionManager(GeoManager):
+    """Returns the currently active study region. The active study region is
     determined by the active attribute.
     """
     def current(self):
@@ -46,13 +48,13 @@ class StudyRegion(models.Model):
         ``lookAt_Heading``      Angle offset from North for default camera pos
 
         ======================  ==============================================
-"""   
+"""
     name = models.CharField(verbose_name="Study Region Name", max_length=255)
 
     active = models.BooleanField(default=False, help_text='This options will usually not be set using the admin interface, but rather by using the management commands relating to study region changes.')
 
-    creation_date = models.DateTimeField(auto_now_add=True) 
-    modification_date = models.DateTimeField(auto_now=True)     
+    creation_date = models.DateTimeField(auto_now_add=True)
+    modification_date = models.DateTimeField(auto_now=True)
 
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, null=True, blank=True, verbose_name="Study region boundary")
 
@@ -79,14 +81,13 @@ class StudyRegion(models.Model):
             # There can be only one!
             StudyRegion.objects.filter(active=True).exclude(pk=self.pk).update(active=False)
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('madrona.studyregion.views.show', [self.pk])
+        return reverse('madrona.studyregion.views.show', args=(self.pk,))
 
-    @property    
+    @property
     def area_sq_mi(self):
         """
-        WARNING:  This method assumes that the native units of the geometry are meters.  
+        WARNING:  This method assumes that the native units of the geometry are meters.
         Returns the area of the study region in sq_mi
         """
         return area_in_display_units(self.geometry.area)
@@ -123,12 +124,12 @@ class StudyRegion(models.Model):
             e = trans_geom.extent[2]
             n = trans_geom.extent[3]
 
-            return '<Document><name>%s</name>' % (self.name,) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>' 
+            return '<Document><name>%s</name>' % (self.name,) + self.lookAtKml() + self.kml_chunk(n,s,e,w) + '</Document>'
 
     # NOTE: not currently used, LOD system overhead not justified by performance
     def kml_chunk(self, n, s, e, w):
         """
-        Get the kml of a lat/lon bounded part of the study region, 
+        Get the kml of a lat/lon bounded part of the study region,
         with geometry simplified in proportion to the visible % of the region
         """
 
@@ -177,15 +178,15 @@ class StudyRegion(models.Model):
         if not bLastLodLevel:
             subregions = '<Folder><name>Study Region LODs</name>' + '<Folder><name>SE</name>' + self.kml_chunk(center_lat, s, e, center_lon) + '</Folder>'
 
-            subregions = subregions + '<Folder><name>NE</name>' + self.kml_chunk(n, center_lat, e, center_lon) + '</Folder>'       
+            subregions = subregions + '<Folder><name>NE</name>' + self.kml_chunk(n, center_lat, e, center_lon) + '</Folder>'
 
-            subregions = subregions + '<Folder><name>SW</name>' + self.kml_chunk(center_lat, s, center_lon, w) + '</Folder>'    
+            subregions = subregions + '<Folder><name>SW</name>' + self.kml_chunk(center_lat, s, center_lon, w) + '</Folder>'
 
             subregions = subregions + '<Folder><name>NW</name>' + self.kml_chunk(n, center_lat, center_lon, w) + '</Folder>'
 
             retval = retval + subregions + '</Folder>'
 
-        return retval 
+        return retval
 
     def lookAtKml(self):
         """
@@ -207,8 +208,8 @@ class StudyRegion(models.Model):
         lookAtParams = ComputeLookAt(self.geometry)
 
         self.lookAt_Range = lookAtParams['range']
-        self.lookAt_Lat = lookAtParams['latitude'] 
-        self.lookAt_Lon = lookAtParams['longitude'] 
+        self.lookAt_Lat = lookAtParams['latitude']
+        self.lookAt_Lon = lookAtParams['longitude']
         self.lookAt_Tilt = lookAtParams['tilt']
         self.lookAt_Heading = lookAtParams['heading']
 

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from models import Analytics
+from .models import Analytics
 
 
 if getattr(settings, 'GOOGLE_ANALYTICS_MODEL', False):
@@ -11,7 +11,7 @@ if getattr(settings, 'GOOGLE_ANALYTICS_MODEL', False):
 
     class SiteAdminGA(admin.ModelAdmin):
         list_display = ('domain', 'name')
-        model = Site 
+        model = Site
         inlines = [AnalyticsInline]
 
     admin.site.unregister(Site)

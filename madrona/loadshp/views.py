@@ -1,28 +1,28 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.conf import settings
-from django.utils import simplejson
+import json as simplejson
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from madrona.common import default_mimetypes as mimetypes
 from madrona.common.utils import kml_errors
-from forms import UploadForm
+from .forms import UploadForm
 
 
 def load_single_shp(request):
     """
     GET returns a form to upload a zipped shp
-    POST takes the zip, validates that it is a single-feature poly shp and returns KML 
+    POST takes the zip, validates that it is a single-feature poly shp and returns KML
     """
     user = request.user
-    if user.is_anonymous() or not user.is_authenticated():
+    if user.is_anonymous or not user.is_authenticated:
         return HttpResponse('You must be logged in', status=401)
 
     form = UploadForm()
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
 
-        # Override the defulat form behavior and 
+        # Override the defulat form behavior and
         # only allow single-feature polygon shps
         form.multi_feature = False
         form.supported_geomtypes = ['Polygon']
@@ -36,8 +36,8 @@ def load_single_shp(request):
             t = get_template('loadshp/loadshp.kml')
             kml = t.render(Context({'username': user.username, 'geoms': geoms}))
             json = simplejson.dumps({'input_kml': kml, 'status':'success'})
-            # Jquery Form plugin requires that we wrap this in a textarea 
-            # otherwise it mangles the kml  
+            # Jquery Form plugin requires that we wrap this in a textarea
+            # otherwise it mangles the kml
             return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
         else:
             json = simplejson.dumps({'error_html': form.errors['file_obj'][0], 'status':'errors'})

@@ -1,5 +1,6 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, include
+from madrona.xyquery import views
 
-urlpatterns = patterns('madrona.xyquery.views',
-        (r'^$', 'query')
-)
+urlpatterns = [
+        url(r'^$', views.query)
+]

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Folder>
+	<name>Google Earth Layers</name>
+	<open>1</open>
+	<Folder>
+	    <visibility>0</visibility>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open closed</state>
+                <href>https://github.com/Ecotrust/madrona/raw/master/madrona/media/common/images/silk/arrow_branch.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>Roads</name>
+	</Folder>
+    <Folder>
+        <visibility>0</visibility>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open closed</state>                
+                <href>https://github.com/Ecotrust/madrona/raw/master/madrona/media/common/images/silk/flag_blue.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>Borders and Labels</name>
+	</Folder>
+	<Folder>
+	    <visibility>0</visibility>
+	    <Style>
+    	    <ListStyle>
+              <listItemType>checkHideChildren</listItemType>
+              <ItemIcon>
+                <state>open closed</state>  
+                <href>https://github.com/Ecotrust/madrona/raw/master/madrona/media/common/images/3d_buildings_16px.png</href>
+              </ItemIcon>
+            </ListStyle>	       
+	    </Style>
+	    <name>3d Buildings</name>
+	</Folder>
+    <Folder>
+        <visibility>0</visibility>
+        <Style>
+            <ListStyle>
+                <listItemType>checkHideChildren</listItemType>
+                <ItemIcon>
+                    <state>open closed</state>
+                    <href>https://github.com/Ecotrust/madrona/raw/master/madrona/media/common/images/silk/database.png</href>
+                </ItemIcon>
+            </ListStyle>
+        </Style>
+        <name>Low Resolution 3d Buildings</name>
+    </Folder>
+</Folder>
+</kml>

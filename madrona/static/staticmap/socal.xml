@@ -1,0 +1,46 @@
+<!DOCTYPE Map>
+<Map background-color="steelblue" srs="+proj=latlong +datum=WGS84">
+
+<Style name="land_style">
+<Rule>
+    <PolygonSymbolizer fill="rgb(244,238,203)" />
+    <LineSymbolizer stroke="rgb(50%,50%,50%)" stroke-width="0.6" />
+</Rule>
+</Style>
+
+<Style name="region_style">
+<Rule>
+    <PolygonSymbolizer fill="steelblue" />
+    <LineSymbolizer stroke="rgb(5%,5%,5%)" stroke-width="1" />
+</Rule>
+</Style>
+
+<Style name="port_style">
+<Rule>
+    <TextSymbolizer face-name="DejaVu Sans Bold" size="8" 
+        fill="black" halo-fill= "#DFDBE3" halo-radius="1"
+        wrap-width="12" spacing="4" avoid-edges="false" 
+        allow-overlap="false" minimum-distance="6">
+        [MAIN_PORT_]
+    </TextSymbolizer>
+
+</Rule>
+</Style>
+
+<Layer name="land" srs="+proj=latlong +datum=WGS84" status="on">
+    <StyleName>land_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">[[MEDIA_ROOT]]/staticmap/data/ca_or_stl</Parameter>
+    </Datasource>
+</Layer>
+
+<Layer name="ports" srs="+proj=latlong +datum=WGS84" status="on">
+    <StyleName>port_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">[[MEDIA_ROOT]]/staticmap/data/world_ports</Parameter>
+    </Datasource>
+</Layer>
+
+</Map>

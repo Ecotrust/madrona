@@ -1,0 +1,138 @@
+.form_controls {
+    clear:both;
+    margin-top:20px;
+    width:100%;
+    position:relative;
+    bottom:0px;
+    background-color:none;
+    padding:10px 0;
+    width:100%;
+    left:0;
+    border-top:solid 1px #BAC0CC;
+}
+
+.form_controls .button {
+    float:right;
+    margin-right:10px;
+}
+
+.madrona-panel form {
+    
+}
+
+.madrona-panel form label {
+    clear:both;
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    padding:0;
+    margin:0 0 5px 0;
+    color:#344E63;
+    text-shadow: 0 1px 0 #FCFAFF;
+    -moz-text-shadow: #FCFAFF 0px 1px 0px;
+}
+
+.madrona-panel form textarea {
+/*    float:right;*/
+    width:440px;
+}
+
+.madrona-panel form textarea, .madrona-panel form input {
+    margin-bottom:10px;
+}
+
+.madrona-panel form input[type=text] {
+    width:250px;
+}
+
+.madrona-panel form input[type=checkbox] {
+/*    float:right;*/
+/*    margin-right:20px;*/
+    position:relative;
+    top:-10px;
+}
+
+.madrona-panel form p.help_text {
+    font-size:12px;
+    margin:0;
+    padding:0;
+    margin-bottom:10px;
+}
+
+
+.madrona-panel form .required label:after {
+    content: " * ";
+}
+
+div.field ul {
+    font-size:12px;
+    margin:0;
+    padding:0;
+    margin-bottom:10px;
+    padding-left:20px;
+}
+
+div.field ul h4 {
+    clear:both;
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    padding:0;
+    margin:0 0 5px 0;
+    color:#344E63;
+    text-shadow: 0 1px 0 #FCFAFF;
+    -moz-text-shadow: #FCFAFF 0px 1px 0px;
+}
+
+.madrona-panel form ul li {
+    padding-left:40px;
+}
+
+.madrona-panel form ul input[type=checkbox] {
+    display:relative;
+    top:0px;
+    margin-left:-20px;
+}
+
+div.field ul p {
+    padding:0;
+    margin:0 5px;
+    font-size:12px;
+}
+
+div.field ul label {
+    margin:0;
+    margin-top:5px;
+}
+
+.madrona-panel .manipulated p {
+    font-size:12px;
+    margin:10px 0px;
+}
+
+div.manipulated.error h3 {
+    color:#A30000;
+}
+
+li.optional_manipulator > span {
+    font-size:14px;
+    margin-left: 5px; 
+}
+
+div.draghint {
+    color:#305665;
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+div.draghint img {
+    float:left;
+    margin-right:10px;
+}
+
+div.draghint h5 {
+    font-size:14px;
+    margin:0;
+    padding:5px 0;
+}

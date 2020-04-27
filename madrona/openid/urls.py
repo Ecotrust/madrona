@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -13,28 +13,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import url
 from django.views.generic.base import TemplateView
 
 # views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from madrona.openid import views as oid_views
-from registration import views as reg_views
-from registration.views import activate
-from registration.views import register
+from django_registration import views as reg_views
+from django_registration.backends.activation import views as registration_views
+activate = registration_views.ActivationView.activate
+register = registration_views.RegistrationView.register
 from madrona.common.registration_backend.forms import MadronaRegistrationForm
 
-urlpatterns = patterns('',
-    url(r'^password/reset/$', auth_views.password_reset, name='auth_password_reset'),
-    url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        auth_views.password_reset_confirm,
+urlpatterns = [
+    url(r'^password/reset/$', auth_views.PasswordResetView, name='auth_password_reset'),
+    url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        auth_views.PasswordResetConfirmView,
         name='auth_password_reset_confirm'),
     url(r'^password/reset/complete/$',
-        auth_views.password_reset_complete,
+        auth_views.PasswordResetCompleteView,
         name='auth_password_reset_complete'),
     url(r'^password/reset/done/$',
-        auth_views.password_reset_done,
+        auth_views.PasswordResetDoneView,
         name='auth_password_reset_done'),
     url(r'^password/$',oid_views.password_change, name='auth_password_change'),
 
@@ -48,8 +49,8 @@ urlpatterns = patterns('',
     url(r'^signin/complete/$', oid_views.complete_signin, name='user_complete_signin'),
     url(
         r'^signup/$',
-        reg_views.register,
-        {'backend': 'registration.backends.default.DefaultBackend', 
+        register,
+        {'backend': 'django_registration.backends.activation',
          'form_class': MadronaRegistrationForm},
         name='registration_register'
     ),
@@ -75,10 +76,10 @@ urlpatterns = patterns('',
 
     # yadis uri
     url(r'^yadis.xrdf$', oid_views.xrdf, name='oid_xrdf'),
-)
+]
 
 
-## The openid login behavior can be 'hidden' by use of a 
+## The openid login behavior can be 'hidden' by use of a
 # template which only allows local user/pass authentication
 # Note that this does not disable openid completely; user could still
 # POST openid credentials if they wanted to
@@ -92,7 +93,7 @@ if use_openid:
 else:
     template_name = 'authopenid/signin_local.html'
 
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^signin/$', oid_views.signin, {'template_name':template_name}, name='user_signin'),
     url(r'^signin/$', oid_views.signin, {'template_name':template_name}, name='auth_login'),
-)
+]

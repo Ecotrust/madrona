@@ -1,17 +1,16 @@
-import urlparse
+from urllib import parse as urlparse
 from django.template import Library
-from django.templatetags.future import url, URLNode
+from django.template.defaulttags import url, URLNode
 from django.contrib.sites.models import Site
 
 register = Library()
 
 class AbsoluteURLNode(URLNode):
-    def __init__(self, view_name, args, kwargs, asvar, legacy_view_name=True):
-        super(AbsoluteURLNode, self).__init__(view_name, 
-            args, 
-            kwargs, 
-            None, 
-            legacy_view_name)
+    def __init__(self, view_name, args, kwargs, asvar):
+        super(AbsoluteURLNode, self).__init__(view_name,
+            args,
+            kwargs,
+            None)
         self.abs_asvar = asvar
 
     def render(self, context):
@@ -28,10 +27,9 @@ class AbsoluteURLNode(URLNode):
 def absurl(parser, token):
     """Just like {% url 'urlname' %} but ads the domain of the current site."""
     node_instance = url(parser, token)
-    return AbsoluteURLNode(view_name=node_instance.view_name, 
-        args=node_instance.args, 
+    return AbsoluteURLNode(view_name=node_instance.view_name,
+        args=node_instance.args,
         kwargs=node_instance.kwargs,
-        asvar=node_instance.asvar,
-        legacy_view_name=node_instance.legacy_view_name)
+        asvar=node_instance.asvar)
 
 absurl = register.tag(absurl)

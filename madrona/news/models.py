@@ -21,7 +21,7 @@ class Entry(models.Model):
     summary = models.CharField(max_length=200,blank=True,null=True,help_text="One sentence. If not supplied, whole body text will show up in archive view.")
     body = models.TextField(help_text="Use HTML.")
     tags = models.ManyToManyField(Tag)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE,)
     is_draft = models.BooleanField("Draft", default=False, help_text="Check if this is a draft.")
     published_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True,editable=False)

@@ -1,6 +1,11 @@
 from django.db import models, connection
 from django.conf import settings
-from osgeo import osr
+try:
+    from osgeo import osr
+except Exception as e:
+    print(str(e))
+    import pdb; pdb.set_trace()
+    print("No OSGEO?")
 from django.contrib.gis.measure import *
 from django.contrib.gis.geos.polygon import Polygon
 
@@ -39,7 +44,7 @@ def area_unit_code_from_srid(srid):
 
 def distance_unit_code_from_srid(srid):
     """Return the unit code used in django.contrib.gis.measure.Distance to represent the units of the given srid.  For example srid
-    3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Distance uses 'm' to represent 
+    3310 (California Albers) has a linear unit value of 'metre'.  django.contrib.gis.measure.Distance uses 'm' to represent
     meters so that's what this method will return for srid 3310."""
     return distance_unit_code_from_srid_unit(units_from_srid(srid))
 
@@ -53,7 +58,7 @@ def units_list():
     return units
 
 def units_count_dict():
-    """Return a dictionary with linear units as keys and a count of how many projections in the spatial_ref_sys table use 
+    """Return a dictionary with linear units as keys and a count of how many projections in the spatial_ref_sys table use
     those units as values."""
     units = {}
     for srid in srid_list():
@@ -75,7 +80,7 @@ def units(self):
 
 @property
 def distance_object(self):
-    """Return the django.contrib.gis.measure.Distance object for a given geometry with origin units determined by 
+    """Return the django.contrib.gis.measure.Distance object for a given geometry with origin units determined by
     the geometry's srid.  This object can be evaluated by looking at the attribute named after the proper units.
     For instance if you want to see the distance in miles, call distance_object.mi"""
     eval_str = "Distance(%s=%f)" % (distance_unit_code_from_srid(self.srid),self.length)
@@ -83,7 +88,7 @@ def distance_object(self):
 
 @property
 def area_object(self):
-    """Return the django.contrib.gis.measure.Area object for a given geometry with origin units determined by 
+    """Return the django.contrib.gis.measure.Area object for a given geometry with origin units determined by
     the geometry's srid. This object can be evaluated by looking at the attribute named after the proper units.
     For instance if you want to see the area in square miles, call distance_object.sq_mi"""
     eval_str = "Area(%s=%f)" % (area_unit_code_from_srid(self.srid),self.area)
@@ -91,7 +96,7 @@ def area_object(self):
 
 def add_dist_meth(cls,unit):
     """Add a method to cls called length_UNIT (where UNIT is the value of unit) that will return the length in
-    those units.  unit must be one of the values found in django.contrib.gis.measure.Distance.UNITS  Most 
+    those units.  unit must be one of the values found in django.contrib.gis.measure.Distance.UNITS  Most
     common will be mi, m, km, nm, ft"""
     @property
     def new_dist_meth(self):
@@ -101,7 +106,7 @@ def add_dist_meth(cls,unit):
 
 def add_area_meth(cls,unit):
     """Add a method to cls called area_UNIT (where UNIT is the value of unit) that will return the length in
-    those units.  unit must be one of the values found in django.contrib.gis.measure.Area.UNITS  Most 
+    those units.  unit must be one of the values found in django.contrib.gis.measure.Area.UNITS  Most
     common will be sq_mi, sq_m, sq_km, sq_nm, sq_ft"""
     @property
     def new_area_meth(self):
@@ -136,7 +141,7 @@ def add_conversion_methods_to_GEOSGeometry():
 ##################################################
 #  The following methods do not depend on the ones above.
 #  They're generally much simpler and easier to use but
-#  they're not as cool (and by cool I mean dorky).  
+#  they're not as cool (and by cool I mean dorky).
 ##################################################
 
 def convert_float_to_length_display_units(float_value):

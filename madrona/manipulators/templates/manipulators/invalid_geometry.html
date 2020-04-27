@@ -1,3 +1,4 @@
+{% load static %}
 <h3>Invalid Geometry</h3>
-<img src="{{MEDIA_URL}}manipulators/invalidgeo.gif" width="121" height="87" />
+<img src="{% static 'manipulators/invalidgeo.gif' %}" width="121" height="87" />
 <p>Please try to avoid drawing points, simple lines, or irregular shapes that intersect themselves like bowties.</p>

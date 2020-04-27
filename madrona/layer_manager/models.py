@@ -12,7 +12,7 @@ class Theme(models.Model):
     thumbnail = models.URLField(max_length=255, blank=True, null=True)
     factsheet_thumb = models.CharField(max_length=255, blank=True, null=True)
     factsheet_link = models.CharField(max_length=255, blank=True, null=True)
-    # not really using these atm    
+    # not really using these atm
     feature_image = models.CharField(max_length=255, blank=True, null=True)
     feature_excerpt = models.TextField(blank=True, null=True)
     feature_link = models.CharField(max_length=255, blank=True, null=True)
@@ -23,7 +23,7 @@ class Theme(models.Model):
     @property
     def learn_link(self):
         return '/learn/%s' % (self.name)
-        
+
     @property
     @cachemethod("Theme_toDict_%(id)s")
     def toDict(self):
@@ -53,25 +53,25 @@ class Layer(models.Model):
     url = models.CharField(max_length=255, null=True)
     arcgis_layers = models.CharField(max_length=255, blank=True, null=True)
     subdomains = models.CharField(max_length=255, blank=True, null=True)
-    sublayers = models.ManyToManyField('self', blank=True, null=True, help_text="Select the PARENT layer (which should be checkbox or radio type). Be sure to also check is_sublayer.")
-    themes = models.ManyToManyField("Theme", null=True)
+    sublayers = models.ManyToManyField('self', blank=True, help_text="Select the PARENT layer (which should be checkbox or radio type). Be sure to also check is_sublayer.")
+    themes = models.ManyToManyField("Theme")
     is_sublayer = models.BooleanField(default=False)
     legend = models.CharField(max_length=255, blank=True, null=True, help_text="URL to legend image")
     legend_title = models.CharField(max_length=255, blank=True, null=True)
     legend_subtitle = models.CharField(max_length=255, blank=True, null=True)
     utfurl = models.CharField(max_length=255, blank=True, null=True)
     default_on = models.BooleanField(default=False, help_text="Should layer appear initially on load?")
-    
+
     #tooltip
     description = models.TextField(blank=True, null=True)
-    
+
     #data description (updated fact sheet) (now the Learn pages)
     data_overview = models.TextField(blank=True, null=True)
     data_status = models.CharField(max_length=255, blank=True, null=True)
     data_source = models.CharField(max_length=512, blank=True, null=True)
     data_notes = models.TextField(blank=True, null=True)
-    
-    #data catalog links    
+
+    #data catalog links
     bookmark = models.CharField(max_length=755, blank=True, null=True)
     map_tiles = models.CharField(max_length=255, blank=True, null=True)
     kml = models.CharField(max_length=255, blank=True, null=True)
@@ -81,23 +81,23 @@ class Layer(models.Model):
     fact_sheet = models.CharField(max_length=255, blank=True, null=True)
     source = models.CharField(max_length=512, blank=True, null=True)
     thumbnail = models.URLField(max_length=255, blank=True, null=True)
-    
+
     #geojson javascript attribution
     EVENT_CHOICES = (
         ('click', 'click'),
         ('mouseover', 'mouseover')
     )
     attribute_title = models.CharField(max_length=255, blank=True, null=True)
-    attribute_fields = models.ManyToManyField('AttributeInfo', blank=True, null=True)
+    attribute_fields = models.ManyToManyField('AttributeInfo', blank=True)
     compress_display = models.BooleanField(default=False)
     attribute_event = models.CharField(max_length=35, choices=EVENT_CHOICES, default='click')
     lookup_field = models.CharField(max_length=255, blank=True, null=True)
-    lookup_table = models.ManyToManyField('LookupInfo', blank=True, null=True)
+    lookup_table = models.ManyToManyField('LookupInfo', blank=True)
     vector_color = models.CharField(max_length=7, blank=True, null=True)
     vector_fill = models.FloatField(blank=True, null=True)
     vector_graphic = models.CharField(max_length=255, blank=True, null=True)
     opacity = models.FloatField(default=.5, blank=True, null=True)
-    
+
     def __unicode__(self):
         return unicode('%s' % (self.name))
 
@@ -118,13 +118,13 @@ class Layer(models.Model):
     @property
     def is_parent(self):
         return self.sublayers.all().count() > 0 and not self.is_sublayer
-    
+
     @property
     def parent(self):
         if self.is_sublayer:
             return self.sublayers.all()[0]
         return self
-    
+
     @property
     def slug(self):
         return slugify(self.name)
@@ -135,28 +135,28 @@ class Layer(models.Model):
             return self.parent.data_overview
         else:
             return self.data_overview
-        
+
     @property
     def data_source_text(self):
         if not self.data_source and self.is_sublayer:
             return self.parent.data_source
         else:
             return self.data_source
-        
+
     @property
     def data_notes_text(self):
         if not self.data_notes and self.is_sublayer:
             return self.parent.data_notes
         else:
             return self.data_notes
-    
+
     @property
     def bookmark_link(self):
         if not self.bookmark and self.is_sublayer and self.parent.bookmark:
             return self.parent.bookmark.replace('<layer_id>', str(self.id))
         else:
             return self.bookmark
-    
+
     @property
     def data_download_link(self):
         if self.data_download and self.data_download.lower() == 'none':
@@ -165,7 +165,7 @@ class Layer(models.Model):
             return self.parent.data_download
         else:
             return self.data_download
-        
+
     @property
     def metadata_link(self):
         if self.metadata and self.metadata.lower() == 'none':
@@ -174,7 +174,7 @@ class Layer(models.Model):
             return self.parent.metadata
         else:
             return self.metadata
-        
+
     @property
     def source_link(self):
         if self.source and self.source.lower() == 'none':
@@ -183,7 +183,7 @@ class Layer(models.Model):
             return self.parent.source
         else:
             return self.source
-        
+
     @property
     def learn_link(self):
         if self.learn_more:
@@ -191,20 +191,20 @@ class Layer(models.Model):
         else:
             return None
         """
-        # TODO 
+        # TODO
         else:
             try:
-                theme = self.themes.all()[0]  
+                theme = self.themes.all()[0]
             except IndexError:
                 return ""
             return "%s#%s" %(theme.learn_link, self.slug)
         """
-        
+
     @property
     def description_link(self):
         theme_name = self.themes.all()[0].name
         return '/learn/%s#%s' % (theme_name, self.slug)
-        
+
     @property
     def tooltip(self):
         if self.description and self.description.strip() != '':
@@ -213,19 +213,19 @@ class Layer(models.Model):
             return self.parent.description
         else:
             return None
-            
+
     @property
     def serialize_attributes(self):
-        return {'title': self.attribute_title, 
+        return {'title': self.attribute_title,
                 'compress_attributes': self.compress_display,
                 'event': self.attribute_event,
                 'attributes': [{'display': attr.display_name, 'field': attr.field_name, 'precision': attr.precision} for attr in self.attribute_fields.all().order_by('order')]}
-    
+
     @property
     def serialize_lookups(self):
-        return {'field': self.lookup_field, 
+        return {'field': self.lookup_field,
                 'details': [{'value': lookup.value, 'color': lookup.color, 'dashstyle': lookup.dashstyle, 'fill': lookup.fill, 'graphic': lookup.graphic} for lookup in self.lookup_table.all()]}
-    
+
 
     @property
     @cachemethod("Layer_toDict_%(id)s")
@@ -251,7 +251,7 @@ class Layer(models.Model):
                 'graphic': layer.vector_graphic,
                 'data_source': layer.data_source,
                 'opacity': layer.opacity
-            } 
+            }
             for layer in self.sublayers.all()
         ]
         layers_dict = {
@@ -286,10 +286,10 @@ class AttributeInfo(models.Model):
     field_name = models.CharField(max_length=255, blank=True, null=True)
     precision = models.IntegerField(blank=True, null=True)
     order = models.IntegerField(default=1)
-    
+
     def __unicode__(self):
-        return unicode('%s' % (self.field_name)) 
-    
+        return unicode('%s' % (self.field_name))
+
 class LookupInfo(models.Model):
     DASH_CHOICES = (
         ('dot', 'dot'),
@@ -304,9 +304,9 @@ class LookupInfo(models.Model):
     dashstyle = models.CharField(max_length=11, choices=DASH_CHOICES, default='solid')
     fill = models.BooleanField(default=False)
     graphic = models.CharField(max_length=255, blank=True, null=True)
-    
+
     def __unicode__(self):
-        return unicode('%s' % (self.value)) 
+        return unicode('%s' % (self.value))
 
 
 class DataNeed(models.Model):
@@ -319,12 +319,12 @@ class DataNeed(models.Model):
     contact_email = models.CharField(max_length=255, blank=True, null=True)
     expected_date = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    themes = models.ManyToManyField("Theme", blank=True, null=True)
+    themes = models.ManyToManyField("Theme", blank=True)
 
     @property
     def html_name(self):
         return self.name.lower().replace(' ', '-')
-    
+
     def __unicode__(self):
         return unicode('%s' % (self.name))
 
@@ -339,7 +339,7 @@ def _clear_layer_cache(sender, instance, **kwargs):
     key = "Layer_toDict_%(id)s" % instance.__dict__
     cache.delete(key)
     for theme in Theme.objects.all():
-        cache.delete("Theme_toDict_%s" % theme.id) 
+        cache.delete("Theme_toDict_%s" % theme.id)
 
 @receiver(m2m_changed, sender=Layer.sublayers.through)
 def _clear_layer_m2m_cache(sender, instance, **kwargs):
@@ -348,7 +348,7 @@ def _clear_layer_m2m_cache(sender, instance, **kwargs):
         key = "Layer_toDict_%(id)s" % x.__dict__
         cache.delete(key)
     for theme in Theme.objects.all():
-        cache.delete("Theme_toDict_%s" % theme.id) 
+        cache.delete("Theme_toDict_%s" % theme.id)
 
 @receiver(post_save, sender=Theme)
 @receiver(post_delete, sender=Theme)

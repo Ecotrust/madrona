@@ -7,7 +7,7 @@ import os
 class AssetsTest(TestCase):
     def test_get_js_files(self):
         """
-        Should return a list of javascript files from 
+        Should return a list of javascript files from
         media/common/js_includes.xml
         """
         from madrona.common import assets
@@ -75,14 +75,14 @@ class BrowserUserAgentTest(TestCase):
         self.unsupported_uastring_examples = [x.strip() for x in open(exdir + '/unsupported_user_agent_examples.txt').readlines()]
 
     def test_supported_browsers(self):
-        from madrona.common.utils import valid_browser 
+        from madrona.common.utils import valid_browser
         for ua in self.supported_uastring_examples:
             if not valid_browser(ua):
                 print "UAPARSER SAYS NOT SUPPORTED .....", ua
             self.assertEquals(valid_browser(ua),True, "*** uaparser says that '%s' is not supported. " % ua)
 
     def test_unsupported_browsers(self):
-        from madrona.common.utils import valid_browser 
+        from madrona.common.utils import valid_browser
         for ua in self.unsupported_uastring_examples:
             if valid_browser(ua):
                 print "UAPARSER SAYS SUPPORTED .....", ua
@@ -116,19 +116,19 @@ class AccessTest(TestCase):
     def test_upload_dir_access(self):
         """ Ensure that the upload directory is not web accessible """
 
-        url = settings.MEDIA_URL + 'upload/' 
+        url = settings.MEDIA_URL + 'upload/'
         response = self.client.get(url)
         self.assertEquals(response.status_code, 403, url)
 
-        url = settings.MEDIA_URL + 'upload/test.txt' 
+        url = settings.MEDIA_URL + 'upload/test.txt'
         response = self.client.get(url)
         self.assertEquals(response.status_code, 403, url)
 
-        url = settings.MEDIA_URL + '/upload/test.txt' 
+        url = settings.MEDIA_URL + '/upload/test.txt'
         response = self.client.get(url)
         self.assertEquals(response.status_code, 403, url)
 
-        url = settings.MEDIA_URL + '/./upload/test.txt' 
+        url = settings.MEDIA_URL + '/./upload/test.txt'
         response = self.client.get(url)
         self.assertEquals(response.status_code, 403, url)
 
@@ -153,16 +153,14 @@ class InstalledAppTest(TestCase):
 class DependenciesTest(TestCase):
 
     def test_dependencies(self):
-        imports = [ 
+        imports = [
             'networkx',
-            'south',
             'django.contrib.gis',
             'elementtree',
             'sphinx',
-            'mapnik',
             'BeautifulSoup',
             'xlwt',
-            'registration',
+            'django_registration',
             'compress',
             'maintenancemode',
         ]
@@ -175,7 +173,7 @@ class DependenciesTest(TestCase):
             self.assertNotEquals(m,None,'Cannot import %s' % dep)
 
 
-from django.contrib.gis.geos import GEOSGeometry 
+from django.contrib.gis.geos import GEOSGeometry
 from madrona.common.utils import forceLHR, forceRHR
 
 class GeometryOpsTest(TestCase):

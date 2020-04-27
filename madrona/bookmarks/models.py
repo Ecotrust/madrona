@@ -13,7 +13,7 @@ class Bookmark(Feature):
     tilt = models.FloatField(default=0)
     roll = models.FloatField(default=0)
     altitudeMode = models.FloatField(default=1)
-    ip = models.IPAddressField(default="0.0.0.0", null=True, blank=True)
+    ip = models.GenericIPAddressField(default="0.0.0.0", null=True, blank=True)
     publicstate = models.TextField(default="{}")
 
     @property
@@ -36,16 +36,16 @@ class Bookmark(Feature):
             </ExtendedData>
             %s
         </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), escape(self.description), camera) 
+        """ % (self.uid, escape(self.name), self.model_uid(), escape(self.description), camera)
 
     @property
     def kml_style(self):
         return """
-        <Style id="%s-default"> 
+        <Style id="%s-default">
             <!-- invisible -->
             <BalloonStyle>
                 <bgColor>ffeeeeee</bgColor>
-                <text> <![CDATA[ 
+                <text> <![CDATA[
                     <h3>$[name]</h3>
                     <p>$[descr]</p>
                 ]]> </text>

@@ -2,19 +2,17 @@ from django.http import HttpResponse
 from madrona.common.views import map
 from madrona.bookmarks.models import Bookmark
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
 from madrona.common.utils import get_logger
 import datetime
-import urlparse
+from urllib import parse as urlparse
 
 log = get_logger()
 
 def lower_first(s):
     return s[0].lower() + s[1:]
-
-domain = "http://%s" % Site.objects.get_current().domain
 
 def show_bookmark(request, bookmark_id):
     try:
@@ -71,6 +69,7 @@ def save_tool_bookmark(request):
     b.save()
 
     url = reverse('bookmark', args=[b.pk])
+    domain = "http://%s" % Site.objects.get_current().domain
     absurl = urlparse.urljoin(domain, url)
 
     return HttpResponse(absurl, status=200)

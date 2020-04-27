@@ -1,0 +1,25 @@
+<div class="panel">
+    <script type="text/javascript" charset="utf-8">
+    
+        madrona.onShow(function(){
+            window.subtab2Show++;
+            window.subtab2Content = $('p.subtab2');
+        });
+
+        madrona.onUnhide(function(){
+            window.subtab2Unhide++;
+        });
+            
+        madrona.onHide(function(){
+            window.subtab2Hide++;
+        });
+
+        madrona.beforeDestroy(function(){
+            window.subtab2BeforeDestroy++;
+        });
+        
+    </script>
+
+    <img class="chart" href="#" />
+    <p class="subtab2">...</p>
+</div>

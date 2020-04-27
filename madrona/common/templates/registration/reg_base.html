@@ -1,12 +1,13 @@
 {% load appname %}
+{% load static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{% appname %} Account</title>
-    <link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}admin/css/forms.css" />
+    <link rel="stylesheet" href="{% static 'common/css/typography.css' %}" type="text/css" media="all" title="no title" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}" />
 </head>
 <body>
 <h4>{% block title %} {% endblock %}</h4>

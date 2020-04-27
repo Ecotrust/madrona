@@ -15,7 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.test.client import Client
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.core.urlresolvers import reverse
 import os
 
@@ -139,7 +139,7 @@ class PublicLayerListTest(TestCase):
         active = PublicLayerList.objects.filter(active=True)
         self.assertEqual(active.count(), 1)
         self.assertEqual(active[0].pk, layer.pk)
-        # Now create a new active layer. The first active layer should now 
+        # Now create a new active layer. The first active layer should now
         # be deactivated.
         new_active_layer = PublicLayerList.objects.create(active=True)
         active = PublicLayerList.objects.filter(active=True)

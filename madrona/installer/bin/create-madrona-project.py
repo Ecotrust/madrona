@@ -16,7 +16,7 @@ def replace_file(infile, outfile, search_replace, remove=True):
     outfh = open(outfile, 'w')
     for line in infh:
         out = line
-        for s, r in search_replace.iteritems():
+        for s, r in search_replace.items():
             out = out.replace(s,r)
         outfh.write(out)
     infh.close()
@@ -29,7 +29,7 @@ def append_to_file(infile, outfile, search_replace):
     outfh = open(outfile, 'a')
     for line in infh:
         out = line
-        for s, r in search_replace.iteritems():
+        for s, r in search_replace.items():
             out = out.replace(s,r)
         outfh.write(out)
     infh.close()
@@ -103,7 +103,7 @@ def parse_conn(conn_string):
 def main():
     parser = optparse.OptionParser(
             usage="""create-madrona-project.py [options] -p <project> -a <app> -d <project.examle.com> -c <postgres_connection>
-            
+
   Example:
     create-madrona-project.py \\
         --project "My Project" \\
@@ -117,33 +117,33 @@ def main():
         --loi "Pipelines"  \\
         --folder "Folder for Areas"  \\
         --kml "Global Marine|http://ebm.nceas.ucsb.edu/GlobalMarine/kml/marine_model.kml" """)
-    parser.add_option('-p', '--project', help='Name of django project', action='store', 
+    parser.add_option('-p', '--project', help='Name of django project', action='store',
             dest='project_name', type='string')
-    parser.add_option('-a', '--app', help='Name of django application', action='store', 
+    parser.add_option('-a', '--app', help='Name of django application', action='store',
             dest='app_name', type='string')
-    parser.add_option('-d', '--domain', help='Full domain name of server', action='store', 
+    parser.add_option('-d', '--domain', help='Full domain name of server', action='store',
             dest='domain', type='string')
-    parser.add_option('-c', '--connection', help='Full connection string to existing postgis db', action='store', 
+    parser.add_option('-c', '--connection', help='Full connection string to existing postgis db', action='store',
             dest='conn_string', type='string')
 
     # Optional
-    parser.add_option('-o', '--outdir', help='Output/destination directory (default = "./<project_name>/")', action='store', 
+    parser.add_option('-o', '--outdir', help='Output/destination directory (default = "./<project_name>/")', action='store',
             dest='dest_dir', type='string', default='')
-    parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store', 
+    parser.add_option('-s', '--srid', help='Database spatial reference ID (default = 3857)', action='store',
             dest='dbsrid', type='string', default='3857')
-    parser.add_option('-r', '--studyregion', help='Study region shape (ewkt string or path to shapefile)', action='store', 
+    parser.add_option('-r', '--studyregion', help='Study region shape (ewkt string or path to shapefile)', action='store',
             dest='studyregion', type='string', default=None)
     parser.add_option('-w', '--folder', help="Folder", action='append',
             dest='folders', type='string', default=[])
-    parser.add_option('-x', '--aoi', help="Area/Polygon Feature", action='append', 
+    parser.add_option('-x', '--aoi', help="Area/Polygon Feature", action='append',
             dest="aois", type='string', default=[])
-    parser.add_option('-y', '--loi', help="Line Feature", action='append', 
+    parser.add_option('-y', '--loi', help="Line Feature", action='append',
             dest="lois", type='string', default=[])
-    parser.add_option('-z', '--poi', help="Point Feature", action='append', 
+    parser.add_option('-z', '--poi', help="Point Feature", action='append',
             dest="pois", type='string', default=[])
-    parser.add_option('-k', '--kml', help="KML URL", action='append', 
+    parser.add_option('-k', '--kml', help="KML URL", action='append',
             dest="kmls", type='string')
-    parser.add_option('-u', '--superuser', help="create default superuser (madrona/madrona) ... NOT SECURE! ", action='store_true', 
+    parser.add_option('-u', '--superuser', help="create default superuser (madrona/madrona) ... NOT SECURE! ", action='store_true',
             dest="superuser", default=False)
     (opts, args) = parser.parse_args()
 
@@ -159,7 +159,7 @@ def main():
     if not opts.conn_string:
         parser.print_help()
         parser.error("Please specify the full database connection string. \nex:\n   -c \"host='localhost' dbname='my_database' user='my_user' password='secret'\"")
-    
+
     # Features
     aois = opts.aois
     lois = opts.lois
@@ -321,7 +321,7 @@ SECRET_KEY = '%s'
         major = vi[0]
         minor = vi[1]
 
-    pyver = '%d.%d' % (major, minor) 
+    pyver = '%d.%d' % (major, minor)
     search_replace = {
             '{{project}}': opts.project_name,
             '{{project_slug}}': project_slug,
@@ -391,12 +391,12 @@ STATIC_URL = 'http://%s/media/'
         t = Tag.objects.create(name="Welcome")
         t.save()
         title = "Welcome to " + opts.project_name[:38] # stay under 50 char
-        e = Entry.objects.create(title=title, 
-            body="""This application was automatically created by the 
-        Madrona App Generator (see <code>create-madrona-app.py</code>). 
-        If you're an adminstrator of the site and would like to customize it, 
-        please see the <a href='http://ecotrust.github.com/madrona/docs/tutorial.html' 
-        target='_blank'>tutorial</a>.""", 
+        e = Entry.objects.create(title=title,
+            body="""This application was automatically created by the
+        Madrona App Generator (see <code>create-madrona-app.py</code>).
+        If you're an adminstrator of the site and would like to customize it,
+        please see the <a href='http://ecotrust.github.com/madrona/docs/tutorial.html'
+        target='_blank'>tutorial</a>.""",
             author=m_user)
         e.tags.add(t)
         e.save()
@@ -422,7 +422,7 @@ STATIC_URL = 'http://%s/media/'
     except:
         port = 80
 
-    
+
     print """
 ******************************
 SUCCESS

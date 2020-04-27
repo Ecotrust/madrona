@@ -1,10 +1,10 @@
-from elementtree import ElementTree as et
+import xml.etree.ElementTree as et
 import os
 
 ROOT_PATH = ''
 
 def get_js_files():
-    """Returns a list of all the javascript files listed in 
+    """Returns a list of all the javascript files listed in
     media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +14,7 @@ def get_js_files():
     return files
 
 def get_js_test_files():
-    """Returns a list of all the javascript test files listed in 
+    """Returns a list of all the javascript test files listed in
     media/js_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +24,7 @@ def get_js_test_files():
     return files
 
 def get_css_files():
-    """Returns a list of all css files listed in 
+    """Returns a list of all css files listed in
     media/css_includes.xml"""
     files = []
     path = os.path.dirname(os.path.abspath(__file__))

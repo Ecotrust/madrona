@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -42,11 +42,11 @@ def load_store(path):
     module, attr = path[:i], path[i + 1:]
     try:
         mod = import_module(module)
-    except ImportError, e:
+    except ImportError as e:
         raise ImproperlyConfigured('Error importing openid store %s: "%s"' % (module, e))
-    except ValueError, e:
+    except ValueError as e:
         raise ImproperlyConfigured('Error importing openid store. Is OPENID_STORE '
-        'a correctly defined list or tuple?')        
+        'a correctly defined list or tuple?')
     try:
         cls = getattr(mod, attr)
     except AttributeError:
@@ -54,4 +54,6 @@ def load_store(path):
         'openid store' % (module, attr))
     return cls
 
-DjangoOpenIDStore = load_store(settings.OPENID_STORE)
+# RDH: Changed this to a function to use lazy_instantiation to avoid "Apps not ready"
+def DjangoOpenIDStore():
+    return load_store(settings.OPENID_STORE)

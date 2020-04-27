@@ -1,12 +1,13 @@
 {% extends 'common/panel.html' %}
 {% load appname %}
-{% load url from future %} 
+{% load static %}
+
 {% block title %}{% appname %} Help{% endblock %}
 
 {% block panel %}
 
-<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
-<link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'screencasts/css/screencasts.css' %}" type="text/css" media="all" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'common/css/typography.css' %}" type="text/css" media="all" title="no title" charset="utf-8">
 
 <style type="text/css">
     .tabs { font-size: 1.0em; }

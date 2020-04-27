@@ -2,12 +2,12 @@ Default Settings
 ================
 
 Default settings can be found under madrona/common/default_settings.py
-Include it **at the top** of your project's settings.py file like so to 
+Include it **at the top** of your project's settings.py file like so to
 simplify setup::
-  
+
     from madrona.common.default_settings import *
 
-Once these settings are included you can override them in the projects 
+Once these settings are included you can override them in the projects
 settings.py or settings_local.py file.
 
 Madrona Settings
@@ -15,19 +15,19 @@ Madrona Settings
 
 .. _SUPEROVERLAY_ROOT:
 ``SUPEROVERLAY_ROOT``
-    Directory path containing access-restricted/private superoverlay kmls.  
+    Directory path containing access-restricted/private superoverlay kmls.
 
 .. _LOG_FILE:
 ``LOG_FILE``
-    Location of the madrona log file output. Used for debugging. Defaults to `/tmp/madrona.log` 
+    Location of the madrona log file output. Used for debugging. Defaults to `/tmp/madrona.log`
 
 .. _GEOMETRY_DB_SRID:
 
 ``GEOMETRY_DB_SRID``
-    Defines the projection that will be used for storing data in the 
+    Defines the projection that will be used for storing data in the
     database. Default is California teale albers, you will likely want to
     change it.
-      
+
 .. _GEOMETRY_CLIENT_SRID:
 
 ``GEOMETRY_CLIENT_SRID``
@@ -43,11 +43,11 @@ Madrona Settings
 .. _GROUP_REQUEST_EMAIL:
 
 ``GROUP_REQUEST_EMAIL``
-    When user requests group membership, send email to this address (``None`` = no email sent) 
+    When user requests group membership, send email to this address (``None`` = no email sent)
 
 .. _GROUP_REGISTERED_BY_WEB:
 
-``GROUP_REGISTERED_BY_WEB`` 
+``GROUP_REGISTERED_BY_WEB``
     Group name assigned to users who register using the web interface. Defaults to 'registered_by_web'
 
 .. _ENFORCE_SUPPORTED_BROWSER:
@@ -67,7 +67,7 @@ Madrona Settings
 
 .. _KML_ALTITUDEMODE_DEFAULT:
 ``KML_ALTITUDEMODE_DEFAULT``
-    Sets the default KML altitudeMode (usually one of: `absolute`, `clampToGround`, `relativeToGround`). 
+    Sets the default KML altitudeMode (usually one of: `absolute`, `clampToGround`, `relativeToGround`).
 
 .. _SHARING_TO_PUBLIC_GROUPS:
 ``SHARING_TO_PUBLIC_GROUPS``
@@ -120,31 +120,31 @@ Madrona Settings
 
 ``COMPRESS_CSS``, ``COMPRESS_JS``, ``COMPRESS_VERSION``, ``COMPRESS_AUTO``
     The `django-compress <http://code.google.com/p/django-compress/>`_ app
-    is setup to compress css and js assets described in 
+    is setup to compress css and js assets described in
     ``media/css_includes.xml`` and ``media/js_includes.xml``
-    
+
 .. _GOOGLE_ANALYTICS:
 
 ``GOOGLE_ANALYTICS_MODEL``
     The `madrona.google-analytics <http://code.google.com/p/django-google-analytics/>`_ app
-    (with alterations made to models.py and admin.py) 
+    (with alterations made to models.py and admin.py)
     allows for managing of Google Analytics accounts from the Django admin page.
-    
+
 .. _BASE_DIR:
 
 ``BASE_DIR``
-    Provides the path to the project codebase. 
+    Provides the path to the project codebase.
 
 .. _OPENID_ENABLED:
 
 ``OPENID_ENABLED``
-    Boolean. Determines whether to expose OpenID authentication. False implies local user/pass authentication only. Defaults to False. 
+    Boolean. Determines whether to expose OpenID authentication. False implies local user/pass authentication only. Defaults to False.
 
 .. _WSGI_USER:
 
 ``WSGI_USER``
     Username of the UNIX/system user which runs the wsgi process. This has implications for the ownership of the MEDIA_ROOT directory as it
-    needs to be writeable by the WSGI process. Setting WSGI_USER will cause the install_media command to chown the MEDIA_ROOT directory 
+    needs to be writeable by the WSGI process. Setting WSGI_USER will cause the install_media command to chown the MEDIA_ROOT directory
     to this user. Defaults to None.
 
 Django Settings
@@ -153,7 +153,7 @@ Django Settings
 .. _MIDDLEWARE_CLASSES:
 
 ``MIDDLEWARE_CLASSES``
-    Is defined in ``default_settings.py`` to include GZIP and Auth 
+    Is defined in ``default_settings.py`` to include GZIP and Auth
     middleware by default.
 
 .. _INSTALLED_APPS:
@@ -198,7 +198,7 @@ Django Settings
 ``CACHES``
     see the `django docs <http://docs.djangoproject.com/en/dev/ref/settings/#caches>`_ for details on cache setup. defaults to local memory caching.
 
- .. 
+ ..
 
 Full settings list
 -------------------
@@ -227,7 +227,7 @@ Below is a complete list of settings for the test project::
     DISPLAY_AREA_UNITS = 'sq_mi'  ###
     DISPLAY_LENGTH_UNITS = 'mi'  ###
     ENFORCE_SUPPORTED_BROWSER = True  ###
-    EXCLUDE_FROM_TESTS = ['south', 'registration', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis']  ###
+    EXCLUDE_FROM_TESTS = ['registration', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis']  ###
     GEOMETRY_CLIENT_SRID = 4326  ###
     GEOMETRY_DB_SRID = 3310  ###
     GOOGLE_ANALYTICS_MODEL = True  ###
@@ -235,7 +235,7 @@ Below is a complete list of settings for the test project::
     GROUP_REGISTERED_BY_WEB = 'registered_by_web'  ###
     GROUP_REQUEST_EMAIL = None  ###
     HELP_EMAIL = 'help@madrona.org'  ###
-    INSTALLED_APPS = ('madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.google-analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registration', 'south', 'djcelery', 'djkombu', 'madrona.raster_stats', 'madrona.heatmap', 'madrona.analysistools', 'madrona.xyquery', 'madrona.group_management', 'mlpa')
+    INSTALLED_APPS = ('madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.google-analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registration', 'djcelery', 'djkombu', 'madrona.raster_stats', 'madrona.heatmap', 'madrona.analysistools', 'madrona.xyquery', 'madrona.group_management', 'mlpa')
     KML_ALTITUDEMODE_DEFAULT = 'absolute'  ###
     KML_EXTRUDE_HEIGHT = 700  ###
     KML_SIMPLIFY_TOLERANCE = 20  ###
@@ -258,8 +258,6 @@ Below is a complete list of settings for the test project::
     SHARING_TO_PUBLIC_GROUPS = ['Share with Public']  ###
     SHARING_TO_STAFF_GROUPS = ['Share with Staff']  ###
     SITE_ID = 1  ###
-    SKIP_SOUTH_TESTS = True  ###
-    SOUTH_TESTS_MIGRATE = False  ###
     STARSPAN_BIN = 'starspan'  ###
     STATICMAP_AUTOZOOM = True  ###
     STATIC_URL = '/media/admin/'

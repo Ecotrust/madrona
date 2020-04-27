@@ -1,4 +1,5 @@
-from urlparse import *
+from urllib.parse import *
+
 from django.template import Library
 from django.contrib.sites.models import Site
 from django.conf import settings

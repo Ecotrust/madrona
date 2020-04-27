@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,10 +8,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="{{MEDIA_URL}}common/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="{{MEDIA_URL}}common/css/jquery-ui.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{MEDIA_URL}}common/css/ui.theme.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{MEDIA_URL}}common/js/theme/default/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static 'common/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'common/css/jquery-ui.css' %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static 'common/css/ui.theme.css' %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static 'common/js/theme/default/style.css' %}" rel="stylesheet" type="text/css" media="all" />
     <style>
         #description-overlay {
             margin: 6px;
@@ -28,13 +29,13 @@
             padding: 3px !important;
         }
         .tab-content {
-            padding: 14px; 
+            padding: 14px;
             padding-top: 21px;
             -webkit-border-radius: 0 0 4px 4px;
             -moz-border-radius: 0 0 4px 4px;
             border-radius: 0 0 4px 4px;
             background-color: white;
-            border: solid 1px #dddddd; 
+            border: solid 1px #dddddd;
             cursor: default;
             border-top: 0;
         }
@@ -62,19 +63,19 @@
         label.olButton {
             display: inline;
             padding: 9px 10px 11px;
-            line-height: 24px; 
+            line-height: 24px;
         }
     </style>
-    <link href="{{MEDIA_URL}}common/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
+    <link href="{% static 'common/bootstrap/css/bootstrap-responsive.css' %}" rel="stylesheet">
 
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout-2.0.0.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout.mapping-latest.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/jPaq.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/amplify.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}common/js/json2.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'common/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/knockout-2.0.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/knockout.mapping-latest.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/jPaq.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/amplify.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'common/js/json2.js' %}" charset="utf-8"></script>
     <script>
         var map;
 
@@ -101,7 +102,7 @@
                 "http://a2.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png",
                 "http://a3.acetate.geoiq.com/tiles/terrain/${z}/${x}/${y}.png"],
                 {
-                    sphericalMercator: true, 
+                    sphericalMercator: true,
                     opacity: 0.2
                 }
             );
@@ -112,12 +113,12 @@
             map.setCenter(pnt, 3);
         }
     </script>
-    <script src="{{MEDIA_URL}}common/js/OpenLayers.js"></script>
+    <script src="{% static 'common/js/OpenLayers.js' %}"></script>
     <!-- IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-    <script src="{{MEDIA_URL}}html5shiv.js"></script>
+    <script src="{% static 'html5shiv.js' %}"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="{{MEDIA_URL}}common/img/favicon.ico">
+    <link rel="shortcut icon" href="{% static 'common/img/favicon.ico' %}">
   </head>
 
   <body>
@@ -157,7 +158,7 @@
                                 <div id="legend-tab-content" class="tab-pane">
                                     <div>{% include "layer_manager/legend.html" %}</div>
                                 </div>
-                                <div id="data-tab-content" class="tab-pane active"> 
+                                <div id="data-tab-content" class="tab-pane active">
                                     <div class="">
                                         <div>{% include "layer_manager/search.html" %}</div>
                                         <div>{% include "layer_manager/data.html" %}</div>
@@ -187,24 +188,24 @@
         };
     </script>
 
-    <script src="{{MEDIA_URL}}layer_manager/js/map.js"></script>
-    <script src="{{MEDIA_URL}}layer_manager/js/models.js"></script>
-    <script src="{{MEDIA_URL}}layer_manager/js/load.js"></script>
-    <script src="{{MEDIA_URL}}layer_manager/js/knockout-bindings.js"></script>
-    <script src="{{MEDIA_URL}}layer_manager/js/demo_fixture.js"></script>
+    <script src="{% static 'layer_manager/js/map.js' %}"></script>
+    <script src="{% static 'layer_manager/js/models.js' %}"></script>
+    <script src="{% static 'layer_manager/js/load.js' %}"></script>
+    <script src="{% static 'layer_manager/js/knockout-bindings.js' %}"></script>
+    <script src="{% static 'layer_manager/js/demo_fixture.js' %}"></script>
 
     <script>
         app.onResize = function () {
             $("#map").height($(window).height() - 78);
             map.render('map');
         };
-        
+
         $(document).ready(function () {
             ko.applyBindings(app.viewModel);
             init_map();
             app.utils.initMap(map);
-            app.viewModel.layers.loadLayersFromFixture(); 
-            //app.viewModel.layers.loadLayersFromServer(); 
+            app.viewModel.layers.loadLayersFromFixture();
+            //app.viewModel.layers.loadLayersFromServer();
 
             app.onResize();
             $(window).resize(app.onResize);

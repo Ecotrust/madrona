@@ -4,10 +4,11 @@ from madrona.studyregion.models import *
 from django.conf import settings
 from madrona.common.utils import LargestPolyFromMulti, LargestLineFromMulti
 from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # manipulatorsDict is bound to this module (won't be reinitialized if module is imported twice)
 manipulatorsDict = {}
-from elementtree.ElementTree import fromstring
+# from elementtree.ElementTree import fromstring
+from xml.etree.ElementTree import fromstring
 from django.contrib.gis.geos import LinearRing, Polygon
 from madrona.common.utils import clean_geometry, ensure_clean
 
@@ -16,7 +17,7 @@ def simplify(geom):
         geom.transform(settings.GEOMETRY_DB_SRID)
     from django.db import connection
     cursor = connection.cursor()
-    query = "select simplify(st_geomfromewkt(\'%s\'), %s) as geometry" % (geom.ewkt,settings.KML_SIMPLIFY_TOLERANCE)
+    query = "select st_simplify(st_geomfromewkt(\'%s\'), %s) as geometry" % (geom.ewkt,settings.KML_SIMPLIFY_TOLERANCE)
     cursor.execute(query)
     row = cursor.fetchone()
     try:
@@ -116,7 +117,7 @@ class BaseManipulator(object):
         BaseManipulator should be used as the parent class to all manipulator classes.
         The manipulate() function should be overridden with suitable definition, it is this function that will
             be called automatically when your manipulator class is included in the Mpa.Options.manipulators list.
-            This function generally takes as input a target shape geometry, and should return a call to result() 
+            This function generally takes as input a target shape geometry, and should return a call to result()
             containing the 'clipped_shape' and optionally a rendered template 'html' and 'success' value.
             'clipped_shape' is the new shape as a result of the manipulator
             'html' is generally a template that might be displayed by the client
@@ -126,13 +127,13 @@ class BaseManipulator(object):
         The result() function should be used for the manipulator return value to ensure that all necessary
             key/value pairs are provided.
         Three useful exceptions are provided as well:
-            InternalException is used for exceptions or errors that are considered 'server-side' 
+            InternalException is used for exceptions or errors that are considered 'server-side'
                 or 'out of the users control', such as failed database access, or failed geometry operation.
-            InvalidGeometryException is used for exceptions or errors resulting from an innapropriate mpa geometry 
+            InvalidGeometryException is used for exceptions or errors resulting from an innapropriate mpa geometry
                 such as a point, line, or otherwise invalid geometry.
             HaltManipulations is used for errors, not already handled by InternalException or InvalidGeometryException,
                 that should prevent any further manipulations from taking place. This could be useful in cases such as
-                when an mpa geometry is outside of the study region. In such cases there is no need for further 
+                when an mpa geometry is outside of the study region. In such cases there is no need for further
                 manipulations as such an mpa entry is already deemed inappropriate for our use.
     '''
     def __init__(self, **kwargs):
@@ -152,7 +153,7 @@ class BaseManipulator(object):
                 target = parsekml(shape)
             else:
                 target = GEOSGeometry(shape)
-        except Exception, e:
+        except Exception as e:
             raise self.InvalidGeometryException(e.message)
 
         if not target.valid:
@@ -160,7 +161,7 @@ class BaseManipulator(object):
             if not target.valid:
                 raise self.InvalidGeometryException()
 
-        target.set_srid(settings.GEOMETRY_CLIENT_SRID)
+        setattr(target, 'set_srid', settings.GEOMETRY_CLIENT_SRID)
         return target
 
     def result(self, clipped_shape, html="", success="1"):
@@ -203,7 +204,7 @@ class BaseManipulator(object):
             self.success = success
 
         def __str__(self):
-            return repr(self._message)   
+            return repr(self._message)
 
     class HaltManipulations(Exception):
         def __init__(self, message="", status_html="", success="0"):
@@ -219,32 +220,32 @@ class ClipToShapeManipulator(BaseManipulator):
         required arguments:
             target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
             clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
-            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
+            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a call to self.result() 
-            with required parameter 'clipped_shape': 
-                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
-                The clipped shape will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against' 
+            a call to self.result()
+            with required parameter 'clipped_shape':
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326)
+                The clipped shape will be the largest (in area) polygon result from intersecting 'target_shape' with 'clip_against'
             and optional parameters 'html' and 'success':
                 The html is usually a template that will be displayed to the client, explaining the manipulation
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
 
-        html_templates=='internal'   
+        html_templates=='internal'
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from "clip_against" 
+                                if geometry can not be generated from "clip_against"
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates=='invalid_geom'   
+        html_templates=='invalid_geom'
                             This represents a 'user error' and is accessed by raising an InvalidGeometryException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from "target_shape" 
+                                if geometry can not be generated from "target_shape"
                                 or if "target_shape" is not a valid geometry
-                            clipped_shape will be returned as None         
+                            clipped_shape will be returned as None
         html_templates==2   clipped shape is empty (no overlap with "clip_against")
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
@@ -262,7 +263,7 @@ class ClipToShapeManipulator(BaseManipulator):
         try:
             clip_against = GEOSGeometry(self.clip_against)
             clip_against.set_srid(settings.GEOMETRY_CLIENT_SRID)
-        except Exception, e:
+        except Exception as e:
             raise self.InternalException("Exception raised in ClipToShapeManipulator while initializing geometry on self.clip_against: " + e.message)
 
         if not clip_against.valid:
@@ -271,8 +272,8 @@ class ClipToShapeManipulator(BaseManipulator):
         #intersect the two geometries
         try:
             clipped_shape = target_shape.intersection(clip_against)
-        except Exception, e:
-            raise self.InternalException("Exception raised in ClipToShapeManipulator while intersecting geometries: " + e.message)  
+        except Exception as e:
+            raise self.InternalException("Exception raised in ClipToShapeManipulator while intersecting geometries: " + e.message)
 
         #if there was no overlap (intersection was empty)
         if clipped_shape.area <= self.zero:
@@ -288,7 +289,7 @@ class ClipToShapeManipulator(BaseManipulator):
         #return self.result(largest_poly, target_shape, status_html, message)
         return self.result(largest_poly, status_html)
     '''
-    #the following is USED FOR TESTING, 
+    #the following is USED FOR TESTING,
     #assigns db current studyregion as the shape to clip against
     class Form(forms.Form):
         available = True
@@ -301,7 +302,7 @@ class ClipToShapeManipulator(BaseManipulator):
             #used for sandbox testing
             clippy = StudyRegion.objects.current().geometry
             clippy.transform(settings.GEOMETRY_CLIENT_SRID)
-            data["clip_against"] = clippy.wkt 
+            data["clip_against"] = clippy.wkt
 
             #my_manipulator = ClipToShapeManipulator( **kwargs )
             my_manipulator = ClipToShapeManipulator( data['target_shape'], data['clip_against'] )
@@ -311,8 +312,8 @@ class ClipToShapeManipulator(BaseManipulator):
     class Options:
         name = 'ClipToShape'
         html_templates = {
-            '0':'manipulators/shape_clip.html', 
-            '2':'manipulators/outside_shape.html', 
+            '0':'manipulators/shape_clip.html',
+            '2':'manipulators/outside_shape.html',
         }
 
 manipulatorsDict[ClipToShapeManipulator.Options.name] = ClipToShapeManipulator
@@ -322,32 +323,32 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         required arguments:
             target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
             clip_against: GEOSGeometry of the shape to clip against, in srid GEOMETRY_CLIENT_SRID (4326)
-            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results 
+            zero: this value may be used to prevent issues that seem to arise from trying to simplify very small geometric results
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a call to self.result() 
-            with required parameter 'clipped_shape': 
-                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
-                The clipped shape will be the largest (in area) polygon result from taking the difference of 'target_shape' with 'clip_against' 
+            a call to self.result()
+            with required parameter 'clipped_shape':
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326)
+                The clipped shape will be the largest (in area) polygon result from taking the difference of 'target_shape' with 'clip_against'
             and optional parameters 'html' and 'success':
                 The html is usually a template that will be displayed to the client, explaining the manipulation
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
 
-        html_templates=='internal'   
+        html_templates=='internal'
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from "clip_against" 
+                                if geometry can not be generated from "clip_against"
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates=='invalid_geom'   
+        html_templates=='invalid_geom'
                             This represents a 'user error' and is accessed by raising an InvalidGeometryException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from "target_shape" 
+                                if geometry can not be generated from "target_shape"
                                 or if "target_shape" is not a valid geometry
-                            clipped_shape will be returned as None         
+                            clipped_shape will be returned as None
         html_templates==2   clipped shape is empty (no overlap with "clip_against")
         html_templates==0   if "target_shape" is successfully clipped to "clip_against"
     '''
@@ -364,7 +365,7 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         try:
             diff_geom = GEOSGeometry(self.diff_geom)
             diff_geom.set_srid(settings.GEOMETRY_CLIENT_SRID)
-        except Exception, e:
+        except Exception as e:
             raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while initializing geometry on self.diff_geom: " + e.message)
 
         if not diff_geom.valid:
@@ -373,8 +374,8 @@ class DifferenceFromShapeManipulator(BaseManipulator):
         #determine the difference in the two geometries
         try:
             clipped_shape = target_shape.difference(diff_geom)
-        except Exception, e:
-            raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while intersecting geometries: " + e.message)  
+        except Exception as e:
+            raise self.InternalException("Exception raised in DifferenceFromShapeManipulator while intersecting geometries: " + e.message)
 
         #if there is no geometry left (difference was empty)
         if clipped_shape.area <= self.zero:
@@ -390,15 +391,15 @@ class DifferenceFromShapeManipulator(BaseManipulator):
     class Options:
         name = 'DifferenceFromShape'
         html_templates = {
-            '0':'manipulators/shape_clip.html', 
-            '2':'manipulators/outside_shape.html', 
+            '0':'manipulators/shape_clip.html',
+            '2':'manipulators/outside_shape.html',
         }
 
 manipulatorsDict[DifferenceFromShapeManipulator.Options.name] = DifferenceFromShapeManipulator
 
 class ClipToStudyRegionManipulator(BaseManipulator):
     '''
-        required argument: 
+        required argument:
             target_shape: GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
         optional argument:
             generally USED FOR TESTING ONLY
@@ -406,31 +407,31 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a call to self.result() 
-            with required parameter 'clipped_shape': 
-                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
-                The clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region 
+            a call to self.result()
+            with required parameter 'clipped_shape':
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326)
+                The clipped shape will be the largest (in area) polygon result from intersecting target_shape with the study region
             and optional parameters 'html' and 'success':
                 The html is usually a template that will be displayed to the client, explaining the manipulation
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
 
-        html_templates=='internal'   
+        html_templates=='internal'
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if Study Region not found in database
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates=='invalid_geom'   
+        html_templates=='invalid_geom'
                             This represents an 'user error' and is accessed by raising a InvalidGeometryException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from target_shape 
+                                if geometry can not be generated from target_shape
                                 or if target_shape is not a valid geometry
-                            clipped_shape will be returned as None         
+                            clipped_shape will be returned as None
         html_templates==2   clipped shape is empty (no overlap with Study Region)
         html_templates==0   if target_shape is successfully clipped to Study Region
-    '''  
+    '''
 
     def __init__(self, target_shape, study_region=None, **kwargs):
         self.target_shape = target_shape
@@ -447,13 +448,13 @@ class ClipToStudyRegionManipulator(BaseManipulator):
                 study_region = GEOSGeometry(self.study_region)
                 study_region.set_srid(settings.GEOMETRY_CLIENT_SRID)
                 study_region.transform(settings.GEOMETRY_DB_SRID)
-            except Exception, e:
+            except Exception as e:
                 raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while initializing study region geometry: " + e.message)
         else:
             try:
                 study_region = StudyRegion.objects.current().geometry
-            except Exception, e:
-                raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while obtaining study region geometry from database: " + e.message)    
+            except Exception as e:
+                raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while obtaining study region geometry from database: " + e.message)
 
         #intersect the two geometries
         try:
@@ -461,8 +462,8 @@ class ClipToStudyRegionManipulator(BaseManipulator):
             clipped_shape = target_shape.intersection(study_region)
             target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
             clipped_shape.transform(settings.GEOMETRY_CLIENT_SRID)
-        except Exception, e:
-            raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while intersecting geometries: " + e.message)  
+        except Exception as e:
+            raise self.InternalException("Exception raised in ClipToStudyRegionManipulator while intersecting geometries: " + e.message)
 
         out_geom = None
         if target_shape.geom_type == 'Polygon' and clipped_shape.area > 0:
@@ -486,41 +487,41 @@ class ClipToStudyRegionManipulator(BaseManipulator):
         display_name = "Study Region"
         description = "Clip your shape to the study region"
         html_templates = {
-            '0':'manipulators/studyregion_clip.html', 
-            '2':'manipulators/outside_studyregion.html', 
+            '0':'manipulators/studyregion_clip.html',
+            '2':'manipulators/outside_studyregion.html',
         }
 
 manipulatorsDict[ClipToStudyRegionManipulator.Options.name] = ClipToStudyRegionManipulator
 
 class ClipToGraticuleManipulator(BaseManipulator):
     '''
-        required argument: 
+        required argument:
             target_shape:  GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
         optional arguments:
-            north, south, east, west:  expressed in srid GEOMETRY_CLIENT_SRID (4326) 
+            north, south, east, west:  expressed in srid GEOMETRY_CLIENT_SRID (4326)
         concerning **kwargs:
             kwargs is included to prevent errors resulting from extra arguments being passed to this manipulator from the generic view
         manipulate() return value:
-            a call to self.result() 
-            with required parameter 'clipped_shape': 
-                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326) 
-                The clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s) 
+            a call to self.result()
+            with required parameter 'clipped_shape':
+                The returned shape geometry should be in srid GEOMETRY_CLIENT_SRID (4326)
+                The clipped shape will be the largest (in area) polygon result from clipping target_shape with the requested graticule(s)
             and optional parameters 'html' and 'success':
                 The html is usually a template that will be displayed to the client, explaining the manipulation
                 if not provided, this will remain empty
                 The success parameter is defined as '1' for success and '0' for failure
                 if not provided, the default value, '1', is used
 
-        html_templates=='invalid'   
+        html_templates=='invalid'
                             This represents an 'internal error' and is accessed by raising a ManipulatorInternalException
                             This should occur under the following circumstances:
                                 if polygon could not be created from graticules
                                 or intersection call failed
                             clipped_shape will be returned as None
-        html_templates=='invalid_geom'   
+        html_templates=='invalid_geom'
                             This represents an 'user error' and is accessed by raising a InvalidGeometryException
                             This should occur under the following circumstances:
-                                if geometry can not be generated from target_shape 
+                                if geometry can not be generated from target_shape
                                 or target_shape is not valid geometry
                             clipped_shape will be returned as None
         html_templates==2   if the clipped geometry is empty
@@ -545,7 +546,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
         #intersect the two geometries
         try:
             clipped_shape = target_shape.intersection(graticule_box)
-        except Exception, e:
+        except Exception as e:
             raise self.InternalException("Exception raised in ClipToGraticuleManipulator while intersecting geometries: " + e.message)
 
         #if there was no overlap (intersection was empty)
@@ -560,16 +561,16 @@ class ClipToGraticuleManipulator(BaseManipulator):
         #message = "Graticule clipping was a success"
         status_html = render_to_string(self.Options.html_templates["0"], {'MEDIA_URL':settings.MEDIA_URL})
         #return {"message": "Graticule clipping was a success", "html": status_html, "clipped_shape": largest_poly, "original_shape": target_shape}
-        return self.result(largest_poly, status_html)        
+        return self.result(largest_poly, status_html)
 
     class GraticuleBoxBuilder():
         '''
-            required argument: 
+            required argument:
                 target_shape:  GEOSGeometry of the shape to be clipped, in srid GEOMETRY_CLIENT_SRID (4326)
             build_box() return value:
-                a box like geometry built from the graticules provided to the manipulator class, completing any 
+                a box like geometry built from the graticules provided to the manipulator class, completing any
                 missing north, south, east, or west values with the extent of the target shape geometry
-                returned shape geometry will be in srid GEOMETRY_CLIENT_SRID (4326) 
+                returned shape geometry will be in srid GEOMETRY_CLIENT_SRID (4326)
         '''
 
         def __init__(self, parent, shape):
@@ -584,14 +585,14 @@ class ClipToGraticuleManipulator(BaseManipulator):
                 bottom_left = (west, south)
             '''
             try:
-                box = Polygon(LinearRing([Point(float(self.west), float(self.north)), 
-                                          Point(float(self.east), float(self.north)), 
-                                          Point(float(self.east), float(self.south)), 
-                                          Point(float(self.west), float(self.south)), 
+                box = Polygon(LinearRing([Point(float(self.west), float(self.north)),
+                                          Point(float(self.east), float(self.north)),
+                                          Point(float(self.east), float(self.south)),
+                                          Point(float(self.west), float(self.south)),
                                           Point(float(self.west), float(self.north))]))
                 box.set_srid(settings.GEOMETRY_CLIENT_SRID)
                 return box
-            except Exception, e:
+            except Exception as e:
                 raise self.InternalException("Exception raised in ClipToGraticuleManipulator while initializing graticule geometry: " + e.message)
 
         def __extract_dirs(self, parent):
@@ -616,7 +617,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
 
     class Form(forms.Form):
         available = True
-        n = forms.FloatField(label='Northern boundary', required=False) 
+        n = forms.FloatField(label='Northern boundary', required=False)
         s = forms.FloatField(label='Southern boundary', required=False)
         e = forms.FloatField(label='Eastern boundary', required=False)
         w = forms.FloatField(label='Western boundary', required=False)
@@ -627,7 +628,7 @@ class ClipToGraticuleManipulator(BaseManipulator):
 
             #the following is used for manipulators testing only
             #data["n"] = 33.75
-            #data["e"] = -118.75 
+            #data["e"] = -118.75
             #data["s"] = 33.25
             #data["w"] = -119.25
 
@@ -639,22 +640,30 @@ class ClipToGraticuleManipulator(BaseManipulator):
         name = 'ClipToGraticule'
         supported_geom_fields = ['PolygonField', 'LineStringField']
         html_templates = {
-            '0':'manipulators/graticule.html', 
+            '0':'manipulators/graticule.html',
             '2':'manipulators/no_graticule_overlap.html',
         }
 
-manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator        
+manipulatorsDict[ClipToGraticuleManipulator.Options.name] = ClipToGraticuleManipulator
 
 class NullManipulator(BaseManipulator):
-    """ 
-    This manipulator does nothing but ensure the geometry is clean. 
+    """
+    This manipulator does nothing but ensure the geometry is clean.
     Even if no manipulator is specified, this, at a minimum, needs to be run.
     """
     def __init__(self, target_shape, **kwargs):
         self.target_shape = target_shape
 
-    def manipulate(self): 
-        target_shape = self.target_to_valid_geom(self.target_shape)
+    def manipulate(self):
+        if type(self.target_shape) == Polygon:
+            target_shape = self.target_shape
+        else:
+            target_shape = self.target_to_valid_geom(self.target_shape)
+        if not target_shape.srid:
+            # RDH: I'm not sure that settings.GEOMETRY_CLIENT_SRID is correct, but
+            #       until we have time to sort out what it MUST be, it MUST have
+            #       an srid field and this is a pretty good guess.
+            setattr(target_shape, 'srid', settings.GEOMETRY_CLIENT_SRID)
         status_html = self.do_template("0")
         return self.result(target_shape, status_html)
 
@@ -662,10 +671,10 @@ class NullManipulator(BaseManipulator):
         name = 'NullManipulator'
         supported_geom_fields = ['PolygonField', 'PointField', 'LineStringField']
         html_templates = {
-            '0':'manipulators/valid.html', 
+            '0':'manipulators/valid.html',
         }
 
-manipulatorsDict[NullManipulator.Options.name] = NullManipulator        
+manipulatorsDict[NullManipulator.Options.name] = NullManipulator
 
 def get_url_for_model(model):
     names = []

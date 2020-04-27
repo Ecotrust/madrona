@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -57,12 +57,12 @@ class Association(models.Model):
         return u"Association: %s, %s" % (self.server_url, self.handle)
 
 class UserAssociation(models.Model):
-    """ 
-    model to manage association between openid and user 
+    """
+    model to manage association between openid and user
     """
     openid_url = models.CharField(primary_key=True, blank=False,
                             max_length=255, verbose_name=_('OpenID URL'))
-    user = models.ForeignKey(User, verbose_name=_('User'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
 
     def __unicode__(self):
         return "Openid %s with user %s" % (self.openid_url, self.user)
@@ -81,7 +81,7 @@ class UserAssociation(models.Model):
                                          'openid': self.openid_url
                                         })
 
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, 
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
                     [self.user.email], fail_silently=True)
         oid_associate.send(sender=self, user=self.user, openid=self.openid_url)
 

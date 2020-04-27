@@ -1,0 +1,26 @@
+div.screencast-link{
+    overflow:auto;
+    width:450px;
+    height:90%;
+}
+p.screencast-link{
+	margin:14px;
+	padding:4px;
+	height:100px;
+    font-size:0.7em;
+}
+p.screencast-link a {
+	text-decoration:none;
+	display: block;
+	padding: 12px; 
+	height: 100px;
+}
+p.screencast-link a:hover{
+	background-color:#C5D5E4;
+}
+p.screencast-link img{
+	margin-right:10px;
+}
+p.screencast-link span{
+	font-weight:bold;
+}

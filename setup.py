@@ -7,38 +7,16 @@ import sys
 # setuptools messes up `sdist`
 # but it works for `develop`
 if len(sys.argv) > 1 and sys.argv[1] == 'develop':
-    print "using setuptools.setup"
+    print("using setuptools.setup")
     from setuptools import setup
 else:
-    print "using distutils.setup"
-    from distutils.core import setup  
+    print("using distutils.setup")
+    from distutils.core import setup
 
 from distutils.command.install_data import install_data
 from distutils.command.install import INSTALL_SCHEMES
 
-readme_text = file('README.rst', 'rb').read()
-
-def parse_requirements(file_name):
-    '''
-    Scan the pip requirements file until you hit a line saying
-    # Optional
-    Packages before that are added to setup.py install_requires
-    '''
-    requirements = []
-    for line in open(file_name, 'r').read().split('\n'):
-        if line.startswith('# Optional') or line.startswith('#Optional'):
-            break
-
-        if re.match(r'(\s*#)|(\s*$)', line):
-            continue
-
-        if re.match(r'\s*-e\s+', line):
-            requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$', r'\1', line))
-        elif re.match(r'\s*-f\s+', line):
-            pass
-        else:
-            requirements.append(line)
-    return requirements
+readme_text = open('README.rst', 'r').read()
 
 def fullsplit(path, result=None):
     """
@@ -78,28 +56,24 @@ for dirpath, dirnames, filenames in os.walk('madrona'):
 
 version = __import__('madrona').get_version()
 
-setup_args = dict(
-    name = 'madrona',
-    version = version,
-    description = 'A software framework for effective place-based decision making',
-    author = 'MarineMap Consortium, Ecotrust',
-    author_email = 'mperry@ecotrust.org',
-    maintainer = 'Ecotrust',
-    maintainer_email = 'ksdev@ecotrust.org',
-    url = 'http://ecotrust.github.com/madrona',
-    license = 'New BSD License',
-    keywords = 'kml marine decisionsupport science gis',
-    long_description = readme_text,
-    packages = packages,
-    data_files = data_files,
-    scripts = [
+setup_args = {
+    'name': 'madrona',
+    'version': version,
+    'description': 'A software framework for effective place-based decision making',
+    'author': 'MarineMap Consortium, Ecotrust',
+    'author_email': 'mperry@ecotrust.org',
+    'maintainer': 'Ecotrust',
+    'maintainer_email': 'ksdev@ecotrust.org',
+    'url': 'http://ecotrust.github.com/madrona',
+    'license': 'New BSD License',
+    'keywords': 'kml marine decisionsupport science gis',
+    'long_description': readme_text,
+    'packages': packages,
+    'data_files': data_files,
+    'scripts': [
         'madrona/installer/bin/create-madrona-project.py',
         ],
-    install_requires = parse_requirements('requirements.txt'),
-    dependency_links = [
-        'https://github.com/springmeyer/djmapnik/tarball/8d736a73470b/#egg=djmapnik-0.1.3',
-        ],
-    classifiers = [
+    'classifiers': [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
@@ -108,41 +82,27 @@ setup_args = dict(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering :: GIS',
         'Framework :: Django',
-        ],
-# Test suite from setup.py not yet functional
-# requires ./test_settings.py
-# challenge is, of course, install_media
-# and using setuptools messes with 
-#   django's package and datafile handling 
-# might need to create custom test_suite entry point
-#    test_suite = 'setuptest.SetupTestSuite',
-#    tests_require = (
-#        'django-setuptest',
-#        'django-unittest-depth',
-#        'unittest-xml-reporting',
-#        'BeautifulSoup',
-#        ),
-    )
-
-# Make sure we've got the other dependencies handled
-try:
-    from osgeo import ogr
-    from osgeo import gdal
-    import PIL 
-    import mapnik
-    try:
-        assert mapnik.mapnik_version >= 200000
-    except:
-        raise ImportError
-except ImportError, e:
-    print e
-    sys.exit(1)
+    ],
+    # Test suite from setup.py not yet functional
+    # requires ./test_settings.py
+    # challenge is, of course, install_media
+    # and using setuptools messes with
+    #   django's package and datafile handling
+    # might need to create custom test_suite entry point
+    #    test_suite = 'setuptest.SetupTestSuite',
+    #    tests_require = (
+    #        'django-setuptest',
+    #        'django-unittest-depth',
+    #        'unittest-xml-reporting',
+    #        'BeautifulSoup',
+    #        ),
+}
 
 #Make sure postgres is ready
 try:
     sd = subprocess.check_output(["pg_config", "--sharedir"]).strip()
     # TODO check contrib/postgis*/ for sql files
-except Exception, e:
-    print "Failed to locate postgres installation.\n", e
+except Exception as e:
+    print( "Failed to locate postgres installation.\n%s" % str(e) )
 
 setup(**setup_args)

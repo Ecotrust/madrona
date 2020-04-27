@@ -1,5 +1,4 @@
-import mapnik
-import settings
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden, Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
@@ -9,7 +8,6 @@ from madrona.common import utils
 from madrona.staticmap.models import MapConfig
 from madrona.features import get_feature_models, get_collection_models, get_feature_by_uid, get_model_by_uid
 from madrona.features.models import FeatureCollection, SpatialFeature, PointFeature, PolygonFeature, LineFeature
-from djmapnik.adapter import PostgisLayer 
 from madrona.common.utils import get_logger
 from django.template.defaultfilters import slugify
 log = get_logger()
@@ -19,25 +17,13 @@ try:
 except:
     settings_dbname = settings.DATABASE_NAME
 
-def default_style():
-    default_style = mapnik.Style()
-    ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
-    ps.fill_opacity = 0.5
-    ls = mapnik.LineSymbolizer(mapnik.Color('#555555'),0.75)
-    ls.stroke_opacity = 0.5
-    r = mapnik.Rule()
-    r.symbols.append(ps)
-    r.symbols.append(ls)
-    r.symbols.append(mapnik.PointSymbolizer())
-    default_style.rules.append(r)
-    return default_style
 
 def get_features(uids,user):
-    """ 
+    """
     Returns list of tuples representing mapnik layers
     Tuple => (model_class, [pks])
     Note: currently just a single pk per 'layer' which is
-    incredibly inefficient but the only way to ensure 
+    incredibly inefficient but the only way to ensure
     proper layer ordering (??).
         features = [ (Mpa, [49, 50]),
                     (Pipeline, [32, 31]),
@@ -92,32 +78,32 @@ def auto_extent(features,srid=settings.GEOMETRY_CLIENT_SRID):
         try:
             ugeom = model.objects.filter(pk__in=pks).collect(field_name=geomfield).transform(srid,clone=True)
             bbox = ugeom.extent
-            if bbox[0] < minx: 
+            if bbox[0] < minx:
                 minx = bbox[0]
-            if bbox[1] < miny: 
+            if bbox[1] < miny:
                 miny = bbox[1]
-            if bbox[2] > maxx: 
+            if bbox[2] > maxx:
                 maxx = bbox[2]
-            if bbox[3] > maxy: 
+            if bbox[3] > maxy:
                 maxy = bbox[3]
         except TypeError as e:
-            log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e)) 
+            log.error("Failed to get extent for %r with pks %r; Exception: \n%s" % (model, pks, e))
             pass
 
     width = maxx - minx
-    height = maxy - miny  
+    height = maxy - miny
     buffer = .15
     # if width and height are 0 (such as for a point geom)
     # we need to take a stab a reasonable value
     if width == 0:
         if bbox[2] <= 180.1:
             width = 0.1
-        else: 
+        else:
             width = 1000
     if height == 0:
         if bbox[3] <= 90.1:
             height = 0.1
-        else: 
+        else:
             height = 1000
 
     # If the following settings variables are not defined (or set to None), then the original method
@@ -150,7 +136,7 @@ def staticmap_link(request, instances, map_name="default"):
 
     response = HttpResponse()
     response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
+    response['Content-Type'] = 'image/png'
     response['Content-Disposition'] = 'attachment; filename=%s.png' % filename
     response.write(img)
     return response
@@ -165,7 +151,7 @@ def show(request, map_name="default"):
         # fall back on defaults
         width, height = None, None
 
-    if 'uids' in request.REQUEST: 
+    if 'uids' in request.REQUEST:
         uids = str(request.REQUEST['uids']).split(',')
     else:
         uids = []
@@ -194,7 +180,7 @@ def show(request, map_name="default"):
 
     response = HttpResponse()
     response['Content-length'] = len(img)
-    response['Content-Type'] = 'image/png' 
+    response['Content-Type'] = 'image/png'
     if attach:
         response['Content-Disposition'] = 'attachment; filename=madrona.png'
     response.write(img)
@@ -212,13 +198,9 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     map = get_object_or_404(MapConfig,mapname=map_name)
     if not width:
         width = map.default_width
-    if not height: 
+    if not height:
         height = map.default_height
     mapfile = str(map.mapfile.path)
-
-    # Create a blank image and map
-    draw = mapnik.Image(width,height)
-    m = mapnik.Map(width,height)
 
     # load_map is NOT thread safe (?)
     # load_map_from_string appears to work
@@ -226,35 +208,14 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
     xmltext = open(mapfile).read()
     # Replace mediaroot
     xmltext = xmltext.replace("[[MEDIA_ROOT]]",settings.MEDIA_ROOT)
-    mapnik.load_map_from_string(m, xmltext)
     log.debug("Completed load_map_from_string(), Map object is %r" % m)
 
     # Create the mapnik layers
     features = get_features(uids,user)
     for model, pks in features:
-        try:
-            geomfield = model.mapnik_geomfield()
-        except AttributeError:
-            geomfield = 'geometry_final'
 
         if geomfield not in [str(x.name) for x in model._meta.fields]:
             continue
-
-        if not issubclass(model, FeatureCollection):
-            try:
-                style = model.mapnik_style()
-            except AttributeError:
-                style = default_style()
-            style_name = str('%s_style' % model.model_uid()) # tsk mapnik cant take unicode
-            m.append_style(style_name, style)
-            if testing:
-                adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield, persist_connection=False)
-            else:
-                adapter = PostgisLayer(model.objects.filter(pk__in=pks), field_name=geomfield)
-            lyr = adapter.to_mapnik()
-            lyr.styles.append(style_name)
-            m.layers.append(lyr)
-
     # Grab the bounding coordinates and set them if specified
     # first, assume default image extent
     x1, y1 = map.default_x1, map.default_y1
@@ -268,42 +229,23 @@ def draw_map(uids, user, width, height, autozoom=False, bbox=None, show_extent=F
         except:
             pass
 
-    bbox = mapnik.Box2d(mapnik.Coord(x1,y1), mapnik.Coord(x2,y2))
 
     if show_extent and features and len(features) > 0:
         # Shows a bounding box for the extent of all specified features
         # Useful for overview maps
         x1, y1, x2, y2 = auto_extent(features, map.default_srid)
 
-        ps = mapnik.PolygonSymbolizer(mapnik.Color('#ffffff'))
         ps.fill_opacity = 0.8
-        ls = mapnik.LineSymbolizer(mapnik.Color('#ff0000'),2.0)
-        r = mapnik.Rule()
         r.symbols.append(ps)
         r.symbols.append(ls)
-        extent_style = mapnik.Style()
         extent_style.rules.append(r)
         m.append_style('extent_style', extent_style)
-        lyr = mapnik.Layer("Features Extent")
-        bbox_sql = """
-        (select 1 as id, st_setsrid(st_makebox2d(st_point(%s,%s),st_point(%s,%s)), %s) as geometry_final) as aoi
-        """ % (x1,y1,x2,y2,map.default_srid)
-        lyr.datasource = mapnik.PostGIS(host=connection.settings_dict['HOST'],
-                user=connection.settings_dict['USER'],
-                password=connection.settings_dict['PASSWORD'],
-                dbname=connection.settings_dict['NAME'], 
-                table=bbox_sql,
-                geometry_field='geometry_final',
-                estimate_extent=False,
-                persist_connection=not testing,
-                extent='%s,%s,%s,%s' % (x1,y1,x2,y2))
         lyr.styles.append('extent_style')
         m.layers.append(lyr)
 
     # Render image and send out the response
     m.zoom_to_box(bbox)
 
-    mapnik.render(m, draw)
     img = draw.tostring('png')
 
     if testing:

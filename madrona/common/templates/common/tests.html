@@ -1,19 +1,28 @@
-{% extends "common/base.html" %}
+ {% static {% extends "common/base.html" %}
+{% load static %}
+{% load compress %}
 
 {% block head %}
     <script src="http://geojs.googlecode.com/files/geo-0.1.2.pack.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.pack.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="{{MEDIA_URL}}common/js/lib/qunit/qunit.css" type="text/css" media="screen">
-	<script type="text/javascript" src="{{MEDIA_URL}}common/js/lib/qunit/qunit.js"></script>
-	<script type="text/javascript" src="{{MEDIA_URL}}common/js/test/qunit_extensions.js"></script>
-    {% load compressed %}
-    {% compressed_js 'tests' %}
+    <link rel="stylesheet" href="{% static "common/js/lib/qunit/qunit.css" %}" type="text/css" media="screen">
+    <script type="text/javascript" src="{% static "common/js/lib/qunit/qunit.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/qunit_extensions.js" %}"></script>
+    {% compress js %}
+    <script type="text/javascript" src="{% static "common/js/test/lib/tmpl.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/lib/ge_utility_lib_patches.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/tools/measure_tool.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/layout/panel.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/map/googleLayers.js" %}"></script>
+    <script type="text/javascript" src="{% static "common/js/test/map/geocoder.js" %}"></script>
+    <script type="text/javascript" src="{% static "manipulators/js/test/manipulators.js" %}"></script>
+    {% endcompress %}
     <script type="text/javascript" charset="utf-8">
         google.load("earth", "1");
-		
+
 		var DEFAULT_USERNAME = 'integration_tester';
         var DEFAULT_PASSWORD = 'password';
-		
+
 		{% block test_script %}{% endblock test_script %}
 
     </script>
@@ -28,7 +37,7 @@
             left:-1000px;
             top:0em;
         }
-        
+
     </style>
 {% endblock %}
 {% block body %}

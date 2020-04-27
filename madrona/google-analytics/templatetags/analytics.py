@@ -1,12 +1,13 @@
 from django import template
 from django.db import models
+from django.apps import apps
 from django.contrib.sites.models import Site
 
 from django.template import Context, loader
 
 
 register = template.Library()
-Analytics = models.get_model('googleanalytics', 'analytics')
+Analytics = apps.get_model('google-analytics', 'analytics')
 
 def do_get_analytics(parser, token):
     try:
@@ -19,7 +20,7 @@ def do_get_analytics(parser, token):
         current_site = Site.objects.get_current()
     else:
         if not (code[0] == code[-1] and code[0] in ('"', "'")):
-            raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
+            raise template.TemplateSyntaxError("%r tag's argument should be in quotes" % tag_name)
         code = code[1:-1]
         current_site = None
     return AnalyticsNode(current_site, code)

@@ -1,5 +1,5 @@
 from django import template
-from django.template import resolve_variable
+from django.template import Variable
 register = template.Library()
 
 @register.tag(name="home_link")
@@ -7,7 +7,7 @@ def do_home_link(parser, token):
     """Provides a back button link to the home panel.
     """
     tokens = token.split_contents()
-    print tokens
+    print(tokens)
     if len(tokens) == 1:
         href = "#"
         text = "Back Home"
@@ -18,7 +18,7 @@ def do_home_link(parser, token):
         text = tokens[1]
         href = '#' + tokens[2].replace(' ', '')
     else:
-        raise template.TemplateSyntaxError, "%r tag accepts no more than 2 arguments." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag accepts no more than 2 arguments." % token.contents.split()[0])
     return HomeLinkNode(href, text)
 
 class HomeLinkNode(template.Node):
@@ -37,18 +37,18 @@ def do_back_link(parser, token):
     """
     tokens = token.split_contents()
     if len(tokens) < 3:
-        raise template.TemplateSyntaxError, "%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0])
 
     title = tokens[1]
     urlvar = tokens[2]
 
     if not (title[0] == title[-1] and title[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires at least 2 arguments, a title, url and optionally a quoted tab target." % token.contents.split()[0])
 
     if len(tokens) == 4:
         tabid = tokens[3]
         if not (tabid[0] == tabid[-1] and tabid[0] in ('"', "'")):
-            raise template.TemplateSyntaxError, "Tab name must be in quotes."
+            raise template.TemplateSyntaxError("Tab name must be in quotes.")
         tab_id = tab_id.replace('"', '').replace("'", "")
         return BackLinkNode(title, urlvar, tab=tab_id)
     else:
@@ -61,7 +61,7 @@ class BackLinkNode(template.Node):
         self.tab = tab
 
     def render(self, context):
-        url = resolve_variable(self.urlvar, context)
+        url = Variable(self.urlvar).resolve(context)
         if self.tab != None:
             url = url + '#' + self.tab
         return """
@@ -82,7 +82,7 @@ class FooterNode(template.Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        print self.nodelist
+        print(self.nodelist)
         output = self.nodelist.render(context)
         return '<div class="sidebar-footer">%s</div>' % (output,)
 
@@ -95,7 +95,7 @@ def do_panel(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, title = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument. You must give your panel a title." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires a single argument. You must give your panel a title." % token.contents.split()[0])
 
     nodelist = parser.parse(('endpanel',))
     parser.delete_first_token()
@@ -108,9 +108,9 @@ class PanelNode(template.Node):
 
     def render(self, context):
         if not (self.title[0] == self.title[-1] and self.title[0] in ('"', "'")):
-            self.title = resolve_variable(self.title, context)
+            self.title = Variable(self.title).resolve(context)
         else:
-            self.title = self.title[1:-1]        
+            self.title = self.title[1:-1]
         output = self.nodelist.render(context)
         return """<div class="sidebar-panel">
             <div class="sidebar-header">
@@ -127,7 +127,7 @@ class PanelNode(template.Node):
 @register.tag(name="printable")
 def do_printable(parser, token):
     """Use this tag to specify that the current panel should be accessible via
-    its url as a printable/static page in addition to the dynamic sidebar 
+    its url as a printable/static page in addition to the dynamic sidebar
     form.
     """
     return PrintableNode()
@@ -147,7 +147,7 @@ def do_tabpanel(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, title = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument. You must give your tabpanel a title." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires a single argument. You must give your tabpanel a title." % token.contents.split()[0])
     nodelist = parser.parse(('endtabpanel',))
     parser.delete_first_token()
     return TabPanelNode(nodelist, title)
@@ -160,7 +160,7 @@ class TabPanelNode(template.Node):
     def render(self, context):
         # print self.nodelist
         if not (self.title[0] == self.title[-1] and self.title[0] in ('"', "'")):
-            self.title = resolve_variable(self.title, context)
+            self.title = Variable(self.title).resolve(context)
         else:
             self.title = self.title[1:-1]
         output = self.nodelist.render(context)
@@ -193,7 +193,7 @@ def do_tab(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, title = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument. You must give your tab a title." % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires a single argument. You must give your tab a title." % token.contents.split()[0])
 
     nodelist = parser.parse(('endtab',))
     parser.delete_first_token()
@@ -207,7 +207,7 @@ class TabNode(template.Node):
 
     def render(self, context):
         if not (self.title[0] == self.title[-1] and self.title[0] in ('"', "'")):
-            self.title = resolve_variable(self.title, context)
+            self.title = Variable(self.title).resolve(context)
         else:
             self.title = self.title[1:-1]
 

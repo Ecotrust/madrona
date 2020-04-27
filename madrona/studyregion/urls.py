@@ -1,11 +1,11 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url, include
+from madrona.studyregion import views
 
-
-urlpatterns = patterns('madrona.studyregion.views',
-    (r'^$', 'studyregion'),
-    url(r'^kml/$', 'regionKml', name='studyregion-kml'),
-    (r'^kml/(\d+)/$', 'kml'),
-    (r'^kml_chunk/([-]?\d+\.\d+)/([-]?\d+\.\d+)/([-]?\d+\.\d+)/([-]?\d+\.\d+)/$', 'regionKmlChunk'),
-    (r'^lookAtKml/$', 'regionLookAtKml'),
-    (r'^show/(\d+)/$', 'show'),
-)
+urlpatterns = [
+    url(r'^$', views.studyregion),
+    url(r'^kml/$', views.regionKml, name='studyregion-kml'),
+    url(r'^kml/(\d+)/$', views.kml),
+    url(r'^kml_chunk/([-]?\d+\.\d+)/([-]?\d+\.\d+)/([-]?\d+\.\d+)/([-]?\d+\.\d+)/$', views.regionKmlChunk),
+    url(r'^lookAtKml/$', views.regionLookAtKml),
+    url(r'^show/(\d+)/$', views.show),
+]

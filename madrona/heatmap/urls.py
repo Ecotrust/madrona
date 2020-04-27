@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from madrona.heatmap.views import *
 
 urlpatterns = patterns('',

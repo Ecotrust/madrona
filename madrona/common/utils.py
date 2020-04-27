@@ -4,6 +4,7 @@ from math import pi, sin, tan, sqrt, pow
 from django.conf import settings
 from django.db import connection
 from django.core.cache import cache
+from importlib import import_module
 from madrona.common.models import KmlCache
 import zipfile
 import re
@@ -26,7 +27,7 @@ def get_logger(caller_name=None):
         if settings.DEBUG:
             level = logging.DEBUG
         else:
-            level = logging.WARNING 
+            level = logging.WARNING
 
     format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     if logfile:
@@ -57,29 +58,29 @@ def LookAtKml(geometry):
     lookAtParams = ComputeLookAt(geometry)
     return '<LookAt><latitude>%f</latitude><longitude>%f</longitude><range>%f</range><tilt>%f</tilt><heading>%f</heading><altitudeMode>clampToGround</altitudeMode></LookAt>' % (lookAtParams['latitude'], lookAtParams['longitude'], lookAtParams['range'], lookAtParams['tilt'], lookAtParams['heading'])
 
-def LargestPolyFromMulti(geom): 
+def LargestPolyFromMulti(geom):
     """ takes a polygon or a multipolygon geometry and returns only the largest polygon geometry"""
     if geom.num_geom > 1:
         largest_area = 0.0
-        for g in geom: # find the largest polygon in the multi polygon 
+        for g in geom: # find the largest polygon in the multi polygon
             if g.area > largest_area:
                 largest_geom = g
                 largest_area = g.area
     else:
         largest_geom = geom
-    return largest_geom  
+    return largest_geom
 
-def LargestLineFromMulti(geom): 
+def LargestLineFromMulti(geom):
     """ takes a line or a multiline geometry and returns only the longest line geometry"""
     if geom.num_geom > 1:
         largest_length = 0.0
-        for g in geom: # find the largest polygon in the multi polygon 
+        for g in geom: # find the largest polygon in the multi polygon
             if g.length > largest_length:
                 largest_geom = g
                 largest_length = g.length
     else:
         largest_geom = geom
-    return largest_geom  
+    return largest_geom
 
 def angle(pnt1,pnt2,pnt3):
     """
@@ -161,7 +162,7 @@ def remove_spikes(poly,threshold=0.01):
 def clean_geometry(geom):
     """Send a geometry to the cleanGeometry stored procedure and get the cleaned geom back."""
     cursor = connection.cursor()
-    query = "select cleangeometry(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
+    query = "select st_makevalid(st_geomfromewkt(\'%s\')) as geometry" % geom.ewkt
     cursor.execute(query)
     row = cursor.fetchone()
     newgeom = fromstr(row[0])
@@ -177,9 +178,9 @@ def clean_geometry(geom):
     else:
         return geometry
 
-# transforms the geometry to the given srid, checks it's validity and 
+# transforms the geometry to the given srid, checks it's validity and
 # cleans it if necessary, transforms it back into the original srid and
-# cleans again if needed before returning 
+# cleans again if needed before returning
 # Note, it does not scrub the geometry before transforming, so if needed
 # call check_validity(geo, geo.srid) first.
 def ensure_clean(geo, srid):
@@ -214,7 +215,7 @@ def ComputeLookAt(geometry):
     center_lon = trans_geom.centroid.y
     center_lat = trans_geom.centroid.x
 
-    lngSpan = (Point(w, center_lat)).distance(Point(e, center_lat)) 
+    lngSpan = (Point(w, center_lat)).distance(Point(e, center_lat))
     latSpan = (Point(center_lon, n)).distance(Point(center_lon, s))
 
     aspectRatio = 1.0
@@ -245,15 +246,14 @@ def ComputeLookAt(geometry):
     return lookAtParams
 
 def get_class(path):
-    from django.utils import importlib
     module,dot,klass = path.rpartition('.')
-    m = importlib.import_module(module)
+    m = import_module(module)
     return m.__getattribute__(klass)
 
 def kml_errors(kmlstring):
     from madrona.common import feedvalidator
     from madrona.common.feedvalidator import compatibility
-    events = feedvalidator.validateString(kmlstring, firstOccurrenceOnly=1)['loggedEvents'] 
+    events = feedvalidator.validateString(kmlstring, firstOccurrenceOnly=1)['loggedEvents']
 
     # Three levels of compatibility
     # "A" is most basic level
@@ -262,26 +262,26 @@ def kml_errors(kmlstring):
     filterFunc = getattr(compatibility, "AA")
     events = filterFunc(events)
 
-    # there are a few annoyances with feedvalidator; specifically it doesn't recognize 
-    # KML ExtendedData element 
-    # or our custom 'mm' namespance 
+    # there are a few annoyances with feedvalidator; specifically it doesn't recognize
+    # KML ExtendedData element
+    # or our custom 'mm' namespance
     # or our custom atom link relation
     # or space-delimited Icon states
     # so we ignore all related events
     events = [x for x in events if not (
-                (isinstance(x,feedvalidator.logging.UndefinedElement) 
+                (isinstance(x,feedvalidator.logging.UndefinedElement)
                     and x.params['element'] == u'ExtendedData') or
-                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel)
                     and x.params['value'] == u'madrona.update_form') or
-                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel)
                     and x.params['value'] == u'madrona.create_form') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) 
+                (isinstance(x,feedvalidator.logging.UnknownNamespace)
                     and x.params['namespace'] == u'http://madrona.org') or
-                (isinstance(x,feedvalidator.logging.UnknownNamespace) 
+                (isinstance(x,feedvalidator.logging.UnknownNamespace)
                     and x.params['namespace'] == u'http://www.google.com/kml/ext/2.2') or
-                (isinstance(x,feedvalidator.logging.InvalidItemIconState) 
+                (isinstance(x,feedvalidator.logging.InvalidItemIconState)
                     and x.params['element'] == u'state' and ' ' in x.params['value']) or
-                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel) 
+                (isinstance(x,feedvalidator.logging.UnregisteredAtomLinkRel)
                     and x.params['element'] == u'atom:link' and 'workspace' in x.params['value'])
                 )]
 
@@ -308,8 +308,6 @@ def hex8_to_rgba(hex8):
     rgba_values = [int(x,16) for x in hex_values]
     rgba_values.reverse()
     return rgba_values
-
-from django.utils.importlib import import_module
 
 def load_session(request, session_key):
     if session_key and session_key != '0':
@@ -369,7 +367,7 @@ class KMZUtil:
             self.addFolderToZip(zip_file, file)
         zip_file.close()
 
-    def addFolderToZip(self, zip_file, folder): 
+    def addFolderToZip(self, zip_file, folder):
         if not folder or folder == '':
             folder_path = '.'
         else:
@@ -460,7 +458,7 @@ def asKml(input_geom, altitudeMode=None, uid=''):
     Performs three critical functions for creating suitable KML geometries:
      - simplifies the geoms (lines, polygons only)
      - forces left-hand rule orientation
-     - sets the altitudeMode shape 
+     - sets the altitudeMode shape
        (usually one of: absolute, clampToGround, relativeToGround)
     """
     if altitudeMode is None:
@@ -483,14 +481,14 @@ def asKml(input_geom, altitudeMode=None, uid=''):
         geom = latlon_geom.simplify(settings.KML_SIMPLIFY_TOLERANCE_DEGREES)
         # Gaurd against invalid geometries due to bad simplification
         # Keep reducing the tolerance til we get a good one
-        if geom.empty or not geom.valid: 
+        if geom.empty or not geom.valid:
             toler = settings.KML_SIMPLIFY_TOLERANCE_DEGREES
             maxruns = 20
             for i in range(maxruns):
                 toler = toler / 3.0
                 geom = latlon_geom.simplify(toler)
                 log.debug("%s ... Simplification failed ... tolerance=%s" % (key,toler))
-                if not geom.empty and geom.valid: 
+                if not geom.empty and geom.valid:
                     break
             if i == maxruns - 1:
                 geom = latlon_geom
@@ -513,7 +511,7 @@ def asKml(input_geom, altitudeMode=None, uid=''):
 
 def enable_sharing(group=None):
     """
-    Give group permission to share models 
+    Give group permission to share models
     Permissions are attached to models but we want this perm to be 'global'
     Fake it by attaching the perm to the Group model (from the auth app)
     We check for this perm like: user1.has_perm("auth.can_share_features")
@@ -522,26 +520,26 @@ def enable_sharing(group=None):
     from django.contrib.contenttypes.models import ContentType
 
     try:
-        p = Permission.objects.get(codename='can_share_features')
+        perm_obj = Permission.objects.get(codename='can_share_features')
     except Permission.DoesNotExist:
-        gct = ContentType.objects.get(name="group")
-        p = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
-        p.save()
+        gct = ContentType.objects.get(model="group")
+        perm_obj = Permission.objects.create(codename='can_share_features',name='Can Share Features',content_type=gct)
+        perm_obj.save()
 
     # Set up default sharing groups
     for groupname in settings.SHARING_TO_PUBLIC_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
-        g.permissions.add(p)
+        g.permissions.add(perm_obj)
         g.save()
 
     for groupname in settings.SHARING_TO_STAFF_GROUPS:
         g, created = Group.objects.get_or_create(name=groupname)
-        g.permissions.add(p)
+        g.permissions.add(perm_obj)
         g.save()
 
     if group:
         # Set up specified group
-        group.permissions.add(p)
+        group.permissions.add(perm_obj)
         group.save()
     return True
 
@@ -549,7 +547,7 @@ def enable_sharing(group=None):
 '''
 Returns a path to desired resource (image file)
 Called from within pisaDocument via link_callback parameter (from pdf_report)
-'''    
+'''
 def fetch_resources(uri, rel):
     import os
     import settings
@@ -578,7 +576,7 @@ def fetch_resources(uri, rel):
         # path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
 
     randnum = random.randint(0, 1000000000)
-    timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')       
+    timestamp = datetime.datetime.now().strftime('%m_%d_%y_%H%M')
     filename = 'resource_%s_%s.tmp' % (timestamp,randnum)
     pathname = os.path.join(tempfile.gettempdir(),filename)
     fh = open(pathname,'wb')
@@ -589,7 +587,7 @@ def fetch_resources(uri, rel):
 '''
 Returns a dictionary representation of the parameters attached to the given uri
 Called by fetch_resources
-'''    
+'''
 def get_params_from_uri(uri):
     from urlparse import urlparse
     results = urlparse(uri)
@@ -616,7 +614,7 @@ def is_text(s):
     if "\0" in s:
         return False
     if not s:
-        return True 
+        return True
 
     # Get the non-text characters (maps a character to itself then
     # use the 'remove' option to get rid of the text characters.)
@@ -630,7 +628,7 @@ def is_text(s):
 
 def cachemethod(cache_key, timeout=60*60*24*365):
     '''
-    http://djangosnippets.org/snippets/1130/    
+    http://djangosnippets.org/snippets/1130/
     Cacheable class method decorator
     from madrona.common.utils import cachemethod
 
@@ -647,7 +645,7 @@ def cachemethod(cache_key, timeout=60*60*24*365):
             return res
         decorated.__doc__ = func.__doc__
         decorated.__dict__ = func.__dict__
-        return decorated 
+        return decorated
     return paramed_decorator
 
 # Use a single json object, optimized for the best available
@@ -658,8 +656,5 @@ except ImportError:
     try:
         import json
     except ImportError:
-        try:
-            import simplejson as json
-        except ImportError:
-            raise ImportError('You must have the cjson, json, or simplejson ' +
-                            'module(s) available.')
+        raise ImportError('You must have the cjson or json ' +
+                        'module(s) available.')

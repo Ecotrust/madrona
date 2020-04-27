@@ -1,11 +1,11 @@
 from django.test import TestCase
 from django.test.client import Client
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from django.contrib.gis.geos import *
 from madrona.studyregion.models import StudyRegion
-from django.core import serializers 
-from manipulators import *      
+from django.core import serializers
+from manipulators import *
 from madrona.features.models import Feature, PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from madrona.features.forms import FeatureForm
 from madrona.features import register
@@ -16,13 +16,13 @@ import re
 
 # set up some test manipulators
 class TestManipulator(BaseManipulator):
-    """ 
-    This manipulator does nothing but ensure the geometry is clean. 
+    """
+    This manipulator does nothing but ensure the geometry is clean.
     """
     def __init__(self, target_shape, **kwargs):
         self.target_shape = target_shape
 
-    def manipulate(self): 
+    def manipulate(self):
         target_shape = self.target_to_valid_geom(self.target_shape)
         status_html = self.do_template("0")
         return self.result(target_shape, status_html)
@@ -32,7 +32,7 @@ class TestManipulator(BaseManipulator):
         supported_geom_fields = ['PolygonField']
         html_templates = {'0':'manipulators/valid.html', }
 
-manipulatorsDict[TestManipulator.Options.name] = TestManipulator        
+manipulatorsDict[TestManipulator.Options.name] = TestManipulator
 
 class ManipulatorsTest(TestCase):
     fixtures = ['manipulators_test_data']
@@ -147,20 +147,20 @@ class ManipulatorsTest(TestCase):
             Tests the following:
                 clipped to study region
         '''
-        study_region = StudyRegion.objects.current().geometry 
+        study_region = StudyRegion.objects.current().geometry
 
         w = study_region.extent[0]
         s = study_region.extent[1]
         e = study_region.extent[2]
         n = study_region.extent[3]
 
-        center_lat = study_region.centroid.y 
+        center_lat = study_region.centroid.y
         center_lon = study_region.centroid.x
 
-        target_shape = Polygon(LinearRing([Point(center_lon, center_lat), 
-                                           Point(e, center_lat), 
-                                           Point(e, s), 
-                                           Point(center_lon, s), 
+        target_shape = Polygon(LinearRing([Point(center_lon, center_lat),
+                                           Point(e, center_lat),
+                                           Point(e, s),
+                                           Point(center_lon, s),
                                            Point(center_lon, center_lat)]))
         target_shape.set_srid(settings.GEOMETRY_DB_SRID)
         target_shape.transform(settings.GEOMETRY_CLIENT_SRID)
@@ -257,7 +257,7 @@ class FeaturesManipulatorTest(TestCase):
         self.assertAlmostEquals(g[1][1], feature.geometry_final[1][1])
 
     def test_studyregion_line_partial(self):
-        # partial 
+        # partial
         g = GEOSGeometry('SRID=4326;LINESTRING(-120.234 34.46, -120.162 34.547)')
         g.transform(settings.GEOMETRY_DB_SRID)
         feature = TestLine(user=self.user, name="My Pipeline", geometry_orig=g)
@@ -270,9 +270,9 @@ class FeaturesManipulatorTest(TestCase):
 
     def test_studyregion_poly_allin(self):
         # all in
-        g = GEOSGeometry('SRID=4326;POLYGON((-120.161 34.441, -120.144 34.458, -120.186 34.455, -120.161 34.441))') 
+        g = GEOSGeometry('SRID=4326;POLYGON((-120.161 34.441, -120.144 34.458, -120.186 34.455, -120.161 34.441))')
         g.transform(settings.GEOMETRY_DB_SRID)
-        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g)
         feature.save()
         self.assertAlmostEquals(g.area, feature.geometry_final.area, 2)
 
@@ -280,7 +280,7 @@ class FeaturesManipulatorTest(TestCase):
         #partial
         g = GEOSGeometry('SRID=4326;POLYGON((-120.234 34.46, -120.152 34.454, -120.162 34.547, -120.234 34.46))')
         g.transform(settings.GEOMETRY_DB_SRID)
-        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g) 
+        feature = TestPoly(user=self.user, name="My Mpa", geometry_orig=g)
         feature.save()
         self.assertNotAlmostEquals(g.area, feature.geometry_final.area)
 
@@ -306,16 +306,16 @@ class FeaturesManipulatorTest(TestCase):
         # Next, POST to manipulators url with no manipulators specified; should get original geom back
         response = self.client.post('/manipulators//', {'target_shape': display_kml(g)})
         self.assertEqual(response.status_code, 200, response.content)
-        kml = json.loads(response.content)['final_shape_kml'] 
+        kml = json.loads(response.content)['final_shape_kml']
         search = re.search('<coordinates>(.*)</coordinates>', kml)
         coords = search.groups()[0]
-        coords_count = coords.count(',') / 2  # number of coordinates in final geom 
+        coords_count = coords.count(',') / 2  # number of coordinates in final geom
         self.assertEqual(coords_count, g.num_coords, coords)
 
         # Next, POST to manipulators url with ClipToStudyRegionManipulator specified; should get clipped geom back
         response = self.client.post('/manipulators/ClipToStudyRegion/', {'target_shape': display_kml(g)})
         self.assertEqual(response.status_code, 200, response.content)
-        kml = json.loads(response.content)['final_shape_kml'] 
+        kml = json.loads(response.content)['final_shape_kml']
         search = re.search('<coordinates>(.*)</coordinates>', kml)
         coords = search.groups()[0]
         coords_count = coords.count(',') / 2

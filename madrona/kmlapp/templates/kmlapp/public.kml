@@ -1,6 +1,6 @@
 {% extends "kmlapp/base.kml" %}
 {% load absurl %}
-{% load url from future %}
+
 {% block workspace-json %}
 	{% if user.is_anonymous %}
 <atom:link title="workspace" rel="workspace" href="{% url 'workspace-public-json' %}" />

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2007, 2008,2009 by Benoît Chesneau <benoitc@e-engura.org>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -65,7 +65,7 @@ def discover_extensions(openid_url):
             use_sreg = sreg.supportsSReg(endpoint)
         if not use_ax:
             use_ax = endpoint.usesExtension("http://openid.net/srv/ax/1.0")
-        if use_ax and use_sreg: 
+        if use_ax and use_sreg:
             break
     if not use_sreg and not use_ax:
         use_sreg = True
@@ -96,7 +96,7 @@ def from_openid_response(openid_response):
         ax_args = ax_resp.data
 
     return OpenID(
-        openid_response.identity_url, issued, openid_response.signed_fields, 
+        openid_response.identity_url, issued, openid_response.signed_fields,
         dict(sreg_resp), ax_args
     )
 

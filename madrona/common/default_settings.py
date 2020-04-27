@@ -1,4 +1,8 @@
 import os
+from madrona.common import assets
+from django.urls import reverse_lazy
+from datetime import timedelta
+
 os.environ["CELERY_LOADER"] = "django"
 
 # !!!!!!!!!!!!!!!!!!!!!!!
@@ -18,31 +22,44 @@ DISPLAY_AREA_UNITS = 'sq_mi' # Choices can be found in django.contrib.gis.measur
 
 GOOGLE_API_KEY = 'ABQIAAAAu2dobIiH7nisivwmaz2gDhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSLaQmJjJuOq03hTEjc-cNV8eegYg'
 
-from madrona.common import assets
+try:
+    STATICFILES_FINDERS += (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+    )
+except Exception as e:
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+    )
 
-COMPRESS_CSS = {
-    'application': {
-        'source_filenames': assets.get_css_files(),
-        'output_filename': 'common/css/madrona.r?.css',
-        'extra_context': {
-            'media': 'all'
-        }
-    }
-}
+# COMPRESS_CSS = {
+#     'application': {
+#         'source_filenames': assets.get_css_files(),
+#         'output_filename': 'common/css/madrona.r?.css',
+#         'extra_context': {
+#             'media': 'all'
+#         }
+#     }
+# }
+#
+# COMPRESS_JS = {
+#     'application': {
+#         'source_filenames': assets.get_js_files(),
+#         'output_filename': 'madrona.r?.js'
+#     },
+#     'tests': {
+#         'source_filenames': assets.get_js_test_files(),
+#         'output_filename': 'madrona_tests.r?.js'
+#     }
+# }
+#
+# COMPRESS_VERSION = True
+# COMPRESS_AUTO = True
 
-COMPRESS_JS = {
-    'application': {
-        'source_filenames': assets.get_js_files(),
-        'output_filename': 'madrona.r?.js'
-    },
-    'tests': {
-        'source_filenames': assets.get_js_test_files(),
-        'output_filename': 'madrona_tests.r?.js'
-    }
-}
 
-COMPRESS_VERSION = True
-COMPRESS_AUTO = True
 
 GOOGLE_ANALYTICS_MODEL = True
 
@@ -50,29 +67,32 @@ MIDDLEWARE_CLASSES = (
     # GZip speeds up downloads by compressing on the fly
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'madrona.common.middleware.IgnoreCsrfMiddleware', 
+    'madrona.common.middleware.IgnoreCsrfMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # compatibility problems with django trunk? 
+    # compatibility problems with django trunk?
     # 'maintenancemode.middleware.MaintenanceModeMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
+    # 'django.middleware.transaction.TransactionMiddleware',
     'madrona.openid.middleware.OpenIDMiddleware',
 )
 
+MIDDLEWARE = MIDDLEWARE_CLASSES # Django 2 compatibility
+
 INSTALLED_APPS = (
-    'madrona.common',
-    'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.auth',
+    'madrona.common',
+    'django.contrib.staticfiles',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.gis',
     'flatblocks',
-    'compress',
+    'compressor',
     'madrona.shapes',
-    'madrona.google-analytics', 
+    'madrona.google-analytics',
     'madrona.layers',
     'madrona.layer_manager',
     'madrona.studyregion',
@@ -90,12 +110,9 @@ INSTALLED_APPS = (
     'madrona.async',
     'madrona.loadshp',
     'madrona.bookmarks',
-    'registration',
-    'south',
-    'djcelery', 
-    'djkombu',
+    'django_registration',
     ##### Optional Apps ####
-    #'madrona.heatmap', 
+    #'madrona.heatmap',
     #'madrona.analysistools',
     #'madrona.raster_stats',
     #'madrona.xyquery',
@@ -103,8 +120,7 @@ INSTALLED_APPS = (
 )
 
 EXCLUDE_FROM_TESTS = [
-    'south', 
-    'registration',
+    'django_registration',
     'flatblocks',
     'django.contrib.auth',
     'django.contrib.admin',
@@ -116,15 +132,33 @@ EXCLUDE_FROM_TESTS = [
 
 ACCOUNT_ACTIVATION_DAYS = 7 # New users have one week to activate account
 REGISTRATION_OPEN = True # Can users register themselves or not?
-GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent) 
+GROUP_REQUEST_EMAIL = None # When user requests group membership, send email to this address (None = no email sent)
 GROUP_REGISTERED_BY_WEB = 'registered_by_web'  # Group name assigned to users who register using the web interface
 
-MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATIC_URL = '/static/'
+
+# STATIC_ROOT = os.path.realpath(os.path.dirname(os.path.abspath(__file__)) + '/../../static/')
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATICFILES_DIRS = [
+    # RDH: It can find properly named static files like the one below on its own.
+    # os.path.join(BASE_DIR, "providers", "static"),
+]
+
+
+
 
 # URLS
 MEDIA_URL = '/media/'
 LOGIN_URL = '/accounts/signin/'
-STATIC_URL = '/media/'
+STATIC_URL = '/static/'
 
 # KML SETTINGS
 KML_SIMPLIFY_TOLERANCE = 20 # meters
@@ -164,26 +198,33 @@ SCREENCASTS = 'screencasts/'
 SCREENCAST_IMAGES = 'screencasts/images'
 VIDEO_PLAYER = MEDIA_URL + 'screencasts/video_player/player-viral.swf'
 
-# This path is used by madrona.layers.views to handle requests initiated by a UserLayerList 
+# This path is used by madrona.layers.views to handle requests initiated by a UserLayerList
 USER_DATA_ROOT = '/mnt/EBS_userdatalayers/display'
 
 SKIP_SOUTH_TESTS = True
 SOUTH_TESTS_MIGRATE = False
 
-#Celery and djkombu settings (for server-side asynchronous process handling)
-CARROT_BACKEND = "django"
-CELERY_RESULT_BACKEND = "database"
-CELERY_TRACK_STARTED = True
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+# ------------------------------------------------------------------------------
+# Celery
+# NEWER CELERY VERSIONS DO NOT USE KOMBU and have different settings. They also
+#       rely on redis or rabbitmq or somthing similar. These settings are to be
+#       moved into your project settings, as it is up to the project to decide
+#       on these dependencies
+# Recommended reading: https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html
+# ------------------------------------------------------------------------------
+CELERY_BROKER_URL = 'amqp://localhost'
+# CARROT_BACKEND = "django"
+# CELERY_RESULT_BACKEND = "database"
+# CELERY_TRACK_STARTED = True
+# BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 # Make sure to add any modules containing tasks
 #CELERY_IMPORT = ('myapp.tasks',)
-import djcelery
-djcelery.setup_loader()
+# djcelery.setup_loader()
 
-#The following is used to determine whether the async app (and celery) should be used 
+#The following is used to determine whether the async app (and celery) should be used
 ASYNC_IS_DISABLED = False
 
-AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media. 
+AWS_USE_S3_MEDIA = False  # Set true IF you want to use S3 to serve static media.
                           # If true, need to set AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_MEDIA_BUCKET and MEDIA_URL
 
 OPENID_ENABLED = False
@@ -201,7 +242,7 @@ DATABASES = {
 }
 
 # UNIX username which owns the wsgi process.
-# Used to set ownership of MEDIA_ROOT 
+# Used to set ownership of MEDIA_ROOT
 # None implies MEDIA_ROOT is owned by whoever runs the install_media command
 WSGI_USER = None
 
@@ -224,7 +265,7 @@ TITLES = {
 # Do you want bookmarks to show up in the kmleditor (True) or just the tool panel (False)?
 BOOKMARK_FEATURE = False
 BOOKMARK_ANON_USERNAME = "anonymous_bookmark_user"
-from datetime import timedelta
+
 BOOKMARK_ANON_LIMIT = (100, timedelta(minutes=30)) # Limit to 100 anon bookmarks per IP every 30 minutes
 
 ENFORCE_SUPPORTED_BROWSER = False
@@ -234,9 +275,11 @@ STARSPAN_REMOVE_TMP = True
 
 POSTGIS_TEMPLATE = 'template1'
 
-LAUNCH_PAGE = False 
-from django.core.urlresolvers import reverse_lazy
+LAUNCH_PAGE = False
 LOGIN_REDIRECT_URL = reverse_lazy('map')
 
 GEOJSON_DOWNLOAD = True  # force headers to treat like an attachment
 GEOJSON_SRID = None  # None -> use GEOMETRY_DB_SRID
+
+SECRET_KEY = 'Override this nonsense'
+ALLOW_PUBLIC_DRAWING = False

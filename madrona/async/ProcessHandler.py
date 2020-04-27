@@ -1,5 +1,4 @@
 from models import URLtoTaskID
-from djcelery.models import TaskMeta
 from django.template.loader import render_to_string
 
 """
@@ -13,13 +12,13 @@ NOTES:
 
     process_is_running (called on its own or from check_status_or_begin or process_is_running_or_complete) checks
     only if status == 'STARTED', this seems like the safest strategy although it does have it's shortcomings.
-    When a task is triggered, it is stored in the celery_taskmeta table with status == PENDING, as soon as 
+    When a task is triggered, it is stored in the celery_taskmeta table with status == PENDING, as soon as
     a worker is assigned to that task, the status becomes STARTED, when the task is complete, status becomes SUCCESS.
-    If something goes wrong during the STARTED phase (celeryd is shut down, etc), then status becomes FAILURE. 
+    If something goes wrong during the STARTED phase (celeryd is shut down, etc), then status becomes FAILURE.
     If celeryd is not communicating with ghettoq, or not running at all, then the status will remain as PENDING.
-    If we assume that PENDING means STARTED, then we may be mislead into thinking a task is being processed, 
+    If we assume that PENDING means STARTED, then we may be mislead into thinking a task is being processed,
     when in fact it is sitting idle.  This may only become apparent after waiting way-too-long for the task
-    to complete.  
+    to complete.
     If we only check for STARTED, then each time the task is requested, we will add a new task to the queue.  This
     may back up the queue, but only in situations when there is something wrong to begin with.  This will also
     likely alert the user (or the developer) more immediately that something has gone wrong with celeryd (or ghettoq,
@@ -29,10 +28,10 @@ NOTES:
     to that task and the status will still be PENDING, in which case a new task will be added to the queue.  This seems
     a small price to pay for the more immediate recognition that there is indeed a problem.  As the developer in this
     case, I'd rather get the impression of a False Negative (thinking there may be a problem, when in fact there is none),
-    than a False Positive (given the impression that everything is fine, when in fact there is a problem).  Also, the 
+    than a False Positive (given the impression that everything is fine, when in fact there is a problem).  Also, the
     user is more likely to notice a problem sooner in the case when there is a hint in the returned statement (that
     the process has begun...yet again), than in the case when they must figure out there is a problem only because
-    the process is taking an inordinately long time (in many cases this could mean hours rather than minutes).  
+    the process is taking an inordinately long time (in many cases this could mean hours rather than minutes).
 """
 
 '''
@@ -87,7 +86,7 @@ def process_is_running_or_complete(polling_url=None, task_id=None):
 #returns boolean based on whether process is in cache and marked as STARTED
 def process_is_running(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
-    if result is not None and result.status == 'STARTED': 
+    if result is not None and result.status == 'STARTED':
         return True
     else:
         return False
@@ -96,7 +95,7 @@ def process_is_running(polling_url=None, task_id=None):
 # i.e. it has been sent to the queue but processing has not yet begun
 def process_is_pending(polling_url=None, task_id=None):
     result = __get_asyncresult(polling_url, task_id)
-    if result is not None and result.status == 'PENDING': 
+    if result is not None and result.status == 'PENDING':
         return True
     else:
         return False
@@ -134,7 +133,7 @@ def get_taskid_from_url(polling_url):
         #raise ValueError("Given URL does not map to any known task_id")
         return None
 
-#get url from URLtoTaskID table    
+#get url from URLtoTaskID table
 def get_url_from_taskid(task_id):
     try:
         entry = URLtoTaskID.objects.get(task_id=task_id)
@@ -153,4 +152,4 @@ def __get_asyncresult(polling_url=None, task_id=None):
     result = result.AsyncResult(task_id)
     if result.task_id == None:
         return None
-    return result    
+    return result

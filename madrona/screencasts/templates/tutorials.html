@@ -1,7 +1,8 @@
 {% extends "common/base.html" %}
+{% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{% static 'screencasts/css/screencasts.css' %}" type="text/css" media="all" title="no title" charset="utf-8">
 {% endblock %}
 
 {% block body %}
