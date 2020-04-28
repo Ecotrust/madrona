@@ -148,13 +148,16 @@ class BaseManipulator(object):
         return render_to_string(self.Options.html_templates[key], context)
 
     def target_to_valid_geom(self, shape):
-        try:
-            if iskml(shape):
-                target = parsekml(shape)
-            else:
-                target = GEOSGeometry(shape)
-        except Exception as e:
-            raise self.InvalidGeometryException(e.message)
+        if hasattr(shape, 'valid'):
+            target = shape
+        else:
+            try:
+                if iskml(shape):
+                    target = parsekml(shape)
+                else:
+                    target = GEOSGeometry(shape)
+            except Exception as e:
+                raise self.InvalidGeometryException(e.message)
 
         if not target.valid:
             target = target.buffer(0)
