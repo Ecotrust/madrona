@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response, render
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext, Context
 from django.conf import settings
 from madrona.features.models import Feature
@@ -690,7 +690,7 @@ def share_form(request,model=None, uid=None):
         # Get a list of user's groups that have sharing permissions
         groups = user_sharing_groups(request.user)
 
-        return render_to_response('sharing/share_form.html', {'groups': groups,
+        return render(request, 'sharing/share_form.html', {'groups': groups,
             'already_shared_groups': already_shared_groups, 'obj': obj,
             'obj_type_verbose': obj_type_verbose,  'user':request.user,
             'MEDIA_URL': settings.MEDIA_URL,

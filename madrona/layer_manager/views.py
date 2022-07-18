@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 import json as simplejson
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from .models import *
 
@@ -16,5 +16,5 @@ def get_json(request):
     return HttpResponse(simplejson.dumps(json))
 
 def demo(request):
-    context = RequestContext(request)
-    return render_to_response('layer_manager/demo.html', context)
+    context = {}
+    return render(request, 'layer_manager/demo.html', context)

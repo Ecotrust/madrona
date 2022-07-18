@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.template import RequestContext, loader, Context
 
 from django.urls import reverse
@@ -51,14 +51,6 @@ from madrona.openid.forms import *
 from madrona.openid.models import UserAssociation
 from madrona.openid.signals import oid_register
 from madrona.openid.utils import *
-
-def _build_context(request, extra_context=None):
-    if extra_context is None:
-        extra_context = {}
-    context = RequestContext(request)
-    for key, value in extra_context.items():
-        context[key] = callable(value) and value() or value
-    return context
 
 def ask_openid(request, openid_url, redirect_to, on_failure=None):
     """ basic function to ask openid and return response """
@@ -144,7 +136,7 @@ def default_on_success(request, identity_url, openid_response, **kwargs):
 
 def default_on_failure(request, message, **kwargs):
     """ default failure action on signin """
-    return render_to_response('openid_failure.html', {
+    return render(request, 'openid_failure.html', {
         'message': message
     })
 
@@ -215,12 +207,17 @@ def signin_failure(request, message, template_name='authopenid/signin.html',
     context. Any callable object in this dictionary will be called to produce
     the end result which appears in the context.
     """
-    return render_to_response(template_name, {
+    context = {
         'msg': message,
         'form1': openid_form(),
         'form2': auth_form(),
         redirect_field_name: request.REQUEST.get(redirect_field_name, '')
-    }, context_instance=_build_context(request, extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_name, context)
 
 @not_authenticated
 def signin(request, template_name='authopenid/signin.html',
@@ -412,13 +409,18 @@ def register(request, template_name='authopenid/complete.html',
             login(request, user_)
             return HttpResponseRedirect(redirect_to)
 
-    return render_to_response(template_name, {
+    context = {
         'form1': form1,
         'form2': form2,
         redirect_field_name: redirect_to,
         'nickname': nickname,
         'email': email
-    }, context_instance=_build_context(request, extra_context=extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_name, context)
 
 @login_required
 def signout(request, next_page=None, template_name='registration/logged_out.html'):
@@ -439,8 +441,8 @@ def signout(request, next_page=None, template_name='registration/logged_out.html
         return HttpResponseRedirect(next)
 
     if next_page is None:
-        return render_to_response(template_name, {
-            'title': _('Logged out')}, context_instance=RequestContext(request))
+        return render(request, template_name, {
+            'title': _('Logged out')})
 
     return HttpResponseRedirect(next_page or request.path)
 
@@ -451,9 +453,9 @@ def xrdf(request, template_name='authopenid/yadis.xrdf'):
     return_to = [
         "%s%s" % (url_host, reverse('user_complete_signin'))
     ]
-    response = render_to_response(template_name, {
+    response = render(request, template_name, {
         'return_to': return_to
-        }, context_instance=RequestContext(request))
+        })
 
     response['Content-Type'] = "application/xrds+xml"
     response['X-XRDS-Location'] = request.build_absolute_uri(reverse('oid_xrdf'))
@@ -503,10 +505,15 @@ def password_change(request,
     else:
         form = change_form(request.user)
 
-    return render_to_response(template_name, {
+    context = {
         'form': form,
         'set_password': set_password
-    }, context_instance=_build_context(request, extra_context=extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_name, context)
 
 @login_required
 def associate_failure(request, message,
@@ -515,11 +522,15 @@ def associate_failure(request, message,
         extra_context=None, **kwargs):
 
     """ function used when new openid association fail"""
-
-    return render_to_response(template_failure, {
+    context = {
         'form': openid_form(request.user),
         'msg': message,
-    }, context_instance=_build_context(request, extra_context=extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_failure, context)
 
 @login_required
 def associate_success(request, identity_url, openid_response,
@@ -596,10 +607,15 @@ def associate(request, template_name='authopenid/associate.html',
                     on_failure=on_failure)
     else:
         form = openid_form(request.user)
-    return render_to_response(template_name, {
+    context = {
         'form': form,
         redirect_field_name: redirect_to
-    }, context_instance=_build_context(request, extra_context=extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_name, context)
 
 @login_required
 def dissociate(request, template_name="authopenid/dissociate.html",
@@ -643,7 +659,12 @@ def dissociate(request, template_name="authopenid/dissociate.html",
             return HttpResponseRedirect("%s?%s" % (redirect_to,
                 urllib.urlencode({"msg": msg})))
         form = dissociate_form(initial={'openid_url': openid_url})
-    return render_to_response(template_name, {
+    context = {
             "form": form,
             "openid_url": openid_url
-    }, context_instance=_build_context(request, extra_context=extra_context))
+    }
+    try:
+        context.update(extra_context)
+    except TypeError:
+        pass
+    return render(request, template_name, context)

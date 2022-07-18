@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from madrona.common import default_mimetypes as mimetypes
 from django.template.loader import render_to_string
 
@@ -63,7 +63,7 @@ def multi_generic_manipulator_view(request, manipulators):
             if request.method == 'GET':
                 if manipClass.Form.available:
                     form = manipClass.Form()
-                    return render_to_response('common/base_form.html', RequestContext(request,{'form': form}))
+                    return render(request, 'common/base_form.html', {'form': form})
                 else: # this manipulator has no form, just error out
                     return HttpResponse("Manipulator " + manipulator + " does not support GET requests.", status=501)
 

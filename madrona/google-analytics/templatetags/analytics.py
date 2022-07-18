@@ -7,7 +7,7 @@ from django.template import Context, loader
 
 
 register = template.Library()
-Analytics = apps.get_model('google-analytics', 'analytics')
+# Analytics = apps.get_model('google-analytics', 'analytics')
 
 def do_get_analytics(parser, token):
     try:

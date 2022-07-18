@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from .models import UserProfile
 from .forms import UserForm, UserProfileForm
 from django.conf import settings
@@ -24,7 +24,7 @@ def profile_form(request,username,use_openid=False):
     if request.method == 'GET':
         uform = UserForm(instance=user)
         pform = UserProfileForm(instance=user_profile)
-        return render_to_response('user_profile/user_profile_form.html',
+        return render(request, 'user_profile/user_profile_form.html',
                 {'profile': user_profile, 'assoc': user_assoc, 'uform': uform, 'pform': pform,
                     'group_request_email': settings.GROUP_REQUEST_EMAIL, 'use_openid': use_openid, 'MEDIA_URL':settings.MEDIA_URL})
 

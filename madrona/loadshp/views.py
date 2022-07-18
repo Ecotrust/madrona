@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.conf import settings
 import json as simplejson
 from django.template import Context, RequestContext
@@ -44,7 +44,7 @@ def load_single_shp(request):
             return HttpResponse('<textarea>' + json + '</textarea>',mimetype="text/html")
 
     elif request.method == 'GET':
-        return render_to_response('loadshp/upload.html', RequestContext(request,{'form': form,'action':request.path}))
+        return render(request, 'loadshp/upload.html', {'form': form,'action':request.path})
 
     else:
         raise Exception("This URL does not support %s requests" % request.method)

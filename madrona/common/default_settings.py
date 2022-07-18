@@ -92,7 +92,7 @@ INSTALLED_APPS = (
     'flatblocks',
     'compressor',
     'madrona.shapes',
-    'madrona.google-analytics',
+    # 'madrona.google-analytics',
     'madrona.layers',
     'madrona.layer_manager',
     'madrona.studyregion',

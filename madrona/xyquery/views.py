@@ -1,6 +1,6 @@
 import struct
 from osgeo import gdal
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib.gis.geos import Point as GEOSPoint
 from django.contrib.gis.gdal import SpatialReference
 from models import Attribute, Feature, Raster
@@ -31,7 +31,7 @@ def query(request):
             if val:
                 results["%s :: %s" % (rast.layer, "Band %s" % band)] = val
 
-    return render_to_response('query.html', {'x': x, 'y':y, 'results': results}) 
+    return render(request, 'query.html', {'x': x, 'y':y, 'results': results}) 
 
 def getRasterValue(x,y,ds,bandnum=1):
     band = ds.GetRasterBand(bandnum)

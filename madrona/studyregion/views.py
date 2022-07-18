@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from madrona.common import default_mimetypes as mimetypes
 from madrona.common.utils import KmlWrap
 from django.urls import reverse
@@ -13,12 +13,12 @@ from django.views.decorators.cache import cache_page
 def studyregion(request, template_name='studyregion/studyregion.html'):
     """Main application window
     """
-    return render_to_response(template_name, RequestContext(request,{'api_key':settings.GOOGLE_API_KEY}))
+    return render(request, template_name, {'api_key':settings.GOOGLE_API_KEY})
 
 def show(request, pk):
     """Display a map with the study region geometry.
     """
-    return render_to_response('studyregion/show.html', RequestContext(request,{'api_key':settings.GOOGLE_API_KEY, 'pk': pk}))
+    return render(request, 'studyregion/show.html', {'api_key':settings.GOOGLE_API_KEY, 'pk': pk})
 
 def kml(request, pk):
     """Return kml for the requested StudyRegion
