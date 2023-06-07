@@ -126,7 +126,7 @@ Madrona Settings
 .. _GOOGLE_ANALYTICS:
 
 ``GOOGLE_ANALYTICS_MODEL``
-    The `madrona.google-analytics <http://code.google.com/p/django-google-analytics/>`_ app
+    The `madrona.google_analytics <http://code.google.com/p/django-google-analytics/>`_ app
     (with alterations made to models.py and admin.py)
     allows for managing of Google Analytics accounts from the Django admin page.
 
@@ -235,7 +235,7 @@ Below is a complete list of settings for the test project::
     GROUP_REGISTERED_BY_WEB = 'registered_by_web'  ###
     GROUP_REQUEST_EMAIL = None  ###
     HELP_EMAIL = 'help@madrona.org'  ###
-    INSTALLED_APPS = ('madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.google-analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registration', 'djcelery', 'djkombu', 'madrona.raster_stats', 'madrona.heatmap', 'madrona.analysistools', 'madrona.xyquery', 'madrona.group_management', 'mlpa')
+    INSTALLED_APPS = ('madrona.common', 'django.contrib.auth', 'django.contrib.admin', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.sites', 'django.contrib.gis', 'compress', 'madrona.shapes', 'madrona.google_analytics', 'madrona.layers', 'madrona.studyregion', 'madrona.simplefaq', 'madrona.help', 'madrona.staticmap', 'madrona.screencasts', 'madrona.news', 'madrona.manipulators', 'madrona.kmlapp', 'madrona.features', 'madrona.user_profile', 'madrona.unit_converter', 'madrona.openid', 'madrona.async', 'madrona.loadshp', 'madrona.bookmarks', 'registration', 'djcelery', 'djkombu', 'madrona.raster_stats', 'madrona.heatmap', 'madrona.analysistools', 'madrona.xyquery', 'madrona.group_management', 'mlpa')
     KML_ALTITUDEMODE_DEFAULT = 'absolute'  ###
     KML_EXTRUDE_HEIGHT = 700  ###
     KML_SIMPLIFY_TOLERANCE = 20  ###

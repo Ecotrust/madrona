@@ -14,9 +14,16 @@
 # limitations under the License.
 from django.dispatch import Signal
 
+# RDH 2023-06-07: This may be hacky since I don't know offhand what signal is used for
+# but in reviving ForestPlanner I just needed this to compile. So I did this below:
+# https://stackoverflow.com/a/70505629/706797
 
 # a new user has been registered
-oid_register = Signal(providing_args=['openid'])
+# oid_register = Signal(providing_args=['openid'])
+# oid_register = Signal('openid')
+oid_register = Signal()
 
 # a new openid has been associated
-oid_associate = Signal(providing_args=["user", "openid"])
+# oid_associate = Signal(providing_args=["user", "openid"])
+# oid_associate = Signal("user", "openid")
+oid_associate = Signal()

@@ -7,7 +7,7 @@ from django.template import Context, loader
 
 
 register = template.Library()
-Analytics = apps.get_model('google-analytics', 'analytics')
+Analytics = apps.get_model('google_analytics', 'analytics')
 
 def do_get_analytics(parser, token):
     try:
@@ -44,7 +44,7 @@ class AnalyticsNode(template.Node):
             return ''
 
         if code.strip() != '':
-            t = loader.get_template('google-analytics/analytics_template.html')
+            t = loader.get_template('google_analytics/analytics_template.html')
             c = Context({
                 'analytics_code': code,
             })

@@ -14,7 +14,7 @@ Required Apps
     async
     bookmarks
     common
-    google-analytics
+    google_analytics
     help
     layers
     layer_manager

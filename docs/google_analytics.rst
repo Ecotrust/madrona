@@ -1,4 +1,4 @@
-``madrona.google-analytics`` - Web traffic analytics
+``madrona.google_analytics`` - Web traffic analytics
 ====================================================
 
 I manage a lot of Django projects that present slightly-different forms to 
