@@ -4,7 +4,7 @@ from madrona.features.views import get_object_for_viewing
 from madrona.analysistools.models import Analysis
 from madrona.common import default_mimetypes as mimetypes
 import json as simplejson
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 from django.views.decorators.cache import never_cache
 # set headers to disable all client-side caching
@@ -46,6 +46,6 @@ def progress_html(request, uid):
             'name': instance.name,
             'html': instance.status_html
         }
-        return render_to_response('analysis/progress.html', {'progress': progress})
+        return render(request, 'analysis/progress.html', {'progress': progress})
 
     return HttpResponse("%s is not an analysis!" % (instance), status=500)

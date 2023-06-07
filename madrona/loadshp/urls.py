@@ -1,6 +1,6 @@
-from django.conf.urls import url, include
+from django.urls import re_path
 from madrona.loadshp import views
 
 urlpatterns = [
-    url(r'^single/$', views.load_single_shp, name='loadshp-single'),
+    re_path(r'^single/$', views.load_single_shp, name='loadshp-single'),
 ]

@@ -1,4 +1,3 @@
-from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import *
 from django.template.loader import get_template
 from django.template import Context

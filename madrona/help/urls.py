@@ -1,6 +1,6 @@
-from django.conf.urls import url, include
+from django.urls import re_path
 from madrona.help import views
 
 urlpatterns = [
-    url(r'^$', views.help, name="help-main"),
+    re_path(r'^$', views.help, name="help-main"),
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from madrona.shapes.forms import UploadForm
 
@@ -13,7 +13,7 @@ def upload(request):
             form.handle(request.FILES['file_obj'])
             #form.save() # if a modelform
             #form.cleaned_data['user'] = request.user
-            return render_to_response('uploaded.html', RequestContext(request,{}))
+            return render(request, 'uploaded.html',{})
     else:
         form = UploadForm()
-    return render_to_response('upload.html', RequestContext(request,{'form': form}))
+    return render(request, 'upload.html', {'form': form})

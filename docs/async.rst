@@ -86,7 +86,7 @@ A common flow of control may be as follows:
         #start the process or continue to wait for the process to complete
         from my_app import tasks
         status_text, task_id = check_status_or_begin(tasks.add, task_args=(3,5), polling_url=url)
-        return render_to_response(my_template, RequestContext( request, {'status': status_text} )) 
+        return render(request, my_template, RequestContext( request, {'status': status_text} )) 
         
 The above strategy allows the code to deal with the possibility that the process has already completed and the 
 results are cached, or that the process is still running in the background, or that the process hasn't begun

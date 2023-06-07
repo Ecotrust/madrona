@@ -1,6 +1,6 @@
-from django.conf.urls import url
+from django.urls import re_path
 from madrona.simplefaq.views import faq
 
 urlpatterns = [
-    url(r'^$', faq, name="simplefaq"),
+    re_path(r'^$', faq, name="simplefaq"),
 ]

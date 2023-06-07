@@ -1,7 +1,6 @@
 from django.http import HttpResponse, Http404
 #, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseServerError, HttpResponseForbidden
 from django.template import RequestContext
-from django.shortcuts import get_object_or_404, render_to_response
 from .models import *
 import os
 import itertools

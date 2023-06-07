@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.conf import settings
 from madrona.group_management.models import GroupRequest
 from django.core.urlresolvers import reverse
@@ -17,7 +17,7 @@ def group_request(request):
         groups = Group.objects.all()
         if len(groups) == 0:
             return HttpResponse("There are no potential groups at this time.", status=404)
-        return render_to_response('group_management/group_request_form.html', 
+        return render(request, 'group_management/group_request_form.html', 
                 {'user':request.user, 'groups': groups, 'current_groups': current_groups, 'MEDIA_URL':settings.MEDIA_URL}) 
     elif request.method == 'POST':
         group_ids = [int(x) for x in request.POST.getlist('sharing_groups')]

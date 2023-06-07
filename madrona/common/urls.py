@@ -1,4 +1,3 @@
-from django.conf.urls import url, include as old_include
 from django.urls import re_path, include
 from django.contrib import admin
 from django.conf import settings

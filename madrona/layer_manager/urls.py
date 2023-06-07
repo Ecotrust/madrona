@@ -1,7 +1,7 @@
-from django.conf.urls import url, include
+from django.urls import re_path, include
 from madrona.layer_manager import views
 
 urlpatterns = [
-    url(r'^layers.json$', views.get_json),
-    url(r'^demo', views.demo)
+    re_path(r'^layers.json$', views.get_json),
+    re_path(r'^demo', views.demo)
 ]

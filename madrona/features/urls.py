@@ -1,4 +1,3 @@
-# from django.conf.urls import url, include
 from django.urls import re_path, include
 from madrona.common.utils import get_class
 from madrona.features import registered_models, registered_links

@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import reverse
+from django.conf.urls import include
+from django.urls import reverse, re_path
 from django.conf import settings
 from madrona.user_profile import views
 
@@ -9,5 +9,5 @@ except:
     use_openid = False
 
 urlpatterns = [
-        url(r'^(?P<username>\w+)/$', views.profile_form, {'use_openid': use_openid}, name="user_profile-form"),
+        re_path(r'^(?P<username>\w+)/$', views.profile_form, {'use_openid': use_openid}, name="user_profile-form"),
 ]
