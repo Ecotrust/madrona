@@ -66,6 +66,7 @@ def quality_parsed(mime_type, parsed_ranges):
        match was found. This function bahaves the same as quality()
        except that 'parsed_ranges' must be a list of
        parsed media ranges. """
+    from functools import reduce
     best_fitness = -1
     best_match = ""
     best_fit_q = 0

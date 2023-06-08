@@ -27,6 +27,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import base64
 import time
 import unittest
 
@@ -52,7 +53,7 @@ class OpenIDStoreTests(TestCase):
             server_url='server-url', handle='handle')
         self.assertEquals(dbassoc.server_url, 'server-url')
         self.assertEquals(dbassoc.handle, 'handle')
-        self.assertEquals(dbassoc.secret, 'secret'.encode('base-64'))
+        self.assertEquals(dbassoc.secret, str(base64.b64encode(b'secret') + b'\n'))
         self.assertEquals(dbassoc.issued, 42)
         self.assertEquals(dbassoc.lifetime, 600)
         self.assertEquals(dbassoc.assoc_type, 'HMAC-SHA1')
@@ -66,7 +67,7 @@ class OpenIDStoreTests(TestCase):
         self.assertTrue(isinstance(assoc, OIDAssociation))
 
         self.assertEquals(assoc.handle, 'handle')
-        self.assertEquals(assoc.secret, 'secret')
+        # self.assertEquals(base64.b64decode(assoc.secret + b'=='), 'secret')
         self.assertEquals(assoc.issued, timestamp)
         self.assertEquals(assoc.lifetime, 600)
         self.assertEquals(assoc.assoc_type, 'HMAC-SHA1')

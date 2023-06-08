@@ -35,14 +35,14 @@ class UploadForm(forms.Form):
         # contruct the full filepath and filename
         downloaded_file = os.path.normpath(os.path.join(settings.SHP_UPLOAD_DIR, filefield_data.name))
 
-        print downloaded_file
+        print(downloaded_file)
         # if we've already got an upload with the same name, append the daymonthyear_minute
         if os.path.exists(downloaded_file):
             name, ext = os.path.splitext(downloaded_file)
             append = datetime.datetime.now().strftime('%d%m%Y_%m')
             downloaded_file = '%s_%s%s' % (name,append,ext) 
 
-        print downloaded_file
+        print(downloaded_file)
         # write the zip archive to final location
         self.write_file(downloaded_file,filefield_data)
 

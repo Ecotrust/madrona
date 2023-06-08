@@ -41,7 +41,7 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
         assoc = Association(
             server_url=server_url,
             handle=association.handle,
-            secret=base64.encodestring(association.secret),
+            secret=base64.encodebytes(association.secret),
             issued=association.issued,
             lifetime=association.lifetime,
             assoc_type=association.assoc_type
@@ -65,10 +65,10 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
         expired = []
         for assoc in assocs:
             association = OIDAssociation(
-                assoc.handle, base64.decodestring(assoc.secret), assoc.issued,
+                assoc.handle, base64.b64decode(str(bytes(assoc.secret,"UTF-8") + b'==')), assoc.issued,
                 assoc.lifetime, assoc.assoc_type
             )
-            if association.getExpiresIn() == 0:
+            if association.expiresIn == 0:
                 expired.append(assoc)
             else:
                 associations.append((association.issued, association))
@@ -100,6 +100,7 @@ class DjangoOpenIDStore(openid.store.interface.OpenIDStore):
                 Q(salt__exact=salt),
         ]
         try:
+            from functools import reduce
             ononce = Nonce.objects.get(reduce(operator.and_, query))
         except Nonce.DoesNotExist:
             ononce = Nonce(

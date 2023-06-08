@@ -8,7 +8,7 @@ import shutil
 import json
 from django.test.client import Client
 from django.contrib.auth.models import *
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.gis.geos import GEOSGeometry 
 from django.conf import settings

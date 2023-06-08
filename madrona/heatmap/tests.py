@@ -1,7 +1,7 @@
 from django.test import TestCase
 from madrona.features.tests import TestMpa, TestFolder
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from madrona.common.utils import enable_sharing
 
 class HeatmapTest(TestCase):

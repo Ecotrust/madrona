@@ -10,7 +10,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.models import *
 from madrona.common import utils 
 from madrona.common.utils import kml_errors, enable_sharing
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from madrona.features.tests import TestMpa as Mpa
 from madrona.features.tests import TestArray as MpaArray

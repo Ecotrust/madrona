@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
 from madrona.group_management.models import GroupRequest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template import Context

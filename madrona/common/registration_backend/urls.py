@@ -22,7 +22,7 @@ urlpatterns = [
         {'backend': 'madrona.common.registration_backend.LingcodBackend'},
         name='registration_activate'),
     re_path(r'^register/$',
-        .register,
+        register,
         {'backend': 'madrona.common.registration_backend.LingcodBackend'},
         name='registration_register'),
     re_path(r'^register/complete/$',
