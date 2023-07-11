@@ -1,8 +1,3 @@
-
-.. image:: https://pypip.in/v/madrona/badge.png
- 
-.. image:: https://pypip.in/d/madrona/badge.png
-
 Madrona
 ========
 
