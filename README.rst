@@ -1,3 +1,8 @@
+.. image:: https://img.shields.io/pypi/v/madrona.svg
+ 
+.. image:: https://img.shields.io/pypi/dm/madrona.svg
+
+=======
 Madrona
 ========
 
